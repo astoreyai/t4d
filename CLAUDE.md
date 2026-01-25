@@ -1,6 +1,6 @@
 # T4DM - Temporal 4D Memory
 
-**Path**: `/mnt/projects/t4dm/`
+**Path**: `/mnt/projects/t4d/t4dm/`
 **Version**: 1.0.0 (forked from World Weaver)
 **Status**: Active Development
 
