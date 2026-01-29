@@ -1,0 +1,92 @@
+graph TB
+    %% Cortical regions
+    subgraph Cortical["Cortical Regions (Neocortex)"]
+        PFC[PFC<br/>Prefrontal Cortex]
+        Motor[Motor<br/>Motor Cortex]
+        Sensory[Sensory<br/>Sensory Cortex]
+        Parietal[Parietal<br/>Parietal Cortex]
+        Temporal[Temporal<br/>Temporal Cortex]
+        Occipital[Occipital<br/>Occipital Cortex]
+    end
+
+    %% Subcortical regions
+    subgraph Subcortical["Subcortical Regions"]
+        Striatum[Striatum<br/>D1/D2 MSNs]
+        Thalamus[Thalamus<br/>Relay Station]
+        GP[GP<br/>Globus Pallidus]
+        STN[STN<br/>Subthalamic Nucleus]
+    end
+
+    %% Limbic regions
+    subgraph Limbic["Limbic System"]
+        Hippocampus[Hippocampus<br/>Memory Formation]
+        Amygdala[Amygdala<br/>Emotion]
+        NAcc[NAcc<br/>Nucleus Accumbens<br/>Reward]
+    end
+
+    %% Brainstem NT source nuclei
+    subgraph Brainstem["Brainstem NT Sources"]
+        VTA[VTA<br/>Dopamine<br/>Mesolimbic/Mesocortical]
+        SNc[SNc<br/>Dopamine<br/>Nigrostriatal]
+        LC[LC<br/>Norepinephrine<br/>Widespread Arousal]
+        Raphe[Raphe<br/>Serotonin<br/>Mood/Patience]
+    end
+
+    %% Additional cholinergic source
+    NBM[NBM<br/>Nucleus Basalis<br/>Acetylcholine<br/>Attention]
+
+    %% Dopaminergic pathways
+    VTA -->|DA Mesolimbic<br/>0.8| NAcc
+    VTA -->|DA Mesocortical<br/>0.6| PFC
+    SNc -->|DA Nigrostriatal<br/>0.9| Striatum
+
+    %% Serotonergic pathways (diffuse)
+    Raphe -.->|5-HT 0.4| PFC
+    Raphe -.->|5-HT 0.4| Motor
+    Raphe -.->|5-HT 0.4| Hippocampus
+    Raphe -.->|5-HT 0.4| Amygdala
+
+    %% Noradrenergic pathways (widespread)
+    LC -.->|NE 0.3| PFC
+    LC -.->|NE 0.3| Striatum
+    LC -.->|NE 0.3| Hippocampus
+    LC -.->|NE 0.3| Thalamus
+
+    %% Cholinergic pathways
+    NBM -.->|ACh 0.5| PFC
+    NBM -.->|ACh 0.5| Motor
+    NBM -.->|ACh 0.5| Sensory
+
+    %% Cortico-striatal (glutamatergic)
+    PFC -->|Glu 0.6| Striatum
+    Motor -->|Glu 0.6| Striatum
+    Sensory -->|Glu 0.6| Striatum
+
+    %% Striato-pallidal (GABAergic inhibitory)
+    Striatum -->|GABA 0.8<br/>Inhibitory| GP
+
+    %% Basal ganglia loop
+    GP -->|Glu| Thalamus
+    Thalamus -->|Glu| PFC
+    Thalamus -->|Glu| Motor
+
+    %% Cortico-cortical connections
+    PFC <-.->|Glu| Motor
+    PFC <-.->|Glu| Parietal
+    Sensory <-.->|Glu| Parietal
+    Parietal <-.->|Glu| Temporal
+
+    %% Hippocampal-cortical
+    Hippocampus <-->|Glu| PFC
+    Hippocampus <-->|Glu| Temporal
+
+    %% Amygdala connections
+    Amygdala <-->|Glu| PFC
+    Amygdala -->|Glu| NAcc
+
+    style VTA fill:#ffd1d1
+    style SNc fill:#ffd1d1
+    style LC fill:#d1e7ff
+    style Raphe fill:#ffe1d1
+    style NBM fill:#fff4d1
+    style NAcc fill:#d1ffd1

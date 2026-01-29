@@ -1,0 +1,36 @@
+flowchart TB
+    subgraph Adenosine["Sleep Pressure (Process S)"]
+        AD_ACC["Adenosine<br/>Accumulation"]
+        AD_THR["Sleep<br/>Threshold"]
+        AD_CLR["Clearance<br/>(Glymphatic)"]
+    end
+
+    subgraph SWR["Sharp-Wave Ripples"]
+        SWR_DET["Ripple Detection<br/>(80-120 Hz)"]
+        SWR_REP["Memory Replay"]
+        SWR_CON["Consolidation"]
+    end
+
+    subgraph Glymphatic["Glymphatic System"]
+        GLY_FLOW["CSF Flow"]
+        GLY_WASTE["Waste Clearance"]
+        GLY_GATE["Sleep-Gated<br/>(NREM only)"]
+    end
+
+    subgraph Spindles["Sleep Spindles"]
+        SP_GEN["Thalamic<br/>Generation"]
+        SP_COUP["Spindle-Delta<br/>Coupling"]
+        SP_MEM["Synaptic<br/>Consolidation"]
+    end
+
+    AD_ACC --> AD_THR
+    AD_THR -->|"Threshold crossed"| SWR
+    SWR_DET --> SWR_REP --> SWR_CON
+
+    AD_CLR <--> GLY_FLOW
+    GLY_FLOW --> GLY_WASTE
+    GLY_GATE --> GLY_FLOW
+
+    SP_GEN --> SP_COUP
+    SP_COUP --> SWR_REP
+    SP_MEM --> SWR_CON

@@ -1,0 +1,69 @@
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#2e86ab'}}}%%
+flowchart TB
+    subgraph FF["Forward-Forward Algorithm"]
+        direction TB
+        FF_POS["Positive Phase<br/>(Real Data)"]
+        FF_NEG["Negative Phase<br/>(Synthetic Data)"]
+        FF_GOOD["Goodness Function<br/>G = sum(h^2)"]
+        FF_THR["Threshold theta"]
+    end
+
+    subgraph NCA["NCA Energy Landscape"]
+        direction TB
+        NCA_EN["Energy E(x)"]
+        NCA_BASIN["Attractor Basin"]
+        NCA_BARR["Energy Barrier"]
+        NCA_MIN["Local Minimum"]
+    end
+
+    subgraph Coupling["FF-NCA Coupling"]
+        direction TB
+        ALIGN["Alignment:<br/>Goodness = -Energy"]
+        G2E["Goodness -> Basin Depth"]
+        TH2B["Threshold -> Barrier Height"]
+        PH2D["Phase -> Energy Gradient"]
+    end
+
+    subgraph NT["Neuromodulator Effects"]
+        DA["DA<br/>Learning Rate"]
+        ACH["ACh<br/>Encode/Retrieve"]
+        NE["NE<br/>Threshold"]
+        SHT["5-HT<br/>Credit Window"]
+    end
+
+    subgraph Feedback["Bidirectional Feedback"]
+        FF2NCA["FF -> NCA:<br/>Goodness -> Field Energy"]
+        NCA2FF["NCA -> FF:<br/>Basin -> Layer Activation"]
+    end
+
+    %% FF internal
+    FF_POS -->|"Maximize"| FF_GOOD
+    FF_NEG -->|"Minimize"| FF_GOOD
+    FF_GOOD --> FF_THR
+
+    %% NCA internal
+    NCA_EN --> NCA_BASIN
+    NCA_EN --> NCA_BARR
+    NCA_BASIN --> NCA_MIN
+
+    %% Coupling relationships
+    FF_GOOD <-->|"Inverse"| NCA_EN
+    FF_THR <-->|"Maps to"| NCA_BARR
+    FF_POS -.->|"Descend"| NCA_MIN
+    FF_NEG -.->|"Ascend"| NCA_BARR
+
+    %% NT modulation
+    DA --> FF_GOOD
+    ACH --> FF_POS
+    ACH --> FF_NEG
+    NE --> FF_THR
+    SHT --> ALIGN
+
+    %% Feedback loop
+    FF_GOOD --> FF2NCA --> NCA_EN
+    NCA_BASIN --> NCA2FF --> FF_POS
+
+    style FF_POS fill:#c8e6c9,stroke:#388e3c
+    style FF_NEG fill:#ffcdd2,stroke:#c62828
+    style NCA_MIN fill:#e3f2fd,stroke:#1976d2
+    style NCA_BARR fill:#fff3e0,stroke:#f57c00

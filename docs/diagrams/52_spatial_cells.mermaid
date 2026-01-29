@@ -1,0 +1,54 @@
+flowchart TD
+    %% Input
+    Embedding[Input Embedding<br/>1024-dim] --> Projection[Projection Matrix<br/>1024 → 2D]
+
+    Projection --> Position2D[2D Position<br/>x, y]
+
+    %% Velocity computation
+    Embedding --> ComputeVel{Last Embedding<br/>Exists?}
+    ComputeVel -->|Yes| VelDelta[Δ = current - last]
+    VelDelta --> Velocity[Velocity<br/>vx, vy]
+    ComputeVel -->|No| ZeroVel[Zero Velocity]
+
+    %% Place cells
+    Position2D --> PlaceCells[Place Cell Population<br/>100 cells]
+
+    PlaceCells --> PlaceActivation{For each cell<br/>compute activation}
+
+    PlaceActivation --> Gaussian[exp-distcenter² / 2σ²]
+
+    Gaussian --> Sparsity[Apply Sparsity<br/>Top 1% active]
+
+    Sparsity --> PlaceOutput[Place Cell<br/>Activations]
+
+    %% Grid cells
+    Position2D --> GridModules[Grid Cell Modules<br/>3 modules scales 0.3, 0.5, 0.8]
+
+    GridModules --> GridResponse{For each module<br/>compute response}
+
+    GridResponse --> HexPattern[Hexagonal Pattern<br/>cos + cos + cos / 3]
+
+    HexPattern --> GridOutput[Grid Cell<br/>Responses 96 cells]
+
+    %% Combined output
+    PlaceOutput --> Combined[Combined Spatial Code<br/>Place + Grid = 196-dim]
+    GridOutput --> Combined
+
+    %% Neighbor finding
+    Combined --> History[Position History<br/>episode_id, position]
+
+    History --> Neighbors[Find Neighbors<br/>k-nearest by distance]
+
+    %% Prediction
+    Velocity --> Predict[Predict Next Position<br/>x + vx, y + vy]
+
+    %% Validation
+    GridOutput -.-> Validate[Validate Hexagonal<br/>Pattern Gridness]
+    Validate -.-> Autocorr[Spatial<br/>Autocorrelation]
+    Autocorr -.-> Gridness[Gridness Score<br/>min60°,120° - max30°,90°,150°]
+
+    style Embedding fill:#e1f5ff
+    style Position2D fill:#fff4e1
+    style PlaceOutput fill:#e1ffe1
+    style GridOutput fill:#ffe1e1
+    style Combined fill:#f0e1ff

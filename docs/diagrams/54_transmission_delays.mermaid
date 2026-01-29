@@ -1,0 +1,62 @@
+flowchart TD
+    %% Delay configuration
+    Config[Delay Configuration<br/>dt = 1ms, max_delay = 100ms] --> BufferSize[Compute Buffer Size<br/>max_delay / dt + 1]
+
+    BufferSize --> NTBuffers[NT Delay Buffers<br/>6 neurotransmitters]
+
+    %% NT-specific delays
+    NTBuffers --> DADelay[DA: 20ms<br/>volume transmission]
+    NTBuffers --> SerDelay[5-HT: 25ms<br/>volume transmission]
+    NTBuffers --> AChDelay[ACh: 5ms<br/>mixed signaling]
+    NTBuffers --> NEDelay[NE: 15ms<br/>volume transmission]
+    NTBuffers --> GABADelay[GABA: 1.5ms<br/>fast synaptic]
+    NTBuffers --> GluDelay[Glu: 1ms<br/>fast synaptic]
+
+    %% Circular buffer structure
+    DADelay --> CircBuf[Circular Buffer<br/>push, get_delayed, interpolate]
+    SerDelay --> CircBuf
+    AChDelay --> CircBuf
+    NEDelay --> CircBuf
+    GABADelay --> CircBuf
+    GluDelay --> CircBuf
+
+    %% Region-to-region delays
+    Config --> DistMatrix[Distance Matrix<br/>n_regions × n_regions]
+
+    DistMatrix --> AxonalDelay{Compute Axonal<br/>Delay}
+
+    AxonalDelay --> Formula[delay_ms = distance_mm / velocity_m_s × 1000]
+
+    Formula --> Velocity[Conduction Velocities<br/>per pathway]
+
+    Velocity --> Unmyelinated[C-fibers: 0.5-2 m/s<br/>pain, temperature]
+    Velocity --> Myelinated[A-fibers: 5-120 m/s<br/>motor, touch]
+    Velocity --> Cortical[Cortical: 1-10 m/s<br/>long-range connections]
+
+    %% DDE operator
+    CircBuf --> DDE[Delay Differential<br/>Operator]
+
+    DDE --> CurrentFields[Current NT Fields<br/>Ux, t]
+
+    CurrentFields --> DelayedFields[Delayed NT Fields<br/>Ux, t-τ₁, x, t-τ₂, ...]
+
+    DelayedFields --> DDETerm[DDE Term<br/>∂U/∂t = fU,delayed U]
+
+    %% Coupling with delays
+    DDETerm --> CouplingMatrix[Coupling Matrix<br/>K &#91;6×6&#93;]
+
+    CouplingMatrix --> DelayedCoupling[Delayed Coupling<br/>Σ Kᵢⱼ · Uⱼx,t-τⱼ]
+
+    %% Plasticity (optional)
+    Velocity -.-> Plasticity[Velocity Plasticity<br/>Activity-Dependent<br/>Myelination]
+
+    Plasticity -.-> UpdateVel[High activity →<br/>↑ velocity up to 100 m/s]
+
+    %% Statistics
+    DelayedCoupling --> Stats[Delay Statistics<br/>mean, max, total buffered]
+
+    style Config fill:#e1f5ff
+    style CircBuf fill:#fff4e1
+    style DDE fill:#ffe1e1
+    style DelayedCoupling fill:#e1ffe1
+    style Plasticity fill:#f0e1ff

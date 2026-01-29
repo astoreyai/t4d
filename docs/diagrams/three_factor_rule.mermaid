@@ -1,0 +1,71 @@
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#2e86ab'}}}%%
+flowchart TB
+    subgraph Factor1["Factor 1: Pre-Synaptic"]
+        PRE["Pre-Synaptic<br/>Activity"]
+        PRE_RATE["Firing Rate<br/>or Spike"]
+    end
+
+    subgraph Factor2["Factor 2: Post-Synaptic"]
+        POST["Post-Synaptic<br/>Activity"]
+        POST_RATE["Firing Rate<br/>or Spike"]
+    end
+
+    subgraph Factor3["Factor 3: Neuromodulator"]
+        direction TB
+        DA["DA: RPE<br/>(Surprise)"]
+        SHT["5-HT: Patience<br/>(Discount)"]
+        NE["NE: Arousal<br/>(Gain)"]
+        ACH["ACh: Mode<br/>(Enc/Ret)"]
+    end
+
+    subgraph Integration["Three-Factor Integration"]
+        HEBBIAN["Hebbian Term<br/>Pre × Post"]
+        GATE["Modulator Gate<br/>M(DA, 5-HT, NE, ACh)"]
+        FINAL["Δw = η × Pre × Post × M"]
+    end
+
+    subgraph Effects["Learning Effects"]
+        LTP["LTP<br/>(Strengthen)"]
+        LTD["LTD<br/>(Weaken)"]
+        NO_CHANGE["No Change<br/>(Gate closed)"]
+    end
+
+    subgraph Conditions["Gating Conditions"]
+        C1["High DA + Pre×Post > 0<br/>→ LTP"]
+        C2["Low DA + Pre×Post > 0<br/>→ LTD or none"]
+        C3["High ACh<br/>→ Encoding mode"]
+        C4["Low ACh<br/>→ Retrieval mode"]
+    end
+
+    %% Main flow
+    PRE --> PRE_RATE --> HEBBIAN
+    POST --> POST_RATE --> HEBBIAN
+
+    DA --> GATE
+    SHT --> GATE
+    NE --> GATE
+    ACH --> GATE
+
+    HEBBIAN --> FINAL
+    GATE --> FINAL
+
+    FINAL --> LTP
+    FINAL --> LTD
+    FINAL --> NO_CHANGE
+
+    %% Conditions
+    C1 -.-> LTP
+    C2 -.-> LTD
+    C3 -.-> GATE
+    C4 -.-> GATE
+
+    %% Styling
+    style HEBBIAN fill:#e3f2fd,stroke:#1976d2
+    style GATE fill:#ffecb3,stroke:#ff8f00
+    style FINAL fill:#c8e6c9,stroke:#388e3c
+    style LTP fill:#c8e6c9,stroke:#388e3c
+    style LTD fill:#ffcdd2,stroke:#c62828
+    style DA fill:#fff3e0,stroke:#f57c00
+    style SHT fill:#e8f5e9,stroke:#4caf50
+    style NE fill:#fce4ec,stroke:#e91e63
+    style ACH fill:#e1f5fe,stroke:#03a9f4

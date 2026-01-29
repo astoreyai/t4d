@@ -1,0 +1,74 @@
+flowchart TD
+    %% Observation input
+    Context[Context Memory IDs<br/>Recent Retrievals] --> Observe[Observe Event]
+    Outcome[Outcome Memory ID<br/>+ Outcome Value] --> Observe
+
+    Observe --> Buffer[Observation Buffer<br/>context, outcome pairs]
+
+    %% Causal edge creation
+    Buffer --> Extract[Extract Recent Context<br/>max_context_depth = 10]
+
+    Extract --> Loop{For each<br/>context memory}
+
+    Loop --> Recency[Compute Recency<br/>position / len context]
+
+    Recency --> InitStrength[Initial Strength<br/>0.3 + 0.4 × recency]
+
+    InitStrength --> RelationType{Outcome Value}
+    RelationType -->|> 0| Causes[CAUSES Relation]
+    RelationType -->|< 0| Prevents[PREVENTS Relation]
+
+    %% Graph update
+    Causes --> Graph[Causal Graph<br/>Directed Edges]
+    Prevents --> Graph
+
+    Graph --> EdgeExists{Edge Already<br/>Exists?}
+
+    EdgeExists -->|Yes| Strengthen[Strengthen Edge<br/>strength + learning_rate<br/>evidence_count++]
+    EdgeExists -->|No| AddEdge[Add New Edge<br/>initial_strength<br/>evidence_count = 1]
+
+    Strengthen --> Updated[Updated Edge]
+    AddEdge --> Updated
+
+    Updated --> Prune{Outgoing edges ><br/>max_edges_per_node?}
+
+    Prune -->|Yes| PruneWeak[Prune Weak Edges<br/>strength < threshold]
+    Prune -->|No| Keep[Keep All Edges]
+
+    %% Counterfactual learning
+    Expected[Expected Cause ID] --> Counter[Counterfactual<br/>Observation]
+    ActualOutcome[Actual Outcome<br/>occurred?] --> Counter
+
+    Counter --> CounterCheck{Outcome<br/>Occurred?}
+    CounterCheck -->|No| Weaken[Weaken Edge<br/>strength -= learning_rate]
+    CounterCheck -->|Yes| Reinforce[Strengthen Edge<br/>Add CAUSES relation]
+
+    Weaken --> Graph
+    Reinforce --> Graph
+
+    %% Attribution
+    Graph --> Attribution[Causal Attribution]
+
+    Attribution --> GetCauses[Get Direct Causes<br/>incoming edges]
+
+    GetCauses --> Normalize[Normalize Strengths<br/>strength / total_strength]
+
+    Normalize --> FilterThresh[Filter by Threshold<br/>contribution > 0.05]
+
+    FilterThresh --> Attributions[Attributions<br/>cause, contribution pairs]
+
+    Attributions --> TotalExplained[Total Explained<br/>Sum of contributions]
+    Attributions --> Residual[Residual<br/>1 - total_explained]
+
+    %% Decay
+    Graph -.-> Decay[Periodic Decay<br/>strength × 1 - decay_rate]
+
+    %% Prediction queries
+    Graph --> Predict[Predictive Queries]
+    Predict --> GetEffects[Get Effects<br/>outgoing edges]
+    Predict --> GetCausesQuery[Get Causes<br/>incoming edges]
+
+    style Observe fill:#e1f5ff
+    style Graph fill:#fff4e1
+    style Attribution fill:#e1ffe1
+    style Counter fill:#ffe1e1

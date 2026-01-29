@@ -1,0 +1,81 @@
+flowchart TD
+    %% Inputs
+    Cortex[Cortical Input<br/>Glutamatergic] --> Striatum[Striatal MSN<br/>Populations]
+    VTA[VTA/SNc<br/>Dopamine] --> Striatum
+    TAN[TANs Cholinergic<br/>Interneurons] --> Striatum
+    NeuralField[Neural Field<br/>GABA Level] --> Striatum
+
+    %% TAN pause mechanism
+    TAN --> TANState{TAN State}
+    TANState -->|Tonic Firing| BaselineACh[Baseline ACh<br/>0.5 tonic firing]
+    TANState -->|Paused| PausedACh[Paused ACh<br/>0.1 during pause]
+
+    RPE[Reward Prediction<br/>Error] --> TANTrigger{&#124;RPE&#124; ><br/>threshold?}
+    TANTrigger -->|Yes| TriggerPause[Trigger TAN Pause<br/>200ms duration]
+    TriggerPause --> PausedACh
+
+    %% D1 MSN pathway (GO)
+    Striatum --> D1Pop[D1 MSN Population<br/>Direct Pathway]
+
+    VTA --> D1Binding[D1 Receptor Binding<br/>Hill Function]
+    D1Binding --> D1Occupancy[occupancy = DAⁿ / K_d1ⁿ + DAⁿ]
+
+    D1Occupancy --> D1Excite[DA EXCITES D1<br/>Gs-coupled → ↑ cAMP]
+
+    Cortex --> D1Drive[Cortical Drive<br/>× D1 Strength]
+    D1Drive --> D1Activity
+    D1Excite --> D1Activity[D1 Activity<br/>Baseline + DA Effect]
+
+    PausedACh -->|Low ACh| D1Boost[Boost D1<br/>Remove Inhibition]
+    D1Boost --> D1Activity
+
+    %% D2 MSN pathway (NO-GO)
+    Striatum --> D2Pop[D2 MSN Population<br/>Indirect Pathway]
+
+    VTA --> D2Binding[D2 Receptor Binding<br/>Hill Function Higher Affinity]
+    D2Binding --> D2Occupancy[occupancy = DAⁿ / K_d2ⁿ + DAⁿ]
+
+    D2Occupancy --> D2Inhibit[DA INHIBITS D2<br/>Gi-coupled → ↓ cAMP]
+
+    Cortex --> D2Drive[Cortical Drive<br/>× D2 Strength]
+    D2Drive --> D2Activity
+    D2Inhibit --> D2Activity[D2 Activity<br/>Baseline - DA Effect]
+
+    BaselineACh -->|High ACh| D2Boost[Boost D2<br/>Enhance Pathway]
+    D2Boost --> D2Activity
+
+    %% Lateral inhibition (GABA-mediated)
+    NeuralField --> GABAMod[GABA Modulates<br/>Inhibition Strength]
+
+    GABAMod --> LateralInhib[Lateral Inhibition<br/>D1 ⊣ D2, D2 ⊣ D1]
+
+    D1Activity --> LateralInhib
+    D2Activity --> LateralInhib
+
+    LateralInhib --> D1Final[Final D1 Activity<br/>- D2 × GABA]
+    LateralInhib --> D2Final[Final D2 Activity<br/>- D1 × GABA]
+
+    %% Competition and action selection
+    D1Final --> Competition[Winner-Take-All<br/>Competition]
+    D2Final --> Competition
+
+    Competition --> Margin[Compute Margin<br/>D1 - D2]
+
+    Margin --> Decision{Action State}
+    Decision -->|D1 > threshold & D1 > D2×1.2| GO[GO Action<br/>Execute]
+    Decision -->|D2 > threshold & D2 > D1×1.2| NO_GO[NO-GO Action<br/>Inhibit]
+    Decision -->|Close| Competing[COMPETING<br/>Undecided]
+
+    %% Plasticity (DA-modulated)
+    VTA --> Plasticity{DA Level}
+    Plasticity -->|High DA > 0.6| D1LTP[D1 LTP<br/>D2 LTD]
+    Plasticity -->|Low DA < 0.4| D2LTP[D2 LTP<br/>D1 LTD]
+
+    D1LTP --> HabitForm[Habit Formation<br/>D1 Strength ↑]
+
+    style VTA fill:#e1f5ff
+    style D1Activity fill:#e1ffe1
+    style D2Activity fill:#ffe1e1
+    style GO fill:#c8ffc8
+    style NO_GO fill:#ffc8c8
+    style TAN fill:#fff4e1

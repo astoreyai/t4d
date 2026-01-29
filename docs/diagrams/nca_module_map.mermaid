@@ -1,0 +1,94 @@
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#2e86ab', 'primaryTextColor': '#fff', 'primaryBorderColor': '#205d87', 'lineColor': '#666', 'secondaryColor': '#f18f01', 'tertiaryColor': '#c73e1d'}}}%%
+flowchart TB
+    subgraph Core["Core NCA"]
+        NF[NeuralFieldSolver<br/>3D PDE Solver]
+        CP[LearnableCoupling<br/>Biological Bounds]
+        EN[EnergyLandscape<br/>Hopfield Integration]
+        AT[AttractorBasin<br/>State Transitions]
+    end
+
+    subgraph Neuromod["Neuromodulatory Systems"]
+        VTA[VTACircuit<br/>DA Production]
+        RP[RapheNucleus<br/>5-HT + Patience]
+        LC[LocusCoeruleus<br/>NE + Surprise]
+        PFC_NEURO[PFC Backprojections<br/>Glutamatergic]
+    end
+
+    subgraph MotorAction["Motor/Action Selection"]
+        STR[StriatalMSN<br/>D1/D2 Populations]
+    end
+
+    subgraph HPC["Hippocampal System"]
+        DG[DentateGyrus<br/>Pattern Separation]
+        CA3[CA3 Layer<br/>Pattern Completion]
+        CA1[CA1 Layer<br/>Novelty Detection]
+        SPC[SpatialCells<br/>Place/Grid Cells]
+    end
+
+    subgraph Learning["Learning Mechanisms"]
+        FF[ForwardForward<br/>Local Goodness]
+        CAP[CapsuleNetwork<br/>Dynamic Routing]
+        TG[ThetaGamma<br/>WM Slots]
+    end
+
+    subgraph Sleep["Sleep/Wake Cycle"]
+        AD[AdenosineDynamics<br/>Sleep Pressure]
+        SP[SleepSpindles<br/>Spindle-Delta]
+        SWR[SWRCoupling<br/>Ripple Events]
+        GLY[GlymphaticSystem<br/>Waste Clearance]
+    end
+
+    subgraph Glia["Glial Support"]
+        AST[AstrocyteLayer<br/>Tripartite Synapse]
+        GLU[GlutamateSignaling<br/>NMDA/AMPA]
+    end
+
+    %% Core connections
+    NF --> CP
+    CP --> EN
+    EN --> AT
+
+    %% Neuromod to Core
+    VTA --> CP
+    RP --> EN
+    LC --> AT
+
+    %% PFC backprojections to neuromodulatory nuclei
+    PFC_NEURO -.->|"glutamatergic"| VTA
+    PFC_NEURO -.->|"glutamatergic"| LC
+    PFC_NEURO -.->|"glutamatergic"| RP
+
+    %% Auto 5-HT↔DA loop
+    RP <-.->|"auto-wired<br/>set_raphe/set_vta"| VTA
+
+    %% Motor/Action to Core (STR is DA target, not source)
+    VTA -->|"DA modulates"| STR
+    STR --> CP
+
+    %% HPC internal
+    DG --> CA3 --> CA1
+    SPC --> DG
+
+    %% HPC to Core
+    CA1 --> EN
+    CA3 --> AT
+
+    %% Learning to Core
+    FF --> EN
+    CAP --> FF
+    TG --> CA3
+
+    %% Sleep to Core
+    AD --> NF
+    SP --> CA1
+    SWR --> CA3
+    GLY --> AST
+
+    %% Glia to Core
+    AST --> CP
+    GLU --> NF
+
+    %% Coupling bridges
+    FF -.->|FF-NCA Coupling| EN
+    CAP -.->|Capsule-NCA Coupling| FF
+    GLY -.->|Glymphatic Bridge| SWR

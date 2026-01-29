@@ -1,0 +1,71 @@
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#2e86ab'}}}%%
+flowchart TB
+    subgraph Input["Cortical Input"]
+        EC["Entorhinal Cortex<br/>(1024-dim)"]
+    end
+
+    subgraph DG_Block["Dentate Gyrus - Pattern Separation"]
+        DG["DG Layer<br/>(4096-dim, 4% sparse)"]
+        DG_OP["Operations:<br/>- Expansion recoding<br/>- Winner-take-all<br/>- Orthogonalization"]
+    end
+
+    subgraph CA3_Block["CA3 - Pattern Completion"]
+        CA3["CA3 Layer<br/>(1024-dim)"]
+        CA3_OP["Operations:<br/>- Modern Hopfield<br/>- Autoassociation<br/>- beta=8.0 temperature"]
+        REC["Recurrent<br/>Connections"]
+    end
+
+    subgraph CA1_Block["CA1 - Novelty Detection"]
+        CA1["CA1 Layer<br/>(1024-dim)"]
+        CA1_OP["Operations:<br/>- EC vs CA3 comparison<br/>- Mismatch computation<br/>- Mode selection"]
+    end
+
+    subgraph Output["Output"]
+        NOV{{"Novelty Score<br/>(0=familiar, 1=novel)"}}
+        MODE{{"Mode Decision"}}
+        OUT["Output to<br/>Cortex"]
+    end
+
+    subgraph Grid["Spatial Module"]
+        GRID["Grid Cells<br/>(EC - Hexagonal)"]
+        PLACE_CA1["Place Cells<br/>(CA1 - Location-specific)"]
+        PLACE_CA3["Place Cells<br/>(CA3 - Auto-association)"]
+    end
+
+    %% Main pathway
+    EC -->|"Perforant Path"| DG
+    DG --> DG_OP
+    DG_OP -->|"Mossy Fibers<br/>(sparse)"| CA3
+    CA3 --> CA3_OP
+    CA3 <--> REC
+    CA3 -->|"Schaffer<br/>Collaterals"| CA1
+    EC -->|"Direct Path"| CA1
+    CA1 --> CA1_OP
+
+    %% Outputs
+    CA1_OP --> NOV
+    NOV --> MODE
+    MODE -->|"Encoding (>0.5)"| DG
+    MODE -->|"Retrieval (<0.3)"| CA3
+    CA1 --> OUT
+
+    %% Spatial cells: Grid cells (EC) feed INTO hippocampus
+    %% Place cells EMERGE in CA3/CA1
+    GRID -->|"Spatial input"| DG
+    GRID -->|"Spatial input"| EC
+    CA3 --- PLACE_CA3
+    CA1 --- PLACE_CA1
+
+    %% Neuromodulation
+    subgraph NM["Neuromodulation"]
+        ACH["ACh<br/>(Encoding Gate)"]
+        DA["DA<br/>(Learning Rate)"]
+    end
+
+    ACH -.->|"High: Encode"| DG
+    ACH -.->|"Low: Retrieve"| CA3
+    DA -.->|"Modulate"| CA3_OP
+
+    style DG fill:#e8f4ea,stroke:#2d6a4f
+    style CA3 fill:#fef3c7,stroke:#d97706
+    style CA1 fill:#dbeafe,stroke:#2563eb

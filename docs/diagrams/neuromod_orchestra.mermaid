@@ -1,0 +1,87 @@
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#2e86ab'}}}%%
+flowchart TB
+    subgraph Sources["Neuromodulator Sources"]
+        VTA["VTA<br/>(Dopamine)"]
+        RAPHE["Raphe<br/>(Serotonin)"]
+        LC["Locus Coeruleus<br/>(Norepinephrine)"]
+        BF["Basal Forebrain<br/>(Acetylcholine)"]
+    end
+
+    subgraph Signals["Input Signals"]
+        RPE["Reward<br/>Prediction Error"]
+        WAIT["Waiting/<br/>Patience"]
+        NOVEL["Novelty/<br/>Surprise"]
+        ATTN["Attention/<br/>Encoding"]
+    end
+
+    subgraph NTLevels["NT Levels (0-1)"]
+        DA_LEVEL["DA Level<br/>0.1-0.9"]
+        SHT_LEVEL["5-HT Level<br/>0.3-0.8"]
+        NE_LEVEL["NE Level<br/>0.2-0.8"]
+        ACH_LEVEL["ACh Level<br/>0.2-0.9"]
+    end
+
+    subgraph Effects["System Effects"]
+        direction TB
+        E_DA["DA Effects:<br/>• Learning rate ↑↓<br/>• Action vigor<br/>• Goal pursuit"]
+        E_SHT["5-HT Effects:<br/>• Discount γ ↑↓<br/>• Patience<br/>• Impulse control"]
+        E_NE["NE Effects:<br/>• Gain modulation<br/>• Arousal state<br/>• Focus width"]
+        E_ACH["ACh Effects:<br/>• Encoding mode<br/>• Retrieval mode<br/>• Attention"]
+    end
+
+    subgraph Integration["Orchestra Integration"]
+        COORD["Cross-NT<br/>Coordination"]
+        STATE["Cognitive<br/>State"]
+    end
+
+    subgraph States["Resulting States"]
+        EXPLORE["Explore<br/>(High NE, Low DA)"]
+        EXPLOIT["Exploit<br/>(High DA, Low NE)"]
+        CONSOLIDATE["Consolidate<br/>(Low all, Sleep)"]
+        ENCODE["Encode<br/>(High ACh)"]
+        RETRIEVE["Retrieve<br/>(Low ACh)"]
+    end
+
+    %% Connections
+    RPE --> VTA --> DA_LEVEL --> E_DA
+    WAIT --> RAPHE --> SHT_LEVEL --> E_SHT
+    NOVEL --> LC --> NE_LEVEL --> E_NE
+    ATTN --> BF --> ACH_LEVEL --> E_ACH
+
+    E_DA --> COORD
+    E_SHT --> COORD
+    E_NE --> COORD
+    E_ACH --> COORD
+
+    COORD --> STATE
+
+    STATE --> EXPLORE
+    STATE --> EXPLOIT
+    STATE --> CONSOLIDATE
+    STATE --> ENCODE
+    STATE --> RETRIEVE
+
+    %% Cross-modulation (dashed)
+    DA_LEVEL -.->|"inhibits"| SHT_LEVEL
+    NE_LEVEL -.->|"modulates"| DA_LEVEL
+    ACH_LEVEL -.->|"gates"| E_DA
+    SHT_LEVEL -.->|"5-HT inhibits VTA DA (auto-wired)"| DA_LEVEL
+
+    %% Auto 5-HT↔DA bidirectional loop
+    RAPHE <-.->|"auto-wired<br/>set_raphe/set_vta"| VTA
+
+    %% PFC top-down regulation (glutamatergic backprojections)
+    subgraph PFCFeedback["PFC Top-Down Regulation"]
+        PFC_REG["Prefrontal Cortex<br/>(Glutamatergic)"]
+    end
+    PFC_REG -.->|"glutamatergic<br/>backprojection"| LC
+    PFC_REG -.->|"glutamatergic<br/>backprojection"| VTA
+    PFC_REG -.->|"glutamatergic<br/>backprojection"| RAPHE
+
+    %% Styling
+    style VTA fill:#fff3e0,stroke:#f57c00
+    style RAPHE fill:#e8f5e9,stroke:#4caf50
+    style LC fill:#fce4ec,stroke:#e91e63
+    style BF fill:#e1f5fe,stroke:#03a9f4
+    style COORD fill:#e3f2fd,stroke:#1976d2
+    style STATE fill:#c8e6c9,stroke:#388e3c

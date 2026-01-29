@@ -1,0 +1,59 @@
+flowchart TD
+    %% Wake/Sleep State
+    WakeSleep[Wake/Sleep State] --> StateRate{State-Dependent<br/>Clearance Rate}
+
+    StateRate -->|NREM Deep 70%| ClearanceHigh[High Clearance]
+    StateRate -->|NREM Light 50%| ClearanceMed[Medium Clearance]
+    StateRate -->|Quiet Wake 30%| ClearanceLow[Low Clearance]
+    StateRate -->|Active Wake 10%| ClearanceMin[Minimal Clearance]
+    StateRate -->|REM 5%| ClearanceREM[REM Blocked<br/>ACh blocks AQP4]
+
+    %% Neuromodulator influence
+    NELevel[NE Level<br/>Locus Coeruleus] --> AstrocyteVolume{Astrocyte<br/>Volume}
+    AstrocyteVolume -->|Low NE| Shrink[Shrink<br/>↑ Interstitial Space]
+    AstrocyteVolume -->|High NE| Expand[Expand<br/>↓ Interstitial Space]
+
+    %% Delta oscillator coupling
+    DeltaOsc[Delta Oscillator<br/>0.5-4 Hz] --> UpState{Delta<br/>Up-State?}
+    UpState -->|Yes| CSFFlow[CSF Flow<br/>Drive Clearance]
+    UpState -->|No| MinimalFlow[Minimal Flow]
+
+    %% Effective rate computation
+    ClearanceHigh --> EffectiveRate[Compute Effective Rate<br/>base × NE_factor × ACh_factor]
+    ClearanceMed --> EffectiveRate
+    ClearanceLow --> EffectiveRate
+    ClearanceMin --> EffectiveRate
+    ClearanceREM --> EffectiveRate
+
+    Shrink --> EffectiveRate
+    Expand --> EffectiveRate
+    CSFFlow --> EffectiveRate
+    MinimalFlow --> EffectiveRate
+
+    %% Waste scanning
+    EffectiveRate --> Scan[Scan for Waste]
+
+    Scan --> UnusedEmb[Unused Embeddings<br/>30+ days]
+    Scan --> WeakConn[Weak Connections<br/>weight < 0.1]
+    Scan --> StaleMemory[Stale Memories<br/>low FSRS stability]
+    Scan --> OrphanEntity[Orphan Entities<br/>no relations]
+
+    %% Clearance execution
+    UnusedEmb --> Execute[Execute Clearance<br/>Batch Processing]
+    WeakConn --> Execute
+    StaleMemory --> Execute
+    OrphanEntity --> Execute
+
+    Execute --> Priority[Priority Order<br/>1. Weak Connections<br/>2. Stale Memories<br/>3. Unused Embeddings]
+
+    Priority --> Delete[Delete from<br/>Memory System]
+
+    Delete --> Cleared[Cleared Count<br/>Statistics]
+
+    %% Safety limits
+    Execute -.-> Safety[Safety Limits<br/>Max 10% per cycle<br/>Preserve < 24h old]
+
+    style WakeSleep fill:#e1f5ff
+    style EffectiveRate fill:#fff4e1
+    style Execute fill:#ffe1e1
+    style Cleared fill:#e1ffe1

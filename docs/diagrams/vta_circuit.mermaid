@@ -1,0 +1,76 @@
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#fff3e0'}}}%%
+flowchart TB
+    subgraph Inputs["VTA Inputs"]
+        LH["Lateral Hypothalamus<br/>(Orexin)"]
+        LDT["LDT/PPTg<br/>(Cholinergic)"]
+        PFC["Prefrontal Cortex<br/>(Goal context + Glu)"]
+        RMTg["RMTg<br/>(GABAergic brake)"]
+        RAPHE_IN["Raphe<br/>(5-HT inhibition)"]
+    end
+
+    subgraph VTA["Ventral Tegmental Area"]
+        direction TB
+        DA_NEURON["DA Neurons<br/>(~60%)"]
+        GABA_NEURON["GABA Neurons<br/>(~35%)"]
+        GLU_NEURON["Glu Neurons<br/>(~5%)"]
+
+        subgraph Firing["Firing Modes"]
+            TONIC["Tonic<br/>(3-5 Hz)"]
+            PHASIC["Phasic<br/>(15-25 Hz burst)"]
+        end
+    end
+
+    subgraph Computation["RPE Computation"]
+        REWARD["Actual Reward<br/>R(t)"]
+        PREDICT["Predicted Value<br/>V(s)"]
+        RPE["RPE = R - V<br/>(δ)"]
+    end
+
+    subgraph Outputs["VTA Projections"]
+        NAC["NAc<br/>(Motivation)"]
+        DLPFC["dlPFC<br/>(Working Memory)"]
+        HPC["Hippocampus<br/>(Encoding gate)"]
+        AMY["Amygdala<br/>(Salience)"]
+    end
+
+    subgraph Effects["Downstream Effects"]
+        LR_MOD["Learning Rate<br/>η × (1 + k×DA)"]
+        VIGOR["Action Vigor<br/>↑ motor output"]
+        GOAL["Goal Pursuit<br/>↑ persistence"]
+    end
+
+    %% Input connections
+    LH -->|"excites"| DA_NEURON
+    LDT -->|"modulates"| DA_NEURON
+    PFC -->|"context + Glu<br/>(receive_pfc_modulation)"| DA_NEURON
+    RMTg -->|"inhibits"| DA_NEURON
+    RAPHE_IN -.->|"5-HT inhibition<br/>(auto set_raphe)"| DA_NEURON
+
+    %% VTA internal
+    DA_NEURON --> TONIC
+    DA_NEURON --> PHASIC
+    GABA_NEURON -.->|"local inhibition"| DA_NEURON
+
+    %% Computation
+    REWARD --> RPE
+    PREDICT --> RPE
+    RPE -->|"+δ→burst"| PHASIC
+    RPE -->|"-δ→pause"| TONIC
+
+    %% Outputs
+    DA_NEURON --> NAC
+    DA_NEURON --> DLPFC
+    DA_NEURON --> HPC
+    DA_NEURON --> AMY
+
+    %% Effects
+    NAC --> VIGOR
+    DLPFC --> GOAL
+    HPC --> LR_MOD
+
+    %% Styling
+    style VTA fill:#fff3e0,stroke:#f57c00
+    style RPE fill:#ffecb3,stroke:#ff8f00
+    style DA_NEURON fill:#ffe0b2,stroke:#fb8c00
+    style PHASIC fill:#c8e6c9,stroke:#388e3c
+    style LR_MOD fill:#e3f2fd,stroke:#1976d2

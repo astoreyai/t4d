@@ -1,0 +1,82 @@
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#f3e5f5'}}}%%
+flowchart TB
+    subgraph SlowOscillation["Slow Oscillation (0.5-1 Hz)"]
+        direction TB
+        DOWN["Down State<br/>(hyperpolarization)"]
+        UP["Up State<br/>(depolarization)"]
+        CORTEX["Cortical Origin"]
+    end
+
+    subgraph Spindles["Sleep Spindles (12-15 Hz)"]
+        direction TB
+        TRN["Thalamic Reticular<br/>Nucleus"]
+        TC["Thalamocortical<br/>Neurons"]
+        SIGMA["Sigma Power<br/>(11-16 Hz)"]
+    end
+
+    subgraph Ripples["Sharp-Wave Ripples (150-250 Hz)"]
+        direction TB
+        CA3["CA3 Sharp Wave<br/>(population burst)"]
+        CA1["CA1 Ripple<br/>(fast oscillation)"]
+        REPLAY["Memory Replay<br/>(20x compression)"]
+    end
+
+    subgraph Nesting["Hierarchical Nesting"]
+        direction TB
+        SO_UP["SO Up State<br/>triggers spindles"]
+        SP_TROUGH["Spindle Troughs<br/>nest ripples"]
+        OPTIMAL["Optimal Timing<br/>for plasticity"]
+    end
+
+    subgraph PlasticityWindow["Plasticity Windows"]
+        LTP_WIN["LTP Window<br/>(spindle peak)"]
+        LTD_WIN["LTD Window<br/>(spindle trough)"]
+        REPLAY_WIN["Replay Transfer<br/>(ripple)"]
+    end
+
+    subgraph Timing["Temporal Sequence"]
+        T0["t=0: SO Up State"]
+        T1["t+50ms: Spindle onset"]
+        T2["t+200ms: Spindle peak"]
+        T3["t+100ms: SWR nested"]
+        T4["t+500ms: Plasticity"]
+    end
+
+    %% Connections
+    CORTEX --> DOWN
+    DOWN --> UP
+
+    %% SO up-state triggers BOTH spindles and SWRs in parallel
+    %% (Staresina et al. 2015)
+    UP --> TRN
+    TRN --> TC
+    TC --> SIGMA
+
+    UP -->|"triggers in parallel"| CA3
+    CA3 --> CA1
+    CA1 --> REPLAY
+
+    %% SWR-Spindle temporal coupling enables consolidation
+    SIGMA <-->|"SWR-Spindle\ntemporal coupling"| CA1
+
+    %% Nesting
+    UP --> SO_UP
+    SO_UP -->|"triggers both"| SP_TROUGH
+    SO_UP -->|"triggers both"| OPTIMAL
+
+    %% Plasticity
+    OPTIMAL --> LTP_WIN
+    OPTIMAL --> LTD_WIN
+    REPLAY --> REPLAY_WIN
+
+    %% Timing
+    T0 --> T1 --> T2 --> T3 --> T4
+
+    %% Styling
+    style SlowOscillation fill:#e8eaf6,stroke:#5c6bc0
+    style Spindles fill:#f3e5f5,stroke:#9c27b0
+    style Ripples fill:#e1f5fe,stroke:#03a9f4
+    style Nesting fill:#fff3e0,stroke:#f57c00
+    style PlasticityWindow fill:#c8e6c9,stroke:#388e3c
+    style UP fill:#c5e1a5,stroke:#7cb342
+    style CA1 fill:#b3e5fc,stroke:#0288d1

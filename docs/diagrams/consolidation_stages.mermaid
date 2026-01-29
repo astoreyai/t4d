@@ -1,0 +1,94 @@
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#c5cae9'}}}%%
+flowchart TB
+    subgraph Encoding["Wake: Encoding Phase"]
+        direction TB
+        INPUT["Sensory Input"]
+        HPC_ENC["HPC Fast Encoding<br/>(seconds)"]
+        WM["Working Memory<br/>(prefrontal)"]
+        EPISODIC["Episodic Binding<br/>(DG/CA3)"]
+    end
+
+    subgraph Stage1["Stage 1: Synaptic Consolidation"]
+        direction TB
+        LTP["LTP Induction<br/>(NMDA-dependent)"]
+        PROTEIN["Protein Synthesis<br/>(2-6 hours)"]
+        TAG["Synaptic Tagging<br/>(early LTP)"]
+        CAPTURE["Plasticity-Related<br/>Products"]
+    end
+
+    subgraph Sleep1["NREM Sleep (Early)"]
+        direction TB
+        SWS["Slow-Wave Sleep<br/>(0.5-1 Hz)"]
+        SPINDLE["Sleep Spindles<br/>(12-15 Hz)"]
+        REPLAY1["Hippocampal Replay<br/>(SWR: 150-250 Hz)"]
+    end
+
+    subgraph Stage2["Stage 2: Systems Consolidation"]
+        direction TB
+        HPC_NCX["HPC→NCX Transfer<br/>(days-years)"]
+        SCHEMA["Schema Integration"]
+        SEMANTIC["Semantic Extraction"]
+        INDEPENDENCE["HPC Independence"]
+    end
+
+    subgraph Sleep2["NREM Sleep (Later)"]
+        direction TB
+        INTERLEAVE["Interleaved Replay<br/>(old + new)"]
+        DOWNSCALE["Synaptic Downscaling<br/>(homeostasis)"]
+        GLYMPH["Glymphatic Clearance<br/>(waste removal)"]
+    end
+
+    subgraph ProceduralPath["Procedural Consolidation (Non-Hippocampal)"]
+        direction TB
+        PROC_ENC["Procedural Encoding<br/>(Striatum/Cerebellum)"]
+        STRIATAL_REPLAY["Striatal Replay<br/>(basal ganglia)"]
+        MOTOR_CONSOL["Motor Cortex<br/>Consolidation"]
+    end
+
+    subgraph LTM["Long-Term Memory"]
+        NCX_STORE["Neocortical Storage<br/>(episodic/semantic)"]
+        MOTOR_STORE["Motor Cortex Storage<br/>(procedural)"]
+        STABLE["Stable Memory Trace"]
+    end
+
+    %% Flow
+    INPUT --> HPC_ENC
+    HPC_ENC --> WM
+    WM --> EPISODIC
+
+    EPISODIC --> LTP
+    LTP --> TAG
+    TAG --> PROTEIN
+    PROTEIN --> CAPTURE
+
+    CAPTURE --> SWS
+    SWS --> SPINDLE
+    SPINDLE --> REPLAY1
+
+    REPLAY1 --> HPC_NCX
+    HPC_NCX --> SCHEMA
+    SCHEMA --> SEMANTIC
+    SEMANTIC --> INDEPENDENCE
+
+    INDEPENDENCE --> INTERLEAVE
+    INTERLEAVE --> DOWNSCALE
+    DOWNSCALE --> GLYMPH
+
+    GLYMPH --> NCX_STORE
+    NCX_STORE --> STABLE
+
+    %% Procedural pathway (bypasses hippocampal SWR)
+    INPUT -->|"Motor/skill learning"| PROC_ENC
+    PROC_ENC --> STRIATAL_REPLAY
+    STRIATAL_REPLAY --> MOTOR_CONSOL
+    MOTOR_CONSOL --> MOTOR_STORE
+    MOTOR_STORE --> STABLE
+
+    %% Styling
+    style Encoding fill:#e8f5e9,stroke:#4caf50
+    style Stage1 fill:#fff3e0,stroke:#f57c00
+    style Sleep1 fill:#c5cae9,stroke:#3f51b5
+    style Stage2 fill:#e1f5fe,stroke:#03a9f4
+    style Sleep2 fill:#d1c4e9,stroke:#673ab7
+    style ProceduralPath fill:#fce4ec,stroke:#c2185b
+    style LTM fill:#c8e6c9,stroke:#388e3c

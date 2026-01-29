@@ -1,0 +1,87 @@
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#2e86ab'}}}%%
+flowchart TB
+    subgraph Temporal["Temporal Credit Assignment"]
+        T0["t=0<br/>Action"]
+        T1["t=1"]
+        T2["t=2"]
+        T3["t=3<br/>Reward"]
+    end
+
+    subgraph Eligibility["Eligibility Traces"]
+        E_INIT["e(0) = 0"]
+        E_T0["e(0) = 1<br/>(Action taken)"]
+        E_T1["e(1) = lambda * gamma * e(0)"]
+        E_T2["e(2) = lambda * gamma * e(1)"]
+        E_T3["e(3) = lambda * gamma * e(2)"]
+    end
+
+    subgraph TD["TD-Lambda Learning"]
+        TD_ERR["delta = r + gamma*V(s') - V(s)<br/>TD Error"]
+        TD_UPD["Delta_w = alpha * delta * e(t)<br/>Weight Update"]
+    end
+
+    subgraph Params["Parameters"]
+        LAMBDA["lambda = 0.9<br/>(Trace decay)"]
+        GAMMA["gamma = 0.99<br/>(Discount)"]
+        ALPHA["alpha = 0.01<br/>(Learning rate)"]
+    end
+
+    subgraph VTA["VTA Dopamine"]
+        DA_BASE["DA Tonic<br/>(~4 Hz)"]
+        DA_BURST["DA Burst<br/>(+RPE)"]
+        DA_PAUSE["DA Pause<br/>(-RPE)"]
+    end
+
+    subgraph Modulation["NT Modulation of Credit"]
+        DA_MOD["DA: Scale learning rate<br/>alpha' = alpha * DA"]
+        SHT_MOD["5-HT: Adjust lambda<br/>lambda' = lambda * (1 + 5-HT)"]
+        NE_MOD["NE: Gate eligibility<br/>e' = e * sigma(NE)"]
+        ACH_MOD["ACh: Encoding strength<br/>e_init = ACh level"]
+    end
+
+    subgraph Decay["Trace Dynamics"]
+        DECAY_EXP["Exponential decay:<br/>e(t) = e(t-1) * lambda * gamma"]
+        DECAY_TAGGED["Tagged synapses:<br/>Maintain traces until reward"]
+        DECAY_RESET["Reset on reward:<br/>e(t) -> 0 after update"]
+    end
+
+    %% Temporal sequence
+    T0 --> T1 --> T2 --> T3
+
+    %% Eligibility trace evolution
+    E_INIT --> E_T0
+    T0 -->|"Tag synapse"| E_T0
+    E_T0 --> E_T1 --> E_T2 --> E_T3
+
+    %% TD learning
+    T3 -->|"Reward signal"| TD_ERR
+    E_T3 --> TD_UPD
+    TD_ERR --> TD_UPD
+
+    %% Parameters
+    LAMBDA --> E_T1
+    GAMMA --> E_T1
+    ALPHA --> TD_UPD
+
+    %% VTA
+    TD_ERR -->|"Positive"| DA_BURST
+    TD_ERR -->|"Negative"| DA_PAUSE
+    DA_BASE --> DA_BURST
+    DA_BASE --> DA_PAUSE
+
+    %% Modulation
+    DA_BURST --> DA_MOD --> TD_UPD
+    DA_PAUSE --> DA_MOD
+    SHT_MOD --> LAMBDA
+    NE_MOD --> E_T0
+    ACH_MOD --> E_INIT
+
+    %% Decay types
+    E_T1 -.-> DECAY_EXP
+    E_T0 -.-> DECAY_TAGGED
+    TD_UPD -.-> DECAY_RESET
+
+    style T0 fill:#c8e6c9,stroke:#388e3c
+    style T3 fill:#fef3c7,stroke:#d97706
+    style DA_BURST fill:#ffcdd2,stroke:#c62828
+    style DA_PAUSE fill:#e3f2fd,stroke:#1976d2

@@ -1,0 +1,79 @@
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#2e86ab'}}}%%
+flowchart TB
+    subgraph Input["Input Layer"]
+        IN["Input Vector<br/>(1024-dim)"]
+    end
+
+    subgraph Primary["Primary Capsules"]
+        PC1["Capsule 1<br/>(8-dim pose)"]
+        PC2["Capsule 2<br/>(8-dim pose)"]
+        PC3["..."]
+        PC32["Capsule 32<br/>(8-dim pose)"]
+    end
+
+    subgraph Transform["Transformation"]
+        W1["W_1j<br/>Pose Matrix"]
+        W2["W_2j<br/>Pose Matrix"]
+        W32["W_32j<br/>Pose Matrix"]
+        PRED1["u_hat_1j<br/>Prediction"]
+        PRED2["u_hat_2j<br/>Prediction"]
+        PRED32["u_hat_32j<br/>Prediction"]
+    end
+
+    subgraph Routing["Dynamic Routing"]
+        B["b_ij = 0<br/>Coupling Logits"]
+        C["c_ij = softmax(b)<br/>Coupling Coefficients"]
+        S["s_j = sum(c * u_hat)<br/>Weighted Sum"]
+        V["v_j = squash(s_j)<br/>Output Capsule"]
+        AGR["Agreement:<br/>a_ij = u_hat @ v_j"]
+        UPD["Update:<br/>b_ij += a_ij"]
+    end
+
+    subgraph Output["Output Capsules"]
+        OC1["Entity 1<br/>(16-dim)"]
+        OC2["Entity 2<br/>(16-dim)"]
+        OC16["Entity 16<br/>(16-dim)"]
+    end
+
+    subgraph Interpret["Interpretation"]
+        LEN["|v| = Probability<br/>(Entity exists?)"]
+        DIR["v/|v| = Pose<br/>(Position, orientation)"]
+    end
+
+    subgraph NTMod["NT Modulation"]
+        DA_T["DA -> Temperature<br/>(Routing sharpness)"]
+        NE_S["NE -> Squash Threshold<br/>(Arousal gate)"]
+        ACH_M["ACh -> Mode<br/>(Encode/Retrieve)"]
+        SHT_C["5-HT -> Convergence<br/>(Routing patience)"]
+    end
+
+    %% Input to Primary
+    IN --> PC1 & PC2 & PC3 & PC32
+
+    %% Primary to Transform
+    PC1 --> W1 --> PRED1
+    PC2 --> W2 --> PRED2
+    PC32 --> W32 --> PRED32
+
+    %% Routing iterations
+    PRED1 & PRED2 & PRED32 --> B
+    B --> C --> S --> V
+    V --> AGR
+    AGR --> UPD --> B
+
+    %% Output
+    V --> OC1 & OC2 & OC16
+
+    %% Interpretation
+    OC1 --> LEN
+    OC1 --> DIR
+
+    %% NT Modulation
+    DA_T -.-> C
+    NE_S -.-> V
+    ACH_M -.-> S
+    SHT_C -.-> AGR
+
+    style PC1 fill:#e8f4ea,stroke:#2d6a4f
+    style OC1 fill:#dbeafe,stroke:#2563eb
+    style V fill:#fef3c7,stroke:#d97706

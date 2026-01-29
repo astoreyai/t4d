@@ -1,0 +1,63 @@
+flowchart TD
+    %% Tripartite synapse components
+    PreSyn[Presynaptic Terminal<br/>Releases Glu/GABA] --> Synapse[Synaptic Cleft<br/>NT Diffusion]
+
+    Synapse --> PostSyn[Postsynaptic Terminal<br/>Receives Signal]
+
+    Synapse --> Astrocyte[Astrocyte Process<br/>Wraps Synapse]
+
+    %% EAAT-2 glutamate reuptake
+    Astrocyte --> EAAT2[EAAT-2 Transporter<br/>Glutamate Reuptake]
+
+    EAAT2 --> MMGlu[Michaelis-Menten<br/>Vmax · &#91;Glu&#93; / &#40;Km + &#91;Glu&#93;&#41;]
+
+    MMGlu --> GluCleared[Glu Cleared<br/>~90% of clearance]
+
+    GluCleared --> Metabolism[Metabolize to<br/>Glutamine]
+
+    %% GAT-3 GABA reuptake
+    Astrocyte --> GAT3[GAT-3 Transporter<br/>GABA Reuptake]
+
+    GAT3 --> MMGABA[Michaelis-Menten<br/>Vmax · &#91;GABA&#93; / &#40;Km + &#91;GABA&#93;&#41;]
+
+    MMGABA --> GABACleared[GABA Cleared<br/>Modulates Inhibition]
+
+    %% Calcium dynamics
+    GluCleared --> CaDynamics[Ca²⁺ Dynamics<br/>Intracellular Calcium]
+
+    CaDynamics --> CaRise[Ca²⁺ Rise<br/>Glu triggers mGluR]
+
+    CaRise --> CaLevel{Ca²⁺ Level}
+
+    CaLevel -->|< 0.4| Quiescent[Quiescent State<br/>Baseline Function]
+    CaLevel -->|0.4 - 0.8| Activated[Activated State<br/>Enhanced Reuptake 1.2×]
+    CaLevel -->|> 0.8| Reactive[Reactive State<br/>Impaired Function 0.6×]
+
+    %% Gliotransmission
+    CaLevel -->|> threshold| Gliotx[Gliotransmission<br/>Release Threshold]
+
+    Gliotx --> GluRelease[Glutamate Release<br/>Excites Neurons]
+    Gliotx --> DSerineRelease[D-Serine Release<br/>NMDA Co-Agonist]
+    Gliotx --> ATPRelease[ATP Release<br/>→ Adenosine]
+
+    GluRelease --> ModulateSyn[Modulate Synaptic<br/>Strength]
+    DSerineRelease --> PotentiatePlasticity[Potentiate<br/>Plasticity]
+    ATPRelease --> Adenosine[Adenosine<br/>Inhibitory, Sleep]
+
+    %% Metabolic support
+    Astrocyte --> Glycogen[Glycogen Buffer<br/>Energy Reserve]
+
+    Glycogen --> Lactate[Lactate Production<br/>Astrocyte-Neuron<br/>Lactate Shuttle]
+
+    Lactate --> NeuronEnergy[Neuronal Energy<br/>Oxidative Metabolism]
+
+    %% Neuroprotection
+    GluCleared -.-> Protect[Neuroprotection<br/>Prevent Excitotoxicity]
+
+    Protect -.-> Threshold{&#91;Glu&#93; > 0.9?}
+    Threshold -->|Yes| Excitotoxic[Excitotoxicity Event<br/>Cell Damage Risk]
+
+    style PreSyn fill:#e1f5ff
+    style Astrocyte fill:#fff4e1
+    style Gliotx fill:#ffe1e1
+    style Protect fill:#e1ffe1

@@ -1,0 +1,83 @@
+flowchart TD
+    %% Input retrieval event
+    Query[Query Embedding] --> Retrieval[Retrieval Event]
+    Retrieved[Retrieved Memories<br/>IDs + Embeddings] --> Retrieval
+
+    Retrieval --> Record[Record Event<br/>in History Buffer]
+
+    %% Method 1: Contrastive Credit
+    Record --> Contrastive[Contrastive Credit<br/>Query-Memory Similarity]
+
+    Contrastive --> Normalize[Normalize Query<br/>& Embeddings]
+
+    Normalize --> DotProduct[Compute Similarity<br/>dot query, embedding]
+
+    DotProduct --> Temperature[Temperature Scaling<br/>score / temperature]
+
+    Temperature --> SoftmaxLike[Softmax-like Probability<br/>exp score / 1 + exp score]
+
+    SoftmaxLike --> PositionWeight[Position Weight<br/>1 / i + 1]
+
+    PositionWeight --> ContrastiveCredit[Contrastive Credit<br/>positive_weight × prob × position]
+
+    %% Method 2: Co-activation Credit
+    Record --> Coactivation[Co-activation Credit<br/>Co-Retrieved Memories]
+
+    Coactivation --> Pairs{For each pair<br/>i, j retrieved}
+
+    Pairs --> CoactMatrix[Update Coactivation<br/>Matrix i,j]
+
+    CoactMatrix --> MutualBoost[Mutual Credit Boost<br/>coactivation_boost]
+
+    MutualBoost --> CoactCredit[Co-activation Credit<br/>for both memories]
+
+    CoactCredit --> CoactDecay[Periodic Decay<br/>coactivation_decay]
+
+    %% Method 3: Frequency Credit
+    Record --> Frequency[Frequency Credit<br/>Retrieval Count]
+
+    Frequency --> IncrementCount[Increment Count<br/>retrieval_counts id]
+
+    IncrementCount --> LogFreq[Log Frequency<br/>log1p count]
+
+    LogFreq --> FreqScale[Frequency Scaling<br/>log_freq / log_freq + baseline]
+
+    FreqScale --> FreqCredit[Frequency Credit<br/>scaling × log_freq]
+
+    %% Method 4: Temporal Chain Credit
+    OutcomeArrives[Explicit Outcome<br/>Arrives Later] --> Temporal[Temporal Chain Credit<br/>Propagate Backwards]
+
+    Temporal --> Lookback[Lookback Window<br/>1 hour default]
+
+    Lookback --> FindEvents[Find Events with<br/>Outcome Memory]
+
+    FindEvents --> ChainLoop{For each event<br/>in chain}
+
+    ChainLoop --> Discount[Discount Factor<br/>chain_discount ^ depth]
+
+    Discount --> PropCredit[Propagated Credit<br/>outcome × discount × 0.5]
+
+    PropCredit --> ChainCredit[Temporal Credit<br/>for co-retrieved]
+
+    %% Accumulation
+    ContrastiveCredit --> Accumulate[Accumulated Credit<br/>per Memory ID]
+    CoactCredit --> Accumulate
+    FreqCredit --> Accumulate
+    ChainCredit --> Accumulate
+
+    %% Decay
+    Accumulate --> CreditDecay[Credit Decay<br/>credit_decay_rate ^ days]
+
+    CreditDecay --> ImplicitValue[Implicit Value<br/>No Explicit Outcome<br/>Required]
+
+    %% Query interface
+    ImplicitValue --> GetCredit[Get Implicit Credit<br/>for Memory ID]
+    ImplicitValue --> GetCount[Get Retrieval Count<br/>for Memory ID]
+    CoactMatrix --> GetCoact[Get Coactivation<br/>Strength id1, id2]
+
+    style Retrieval fill:#e1f5ff
+    style Contrastive fill:#fff4e1
+    style Coactivation fill:#ffe1e1
+    style Frequency fill:#e1ffe1
+    style Temporal fill:#f0e1ff
+    style ImplicitValue fill:#ffd1d1

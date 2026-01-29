@@ -1,0 +1,88 @@
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#ffecb3'}}}%%
+flowchart TB
+    subgraph WakePhase["Wake Phase"]
+        direction TB
+        WAKE_ACTIVITY["Neural Activity<br/>(ATP consumption)"]
+        ATP_BREAKDOWN["ATP → ADP → AMP"]
+        ADENOSINE_ACC["Adenosine<br/>Accumulation"]
+    end
+
+    subgraph ProcessS["Process S (Sleep Pressure)"]
+        direction TB
+        PRESSURE["Sleep Pressure<br/>↑ over wake"]
+        THRESHOLD["Sleep Threshold<br/>(~16 hrs wake)"]
+        TRIGGER["Sleep Onset<br/>Trigger"]
+    end
+
+    subgraph Receptors["Adenosine Receptors"]
+        direction TB
+        A1["A1 Receptor<br/>(inhibitory)"]
+        A2A["A2A Receptor<br/>(sleep-promoting)"]
+
+        subgraph Effects["Receptor Effects"]
+            A1_EFFECT["A1: ↓ Wake-promoting<br/>neurons (BF, TMN)"]
+            A2A_EFFECT["A2A: ↑ VLPO<br/>(sleep-promoting)"]
+        end
+    end
+
+    subgraph SleepPhase["Sleep Phase"]
+        direction TB
+        VLPO["VLPO Activation<br/>(GABAergic)"]
+        AROUSAL_OFF["Arousal Systems<br/>Inhibited"]
+        CLEARANCE["Adenosine<br/>Clearance"]
+        RECOVERY["Sleep Pressure<br/>↓ over sleep"]
+    end
+
+    subgraph Caffeine["Caffeine Antagonism"]
+        CAFFEINE["Caffeine Molecule"]
+        BLOCK_A1["Block A1<br/>(↓ inhibition)"]
+        BLOCK_A2A["Block A2A<br/>(↓ sleep drive)"]
+        ALERTNESS["Maintained<br/>Alertness"]
+    end
+
+    subgraph Homeostasis["Two-Process Model"]
+        PROCESS_S["Process S<br/>(homeostatic)"]
+        PROCESS_C["Process C<br/>(circadian)"]
+        SLEEP_GATE["Sleep Gate<br/>(S > C threshold)"]
+    end
+
+    %% Wake accumulation
+    WAKE_ACTIVITY --> ATP_BREAKDOWN
+    ATP_BREAKDOWN --> ADENOSINE_ACC
+    ADENOSINE_ACC --> PRESSURE
+
+    %% Threshold crossing
+    PRESSURE --> THRESHOLD
+    THRESHOLD --> TRIGGER
+
+    %% Receptor activation
+    ADENOSINE_ACC --> A1
+    ADENOSINE_ACC --> A2A
+    A1 --> A1_EFFECT
+    A2A --> A2A_EFFECT
+
+    %% Sleep induction
+    A2A_EFFECT --> VLPO
+    VLPO --> AROUSAL_OFF
+    AROUSAL_OFF --> CLEARANCE
+    CLEARANCE --> RECOVERY
+
+    %% Caffeine
+    CAFFEINE --> BLOCK_A1
+    CAFFEINE --> BLOCK_A2A
+    BLOCK_A1 --> ALERTNESS
+    BLOCK_A2A --> ALERTNESS
+
+    %% Two-process
+    PRESSURE --> PROCESS_S
+    PROCESS_S --> SLEEP_GATE
+    PROCESS_C --> SLEEP_GATE
+
+    %% Styling
+    style WakePhase fill:#fff3e0,stroke:#f57c00
+    style ProcessS fill:#ffecb3,stroke:#ff8f00
+    style SleepPhase fill:#c5cae9,stroke:#3f51b5
+    style Caffeine fill:#ffcdd2,stroke:#c62828
+    style Homeostasis fill:#e8f5e9,stroke:#4caf50
+    style ADENOSINE_ACC fill:#ffcc80,stroke:#fb8c00
+    style VLPO fill:#9fa8da,stroke:#5c6bc0

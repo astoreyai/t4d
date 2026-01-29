@@ -1,0 +1,114 @@
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#2e86ab'}}}%%
+flowchart TB
+    subgraph Encoding["Memory Encoding"]
+        EXP["Experience"]
+        ENC["Encoder"]
+        EMB["Embedding<br/>(768-dim)"]
+    end
+
+    subgraph Buffer["Short-Term Buffer"]
+        BUF["Episode Buffer<br/>(capacity: 1000)"]
+        PRI["Priority Queue<br/>(importance)"]
+        TTL["TTL Tracker<br/>(recency)"]
+    end
+
+    subgraph Consolidation["Consolidation (Sleep)"]
+        REP["Replay Selection"]
+        SWR["SWR Events"]
+        STR["Strengthening"]
+        PRU["Pruning"]
+    end
+
+    subgraph LTM["Long-Term Memory"]
+        subgraph Semantic["Semantic Memory"]
+            ENTITY["Entities"]
+            CONCEPT["Concepts"]
+            FACT["Facts"]
+        end
+
+        subgraph Episodic["Episodic Memory"]
+            EVENT["Events"]
+            CONTEXT["Context Links"]
+            TIMELINE["Timeline"]
+        end
+
+        subgraph Procedural["Procedural Memory"]
+            SKILL["Skills"]
+            HABIT["Habits"]
+        end
+    end
+
+    subgraph Retrieval["Retrieval System"]
+        QUERY["Query Vector"]
+        SPARSE["Sparse Index<br/>(LSH)"]
+        DENSE["Dense Index<br/>(FAISS)"]
+        RANK["Re-ranking"]
+        RESULT["Retrieved<br/>Memories"]
+    end
+
+    subgraph Forgetting["Forgetting Mechanisms"]
+        DECAY["Trace Decay<br/>(exponential)"]
+        INTER["Interference<br/>(similarity)"]
+        COMP["Compression<br/>(abstraction)"]
+    end
+
+    %% Encoding flow
+    EXP --> ENC --> EMB
+
+    %% Buffer
+    EMB --> BUF
+    BUF --> PRI
+    BUF --> TTL
+
+    %% Consolidation
+    PRI -->|"High priority"| REP
+    TTL -->|"Schedule"| REP
+    REP --> SWR
+    SWR --> STR
+    SWR --> PRU
+
+    %% To LTM
+    STR -->|"Semantic extraction"| Semantic
+    STR -->|"Episode binding"| Episodic
+    STR -->|"Pattern learning"| Procedural
+
+    %% Retrieval
+    QUERY --> SPARSE
+    QUERY --> DENSE
+    SPARSE --> RANK
+    DENSE --> RANK
+    LTM --> RANK
+    RANK --> RESULT
+
+    %% Forgetting
+    BUF --> DECAY
+    DECAY --> PRU
+    LTM --> INTER
+    INTER --> COMP
+    COMP -->|"Merge"| Semantic
+
+    %% Reconsolidation pathway
+    RESULT -.->|"Retrieval triggers"| LABILE
+    subgraph Reconsolidation["Reconsolidation"]
+        LABILE["Labile State<br/>(destabilized)"]
+        RESTAB["Reconsolidated<br/>(protein synthesis)"]
+        WEAKENED["Weakened/Modified"]
+    end
+    LABILE -->|"Restabilization"| RESTAB
+    LABILE -->|"Interference"| WEAKENED
+    RESTAB -.->|"Back to LTM"| LTM
+    WEAKENED -.->|"Degraded trace"| LTM
+
+    %% Separate procedural pathway (bypasses hippocampal SWR)
+    subgraph ProceduralPath["Procedural Consolidation"]
+        BG_REP["Basal Ganglia<br/>Replay"]
+        MOTOR_C["Motor Cortex<br/>Stabilization"]
+    end
+    STR -->|"Procedural"| BG_REP
+    BG_REP --> MOTOR_C
+    MOTOR_C -->|"Skill learning"| Procedural
+
+    style BUF fill:#fff3e0,stroke:#f57c00
+    style Episodic fill:#e3f2fd,stroke:#1976d2
+    style Semantic fill:#e8f4ea,stroke:#2d6a4f
+    style Procedural fill:#fce4ec,stroke:#c2185b

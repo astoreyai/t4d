@@ -1,0 +1,95 @@
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#e1f5fe'}}}%%
+flowchart TB
+    subgraph SleepState["Sleep State"]
+        NREM["NREM Sleep<br/>(Slow oscillations)"]
+        SPINDLE["Sleep Spindles<br/>(12-15 Hz)"]
+        SO["Slow Oscillation<br/>(0.5-1 Hz)"]
+    end
+
+    subgraph HPC_SWR["Hippocampal SWR"]
+        direction TB
+        CA3_BURST["CA3 Burst<br/>(Pattern completion)"]
+        RIPPLE["Ripple<br/>(150-250 Hz)"]
+        CA1_FIRE["CA1 Firing<br/>(Compressed replay)"]
+
+        COMPRESS["Time Compression<br/>(20x faster)"]
+    end
+
+    subgraph ReplayContent["Replay Content"]
+        RECENT["Recent Episodes<br/>(high priority)"]
+        REMOTE["Remote Memories<br/>(interleaved)"]
+        FILTER["Memory Filter<br/>(exclude procedural)"]
+        SEQUENCE["Sequential<br/>Replay"]
+    end
+
+    subgraph ProceduralRoute["Procedural Memory Routing"]
+        PROC_MEM["Procedural<br/>Memories"]
+        MSN_PATH["Striatal MSN<br/>(motor pathway)"]
+    end
+
+    subgraph Coordination["Thalamocortical Coordination"]
+        direction TB
+        THAL["Thalamus"]
+        NCX["Neocortex"]
+
+        UP_STATE["Up State<br/>(depolarization)"]
+        DOWN_STATE["Down State<br/>(silence)"]
+    end
+
+    subgraph Plasticity["Plasticity Windows"]
+        SWR_LTP["SWR-triggered LTP<br/>(HPC→NCX)"]
+        SPINDLE_LTP["Spindle-coupled<br/>Plasticity"]
+        CONSOLIDATE["Memory<br/>Consolidation"]
+    end
+
+    subgraph Timing["Temporal Coupling"]
+        T1["SO Up State<br/>(t=0)"]
+        T2["Spindle Start<br/>(t+200ms)"]
+        T3["SWR Nested<br/>(t+300ms)"]
+        T4["Plasticity Window<br/>(t+500ms)"]
+    end
+
+    %% Sleep state transitions
+    NREM --> SO
+    NREM --> SPINDLE
+
+    %% SWR generation
+    SO -->|"triggers"| CA3_BURST
+    CA3_BURST --> RIPPLE
+    RIPPLE --> CA1_FIRE
+    CA1_FIRE --> COMPRESS
+
+    %% Replay content (with procedural exclusion filter)
+    RECENT --> FILTER
+    REMOTE --> FILTER
+    FILTER -->|"episodic + semantic only"| SEQUENCE
+    SEQUENCE --> CA3_BURST
+
+    %% Procedural memory routing stub
+    PROC_MEM -.->|"routed to striatal<br/>MSN pathway (stub)"| MSN_PATH
+
+    %% Thalamocortical
+    SO --> UP_STATE
+    SO --> DOWN_STATE
+    UP_STATE --> THAL
+    THAL --> SPINDLE
+    SPINDLE --> NCX
+
+    %% Plasticity
+    CA1_FIRE --> SWR_LTP
+    SPINDLE --> SPINDLE_LTP
+    SWR_LTP --> CONSOLIDATE
+    SPINDLE_LTP --> CONSOLIDATE
+
+    %% Timing sequence
+    T1 --> T2 --> T3 --> T4
+
+    %% Styling
+    style HPC_SWR fill:#e1f5fe,stroke:#03a9f4
+    style RIPPLE fill:#b3e5fc,stroke:#0288d1
+    style CONSOLIDATE fill:#c8e6c9,stroke:#388e3c
+    style COMPRESS fill:#fff3e0,stroke:#f57c00
+    style SO fill:#e8eaf6,stroke:#5c6bc0
+    style SPINDLE fill:#f3e5f5,stroke:#9c27b0
+    style FILTER fill:#ffebee,stroke:#c62828
+    style MSN_PATH fill:#fce4ec,stroke:#e91e63

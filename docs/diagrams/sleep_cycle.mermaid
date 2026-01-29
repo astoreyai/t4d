@@ -1,0 +1,53 @@
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#2e86ab'}}}%%
+stateDiagram-v2
+    [*] --> Wake
+
+    state Wake {
+        [*] --> Active
+        Active --> Quiet: Low activity
+        Quiet --> Active: Stimulus
+
+        note right of Active
+            Adenosine accumulates
+            Process S increases
+            Theta (4-8 Hz) active
+        end note
+    }
+
+    state NREM {
+        [*] --> N1
+        N1 --> N2: Spindle onset
+        N2 --> N3: Delta dominance
+        N3 --> N2: Lightening
+
+        note right of N2
+            Sleep Spindles (12-15 Hz)
+            Thalamo-cortical loops
+            Memory consolidation
+        end note
+
+        note right of N3
+            Slow Oscillations (0.5-2 Hz)
+            SWR Events (150-250 Hz)
+            Hippocampal replay
+            Glymphatic peak flow
+        end note
+    }
+
+    state REM {
+        [*] --> Tonic
+        Tonic --> Phasic: Eye movement
+        Phasic --> Tonic: Settle
+
+        note right of Tonic
+            Theta dominance (4-8 Hz)
+            Acetylcholine peak
+            Muscle atonia
+        end note
+    }
+
+    Wake --> NREM: Sleep pressure high
+    NREM --> REM: ~90 min cycle
+    REM --> NREM: Continue cycle
+    NREM --> Wake: Alarm/threshold
+    REM --> Wake: Natural awakening

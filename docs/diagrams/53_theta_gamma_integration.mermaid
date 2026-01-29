@@ -1,0 +1,72 @@
+sequenceDiagram
+    participant Neuromod as Neuromodulators<br/>ACh, DA, NE, Glu, GABA
+    participant Osc as Frequency Band<br/>Generator
+    participant Theta as Theta Oscillator<br/>4-8 Hz
+    participant Gamma as Gamma Oscillator<br/>30-80 Hz
+    participant WM as Working Memory<br/>7 slots
+    participant Plasticity as Plasticity<br/>Modules
+
+    Note over Neuromod,Plasticity: Step 1: Oscillator Update
+
+    Neuromod->>Osc: ACh, DA, NE, Glu, GABA levels
+    Osc->>Theta: Compute theta phase
+    Osc->>Gamma: Compute gamma phase
+
+    Theta-->>Osc: Theta phase returned
+    Gamma-->>Osc: Gamma phase returned
+
+    Note over Theta: Theta Cycle Detection
+    alt Theta phase < last phase
+        Theta->>Theta: New cycle detected
+        Theta->>WM: Decay slot activations × 0.9
+    end
+
+    Note over Osc,Plasticity: Step 2: Cognitive Phase Determination
+
+    Osc->>Osc: Determine cognitive phase<br/>from theta phase
+
+    alt Theta trough 0-π
+        Osc-->>Plasticity: ENCODING phase
+        Note over Plasticity: LR boosted 2x
+    else Theta peak π-2π
+        Osc-->>Plasticity: RETRIEVAL phase
+        Note over Plasticity: LR suppressed 0.3x
+    end
+
+    Note over Gamma,WM: Step 3: Gamma-Nested WM Slots
+
+    loop For each WM slot
+        Gamma->>WM: Update slot gamma phase
+        WM->>WM: slot.gamma_phase = current
+        WM->>WM: slot.theta_cycle = count
+    end
+
+    Note over Neuromod,Plasticity: Step 4: Plasticity Gating
+
+    loop For each registered module
+        alt ENCODING phase
+            Plasticity->>Plasticity: gated_lr = base_lr × 1 + boost - 1 × encoding_signal
+        else RETRIEVAL phase
+            Plasticity->>Plasticity: gated_lr = base_lr × suppression
+        end
+    end
+
+    Note over WM: Step 5: WM Operations
+
+    opt Store request
+        WM->>WM: Find empty slot or<br/>lowest activation slot
+        WM->>WM: Set content_id, activation = 1.0
+        WM->>WM: Record theta_cycle, gamma_phase
+    end
+
+    opt Retrieve request
+        WM->>WM: Find slot with content_id
+        WM->>WM: Boost activation = 1.0
+    end
+
+    Note over Neuromod,WM: Reward Processing
+
+    opt Reward event RPE
+        Neuromod->>Osc: Update PAC from reward
+        Osc->>Osc: Adjust phase-amplitude<br/>coupling strength
+    end

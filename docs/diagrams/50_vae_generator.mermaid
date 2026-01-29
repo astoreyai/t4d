@@ -1,0 +1,40 @@
+flowchart TD
+    Input[Input Embedding<br/>1024-dim] --> Encoder[Encoder MLP<br/>Layers: 512, 256]
+
+    Encoder --> MuLayer[Mu Layer<br/>→ Latent Mean]
+    Encoder --> LogVarLayer[LogVar Layer<br/>→ Latent Log Variance]
+
+    MuLayer --> Reparam[Reparameterization Trick<br/>z = μ + σ * ε]
+    LogVarLayer --> Reparam
+    Random[ε ~ N0,1] -.-> Reparam
+
+    Reparam --> LatentZ[Latent Vector z<br/>128-dim]
+
+    LatentZ --> Decoder[Decoder MLP<br/>Layers: 256, 512]
+
+    Decoder --> OutputLayer[Output Layer<br/>→ 1024-dim]
+
+    OutputLayer --> Normalize[Normalize to<br/>Unit Sphere]
+
+    Normalize --> Reconstruction[Reconstructed<br/>Embedding]
+
+    %% Loss computation
+    Input -.-> Loss[ELBO Loss]
+    Reconstruction -.-> Loss
+    MuLayer -.-> KL[KL Divergence<br/>KL between N&#40;μ,σ&#41; and N&#40;0,1&#41;]
+    LogVarLayer -.-> KL
+    KL -.-> Loss
+
+    %% Training loop
+    Loss --> Backward[Backward Pass<br/>Update Weights]
+    Backward --> State[VAE State<br/>Training Steps<br/>Loss History]
+
+    %% Generation mode
+    LatentZ -.-> Generate[Generate Mode<br/>Sample from Prior<br/>N0,1]
+    Generate -.-> Decoder
+
+    style Input fill:#e1f5ff
+    style LatentZ fill:#fff4e1
+    style Reconstruction fill:#e1ffe1
+    style Loss fill:#ffe1e1
+    style Generate fill:#f0e1ff

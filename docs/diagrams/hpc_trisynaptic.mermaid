@@ -1,0 +1,78 @@
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#e8f5e9'}}}%%
+flowchart TB
+    subgraph Input["Cortical Input"]
+        EC_II["Entorhinal Cortex<br/>Layer II"]
+        EC_III["Entorhinal Cortex<br/>Layer III"]
+    end
+
+    subgraph DG["Dentate Gyrus"]
+        direction TB
+        GC["Granule Cells<br/>(~1M neurons)"]
+        MOSSY["Mossy Cells"]
+        HILUS["Hilar Interneurons"]
+
+        PATTERN_SEP["Pattern Separation<br/>(sparse coding ~2%)"]
+    end
+
+    subgraph CA3["CA3 Region"]
+        direction TB
+        PYR_CA3["Pyramidal Cells"]
+        RECURRENT["Recurrent<br/>Collaterals"]
+
+        PATTERN_COMP["Pattern Completion<br/>(attractor dynamics)"]
+    end
+
+    subgraph CA1["CA1 Region"]
+        direction TB
+        PYR_CA1["Pyramidal Cells"]
+        INH_CA1["Inhibitory<br/>Interneurons"]
+
+        COMPARE["Mismatch Detection<br/>(novelty)"]
+    end
+
+    subgraph Output["Output Pathways"]
+        SUBICULUM["Subiculum"]
+        EC_V["Entorhinal Cortex<br/>Layer V"]
+        CORTEX["Neocortex<br/>(consolidation)"]
+    end
+
+    subgraph Modulation["Neuromodulatory Control"]
+        ACH_MOD["ACh: Encoding/Retrieval"]
+        DA_MOD["DA: Novelty gate"]
+        NE_MOD["NE: Arousal gain"]
+    end
+
+    %% Trisynaptic pathway
+    EC_II -->|"Perforant Path"| GC
+    GC --> PATTERN_SEP
+    GC -->|"Mossy Fibers<br/>(giant synapses)"| PYR_CA3
+    PYR_CA3 --> PATTERN_COMP
+    PYR_CA3 --> RECURRENT
+    RECURRENT --> PYR_CA3
+    PYR_CA3 -->|"Schaffer<br/>Collaterals"| PYR_CA1
+
+    %% Direct pathway
+    EC_III -->|"Temporoammonic"| PYR_CA1
+
+    %% CA1 processing
+    PYR_CA1 --> COMPARE
+    INH_CA1 -.-> PYR_CA1
+
+    %% Output
+    PYR_CA1 --> SUBICULUM
+    SUBICULUM --> EC_V
+    EC_V --> CORTEX
+
+    %% Modulation
+    ACH_MOD -.->|"high=encode"| DG
+    ACH_MOD -.->|"low=retrieve"| CA3
+    DA_MOD -.->|"gates LTP"| CA1
+    NE_MOD -.->|"gain control"| CA3
+
+    %% Styling
+    style DG fill:#e8f5e9,stroke:#4caf50
+    style CA3 fill:#e3f2fd,stroke:#1976d2
+    style CA1 fill:#fff3e0,stroke:#f57c00
+    style PATTERN_SEP fill:#c8e6c9,stroke:#388e3c
+    style PATTERN_COMP fill:#bbdefb,stroke:#1976d2
+    style COMPARE fill:#ffe0b2,stroke:#fb8c00

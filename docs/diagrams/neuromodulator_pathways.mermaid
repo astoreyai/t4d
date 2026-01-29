@@ -1,0 +1,77 @@
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#2e86ab'}}}%%
+flowchart TB
+    subgraph Sources["Neuromodulator Sources"]
+        VTA["VTA<br/>(Midbrain)"]
+        SN["Substantia Nigra<br/>(Motor DA)"]
+        DRN["Dorsal Raphe<br/>(5-HT)"]
+        LC["Locus Coeruleus<br/>(NE)"]
+        NBM["Nucleus Basalis<br/>(ACh)"]
+    end
+
+    subgraph Signals["Input Signals"]
+        RPE[/"Reward Prediction Error"/]
+        UNC[/"Uncertainty"/]
+        SAL[/"Salience"/]
+        ATT[/"Attention Demand"/]
+    end
+
+    subgraph Targets["Target Regions"]
+        PFC["Prefrontal<br/>Cortex"]
+        STR["Striatum<br/>(D1/D2 MSN)"]
+        HPC["Hippocampus<br/>(CA1/CA3)"]
+        AMY["Amygdala"]
+    end
+
+    subgraph Effects["Functional Effects"]
+        LR["Learning Rate<br/>Modulation"]
+        EX["Exploration vs<br/>Exploitation"]
+        TH["Threshold<br/>Adjustment"]
+        MEM["Memory<br/>Encoding Gate"]
+    end
+
+    %% Signal inputs
+    RPE --> VTA
+    UNC --> LC
+    SAL --> DRN
+    ATT --> NBM
+
+    %% DA Pathway (orange)
+    VTA -->|"DA (tonic 1-8 Hz)"| STR
+    VTA -->|"DA (burst 15-30 Hz)"| PFC
+    SN -->|"DA"| STR
+
+    %% 5-HT Pathway (purple)
+    DRN -->|"5-HT (1-5 Hz)"| PFC
+    DRN -->|"5-HT"| HPC
+    DRN -->|"5-HT"| AMY
+
+    %% NE Pathway (blue)
+    LC -->|"NE (tonic 0.5-5 Hz)"| PFC
+    LC -->|"NE (phasic 10-20 Hz)"| HPC
+    LC -->|"NE"| AMY
+
+    %% ACh Pathway (green)
+    NBM -->|"ACh"| HPC
+    NBM -->|"ACh"| PFC
+
+    %% Effects
+    VTA -.-> LR
+    DRN -.-> EX
+    LC -.-> TH
+    NBM -.-> MEM
+
+    %% Interactions
+    VTA <-.->|"Opponent"| DRN
+    LC <-.->|"Arousal Sync"| VTA
+    DRN -.->|"5-HT inhibits DA"| VTA
+
+    %% PFC top-down feedback (glutamatergic backprojections)
+    PFC -.->|"glutamatergic<br/>backprojection"| LC
+    PFC -.->|"glutamatergic<br/>backprojection"| VTA
+    PFC -.->|"glutamatergic<br/>backprojection"| DRN
+
+    style VTA fill:#f18f01,stroke:#333
+    style SN fill:#f18f01,stroke:#333
+    style DRN fill:#9b5de5,stroke:#333
+    style LC fill:#00a8e8,stroke:#333
+    style NBM fill:#00c853,stroke:#333

@@ -1,0 +1,59 @@
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#2e86ab'}}}%%
+flowchart TB
+    subgraph PreSynaptic["Pre-Synaptic Activity"]
+        PRE_SPIKE["Pre Spike"]
+        PRE_TRACE["Pre Trace<br/>e_pre(t)"]
+    end
+
+    subgraph PostSynaptic["Post-Synaptic Activity"]
+        POST_SPIKE["Post Spike"]
+        POST_TRACE["Post Trace<br/>e_post(t)"]
+    end
+
+    subgraph EligibilityTrace["Eligibility Trace"]
+        direction TB
+        ET["e(t) = e_pre × e_post"]
+        ET_DECAY["Decay: e(t+1) = γλ × e(t)"]
+        ET_PARAMS["γ = 0.99 (discount)<br/>λ = 0.9-0.95 (decay)"]
+    end
+
+    subgraph Neuromodulator["Neuromodulator Signal"]
+        DA["Dopamine<br/>(RPE)"]
+        DA_TIMING["Arrives 0.5-2s<br/>after event"]
+    end
+
+    subgraph WeightUpdate["Weight Update"]
+        DW["Δw = η × DA × e(t)"]
+        RESULT["Synaptic<br/>Plasticity"]
+    end
+
+    subgraph Timeline["Temporal Dynamics"]
+        T1["t=0: Pre+Post<br/>spike pairing"]
+        T2["t=0→τ: Eligibility<br/>trace decays"]
+        T3["t=τ: DA arrives<br/>triggers update"]
+    end
+
+    %% Connections
+    PRE_SPIKE --> PRE_TRACE
+    POST_SPIKE --> POST_TRACE
+    PRE_TRACE --> ET
+    POST_TRACE --> ET
+    ET --> ET_DECAY
+    ET_PARAMS -.-> ET_DECAY
+
+    DA --> DA_TIMING
+    DA_TIMING --> DW
+    ET_DECAY --> DW
+    DW --> RESULT
+
+    T1 --> T2 --> T3
+
+    %% Styling
+    style ET fill:#e3f2fd,stroke:#1976d2
+    style DA fill:#ffecb3,stroke:#ff8f00
+    style DW fill:#c8e6c9,stroke:#388e3c
+    style RESULT fill:#c8e6c9,stroke:#388e3c
+
+    %% Notes
+    classDef noteStyle fill:#f5f5f5,stroke:#9e9e9e
+    class ET_PARAMS,DA_TIMING,Timeline noteStyle
