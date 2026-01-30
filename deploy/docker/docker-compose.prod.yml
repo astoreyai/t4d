@@ -1,0 +1,275 @@
+# World Weaver Production Docker Compose
+# Phase 9: Production infrastructure
+#
+# Usage:
+#   docker compose -f deploy/docker/docker-compose.prod.yml up -d
+#
+# Environment variables (set in .env or export):
+#   WW_JWT_SECRET - Required for authentication
+#   WW_DATABASE_PASSWORD - PostgreSQL password
+#   WW_NEO4J_PASSWORD - Neo4j password
+#   WW_QDRANT_API_KEY - Qdrant API key (optional)
+#   OPENAI_API_KEY - For embeddings
+
+version: "3.9"
+
+services:
+  # ==========================================================================
+  # API Server
+  # ==========================================================================
+  api:
+    build:
+      context: ../..
+      dockerfile: Dockerfile
+    image: world-weaver:${WW_VERSION:-latest}
+    container_name: ww-api
+    restart: unless-stopped
+    ports:
+      - "${WW_API_PORT:-8765}:8765"
+    environment:
+      - WW_API_HOST=0.0.0.0
+      - WW_API_PORT=8765
+      - WW_DATABASE_URL=postgresql://ww:${WW_DATABASE_PASSWORD}@postgres:5432/worldweaver
+      - WW_NEO4J_URI=bolt://neo4j:7687
+      - WW_NEO4J_USER=neo4j
+      - WW_NEO4J_PASSWORD=${WW_NEO4J_PASSWORD}
+      - WW_QDRANT_HOST=qdrant
+      - WW_QDRANT_PORT=6333
+      - WW_JWT_SECRET=${WW_JWT_SECRET}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - WW_LOG_LEVEL=${WW_LOG_LEVEL:-INFO}
+      # Feature flags
+      - WW_FLAG_FF_ENCODER=true
+      - WW_FLAG_CAPSULE_ENCODING=true
+      - WW_FLAG_THREE_FACTOR_LEARNING=true
+    volumes:
+      - ww-models:/app/models
+      - ww-archive:/var/ww/archive
+    depends_on:
+      postgres:
+        condition: service_healthy
+      neo4j:
+        condition: service_healthy
+      qdrant:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8765/api/v1/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 4G
+        reservations:
+          cpus: "0.5"
+          memory: 1G
+    networks:
+      - ww-network
+
+  # ==========================================================================
+  # Consolidation Worker
+  # ==========================================================================
+  worker:
+    build:
+      context: ../..
+      dockerfile: deploy/docker/Dockerfile.worker
+    image: world-weaver-worker:${WW_VERSION:-latest}
+    container_name: ww-worker
+    restart: unless-stopped
+    environment:
+      - WW_DATABASE_URL=postgresql://ww:${WW_DATABASE_PASSWORD}@postgres:5432/worldweaver
+      - WW_NEO4J_URI=bolt://neo4j:7687
+      - WW_NEO4J_USER=neo4j
+      - WW_NEO4J_PASSWORD=${WW_NEO4J_PASSWORD}
+      - WW_QDRANT_HOST=qdrant
+      - WW_QDRANT_PORT=6333
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - WW_LOG_LEVEL=${WW_LOG_LEVEL:-INFO}
+      # Consolidation settings
+      - WW_CONSOLIDATION_INTERVAL=3600
+      - WW_CONSOLIDATION_DEPTH=deep
+      # Feature flags
+      - WW_FLAG_LABILITY_WINDOW=true
+      - WW_FLAG_GENERATIVE_REPLAY=true
+      - WW_FLAG_SWR_PHASE_LOCKING=true
+    volumes:
+      - ww-models:/app/models
+      - ww-archive:/var/ww/archive
+    depends_on:
+      - api
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 8G
+        reservations:
+          cpus: "0.5"
+          memory: 2G
+    networks:
+      - ww-network
+
+  # ==========================================================================
+  # PostgreSQL (metadata, sessions)
+  # ==========================================================================
+  postgres:
+    image: postgres:15-alpine
+    container_name: ww-postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=ww
+      - POSTGRES_PASSWORD=${WW_DATABASE_PASSWORD}
+      - POSTGRES_DB=worldweaver
+    volumes:
+      - ww-postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ww -d worldweaver"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 2G
+    networks:
+      - ww-network
+
+  # ==========================================================================
+  # Neo4j (graph store)
+  # ==========================================================================
+  neo4j:
+    image: neo4j:5.15-community
+    container_name: ww-neo4j
+    restart: unless-stopped
+    environment:
+      - NEO4J_AUTH=neo4j/${WW_NEO4J_PASSWORD}
+      - NEO4J_PLUGINS=["apoc"]
+      - NEO4J_dbms_memory_heap_initial__size=512m
+      - NEO4J_dbms_memory_heap_max__size=2G
+    volumes:
+      - ww-neo4j:/data
+    ports:
+      - "${NEO4J_HTTP_PORT:-7474}:7474"
+      - "${NEO4J_BOLT_PORT:-7687}:7687"
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:7474 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 4G
+    networks:
+      - ww-network
+
+  # ==========================================================================
+  # Qdrant (vector store)
+  # ==========================================================================
+  qdrant:
+    image: qdrant/qdrant:v1.7.4
+    container_name: ww-qdrant
+    restart: unless-stopped
+    volumes:
+      - ww-qdrant:/qdrant/storage
+    ports:
+      - "${QDRANT_HTTP_PORT:-6333}:6333"
+      - "${QDRANT_GRPC_PORT:-6334}:6334"
+    environment:
+      - QDRANT__SERVICE__API_KEY=${WW_QDRANT_API_KEY:-}
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 4G
+    networks:
+      - ww-network
+
+  # ==========================================================================
+  # Nginx (reverse proxy, TLS termination)
+  # ==========================================================================
+  nginx:
+    image: nginx:alpine
+    container_name: ww-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./certs:/etc/nginx/certs:ro
+    depends_on:
+      - api
+    networks:
+      - ww-network
+
+  # ==========================================================================
+  # Prometheus (metrics)
+  # ==========================================================================
+  prometheus:
+    image: prom/prometheus:v2.48.0
+    container_name: ww-prometheus
+    restart: unless-stopped
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ww-prometheus:/prometheus
+    ports:
+      - "${PROMETHEUS_PORT:-9090}:9090"
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.enable-lifecycle'
+    networks:
+      - ww-network
+
+  # ==========================================================================
+  # Grafana (dashboards)
+  # ==========================================================================
+  grafana:
+    image: grafana/grafana:10.2.2
+    container_name: ww-grafana
+    restart: unless-stopped
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-admin}
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - ww-grafana:/var/lib/grafana
+      - ./grafana/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./grafana/datasources:/etc/grafana/provisioning/datasources:ro
+    ports:
+      - "${GRAFANA_PORT:-3000}:3000"
+    depends_on:
+      - prometheus
+    networks:
+      - ww-network
+
+# ==========================================================================
+# Volumes
+# ==========================================================================
+volumes:
+  ww-postgres:
+    driver: local
+  ww-neo4j:
+    driver: local
+  ww-qdrant:
+    driver: local
+  ww-models:
+    driver: local
+  ww-archive:
+    driver: local
+  ww-prometheus:
+    driver: local
+  ww-grafana:
+    driver: local
+
+# ==========================================================================
+# Networks
+# ==========================================================================
+networks:
+  ww-network:
+    driver: bridge

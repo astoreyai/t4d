@@ -1,0 +1,1201 @@
+openapi: 3.0.0
+info:
+  title: World Weaver Memory Gateway API
+  version: 1.0.0
+  description: MCP server providing access to a tripartite memory system (episodic,
+    semantic, procedural) for Claude Code instances. Implements 17 tools for autobiographical
+    events, knowledge graphs, and learned procedures with ACT-R activation, FSRS retrievability,
+    and Hebbian learning.
+  contact:
+    name: World Weaver Project
+    url: https://github.com/astoreyai/world-weaver
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+servers:
+- url: http://localhost:5000
+  description: Local MCP server
+paths:
+  /tools/create_episode:
+    post:
+      summary: Store an autobiographical event with temporal-spatial context
+      description: Creates a new episodic memory with content, context, outcome, and
+        emotional valence
+      operationId: create_episode
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                  description: Full interaction text or event description
+                context:
+                  type: object
+                  description: Spatial context (project, file, tool, cwd)
+                outcome:
+                  type: string
+                  default: neutral
+                  enum:
+                  - success
+                  - failure
+                  - partial
+                  - neutral
+                valence:
+                  type: number
+                  default: 0.5
+                  minimum: 0.0
+                  maximum: 1.0
+              required:
+              - content
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+                  field:
+                    type: string
+        '429':
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+        '500':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+  /tools/recall_episodes:
+    post:
+      summary: Retrieve autobiographical events by semantic similarity
+      description: Search episodes using semantic similarity with recency decay and
+        importance weighting
+      operationId: recall_episodes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                  description: Natural language search query
+                limit:
+                  type: integer
+                  description: Maximum number of results
+                  default: 10
+                offset:
+                  type: integer
+                  description: Number of results to skip (pagination)
+                  default: 0
+                session_filter:
+                  type: string
+                  description: Filter to specific session ID
+                time_start:
+                  type: string
+                  description: ISO datetime for range start
+                time_end:
+                  type: string
+                  description: ISO datetime for range end
+              required:
+              - query
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+                  field:
+                    type: string
+        '429':
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+        '500':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+  /tools/query_at_time:
+    post:
+      summary: What did we know at a specific point in time?
+      description: Uses T_sys (ingestion time) to filter episodes that existed at
+        that moment
+      operationId: query_at_time
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                  description: Search query
+                point_in_time:
+                  type: string
+                  description: ISO datetime for historical query
+                limit:
+                  type: integer
+                  default: 10
+              required:
+              - query
+              - point_in_time
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+                  field:
+                    type: string
+        '429':
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+        '500':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+  /tools/mark_important:
+    post:
+      summary: Mark an episode as important (increase valence)
+      description: Updates episode emotional valence to increase retrievability
+      operationId: mark_important
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                episode_id:
+                  type: string
+                  description: Episode UUID
+                new_valence:
+                  type: number
+                  description: Specific valence value (0-1), or increment by 0.2 if
+                    None
+              required:
+              - episode_id
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+                  field:
+                    type: string
+        '429':
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+        '500':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+  /tools/create_entity:
+    post:
+      summary: Create a semantic knowledge entity
+      description: Creates a new entity in the knowledge graph
+      operationId: create_entity
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Canonical entity name
+                entity_type:
+                  type: string
+                  enum:
+                  - CONCEPT
+                  - PERSON
+                  - PROJECT
+                  - TOOL
+                  - TECHNIQUE
+                  - FACT
+                summary:
+                  type: string
+                  description: Short description
+                details:
+                  type: string
+                  description: Expanded context
+                source:
+                  type: string
+                  description: Episode ID or 'user_provided'
+              required:
+              - name
+              - entity_type
+              - summary
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+                  field:
+                    type: string
+        '429':
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+        '500':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+  /tools/create_relation:
+    post:
+      summary: Create a Hebbian-weighted relationship between entities
+      description: Links two entities with a relationship type and initial weight
+      operationId: create_relation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                source_id:
+                  type: string
+                  description: Source entity UUID
+                target_id:
+                  type: string
+                  description: Target entity UUID
+                relation_type:
+                  type: string
+                  enum:
+                  - USES
+                  - PRODUCES
+                  - REQUIRES
+                  - CAUSES
+                  - PART_OF
+                  - SIMILAR_TO
+                  - IMPLEMENTS
+                initial_weight:
+                  type: number
+                  default: 0.1
+                  minimum: 0.0
+                  maximum: 1.0
+              required:
+              - source_id
+              - target_id
+              - relation_type
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+                  field:
+                    type: string
+        '429':
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+        '500':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+  /tools/semantic_recall:
+    post:
+      summary: Retrieve semantic entities with ACT-R activation scoring
+      description: Combines vector similarity + ACT-R activation + FSRS retrievability
+      operationId: semantic_recall
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                  description: Natural language search query
+                context_entities:
+                  type: array
+                  description: Entity IDs to spread activation from
+                  items:
+                    type: string
+                limit:
+                  type: integer
+                  default: 10
+                offset:
+                  type: integer
+                  description: Number of results to skip (pagination)
+                  default: 0
+                include_spreading:
+                  type: boolean
+                  default: true
+              required:
+              - query
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+                  field:
+                    type: string
+        '429':
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+        '500':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+  /tools/spread_activation:
+    post:
+      summary: Spread activation through knowledge graph from seed entities
+      description: Propagates activation through the graph to find related concepts
+      operationId: spread_activation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                seed_entities:
+                  type: array
+                  description: Entity IDs to start from
+                  items:
+                    type: string
+                steps:
+                  type: integer
+                  description: Number of propagation steps
+                  default: 3
+                retention:
+                  type: number
+                  default: 0.5
+                  minimum: 0.0
+                  maximum: 1.0
+                decay:
+                  type: number
+                  default: 0.1
+                  minimum: 0.0
+                  maximum: 1.0
+                threshold:
+                  type: number
+                  default: 0.01
+                  minimum: 0.0
+                  maximum: 1.0
+              required:
+              - seed_entities
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+                  field:
+                    type: string
+        '429':
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+        '500':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+  /tools/supersede_fact:
+    post:
+      summary: Update an entity with bi-temporal versioning
+      description: Old version's validTo is set, new version created
+      operationId: supersede_fact
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                entity_id:
+                  type: string
+                  description: Entity to supersede
+                new_summary:
+                  type: string
+                  description: Updated summary
+                new_details:
+                  type: string
+                  description: Updated details
+              required:
+              - entity_id
+              - new_summary
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+                  field:
+                    type: string
+        '429':
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+        '500':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+  /tools/build_skill:
+    post:
+      summary: Build a reusable procedure from a successful trajectory
+      description: Only learns from successful outcomes (score >= 0.7)
+      operationId: build_skill
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                trajectory:
+                  type: array
+                  description: List of action dicts with tool, parameters, result
+                  items:
+                    type: object
+                outcome_score:
+                  type: number
+                  description: Success score, must be >= 0.7
+                  minimum: 0.0
+                  maximum: 1.0
+                domain:
+                  type: string
+                  enum:
+                  - coding
+                  - research
+                  - trading
+                  - devops
+                  - writing
+                trigger_pattern:
+                  type: string
+                  description: When to invoke this procedure
+                name:
+                  type: string
+                  description: Optional procedure name
+              required:
+              - trajectory
+              - outcome_score
+              - domain
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+                  field:
+                    type: string
+        '429':
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+        '500':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+  /tools/how_to:
+    post:
+      summary: Retrieve procedures matching a task description
+      description: 'Scoring: 0.6*similarity + 0.3*success_rate + 0.1*experience'
+      operationId: how_to
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                task:
+                  type: string
+                  description: Task description to match
+                domain:
+                  type: string
+                  enum:
+                  - coding
+                  - research
+                  - trading
+                  - devops
+                  - writing
+                limit:
+                  type: integer
+                  default: 5
+                offset:
+                  type: integer
+                  description: Number of results to skip (pagination)
+                  default: 0
+              required:
+              - task
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+                  field:
+                    type: string
+        '429':
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+        '500':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+  /tools/execute_skill:
+    post:
+      summary: Record execution of a procedure and update success rate
+      description: Updates the procedure's success rate and execution count, may deprecate
+        if consistently failing
+      operationId: execute_skill
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                procedure_id:
+                  type: string
+                  description: Procedure UUID
+                success:
+                  type: boolean
+                  description: Whether execution succeeded
+                error:
+                  type: string
+                  description: Error message if failed
+                failed_step:
+                  type: integer
+                  description: Step number that failed
+                context:
+                  type: string
+                  description: Execution context
+              required:
+              - procedure_id
+              - success
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+                  field:
+                    type: string
+        '429':
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+        '500':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+  /tools/deprecate_skill:
+    post:
+      summary: Mark a procedure as deprecated
+      description: Prevents the procedure from being retrieved in future searches
+      operationId: deprecate_skill
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                procedure_id:
+                  type: string
+                  description: Procedure UUID
+                reason:
+                  type: string
+                  description: Deprecation reason
+              required:
+              - procedure_id
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+                  field:
+                    type: string
+        '429':
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+        '500':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+  /tools/consolidate_now:
+    post:
+      summary: Trigger immediate memory consolidation
+      description: 'Types: light (dedup), deep (semantic extraction), skill (optimization),
+        all (full cycle)'
+      operationId: consolidate_now
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                consolidation_type:
+                  type: string
+                  default: light
+                  enum:
+                  - light
+                  - deep
+                  - skill
+                  - all
+                session_filter:
+                  type: string
+                  description: Limit to specific session
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+                  field:
+                    type: string
+        '429':
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+        '500':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+  /tools/get_provenance:
+    post:
+      summary: Get the source episodes for a semantic entity
+      description: Traces knowledge back to its autobiographical origins
+      operationId: get_provenance
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                entity_id:
+                  type: string
+                  description: Entity UUID
+              required:
+              - entity_id
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+                  field:
+                    type: string
+        '429':
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+        '500':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+  /tools/get_session_id:
+    post:
+      summary: Get the current Claude Code instance session ID
+      description: Returns session identifier for this instance
+      operationId: get_session_id
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: {}
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+                  field:
+                    type: string
+        '429':
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+        '500':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+  /tools/memory_stats:
+    post:
+      summary: Get statistics about the memory system
+      description: Returns memory system health and counts
+      operationId: memory_stats
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                include_detailed:
+                  type: boolean
+                  description: Include per-collection statistics
+                  default: false
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+                  field:
+                    type: string
+        '429':
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+        '500':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+tags:
+- name: episodic
+  description: Autobiographical event memory operations
+- name: semantic
+  description: Knowledge graph and entity operations
+- name: procedural
+  description: Learned procedure and skill operations
+- name: consolidation
+  description: Memory consolidation operations
+- name: utility
+  description: Utility and metadata operations

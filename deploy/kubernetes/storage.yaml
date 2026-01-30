@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ww-archive-pvc
+  namespace: world-weaver
+  labels:
+    app.kubernetes.io/name: world-weaver
+    app.kubernetes.io/component: storage
+spec:
+  accessModes:
+    - ReadWriteMany  # Shared across replicas
+  storageClassName: standard  # Adjust for your cluster
+  resources:
+    requests:
+      storage: 100Gi
+
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: ww-api-pdb
+  namespace: world-weaver
+  labels:
+    app.kubernetes.io/name: world-weaver
+    app.kubernetes.io/component: api
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: world-weaver
+      app.kubernetes.io/component: api

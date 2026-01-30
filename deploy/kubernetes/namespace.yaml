@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: world-weaver
+  labels:
+    app.kubernetes.io/name: world-weaver
+    app.kubernetes.io/version: "0.1.0"

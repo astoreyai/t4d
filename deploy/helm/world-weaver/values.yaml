@@ -1,0 +1,203 @@
+# World Weaver Helm Chart Values
+# Phase 9: Production infrastructure
+
+# =============================================================================
+# Global Settings
+# =============================================================================
+global:
+  imageRegistry: ""
+  imagePullSecrets: []
+  storageClass: ""
+
+# =============================================================================
+# API Server
+# =============================================================================
+api:
+  enabled: true
+  replicaCount: 3
+
+  image:
+    repository: ghcr.io/world-weaver/ww-api
+    tag: ""  # Defaults to Chart.appVersion
+    pullPolicy: IfNotPresent
+
+  service:
+    type: ClusterIP
+    port: 8765
+
+  ingress:
+    enabled: false
+    className: nginx
+    annotations: {}
+    hosts:
+      - host: ww.example.com
+        paths:
+          - path: /
+            pathType: Prefix
+    tls: []
+
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1Gi
+    limits:
+      cpu: 2000m
+      memory: 4Gi
+
+  autoscaling:
+    enabled: true
+    minReplicas: 3
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 70
+    targetMemoryUtilizationPercentage: 80
+
+  podDisruptionBudget:
+    enabled: true
+    minAvailable: 2
+
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+# =============================================================================
+# Consolidation Worker
+# =============================================================================
+worker:
+  enabled: true
+  replicaCount: 1
+
+  image:
+    repository: ghcr.io/world-weaver/ww-worker
+    tag: ""
+    pullPolicy: IfNotPresent
+
+  resources:
+    requests:
+      cpu: 500m
+      memory: 2Gi
+    limits:
+      cpu: 2000m
+      memory: 8Gi
+
+  # Consolidation settings
+  consolidation:
+    intervalSeconds: 3600
+    depth: deep  # light, deep, all
+
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+# =============================================================================
+# Configuration
+# =============================================================================
+config:
+  logLevel: INFO
+  debug: false
+
+  # Feature flags
+  featureFlags:
+    ffEncoder: true
+    capsuleEncoding: true
+    capsuleRouting: true
+    capsulePoseLearning: true
+    labilityWindow: true
+    generativeReplay: true
+    threeFactorLearning: true
+    eligibilityTraces: true
+    apiRateLimiting: true
+    apiMetrics: true
+    telemetry: false
+    distributedTracing: false
+
+  # Secrets backend: auto, env, file
+  secretsBackend: auto
+
+# =============================================================================
+# Secrets
+# =============================================================================
+secrets:
+  # Create Kubernetes secrets or use existing
+  create: true
+  existingSecret: ""
+
+  # Required secrets (must be provided)
+  jwtSecret: ""
+  databasePassword: ""
+  neo4jPassword: ""
+
+  # Optional secrets
+  qdrantApiKey: ""
+  openaiApiKey: ""
+  anthropicApiKey: ""
+
+# =============================================================================
+# PostgreSQL (metadata, sessions)
+# =============================================================================
+postgresql:
+  enabled: true
+  auth:
+    username: ww
+    database: worldweaver
+    existingSecret: ""
+  primary:
+    persistence:
+      enabled: true
+      size: 10Gi
+
+# =============================================================================
+# Neo4j (graph store)
+# =============================================================================
+neo4j:
+  enabled: true
+  neo4j:
+    password: ""
+  volumes:
+    data:
+      mode: defaultStorageClass
+      size: 10Gi
+
+# =============================================================================
+# Qdrant (vector store) - External
+# =============================================================================
+qdrant:
+  enabled: false  # Use external Qdrant
+  host: qdrant
+  port: 6333
+
+# =============================================================================
+# Observability
+# =============================================================================
+serviceMonitor:
+  enabled: false
+  interval: 30s
+  labels: {}
+
+# =============================================================================
+# Storage
+# =============================================================================
+persistence:
+  enabled: true
+  accessMode: ReadWriteOnce
+  size: 10Gi
+  storageClass: ""
+
+# =============================================================================
+# Security
+# =============================================================================
+serviceAccount:
+  create: true
+  name: ""
+  annotations: {}
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  fsGroup: 1000
+
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop:
+      - ALL

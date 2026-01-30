@@ -1,0 +1,66 @@
+# World Weaver Consolidation Worker
+# Multi-stage build for minimal production image
+
+# Build stage
+FROM python:3.11-slim as builder
+
+WORKDIR /app
+
+# Install build dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create virtual environment
+RUN python -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
+# Install Python dependencies
+COPY pyproject.toml README.md ./
+COPY src/ ./src/
+
+# Install package with worker dependencies
+RUN pip install --no-cache-dir -e ".[worker]"
+
+
+# Production stage
+FROM python:3.11-slim as production
+
+WORKDIR /app
+
+# Create non-root user for security
+RUN groupadd -r ww && useradd -r -g ww ww
+
+# Install runtime dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy virtual environment from builder
+COPY --from=builder /opt/venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
+# Copy application code
+COPY --from=builder /app/src ./src
+COPY --from=builder /app/pyproject.toml ./
+
+# Create directories for models and data
+RUN mkdir -p /app/models /app/data /var/ww/archive && \
+    chown -R ww:ww /app /var/ww
+
+# Switch to non-root user
+USER ww
+
+# Environment configuration
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    WW_WORKER_MODE=consolidation \
+    WW_EMBEDDING_CACHE_DIR=/app/models
+
+# Health check (worker has different health endpoint)
+HEALTHCHECK --interval=60s --timeout=10s --start-period=120s --retries=3 \
+    CMD python -c "from ww.consolidation import get_consolidation_service; s = get_consolidation_service(); print('healthy' if s else 'unhealthy')" || exit 1
+
+# Run the consolidation worker
+CMD ["python", "-m", "ww.consolidation.worker"]

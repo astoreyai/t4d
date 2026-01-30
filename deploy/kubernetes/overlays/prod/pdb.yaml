@@ -1,0 +1,33 @@
+# Pod Disruption Budget for World Weaver Production
+# Ensures high availability during node maintenance and upgrades
+
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: ww-api-pdb
+  namespace: ww-prod
+  labels:
+    app.kubernetes.io/name: world-weaver
+    app.kubernetes.io/component: api
+spec:
+  minAvailable: 2  # At least 2 pods must be available
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: world-weaver
+      app.kubernetes.io/component: api
+
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: ww-worker-pdb
+  namespace: ww-prod
+  labels:
+    app.kubernetes.io/name: world-weaver
+    app.kubernetes.io/component: worker
+spec:
+  minAvailable: 1  # At least 1 worker must be available
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: world-weaver
+      app.kubernetes.io/component: worker

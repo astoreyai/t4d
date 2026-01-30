@@ -1,0 +1,675 @@
+{
+  "project": "world-weaver",
+  "generated": "2025-11-27T10:00:00Z",
+  "last_updated": "2025-11-27T14:00:00Z",
+  "spec_summary": "Modular, provider-agnostic AI assistant framework for knowledge management, semantic processing, and specialized domain assistance",
+  "features": [
+    {
+      "id": "ORG-001",
+      "category": "orchestration",
+      "description": "ww-init agent can bootstrap new projects with feature lists and progress tracking",
+      "priority": 1,
+      "passes": false,
+      "verification_steps": [
+        "Run ww-init agent with a project spec",
+        "Verify ww-features.json is created with features",
+        "Verify ww-progress.json is created",
+        "Verify init.sh is created and executable"
+      ],
+      "estimated_effort": "medium"
+    },
+    {
+      "id": "ORG-002",
+      "category": "orchestration",
+      "description": "ww-session agent loads previous session state at startup",
+      "priority": 1,
+      "passes": false,
+      "verification_steps": [
+        "Run ww-session agent",
+        "Verify it reads ww-progress.json",
+        "Verify it reports recent session summary",
+        "Verify it identifies current focus"
+      ],
+      "estimated_effort": "small"
+    },
+    {
+      "id": "ORG-003",
+      "category": "orchestration",
+      "description": "ww-session agent persists session state at end",
+      "priority": 1,
+      "passes": false,
+      "verification_steps": [
+        "Complete work in a session",
+        "Run session end protocol",
+        "Verify ww-progress.json is updated",
+        "Verify git commit is created"
+      ],
+      "estimated_effort": "small"
+    },
+    {
+      "id": "ORG-004",
+      "category": "orchestration",
+      "description": "ww-conductor routes requests to appropriate agents",
+      "priority": 2,
+      "passes": false,
+      "verification_steps": [
+        "Send 'save knowledge' request to conductor",
+        "Verify it routes to ww-knowledge",
+        "Send 'find information' request",
+        "Verify it routes to ww-retriever"
+      ],
+      "estimated_effort": "medium"
+    },
+    {
+      "id": "MEM-001",
+      "category": "memory",
+      "description": "Provider-agnostic embedding interface protocol defined",
+      "priority": 1,
+      "passes": false,
+      "verification_steps": [
+        "Import EmbeddingProvider protocol",
+        "Verify embed() method signature",
+        "Verify embed_query() method signature",
+        "Verify dimension property exists"
+      ],
+      "estimated_effort": "small"
+    },
+    {
+      "id": "MEM-002",
+      "category": "memory",
+      "description": "Voyage AI embedding provider implementation",
+      "priority": 2,
+      "passes": false,
+      "verification_steps": [
+        "Instantiate VoyageEmbedding with API key",
+        "Call embed(['test']) and verify returns list of floats",
+        "Verify embedding dimension is 1024",
+        "Test batch embedding with multiple texts"
+      ],
+      "estimated_effort": "medium"
+    },
+    {
+      "id": "MEM-003",
+      "category": "memory",
+      "description": "Local SBERT embedding provider implementation",
+      "priority": 2,
+      "passes": false,
+      "verification_steps": [
+        "Instantiate LocalEmbedding",
+        "Call embed(['test']) and verify returns list of floats",
+        "Verify works without API key",
+        "Test performance on batch"
+      ],
+      "estimated_effort": "medium"
+    },
+    {
+      "id": "MEM-004",
+      "category": "memory",
+      "description": "Vector store abstraction protocol defined",
+      "priority": 1,
+      "passes": false,
+      "verification_steps": [
+        "Import VectorStore protocol",
+        "Verify add() method signature",
+        "Verify query() method signature",
+        "Verify delete() method signature"
+      ],
+      "estimated_effort": "small"
+    },
+    {
+      "id": "MEM-005",
+      "category": "memory",
+      "description": "ChromaDB vector store implementation",
+      "priority": 2,
+      "passes": false,
+      "verification_steps": [
+        "Instantiate ChromaDBStore",
+        "Add documents with embeddings",
+        "Query and verify results returned",
+        "Delete documents and verify removed"
+      ],
+      "estimated_effort": "medium"
+    },
+    {
+      "id": "MEM-006",
+      "category": "memory",
+      "description": "FAISS vector store implementation",
+      "priority": 3,
+      "passes": false,
+      "verification_steps": [
+        "Instantiate FAISSStore",
+        "Add documents with embeddings",
+        "Query and verify results returned",
+        "Test with large dataset (10k vectors)"
+      ],
+      "estimated_effort": "medium"
+    },
+    {
+      "id": "MEM-007",
+      "category": "memory",
+      "description": "Multi-tier memory layer integration",
+      "priority": 2,
+      "passes": false,
+      "verification_steps": [
+        "Store document in warm tier",
+        "Retrieve by ID (searches all tiers)",
+        "Promote document to hot tier",
+        "Demote document to cold tier"
+      ],
+      "estimated_effort": "large"
+    },
+    {
+      "id": "TMEM-001",
+      "category": "tripartite-memory",
+      "description": "Episodic memory stores autobiographical events with bi-temporal versioning",
+      "priority": 1,
+      "passes": false,
+      "verification_steps": [
+        "Create episode with content, context, outcome",
+        "Verify T_ref (event time) and T_sys (ingestion time) stored",
+        "Verify embedding generated (1024-dim BGE-M3)",
+        "Verify session namespacing works"
+      ],
+      "estimated_effort": "medium"
+    },
+    {
+      "id": "TMEM-002",
+      "category": "tripartite-memory",
+      "description": "Episodic retrieval with decay-weighted scoring",
+      "priority": 1,
+      "passes": false,
+      "verification_steps": [
+        "Store multiple episodes with varying recency",
+        "Query with natural language",
+        "Verify scoring formula: 0.4*semantic + 0.25*recency + 0.2*outcome + 0.15*importance",
+        "Verify more recent episodes rank higher (all else equal)"
+      ],
+      "estimated_effort": "medium"
+    },
+    {
+      "id": "TMEM-003",
+      "category": "tripartite-memory",
+      "description": "FSRS retrievability decay for episodic memory",
+      "priority": 1,
+      "passes": false,
+      "verification_steps": [
+        "Create episode with initial stability 1.0",
+        "Calculate retrievability: R(t,S) = (1 + 0.9*t/S)^(-0.5)",
+        "Verify successful retrieval increases stability",
+        "Verify failed retrieval decreases stability"
+      ],
+      "estimated_effort": "medium"
+    },
+    {
+      "id": "TMEM-004",
+      "category": "tripartite-memory",
+      "description": "Point-in-time episodic queries",
+      "priority": 2,
+      "passes": false,
+      "verification_steps": [
+        "Store episodes at different times",
+        "Query 'what did we know at time X'",
+        "Verify only episodes with T_sys <= X returned",
+        "Verify correct temporal filtering"
+      ],
+      "estimated_effort": "small"
+    },
+    {
+      "id": "TMEM-005",
+      "category": "tripartite-memory",
+      "description": "Semantic memory stores entities with Hebbian-weighted relationships",
+      "priority": 1,
+      "passes": false,
+      "verification_steps": [
+        "Create entity with name, type, summary",
+        "Create relationship with initial weight 0.1",
+        "Verify entity embedding generated",
+        "Verify relationship types (USES, PRODUCES, REQUIRES, etc.)"
+      ],
+      "estimated_effort": "medium"
+    },
+    {
+      "id": "TMEM-006",
+      "category": "tripartite-memory",
+      "description": "Hebbian strengthening on co-retrieval",
+      "priority": 1,
+      "passes": false,
+      "verification_steps": [
+        "Create two connected entities",
+        "Retrieve both in same query",
+        "Verify connection weight increased: w' = w + lr*(1-w)",
+        "Verify bounded approach to 1.0"
+      ],
+      "estimated_effort": "medium"
+    },
+    {
+      "id": "TMEM-007",
+      "category": "tripartite-memory",
+      "description": "ACT-R activation-based semantic retrieval",
+      "priority": 1,
+      "passes": false,
+      "verification_steps": [
+        "Calculate base-level activation from access history",
+        "Calculate spreading activation from context entities",
+        "Combine: A = B + sum(W*S) + noise",
+        "Verify retrieval probability calculation"
+      ],
+      "estimated_effort": "large"
+    },
+    {
+      "id": "TMEM-008",
+      "category": "tripartite-memory",
+      "description": "Spreading activation search through knowledge graph",
+      "priority": 2,
+      "passes": false,
+      "verification_steps": [
+        "Set seed entities with activation 1.0",
+        "Spread through weighted connections for N steps",
+        "Apply retention and decay at each step",
+        "Return all entities with activation above threshold"
+      ],
+      "estimated_effort": "medium"
+    },
+    {
+      "id": "TMEM-009",
+      "category": "tripartite-memory",
+      "description": "Procedural memory stores skills with dual format (steps + script)",
+      "priority": 1,
+      "passes": false,
+      "verification_steps": [
+        "Create procedure with fine-grained steps",
+        "Verify high-level script abstraction generated",
+        "Verify trigger pattern stored",
+        "Verify domain classification"
+      ],
+      "estimated_effort": "medium"
+    },
+    {
+      "id": "TMEM-010",
+      "category": "tripartite-memory",
+      "description": "Procedure BUILD from successful trajectory",
+      "priority": 1,
+      "passes": false,
+      "verification_steps": [
+        "Input trajectory with success score >= 0.7",
+        "Extract steps with tool, parameters, outcome",
+        "Generate abstract script",
+        "Infer trigger pattern"
+      ],
+      "estimated_effort": "medium"
+    },
+    {
+      "id": "TMEM-011",
+      "category": "tripartite-memory",
+      "description": "Procedure RETRIEVE by task matching",
+      "priority": 1,
+      "passes": false,
+      "verification_steps": [
+        "Store multiple procedures",
+        "Query with task description",
+        "Score: 0.6*similarity + 0.3*success_rate + 0.1*experience",
+        "Verify deprecated procedures excluded"
+      ],
+      "estimated_effort": "medium"
+    },
+    {
+      "id": "TMEM-012",
+      "category": "tripartite-memory",
+      "description": "Procedure UPDATE from execution feedback",
+      "priority": 1,
+      "passes": false,
+      "verification_steps": [
+        "Execute procedure and report success",
+        "Verify success rate updated",
+        "Execute and report failure",
+        "Verify reflection and potential revision triggered"
+      ],
+      "estimated_effort": "medium"
+    },
+    {
+      "id": "TMEM-013",
+      "category": "tripartite-memory",
+      "description": "Consolidation engine performs episodic->semantic transfer",
+      "priority": 1,
+      "passes": false,
+      "verification_steps": [
+        "Store 3+ similar episodes",
+        "Run consolidation with min_similarity 0.75",
+        "Verify semantic entity created",
+        "Verify provenance chain maintained"
+      ],
+      "estimated_effort": "large"
+    },
+    {
+      "id": "TMEM-014",
+      "category": "tripartite-memory",
+      "description": "Consolidation extracts patterns from successful trajectories",
+      "priority": 2,
+      "passes": false,
+      "verification_steps": [
+        "Store successful episodes with similar actions",
+        "Run pattern extraction (min 80% success rate)",
+        "Verify patterns identified",
+        "Verify procedure suggestion generated"
+      ],
+      "estimated_effort": "medium"
+    },
+    {
+      "id": "TMEM-015",
+      "category": "tripartite-memory",
+      "description": "Consolidation merges similar procedures into skills",
+      "priority": 2,
+      "passes": false,
+      "verification_steps": [
+        "Store similar procedures with >0.7 success rate",
+        "Run skill consolidation with 0.85 similarity threshold",
+        "Verify merged procedure created",
+        "Verify originals marked deprecated"
+      ],
+      "estimated_effort": "medium"
+    },
+    {
+      "id": "TMEM-016",
+      "category": "tripartite-memory",
+      "description": "Scheduled consolidation cycles (light/deep/skill)",
+      "priority": 2,
+      "passes": false,
+      "verification_steps": [
+        "Configure light consolidation (2-4 hour interval)",
+        "Configure deep consolidation (daily)",
+        "Configure skill consolidation (weekly)",
+        "Verify each runs at scheduled time"
+      ],
+      "estimated_effort": "medium"
+    },
+    {
+      "id": "TMEM-017",
+      "category": "tripartite-memory",
+      "description": "MCP memory gateway exposes all memory operations",
+      "priority": 1,
+      "passes": false,
+      "verification_steps": [
+        "Start MCP server with memory tools",
+        "Call create_episode via MCP",
+        "Call semantic_recall via MCP",
+        "Call how_to (procedural retrieval) via MCP"
+      ],
+      "estimated_effort": "large"
+    },
+    {
+      "id": "TMEM-018",
+      "category": "tripartite-memory",
+      "description": "BGE-M3 local embedding generation on Archimedes GPU",
+      "priority": 1,
+      "passes": false,
+      "verification_steps": [
+        "Load BGE-M3 model on RTX 3090",
+        "Generate 1024-dim embedding from text",
+        "Verify sub-100ms latency for single embed",
+        "Verify batch processing works"
+      ],
+      "estimated_effort": "medium"
+    },
+    {
+      "id": "TMEM-019",
+      "category": "tripartite-memory",
+      "description": "Neo4j + Qdrant hybrid storage backend",
+      "priority": 1,
+      "passes": false,
+      "verification_steps": [
+        "Connect to Neo4j for graph storage",
+        "Connect to Qdrant for vector storage",
+        "Store entity with both graph node and vector",
+        "Query via vector similarity AND graph traversal"
+      ],
+      "estimated_effort": "large"
+    },
+    {
+      "id": "KNW-001",
+      "category": "knowledge",
+      "description": "Knowledge extraction from text",
+      "priority": 2,
+      "passes": false,
+      "verification_steps": [
+        "Input text with concepts and facts",
+        "Verify concepts are extracted",
+        "Verify facts are extracted",
+        "Verify relationships are detected"
+      ],
+      "estimated_effort": "medium"
+    },
+    {
+      "id": "KNW-002",
+      "category": "knowledge",
+      "description": "Knowledge classification by type",
+      "priority": 2,
+      "passes": false,
+      "verification_steps": [
+        "Input definition text, verify classified as concept",
+        "Input procedure text, verify classified as procedure",
+        "Input relationship text, verify classified as relationship"
+      ],
+      "estimated_effort": "small"
+    },
+    {
+      "id": "KNW-003",
+      "category": "knowledge",
+      "description": "Knowledge schema application",
+      "priority": 2,
+      "passes": false,
+      "verification_steps": [
+        "Extract concept and apply schema",
+        "Verify all schema fields populated",
+        "Verify metadata is complete",
+        "Verify provenance tracked"
+      ],
+      "estimated_effort": "medium"
+    },
+    {
+      "id": "KNW-004",
+      "category": "knowledge",
+      "description": "Semantic search via ww-retriever",
+      "priority": 2,
+      "passes": false,
+      "verification_steps": [
+        "Store documents with embeddings",
+        "Query with natural language",
+        "Verify relevant results returned",
+        "Verify scores are reasonable"
+      ],
+      "estimated_effort": "medium"
+    },
+    {
+      "id": "KNW-005",
+      "category": "knowledge",
+      "description": "Hybrid search (semantic + keyword)",
+      "priority": 3,
+      "passes": false,
+      "verification_steps": [
+        "Store documents",
+        "Query with hybrid strategy",
+        "Verify results from both methods",
+        "Verify RRF fusion applied"
+      ],
+      "estimated_effort": "medium"
+    },
+    {
+      "id": "GRF-001",
+      "category": "graph",
+      "description": "Entity extraction from text",
+      "priority": 2,
+      "passes": false,
+      "verification_steps": [
+        "Input text with named entities",
+        "Verify entities extracted with types",
+        "Verify confidence scores present"
+      ],
+      "estimated_effort": "medium"
+    },
+    {
+      "id": "GRF-002",
+      "category": "graph",
+      "description": "Relationship detection between entities",
+      "priority": 2,
+      "passes": false,
+      "verification_steps": [
+        "Input text with relationships",
+        "Verify relationships detected",
+        "Verify relationship types assigned"
+      ],
+      "estimated_effort": "medium"
+    },
+    {
+      "id": "GRF-003",
+      "category": "graph",
+      "description": "Graph node and edge creation",
+      "priority": 2,
+      "passes": false,
+      "verification_steps": [
+        "Add node to graph",
+        "Add edge between nodes",
+        "Verify nodes and edges persisted",
+        "Query and verify structure"
+      ],
+      "estimated_effort": "medium"
+    },
+    {
+      "id": "GRF-004",
+      "category": "graph",
+      "description": "Path finding between entities",
+      "priority": 3,
+      "passes": false,
+      "verification_steps": [
+        "Create graph with multiple paths",
+        "Find path between two nodes",
+        "Verify shortest path returned"
+      ],
+      "estimated_effort": "medium"
+    },
+    {
+      "id": "WRK-001",
+      "category": "workflow",
+      "description": "Task decomposition via ww-planner",
+      "priority": 2,
+      "passes": false,
+      "verification_steps": [
+        "Input complex goal",
+        "Verify tasks generated",
+        "Verify dependencies identified",
+        "Verify priorities assigned"
+      ],
+      "estimated_effort": "medium"
+    },
+    {
+      "id": "WRK-002",
+      "category": "workflow",
+      "description": "Feature validation via ww-validator",
+      "priority": 2,
+      "passes": false,
+      "verification_steps": [
+        "Run validation on complete feature",
+        "Verify all steps executed",
+        "Verify pass/fail determined correctly"
+      ],
+      "estimated_effort": "medium"
+    },
+    {
+      "id": "WRK-003",
+      "category": "workflow",
+      "description": "Knowledge synthesis via ww-synthesizer",
+      "priority": 3,
+      "passes": false,
+      "verification_steps": [
+        "Provide multiple source documents",
+        "Request synthesis",
+        "Verify comprehensive output",
+        "Verify sources cited"
+      ],
+      "estimated_effort": "medium"
+    },
+    {
+      "id": "DOM-001",
+      "category": "domain",
+      "description": "Neuroscience domain queries via ww-neuro",
+      "priority": 3,
+      "passes": false,
+      "verification_steps": [
+        "Query brain region information",
+        "Verify accurate response",
+        "Query neural pathway",
+        "Verify pathway details correct"
+      ],
+      "estimated_effort": "medium"
+    },
+    {
+      "id": "DOM-002",
+      "category": "domain",
+      "description": "Computational biology queries via ww-compbio",
+      "priority": 3,
+      "passes": false,
+      "verification_steps": [
+        "Query protein information",
+        "Verify accurate response",
+        "Query pathway information",
+        "Verify pathway details correct"
+      ],
+      "estimated_effort": "medium"
+    },
+    {
+      "id": "DOM-003",
+      "category": "domain",
+      "description": "Algorithm design via ww-algorithm",
+      "priority": 3,
+      "passes": false,
+      "verification_steps": [
+        "Request algorithm for specific problem",
+        "Verify pseudocode provided",
+        "Verify complexity analysis included",
+        "Verify implementation correct"
+      ],
+      "estimated_effort": "medium"
+    },
+    {
+      "id": "INT-001",
+      "category": "integration",
+      "description": "End-to-end knowledge capture workflow",
+      "priority": 2,
+      "passes": false,
+      "verification_steps": [
+        "Input conversation with knowledge",
+        "Trigger capture workflow",
+        "Verify extraction, embedding, storage, linking",
+        "Retrieve and verify complete"
+      ],
+      "estimated_effort": "large"
+    },
+    {
+      "id": "INT-002",
+      "category": "integration",
+      "description": "End-to-end retrieval workflow",
+      "priority": 2,
+      "passes": false,
+      "verification_steps": [
+        "Store multiple knowledge items",
+        "Query with natural language",
+        "Verify relevant results synthesized",
+        "Verify sources attributed"
+      ],
+      "estimated_effort": "large"
+    },
+    {
+      "id": "INT-003",
+      "category": "integration",
+      "description": "Multi-agent coordination workflow",
+      "priority": 3,
+      "passes": false,
+      "verification_steps": [
+        "Send complex request to conductor",
+        "Verify multiple agents spawned",
+        "Verify results aggregated",
+        "Verify coherent response"
+      ],
+      "estimated_effort": "large"
+    }
+  ]
+}

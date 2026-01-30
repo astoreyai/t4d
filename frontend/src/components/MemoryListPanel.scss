@@ -1,0 +1,765 @@
+@import '../styles/variables';
+
+.memory-list-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: $color-bg-primary;
+  overflow: hidden;
+}
+
+// Header
+.memory-list-panel > .panel-header {
+  padding: $spacing-lg;
+  background: $color-bg-secondary;
+  border-bottom: 1px solid $color-border;
+
+  @include mobile-only {
+    padding: $spacing-md;
+  }
+
+  h1 {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0;
+    color: $color-text-primary;
+
+    @include mobile-only {
+      font-size: 1.25rem;
+    }
+
+    i {
+      color: $color-accent;
+    }
+  }
+
+  .subtitle {
+    margin: $spacing-xs 0 0;
+    font-size: 0.875rem;
+    color: $color-text-secondary;
+  }
+}
+
+// Tabs
+.panel-tabs {
+  display: flex;
+  gap: $spacing-xs;
+  padding: $spacing-md $spacing-lg;
+  background: $color-bg-secondary;
+  border-bottom: 1px solid $color-border;
+
+  @include mobile-only {
+    padding: $spacing-sm $spacing-md;
+    gap: $spacing-sm;
+  }
+
+  .tab {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    padding: $spacing-sm $spacing-md;
+    min-height: $touch-target-min;
+    background: $color-bg-tertiary;
+    border: 1px solid $color-border;
+    border-radius: $radius-md;
+    color: $color-text-secondary;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all $transition-fast;
+
+    @include mobile-only {
+      flex: 1;
+      justify-content: center;
+      font-size: 0.8rem;
+    }
+
+    &:hover {
+      background: $color-bg-panel;
+      color: $color-text-primary;
+    }
+
+    &.active {
+      background: $color-accent;
+      border-color: $color-accent;
+      color: white;
+    }
+  }
+}
+
+// Search
+.search-form {
+  display: flex;
+  gap: $spacing-sm;
+  padding: $spacing-md $spacing-lg;
+  background: $color-bg-secondary;
+  border-bottom: 1px solid $color-border;
+
+  @include mobile-only {
+    padding: $spacing-sm $spacing-md;
+    flex-wrap: wrap;
+  }
+
+  .search-input-wrapper {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    background: $color-bg-tertiary;
+    border: 1px solid $color-border;
+    border-radius: $radius-md;
+    padding: 0 $spacing-md;
+
+    @include mobile-only {
+      width: 100%;
+      flex: none;
+    }
+
+    i {
+      color: $color-text-muted;
+    }
+
+    input {
+      flex: 1;
+      min-height: $touch-target-min;
+      background: transparent;
+      border: none;
+      color: $color-text-primary;
+      font-size: 0.875rem;
+
+      &::placeholder {
+        color: $color-text-muted;
+      }
+
+      &:focus {
+        outline: none;
+      }
+    }
+
+    .clear-btn {
+      padding: $spacing-xs;
+      background: none;
+      border: none;
+      color: $color-text-muted;
+      cursor: pointer;
+
+      &:hover {
+        color: $color-text-primary;
+      }
+    }
+  }
+
+  .search-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 $spacing-lg;
+    min-height: $touch-target-min;
+    background: $color-accent;
+    border: none;
+    border-radius: $radius-md;
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background $transition-fast;
+
+    @include mobile-only {
+      width: 100%;
+    }
+
+    &:hover {
+      background: $color-accent-light;
+    }
+  }
+}
+
+// Content
+.panel-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: $spacing-md $spacing-lg;
+
+  @include mobile-only {
+    padding: $spacing-sm $spacing-md;
+  }
+}
+
+// Memory list
+.memory-list {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+}
+
+// Memory row
+.memory-row {
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-md;
+  padding: $spacing-md;
+  background: $color-bg-panel;
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+  transition: border-color $transition-fast;
+
+  @include mobile-only {
+    flex-wrap: wrap;
+    padding: $spacing-sm;
+    gap: $spacing-sm;
+  }
+
+  &:hover {
+    border-color: $color-accent;
+  }
+
+  .row-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    background: $color-bg-tertiary;
+    border-radius: $radius-md;
+    color: $color-accent;
+
+    @include mobile-only {
+      display: none;
+    }
+  }
+
+  .row-content {
+    flex: 1;
+    min-width: 0;
+
+    @include mobile-only {
+      width: 100%;
+    }
+
+    .content-text,
+    .entity-summary {
+      margin: 0;
+      font-size: 0.875rem;
+      color: $color-text-secondary;
+      line-height: 1.5;
+      word-break: break-word;
+    }
+
+    .entity-name {
+      margin: 0 0 $spacing-xs;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: $color-text-primary;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: $spacing-sm;
+      margin-top: $spacing-sm;
+      font-size: 0.75rem;
+
+      span {
+        padding: 2px 8px;
+        background: $color-bg-tertiary;
+        border-radius: $radius-sm;
+        color: $color-text-muted;
+      }
+
+      .outcome {
+        text-transform: uppercase;
+        font-weight: 600;
+
+        &.success {
+          background: rgba($color-success, 0.15);
+          color: $color-success;
+        }
+
+        &.failure {
+          background: rgba($color-error, 0.15);
+          color: $color-error;
+        }
+
+        &.neutral {
+          background: rgba($color-text-muted, 0.15);
+          color: $color-text-muted;
+        }
+      }
+
+      .entity-type {
+        background: rgba($color-accent, 0.15);
+        color: $color-accent;
+      }
+    }
+  }
+
+  .row-stats {
+    display: flex;
+    gap: $spacing-md;
+
+    @include mobile-only {
+      width: 100%;
+      justify-content: flex-start;
+      gap: $spacing-lg;
+    }
+
+    .stat {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 50px;
+
+      .value {
+        font-size: 1rem;
+        font-weight: 600;
+        font-family: $font-mono;
+        color: $color-accent;
+      }
+
+      .label {
+        font-size: 0.65rem;
+        color: $color-text-muted;
+        text-transform: uppercase;
+      }
+    }
+  }
+
+  .row-actions {
+    display: flex;
+    gap: $spacing-xs;
+
+    @include mobile-only {
+      position: absolute;
+      right: $spacing-sm;
+      top: $spacing-sm;
+    }
+
+    .action-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: $touch-target-min;
+      height: $touch-target-min;
+      background: $color-bg-tertiary;
+      border: 1px solid $color-border;
+      border-radius: $radius-md;
+      color: $color-text-muted;
+      cursor: pointer;
+      transition: all $transition-fast;
+
+      &:hover {
+        color: $color-text-primary;
+        border-color: $color-accent;
+      }
+
+      &.edit:hover {
+        background: rgba($color-accent, 0.15);
+        color: $color-accent;
+      }
+
+      &.delete:hover {
+        background: rgba($color-error, 0.15);
+        color: $color-error;
+        border-color: $color-error;
+      }
+    }
+  }
+}
+
+// Make row relative for mobile action buttons
+@include mobile-only {
+  .memory-row {
+    position: relative;
+  }
+}
+
+// Pagination
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-md;
+  padding: $spacing-lg 0;
+
+  button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: $touch-target-min;
+    height: $touch-target-min;
+    background: $color-bg-tertiary;
+    border: 1px solid $color-border;
+    border-radius: $radius-md;
+    color: $color-text-secondary;
+    cursor: pointer;
+    transition: all $transition-fast;
+
+    &:hover:not(:disabled) {
+      background: $color-accent;
+      color: white;
+      border-color: $color-accent;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  .page-info {
+    font-size: 0.875rem;
+    color: $color-text-secondary;
+  }
+}
+
+// States
+.loading-state,
+.error-state,
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-md;
+  padding: $spacing-xl;
+  text-align: center;
+
+  i {
+    font-size: 3rem;
+    color: $color-text-muted;
+  }
+
+  p {
+    color: $color-text-secondary;
+    margin: 0;
+  }
+
+  button {
+    padding: $spacing-sm $spacing-lg;
+    min-height: $touch-target-min;
+    background: $color-accent;
+    border: none;
+    border-radius: $radius-md;
+    color: white;
+    cursor: pointer;
+
+    &:hover {
+      background: $color-accent-light;
+    }
+  }
+}
+
+.loading-state i {
+  color: $color-accent;
+}
+
+.error-state i {
+  color: $color-error;
+}
+
+// Modal overlays
+.surgery-modal-overlay,
+.delete-modal-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: $z-modal;
+  padding: $spacing-lg;
+}
+
+// Modal base
+.surgery-modal,
+.delete-modal {
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  background: $color-bg-panel;
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+  overflow: hidden;
+  animation: modalSlideIn 0.2s ease;
+
+  @include mobile-only {
+    max-width: 100%;
+    max-height: calc(100vh - #{$spacing-lg} * 2);
+  }
+
+  .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: $spacing-md $spacing-lg;
+    background: $color-bg-tertiary;
+    border-bottom: 1px solid $color-border;
+
+    h3 {
+      display: flex;
+      align-items: center;
+      gap: $spacing-sm;
+      margin: 0;
+      font-size: 1.125rem;
+      color: $color-text-primary;
+
+      i {
+        color: $color-accent;
+      }
+    }
+
+    &.danger h3 i {
+      color: $color-error;
+    }
+
+    .close-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: $touch-target-min;
+      height: $touch-target-min;
+      background: none;
+      border: none;
+      color: $color-text-muted;
+      cursor: pointer;
+
+      &:hover {
+        color: $color-text-primary;
+      }
+    }
+  }
+
+  .modal-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: $spacing-lg;
+
+    @include mobile-only {
+      padding: $spacing-md;
+    }
+
+    p {
+      margin: 0 0 $spacing-md;
+      color: $color-text-secondary;
+    }
+
+    .item-preview {
+      padding: $spacing-md;
+      background: $color-bg-tertiary;
+      border-radius: $radius-md;
+      font-size: 0.875rem;
+      color: $color-text-primary;
+      word-break: break-word;
+    }
+
+    .warning {
+      color: $color-error;
+      font-weight: 500;
+    }
+  }
+
+  .modal-footer {
+    display: flex;
+    gap: $spacing-sm;
+    padding: $spacing-md $spacing-lg;
+    background: $color-bg-tertiary;
+    border-top: 1px solid $color-border;
+
+    @include mobile-only {
+      padding: $spacing-md;
+    }
+
+    button {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: $spacing-sm $spacing-md;
+      min-height: $touch-target-min;
+      border-radius: $radius-md;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all $transition-fast;
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
+
+    .btn-secondary {
+      background: $color-bg-secondary;
+      border: 1px solid $color-border;
+      color: $color-text-secondary;
+
+      &:hover:not(:disabled) {
+        background: $color-bg-panel;
+        color: $color-text-primary;
+      }
+    }
+
+    .btn-primary {
+      background: $color-accent;
+      border: 1px solid $color-accent;
+      color: white;
+
+      &:hover:not(:disabled) {
+        background: $color-accent-light;
+      }
+    }
+
+    .btn-danger {
+      background: $color-error;
+      border: 1px solid $color-error;
+      color: white;
+
+      &:hover:not(:disabled) {
+        background: lighten($color-error, 10%);
+      }
+    }
+  }
+}
+
+// Form groups
+.form-group {
+  margin-bottom: $spacing-lg;
+
+  label {
+    display: block;
+    margin-bottom: $spacing-xs;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: $color-text-primary;
+  }
+
+  input[type='text'],
+  textarea {
+    width: 100%;
+    padding: $spacing-sm $spacing-md;
+    min-height: $touch-target-min;
+    background: $color-bg-tertiary;
+    border: 1px solid $color-border;
+    border-radius: $radius-md;
+    color: $color-text-primary;
+    font-size: 0.875rem;
+    font-family: inherit;
+    resize: vertical;
+
+    &::placeholder {
+      color: $color-text-muted;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: $color-accent;
+    }
+
+    &.disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  textarea {
+    min-height: 100px;
+  }
+
+  .help-text {
+    margin-top: $spacing-xs;
+    font-size: 0.75rem;
+    color: $color-text-muted;
+  }
+}
+
+// Slider wrapper
+.slider-wrapper {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+
+  input[type='range'] {
+    flex: 1;
+    height: 6px;
+    background: $color-bg-tertiary;
+    border-radius: $radius-full;
+    appearance: none;
+    cursor: pointer;
+
+    &::-webkit-slider-thumb {
+      appearance: none;
+      width: 24px;
+      height: 24px;
+      background: $color-accent;
+      border-radius: $radius-full;
+      cursor: grab;
+    }
+
+    &::-moz-range-thumb {
+      width: 24px;
+      height: 24px;
+      background: $color-accent;
+      border: none;
+      border-radius: $radius-full;
+      cursor: grab;
+    }
+  }
+
+  .value {
+    min-width: 50px;
+    font-family: $font-mono;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: $color-accent;
+    text-align: right;
+  }
+}
+
+// Info grid
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $spacing-sm;
+  padding: $spacing-md;
+  background: $color-bg-tertiary;
+  border-radius: $radius-md;
+
+  @include mobile-only {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .info-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $spacing-xs;
+
+    .label {
+      font-size: 0.65rem;
+      color: $color-text-muted;
+      text-transform: uppercase;
+    }
+
+    .value {
+      font-size: 0.875rem;
+      font-weight: 600;
+      font-family: $font-mono;
+      color: $color-text-primary;
+    }
+  }
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

@@ -1,0 +1,97 @@
+\contentsline {section}{\numberline {1}Introduction: The Amnesia Problem}{5}{section.1}%
+\contentsline {subsection}{\numberline {1.1}The Stakes}{5}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}Scope and Claims}{5}{subsection.1.2}%
+\contentsline {section}{\numberline {2}Theoretical Foundations}{6}{section.2}%
+\contentsline {subsection}{\numberline {2.1}The World Model Debate}{6}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Cognitive Memory Systems}{6}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Memory-Augmented Neural Networks}{7}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}The Consolidation Problem}{8}{subsection.2.4}%
+\contentsline {section}{\numberline {3}System Architecture}{8}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Design Philosophy}{8}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Episodic Memory}{9}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Semantic Memory}{9}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}Procedural Memory}{10}{subsection.3.4}%
+\contentsline {subsection}{\numberline {3.5}Hybrid Retrieval}{10}{subsection.3.5}%
+\contentsline {section}{\numberline {4}Literature Review}{11}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Memory in Cognitive Science}{11}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Memory in Artificial Intelligence}{11}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Retrieval-Augmented Generation}{12}{subsection.4.3}%
+\contentsline {subsection}{\numberline {4.4}World Models in AI}{12}{subsection.4.4}%
+\contentsline {section}{\numberline {5}Case Study: A Session in Practice}{12}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Session Initialization}{13}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}Task Execution}{13}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.3}Memory Formation}{13}{subsection.5.3}%
+\contentsline {subsection}{\numberline {5.4}Consolidation (Later)}{14}{subsection.5.4}%
+\contentsline {subsection}{\numberline {5.5}Future Session Benefits}{14}{subsection.5.5}%
+\contentsline {section}{\numberline {6}Memory vs. Retrieval: A Crucial Distinction}{14}{section.6}%
+\contentsline {subsection}{\numberline {6.1}What Retrieval-Augmented Generation Is Not}{14}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}The Continuity Criterion}{15}{subsection.6.2}%
+\contentsline {subsection}{\numberline {6.3}The Experience-Knowledge Gap}{15}{subsection.6.3}%
+\contentsline {section}{\numberline {7}Critical Analysis}{16}{section.7}%
+\contentsline {subsection}{\numberline {7.1}What World Weaver Does Well}{16}{subsection.7.1}%
+\contentsline {subsection}{\numberline {7.2}What World Weaver Does Poorly}{16}{subsection.7.2}%
+\contentsline {subsection}{\numberline {7.3}Fundamental Questions}{17}{subsection.7.3}%
+\contentsline {section}{\numberline {8}Ethical and Societal Implications}{17}{section.8}%
+\contentsline {subsection}{\numberline {8.1}The Right to Be Forgotten}{17}{subsection.8.1}%
+\contentsline {subsection}{\numberline {8.2}Memory Manipulation}{17}{subsection.8.2}%
+\contentsline {subsection}{\numberline {8.3}Differential Memory}{18}{subsection.8.3}%
+\contentsline {subsection}{\numberline {8.4}Memory as Liability}{18}{subsection.8.4}%
+\contentsline {subsection}{\numberline {8.5}The Continuity Question}{18}{subsection.8.5}%
+\contentsline {section}{\numberline {9}Empirical Evaluation}{18}{section.9}%
+\contentsline {subsection}{\numberline {9.1}The Measurement Problem}{18}{subsection.9.1}%
+\contentsline {subsection}{\numberline {9.2}Ablation Studies}{19}{subsection.9.2}%
+\contentsline {subsection}{\numberline {9.3}Failure Mode Analysis}{20}{subsection.9.3}%
+\contentsline {section}{\numberline {10}The Cognitive Metaphor: Limits and Risks}{20}{section.10}%
+\contentsline {subsection}{\numberline {10.1}When the Brain Analogy Breaks}{20}{subsection.10.1}%
+\contentsline {subsection}{\numberline {10.2}The Risk of Misplaced Confidence}{21}{subsection.10.2}%
+\contentsline {section}{\numberline {11}Adversarial Considerations}{21}{section.11}%
+\contentsline {subsection}{\numberline {11.1}Memory Poisoning}{21}{subsection.11.1}%
+\contentsline {subsection}{\numberline {11.2}Mitigations}{21}{subsection.11.2}%
+\contentsline {section}{\numberline {12}Collective Memory and Multi-Agent Systems}{22}{section.12}%
+\contentsline {subsection}{\numberline {12.1}Beyond Individual Memory}{22}{subsection.12.1}%
+\contentsline {subsection}{\numberline {12.2}Organizational Memory}{22}{subsection.12.2}%
+\contentsline {section}{\numberline {13}Future Directions}{22}{section.13}%
+\contentsline {subsection}{\numberline {13.1}Neural-Symbolic Integration}{22}{subsection.13.1}%
+\contentsline {subsection}{\numberline {13.2}Multi-Modal Memory}{23}{subsection.13.2}%
+\contentsline {subsection}{\numberline {13.3}Social Memory}{23}{subsection.13.3}%
+\contentsline {subsection}{\numberline {13.4}Meta-Memory}{23}{subsection.13.4}%
+\contentsline {subsection}{\numberline {13.5}Formal Verification}{23}{subsection.13.5}%
+\contentsline {section}{\numberline {14}Epistemological Foundations}{23}{section.14}%
+\contentsline {subsection}{\numberline {14.1}What Does the Agent Know?}{23}{subsection.14.1}%
+\contentsline {subsection}{\numberline {14.2}The Frame Problem Revisited}{23}{subsection.14.2}%
+\contentsline {subsection}{\numberline {14.3}Memory and Meaning}{24}{subsection.14.3}%
+\contentsline {subsection}{\numberline {14.4}The Symbol Grounding Problem}{24}{subsection.14.4}%
+\contentsline {section}{\numberline {15}The Hard Problem of AI Memory}{24}{section.15}%
+\contentsline {subsection}{\numberline {15.1}Phenomenology and the Missing Qualia}{24}{subsection.15.1}%
+\contentsline {subsection}{\numberline {15.2}The Binding Problem}{25}{subsection.15.2}%
+\contentsline {subsection}{\numberline {15.3}Intentionality and Aboutness}{25}{subsection.15.3}%
+\contentsline {subsection}{\numberline {15.4}Memory Without Understanding}{26}{subsection.15.4}%
+\contentsline {section}{\numberline {16}Memory and Intelligence}{26}{section.16}%
+\contentsline {subsection}{\numberline {16.1}Is Memory Necessary for Intelligence?}{26}{subsection.16.1}%
+\contentsline {subsection}{\numberline {16.2}The Memory-Reasoning Interface}{26}{subsection.16.2}%
+\contentsline {subsection}{\numberline {16.3}Memory and Creativity}{27}{subsection.16.3}%
+\contentsline {subsection}{\numberline {16.4}The Expertise Question}{28}{subsection.16.4}%
+\contentsline {section}{\numberline {17}Toward a Theory of Machine Memory}{28}{section.17}%
+\contentsline {subsection}{\numberline {17.1}What Should a Theory Explain?}{28}{subsection.17.1}%
+\contentsline {subsection}{\numberline {17.2}Desiderata for Machine Memory}{29}{subsection.17.2}%
+\contentsline {subsection}{\numberline {17.3}A Taxonomy of Memory Architectures}{29}{subsection.17.3}%
+\contentsline {subsection}{\numberline {17.4}Memory and Time}{30}{subsection.17.4}%
+\contentsline {subsection}{\numberline {17.5}Memory and Prediction}{30}{subsection.17.5}%
+\contentsline {subsection}{\numberline {17.6}The Linguistic Nature of AI Memory}{31}{subsection.17.6}%
+\contentsline {subsection}{\numberline {17.7}Open Theoretical Questions}{31}{subsection.17.7}%
+\contentsline {section}{\numberline {18}The Deeper Purpose}{31}{section.18}%
+\contentsline {section}{\numberline {19}Industry Context and Related Developments}{32}{section.19}%
+\contentsline {subsection}{\numberline {19.1}Commercial Memory Systems}{32}{subsection.19.1}%
+\contentsline {subsection}{\numberline {19.2}Research Developments}{32}{subsection.19.2}%
+\contentsline {subsection}{\numberline {19.3}Open Problems in the Field}{33}{subsection.19.3}%
+\contentsline {section}{\numberline {20}Reflections on Building World Weaver}{33}{section.20}%
+\contentsline {subsection}{\numberline {20.1}What Surprised Us}{33}{subsection.20.1}%
+\contentsline {subsection}{\numberline {20.2}What We Would Do Differently}{33}{subsection.20.2}%
+\contentsline {subsection}{\numberline {20.3}Advice for Others}{34}{subsection.20.3}%
+\contentsline {section}{\numberline {21}Final Meditations: What Are We Creating?}{34}{section.21}%
+\contentsline {subsection}{\numberline {21.1}The Artifact Question}{34}{subsection.21.1}%
+\contentsline {subsection}{\numberline {21.2}The Responsibility Question}{34}{subsection.21.2}%
+\contentsline {subsection}{\numberline {21.3}The Consciousness Question}{35}{subsection.21.3}%
+\contentsline {subsection}{\numberline {21.4}The Humility Imperative}{35}{subsection.21.4}%
+\contentsline {subsection}{\numberline {21.5}A Vision}{35}{subsection.21.5}%
+\contentsline {section}{\numberline {22}Conclusion}{35}{section.22}%

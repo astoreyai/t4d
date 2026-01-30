@@ -1,0 +1,73 @@
+# Staging overlay for World Weaver
+# Usage: kubectl apply -k deploy/kubernetes/overlays/staging
+
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: ww-staging
+
+resources:
+  - ../../  # Base configuration
+
+commonLabels:
+  environment: staging
+
+# Name prefix for staging resources
+namePrefix: staging-
+
+# Staging-specific patches
+patches:
+  # Moderate replicas for staging
+  - target:
+      kind: Deployment
+      name: ww-api
+    patch: |
+      - op: replace
+        path: /spec/replicas
+        value: 2
+
+  # Staging resource limits (between dev and prod)
+  - target:
+      kind: Deployment
+      name: ww-api
+    patch: |
+      - op: replace
+        path: /spec/template/spec/containers/0/resources/requests/cpu
+        value: "250m"
+      - op: replace
+        path: /spec/template/spec/containers/0/resources/requests/memory
+        value: "512Mi"
+      - op: replace
+        path: /spec/template/spec/containers/0/resources/limits/cpu
+        value: "1000m"
+      - op: replace
+        path: /spec/template/spec/containers/0/resources/limits/memory
+        value: "2Gi"
+
+  # Moderate HPA for staging
+  - target:
+      kind: HorizontalPodAutoscaler
+      name: ww-api-hpa
+    patch: |
+      - op: replace
+        path: /spec/minReplicas
+        value: 2
+      - op: replace
+        path: /spec/maxReplicas
+        value: 5
+
+# Staging image
+images:
+  - name: world-weaver
+    newName: ghcr.io/world-weaver/ww-api
+    newTag: staging
+
+# Staging ConfigMap overrides
+configMapGenerator:
+  - name: ww-config-staging
+    behavior: merge
+    literals:
+      - WW_LOG_LEVEL=INFO
+      - WW_DEBUG=false
+      - WW_FLAG_TELEMETRY=true
+      - WW_SECRETS_BACKEND=file

@@ -1,0 +1,472 @@
+@import '../styles/variables';
+
+.three-factor-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+  padding: $spacing-lg;
+  background: $color-bg-primary;
+  height: 100%;
+  overflow-y: auto;
+
+  @include mobile-only {
+    padding: $spacing-md;
+    gap: $spacing-md;
+  }
+
+  &.loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: $spacing-md;
+
+    i {
+      font-size: 2rem;
+      color: $color-accent;
+    }
+
+    p {
+      color: $color-text-secondary;
+    }
+  }
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+
+  h2 {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: $color-text-primary;
+    margin: 0;
+
+    i {
+      color: $color-accent;
+    }
+  }
+
+  .header-controls {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+
+    .auto-refresh-toggle {
+      display: flex;
+      align-items: center;
+      gap: $spacing-xs;
+      font-size: 0.75rem;
+      color: $color-text-secondary;
+      cursor: pointer;
+
+      input {
+        cursor: pointer;
+      }
+    }
+
+    .refresh-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: $touch-target-min;
+      height: $touch-target-min;
+      background: $color-bg-tertiary;
+      border: 1px solid $color-border;
+      border-radius: $radius-md;
+      color: $color-text-secondary;
+      cursor: pointer;
+      transition: all $transition-fast;
+
+      &:hover {
+        background: $color-accent;
+        color: white;
+        border-color: $color-accent;
+      }
+    }
+  }
+}
+
+.dashboard-subtitle {
+  font-size: 0.875rem;
+  color: $color-text-muted;
+  font-style: italic;
+}
+
+// ============================================================================
+// Gauges Row
+// ============================================================================
+
+.gauges-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $spacing-lg;
+
+  @include mobile-only {
+    grid-template-columns: 1fr;
+    gap: $spacing-md;
+  }
+}
+
+.gauge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: $spacing-lg;
+  background: $color-bg-panel;
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+  transition: border-color $transition-fast;
+
+  @include mobile-only {
+    padding: $spacing-md;
+  }
+
+  &:hover {
+    border-color: $color-accent;
+  }
+
+  &.low {
+    border-color: $color-warning;
+    background: rgba($color-warning, 0.05);
+  }
+
+  .gauge-header {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    margin-bottom: $spacing-md;
+
+    i {
+      font-size: 1.25rem;
+    }
+
+    .gauge-label {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: $color-text-primary;
+    }
+  }
+
+  .gauge-visual {
+    position: relative;
+    width: 120px;
+    height: 80px;
+
+    @include mobile-only {
+      width: 100px;
+      height: 70px;
+    }
+
+    .gauge-arc {
+      width: 100%;
+      height: auto;
+    }
+
+    .gauge-value {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 1.25rem;
+      font-weight: 700;
+      font-family: $font-mono;
+    }
+  }
+
+  .gauge-subtitle {
+    font-size: 0.75rem;
+    color: $color-text-muted;
+    margin-top: $spacing-sm;
+  }
+
+  .gauge-warning {
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+    margin-top: $spacing-sm;
+    padding: $spacing-xs $spacing-sm;
+    background: rgba($color-warning, 0.15);
+    border-radius: $radius-sm;
+    font-size: 0.7rem;
+    color: $color-warning;
+    font-weight: 500;
+
+    i {
+      font-size: 0.75rem;
+    }
+  }
+}
+
+// ============================================================================
+// Learning Equation
+// ============================================================================
+
+.learning-equation {
+  padding: $spacing-lg;
+  background: $color-bg-panel;
+  border: 2px solid $color-border;
+  border-radius: $radius-lg;
+  text-align: center;
+
+  @include mobile-only {
+    padding: $spacing-md;
+  }
+
+  &.active {
+    border-color: $color-success;
+    background: rgba($color-success, 0.05);
+
+    .equation-header {
+      color: $color-success;
+    }
+  }
+
+  &.blocked {
+    border-color: $color-warning;
+    background: rgba($color-warning, 0.05);
+
+    .equation-header {
+      color: $color-warning;
+    }
+  }
+
+  .equation-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-sm;
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: $spacing-md;
+
+    i {
+      font-size: 1rem;
+    }
+  }
+
+  .equation-body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-sm;
+    flex-wrap: wrap;
+    font-family: $font-mono;
+    font-size: 1.25rem;
+
+    @include mobile-only {
+      font-size: 1rem;
+      gap: $spacing-xs;
+    }
+
+    .term {
+      padding: $spacing-xs $spacing-sm;
+      background: $color-bg-tertiary;
+      border-radius: $radius-sm;
+      color: $color-text-primary;
+      font-weight: 600;
+
+      &.blocking {
+        background: rgba($color-warning, 0.2);
+        color: $color-warning;
+      }
+    }
+
+    .operator {
+      color: $color-text-muted;
+    }
+
+    .result {
+      padding: $spacing-xs $spacing-md;
+      background: $color-accent;
+      border-radius: $radius-sm;
+      color: white;
+      font-weight: 700;
+    }
+  }
+
+  .equation-labels {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-sm;
+    margin-top: $spacing-sm;
+    font-size: 0.65rem;
+    color: $color-text-muted;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+
+    @include mobile-only {
+      display: none;
+    }
+  }
+}
+
+// ============================================================================
+// Block Reason
+// ============================================================================
+
+.block-reason {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  padding: $spacing-md;
+  background: rgba($color-info, 0.1);
+  border: 1px solid rgba($color-info, 0.3);
+  border-radius: $radius-md;
+  font-size: 0.875rem;
+  color: $color-info;
+
+  i {
+    flex-shrink: 0;
+  }
+}
+
+// ============================================================================
+// Recent Events
+// ============================================================================
+
+.recent-events {
+  background: $color-bg-panel;
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+  overflow: hidden;
+
+  h4 {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    padding: $spacing-md;
+    margin: 0;
+    background: $color-bg-tertiary;
+    border-bottom: 1px solid $color-border;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: $color-text-primary;
+
+    i {
+      color: $color-accent;
+    }
+  }
+
+  .no-events {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-sm;
+    padding: $spacing-lg;
+    color: $color-text-muted;
+    font-size: 0.875rem;
+
+    i {
+      opacity: 0.5;
+    }
+  }
+
+  .events-list {
+    max-height: 200px;
+    overflow-y: auto;
+  }
+
+  .event-row {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    padding: $spacing-sm $spacing-md;
+    min-height: $touch-target-min;
+    border-bottom: 1px solid $color-border;
+    cursor: pointer;
+    transition: background $transition-fast;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &:hover {
+      background: $color-bg-tertiary;
+    }
+
+    &.positive .event-icon {
+      color: $color-success;
+    }
+
+    &.negative .event-icon {
+      color: $color-error;
+    }
+
+    .event-icon {
+      font-weight: 700;
+      font-size: 1rem;
+      width: 20px;
+      text-align: center;
+    }
+
+    .event-memory {
+      flex: 1;
+      font-family: $font-mono;
+      font-size: 0.8rem;
+      color: $color-text-secondary;
+    }
+
+    .event-advantage {
+      font-family: $font-mono;
+      font-size: 0.8rem;
+      font-weight: 600;
+      min-width: 60px;
+      text-align: right;
+
+      &.pos {
+        color: $color-success;
+      }
+
+      &.neg {
+        color: $color-error;
+      }
+    }
+
+    .event-time {
+      font-size: 0.7rem;
+      color: $color-text-muted;
+      min-width: 70px;
+      text-align: right;
+    }
+  }
+}
+
+// ============================================================================
+// Educational Footer
+// ============================================================================
+
+.dashboard-footer {
+  padding: $spacing-md;
+  background: $color-bg-tertiary;
+  border-radius: $radius-md;
+  font-size: 0.8rem;
+
+  h5 {
+    margin: 0 0 $spacing-sm;
+    font-size: 0.875rem;
+    color: $color-text-primary;
+  }
+
+  ul {
+    margin: 0;
+    padding-left: $spacing-lg;
+    color: $color-text-secondary;
+    line-height: 1.6;
+
+    li {
+      margin-bottom: $spacing-xs;
+
+      strong {
+        color: $color-accent;
+      }
+    }
+  }
+}

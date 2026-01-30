@@ -1,0 +1,40 @@
+study_id,title,authors,year,venue,doi,abstract_summary,citations,focus_area,include_decision
+EP001,Transformers are Meta-Reinforcement Learners,Luckeciano C. Melo,2022,arXiv,10.48550/arxiv.2206.06614,TrMRL mimics episodic memory through self-attention for meta-RL,8,episodic_memory,include
+EP002,Memory Gym: Towards Endless Tasks to Benchmark Memory,Pleines et al.,2023,arXiv,10.48550/arxiv.2309.17207,Benchmark for evaluating memory in decision-making agents,0,episodic_memory,include
+EP003,MuRAG: Multimodal Retrieval-Augmented Generator,Chen et al.,2022,EMNLP,10.18653/v1/2022.emnlp-main.375,First multimodal RAG for text and image memory,70,episodic_memory,include
+EP004,Interactive AI With RAG for Networking,Zhang et al.,2024,IEEE Network,10.1109/mnet.2024.3401159,RAG with contextual memory for network management,38,episodic_memory,include
+EP005,Memory-Based Model Editing at Scale,Mitchell et al.,2022,arXiv,10.48550/arxiv.2206.06520,SERAC stores edits in explicit memory with retrieval,30,episodic_memory,include
+EP006,Recitation-Augmented Language Models,Sun et al.,2022,arXiv,10.48550/arxiv.2210.01296,RECITE uses internal memory via sampling before generation,30,episodic_memory,include
+EP007,Retrieval-Augmented Multimodal Language Modeling,Yasunaga et al.,2022,arXiv,10.48550/arxiv.2211.12561,RA-CM3 retrieves and generates text and images,28,episodic_memory,include
+SM001,Knowledge Graph Alignment Network with Gated Multi-Hop Aggregation,Sun et al.,2020,AAAI,10.1609/aaai.v34i01.5354,Attention-based entity alignment in knowledge graphs,306,semantic_memory,include
+SM002,Learning Knowledge Graph Embedding With Heterogeneous Relation Attention,Li et al.,2021,IEEE TNNLS,10.1109/tnnls.2021.3055147,Heterogeneous GNN for knowledge graph embeddings,304,semantic_memory,include
+SM003,KGNN: Knowledge Graph Neural Network for Drug-Drug Interaction,Lin et al.,2020,IJCAI,10.24963/ijcai.2020/380,KG-based drug interaction prediction,285,semantic_memory,include
+SM004,When Radiology Report Generation Meets Knowledge Graph,Zhang et al.,2020,AAAI,10.1609/aaai.v34i07.6989,Graph embeddings for medical report generation,283,semantic_memory,include
+SM005,Towards Multi-Modal Causability with Graph Neural Networks,Holzinger et al.,2021,Information Fusion,10.1016/j.inffus.2021.01.008,GNNs for multimodal information fusion,320,semantic_memory,include
+SM006,Survey of vector database management systems,Pan et al.,2024,VLDB Journal,,Comprehensive survey of vector databases,71,semantic_memory,include
+PM001,Intelligent problem-solving as integrated hierarchical RL,Eppe et al.,2022,Nature Machine Intelligence,,Integrated HRL for complex problem decomposition,74,procedural_memory,include
+PM002,Reinforcement Learning for Production-Based Cognitive Models,Brasoveanu & Dotlacil,2021,Topics in Cognitive Science,10.1111/tops.12546,RL for ACT-R production rule learning,5,procedural_memory,include
+PM003,DRL-Based Intelligent Reflecting Surface,Yang et al.,2020,IEEE TWC,10.1109/twc.2020.3024860,DRL with prioritized experience replay,439,procedural_memory,include
+PM004,Resource Allocation Based on DRL in IoT Edge Computing,Xiong et al.,2020,IEEE JSAC,10.1109/jsac.2020.2986615,Enhanced DQN with multiple replay memories,277,procedural_memory,include
+PM005,DRL Based Dynamic Trajectory Control for UAV-MEC,Wang et al.,2021,IEEE TMC,10.1109/tmc.2021.3059691,DRL with prioritized experience replay,255,procedural_memory,include
+MC001,Autonomous interactions between hippocampus and neocortex,Singh et al.,2022,PNAS,10.1073/pnas.2123432119,Sleep-based memory consolidation model,66,consolidation,include
+MC002,Can sleep protect memories from catastrophic forgetting?,Gonzalez et al.,2020,eLife,10.7554/elife.51005,Sleep replay for memory protection,54,consolidation,include
+MC003,Triple-Memory Networks: Brain-Inspired Continual Learning,Wang et al.,2021,IEEE TNNLS,10.1109/tnnls.2021.3111019,Three memory systems for continual learning,48,consolidation,include
+MC004,Learning offline: memory replay in biological and artificial RL,Roscow et al.,2021,Trends in Neurosciences,10.1016/j.tins.2021.07.007,Review of offline replay mechanisms,33,consolidation,include
+MC005,Memory Recall Framework Against Catastrophic Forgetting,Zhang et al.,2021,IEEE TNNLS,10.1109/tnnls.2021.3099700,Memory replay for catastrophic forgetting,32,consolidation,include
+MC006,A Continual Learning Survey: Defying Forgetting,Delange et al.,2021,IEEE TPAMI,10.1109/tpami.2021.3057446,Comprehensive continual learning survey,1488,consolidation,include
+MC007,Brain-Inspired Replay for Continual Learning,van de Ven et al.,2020,Nature Communications,10.1038/s41467-020-17866-2,Neuroscience-inspired replay for ANNs,426,consolidation,include
+MC008,Using Hindsight to Anchor Past Knowledge,Chaudhry et al.,2021,AAAI,10.1609/aaai.v35i8.16861,Replay with bilevel optimization,174,consolidation,include
+CA001,Time-scale invariant contingency yields one-shot RL,Gallistel & Shahan,2024,PNAS,10.1073/pnas.2405451121,Information-theoretic credit assignment,10,credit_assignment,include
+CA002,Predecessor Features,Bailey & Mattar,2022,arXiv,10.48550/arxiv.2206.00303,Enhanced credit assignment via TD propagation,5,credit_assignment,include
+CA003,Expected Eligibility Traces,van Hasselt et al.,2021,AAAI,10.1609/aaai.v35i11.17200,Expected traces for counterfactual sequences,3,credit_assignment,include
+CA004,Information-Theoretic Perspective on Credit Assignment,Arumugam et al.,2021,arXiv,10.48550/arxiv.2103.06224,Formal credit assignment framework,3,credit_assignment,include
+NS001,Cognitive Architectures for Language Agents (CoALA),Sumers et al.,2023,arXiv,10.48550/arxiv.2309.02427,Framework for LLM agents with modular memory,53,neural_symbolic,include
+NS002,Dynamic Human-like Memory in LLM Agents,Hou et al.,2024,CHI EA,10.1145/3613905.3650839,Human-inspired memory recall and consolidation,20,neural_symbolic,include
+NS003,FinMem: Performance-Enhanced LLM Trading Agent,Yu et al.,2024,AAAI Symposium,10.1609/aaaiss.v3i1.31290,Layered memory for financial reasoning,19,neural_symbolic,include
+NS004,MemGPT: Towards LLMs as Operating Systems,Packer et al.,2023,arXiv,10.48550/arxiv.2310.08560,Virtual context management for LLMs,30,neural_symbolic,include
+NS005,Cognitive LLMs: Integrating Cognitive Architectures and LLMs,Wu et al.,2024,arXiv,10.48550/arxiv.2408.09176,ACT-R integration with LLMs,2,neural_symbolic,include
+NS006,RAISE: ReAct with Memory Enhancement,Liu et al.,2024,arXiv,,Dual-component memory for conversational agents,0,neural_symbolic,include
+HB001,Spatial Properties of STDP in Self-Learning SNN,Lobov et al.,2020,Frontiers in Neuroscience,10.3389/fnins.2020.00088,STDP for associative learning in robots,102,hebbian_learning,include
+HB002,Ferroelectric Synaptic Transistor Network for Associative Memory,Yan et al.,2021,Advanced Electronic Materials,10.1002/aelm.202001276,Hebbian learning in hardware,90,hebbian_learning,include
+HB003,Canonical Neural Networks Perform Active Inference,Isomura et al.,2022,Communications Biology,10.1038/s42003-021-02994-2,Bayesian perception through standard NNs,50,hebbian_learning,include

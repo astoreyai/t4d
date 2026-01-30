@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "mcpServers": {
+    "ww-memory": {
+      "command": "/mnt/projects/ww/.venv/bin/python",
+      "args": ["-m", "ww.mcp.memory_gateway"],
+      "env": {
+        "WW_SESSION_ID": "${CLAUDE_INSTANCE_ID:-ww-default}",
+        "WW_NEO4J_URI": "bolt://localhost:7687",
+        "WW_NEO4J_USER": "neo4j",
+        "WW_NEO4J_PASSWORD": "wwpassword",
+        "WW_QDRANT_URL": "http://localhost:6333",
+        "WW_EMBEDDING_MODEL": "BAAI/bge-m3",
+        "WW_EMBEDDING_DEVICE": "cuda:0",
+        "WW_EMBEDDING_DIMENSION": "1024",
+        "WW_EMBEDDING_CACHE_DIR": "/mnt/projects/ww/models",
+        "PYTHONPATH": ""
+      }
+    }
+  }
+}

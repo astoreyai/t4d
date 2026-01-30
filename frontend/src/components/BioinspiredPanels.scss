@@ -1,0 +1,741 @@
+/**
+ * Bioinspired Visualization Panels - Shared Styles
+ */
+
+// Variables
+$bg-dark: #0f0f14;
+$bg-card: #1a1a24;
+$bg-hover: #252530;
+$border-color: #2a2a3a;
+$text-primary: #e0e0e8;
+$text-secondary: #a0a0b0;
+$accent-primary: #6366f1;
+$accent-success: #22c55e;
+$accent-warning: #eab308;
+$accent-danger: #ef4444;
+$accent-orange: #f97316;
+
+// Shared Panel Styles
+.eligibility-panel,
+.sparse-encoding-panel,
+.fes-panel {
+  background: $bg-dark;
+  color: $text-primary;
+  padding: 24px;
+  border-radius: 12px;
+  min-height: 100vh;
+
+  .panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid $border-color;
+
+    h2 {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 0;
+      font-size: 24px;
+      font-weight: 600;
+
+      .icon {
+        font-size: 28px;
+      }
+    }
+
+    .bio-tag {
+      background: rgba($accent-primary, 0.2);
+      color: $accent-primary;
+      padding: 6px 12px;
+      border-radius: 16px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .controls {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+
+      .toggle {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+
+        input {
+          accent-color: $accent-primary;
+        }
+      }
+    }
+  }
+}
+
+// Stats Row
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+
+  .stat-card {
+    background: $bg-card;
+    border: 1px solid $border-color;
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+
+    &.highlight {
+      border-color: $accent-success;
+      background: rgba($accent-success, 0.1);
+    }
+
+    .stat-value {
+      font-size: 28px;
+      font-weight: 700;
+      color: $text-primary;
+      margin-bottom: 4px;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: $text-secondary;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .progress-bar {
+      margin-top: 8px;
+      height: 4px;
+      background: $border-color;
+      border-radius: 2px;
+      overflow: hidden;
+
+      .progress-fill {
+        height: 100%;
+        transition: width 0.3s ease;
+      }
+    }
+  }
+}
+
+// Action Row
+.action-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+
+  .btn-action {
+    padding: 10px 20px;
+    border: 1px solid $border-color;
+    border-radius: 6px;
+    background: $bg-card;
+    color: $text-primary;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
+
+    &:hover {
+      background: $bg-hover;
+      border-color: $accent-primary;
+    }
+
+    &.positive {
+      border-color: $accent-success;
+      &:hover {
+        background: rgba($accent-success, 0.2);
+      }
+    }
+
+    &.negative {
+      border-color: $accent-danger;
+      &:hover {
+        background: rgba($accent-danger, 0.2);
+      }
+    }
+  }
+}
+
+// Charts Grid
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.chart-card {
+  background: $bg-card;
+  border: 1px solid $border-color;
+  border-radius: 8px;
+  padding: 20px;
+
+  h3, h4 {
+    margin: 0 0 16px 0;
+    font-size: 16px;
+    font-weight: 500;
+    color: $text-primary;
+  }
+}
+
+// Buttons
+.btn-refresh,
+.btn-encode,
+.btn-write {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  background: $accent-primary;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s;
+
+  &:hover:not(:disabled) {
+    background: lighten($accent-primary, 10%);
+    transform: translateY(-1px);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+// Credits Section
+.credits-section {
+  background: $bg-card;
+  border: 1px solid $border-color;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 24px;
+
+  h3 {
+    margin: 0 0 16px 0;
+    font-size: 16px;
+  }
+
+  .credits-list {
+    .empty-state {
+      text-align: center;
+      color: $text-secondary;
+      padding: 20px;
+    }
+
+    .credit-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 12px;
+      border-radius: 4px;
+      margin-bottom: 4px;
+
+      &.positive {
+        background: rgba($accent-success, 0.1);
+        .credit-value {
+          color: $accent-success;
+        }
+      }
+
+      &.negative {
+        background: rgba($accent-danger, 0.1);
+        .credit-value {
+          color: $accent-danger;
+        }
+      }
+
+      .memory-id {
+        font-family: monospace;
+        color: $text-secondary;
+      }
+
+      .credit-value {
+        font-weight: 600;
+      }
+    }
+  }
+}
+
+// Bio Context
+.bio-context {
+  background: rgba($accent-primary, 0.05);
+  border: 1px solid rgba($accent-primary, 0.2);
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 24px;
+
+  h4 {
+    margin: 0 0 12px 0;
+    color: $accent-primary;
+    font-size: 14px;
+  }
+
+  p {
+    margin: 0 0 12px 0;
+    color: $text-secondary;
+    line-height: 1.6;
+
+    strong {
+      color: $text-primary;
+    }
+  }
+
+  code {
+    display: block;
+    background: $bg-dark;
+    padding: 12px;
+    border-radius: 4px;
+    font-family: 'Fira Code', monospace;
+    font-size: 13px;
+    color: $accent-success;
+  }
+
+  .bio-stats, .bio-features {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+
+    .bio-stat, .feature {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      .label {
+        color: $text-secondary;
+      }
+
+      .value {
+        color: $accent-primary;
+        font-weight: 600;
+      }
+
+      .icon {
+        font-size: 18px;
+      }
+    }
+  }
+}
+
+// Error Toast
+.error-toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: $accent-danger;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+
+  button {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 0;
+    margin-left: 8px;
+  }
+}
+
+// Loading State
+.panel.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  color: $text-secondary;
+
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid $border-color;
+    border-top-color: $accent-primary;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 16px;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+}
+
+// Sparse Encoding Specific
+.sparse-encoding-panel {
+  .config-section {
+    background: $bg-card;
+    border: 1px solid $border-color;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 24px;
+
+    h3 {
+      margin: 0 0 16px 0;
+      font-size: 16px;
+    }
+
+    .config-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 16px;
+
+      .config-item {
+        .config-label {
+          display: block;
+          font-size: 12px;
+          color: $text-secondary;
+          margin-bottom: 4px;
+        }
+
+        .config-value {
+          font-size: 20px;
+          font-weight: 600;
+          color: $accent-primary;
+        }
+      }
+    }
+  }
+
+  .test-section {
+    background: $bg-card;
+    border: 1px solid $border-color;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 24px;
+
+    h3 {
+      margin: 0 0 16px 0;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 12px;
+
+      textarea {
+        flex: 1;
+        background: $bg-dark;
+        border: 1px solid $border-color;
+        border-radius: 6px;
+        padding: 12px;
+        color: $text-primary;
+        font-family: inherit;
+        resize: vertical;
+
+        &:focus {
+          outline: none;
+          border-color: $accent-primary;
+        }
+      }
+    }
+  }
+
+  .encoding-results {
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    .result-card {
+      background: $bg-card;
+      border: 1px solid $border-color;
+      border-radius: 8px;
+      padding: 20px;
+
+      .stat-list {
+        .stat-row {
+          display: flex;
+          justify-content: space-between;
+          padding: 8px 0;
+          border-bottom: 1px solid $border-color;
+
+          &:last-child {
+            border-bottom: none;
+          }
+
+          .highlight {
+            color: $accent-primary;
+            font-weight: 600;
+          }
+
+          .good {
+            color: $accent-success;
+          }
+
+          .warning {
+            color: $accent-warning;
+          }
+        }
+      }
+    }
+  }
+
+  .heatmap-section {
+    background: $bg-card;
+    border: 1px solid $border-color;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 24px;
+
+    h4 {
+      margin: 0 0 16px 0;
+    }
+
+    .heatmap-container {
+      overflow-x: auto;
+    }
+
+    .heatmap-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      background: $border-color;
+      padding: 1px;
+      border-radius: 4px;
+      width: fit-content;
+
+      .heatmap-row {
+        display: flex;
+        gap: 1px;
+      }
+
+      .heatmap-cell {
+        width: 6px;
+        height: 6px;
+        background: $bg-dark;
+
+        &.active {
+          background: $accent-success;
+        }
+      }
+    }
+
+    .heatmap-legend {
+      display: flex;
+      gap: 24px;
+      margin-top: 12px;
+
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 12px;
+        color: $text-secondary;
+
+        &::before {
+          content: '';
+          width: 12px;
+          height: 12px;
+          border-radius: 2px;
+        }
+
+        &.inactive::before {
+          background: $bg-dark;
+        }
+
+        &.active::before {
+          background: $accent-success;
+        }
+      }
+    }
+  }
+
+  .history-section {
+    background: $bg-card;
+    border: 1px solid $border-color;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 24px;
+
+    h3 {
+      margin: 0 0 16px 0;
+    }
+  }
+}
+
+// Fast Episodic Specific
+.fes-panel {
+  .write-section {
+    background: $bg-card;
+    border: 1px solid $border-color;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 24px;
+
+    h3 {
+      margin: 0 0 16px 0;
+    }
+
+    .write-form {
+      textarea {
+        width: 100%;
+        background: $bg-dark;
+        border: 1px solid $border-color;
+        border-radius: 6px;
+        padding: 12px;
+        color: $text-primary;
+        font-family: inherit;
+        resize: vertical;
+        margin-bottom: 16px;
+        box-sizing: border-box;
+
+        &:focus {
+          outline: none;
+          border-color: $accent-primary;
+        }
+      }
+
+      .neuromod-controls {
+        background: $bg-dark;
+        border-radius: 8px;
+        padding: 16px;
+        margin-bottom: 16px;
+
+        h4 {
+          margin: 0 0 16px 0;
+          font-size: 14px;
+        }
+
+        .sliders {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: 16px;
+
+          .slider-group {
+            label {
+              display: flex;
+              justify-content: space-between;
+              margin-bottom: 8px;
+              font-size: 13px;
+
+              .value {
+                color: $accent-primary;
+                font-weight: 600;
+              }
+            }
+
+            .slider {
+              width: 100%;
+              height: 6px;
+              -webkit-appearance: none;
+              background: $border-color;
+              border-radius: 3px;
+              outline: none;
+
+              &::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                width: 16px;
+                height: 16px;
+                border-radius: 50%;
+                cursor: pointer;
+              }
+
+              &.dopamine::-webkit-slider-thumb {
+                background: $accent-danger;
+              }
+
+              &.norepinephrine::-webkit-slider-thumb {
+                background: $accent-orange;
+              }
+
+              &.acetylcholine::-webkit-slider-thumb {
+                background: $accent-warning;
+              }
+            }
+          }
+        }
+
+        .predicted-salience {
+          text-align: center;
+          margin-top: 16px;
+          padding-top: 16px;
+          border-top: 1px solid $border-color;
+
+          strong {
+            color: $accent-primary;
+            font-size: 20px;
+          }
+        }
+      }
+
+      .btn-write {
+        width: 100%;
+        padding: 14px;
+        font-size: 16px;
+      }
+    }
+  }
+
+  .episodes-section {
+    background: $bg-card;
+    border: 1px solid $border-color;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 24px;
+
+    h3 {
+      margin: 0 0 16px 0;
+    }
+
+    .episodes-list {
+      .empty-state {
+        text-align: center;
+        color: $text-secondary;
+        padding: 40px;
+      }
+
+      .episode-item {
+        background: $bg-dark;
+        border-radius: 8px;
+        padding: 16px;
+        margin-bottom: 12px;
+
+        .episode-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 8px;
+
+          .episode-id {
+            font-family: monospace;
+            color: $text-secondary;
+            font-size: 12px;
+          }
+
+          .salience-badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            color: white;
+          }
+        }
+
+        .episode-content {
+          font-size: 14px;
+          line-height: 1.5;
+          margin-bottom: 8px;
+          color: $text-primary;
+        }
+
+        .episode-meta {
+          display: flex;
+          justify-content: space-between;
+          font-size: 11px;
+          color: $text-secondary;
+        }
+      }
+    }
+  }
+}

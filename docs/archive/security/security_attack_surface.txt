@@ -1,0 +1,295 @@
+════════════════════════════════════════════════════════════════════════════════
+                    ELIGIBILITY TRACE SYSTEM - ATTACK SURFACE MAP
+════════════════════════════════════════════════════════════════════════════════
+
+                        EligibilityTrace Class (285 lines)
+                                      │
+                    ┌─────────────────┼─────────────────┐
+                    │                 │                 │
+            ┌───────▼────────┐ ┌─────▼──────┐ ┌────────▼────────┐
+            │   __init__()   │ │  update()  │ │     step()      │
+            │   Lines 70-103 │ │ Lines 112- │ │  Lines 148-171  │
+            │                │ │    146     │ │                 │
+            │ Validates:     │ │            │ │                 │
+            │ ✓ decay        │ │ Validates: │ │  Validates:     │
+            │ ✓ tau_trace    │ │ ✗ mem_id   │ │  ✗ dt           │
+            │ ✓ max_traces   │ │ ✗ activity │ │                 │
+            │ ✗ a_plus       │ │            │ │  Attack:        │
+            │ ✗ a_minus      │ │ Attack:    │ │  MEDIUM-3       │
+            │ ✗ min_trace    │ │ HIGH-2     │ │  Time overflow  │
+            │                │ │ Memory     │ │  dt=1e10        │
+            │ Risk: LOW-1    │ │ exhaustion │ │  → instant      │
+            └────────────────┘ │            │ │    decay        │
+                               │ MEDIUM-1   │ └─────────────────┘
+                               │ NaN inject │
+                               │ activity=  │
+                               │   nan      │
+                               └────────────┘
+                                      │
+                                      │ Calls
+                                      ▼
+                            ┌──────────────────┐
+                            │ _evict_weakest() │
+                            │  Lines 251-258   │
+                            │                  │
+                            │  Timing leak:    │
+                            │  MEDIUM-2        │
+                            │  O(n) search     │
+                            │  reveals count   │
+                            └──────────────────┘
+
+                    ┌──────────────────────────┐
+                    │   assign_credit(reward)  │
+                    │      Lines 172-195       │
+                    │                          │
+                    │  Validates:              │
+                    │  ✗ reward                │
+                    │                          │
+                    │  Attack: HIGH-1          │
+                    │  reward = 1e308          │
+                    │  → credit overflow       │
+                    │  → inf propagation       │
+                    └──────────────────────────┘
+
+        ┌────────────────────────────────────────────────────┐
+        │        LayeredEligibilityTrace (Subclass)          │
+        │              Lines 285-399                         │
+        │                                                    │
+        │  Inherits: EligibilityTrace                       │
+        │  Overrides: update(), step(), assign_credit()     │
+        │                                                    │
+        │  CRITICAL BUG: MEDIUM-4                           │
+        │  Does NOT enforce max_traces limit                │
+        │  → Unbounded memory growth                        │
+        │  → Security control bypassed                      │
+        │                                                    │
+        │  PoC: Created 1000 traces with limit=100          │
+        └────────────────────────────────────────────────────┘
+
+
+════════════════════════════════════════════════════════════════════════════════
+                              CONCURRENCY ATTACK SURFACE
+════════════════════════════════════════════════════════════════════════════════
+
+                         Thread 1              Thread 2              Thread 3
+                            │                     │                     │
+                            ▼                     ▼                     ▼
+                      update("mem1")        step(dt=0.1)      assign_credit(10)
+                            │                     │                     │
+                            └─────────────────────┴─────────────────────┘
+                                                  │
+                                    CRITICAL-1: Race Condition
+                                                  │
+                            ┌─────────────────────┴─────────────────────┐
+                            │                                           │
+                      ┌─────▼──────┐                            ┌──────▼─────┐
+                      │ Dictionary │                            │ Statistics │
+                      │ Corruption │                            │    Lost    │
+                      │            │                            │  Updates   │
+                      │ Line 136:  │                            │            │
+                      │ if len()   │                            │ Line 146:  │
+                      │   >= max   │                            │ _total_    │
+                      │            │                            │  updates++ │
+                      │ Line 169:  │                            │            │
+                      │ del traces │                            │ Line 193:  │
+                      │   [id]     │                            │ _total_    │
+                      │            │                            │  credits+= │
+                      │ → KeyError │                            │            │
+                      │ → max_     │                            │ → Lost     │
+                      │   traces   │                            │   counts   │
+                      │   bypass   │                            └────────────┘
+                      └────────────┘
+
+        NO THREAD SYNCHRONIZATION:
+        ✗ No threading.Lock()
+        ✗ No threading.RLock()
+        ✗ No thread-local storage
+        ✗ No atomic operations
+
+
+════════════════════════════════════════════════════════════════════════════════
+                               DATA FLOW ATTACK CHAINS
+════════════════════════════════════════════════════════════════════════════════
+
+CHAIN 1: NaN Propagation (MEDIUM-1)
+───────────────────────────────────
+External Input → update(activity=NaN) → entry.value = NaN → assign_credit()
+                                                           → credit = reward * NaN
+                                                           → credit = NaN
+                                                           → _total_credits = NaN
+                                                           → get_stats() = NaN
+                                                           → All downstream = NaN
+
+Impact: Total system corruption, irrecoverable
+
+
+CHAIN 2: Memory Exhaustion (HIGH-2)
+────────────────────────────────────
+Attacker → Creates 10,000 traces → Each with 10 MB memory_id
+         → Total: 100 GB consumed → System OOM crash
+         → Bypass: max_traces=10k limits COUNT not SIZE
+
+Impact: Denial of service, system crash
+
+
+CHAIN 3: Overflow Cascade (HIGH-1)
+───────────────────────────────────
+External API → reward = 1e308 → assign_credit(1e308)
+             → credit = 1e308 * 100.0 → credit = inf
+             → _total_credits = inf → get_stats()['total_credits'] = inf
+             → Scorer training → Model weights = inf
+             → Predictions = NaN → System broken
+
+Impact: Learning system poisoning
+
+
+CHAIN 4: Time Manipulation (MEDIUM-3)
+──────────────────────────────────────
+Attacker controls dt → step(dt=1e10) → decay_factor = exp(-1e10/tau)
+                                     → decay_factor ≈ 0
+                                     → All traces → 0.0
+                                     → Learning history erased
+
+Impact: Denial of service, data loss
+
+
+════════════════════════════════════════════════════════════════════════════════
+                            SECURITY CONTROL ANALYSIS
+════════════════════════════════════════════════════════════════════════════════
+
+Existing Controls:
+┌────────────────────┬─────────┬──────────┬────────────────────────────┐
+│ Control            │ Present │ Enforced │ Bypassed By                │
+├────────────────────┼─────────┼──────────┼────────────────────────────┤
+│ MAX_TRACES         │   YES   │  PARTIAL │ LayeredEligibilityTrace    │
+│ MAX_TRACE_VALUE    │   YES   │   YES    │ (None - works)             │
+│ decay validation   │   YES   │   YES    │ (None - works)             │
+│ tau validation     │   YES   │   YES    │ (None - works)             │
+│ max_traces valid.  │   YES   │   YES    │ (None - works)             │
+├────────────────────┼─────────┼──────────┼────────────────────────────┤
+│ memory_id limit    │   NO    │   N/A    │ Always bypassed            │
+│ reward validation  │   NO    │   N/A    │ Always bypassed            │
+│ dt validation      │   NO    │   N/A    │ Always bypassed            │
+│ activity valid.    │   NO    │   N/A    │ Always bypassed            │
+│ Thread safety      │   NO    │   N/A    │ Always vulnerable          │
+└────────────────────┴─────────┴──────────┴────────────────────────────┘
+
+Coverage: 5/10 controls = 50%
+
+
+Missing Critical Controls:
+┌────────────────────────┬───────────┬────────────────────────────────┐
+│ Control Needed         │ Severity  │ Protects Against               │
+├────────────────────────┼───────────┼────────────────────────────────┤
+│ MAX_MEMORY_ID_LENGTH   │ HIGH      │ Memory exhaustion (HIGH-2)     │
+│ MAX_REWARD             │ HIGH      │ Overflow (HIGH-1)              │
+│ MAX_DT                 │ MEDIUM    │ Time overflow (MEDIUM-3)       │
+│ MAX_ACTIVITY           │ MEDIUM    │ Activity overflow (MEDIUM-1)   │
+│ NaN/inf detection      │ MEDIUM    │ NaN propagation (MEDIUM-1)     │
+│ Thread synchronization │ CRITICAL  │ Race conditions (CRITICAL-1)   │
+└────────────────────────┴───────────┴────────────────────────────────┘
+
+
+════════════════════════════════════════════════════════════════════════════════
+                         EXPLOITABILITY ASSESSMENT
+════════════════════════════════════════════════════════════════════════════════
+
+┌──────────────┬──────────┬──────────────┬────────────┬───────────┬──────────┐
+│ Vulnerability│ Severity │ Exploitable? │ Complexity │ PoC Exists│ Impact   │
+├──────────────┼──────────┼──────────────┼────────────┼───────────┼──────────┤
+│ CRITICAL-1   │ CRITICAL │   Possible   │   Medium   │    Yes    │   High   │
+│ Race Cond.   │          │ (not proven) │ (threading)│           │          │
+├──────────────┼──────────┼──────────────┼────────────┼───────────┼──────────┤
+│ HIGH-1       │   HIGH   │   Mitigated  │    Low     │    Yes    │  Medium  │
+│ Reward Over. │          │ (near limit) │ (1 line)   │           │          │
+├──────────────┼──────────┼──────────────┼────────────┼───────────┼──────────┤
+│ HIGH-2       │   HIGH   │     YES      │    Low     │    Yes    │   High   │
+│ Memory Exh.  │          │   CONFIRMED  │ (1 line)   │           │          │
+├──────────────┼──────────┼──────────────┼────────────┼───────────┼──────────┤
+│ MEDIUM-1     │  MEDIUM  │     YES      │    Low     │    Yes    │   High   │
+│ NaN Inject   │          │   CONFIRMED  │ (1 line)   │           │          │
+├──────────────┼──────────┼──────────────┼────────────┼───────────┼──────────┤
+│ MEDIUM-2     │  MEDIUM  │   Possible   │   Medium   │    No     │   Low    │
+│ Timing Leak  │          │ (side-chan.) │ (requires  │           │          │
+│              │          │              │  precise   │           │          │
+│              │          │              │   timing)  │           │          │
+├──────────────┼──────────┼──────────────┼────────────┼───────────┼──────────┤
+│ MEDIUM-3     │  MEDIUM  │     YES      │    Low     │    Yes    │  Medium  │
+│ Time Over.   │          │   CONFIRMED  │ (1 line)   │           │          │
+├──────────────┼──────────┼──────────────┼────────────┼───────────┼──────────┤
+│ MEDIUM-4     │  MEDIUM  │     YES      │    Low     │    Yes    │   High   │
+│ Capacity By. │          │   CONFIRMED  │ (1 line)   │           │          │
+├──────────────┼──────────┼──────────────┼────────────┼───────────┼──────────┤
+│ LOW-1,2,3    │   LOW    │      No      │    N/A     │    No     │   Low    │
+│ (Various)    │          │              │            │           │          │
+└──────────────┴──────────┴──────────────┴────────────┴───────────┴──────────┘
+
+CONFIRMED EXPLOITS: 4/10 (40%)
+EXPLOITABILITY SCORE: 7.2/10 (HIGH)
+
+
+════════════════════════════════════════════════════════════════════════════════
+                              REMEDIATION IMPACT MAP
+════════════════════════════════════════════════════════════════════════════════
+
+                            Current State (Vulnerable)
+                                      │
+                                      │
+                    ┌─────────────────┼─────────────────┐
+                    │                 │                 │
+         ┌──────────▼──────────┐     │      ┌──────────▼──────────┐
+         │ Input Validation    │     │      │  Thread Safety      │
+         │ Coverage: 30%       │     │      │  Coverage: 0%       │
+         │                     │     │      │                     │
+         │ HIGH-2  ✗           │     │      │ CRITICAL-1  ✗       │
+         │ MEDIUM-1 ✗          │     │      │                     │
+         │ MEDIUM-3 ✗          │     │      └─────────────────────┘
+         └─────────────────────┘     │
+                                     │
+                          ┌──────────▼──────────┐
+                          │  Overflow Protection│
+                          │  Coverage: 20%      │
+                          │                     │
+                          │ HIGH-1   Partial    │
+                          │ MEDIUM-4 ✗          │
+                          └─────────────────────┘
+
+                                      │
+                             After Remediation
+                                      ▼
+
+                            Hardened State (Secure)
+                                      │
+                                      │
+                    ┌─────────────────┼─────────────────┐
+                    │                 │                 │
+         ┌──────────▼──────────┐     │      ┌──────────▼──────────┐
+         │ Input Validation    │     │      │  Thread Safety      │
+         │ Coverage: 100%      │     │      │  Coverage: 100%     │
+         │                     │     │      │                     │
+         │ HIGH-2  ✓           │     │      │ CRITICAL-1  ✓       │
+         │ MEDIUM-1 ✓          │     │      │ RLock added         │
+         │ MEDIUM-3 ✓          │     │      └─────────────────────┘
+         │ LOW-1,2,3 ✓         │     │
+         └─────────────────────┘     │
+                                     │
+                          ┌──────────▼──────────┐
+                          │  Overflow Protection│
+                          │  Coverage: 100%     │
+                          │                     │
+                          │ HIGH-1   ✓          │
+                          │ MEDIUM-4 ✓          │
+                          └─────────────────────┘
+
+Risk Reduction: HIGH → LOW
+Security Score: 3.0/10 → 9.5/10
+
+
+════════════════════════════════════════════════════════════════════════════════
+                                END OF ATTACK SURFACE MAP
+════════════════════════════════════════════════════════════════════════════════
+
+Generated: 2025-12-06
+File: /home/aaron/ww/security_attack_surface.txt
+Total Vulnerabilities: 10 (1 CRITICAL, 2 HIGH, 4 MEDIUM, 3 LOW)
+Confirmed Exploits: 4 (40%)

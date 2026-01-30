@@ -1,0 +1,40 @@
+apiVersion: v2
+name: world-weaver
+description: A Helm chart for World Weaver - Biologically-Inspired Memory System
+type: application
+version: 0.5.0
+appVersion: "0.5.0"
+
+home: https://github.com/world-weaver/ww
+sources:
+  - https://github.com/world-weaver/ww
+
+maintainers:
+  - name: Aaron Storey
+    email: aaron@example.com
+
+keywords:
+  - memory
+  - ai
+  - machine-learning
+  - neural-network
+  - biologically-inspired
+
+annotations:
+  artifacthub.io/license: MIT
+  artifacthub.io/changes: |
+    - Phase 9: Production infrastructure
+    - Learnable FF encoder
+    - Capsule pose learning
+    - Sleep consolidation with generative replay
+
+dependencies:
+  - name: postgresql
+    version: "13.x.x"
+    repository: https://charts.bitnami.com/bitnami
+    condition: postgresql.enabled
+
+  - name: neo4j
+    version: "5.x.x"
+    repository: https://helm.neo4j.com/neo4j
+    condition: neo4j.enabled

@@ -1,0 +1,325 @@
+@import '../styles/variables';
+
+.bio-dashboard {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: $spacing-lg;
+  overflow-y: auto;
+  gap: $spacing-lg;
+
+  @include mobile-only {
+    padding: $spacing-md;
+    gap: $spacing-md;
+  }
+
+  &.loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: $spacing-md;
+
+    i {
+      font-size: 3rem;
+      color: $color-accent;
+    }
+  }
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+
+  @include mobile-only {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  h1 {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+    font-size: 1.5rem;
+    font-weight: 600;
+
+    @include mobile-only {
+      font-size: 1.25rem;
+    }
+
+    i {
+      color: $color-accent;
+    }
+  }
+
+  .refresh-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-sm;
+    padding: $spacing-sm $spacing-md;
+    min-height: $touch-target-min;
+    background: $color-bg-tertiary;
+    border: 1px solid $color-border;
+    border-radius: $radius-md;
+    color: $color-text-secondary;
+    cursor: pointer;
+    transition: all $transition-fast;
+
+    &:hover {
+      background: $color-accent;
+      color: white;
+      border-color: $color-accent;
+    }
+  }
+}
+
+.metrics-grid {
+  @include responsive-grid(1, 2, 3);
+
+  @include mobile-only {
+    gap: $spacing-sm;
+  }
+}
+
+.metric-card {
+  background: $color-bg-panel;
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+
+  @include mobile-only {
+    padding: $spacing-md;
+  }
+
+  &.full-width {
+    grid-column: 1 / -1;
+  }
+
+  h3 {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: $spacing-md;
+    color: $color-text-primary;
+
+    @include mobile-only {
+      font-size: 0.9rem;
+    }
+
+    i {
+      color: $color-accent;
+    }
+  }
+
+  .chart-container {
+    margin: $spacing-md 0;
+  }
+
+  &.neuromod {
+    .neuro-levels {
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-sm;
+      margin-top: $spacing-md;
+
+      .level {
+        display: flex;
+        align-items: center;
+        gap: $spacing-sm;
+        font-size: 0.75rem;
+        font-family: $font-mono;
+
+        > span:first-child {
+          width: 32px;
+          font-weight: 600;
+        }
+
+        .bar {
+          flex: 1;
+          height: 8px;
+          background: $color-bg-tertiary;
+          border-radius: $radius-full;
+          overflow: hidden;
+
+          > div {
+            height: 100%;
+            border-radius: $radius-full;
+            transition: width $transition-normal;
+          }
+        }
+
+        > span:last-child {
+          width: 40px;
+          text-align: right;
+          color: $color-text-secondary;
+        }
+
+        &.dopamine .bar > div {
+          background: $color-dopamine;
+        }
+
+        &.norepinephrine .bar > div {
+          background: $color-norepinephrine;
+        }
+
+        &.serotonin .bar > div {
+          background: $color-serotonin;
+        }
+
+        &.acetylcholine .bar > div {
+          background: $color-acetylcholine;
+        }
+      }
+    }
+  }
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $spacing-md;
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: $spacing-md;
+    background: $color-bg-tertiary;
+    border-radius: $radius-md;
+
+    .value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      font-family: $font-mono;
+      color: $color-accent;
+    }
+
+    .label {
+      font-size: 0.75rem;
+      color: $color-text-secondary;
+      margin-top: $spacing-xs;
+    }
+  }
+}
+
+.decay-formula,
+.learning-formula,
+.bio-note {
+  margin-top: $spacing-md;
+  padding: $spacing-sm $spacing-md;
+  background: $color-bg-tertiary;
+  border-radius: $radius-md;
+  font-family: $font-mono;
+  font-size: 0.875rem;
+  color: $color-text-secondary;
+  text-align: center;
+}
+
+.error-toast {
+  position: fixed;
+  bottom: $spacing-lg;
+  right: $spacing-lg;
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  padding: $spacing-md $spacing-lg;
+  background: rgba($color-error, 0.9);
+  border-radius: $radius-md;
+  color: white;
+  font-size: 0.875rem;
+  animation: slideIn 0.3s ease;
+}
+
+// Sub-navigation for bioinspired panels
+.sub-nav {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  margin-bottom: $spacing-lg;
+  padding-bottom: $spacing-md;
+  border-bottom: 1px solid $color-border;
+
+  button {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    padding: $spacing-sm $spacing-md;
+    background: $color-bg-tertiary;
+    border: 1px solid $color-border;
+    border-radius: $radius-md;
+    color: $color-text-secondary;
+    cursor: pointer;
+    font-size: 0.875rem;
+    transition: all $transition-fast;
+
+    &:hover {
+      background: $color-accent;
+      color: white;
+      border-color: $color-accent;
+    }
+  }
+
+  .sub-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: $color-text-primary;
+  }
+}
+
+// Bio panels navigation grid
+.bio-panels-nav {
+  @include responsive-grid(1, 2, 3);
+  margin-bottom: $spacing-lg;
+
+  .panel-link {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+    padding: $spacing-lg;
+    min-height: $touch-target-min;
+    background: $color-bg-panel;
+    border: 1px solid $color-border;
+    border-radius: $radius-lg;
+    color: $color-text-primary;
+    cursor: pointer;
+    transition: all $transition-fast;
+    text-align: left;
+
+    @include mobile-only {
+      padding: $spacing-md;
+    }
+
+    .icon {
+      font-size: 1.5rem;
+    }
+
+    span:nth-child(2) {
+      flex: 1;
+      font-size: 1rem;
+      font-weight: 500;
+    }
+
+    .arrow {
+      font-size: 1.25rem;
+      color: $color-text-muted;
+      transition: transform $transition-fast;
+    }
+
+    &:hover {
+      background: $color-bg-tertiary;
+      border-color: $color-accent;
+      transform: translateY(-2px);
+
+      .arrow {
+        transform: translateX(4px);
+        color: $color-accent;
+      }
+    }
+  }
+}

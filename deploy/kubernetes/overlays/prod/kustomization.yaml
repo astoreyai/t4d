@@ -1,0 +1,88 @@
+# Production overlay for World Weaver
+# Usage: kubectl apply -k deploy/kubernetes/overlays/prod
+
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: ww-prod
+
+resources:
+  - ../../  # Base configuration
+  - pdb.yaml  # Pod Disruption Budget
+
+commonLabels:
+  environment: prod
+
+# Production-specific patches
+patches:
+  # Production replicas
+  - target:
+      kind: Deployment
+      name: ww-api
+    patch: |
+      - op: replace
+        path: /spec/replicas
+        value: 3
+
+  # Production resource limits
+  - target:
+      kind: Deployment
+      name: ww-api
+    patch: |
+      - op: replace
+        path: /spec/template/spec/containers/0/resources/requests/cpu
+        value: "500m"
+      - op: replace
+        path: /spec/template/spec/containers/0/resources/requests/memory
+        value: "1Gi"
+      - op: replace
+        path: /spec/template/spec/containers/0/resources/limits/cpu
+        value: "2000m"
+      - op: replace
+        path: /spec/template/spec/containers/0/resources/limits/memory
+        value: "4Gi"
+
+  # Production HPA
+  - target:
+      kind: HorizontalPodAutoscaler
+      name: ww-api-hpa
+    patch: |
+      - op: replace
+        path: /spec/minReplicas
+        value: 3
+      - op: replace
+        path: /spec/maxReplicas
+        value: 10
+
+  # Add pod anti-affinity for HA
+  - target:
+      kind: Deployment
+      name: ww-api
+    patch: |
+      - op: add
+        path: /spec/template/spec/affinity/podAntiAffinity/requiredDuringSchedulingIgnoredDuringExecution
+        value:
+          - labelSelector:
+              matchLabels:
+                app.kubernetes.io/name: world-weaver
+                app.kubernetes.io/component: api
+            topologyKey: kubernetes.io/hostname
+
+# Production image (pinned version)
+images:
+  - name: world-weaver
+    newName: ghcr.io/world-weaver/ww-api
+    newTag: v0.5.0  # Pin to specific version
+
+# Production ConfigMap overrides
+configMapGenerator:
+  - name: ww-config-prod
+    behavior: merge
+    literals:
+      - WW_LOG_LEVEL=WARNING
+      - WW_DEBUG=false
+      - WW_FLAG_TELEMETRY=true
+      - WW_SECRETS_BACKEND=auto
+      - WW_FLAG_API_RATE_LIMITING=true
+      - WW_FLAG_API_METRICS=true
+      - WW_FLAG_DISTRIBUTED_TRACING=true

@@ -1,0 +1,114 @@
+# World Weaver .gitignore
+
+# ============================================
+# Environment files (NEVER commit secrets)
+# ============================================
+.env
+.env.local
+.env.*.local
+
+# Keep example template
+!.env.example
+
+# ============================================
+# Python
+# ============================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# ============================================
+# Testing
+# ============================================
+.pytest_cache/
+.coverage
+.coverage.*
+coverage.json
+htmlcov/
+.tox/
+.nox/
+coverage.xml
+*.cover
+.hypothesis/
+.benchmarks/
+.playwright-mcp/
+
+# ============================================
+# Linting & Type Checking
+# ============================================
+.mypy_cache/
+.ruff_cache/
+
+# ============================================
+# IDEs
+# ============================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# ============================================
+# Models & Data
+# ============================================
+models/
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+
+# Logs
+*.log
+logs/
+
+# ============================================
+# Docker
+# ============================================
+.dockerignore
+
+# ============================================
+# Temporary files
+# ============================================
+*.tmp
+*.temp
+*.bak
+.cache/
+.venv/
+node_modules/
+
+# LoRA adapter weights
+.ww_lora/
+.qdrant_data/
+site/
+
+# Syncthing
+.stfolder/
+.stignore

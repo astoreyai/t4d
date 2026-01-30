@@ -1,0 +1,167 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "world-weaver"
+version = "1.0.0"
+description = "Biologically-inspired memory system for AI agents"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.11"
+authors = [
+    { name = "Aaron Storey" }
+]
+keywords = [
+    "ai",
+    "memory",
+    "knowledge-graph",
+    "neural-memory",
+    "cognitive-architecture",
+    "episodic-memory",
+    "semantic-memory"
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "neo4j>=5.0.0",
+    "qdrant-client>=1.7.0",
+    "FlagEmbedding>=1.2.7",
+    "sentence-transformers>=2.2.0",
+    "torch>=2.0.0",
+    "pydantic>=2.0.0",
+    "pydantic-settings>=2.0.0",
+    "httpx>=0.24.0",
+    "numpy>=1.24.0",
+    "python-dotenv>=1.0.0",
+    "pyyaml>=6.0.0",
+    "typer>=0.9.0",
+    "rich>=13.0.0",
+]
+
+[project.optional-dependencies]
+consolidation = [
+    "hdbscan>=0.8.33",
+]
+api = [
+    "fastapi>=0.109.0",
+    "uvicorn[standard]>=0.27.0",
+]
+cache = [
+    "redis>=5.0.0",
+]
+observability = [
+    "opentelemetry-api>=1.20.0",
+    "opentelemetry-sdk>=1.20.0",
+    "opentelemetry-exporter-otlp>=1.20.0",
+]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.21.0",
+    "pytest-cov>=4.0.0",
+    "pytest-benchmark>=4.0.0",
+    "hypothesis>=6.70.0",
+    "coverage-badge>=1.1.0",
+    "psutil>=5.9.0",
+    "black>=23.0.0",
+    "ruff>=0.1.0",
+    "mypy>=1.0.0",
+    "detect-secrets>=1.4.0",
+]
+flash = [
+    "flash-attn>=2.4.0",
+]
+
+[project.scripts]
+ww = "ww.cli.main:main"
+ww-api = "ww.api.server:main"
+
+[project.urls]
+Homepage = "https://github.com/astoreyai/world-weaver"
+Documentation = "https://github.com/astoreyai/world-weaver#readme"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/ww"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "session"
+testpaths = ["tests"]
+addopts = "-v --cov=src/ww --cov-report=term-missing"
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "benchmark: marks tests as benchmarks",
+    "integration: marks tests as integration tests",
+    "performance: marks tests as performance tests",
+    "security: marks tests as security tests",
+    "asyncio: marks tests as async",
+]
+
+[tool.black]
+line-length = 100
+target-version = ["py311"]
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W", "UP"]
+ignore = [
+    "E501",  # Line too long (handled by formatter)
+    "F821",  # Undefined name (false positives from string type hints)
+    "F405",  # Star imports (intentional in some modules)
+]
+
+[tool.ruff.lint.per-file-ignores]
+"src/ww/interfaces/*.py" = ["F401"]  # Unused imports for optional rich
+"src/ww/observability/prometheus.py" = ["F401", "E402"]  # Unused Info import, late asyncio
+"src/ww/api/server.py" = ["E402"]  # Router imports after app definition
+"src/ww/api/routes/visualization.py" = ["E402"]  # Late import for specific functions
+"src/ww/storage/qdrant_store.py" = ["E402"]  # Singleton management section
+
+[tool.mypy]
+python_version = "3.11"
+strict = false
+ignore_missing_imports = true
+warn_return_any = false
+warn_unused_ignores = false
+disallow_untyped_defs = false
+disallow_incomplete_defs = false
+check_untyped_defs = false
+no_implicit_optional = true
+warn_redundant_casts = false
+warn_unused_configs = false
+disable_error_code = ["attr-defined", "index", "call-overload", "override", "misc", "union-attr", "has-type", "arg-type", "call-arg", "assignment", "return-value", "operator", "name-defined", "valid-type", "var-annotated", "import-untyped", "str-bytes-safe", "list-item", "annotation-unchecked"]
+
+# Per-module strictness - only enforce on core types
+[[tool.mypy.overrides]]
+module = "ww.core.types"
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+
+[[tool.mypy.overrides]]
+module = "ww.core.config"
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+
+[tool.coverage.run]
+source = ["src/ww"]
+omit = [
+    "src/ww/memory/episodic_ORIGINAL_BACKUP.py",
+    "*/__pycache__/*",
+    "*/tests/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise NotImplementedError",
+    "if TYPE_CHECKING:",
+]

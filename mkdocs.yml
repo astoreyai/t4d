@@ -1,0 +1,103 @@
+site_name: World Weaver
+site_description: Biologically-inspired memory for AI
+site_url: https://astoreyai.github.io/ww
+repo_url: https://github.com/astoreyai/ww
+repo_name: astoreyai/ww
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: deep purple
+      accent: amber
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: deep purple
+      accent: amber
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.indexes
+    - toc.integrate
+    - search.suggest
+    - search.highlight
+    - content.tabs.link
+    - content.code.copy
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - admonition
+  - pymdownx.details
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+
+plugins:
+  - search
+  - mermaid2
+
+nav:
+  - Home: index.md
+  - Getting Started:
+    - getting-started/index.md
+    - Installation: getting-started/installation.md
+    - Quick Start: getting-started/quickstart.md
+    - Configuration: getting-started/configuration.md
+  - Concepts:
+    - concepts/index.md
+    - Architecture: concepts/architecture.md
+    - Memory Types: concepts/memory-types.md
+    - Neuro Cognitive Architecture: concepts/nca.md
+    - Brain Region Mapping: concepts/brain-mapping.md
+    - Bioinspired Components: concepts/bioinspired.md
+    - Storage Resilience: concepts/storage-resilience.md
+    - Persistence Layer: concepts/persistence.md
+  - Guides:
+    - guides/index.md
+    - Hook Development: guides/hooks.md
+    - Performance Tuning: guides/performance.md
+    - Testing: guides/testing.md
+  - API Reference:
+    - reference/index.md
+    - REST API: reference/rest-api.md
+    - Python SDK: reference/sdk.md
+    - CLI: reference/cli.md
+    - Memory API: reference/memory-api.md
+    - Sequence Diagrams: reference/sequences.md
+    - Class Diagrams: reference/classes.md
+  - Science:
+    - science/index.md
+    - Biology Audit: science/biology-audit.md
+    - Learning Theory: science/learning-theory.md
+    - Algorithmic Complexity: science/algorithmic-complexity.md
+  - Operations:
+    - operations/index.md
+    - Deployment: operations/deployment.md
+    - Monitoring: operations/monitoring.md
+
+extra:
+  version:
+    provider: mike
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/astoreyai/ww
+
+copyright: Copyright &copy; 2025-2026 Aaron Storey

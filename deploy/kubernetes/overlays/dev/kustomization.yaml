@@ -1,0 +1,73 @@
+# Development overlay for World Weaver
+# Usage: kubectl apply -k deploy/kubernetes/overlays/dev
+
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: ww-dev
+
+resources:
+  - ../../  # Base configuration
+
+commonLabels:
+  environment: dev
+
+# Name prefix for dev resources
+namePrefix: dev-
+
+# Development-specific patches
+patches:
+  # Reduce replicas for dev
+  - target:
+      kind: Deployment
+      name: ww-api
+    patch: |
+      - op: replace
+        path: /spec/replicas
+        value: 1
+
+  # Reduce resource limits for dev
+  - target:
+      kind: Deployment
+      name: ww-api
+    patch: |
+      - op: replace
+        path: /spec/template/spec/containers/0/resources/requests/cpu
+        value: "100m"
+      - op: replace
+        path: /spec/template/spec/containers/0/resources/requests/memory
+        value: "256Mi"
+      - op: replace
+        path: /spec/template/spec/containers/0/resources/limits/cpu
+        value: "500m"
+      - op: replace
+        path: /spec/template/spec/containers/0/resources/limits/memory
+        value: "1Gi"
+
+  # Disable HPA in dev
+  - target:
+      kind: HorizontalPodAutoscaler
+      name: ww-api-hpa
+    patch: |
+      - op: replace
+        path: /spec/minReplicas
+        value: 1
+      - op: replace
+        path: /spec/maxReplicas
+        value: 2
+
+# Development image
+images:
+  - name: world-weaver
+    newName: world-weaver
+    newTag: dev
+
+# Development ConfigMap overrides
+configMapGenerator:
+  - name: ww-config-dev
+    behavior: merge
+    literals:
+      - WW_LOG_LEVEL=DEBUG
+      - WW_DEBUG=true
+      - WW_FLAG_TELEMETRY=false
+      - WW_SECRETS_BACKEND=env

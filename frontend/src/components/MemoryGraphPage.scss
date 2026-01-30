@@ -1,0 +1,567 @@
+@import '../styles/variables';
+
+.memory-graph-page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: $color-bg-primary;
+}
+
+.graph-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $spacing-md $spacing-lg;
+  background: $color-bg-secondary;
+  border-bottom: 1px solid $color-border;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+
+  @include mobile-only {
+    padding: $spacing-sm $spacing-md;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .header-left {
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin: 0;
+
+      @include mobile-only {
+        font-size: 1.25rem;
+      }
+    }
+
+    .subtitle {
+      margin: $spacing-xs 0 0;
+      color: $color-text-secondary;
+      font-size: 0.875rem;
+
+      @include mobile-only {
+        display: none;
+      }
+    }
+  }
+
+  .header-controls {
+    display: flex;
+    gap: $spacing-sm;
+    flex-wrap: wrap;
+
+    @include mobile-only {
+      justify-content: stretch;
+    }
+
+    .mode-btn {
+      padding: $spacing-sm $spacing-md;
+      min-height: $touch-target-min;
+      min-width: $touch-target-min;
+      background: $color-bg-tertiary;
+      border: 1px solid $color-border;
+      border-radius: $radius-md;
+      color: $color-text-secondary;
+      cursor: pointer;
+      transition: all 0.2s;
+
+      @include mobile-only {
+        flex: 1;
+        padding: $spacing-sm;
+      }
+
+      &:hover {
+        background: $color-bg-panel;
+        color: $color-text-primary;
+      }
+
+      &.active {
+        background: $color-accent;
+        border-color: $color-accent;
+        color: white;
+      }
+    }
+
+    .refresh-btn {
+      padding: $spacing-sm $spacing-md;
+      min-height: $touch-target-min;
+      min-width: $touch-target-min;
+      background: $color-bg-tertiary;
+      border: 1px solid $color-border;
+      border-radius: $radius-md;
+      color: $color-text-primary;
+      cursor: pointer;
+      transition: all 0.2s;
+
+      @include mobile-only {
+        flex: 1;
+      }
+
+      &:hover:not(:disabled) {
+        background: $color-accent;
+        border-color: $color-accent;
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
+  }
+}
+
+.graph-content {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+// Loading state
+.loading-state {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: $color-bg-primary;
+
+  .spinner {
+    width: 48px;
+    height: 48px;
+    border: 3px solid $color-border;
+    border-top-color: $color-accent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  p {
+    margin-top: $spacing-md;
+    color: $color-text-secondary;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Error state
+.error-state {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: $color-bg-primary;
+  color: $color-error;
+
+  button {
+    margin-top: $spacing-md;
+    padding: $spacing-sm $spacing-lg;
+    background: $color-accent;
+    border: none;
+    border-radius: $radius-md;
+    color: white;
+    cursor: pointer;
+
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+}
+
+// Empty state
+.empty-state {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: $color-bg-primary;
+  color: $color-text-secondary;
+}
+
+// Details panel
+.details-panel {
+  position: absolute;
+  top: $spacing-md;
+  right: $spacing-md;
+  width: 300px;
+  max-width: calc(100vw - #{$spacing-lg * 2});
+  background: rgba($color-bg-secondary, 0.95);
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  z-index: $z-panel;
+
+  // Mobile: slide up from bottom
+  @include mobile-only {
+    position: fixed;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    max-width: 100%;
+    max-height: 60vh;
+    border-radius: $radius-lg $radius-lg 0 0;
+    overflow-y: auto;
+  }
+
+  .panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: $spacing-md;
+    border-bottom: 1px solid $color-border;
+    position: sticky;
+    top: 0;
+    background: inherit;
+    z-index: 1;
+
+    // Drag handle for mobile
+    @include mobile-only {
+      &::before {
+        content: '';
+        position: absolute;
+        top: 8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 40px;
+        height: 4px;
+        background: $color-border-light;
+        border-radius: 2px;
+      }
+      padding-top: $spacing-lg;
+    }
+
+    h3 {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .close-btn {
+      width: $touch-target-min;
+      height: $touch-target-min;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: $color-bg-tertiary;
+      border: 1px solid $color-border;
+      border-radius: $radius-sm;
+      color: $color-text-secondary;
+      font-size: 1.5rem;
+      line-height: 1;
+      cursor: pointer;
+
+      &:hover {
+        background: $color-bg-panel;
+        color: $color-text-primary;
+      }
+    }
+  }
+
+  .panel-content {
+    padding: $spacing-md;
+
+    @include mobile-only {
+      padding-bottom: $spacing-xl; // Safe area for home indicator
+    }
+
+    .detail-row {
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-xs;
+      padding: $spacing-sm 0;
+      border-bottom: 1px solid $color-border;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      .label {
+        font-size: 0.875rem;
+        color: $color-text-muted;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+
+        @include mobile-only {
+          font-size: 0.8rem;
+        }
+      }
+
+      .value {
+        font-size: 1rem;
+        color: $color-text-primary;
+        word-break: break-word;
+
+        &.mono {
+          font-family: $font-mono;
+        }
+      }
+    }
+  }
+}
+
+// Stats view
+.stats-view {
+  padding: $spacing-xl;
+  overflow-y: auto;
+  height: 100%;
+
+  @include mobile-only {
+    padding: $spacing-md;
+  }
+
+  .stats-grid {
+    @include responsive-grid(2, 2, 4);
+    margin-bottom: $spacing-xl;
+
+    @include mobile-only {
+      gap: $spacing-sm;
+    }
+
+    .stat-card {
+      padding: $spacing-lg;
+      background: $color-bg-secondary;
+      border: 1px solid $color-border;
+      border-radius: $radius-lg;
+      text-align: center;
+
+      @include mobile-only {
+        padding: $spacing-md;
+      }
+
+      h4 {
+        margin: 0 0 $spacing-sm;
+        font-size: 0.875rem;
+        color: $color-text-secondary;
+        font-weight: 500;
+
+        @include mobile-only {
+          font-size: 0.75rem;
+        }
+      }
+
+      .big-number {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: $color-accent;
+        font-family: $font-mono;
+
+        @include mobile-only {
+          font-size: 1.75rem;
+        }
+      }
+    }
+  }
+
+  .type-breakdown {
+    background: $color-bg-secondary;
+    border: 1px solid $color-border;
+    border-radius: $radius-lg;
+    padding: $spacing-lg;
+
+    h4 {
+      margin: 0 0 $spacing-lg;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .type-bars {
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-md;
+
+      .type-bar {
+        display: flex;
+        align-items: center;
+        gap: $spacing-md;
+
+        .bar-label {
+          width: 120px;
+          display: flex;
+          align-items: center;
+          gap: $spacing-sm;
+          font-size: 0.875rem;
+
+          .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+
+            &.episodic {
+              background: #64b5f6;
+            }
+
+            &.semantic {
+              background: #81c784;
+            }
+
+            &.procedural {
+              background: #ffb74d;
+            }
+          }
+        }
+
+        .bar-track {
+          flex: 1;
+          height: 24px;
+          background: $color-bg-tertiary;
+          border-radius: $radius-md;
+          overflow: hidden;
+
+          .bar-fill {
+            height: 100%;
+            border-radius: $radius-md;
+            transition: width 0.3s ease;
+
+            &.episodic {
+              background: linear-gradient(90deg, #64b5f6, #42a5f5);
+            }
+
+            &.semantic {
+              background: linear-gradient(90deg, #81c784, #66bb6a);
+            }
+
+            &.procedural {
+              background: linear-gradient(90deg, #ffb74d, #ffa726);
+            }
+          }
+        }
+
+        .bar-count {
+          width: 60px;
+          text-align: right;
+          font-family: $font-mono;
+          font-weight: 600;
+          color: $color-text-secondary;
+        }
+      }
+    }
+  }
+}
+
+// Stats bar (footer)
+.stats-bar {
+  display: flex;
+  justify-content: center;
+  gap: $spacing-xl;
+  padding: $spacing-md $spacing-lg;
+  background: $color-bg-secondary;
+  border-top: 1px solid $color-border;
+
+  @include mobile-only {
+    gap: $spacing-md;
+    padding: $spacing-sm $spacing-md;
+    justify-content: space-around;
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+
+    .stat-value {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: $color-accent;
+      font-family: $font-mono;
+
+      @include mobile-only {
+        font-size: 1rem;
+      }
+    }
+
+    .stat-label {
+      font-size: 0.7rem;
+      color: $color-text-muted;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+
+      @include mobile-only {
+        font-size: 0.6rem;
+      }
+    }
+  }
+}
+
+// Legacy placeholder styles (can be removed once verified)
+.graph-placeholder {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, $color-bg-secondary 0%, $color-bg-tertiary 100%);
+}
+
+.placeholder-content {
+  text-align: center;
+  padding: $spacing-xl;
+
+  .placeholder-icon {
+    font-size: 4rem;
+    color: $color-accent;
+    margin-bottom: $spacing-lg;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0 0 $spacing-md;
+  }
+
+  p {
+    color: $color-text-secondary;
+    line-height: 1.6;
+    margin-bottom: $spacing-lg;
+  }
+
+  .feature-list {
+    display: flex;
+    justify-content: center;
+    gap: $spacing-lg;
+    flex-wrap: wrap;
+
+    .feature {
+      display: flex;
+      align-items: center;
+      gap: $spacing-sm;
+      padding: $spacing-sm $spacing-md;
+      background: $color-bg-panel;
+      border: 1px solid $color-border;
+      border-radius: $radius-md;
+      font-size: 0.875rem;
+
+      i.episodic {
+        color: $color-accent;
+      }
+
+      i.semantic {
+        color: $color-dopamine;
+      }
+
+      i.procedural {
+        color: $color-acetylcholine;
+      }
+    }
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.05);
+  }
+}

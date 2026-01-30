@@ -1,0 +1,988 @@
+@import '../styles/variables';
+
+.tracing-dashboard {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: $spacing-lg;
+  overflow-y: auto;
+  gap: $spacing-lg;
+
+  @include mobile-only {
+    padding: $spacing-md;
+    gap: $spacing-md;
+  }
+
+  &.loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: $spacing-md;
+
+    i {
+      font-size: 3rem;
+      color: $color-accent;
+    }
+  }
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+
+  @include mobile-only {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  h1 {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+    font-size: 1.5rem;
+    font-weight: 600;
+
+    @include mobile-only {
+      font-size: 1.25rem;
+    }
+
+    i {
+      color: $color-accent;
+    }
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+    flex-wrap: wrap;
+
+    @include mobile-only {
+      gap: $spacing-sm;
+      justify-content: stretch;
+    }
+  }
+
+  .auto-refresh-toggle {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    color: $color-text-secondary;
+    font-size: 0.875rem;
+    cursor: pointer;
+    min-height: $touch-target-min;
+
+    input {
+      cursor: pointer;
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  .action-btn {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    padding: $spacing-sm $spacing-md;
+    min-height: $touch-target-min;
+    background: $color-bg-tertiary;
+    border: 1px solid $color-border;
+    border-radius: $radius-md;
+    color: $color-text-secondary;
+    cursor: pointer;
+    transition: all $transition-fast;
+
+    @include mobile-only {
+      flex: 1;
+      justify-content: center;
+    }
+
+    &:hover:not(:disabled) {
+      background: $color-accent;
+      color: white;
+      border-color: $color-accent;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+}
+
+// Error banner
+.error-banner {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  padding: $spacing-md $spacing-lg;
+  background: rgba($color-error, 0.1);
+  border: 1px solid $color-error;
+  border-radius: $radius-md;
+  color: $color-error;
+
+  i {
+    font-size: 1.25rem;
+  }
+
+  button {
+    margin-left: auto;
+    padding: $spacing-xs $spacing-md;
+    background: $color-error;
+    border: none;
+    border-radius: $radius-sm;
+    color: white;
+    cursor: pointer;
+
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+}
+
+// Learning health summary
+.health-summary {
+  display: flex;
+  gap: $spacing-lg;
+  padding: $spacing-lg;
+  background: $color-bg-panel;
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+  flex-wrap: wrap;
+
+  @include mobile-only {
+    padding: $spacing-md;
+    gap: $spacing-sm;
+  }
+
+  .health-indicator {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    padding: $spacing-sm $spacing-lg;
+    min-height: $touch-target-min;
+    background: $color-bg-tertiary;
+    border-radius: $radius-md;
+
+    @include mobile-only {
+      padding: $spacing-sm $spacing-md;
+      flex: 1;
+      min-width: calc(50% - #{$spacing-sm});
+      justify-content: center;
+    }
+
+    .indicator-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: $color-text-muted;
+    }
+
+    &.active .indicator-dot {
+      background: $color-success;
+      box-shadow: 0 0 8px $color-success;
+    }
+
+    &.inactive .indicator-dot {
+      background: $color-text-muted;
+    }
+
+    .indicator-dot.surprise {
+      background: $color-warning;
+    }
+
+    .count {
+      margin-left: $spacing-sm;
+      font-family: $font-mono;
+      font-size: 0.875rem;
+      color: $color-text-secondary;
+    }
+  }
+}
+
+.metrics-grid {
+  @include responsive-grid(1, 1, 2);
+
+  @include mobile-only {
+    gap: $spacing-md;
+  }
+}
+
+.metric-card {
+  background: $color-bg-panel;
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+
+  @include mobile-only {
+    padding: $spacing-md;
+  }
+
+  &.full-width {
+    grid-column: 1 / -1;
+  }
+
+  h3 {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: $spacing-sm;
+    color: $color-text-primary;
+
+    @include mobile-only {
+      font-size: 0.9rem;
+    }
+
+    i {
+      color: $color-accent;
+    }
+  }
+
+  .card-subtitle {
+    font-size: 0.875rem;
+    color: $color-text-muted;
+    margin-bottom: $spacing-md;
+  }
+
+  .chart-container {
+    margin: $spacing-md 0;
+  }
+}
+
+// Stat grid for dopamine/reconsolidation cards
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $spacing-md;
+
+  @include mobile-only {
+    grid-template-columns: repeat(2, 1fr);
+    gap: $spacing-sm;
+  }
+
+  .stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: $spacing-md;
+    background: $color-bg-tertiary;
+    border-radius: $radius-md;
+    text-align: center;
+
+    @include mobile-only {
+      padding: $spacing-sm;
+    }
+
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 600;
+      font-family: $font-mono;
+      color: $color-text-primary;
+
+      @include mobile-only {
+        font-size: 1.25rem;
+      }
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      color: $color-text-muted;
+      text-transform: uppercase;
+      margin-top: $spacing-xs;
+
+      @include mobile-only {
+        font-size: 0.65rem;
+      }
+    }
+
+    &.positive .stat-value {
+      color: $color-success;
+    }
+
+    &.negative .stat-value {
+      color: $color-error;
+    }
+  }
+}
+
+// Trace list for reconsolidation events
+.trace-list {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+
+  .trace-header {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+    padding: $spacing-sm $spacing-md;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: $color-text-muted;
+    text-transform: uppercase;
+    border-bottom: 1px solid $color-border;
+
+    @include mobile-only {
+      display: none; // Hide header on mobile, use card layout
+    }
+  }
+
+  .trace-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+    padding: $spacing-md;
+    min-height: $touch-target-min;
+    background: $color-bg-tertiary;
+    border-radius: $radius-md;
+    cursor: pointer;
+    transition: all $transition-fast;
+    border: 1px solid transparent;
+
+    @include mobile-only {
+      grid-template-columns: 1fr 1fr;
+      gap: $spacing-xs;
+      padding: $spacing-sm;
+    }
+
+    &:hover {
+      background: $color-bg-secondary;
+    }
+
+    &.selected {
+      background: rgba($color-accent, 0.2);
+      border-color: $color-accent;
+    }
+
+    &.positive {
+      border-left: 3px solid $color-success;
+    }
+
+    &.negative {
+      border-left: 3px solid $color-error;
+    }
+
+    .memory-id {
+      font-family: $font-mono;
+      font-size: 0.875rem;
+      color: $color-text-primary;
+
+      @include mobile-only {
+        grid-column: 1 / -1;
+        font-size: 0.8rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+
+    .advantage {
+      font-family: $font-mono;
+      font-weight: 500;
+
+      &.pos {
+        color: $color-success;
+      }
+
+      &.neg {
+        color: $color-error;
+      }
+    }
+
+    .lr, .magnitude {
+      font-family: $font-mono;
+      font-size: 0.875rem;
+      color: $color-text-secondary;
+
+      @include mobile-only {
+        font-size: 0.75rem;
+      }
+    }
+
+    .time {
+      color: $color-text-muted;
+      font-size: 0.875rem;
+
+      @include mobile-only {
+        font-size: 0.75rem;
+      }
+    }
+  }
+}
+
+// Empty state
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-xl;
+  color: $color-text-muted;
+  text-align: center;
+
+  i {
+    font-size: 2rem;
+    margin-bottom: $spacing-md;
+    opacity: 0.5;
+  }
+
+  p {
+    max-width: 400px;
+  }
+}
+
+// Detail panel
+.trace-detail {
+  position: fixed;
+  right: $spacing-lg;
+  top: calc($header-height + $spacing-lg);
+  width: 380px;
+  max-height: calc(100vh - $header-height - $spacing-xl);
+  background: $color-bg-panel;
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+  overflow: hidden;
+  box-shadow: $shadow-lg;
+  z-index: $z-panel;
+
+  // Mobile: slide up from bottom
+  @include mobile-only {
+    position: fixed;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    max-height: 60vh;
+    border-radius: $radius-lg $radius-lg 0 0;
+    overflow-y: auto;
+  }
+
+  .detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: $spacing-md $spacing-lg;
+    background: $color-bg-tertiary;
+    border-bottom: 1px solid $color-border;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+
+    // Drag handle for mobile
+    @include mobile-only {
+      &::before {
+        content: '';
+        position: absolute;
+        top: 8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 40px;
+        height: 4px;
+        background: $color-border-light;
+        border-radius: 2px;
+      }
+      padding-top: $spacing-lg;
+    }
+
+    h4 {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    button {
+      background: $color-bg-tertiary;
+      border: 1px solid $color-border;
+      border-radius: $radius-sm;
+      color: $color-text-muted;
+      cursor: pointer;
+      width: $touch-target-min;
+      height: $touch-target-min;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+
+      &:hover {
+        color: $color-text-primary;
+        background: $color-bg-panel;
+      }
+    }
+  }
+
+  .detail-content {
+    padding: $spacing-lg;
+    overflow-y: auto;
+    max-height: 500px;
+
+    @include mobile-only {
+      padding: $spacing-md;
+      padding-bottom: $spacing-xl; // Safe area
+      max-height: none;
+    }
+
+    h5 {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: $color-text-secondary;
+      margin: $spacing-lg 0 $spacing-sm;
+      text-transform: uppercase;
+    }
+
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: $spacing-sm 0;
+      border-bottom: 1px solid $color-border;
+      font-size: 0.875rem;
+      gap: $spacing-md;
+
+      .label {
+        color: $color-text-muted;
+        flex-shrink: 0;
+      }
+
+      code {
+        font-family: $font-mono;
+        font-size: 0.75rem;
+        color: $color-accent;
+        word-break: break-all;
+      }
+
+      .positive {
+        color: $color-success;
+        font-weight: 500;
+      }
+
+      .negative {
+        color: $color-error;
+        font-weight: 500;
+      }
+    }
+
+    .detail-explanation {
+      margin-top: $spacing-lg;
+      padding: $spacing-md;
+      background: $color-bg-tertiary;
+      border-radius: $radius-md;
+
+      h5 {
+        margin: 0 0 $spacing-sm;
+      }
+
+      p {
+        font-size: 0.875rem;
+        color: $color-text-secondary;
+        line-height: 1.5;
+      }
+    }
+  }
+}
+
+// Action toast notifications
+.action-toast {
+  position: fixed;
+  top: $spacing-lg;
+  right: $spacing-lg;
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  padding: $spacing-md $spacing-lg;
+  border-radius: $radius-md;
+  font-size: 0.875rem;
+  z-index: $z-toast;
+  animation: slideIn 0.2s ease-out;
+
+  @keyframes slideIn {
+    from {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  &.success {
+    background: rgba($color-success, 0.9);
+    color: white;
+  }
+
+  &.error {
+    background: rgba($color-error, 0.9);
+    color: white;
+  }
+}
+
+// Toggle button
+.toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  padding: $spacing-sm $spacing-md;
+  background: $color-bg-tertiary;
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+  color: $color-text-secondary;
+  cursor: pointer;
+  transition: all $transition-fast;
+
+  &:hover {
+    border-color: $color-accent;
+  }
+
+  &.active {
+    background: rgba($color-accent, 0.2);
+    border-color: $color-accent;
+    color: $color-accent;
+  }
+}
+
+// Control panel
+.control-panel {
+  @include responsive-grid(1, 2, 3);
+  padding: $spacing-lg;
+  background: $color-bg-panel;
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+
+  @include mobile-only {
+    padding: $spacing-md;
+  }
+}
+
+.control-section {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+
+  h3 {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: $color-text-secondary;
+
+    i {
+      color: $color-accent;
+    }
+  }
+
+  .param-grid {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+  }
+
+  .apply-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-sm;
+    padding: $spacing-sm $spacing-md;
+    min-height: $touch-target-min;
+    background: $color-accent;
+    border: none;
+    border-radius: $radius-md;
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all $transition-fast;
+    margin-top: $spacing-sm;
+
+    &:hover:not(:disabled) {
+      opacity: 0.9;
+    }
+
+    &:disabled {
+      background: $color-bg-tertiary;
+      color: $color-text-muted;
+      cursor: not-allowed;
+    }
+  }
+}
+
+// Parameter slider
+.param-slider {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+
+  .param-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    label {
+      font-size: 0.875rem;
+      color: $color-text-primary;
+    }
+
+    .param-value {
+      font-family: $font-mono;
+      font-size: 0.875rem;
+      color: $color-accent;
+      font-weight: 500;
+    }
+  }
+
+  input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 6px;
+    background: $color-bg-tertiary;
+    border-radius: 3px;
+    cursor: pointer;
+
+    &::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      background: $color-accent;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: transform $transition-fast;
+
+      &:hover {
+        transform: scale(1.2);
+      }
+    }
+
+    &::-moz-range-thumb {
+      width: 16px;
+      height: 16px;
+      background: $color-accent;
+      border-radius: 50%;
+      cursor: pointer;
+      border: none;
+    }
+  }
+
+  .param-desc {
+    font-size: 0.75rem;
+    color: $color-text-muted;
+  }
+}
+
+// Surgery controls
+.surgery-controls {
+  .surgery-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: $spacing-sm;
+  }
+
+  .memory-id-input {
+    flex: 1;
+    min-width: 200px;
+    min-height: $touch-target-min;
+    padding: $spacing-sm $spacing-md;
+    background: $color-bg-tertiary;
+    border: 1px solid $color-border;
+    border-radius: $radius-md;
+    color: $color-text-primary;
+    font-family: $font-mono;
+    font-size: 0.875rem;
+
+    @include mobile-only {
+      width: 100%;
+      min-width: 100%;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: $color-accent;
+    }
+
+    &::placeholder {
+      color: $color-text-muted;
+    }
+  }
+
+  .value-input {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+
+    label {
+      font-size: 0.875rem;
+      color: $color-text-secondary;
+    }
+
+    input[type="number"] {
+      width: 70px;
+      min-height: $touch-target-min;
+      padding: $spacing-sm;
+      background: $color-bg-tertiary;
+      border: 1px solid $color-border;
+      border-radius: $radius-md;
+      color: $color-text-primary;
+      font-family: $font-mono;
+      text-align: center;
+
+      &:focus {
+        outline: none;
+        border-color: $color-accent;
+      }
+    }
+  }
+
+  .surgery-btn {
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+    padding: $spacing-sm $spacing-md;
+    min-height: $touch-target-min;
+    background: $color-bg-tertiary;
+    border: 1px solid $color-border;
+    border-radius: $radius-md;
+    color: $color-text-secondary;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all $transition-fast;
+
+    @include mobile-only {
+      flex: 1;
+      justify-content: center;
+    }
+
+    &:hover:not(:disabled) {
+      background: $color-warning;
+      border-color: $color-warning;
+      color: white;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+}
+
+// Action buttons
+.action-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+
+  .action-btn {
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+    padding: $spacing-sm $spacing-md;
+    min-height: $touch-target-min;
+    background: $color-bg-tertiary;
+    border: 1px solid $color-border;
+    border-radius: $radius-md;
+    color: $color-text-secondary;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all $transition-fast;
+
+    @include mobile-only {
+      flex: 1;
+      justify-content: center;
+      min-width: calc(50% - #{$spacing-xs});
+    }
+
+    &:hover {
+      background: $color-accent;
+      border-color: $color-accent;
+      color: white;
+    }
+
+    &.positive:hover {
+      background: $color-success;
+      border-color: $color-success;
+    }
+
+    &.negative:hover {
+      background: $color-error;
+      border-color: $color-error;
+    }
+  }
+}
+
+// Detail panel actions
+.detail-actions {
+  margin-top: $spacing-lg;
+  padding-top: $spacing-md;
+  border-top: 1px solid $color-border;
+
+  h5 {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: $color-text-muted;
+    text-transform: uppercase;
+    margin-bottom: $spacing-sm;
+  }
+
+  button {
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+    width: 100%;
+    padding: $spacing-sm $spacing-md;
+    min-height: $touch-target-min;
+    margin-bottom: $spacing-xs;
+    background: $color-bg-tertiary;
+    border: 1px solid $color-border;
+    border-radius: $radius-md;
+    color: $color-text-secondary;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all $transition-fast;
+
+    &:hover {
+      background: $color-accent;
+      border-color: $color-accent;
+      color: white;
+    }
+  }
+}
+
+// Dashboard footer
+.dashboard-footer {
+  margin-top: auto;
+  padding-top: $spacing-lg;
+  border-top: 1px solid $color-border;
+
+  .explanation {
+    padding: $spacing-lg;
+    background: $color-bg-tertiary;
+    border-radius: $radius-md;
+
+    h4 {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: $color-text-secondary;
+      margin-bottom: $spacing-sm;
+    }
+
+    p {
+      font-size: 0.875rem;
+      color: $color-text-muted;
+      line-height: 1.6;
+
+      strong {
+        color: $color-text-primary;
+      }
+
+      em {
+        color: $color-accent;
+        font-style: normal;
+      }
+    }
+  }
+}

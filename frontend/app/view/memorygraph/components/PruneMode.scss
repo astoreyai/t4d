@@ -1,0 +1,153 @@
+/**
+ * Styles for Prune Mode
+ */
+
+.prune-mode {
+    width: 340px;
+    height: 100%;
+    overflow: hidden;
+    padding: 12px;
+    background: var(--panel-bg-color);
+
+    .prune-content {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        padding: 16px;
+        height: 100%;
+    }
+
+    .prune-stats {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding: 12px;
+        background: rgb(from var(--highlight-bg-color) r g b / 0.1);
+        border-radius: 6px;
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+
+            .stat-label {
+                color: var(--secondary-text-color);
+                font-weight: 500;
+            }
+
+            .stat-value {
+                color: var(--main-text-color);
+                font-family: monospace;
+                font-size: 12px;
+            }
+        }
+    }
+
+    .selection-controls {
+        display: flex;
+        gap: 8px;
+
+        button {
+            flex: 1;
+            font-size: 12px;
+
+            .mr-2 {
+                margin-right: 6px;
+            }
+        }
+    }
+
+    .selected-nodes-section {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        flex: 1;
+        min-height: 0;
+
+        h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--main-text-color);
+        }
+
+        .selected-nodes-list {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 8px;
+
+            .selected-node-item {
+                display: flex;
+                align-items: flex-start;
+                gap: 10px;
+                padding: 10px;
+                background: rgb(from var(--highlight-bg-color) r g b / 0.1);
+                border-radius: 6px;
+                margin-bottom: 8px;
+                transition: all 0.2s;
+
+                &:hover {
+                    background: rgb(from var(--highlight-bg-color) r g b / 0.15);
+                }
+
+                .node-preview {
+                    flex: 1;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 6px;
+                    min-width: 0;
+
+                    .type-badge {
+                        font-size: 10px;
+                        text-transform: uppercase;
+                        width: fit-content;
+                    }
+
+                    .node-content {
+                        font-size: 12px;
+                        color: var(--main-text-color);
+                        line-height: 1.4;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
+                }
+            }
+
+            .empty-state {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: 32px 16px;
+                gap: 12px;
+                color: var(--secondary-text-color);
+                text-align: center;
+
+                i {
+                    font-size: 32px;
+                    opacity: 0.4;
+                }
+
+                p {
+                    font-size: 12px;
+                    line-height: 1.5;
+                }
+            }
+        }
+    }
+
+    .prune-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+
+        .full-width {
+            width: 100%;
+            justify-content: flex-start;
+
+            .mr-2 {
+                margin-right: 8px;
+            }
+        }
+    }
+}

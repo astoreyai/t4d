@@ -1,0 +1,168 @@
+================================================================================
+                    WORLD WEAVER VALIDATION SUMMARY
+================================================================================
+Date:           2025-12-07
+Version:        0.1.0
+Status:         VALIDATION COMPLETE WITH CRITICAL ISSUES
+
+================================================================================
+QUICK METRICS
+================================================================================
+
+Test Results:
+  Total Tests:              2,423
+  Passed:                   2,378 (98.1%)
+  Failed:                   18 (0.7%)
+  Coverage:                 64%
+
+By Category:
+  Unit Tests:               1,763 passed, 8 failed (39.84s)
+  Integration Tests:        55 passed, 11 failed
+  Performance Tests:        8 passed (all passing)
+  Security Tests:           15 passed (all passing)
+
+================================================================================
+API STATUS
+================================================================================
+
+Working:
+  + GET /api/v1/health ............................ 200 OK
+
+Partially Working:
+  ~ POST /api/v1/episodes ......................... 201 Created (some cases fail in tests)
+
+Broken:
+  - GET /api/v1/episodes .......................... 500 (missing .recent() method)
+  - POST /api/v1/entities ......................... 422 (missing .store_entity() method)
+  - GET /api/v1/entities .......................... 500 (missing .list_entities() method)
+  - POST /api/v1/skills ........................... 422 (validation error)
+  - GET /api/v1/skills/{id} ....................... 500 (enum constraint error)
+
+Not Implemented:
+  x GET /api/v1/entities/search ................... 405 (route missing)
+  x GET /api/v1/skills/search ..................... 405 (route missing)
+
+================================================================================
+CRITICAL BUGS (PRIORITY 1)
+================================================================================
+
+[1] Missing EpisodicMemory.recent() Method
+    File: /home/aaron/ww/src/ww/memory/episodic.py
+    Impact: Cannot list episodes via API
+    Tests: GET /api/v1/episodes failing
+
+[2] Missing SemanticMemory Methods
+    File: /home/aaron/ww/src/ww/memory/semantic.py
+    Methods: store_entity(), list_entities()
+    Impact: Cannot create/list entities via API
+    Tests: POST/GET /api/v1/entities failing
+
+[3] Pattern Separation Broken
+    File: /home/aaron/ww/src/ww/memory/pattern_separation.py::DentateGyrus
+    Issue: State tracking not working (search_calls, history, stats all empty)
+    Tests: 7 pattern separation unit tests failing
+
+[4] Joint Optimization Convergence Issue
+    File: /home/aaron/ww/src/ww/learning/
+    Issue: Loss diverging (0.4055 → 0.5313), expected convergence
+    Tests: test_consistency_loss_convergence failing
+
+================================================================================
+COVERAGE ANALYSIS
+================================================================================
+
+Excellent Coverage (>85%):
+  Core Memory Systems (episodic, semantic, procedural)
+  Learning & Plasticity Systems
+  Storage Layer (Neo4j, Qdrant)
+  Temporal Integration
+  Session Management
+
+Good Coverage (70-85%):
+  Consolidation Service
+  Config & Security
+  API Episodes Route
+
+Partial Coverage (50-70%):
+  API Entities Route (51%)
+  API Skills Route (54%)
+  MCP Tools
+  Memory Gate
+
+Low/No Coverage (<50%):
+  Visualization Modules ................... 0% (6 modules, ~1,050 lines)
+  Interface Modules ....................... 0% (5 modules, ~1,150 lines)
+  Kymera Integrations ..................... 13-32%
+  MCP Server .............................. 21%
+  Privacy Filter .......................... 37%
+
+================================================================================
+REGRESSION TESTING
+================================================================================
+
+Status: NO REGRESSIONS DETECTED
+
+Core Systems Working:
+  ✓ Session isolation (58 tests passing)
+  ✓ Security (15 tests passing, all injection/XSS/CRLF prevention working)
+  ✓ Performance (all 8 benchmarks passing)
+  ✓ Buffer management
+  ✓ Cluster indexing
+  ✓ Memory decay & consolidation
+  ✓ Biological validation
+
+================================================================================
+FUNCTIONAL ISSUES (PRIORITY 2)
+================================================================================
+
+[5] Missing Search Endpoints
+    Endpoints: GET /api/v1/entities/search, GET /api/v1/skills/search
+    Status: Routes not defined in API
+    Impact: Search functionality not available
+
+[6] Invalid Database Enum Values
+    Issue: Skill with domain='testing' (not in allowed enum)
+    Impact: Cannot retrieve certain skills via API
+
+[7] AsyncMock Serialization in Tests
+    File: tests/integration/conftest.py
+    Issue: Mock objects not properly converted before serialization
+    Impact: 8 integration tests failing with validation errors
+    Fix: Update mock configuration to properly await async returns
+
+================================================================================
+RECOMMENDATIONS
+================================================================================
+
+IMMEDIATE (Fix before production):
+  1. Implement missing EpisodicMemory.recent() method
+  2. Implement missing SemanticMemory methods (store_entity, list_entities)
+  3. Debug and fix pattern separation state tracking
+  4. Investigate consistency loss divergence in joint optimization
+  5. Implement missing search endpoints
+
+SHORT TERM (Before 1.0 release):
+  1. Fix integration test conftest.py mocks
+  2. Add tests for visualization modules (1,050 lines untested)
+  3. Add tests for interface modules (1,150 lines untested)
+  4. Improve API routes coverage to 80%+
+  5. Improve MCP tools coverage to 85%+
+
+ESTIMATED FIX TIME: 4-6 hours for critical bugs
+
+================================================================================
+DETAILED REPORT
+================================================================================
+
+See: /home/aaron/ww/VALIDATION_REPORT_2025-12-07.md (462 lines)
+
+Contains:
+  - Full test results and failure analysis
+  - Detailed coverage breakdown by module
+  - API endpoint testing results
+  - Security test results
+  - Regression analysis
+  - Semantic validation
+  - Complete bug descriptions
+
+================================================================================

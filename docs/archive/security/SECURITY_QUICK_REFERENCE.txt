@@ -1,0 +1,162 @@
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                   WORLD WEAVER SECURITY AUDIT                             ║
+║                        Quick Reference Card                               ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║ Date: 2025-12-06                                                          ║
+║ Overall Grade: B+ (Good, with improvements needed)                       ║
+║ Production Ready: ⚠️  After 4 critical fixes (10 hours)                   ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║ FINDINGS SUMMARY                                                          ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║ Critical Issues:    0 ✓                                                   ║
+║ High Severity:      3 ⚠️  (MUST fix before production)                    ║
+║ Medium Severity:    6 ⚠️  (SHOULD fix before production)                  ║
+║ Low Severity:       8 ℹ️  (Defense in depth)                              ║
+║ Informational:      5 ℹ️  (Best practices)                                ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║ TOP 4 CRITICAL ISSUES (Must Fix Before Production)                       ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║                                                                           ║
+║ [H-1] CORS Wildcard Allowed                                              ║
+║   Risk:  CSRF attacks if WW_API_CORS_ORIGINS=*                           ║
+║   Fix:   Add validator to reject wildcard in production                  ║
+║   Time:  1 hour                                                           ║
+║   File:  src/ww/core/config.py:645                                        ║
+║                                                                           ║
+║ [H-2] Database Error Message Leakage                                     ║
+║   Risk:  Stack traces expose Neo4j URIs, internal paths                  ║
+║   Fix:   Sanitize all API error responses with generic messages          ║
+║   Time:  3 hours                                                          ║
+║   Files: src/ww/api/routes/*.py (21 locations)                           ║
+║                                                                           ║
+║ [H-3] Production TLS Not Enforced                                        ║
+║   Risk:  Credentials and data transmitted in plaintext                   ║
+║   Fix:   Add validator requiring bolt+s://, OTLP TLS in production       ║
+║   Time:  2 hours                                                          ║
+║   File:  src/ww/core/config.py                                            ║
+║                                                                           ║
+║ [M-4] No API Key Authentication                                          ║
+║   Risk:  Anyone with network access can read/write memories              ║
+║   Fix:   Implement X-API-Key header authentication                       ║
+║   Time:  4 hours                                                          ║
+║   Files: src/ww/core/config.py, src/ww/api/deps.py                       ║
+║                                                                           ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║ WHAT'S GOOD (Strong Security Foundations)                                ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║                                                                           ║
+║ ✓ Excellent input validation (validation.py)                             ║
+║ ✓ Parameterized queries (no SQL/Cypher injection)                        ║
+║ ✓ Label/type whitelisting for queries                                    ║
+║ ✓ XSS pattern removal                                                    ║
+║ ✓ Rate limiting (100 req/min per session)                                ║
+║ ✓ Password strength validation                                           ║
+║ ✓ .env excluded from git                                                 ║
+║ ✓ Docker ports bound to localhost                                        ║
+║ ✓ Session ID validation (alphanumeric + underscore + hyphen)             ║
+║ ✓ Null byte detection                                                    ║
+║                                                                           ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║ PRODUCTION DEPLOYMENT CHECKLIST                                          ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║                                                                           ║
+║ P0 - CRITICAL (Cannot deploy without):                                   ║
+║   [ ] Set WW_ENVIRONMENT=production                                       ║
+║   [ ] Generate API key: openssl rand -hex 32                              ║
+║   [ ] Set WW_API_KEY=<generated_key>                                      ║
+║   [ ] Configure Neo4j TLS: WW_NEO4J_URI=bolt+s://...                      ║
+║   [ ] Set CORS origins: WW_API_CORS_ORIGINS=https://app.example.com      ║
+║   [ ] Sanitize API error messages (implement fixes)                      ║
+║   [ ] Verify .env permissions: chmod 600 .env                             ║
+║                                                                           ║
+║ P1 - HIGH PRIORITY (Should fix):                                         ║
+║   [ ] Block reserved session IDs (allow_reserved=False)                  ║
+║   [ ] Add security headers middleware                                    ║
+║   [ ] Document rate limiting with multiple workers                       ║
+║   [ ] Run security test suite                                            ║
+║                                                                           ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║ QUICK TESTS (After Implementing Fixes)                                   ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║                                                                           ║
+║ # Test CORS validation (should FAIL):                                    ║
+║ WW_ENVIRONMENT=production WW_API_CORS_ORIGINS="*" python -m ww.api.server║
+║                                                                           ║
+║ # Test API key requirement (should return 401):                          ║
+║ curl http://localhost:8765/api/v1/health                                 ║
+║                                                                           ║
+║ # Test reserved session ID (should return 400):                          ║
+║ curl -H "X-Session-ID: admin" http://localhost:8765/api/v1/health        ║
+║                                                                           ║
+║ # Test TLS enforcement (should FAIL):                                    ║
+║ WW_ENVIRONMENT=production WW_NEO4J_URI="bolt://..." python -m ww.api.srv ║
+║                                                                           ║
+║ # Run security tests:                                                    ║
+║ pytest tests/security/ -v                                                ║
+║                                                                           ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║ EFFORT REQUIRED                                                           ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║                                                                           ║
+║ Phase 1 - Critical Fixes:         10 hours (2 days)                      ║
+║ Phase 2 - Security Hardening:      6 hours (1 day)                       ║
+║ Phase 3 - Defense in Depth:        5 hours (1 day)                       ║
+║ Phase 4 - Testing & Docs:          8 hours (1 day)                       ║
+║                                                                           ║
+║ TOTAL: 29 hours (~4 developer days)                                      ║
+║                                                                           ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║ FILES DELIVERED                                                           ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║                                                                           ║
+║ 1. SECURITY_AUDIT_REPORT.md      - Complete audit (22 findings)          ║
+║ 2. SECURITY_REMEDIATION_PLAN.md  - Step-by-step fixes                    ║
+║ 3. SECURITY_SUMMARY.md            - Executive summary                    ║
+║ 4. security_findings.csv          - Tracking spreadsheet                 ║
+║ 5. SECURITY_QUICK_REFERENCE.txt   - This card                            ║
+║                                                                           ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║ SECURITY GRADE PROGRESSION                                               ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║                                                                           ║
+║ Current:       B+ (Good foundations, needs auth & TLS)                   ║
+║ After Phase 1: A- (Critical issues resolved)                             ║
+║ After Phase 2: A  (Excellent security posture)                           ║
+║ After Phase 3: A+ (Best-in-class security)                               ║
+║                                                                           ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║ ATTACK PROTECTION STATUS                                                 ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║                                                                           ║
+║ SQL/Cypher Injection:     ✓ Protected (parameterized queries)            ║
+║ XSS:                      ✓ Protected (pattern removal)                  ║
+║ Path Traversal:           ✓ Protected (whitelist validation)             ║
+║ Null Byte Injection:      ✓ Protected (detection & rejection)            ║
+║ DoS (Rate):               ✓ Protected (100 req/min)                      ║
+║ Weak Passwords:           ✓ Protected (strength validation)              ║
+║                                                                           ║
+║ CSRF:                     ⚠️  Vulnerable if CORS=* (fix H-1)              ║
+║ MITM:                     ⚠️  Vulnerable without TLS (fix H-3)            ║
+║ Unauthorized Access:      ⚠️  No authentication (fix M-4)                 ║
+║ Information Disclosure:   ⚠️  Error messages leak info (fix H-2)          ║
+║                                                                           ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║ RECOMMENDED IMMEDIATE ACTIONS                                            ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║                                                                           ║
+║ 1. Read SECURITY_SUMMARY.md (5 minutes)                                  ║
+║ 2. Review top 4 critical issues above                                    ║
+║ 3. Schedule 2-day sprint for Phase 1 fixes                               ║
+║ 4. Generate API key: openssl rand -hex 32                                ║
+║ 5. Follow SECURITY_REMEDIATION_PLAN.md step-by-step                      ║
+║                                                                           ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║ CONTACT                                                                   ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║                                                                           ║
+║ Questions? File issue at:                                                ║
+║ https://github.com/astoreyai/world-weaver/issues                         ║
+║                                                                           ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+Print this card and keep it handy during remediation!

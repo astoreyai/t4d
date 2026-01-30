@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "world-weaver.fullname" . }}-config
+  labels:
+    {{- include "world-weaver.labels" . | nindent 4 }}
+data:
+  # Logging
+  WW_LOG_LEVEL: {{ .Values.config.logLevel | quote }}
+  WW_DEBUG: {{ .Values.config.debug | quote }}
+
+  # Secrets backend
+  WW_SECRETS_BACKEND: {{ .Values.config.secretsBackend | quote }}
+
+  # Feature flags
+  WW_FLAG_FF_ENCODER: {{ .Values.config.featureFlags.ffEncoder | quote }}
+  WW_FLAG_CAPSULE_ENCODING: {{ .Values.config.featureFlags.capsuleEncoding | quote }}
+  WW_FLAG_CAPSULE_ROUTING: {{ .Values.config.featureFlags.capsuleRouting | quote }}
+  WW_FLAG_CAPSULE_POSE_LEARNING: {{ .Values.config.featureFlags.capsulePoseLearning | quote }}
+  WW_FLAG_LABILITY_WINDOW: {{ .Values.config.featureFlags.labilityWindow | quote }}
+  WW_FLAG_GENERATIVE_REPLAY: {{ .Values.config.featureFlags.generativeReplay | quote }}
+  WW_FLAG_THREE_FACTOR_LEARNING: {{ .Values.config.featureFlags.threeFactorLearning | quote }}
+  WW_FLAG_ELIGIBILITY_TRACES: {{ .Values.config.featureFlags.eligibilityTraces | quote }}
+  WW_FLAG_API_RATE_LIMITING: {{ .Values.config.featureFlags.apiRateLimiting | quote }}
+  WW_FLAG_API_METRICS: {{ .Values.config.featureFlags.apiMetrics | quote }}
+  WW_FLAG_TELEMETRY: {{ .Values.config.featureFlags.telemetry | quote }}
+  WW_FLAG_DISTRIBUTED_TRACING: {{ .Values.config.featureFlags.distributedTracing | quote }}
+
+  # Database connections
+  {{- if .Values.postgresql.enabled }}
+  WW_DATABASE_URL: "postgresql://{{ .Values.postgresql.auth.username }}@{{ include "world-weaver.fullname" . }}-postgresql:5432/{{ .Values.postgresql.auth.database }}"
+  {{- end }}
+  {{- if .Values.neo4j.enabled }}
+  WW_NEO4J_URI: "bolt://{{ include "world-weaver.fullname" . }}-neo4j:7687"
+  WW_NEO4J_USER: "neo4j"
+  {{- end }}
+  {{- if not .Values.qdrant.enabled }}
+  WW_QDRANT_HOST: {{ .Values.qdrant.host | quote }}
+  WW_QDRANT_PORT: {{ .Values.qdrant.port | quote }}
+  {{- end }}
