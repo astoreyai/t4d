@@ -118,6 +118,7 @@ class LCState:
 
     # Performance modulation
     gain_modulation: float = 1.0        # Yerkes-Dodson gain
+    pfc_gain: float = 1.0               # PFC-modulated phasic responsiveness
 
     def to_dict(self) -> dict:
         """Convert to dictionary."""
@@ -830,9 +831,15 @@ class LocusCoeruleus:
             1.0
         ))
 
-        # ATOM-P4-11: TODO: PFC modulation planned for future enhancement
-        # High PFC should reduce phasic responsiveness (top-down control)
-        # Currently not implemented - pfc_gain attribute removed (was dead code)
+        # PFC modulates phasic responsiveness (top-down control)
+        # High PFC → reduced phasic gain (less distractible, more focused)
+        # Low PFC → increased phasic gain (more distractible, more exploratory)
+        # Gain ranges from 0.5 (high PFC, focused) to 1.0 (low PFC, exploratory)
+        self.state.pfc_gain = float(np.clip(
+            1.0 - 0.5 * pfc_signal,  # High PFC (1.0) → gain 0.5, Low PFC (0.0) → gain 1.0
+            0.5,
+            1.0
+        ))
 
     # =========================================================================
     # Integration Methods

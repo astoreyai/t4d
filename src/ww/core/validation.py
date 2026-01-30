@@ -821,7 +821,7 @@ def validate_timestamp(ts, *, max_future_s: float = 5.0, max_past_s: float = 864
 
     Args:
         ts: Timestamp as float (unix epoch) or datetime
-        max_future_s: Max seconds into the future allowed
+        max_future_s: Max seconds into the future allowed (default 5s)
         max_past_s: Max seconds into the past allowed
 
     Raises:
@@ -895,7 +895,7 @@ def validate_spike_interval(prev_ts: float, curr_ts: float, *, min_isi_ms: float
     Args:
         prev_ts: Previous spike timestamp (seconds)
         curr_ts: Current spike timestamp (seconds)
-        min_isi_ms: Minimum inter-spike interval in milliseconds
+        min_isi_ms: Minimum inter-spike interval in milliseconds (default 1.0ms)
 
     Raises:
         ValidationError: If interval is too short

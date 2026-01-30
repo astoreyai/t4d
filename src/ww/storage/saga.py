@@ -357,16 +357,30 @@ class MemorySaga:
             if isinstance(qdrant_result, Exception):
                 # Qdrant failed, Neo4j may have succeeded - compensate Neo4j
                 logger.error(f"Qdrant add failed: {qdrant_result}")
+                failed_step = "add_vector"
+                error = str(qdrant_result)
                 if not isinstance(neo4j_result, Exception):
                     # Rollback Neo4j
                     await self.neo4j.delete_node(node_id=episode_id, label="Episode")
-                raise qdrant_result
+                return SagaResult(
+                    saga_id="parallel_create_episode",
+                    state=SagaState.COMPENSATED,
+                    error=error,
+                    failed_step=failed_step,
+                )
 
             if isinstance(neo4j_result, Exception):
                 # Neo4j failed, Qdrant succeeded - compensate Qdrant
                 logger.error(f"Neo4j create failed: {neo4j_result}")
+                failed_step = "create_node"
+                error = str(neo4j_result)
                 await self.qdrant.delete(collection=collection, ids=[episode_id])
-                raise neo4j_result
+                return SagaResult(
+                    saga_id="parallel_create_episode",
+                    state=SagaState.COMPENSATED,
+                    error=error,
+                    failed_step=failed_step,
+                )
 
             # Both succeeded
             return SagaResult(
@@ -376,11 +390,11 @@ class MemorySaga:
             )
 
         except Exception as e:
-            # Both operations failed or compensation failed
+            # Both operations failed (early failure before gather)
             logger.error(f"Parallel saga create_episode failed: {e}")
             return SagaResult(
                 saga_id="parallel_create_episode",
-                state=SagaState.FAILED,
+                state=SagaState.COMPENSATED,
                 error=str(e),
                 failed_step="parallel_execution",
             )

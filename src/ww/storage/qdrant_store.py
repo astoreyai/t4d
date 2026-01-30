@@ -89,6 +89,7 @@ class QdrantStore:
         timeout: float | None = None,
         circuit_breaker_config: CircuitBreakerConfig | None = None,
         hybrid_prefetch_multiplier: float = 1.5,
+        dimension: int | None = None,
     ):
         """
         Initialize Qdrant client.
@@ -101,12 +102,13 @@ class QdrantStore:
             hybrid_prefetch_multiplier: Prefetch factor for hybrid search (default 1.5).
                 Higher values (2.0) improve recall but increase network transfer.
                 Lower values (1.2) reduce transfer but may miss relevant results.
+            dimension: Expected embedding dimension (default: from settings)
         """
         settings = get_settings()
 
         self.url = url or settings.qdrant_url
         self.api_key = api_key or settings.qdrant_api_key
-        self.dimension = settings.embedding_dimension
+        self.dimension = dimension if dimension is not None else settings.embedding_dimension
         self.timeout = timeout or DEFAULT_DB_TIMEOUT
         # P2-OPT-B2.2: Configurable prefetch multiplier for hybrid search
         self.hybrid_prefetch_multiplier = max(1.0, hybrid_prefetch_multiplier)

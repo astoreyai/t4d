@@ -601,8 +601,10 @@ class STDPLearner:
         """Clear spike history for entity or all entities."""
         if entity_id:
             self._spike_history.pop(entity_id, None)
+            self._last_spike_times.pop(entity_id, None)
         else:
             self._spike_history.clear()
+            self._last_spike_times.clear()
 
     def get_stats(self) -> dict:
         """Get STDP statistics."""

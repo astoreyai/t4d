@@ -584,14 +584,6 @@ class ConsolidationService:
             from ww.core.access_control import require_capability
             require_capability(token, "trigger_consolidation")
 
-        # ATOM-P0-14: Validate consolidation type
-        valid_types = {"light", "deep", "skill", "all"}
-        if consolidation_type not in valid_types:
-            raise ValueError(
-                f"Invalid consolidation_type: '{consolidation_type}'. "
-                f"Must be one of {valid_types}"
-            )
-
         start_time = datetime.now()
         results = {
             "consolidation_type": consolidation_type,
@@ -600,6 +592,14 @@ class ConsolidationService:
             "results": {},
             "consolidation_events": [],
         }
+
+        # ATOM-P0-14: Validate consolidation type
+        valid_types = {"light", "deep", "skill", "all"}
+        if consolidation_type not in valid_types:
+            results["status"] = "error"
+            results["error"] = f"Unknown consolidation type: {consolidation_type}"
+            results["duration_seconds"] = (datetime.now() - start_time).total_seconds()
+            return results
 
         # RACE-002 FIX: Serialize consolidation to prevent race conditions
         async with self._consolidation_lock:
@@ -619,10 +619,6 @@ class ConsolidationService:
                     results["results"]["episodic_to_semantic"] = await self._consolidate_deep(session_filter)
                     results["results"]["skill_consolidation"] = await self._consolidate_skills()
                     results["results"]["decay_updated"] = await self._update_decay()
-
-                else:
-                    results["status"] = "error"
-                    results["error"] = f"Unknown consolidation type: {consolidation_type}"
 
             except Exception as e:
                 logger.error(f"Consolidation failed: {e}")

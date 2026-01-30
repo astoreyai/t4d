@@ -129,9 +129,10 @@ class TestConsolidationSecurity:
 
         service = ConsolidationService()
 
-        # Invalid type should raise ValueError
-        with pytest.raises(ValueError, match="Invalid consolidation_type"):
-            asyncio.run(service.consolidate(consolidation_type="invalid_type"))
+        # Invalid type should return error result
+        result = asyncio.run(service.consolidate(consolidation_type="invalid_type"))
+        assert result["status"] == "error"
+        assert "Unknown consolidation type" in result["error"]
 
     def test_consolidation_accepts_valid_types(self):
         """P0-14: Valid consolidation types accepted."""
