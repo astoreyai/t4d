@@ -1,0 +1,40 @@
+%%{init: {'theme': 'base'}}%%
+
+flowchart TB
+    START([System Start]) --> CHECK{Checkpoint<br/>exists?}
+
+    CHECK -->|No| COLD[Cold Start]
+    CHECK -->|Yes| WARM[Warm Start]
+
+    subgraph ColdStart["Cold Start Path"]
+        COLD --> INIT_DEF[Initialize Defaults]
+        INIT_DEF --> INIT_GATE[Reset LearnedGate<br/>weights = random]
+        INIT_GATE --> INIT_SCORER[Reset Scorer<br/>weights = random]
+        INIT_SCORER --> INIT_NEURO[Reset Neuromod<br/>expectations = 0.5]
+        INIT_NEURO --> INIT_BUF[Clear Buffer<br/>size = 0]
+        INIT_BUF --> LOG_COLD[Log: SYSTEM_START<br/>mode=COLD]
+    end
+
+    subgraph WarmStart["Warm Start Path"]
+        WARM --> FIND_CP[Find Latest<br/>Valid Checkpoint]
+        FIND_CP --> VERIFY[Verify SHA-256]
+        VERIFY -->|Invalid| FIND_PREV[Try Previous<br/>Checkpoint]
+        FIND_PREV --> VERIFY
+        VERIFY -->|Valid| DECOMP[Decompress<br/>gzip]
+        DECOMP --> LOAD[Load State:<br/>gate, scorer,<br/>buffer, neuromod]
+        LOAD --> GET_LSN[Get Checkpoint LSN]
+        GET_LSN --> FIND_WAL[Find WAL Entries<br/>LSN > checkpoint_lsn]
+        FIND_WAL --> REPLAY{Entries to<br/>replay?}
+        REPLAY -->|Yes| APPLY[Apply Entry<br/>to State]
+        APPLY --> NEXT[Next Entry]
+        NEXT --> REPLAY
+        REPLAY -->|No| LOG_WARM[Log: SYSTEM_START<br/>mode=WARM]
+    end
+
+    LOG_COLD --> READY([System Ready])
+    LOG_WARM --> READY
+
+    style COLD fill:#3498db,color:#fff
+    style WARM fill:#27ae60,color:#fff
+    style READY fill:#2ecc71,color:#fff
+    style START fill:#9b59b6,color:#fff

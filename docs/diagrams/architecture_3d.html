@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>T4DM - 3D Architecture Visualization</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0a1a; overflow: hidden; font-family: 'Segoe UI', sans-serif; }
+  canvas { display: block; }
+  #legend {
+    position: fixed; top: 16px; right: 16px; background: rgba(10,10,26,0.85);
+    border: 1px solid #333; border-radius: 8px; padding: 14px 18px;
+    color: #ccc; font-size: 13px; z-index: 10; pointer-events: none;
+  }
+  #legend h3 { margin-bottom: 8px; color: #fff; font-size: 14px; }
+  .legend-row { display: flex; align-items: center; margin: 4px 0; }
+  .legend-swatch { width: 14px; height: 14px; border-radius: 3px; margin-right: 8px; flex-shrink: 0; }
+  #title {
+    position: fixed; top: 16px; left: 16px; color: #ddd; z-index: 10;
+    font-size: 20px; font-weight: 600; pointer-events: none;
+  }
+  #title small { display: block; font-size: 12px; color: #888; font-weight: 400; margin-top: 2px; }
+  #info {
+    position: fixed; bottom: 16px; left: 16px; color: #666; font-size: 12px; z-index: 10;
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+<div id="title">T4DM Architecture<small>Click a module to highlight connections. Click background to reset. 41 components across 7 layers.</small></div>
+<div id="legend">
+  <h3>Layers</h3>
+  <div class="legend-row"><div class="legend-swatch" style="background:#4fc3f7"></div>Core (bottom)</div>
+  <div class="legend-row"><div class="legend-swatch" style="background:#81c784"></div>Memory</div>
+  <div class="legend-row"><div class="legend-swatch" style="background:#ffb74d"></div>Learning</div>
+  <div class="legend-row"><div class="legend-swatch" style="background:#e57373"></div>Storage</div>
+  <div class="legend-row"><div class="legend-swatch" style="background:#ba68c8"></div>Interface</div>
+  <div class="legend-row"><div class="legend-swatch" style="background:#4db6ac"></div>Support</div>
+  <div class="legend-row"><div class="legend-swatch" style="background:#90a4ae"></div>Infrastructure (top)</div>
+</div>
+<div id="info">Orbit: drag | Zoom: scroll | Pan: right-drag</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
+
+// -- Graph Data --
+const LAYERS = [
+  { name: 'Core',           y: 0,  color: '#4fc3f7', modules: ['core', 'encoding', 'embedding'] },
+  { name: 'Memory',         y: 2,  color: '#81c784', modules: ['memory', 'consolidation', 'dreaming', 'prediction'] },
+  { name: 'Learning',       y: 4,  color: '#ffb74d', modules: ['learning', 'nca', 'bridges', 'temporal'] },
+  { name: 'Storage',        y: 6,  color: '#e57373', modules: ['storage', 'persistence', 'extraction'] },
+  { name: 'Interface',      y: 8,  color: '#ba68c8', modules: ['api', 'cli', 'mcp', 'sdk', 'interfaces', 'hooks'] },
+  { name: 'Support',        y: 10, color: '#4db6ac', modules: ['observability', 'visualization', 'integration', 'integrations'] },
+  { name: 'Infrastructure', y: 12, color: '#90a4ae', modules: ['tests', 'docs', 'scripts', 'examples', 'config', 'deploy', 'migrations', 'frontend', 'agents', 'skills'] },
+];
+
+const EDGES = [
+  // Core layer
+  ['core', 'memory'], ['core', 'encoding'], ['core', 'embedding'], ['core', 'learning'],
+  // Memory layer
+  ['memory', 'consolidation'], ['memory', 'storage'], ['memory', 'encoding'],
+  ['consolidation', 'dreaming'], ['consolidation', 'learning'], ['consolidation', 'storage'],
+  // Learning layer
+  ['learning', 'nca'], ['learning', 'bridges'], ['learning', 'temporal'],
+  ['nca', 'bridges'],
+  // Interface layer
+  ['api', 'core'], ['api', 'memory'], ['api', 'storage'],
+  ['cli', 'core'], ['cli', 'api'],
+  ['mcp', 'core'], ['mcp', 'memory'],
+  ['sdk', 'api'],
+  // Storage layer
+  ['storage', 'persistence'],
+  // Support layer
+  ['observability', 'core'],
+  ['visualization', 'memory'], ['visualization', 'learning'], ['visualization', 'nca'],
+  ['integration', 'core'], ['integration', 'memory'],
+  ['integrations', 'core'], ['integrations', 'memory'], ['integrations', 'storage'],
+  // More src/ww edges
+  ['extraction', 'memory'], ['extraction', 'core'],
+  ['prediction', 'memory'], ['prediction', 'learning'], ['prediction', 'encoding'],
+  ['hooks', 'core'],
+  ['interfaces', 'core'], ['interfaces', 'memory'],
+  // Infrastructure edges
+  ['tests', 'core'], ['tests', 'memory'], ['tests', 'learning'], ['tests', 'nca'],
+  ['tests', 'storage'], ['tests', 'api'], ['tests', 'consolidation'],
+  ['frontend', 'api'], ['frontend', 'memory'], ['frontend', 'visualization'],
+  ['agents', 'core'], ['agents', 'memory'], ['agents', 'learning'],
+  ['skills', 'core'], ['skills', 'memory'], ['skills', 'learning'],
+  ['scripts', 'storage'], ['scripts', 'persistence'], ['scripts', 'config'],
+  ['deploy', 'config'], ['deploy', 'api'],
+  ['examples', 'api'], ['examples', 'sdk'], ['examples', 'core'],
+  ['config', 'core'],
+  ['migrations', 'storage'], ['migrations', 'persistence'],
+];
+
+// -- Scene Setup --
+const scene = new THREE.Scene();
+scene.fog = new THREE.FogExp2(0x0a0a1a, 0.012);
+
+const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 200);
+camera.position.set(18, 16, 24);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setClearColor(0x0a0a1a);
+document.body.appendChild(renderer.domElement);
+
+const labelRenderer = new CSS2DRenderer();
+labelRenderer.setSize(window.innerWidth, window.innerHeight);
+labelRenderer.domElement.style.position = 'absolute';
+labelRenderer.domElement.style.top = '0';
+labelRenderer.domElement.style.pointerEvents = 'none';
+document.body.appendChild(labelRenderer.domElement);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.08;
+controls.target.set(0, 6, 0);
+
+// -- Lighting --
+scene.add(new THREE.AmbientLight(0x404060, 1.2));
+const dl = new THREE.DirectionalLight(0xffffff, 0.8);
+dl.position.set(10, 20, 10);
+scene.add(dl);
+scene.add(new THREE.PointLight(0x4fc3f7, 0.4, 50));
+
+// -- Build Modules --
+const moduleMap = {};
+const meshToName = new Map();
+const allMeshes = [];
+const BOX_W = 1.4, BOX_H = 0.65, BOX_D = 0.9;
+
+LAYERS.forEach((layer) => {
+  const c = new THREE.Color(layer.color);
+  const count = layer.modules.length;
+  const spread = 2.8;
+  const startX = -(count - 1) * spread / 2;
+
+  // semi-transparent layer plane
+  const planeGeo = new THREE.PlaneGeometry(count * spread + 3, 4);
+  const planeMat = new THREE.MeshBasicMaterial({
+    color: c, transparent: true, opacity: 0.06, side: THREE.DoubleSide
+  });
+  const plane = new THREE.Mesh(planeGeo, planeMat);
+  plane.rotation.x = -Math.PI / 2;
+  plane.position.set(0, layer.y - 0.35, 0);
+  scene.add(plane);
+
+  layer.modules.forEach((mod, i) => {
+    const geo = new THREE.BoxGeometry(BOX_W, BOX_H, BOX_D);
+    const mat = new THREE.MeshPhongMaterial({
+      color: c, transparent: true, opacity: 0.85,
+      emissive: c, emissiveIntensity: 0.15,
+    });
+    const mesh = new THREE.Mesh(geo, mat);
+    const x = startX + i * spread;
+    const z = (Math.random() - 0.5) * 1.2;
+    mesh.position.set(x, layer.y, z);
+    scene.add(mesh);
+
+    // edges
+    const edgesGeo = new THREE.EdgesGeometry(geo);
+    const edgesMat = new THREE.LineBasicMaterial({ color: c, transparent: true, opacity: 0.5 });
+    const edges = new THREE.LineSegments(edgesGeo, edgesMat);
+    mesh.add(edges);
+
+    // label
+    const div = document.createElement('div');
+    div.textContent = mod;
+    div.style.cssText = `color:#fff;font-size:10px;font-family:'Segoe UI',sans-serif;
+      background:rgba(0,0,0,0.55);padding:2px 5px;border-radius:4px;white-space:nowrap;`;
+    const label = new CSS2DObject(div);
+    label.position.set(0, BOX_H / 2 + 0.25, 0);
+    mesh.add(label);
+
+    moduleMap[mod] = { mesh, layer, pos: mesh.position.clone(), labelDiv: div };
+    meshToName.set(mesh, mod);
+    allMeshes.push(mesh);
+  });
+});
+
+// -- Build Edges (3D lines) --
+const edgeLines = [];
+EDGES.forEach(([from, to]) => {
+  const a = moduleMap[from], b = moduleMap[to];
+  if (!a || !b) return;
+  const points = [a.pos, b.pos];
+  const geo = new THREE.BufferGeometry().setFromPoints(points);
+  const cFrom = new THREE.Color(a.layer.color);
+  const cTo = new THREE.Color(b.layer.color);
+  const colors = new Float32Array([cFrom.r, cFrom.g, cFrom.b, cTo.r, cTo.g, cTo.b]);
+  geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+  const mat = new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.35 });
+  const line = new THREE.Line(geo, mat);
+  scene.add(line);
+  edgeLines.push({ line, from, to, mat });
+});
+
+// -- Raycasting / Click --
+const raycaster = new THREE.Raycaster();
+const pointer = new THREE.Vector2();
+let selected = null;
+
+function resetHighlight() {
+  selected = null;
+  allMeshes.forEach(m => {
+    m.material.opacity = 0.85;
+    m.material.emissiveIntensity = 0.15;
+  });
+  edgeLines.forEach(e => { e.mat.opacity = 0.35; });
+  Object.values(moduleMap).forEach(m => { m.labelDiv.style.opacity = '1'; });
+}
+
+function highlight(name) {
+  selected = name;
+  const connected = new Set([name]);
+  EDGES.forEach(([a, b]) => {
+    if (a === name || b === name) { connected.add(a); connected.add(b); }
+  });
+  allMeshes.forEach(m => {
+    const n = meshToName.get(m);
+    if (connected.has(n)) {
+      m.material.opacity = 1.0;
+      m.material.emissiveIntensity = n === name ? 0.5 : 0.3;
+    } else {
+      m.material.opacity = 0.12;
+      m.material.emissiveIntensity = 0.0;
+    }
+  });
+  Object.entries(moduleMap).forEach(([n, m]) => {
+    m.labelDiv.style.opacity = connected.has(n) ? '1' : '0.2';
+  });
+  edgeLines.forEach(e => {
+    e.mat.opacity = (e.from === name || e.to === name) ? 0.9 : 0.05;
+  });
+}
+
+renderer.domElement.addEventListener('click', (ev) => {
+  pointer.x = (ev.clientX / window.innerWidth) * 2 - 1;
+  pointer.y = -(ev.clientY / window.innerHeight) * 2 + 1;
+  raycaster.setFromCamera(pointer, camera);
+  const hits = raycaster.intersectObjects(allMeshes);
+  if (hits.length > 0) {
+    const name = meshToName.get(hits[0].object);
+    if (name) highlight(name);
+  } else {
+    resetHighlight();
+  }
+});
+
+// -- Animation Loop --
+function animate() {
+  requestAnimationFrame(animate);
+  controls.update();
+  renderer.render(scene, camera);
+  labelRenderer.render(scene, camera);
+}
+animate();
+
+// -- Resize --
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  labelRenderer.setSize(window.innerWidth, window.innerHeight);
+});
+</script>
+</body>
+</html>

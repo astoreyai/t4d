@@ -1,0 +1,46 @@
+%%{init: {'theme': 'dark', 'themeVariables': { 'primaryColor': '#6366f1', 'primaryTextColor': '#e8e8f0', 'primaryBorderColor': '#818cf8', 'lineColor': '#a0a0b0', 'secondaryColor': '#1e1e2a', 'tertiaryColor': '#2a2a3a'}}}%%
+flowchart TB
+    subgraph L1["API SUBSYSTEM"]
+        direction TB
+
+        subgraph REST["FastAPI REST API"]
+            REST_ROU[Route Handlers<br/>/api/memory/*<br/>/api/consolidation/*<br/>/api/neuromod/*]
+            REST_MID[Middleware<br/>CORS, Auth, Trace]
+            REST_DOC[OpenAPI Docs<br/>/docs, /redoc]
+            REST_WS[WebSocket<br/>Real-time updates]
+        end
+
+        subgraph SDK["Python SDK"]
+            SDK_CLI[WWClient<br/>High-level API]
+            SDK_MEM[Memory Mixins<br/>Type-specific]
+            SDK_ASY[Async Support<br/>asyncio native]
+            SDK_RET[Retry Logic<br/>Exponential backoff]
+        end
+
+        subgraph VIZ["Visualization API"]
+            VIZ_BIO[Bio Endpoints<br/>/viz/bio/*]
+            VIZ_MET[Metrics API<br/>Prometheus format]
+            VIZ_DASH[Dashboard Data<br/>Aggregated views]
+        end
+
+        subgraph AUTH["Authentication"]
+            AUTH_KEY[API Key<br/>Bearer token]
+            AUTH_SESS[Session Token<br/>JWT optional]
+            AUTH_RATE[Rate Limiting<br/>Per-client]
+        end
+    end
+
+    SDK --> REST
+    REST --> VIZ
+    AUTH --> REST
+    AUTH --> SDK
+
+    classDef rest fill:#22c55e,stroke:#4ade80,color:#fff
+    classDef sdk fill:#f97316,stroke:#fb923c,color:#fff
+    classDef viz fill:#3b82f6,stroke:#60a5fa,color:#fff
+    classDef auth fill:#ef4444,stroke:#f87171,color:#fff
+
+    class REST_ROU,REST_MID,REST_DOC,REST_WS rest
+    class SDK_CLI,SDK_MEM,SDK_ASY,SDK_RET sdk
+    class VIZ_BIO,VIZ_MET,VIZ_DASH viz
+    class AUTH_KEY,AUTH_SESS,AUTH_RATE auth

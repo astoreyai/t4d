@@ -1,4 +1,7 @@
 flowchart TD
+    %% Note on localist vs distributed approach
+    Note1[NOTE: Current implementation uses causal edges between memory IDs symbolic.<br/>Target: latent causal models in embedding space Schölkopf 2021.<br/>Migration planned from localist symbolic to distributed representation.]:::partial
+
     %% Observation input
     Context[Context Memory IDs<br/>Recent Retrievals] --> Observe[Observe Event]
     Outcome[Outcome Memory ID<br/>+ Outcome Value] --> Observe
@@ -72,3 +75,5 @@ flowchart TD
     style Graph fill:#fff4e1
     style Attribution fill:#e1ffe1
     style Counter fill:#ffe1e1
+
+    classDef partial fill:#fff3e0,stroke:#ffa726,stroke-dasharray: 5 5

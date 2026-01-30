@@ -1,0 +1,95 @@
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#4a90d9', 'secondaryColor': '#f0f4f8', 'tertiaryColor': '#e8f4e8'}}}%%
+flowchart TB
+    subgraph Client["Client Layer"]
+        CLI[Claude Code CLI]
+        SDK[Python SDK]
+        API[REST API]
+    end
+
+    subgraph MCP["MCP Gateway Layer"]
+        Gateway[MCP Gateway]
+        Auth[Authentication]
+        RateLimit[Rate Limiter]
+        Validation[Input Validation]
+
+        subgraph Tools["MCP Tools"]
+            EpisodicTools[Episodic Tools]
+            SemanticTools[Semantic Tools]
+            ProceduralTools[Procedural Tools]
+            BioTools[Bioinspired Tools]
+            SystemTools[System Tools]
+        end
+    end
+
+    subgraph Core["Core Memory System"]
+        subgraph Bioinspired["Bioinspired Components"]
+            SparseEncoder[Sparse Encoder<br/>k-WTA 2%]
+            DendriticNeuron[Dendritic Neuron<br/>Two-Compartment]
+            AttractorNet[Attractor Network<br/>Hopfield]
+            EligibilityTrace[Eligibility Traces<br/>TD-lambda]
+            CEREBELLUM["Cerebellum (PLANNED)"]:::planned
+        end
+
+        subgraph MemorySystems["Memory Stores"]
+            FastEpisodic[Fast Episodic Store<br/>10K One-Shot]
+            EpisodicStore[Episodic Memory<br/>Event Storage]
+            SemanticStore[Semantic Memory<br/>Entity/Skill KB]
+            ProceduralStore[Procedural Memory<br/>Skill Patterns]
+            WorkingMem[Working Memory<br/>Active Context]
+        end
+
+        subgraph Learning["Learning Systems"]
+            NeuromodGate[Neuromodulator Gate<br/>DA/NE/ACh]
+            ConsolidationSvc[Consolidation Service]
+            SleepCycle[Sleep Consolidation]
+        end
+    end
+
+    subgraph Storage["Persistent Storage"]
+        Qdrant[(Qdrant<br/>Vector Store)]
+        Neo4j[(Neo4j<br/>Graph Store)]
+        Postgres[(PostgreSQL<br/>Relational)]
+    end
+
+    subgraph Observability["Observability"]
+        Metrics[Prometheus Metrics]
+        Tracing[OpenTelemetry]
+        Logging[Structured Logging]
+        Health[Health Checks]
+    end
+
+    CLI --> Gateway
+    SDK --> Gateway
+    API --> Gateway
+
+    Gateway --> Auth
+    Gateway --> RateLimit
+    Gateway --> Validation
+    Validation --> Tools
+
+    Tools --> Core
+    BioTools --> Bioinspired
+    EpisodicTools --> MemorySystems
+    SemanticTools --> MemorySystems
+    ProceduralTools --> MemorySystems
+
+    SparseEncoder --> FastEpisodic
+    DendriticNeuron --> MemorySystems
+    AttractorNet --> EpisodicStore
+    EligibilityTrace --> Learning
+
+    FastEpisodic --> ConsolidationSvc
+    ConsolidationSvc --> EpisodicStore
+    EpisodicStore --> SleepCycle
+    SleepCycle --> SemanticStore
+
+    MemorySystems --> Storage
+    EpisodicStore --> Qdrant
+    SemanticStore --> Neo4j
+    FastEpisodic --> Qdrant
+
+    Core --> Observability
+
+    CEREBELLUM -.->|"planned"| ProceduralStore
+
+    classDef planned fill:#e0e0e0,stroke:#999,stroke-dasharray: 5 5

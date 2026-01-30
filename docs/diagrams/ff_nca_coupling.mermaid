@@ -3,9 +3,14 @@ flowchart TB
     subgraph FF["Forward-Forward Algorithm"]
         direction TB
         FF_POS["Positive Phase<br/>(Real Data)"]
-        FF_NEG["Negative Phase<br/>(Synthetic Data)"]
-        FF_GOOD["Goodness Function<br/>G = sum(h^2)"]
-        FF_THR["Threshold theta"]
+        FF_NEG["Negative Phase<br/>(Negative via label corruption or VAE)"]
+
+        L1_G["Layer 1: G₁ = Σ(h₁²), θ₁"]
+        L2_G["Layer 2: G₂ = Σ(h₂²), θ₂"]
+        LN_G["Layer N: Gₙ = Σ(hₙ²), θₙ"]
+
+        FF_NOTE["Note: Each layer independently classifies input as real (G>θ) or negative (G<θ).<br/>No backward pass. No global loss. (Hinton 2022)"]
+        FF_NEURO["Neurogenesis: add_neuron() / remove_neuron()<br/>Dynamic layer growth (Phase 4A)"]
     end
 
     subgraph NCA["NCA Energy Landscape"]
@@ -19,9 +24,10 @@ flowchart TB
     subgraph Coupling["FF-NCA Coupling"]
         direction TB
         ALIGN["Alignment:<br/>Goodness = -Energy"]
-        G2E["Goodness -> Basin Depth"]
-        TH2B["Threshold -> Barrier Height"]
+        G2E["Per-Layer Goodness -> Basin Depth"]
+        TH2B["Per-Layer Threshold -> Barrier Height"]
         PH2D["Phase -> Energy Gradient"]
+        ENERGY_MODU["NCA energy basin depth modulates per-layer θ"]
     end
 
     subgraph NT["Neuromodulator Effects"]
@@ -36,32 +42,52 @@ flowchart TB
         NCA2FF["NCA -> FF:<br/>Basin -> Layer Activation"]
     end
 
-    %% FF internal
-    FF_POS -->|"Maximize"| FF_GOOD
-    FF_NEG -->|"Minimize"| FF_GOOD
-    FF_GOOD --> FF_THR
+    %% FF internal - per-layer processing
+    FF_POS -->|"Maximize"| L1_G
+    FF_POS -->|"Maximize"| L2_G
+    FF_POS -->|"Maximize"| LN_G
+
+    FF_NEG -->|"Minimize"| L1_G
+    FF_NEG -->|"Minimize"| L2_G
+    FF_NEG -->|"Minimize"| LN_G
+
+    L1_G --> L2_G --> LN_G
 
     %% NCA internal
     NCA_EN --> NCA_BASIN
     NCA_EN --> NCA_BARR
     NCA_BASIN --> NCA_MIN
 
-    %% Coupling relationships
-    FF_GOOD <-->|"Inverse"| NCA_EN
-    FF_THR <-->|"Maps to"| NCA_BARR
+    %% Coupling relationships - per-layer
+    L1_G <-->|"Inverse"| NCA_EN
+    L2_G <-->|"Inverse"| NCA_EN
+    LN_G <-->|"Inverse"| NCA_EN
+
+    L1_G <-->|"Maps to"| NCA_BARR
+    L2_G <-->|"Maps to"| NCA_BARR
+    LN_G <-->|"Maps to"| NCA_BARR
+
     FF_POS -.->|"Descend"| NCA_MIN
     FF_NEG -.->|"Ascend"| NCA_BARR
 
-    %% NT modulation
-    DA --> FF_GOOD
+    %% NT modulation - per-layer
+    DA --> L1_G
+    DA --> L2_G
+    DA --> LN_G
     ACH --> FF_POS
     ACH --> FF_NEG
-    NE --> FF_THR
+    NE --> L1_G
+    NE --> L2_G
+    NE --> LN_G
     SHT --> ALIGN
 
-    %% Feedback loop
-    FF_GOOD --> FF2NCA --> NCA_EN
+    %% Feedback loop - per-layer
+    L1_G --> FF2NCA
+    L2_G --> FF2NCA
+    LN_G --> FF2NCA
+    FF2NCA --> NCA_EN
     NCA_BASIN --> NCA2FF --> FF_POS
+    NCA_BASIN --> ENERGY_MODU
 
     style FF_POS fill:#c8e6c9,stroke:#388e3c
     style FF_NEG fill:#ffcdd2,stroke:#c62828

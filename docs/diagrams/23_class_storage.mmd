@@ -1,0 +1,100 @@
+%%{init: {'theme': 'dark', 'themeVariables': { 'primaryColor': '#6366f1', 'primaryTextColor': '#e8e8f0', 'primaryBorderColor': '#818cf8', 'lineColor': '#a0a0b0', 'secondaryColor': '#1e1e2a', 'tertiaryColor': '#2a2a3a'}}}%%
+classDiagram
+    class StorageBackend {
+        <<abstract>>
+        +store(data) str
+        +retrieve(id) Optional~Data~
+        +update(id, data) bool
+        +delete(id) bool
+        +health_check() bool
+    }
+
+    class Neo4jStore {
+        -driver: AsyncDriver
+        -session_pool: Pool
+        +create_node(labels, properties) str
+        +create_relationship(src, dst, type, props)
+        +query(cypher, params) List
+        +batch_create(nodes) List~str~
+        +get_neighbors(node_id, depth) List
+    }
+
+    class QdrantStore {
+        -client: AsyncQdrantClient
+        -collections: Dict
+        +upsert_vector(id, vector, payload)
+        +search(vector, limit, filter) List
+        +batch_upsert(points) bool
+        +delete_collection(name)
+        +get_collection_info(name) Dict
+    }
+
+    class SagaCoordinator {
+        -neo4j: Neo4jStore
+        -qdrant: QdrantStore
+        -pending: Dict
+        +begin_transaction() str
+        +prepare(txn_id, operations) bool
+        +commit(txn_id) bool
+        +rollback(txn_id)
+        +get_status(txn_id) TxnStatus
+    }
+
+    class CircuitBreaker {
+        -state: CBState
+        -failure_count: int
+        -failure_threshold: int
+        -reset_timeout: float
+        -success_threshold: int
+        +call(func, args) Result
+        +record_success()
+        +record_failure()
+        +is_open() bool
+        +try_reset()
+    }
+
+    class FallbackCache {
+        -lru_cache: LRUCache
+        -pending_queue: Queue
+        -max_size: int
+        +put(key, value)
+        +get(key) Optional~Value~
+        +queue_for_replay(operation)
+        +drain_to_backend(backend)
+        +get_stats() Dict
+    }
+
+    class EmbeddingProvider {
+        <<abstract>>
+        +embed(text) ndarray
+        +batch_embed(texts) List~ndarray~
+        +get_dimension() int
+    }
+
+    class BGEEmbedder {
+        -model: FlagModel
+        -device: str
+        -cache: EmbeddingCache
+        +embed(text) ndarray
+        +batch_embed(texts) List~ndarray~
+    }
+
+    class EmbeddingCache {
+        -l1_cache: LRUCache
+        -l2_cache: SQLiteCache
+        +get(text_hash) Optional~ndarray~
+        +put(text_hash, vector)
+        +get_hit_rate() float
+    }
+
+    StorageBackend <|-- Neo4jStore
+    StorageBackend <|-- QdrantStore
+
+    SagaCoordinator o-- Neo4jStore
+    SagaCoordinator o-- QdrantStore
+
+    CircuitBreaker ..> StorageBackend
+    FallbackCache ..> StorageBackend
+
+    EmbeddingProvider <|-- BGEEmbedder
+    BGEEmbedder *-- EmbeddingCache

@@ -33,8 +33,18 @@ flowchart TD
     LatentZ -.-> Generate[Generate Mode<br/>Sample from Prior<br/>N0,1]
     Generate -.-> Decoder
 
+    %% Integration with other systems
+    Reconstruction --> SleepCons[Sleep Consolidation<br/>Generative Replay]
+    Reconstruction --> FFNeg[Forward-Forward<br/>Negative Phase Data]
+    Reconstruction --> MemLife[Memory Lifecycle<br/>Synthetic Memories]
+
+    Note over SleepCons,MemLife: VAE serves CLS generative replay and FF negative data
+
     style Input fill:#e1f5ff
     style LatentZ fill:#fff4e1
     style Reconstruction fill:#e1ffe1
     style Loss fill:#ffe1e1
     style Generate fill:#f0e1ff
+    style SleepCons fill:#c8e6c9
+    style FFNeg fill:#ffecb3
+    style MemLife fill:#e1bee7

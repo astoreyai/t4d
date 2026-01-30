@@ -1,0 +1,84 @@
+%%{init: {'theme': 'dark', 'themeVariables': { 'primaryColor': '#6366f1', 'primaryTextColor': '#e8e8f0', 'primaryBorderColor': '#818cf8', 'lineColor': '#a0a0b0', 'secondaryColor': '#1e1e2a', 'tertiaryColor': '#2a2a3a'}}}%%
+classDiagram
+    class LearnedMemoryGate {
+        -bayesian_lr: BayesianLogisticRegression
+        -thompson_sampler: ThompsonSampler
+        -feature_extractor: FeatureExtractor
+        -population_prior: PopulationPrior
+        -pending_decisions: Dict
+        +should_store(content, context) Tuple~bool, float~
+        +register_pending(memory_id, features)
+        +update_on_retrieval(memory_id, was_helpful)
+        +update_on_outcome(memory_id, outcome_value)
+        +get_exploitation_ratio() float
+    }
+
+    class BayesianLogisticRegression {
+        -mu: ndarray
+        -sigma: ndarray
+        -n_features: int
+        +predict_proba(features) float
+        +update(features, label, weight)
+        +sample_weights() ndarray
+        +get_uncertainty() float
+    }
+
+    class ThompsonSampler {
+        -alpha: float
+        -beta: float
+        +sample() float
+        +update(reward)
+        +get_mean() float
+    }
+
+    class EligibilityTrace {
+        <<abstract>>
+        -traces: Dict
+        -tau: float
+        +update(memory_id, activation)
+        +decay(dt)
+        +get_trace(memory_id) float
+        +assign_credit(reward) Dict
+    }
+
+    class StandardTrace {
+        -tau: float = 20.0
+        +update(memory_id, activation)
+        +decay(dt)
+    }
+
+    class LayeredTrace {
+        -fast_tau: float = 5.0
+        -slow_tau: float = 60.0
+        -fast_traces: Dict
+        -slow_traces: Dict
+        +update(memory_id, activation)
+        +decay(dt)
+        +get_combined_trace(memory_id) float
+    }
+
+    class HebbianLearner {
+        -learning_rate: float
+        -weights: Dict
+        -weight_bounds: Tuple
+        +strengthen(src, dst, modulation)
+        +weaken(src, dst, factor)
+        +get_weight(src, dst) float
+        +decay_unused(threshold)
+        +normalize_weights()
+    }
+
+    class LearnedRetrievalScorer {
+        -model: MLP
+        -optimizer: Adam
+        -feature_dim: int
+        +score(query_features, candidate_features) float
+        +train_batch(examples, labels)
+        +update_online(example, label)
+    }
+
+    EligibilityTrace <|-- StandardTrace
+    EligibilityTrace <|-- LayeredTrace
+
+    LearnedMemoryGate *-- BayesianLogisticRegression
+    LearnedMemoryGate *-- ThompsonSampler

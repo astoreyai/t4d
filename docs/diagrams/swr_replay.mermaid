@@ -4,6 +4,7 @@ flowchart TB
         NREM["NREM Sleep<br/>(Slow oscillations)"]
         SPINDLE["Sleep Spindles<br/>(12-15 Hz)"]
         SO["Slow Oscillation<br/>(0.5-1 Hz)"]
+        ACH_REM["ACh Peak (REM)<br/>Suppresses SWRs"]
     end
 
     subgraph HPC_SWR["Hippocampal SWR"]
@@ -12,7 +13,7 @@ flowchart TB
         RIPPLE["Ripple<br/>(150-250 Hz)"]
         CA1_FIRE["CA1 Firing<br/>(Compressed replay)"]
 
-        COMPRESS["Time Compression<br/>(20x faster)"]
+        COMPRESS["Time Compression<br/>(10x faster)"]
     end
 
     subgraph ReplayContent["Replay Content"]
@@ -20,6 +21,7 @@ flowchart TB
         REMOTE["Remote Memories<br/>(interleaved)"]
         FILTER["Memory Filter<br/>(exclude procedural)"]
         SEQUENCE["Sequential<br/>Replay"]
+        DIRECTION["Replay Direction<br/>90% reverse, 10% forward<br/>(Foster &amp; Wilson 2006)"]
     end
 
     subgraph ProceduralRoute["Procedural Memory Routing"]
@@ -30,6 +32,7 @@ flowchart TB
     subgraph Coordination["Thalamocortical Coordination"]
         direction TB
         THAL["Thalamus"]
+        TRN["Thalamic Reticular<br/>Nucleus"]
         NCX["Neocortex"]
 
         UP_STATE["Up State<br/>(depolarization)"]
@@ -53,6 +56,11 @@ flowchart TB
     NREM --> SO
     NREM --> SPINDLE
 
+    %% ACh modulation of SWR generation
+    ACH_REM -.->|"suppresses"| CA3_BURST
+
+    Note over ACH_REM: High ACh during REM suppresses SWRs; replay is NREM-specific (Hasselmo 1999)
+
     %% SWR generation
     SO -->|"triggers"| CA3_BURST
     CA3_BURST --> RIPPLE
@@ -63,7 +71,8 @@ flowchart TB
     RECENT --> FILTER
     REMOTE --> FILTER
     FILTER -->|"episodic + semantic only"| SEQUENCE
-    SEQUENCE --> CA3_BURST
+    SEQUENCE --> DIRECTION
+    DIRECTION --> CA3_BURST
 
     %% Procedural memory routing stub
     PROC_MEM -.->|"routed to striatal<br/>MSN pathway (stub)"| MSN_PATH
@@ -72,8 +81,12 @@ flowchart TB
     SO --> UP_STATE
     SO --> DOWN_STATE
     UP_STATE --> THAL
+    TRN -->|"GABA"| THAL
     THAL --> SPINDLE
     SPINDLE --> NCX
+
+    %% TRN note
+    Note over TRN: TRN inhibition generates spindles<br/>via rebound bursting (Steriade 1993)
 
     %% Plasticity
     CA1_FIRE --> SWR_LTP

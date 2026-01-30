@@ -1,0 +1,50 @@
+%%{init: {'theme': 'base'}}%%
+
+stateDiagram-v2
+    [*] --> Idle: System running
+
+    Idle --> Triggered: Timer (300s) OR<br/>Ops threshold (1000)
+
+    Triggered --> Collecting: Begin checkpoint
+
+    Collecting --> Serializing: Collect component states
+    note right of Collecting
+        Components:
+        - LearnedGate weights
+        - Scorer weights
+        - Buffer contents
+        - Neuromod state
+        - Eligibility traces
+    end note
+
+    Serializing --> Compressing: JSON serialize
+
+    Compressing --> Writing: gzip compress
+
+    Writing --> Verifying: Write to temp file
+    note right of Writing
+        Atomic write:
+        1. Write .tmp file
+        2. fsync()
+        3. Rename to final
+    end note
+
+    Verifying --> Committed: Verify SHA-256
+
+    Committed --> Cleanup: Log to WAL
+    note right of Committed
+        WAL entry:
+        CHECKPOINT_COMPLETE
+        with checkpoint LSN
+    end note
+
+    Cleanup --> Idle: Remove old checkpoints
+    note right of Cleanup
+        Keep only N most recent
+        (default: 5)
+    end note
+
+    Verifying --> Failed: Checksum mismatch
+    Failed --> Triggered: Retry
+
+    Writing --> Failed: Disk error

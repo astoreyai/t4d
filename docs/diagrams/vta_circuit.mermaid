@@ -1,10 +1,10 @@
 %%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#fff3e0'}}}%%
 flowchart TB
     subgraph Inputs["VTA Inputs"]
-        LH["Lateral Hypothalamus<br/>(Orexin)"]
-        LDT["LDT/PPTg<br/>(Cholinergic)"]
+        LH["Lateral Hypothalamus<br/>(Orexin)"]:::planned
+        LDT["LDT/PPTg<br/>(Cholinergic)"]:::planned
         PFC["Prefrontal Cortex<br/>(Goal context + Glu)"]
-        RMTg["RMTg<br/>(GABAergic brake)"]
+        RMTg["RMTg<br/>(GABAergic brake)"]:::planned
         RAPHE_IN["Raphe<br/>(5-HT inhibition)"]
     end
 
@@ -16,7 +16,7 @@ flowchart TB
 
         subgraph Firing["Firing Modes"]
             TONIC["Tonic<br/>(3-5 Hz)"]
-            PHASIC["Phasic<br/>(15-25 Hz burst)"]
+            PHASIC["Phasic Burst<br/>(15-30 Hz)"]
         end
     end
 
@@ -40,10 +40,10 @@ flowchart TB
     end
 
     %% Input connections
-    LH -->|"excites"| DA_NEURON
-    LDT -->|"modulates"| DA_NEURON
+    LH -.->|"excites"| DA_NEURON
+    LDT -.->|"modulates"| DA_NEURON
     PFC -->|"context + Glu<br/>(receive_pfc_modulation)"| DA_NEURON
-    RMTg -->|"inhibits"| DA_NEURON
+    RMTg -.->|"inhibits"| DA_NEURON
     RAPHE_IN -.->|"5-HT inhibition<br/>(auto set_raphe)"| DA_NEURON
 
     %% VTA internal
@@ -63,12 +63,17 @@ flowchart TB
     DA_NEURON --> HPC
     DA_NEURON --> AMY
 
+    %% Mesolimbic feedback loop (Watabe-Uchida 2012)
+    NAC -.->|"GABA feedback"| GABA_NEURON
+
     %% Effects
     NAC --> VIGOR
     DLPFC --> GOAL
     HPC --> LR_MOD
 
     %% Styling
+    classDef planned fill:#e0e0e0,stroke:#999,stroke-dasharray: 5 5
+
     style VTA fill:#fff3e0,stroke:#f57c00
     style RPE fill:#ffecb3,stroke:#ff8f00
     style DA_NEURON fill:#ffe0b2,stroke:#fb8c00

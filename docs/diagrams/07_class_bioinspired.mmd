@@ -1,0 +1,110 @@
+%%{init: {'theme': 'base'}}%%
+classDiagram
+    class SparseEncoder {
+        +int input_dim
+        +int hidden_dim
+        +float sparsity
+        +nn.Linear projection
+        +forward(x: Tensor) Tensor
+        +kwta(x: Tensor, k: int) Tensor
+        +get_active_indices(x: Tensor) List~int~
+    }
+
+    class AdaptiveSparseEncoder {
+        +float target_sparsity
+        +float adaptation_rate
+        +adapt_threshold(batch: Tensor)
+    }
+
+    class DendriticNeuron {
+        +int input_dim
+        +float tau_soma
+        +float tau_dendrite
+        +float coupling
+        +nn.Linear basal_weights
+        +nn.Linear apical_weights
+        +nn.Linear gate
+        +forward(basal: Tensor, apical: Tensor) Tensor
+        +compute_mismatch() Tensor
+    }
+
+    class DendriticProcessor {
+        +List~DendriticNeuron~ layers
+        +forward(x: Tensor, context: Tensor) Tensor
+    }
+
+    class AttractorNetwork {
+        +int dim
+        +int capacity
+        +Tensor weights
+        +store(pattern: Tensor)
+        +retrieve(cue: Tensor, steps: int) RetrievalResult
+        +get_energy(state: Tensor) float
+        +estimate_basin(pattern: Tensor) float
+    }
+
+    class ModernHopfieldNetwork {
+        +float beta
+        +retrieve(query: Tensor, keys: Tensor) Tensor
+    }
+
+    class EligibilityTrace {
+        +float decay
+        +float tau_trace
+        +float a_plus
+        +float a_minus
+        +float min_trace
+        +int max_traces
+        +Dict traces
+        +RLock _lock
+        +update(memory_id: str, activity: float)
+        +step(dt: float)
+        +assign_credit(reward: float) Dict
+        +get_trace(memory_id: str) float
+        +get_stats() Dict
+    }
+
+    class LayeredEligibilityTrace {
+        +float fast_tau
+        +float slow_tau
+        +float fast_weight
+        +Dict fast_traces
+        +Dict slow_traces
+        +update(memory_id: str, activity: float)
+        +step(dt: float)
+        +assign_credit(reward: float) Dict
+    }
+
+    class TraceEntry {
+        +str memory_id
+        +float value
+        +float last_update
+        +int total_activations
+    }
+
+    class FastEpisodicStore {
+        +int capacity
+        +float consolidation_threshold
+        +List~Episode~ episodes
+        +Tensor encodings
+        +write(episode: Episode, encoding: Tensor, neuromod: Dict) Dict
+        +read(query: Tensor, top_k: int) List
+        +get_consolidation_candidates() List
+        +evict_lowest_salience()
+    }
+
+    class Episode {
+        +UUID id
+        +str session_id
+        +str content
+        +datetime timestamp
+        +float emotional_valence
+        +float importance
+    }
+
+    SparseEncoder <|-- AdaptiveSparseEncoder
+    EligibilityTrace <|-- LayeredEligibilityTrace
+    EligibilityTrace *-- TraceEntry
+    AttractorNetwork <|-- ModernHopfieldNetwork
+    FastEpisodicStore *-- Episode
+    DendriticProcessor *-- DendriticNeuron

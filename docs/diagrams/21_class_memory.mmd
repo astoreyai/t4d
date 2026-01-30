@@ -1,0 +1,85 @@
+%%{init: {'theme': 'dark', 'themeVariables': { 'primaryColor': '#6366f1', 'primaryTextColor': '#e8e8f0', 'primaryBorderColor': '#818cf8', 'lineColor': '#a0a0b0', 'secondaryColor': '#1e1e2a', 'tertiaryColor': '#2a2a3a'}}}%%
+classDiagram
+    class MemorySubsystem {
+        <<abstract>>
+        +store(content, metadata) str
+        +retrieve(query, limit) List~Memory~
+        +update(memory_id, updates) bool
+        +delete(memory_id) bool
+        +get_stats() Dict
+    }
+
+    class EpisodicMemory {
+        -fast_store: FastEpisodicStore
+        -temporal_index: TemporalIndex
+        -retrieval_scorer: RetrievalScorer
+        +store_episode(content, context) str
+        +retrieve_episodes(query, time_range) List
+        +mark_consolidated(memory_id)
+        +get_consolidation_candidates() List
+    }
+
+    class SemanticMemory {
+        -knowledge_graph: Neo4jStore
+        -vector_store: QdrantStore
+        -hebbian_learner: HebbianLearner
+        +store_entity(content, entity_type) str
+        +retrieve_entities(query, filters) List
+        +strengthen_link(src, dst, weight)
+        +get_related(entity_id, depth) List
+    }
+
+    class ProceduralMemory {
+        -skill_store: SkillStore
+        -trajectory_parser: TrajectoryParser
+        -success_tracker: SuccessTracker
+        +build_skill(name, episodes) str
+        +retrieve_skill(query) Skill
+        +update_skill(skill_id, new_episodes)
+        +get_success_rate(skill_id) float
+    }
+
+    class WorkingMemory {
+        -buffer: CircularBuffer
+        -priority_queue: PriorityQueue
+        -attention_window: AttentionWindow
+        +push(item, priority) bool
+        +pop() Optional~Item~
+        +peek(n) List~Item~
+        +clear()
+        +get_capacity() Tuple
+    }
+
+    class FastEpisodicStore {
+        -episodes: Dict
+        -capacity: int
+        -salience_heap: Heap
+        +write(content, salience) str
+        +read(episode_id) Episode
+        +evict_lowest()
+        +get_high_salience(threshold) List
+    }
+
+    class TemporalIndex {
+        -ref_times: SortedDict
+        -sys_times: SortedDict
+        +index(memory_id, t_ref, t_sys)
+        +query_range(start, end) List
+        +get_recent(n) List
+    }
+
+    class RetrievalScorer {
+        -weights: Dict
+        +score(query, candidate) float
+        +batch_score(query, candidates) List
+        +update_weights(feedback)
+    }
+
+    MemorySubsystem <|-- EpisodicMemory
+    MemorySubsystem <|-- SemanticMemory
+    MemorySubsystem <|-- ProceduralMemory
+    MemorySubsystem <|-- WorkingMemory
+
+    EpisodicMemory *-- FastEpisodicStore
+    EpisodicMemory *-- TemporalIndex
+    EpisodicMemory *-- RetrievalScorer

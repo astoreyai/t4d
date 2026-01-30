@@ -1,0 +1,92 @@
+%%{init: {'theme': 'dark', 'themeVariables': { 'primaryColor': '#6366f1', 'primaryTextColor': '#e8e8f0', 'primaryBorderColor': '#818cf8', 'lineColor': '#a0a0b0', 'secondaryColor': '#1e1e2a', 'tertiaryColor': '#2a2a3a'}}}%%
+sequenceDiagram
+    autonumber
+    participant C as Client
+    participant MCP as MCP Gateway
+    participant O as Orchestra
+    participant E as Embedder
+    participant Q as Qdrant
+    participant N as Neo4j
+    participant R as Retrieval Scorer
+    participant H as Hebbian Learner
+    participant G as Memory Gate
+    participant T as Eligibility Trace
+
+    C->>+MCP: retrieve_memories(query, limit=10)
+    MCP->>MCP: validate_input()
+
+    MCP->>+O: get_state()
+    O-->>-MCP: NeuroState{ACh=0.3 RETRIEVAL}
+
+    MCP->>+E: embed(query)
+    E-->>-MCP: query_vector[1024]
+
+    MCP->>MCP: CA3_pattern_completion(query_vector)
+    Note over MCP: Modern Hopfield: softmax(beta * X^T * query) * X
+    MCP->>MCP: expand_via_autoassociation()
+
+    MCP->>+Q: search(query_vector, limit=50)
+    Q->>Q: HNSW_search()
+    Q-->>-MCP: candidates[50]
+
+    MCP->>+N: get_graph_context(candidate_ids)
+    N->>N: MATCH paths
+    N-->>-MCP: relationships[]
+
+    rect rgb(40, 50, 60)
+        Note over MCP,R: Stage 1: Relevance Scoring (LearnedRelevanceScorer)
+        loop For each candidate
+            MCP->>+R: relevance_score(query, candidate, context)
+            R->>R: compute_semantic_sim()
+            R->>R: compute_recency()
+            R->>R: compute_importance()
+            R->>R: weighted_combine()
+            R-->>-MCP: relevance_score
+        end
+    end
+
+    rect rgb(50, 40, 60)
+        Note over MCP,R: Stage 2: Retrieval Ranking (LearnedRetrievalScorer / ListMLE)
+        MCP->>+R: rerank(candidates, relevance_scores)
+        R->>R: listmle_ranking()
+        R-->>-MCP: ranked_candidates
+    end
+
+    MCP->>MCP: top_k(limit=10)
+
+    par Update Hebbian weights
+        loop For each result pair
+            MCP->>+H: strengthen(memory_i, memory_j)
+            H->>H: dw = eta * DA * co_retrieval
+            H-->>-MCP: updated
+        end
+    and Update eligibility traces
+        loop For each result
+            MCP->>+T: update(memory_id, activation)
+            T-->>-MCP: trace_updated
+        end
+    and Update gate feedback
+        loop For each result
+            MCP->>+G: update_on_retrieval(memory_id, was_helpful=true)
+            G->>G: bayesian_update()
+            G-->>-MCP: updated
+        end
+    end
+
+    MCP-->>C: {memories: [...], scores: [...]}
+
+    rect rgb(60, 40, 30)
+        Note over MCP,G: Reconsolidation (retrieved memories become labile)
+        MCP->>MCP: enter_lability_window(retrieved_ids)
+        MCP->>MCP: protein_synthesis_dependent_restabilization()
+        Note over MCP: Memory may be updated, strengthened, or weakened
+    end
+
+    rect rgb(50, 30, 60)
+        Note over MCP,O: Retrieval→Neuromod Feedback
+        MCP->>O: RPE from retrieval outcome
+        O->>O: VTA: update DA (surprising retrieval)
+        O->>O: LC: update NE (retrieval failure)
+    end
+
+    Note over H,G: Retrieval triggers learning updates + reconsolidation

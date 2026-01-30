@@ -68,11 +68,28 @@ flowchart TB
     OC1 --> LEN
     OC1 --> DIR
 
+    %% Reconstruction Decoder (regularization)
+    subgraph Decoder["Reconstruction Decoder"]
+        DEC["Decoder Network<br/>(FC layers)"]:::planned
+        RECON["Reconstructed Input<br/>(1024-dim)"]:::planned
+        RECON_LOSS["Reconstruction Loss<br/>(MSE)"]:::planned
+    end
+
+    OC1 & OC2 & OC16 -.-> DEC
+    DEC -.-> RECON
+    RECON -.-> RECON_LOSS
+    IN -.-> RECON_LOSS
+
+    Note over DEC,RECON_LOSS: Decoder regularizes capsule representations (Sabour 2017)
+    Note over AGR,UPD: Emergent pose dimension discovery<br/>via routing agreement (pose_learner.py:260-409)
+
     %% NT Modulation
     DA_T -.-> C
     NE_S -.-> V
     ACH_M -.-> S
     SHT_C -.-> AGR
+
+    classDef planned fill:#e0e0e0,stroke:#999,stroke-dasharray: 5 5
 
     style PC1 fill:#e8f4ea,stroke:#2d6a4f
     style OC1 fill:#dbeafe,stroke:#2563eb

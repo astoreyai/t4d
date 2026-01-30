@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>T4DM System Network Map</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            overflow: hidden;
+        }
+        #container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+        #graph {
+            width: 100%;
+            height: 100%;
+        }
+        #controls {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 12px;
+            max-width: 300px;
+            z-index: 100;
+        }
+        #controls h1 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: #00d9ff;
+        }
+        #controls label {
+            display: block;
+            margin: 10px 0 5px;
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+        #controls select, #controls input {
+            width: 100%;
+            padding: 8px;
+            border: none;
+            border-radius: 6px;
+            background: #2a2a4a;
+            color: #fff;
+            font-size: 0.9rem;
+        }
+        #search {
+            margin-bottom: 15px;
+        }
+        #legend {
+            margin-top: 20px;
+            font-size: 0.8rem;
+        }
+        #legend .item {
+            display: flex;
+            align-items: center;
+            margin: 5px 0;
+        }
+        #legend .color {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        #tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+            max-width: 350px;
+            z-index: 200;
+        }
+        #tooltip h3 {
+            color: #00d9ff;
+            margin-bottom: 8px;
+        }
+        #tooltip .stat {
+            margin: 4px 0;
+            color: #ccc;
+        }
+        #tooltip .stat span {
+            color: #fff;
+            font-weight: bold;
+        }
+        #stats {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+        }
+        #stats .stat-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 5px 0;
+        }
+        #stats .stat-value {
+            color: #00d9ff;
+            font-weight: bold;
+        }
+        .node {
+            cursor: pointer;
+        }
+        .node text {
+            font-size: 11px;
+            fill: #fff;
+            pointer-events: none;
+        }
+        .link {
+            stroke-opacity: 0.6;
+        }
+        .link.highlighted {
+            stroke-opacity: 1;
+            stroke-width: 3px !important;
+        }
+        .node.dimmed circle {
+            opacity: 0.2;
+        }
+        .node.dimmed text {
+            opacity: 0.2;
+        }
+        .link.dimmed {
+            stroke-opacity: 0.05;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <svg id="graph"></svg>
+
+        <div id="controls">
+            <h1>T4DM Network</h1>
+            <input type="text" id="search" placeholder="Search modules...">
+
+            <label>Filter by Category</label>
+            <select id="categoryFilter">
+                <option value="all">All Categories</option>
+                <option value="core">Core Systems</option>
+                <option value="memory">Memory</option>
+                <option value="neural">Neural/NCA</option>
+                <option value="learning">Learning</option>
+                <option value="storage">Storage</option>
+                <option value="interface">Interfaces</option>
+                <option value="infrastructure">Infrastructure</option>
+            </select>
+
+            <label>Node Size</label>
+            <select id="sizeMetric">
+                <option value="centrality">Centrality Score</option>
+                <option value="files">File Count</option>
+                <option value="lines">Line Count</option>
+            </select>
+
+            <div id="legend">
+                <div class="item"><div class="color" style="background: #ff9ff3"></div> Core Hub</div>
+                <div class="item"><div class="color" style="background: #54a0ff"></div> Memory</div>
+                <div class="item"><div class="color" style="background: #ff6b6b"></div> Neural/NCA</div>
+                <div class="item"><div class="color" style="background: #5f27cd"></div> Learning</div>
+                <div class="item"><div class="color" style="background: #10ac84"></div> Storage</div>
+                <div class="item"><div class="color" style="background: #ffeaa7"></div> Interfaces</div>
+                <div class="item"><div class="color" style="background: #90a4ae"></div> Infrastructure</div>
+            </div>
+        </div>
+
+        <div id="stats">
+            <div class="stat-row"><span>Modules:</span><span class="stat-value">41</span></div>
+            <div class="stat-row"><span>Dependencies:</span><span class="stat-value">72</span></div>
+            <div class="stat-row"><span>Files:</span><span class="stat-value">206</span></div>
+            <div class="stat-row"><span>Lines:</span><span class="stat-value">~50K</span></div>
+        </div>
+
+        <div id="tooltip"></div>
+    </div>
+
+    <script>
+        // Module data - 41 components
+        const nodes = [
+            // Core (3)
+            { id: "core", name: "core", category: "core", files: 13, lines: 2500, centrality: 16, desc: "Configuration, types, validation, service registry" },
+            { id: "embedding", name: "embedding", category: "core", files: 9, lines: 2200, centrality: 9, desc: "BGE-M3 embeddings, sparse encoding" },
+            { id: "encoding", name: "encoding", category: "core", files: 5, lines: 900, centrality: 3, desc: "Time2Vec temporal encoding" },
+
+            // Memory (4)
+            { id: "memory", name: "memory", category: "memory", files: 13, lines: 10870, centrality: 11, desc: "Tripartite memory: episodic, semantic, procedural" },
+            { id: "consolidation", name: "consolidation", category: "memory", files: 6, lines: 4500, centrality: 10, desc: "Sleep phases: NREM, REM, PRUNE" },
+            { id: "dreaming", name: "dreaming", category: "memory", files: 4, lines: 1200, centrality: 1, desc: "Dream trajectory generation" },
+            { id: "prediction", name: "prediction", category: "memory", files: 6, lines: 1200, centrality: 3, desc: "JEPA-style prediction module" },
+
+            // Learning (4)
+            { id: "learning", name: "learning", category: "learning", files: 24, lines: 8500, centrality: 12, desc: "Three-factor learning, neuromodulators, STDP" },
+            { id: "nca", name: "nca", category: "learning", files: 30, lines: 8500, centrality: 5, desc: "Neural Cognitive Architecture: 6-NT PDE system" },
+            { id: "bridges", name: "bridges", category: "learning", files: 8, lines: 2000, centrality: 3, desc: "Neo4j + Qdrant bridge connectors" },
+            { id: "temporal", name: "temporal", category: "learning", files: 5, lines: 1000, centrality: 2, desc: "Temporal processing and STDP dynamics" },
+
+            // Storage (3)
+            { id: "storage", name: "storage", category: "storage", files: 6, lines: 3500, centrality: 8, desc: "Neo4j + Qdrant with saga pattern" },
+            { id: "persistence", name: "persistence", category: "storage", files: 6, lines: 4500, centrality: 4, desc: "WAL, checkpoints, recovery, shutdown" },
+            { id: "extraction", name: "extraction", category: "storage", files: 2, lines: 500, centrality: 2, desc: "Entity extraction from episodes" },
+
+            // Interface (6)
+            { id: "api", name: "api", category: "interface", files: 13, lines: 5500, centrality: 6, desc: "REST API with 40+ endpoints, WebSocket" },
+            { id: "cli", name: "cli", category: "interface", files: 2, lines: 400, centrality: 2, desc: "Command-line interface" },
+            { id: "mcp", name: "mcp", category: "interface", files: 4, lines: 800, centrality: 2, desc: "Model Context Protocol server" },
+            { id: "sdk", name: "sdk", category: "interface", files: 3, lines: 600, centrality: 1, desc: "Python SDK for integration" },
+            { id: "interfaces", name: "interfaces", category: "interface", files: 8, lines: 2000, centrality: 4, desc: "UI components and utilities" },
+            { id: "hooks", name: "hooks", category: "interface", files: 3, lines: 500, centrality: 1, desc: "Lifecycle hooks and event handlers" },
+
+            // Support (4)
+            { id: "observability", name: "observability", category: "storage", files: 6, lines: 1800, centrality: 6, desc: "OpenTelemetry, metrics, audit logging" },
+            { id: "visualization", name: "visualization", category: "interface", files: 20, lines: 5000, centrality: 3, desc: "3D graph, neural dynamics display" },
+            { id: "integration", name: "integration", category: "interface", files: 4, lines: 800, centrality: 2, desc: "External system integration" },
+            { id: "integrations", name: "integrations", category: "interface", files: 6, lines: 1200, centrality: 3, desc: "Third-party service connectors" },
+
+            // Infrastructure (10)
+            { id: "tests", name: "tests", category: "infrastructure", files: 50, lines: 12000, centrality: 7, desc: "8,905 tests: unit, integration, biology" },
+            { id: "docs", name: "docs", category: "infrastructure", files: 30, lines: 5000, centrality: 0, desc: "MkDocs documentation, architecture diagrams" },
+            { id: "scripts", name: "scripts", category: "infrastructure", files: 10, lines: 1500, centrality: 3, desc: "Build, deploy, maintenance scripts" },
+            { id: "examples", name: "examples", category: "infrastructure", files: 8, lines: 1200, centrality: 3, desc: "Usage examples and tutorials" },
+            { id: "config", name: "config", category: "infrastructure", files: 6, lines: 800, centrality: 3, desc: "Configuration files and templates" },
+            { id: "deploy", name: "deploy", category: "infrastructure", files: 5, lines: 600, centrality: 2, desc: "Docker, Kubernetes deployment" },
+            { id: "migrations", name: "migrations", category: "infrastructure", files: 8, lines: 1000, centrality: 2, desc: "Database schema migrations" },
+            { id: "frontend", name: "frontend", category: "infrastructure", files: 15, lines: 4000, centrality: 3, desc: "Web frontend for memory visualization" },
+            { id: "agents", name: "agents", category: "infrastructure", files: 6, lines: 1000, centrality: 3, desc: "AI agent configurations" },
+            { id: "skills", name: "skills", category: "infrastructure", files: 12, lines: 2000, centrality: 3, desc: "domain, knowledge, memory, orchestration, workflow" },
+        ];
+
+        // Dependencies - 72 edges
+        const links = [
+            // Core dependencies
+            { source: "api", target: "core", type: "depends" },
+            { source: "cli", target: "core", type: "depends" },
+            { source: "memory", target: "core", type: "depends" },
+            { source: "learning", target: "core", type: "depends" },
+            { source: "storage", target: "core", type: "depends" },
+            { source: "embedding", target: "core", type: "depends" },
+
+            // Core to encoding/embedding
+            { source: "core", target: "encoding", type: "uses" },
+            { source: "core", target: "embedding", type: "uses" },
+
+            // Memory internal
+            { source: "memory", target: "consolidation", type: "uses" },
+            { source: "memory", target: "storage", type: "uses" },
+            { source: "memory", target: "encoding", type: "uses" },
+            { source: "memory", target: "embedding", type: "uses" },
+            { source: "consolidation", target: "dreaming", type: "uses" },
+            { source: "consolidation", target: "learning", type: "uses" },
+            { source: "consolidation", target: "storage", type: "uses" },
+            { source: "consolidation", target: "embedding", type: "uses" },
+            { source: "consolidation", target: "extraction", type: "uses" },
+
+            // Learning
+            { source: "memory", target: "learning", type: "uses" },
+            { source: "nca", target: "learning", type: "uses" },
+            { source: "learning", target: "nca", type: "uses" },
+            { source: "learning", target: "bridges", type: "uses" },
+            { source: "learning", target: "temporal", type: "uses" },
+            { source: "nca", target: "bridges", type: "uses" },
+            { source: "nca", target: "consolidation", type: "uses" },
+
+            // Prediction
+            { source: "prediction", target: "memory", type: "uses" },
+            { source: "prediction", target: "learning", type: "uses" },
+            { source: "prediction", target: "encoding", type: "uses" },
+            { source: "dreaming", target: "prediction", type: "uses" },
+
+            // API / Interface
+            { source: "api", target: "memory", type: "uses" },
+            { source: "api", target: "consolidation", type: "uses" },
+            { source: "api", target: "persistence", type: "uses" },
+            { source: "api", target: "observability", type: "uses" },
+            { source: "api", target: "storage", type: "uses" },
+            { source: "cli", target: "api", type: "uses" },
+            { source: "mcp", target: "core", type: "uses" },
+            { source: "mcp", target: "memory", type: "uses" },
+            { source: "sdk", target: "api", type: "uses" },
+            { source: "hooks", target: "core", type: "uses" },
+            { source: "interfaces", target: "memory", type: "uses" },
+            { source: "interfaces", target: "learning", type: "uses" },
+            { source: "interfaces", target: "storage", type: "uses" },
+            { source: "interfaces", target: "core", type: "uses" },
+
+            // Persistence / Storage
+            { source: "persistence", target: "memory", type: "uses" },
+            { source: "storage", target: "persistence", type: "uses" },
+            { source: "storage", target: "observability", type: "uses" },
+            { source: "extraction", target: "memory", type: "uses" },
+            { source: "extraction", target: "core", type: "uses" },
+
+            // Support
+            { source: "observability", target: "core", type: "uses" },
+            { source: "visualization", target: "nca", type: "uses" },
+            { source: "visualization", target: "learning", type: "uses" },
+            { source: "visualization", target: "memory", type: "uses" },
+            { source: "integration", target: "core", type: "uses" },
+            { source: "integration", target: "memory", type: "uses" },
+            { source: "integrations", target: "core", type: "uses" },
+            { source: "integrations", target: "memory", type: "uses" },
+            { source: "integrations", target: "storage", type: "uses" },
+
+            // Infrastructure edges
+            { source: "tests", target: "core", type: "tests" },
+            { source: "tests", target: "memory", type: "tests" },
+            { source: "tests", target: "learning", type: "tests" },
+            { source: "tests", target: "nca", type: "tests" },
+            { source: "tests", target: "storage", type: "tests" },
+            { source: "tests", target: "api", type: "tests" },
+            { source: "tests", target: "consolidation", type: "tests" },
+            { source: "frontend", target: "api", type: "uses" },
+            { source: "frontend", target: "memory", type: "uses" },
+            { source: "frontend", target: "visualization", type: "uses" },
+            { source: "agents", target: "core", type: "uses" },
+            { source: "agents", target: "memory", type: "uses" },
+            { source: "agents", target: "learning", type: "uses" },
+            { source: "skills", target: "core", type: "uses" },
+            { source: "skills", target: "memory", type: "uses" },
+            { source: "skills", target: "learning", type: "uses" },
+            { source: "scripts", target: "storage", type: "uses" },
+            { source: "scripts", target: "persistence", type: "uses" },
+            { source: "scripts", target: "config", type: "uses" },
+            { source: "deploy", target: "config", type: "uses" },
+            { source: "deploy", target: "api", type: "uses" },
+            { source: "examples", target: "api", type: "uses" },
+            { source: "examples", target: "sdk", type: "uses" },
+            { source: "examples", target: "core", type: "uses" },
+            { source: "config", target: "core", type: "uses" },
+            { source: "migrations", target: "storage", type: "uses" },
+            { source: "migrations", target: "persistence", type: "uses" },
+        ];
+
+        // Colors
+        const categoryColors = {
+            core: "#ff9ff3",
+            memory: "#54a0ff",
+            neural: "#ff6b6b",
+            learning: "#5f27cd",
+            storage: "#10ac84",
+            interface: "#ffeaa7",
+            infrastructure: "#90a4ae"
+        };
+
+        // SVG setup
+        const svg = d3.select("#graph");
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+
+        svg.attr("viewBox", [0, 0, width, height]);
+
+        // Zoom
+        const g = svg.append("g");
+        const zoom = d3.zoom()
+            .scaleExtent([0.3, 4])
+            .on("zoom", (event) => g.attr("transform", event.transform));
+        svg.call(zoom);
+
+        // Simulation
+        const simulation = d3.forceSimulation(nodes)
+            .force("link", d3.forceLink(links).id(d => d.id).distance(100))
+            .force("charge", d3.forceManyBody().strength(-350))
+            .force("center", d3.forceCenter(width / 2, height / 2))
+            .force("collision", d3.forceCollide().radius(d => getNodeRadius(d) + 10));
+
+        // Links
+        const link = g.append("g")
+            .selectAll("line")
+            .data(links)
+            .join("line")
+            .attr("class", "link")
+            .attr("stroke", "#444")
+            .attr("stroke-width", 1.5);
+
+        // Nodes
+        const node = g.append("g")
+            .selectAll("g")
+            .data(nodes)
+            .join("g")
+            .attr("class", "node")
+            .call(d3.drag()
+                .on("start", dragstarted)
+                .on("drag", dragged)
+                .on("end", dragended));
+
+        node.append("circle")
+            .attr("r", d => getNodeRadius(d))
+            .attr("fill", d => categoryColors[d.category])
+            .attr("stroke", "#fff")
+            .attr("stroke-width", 2);
+
+        node.append("text")
+            .attr("dy", d => getNodeRadius(d) + 15)
+            .attr("text-anchor", "middle")
+            .text(d => d.name);
+
+        // Tooltip
+        const tooltip = d3.select("#tooltip");
+
+        node.on("mouseover", (event, d) => {
+            tooltip.style("opacity", 1)
+                .html(`
+                    <h3>${d.name}</h3>
+                    <div class="stat">${d.desc}</div>
+                    <div class="stat">Files: <span>${d.files}</span></div>
+                    <div class="stat">Lines: <span>${d.lines.toLocaleString()}</span></div>
+                    <div class="stat">Centrality: <span>${d.centrality}</span></div>
+                    <div class="stat">Category: <span>${d.category}</span></div>
+                `)
+                .style("left", (event.pageX + 15) + "px")
+                .style("top", (event.pageY - 10) + "px");
+
+            highlightConnections(d);
+        })
+        .on("mouseout", () => {
+            tooltip.style("opacity", 0);
+            resetHighlight();
+        });
+
+        // Simulation tick
+        simulation.on("tick", () => {
+            link
+                .attr("x1", d => d.source.x)
+                .attr("y1", d => d.source.y)
+                .attr("x2", d => d.target.x)
+                .attr("y2", d => d.target.y);
+
+            node.attr("transform", d => `translate(${d.x},${d.y})`);
+        });
+
+        // Helper functions
+        function getNodeRadius(d) {
+            const metric = document.getElementById("sizeMetric").value;
+            const scale = {
+                centrality: d => 10 + d.centrality * 2,
+                files: d => 10 + d.files,
+                lines: d => 10 + Math.sqrt(d.lines) / 5
+            };
+            return scale[metric](d);
+        }
+
+        function highlightConnections(d) {
+            const connected = new Set([d.id]);
+            links.forEach(l => {
+                if (l.source.id === d.id) connected.add(l.target.id);
+                if (l.target.id === d.id) connected.add(l.source.id);
+            });
+
+            node.classed("dimmed", n => !connected.has(n.id));
+            link.classed("dimmed", l => l.source.id !== d.id && l.target.id !== d.id)
+                .classed("highlighted", l => l.source.id === d.id || l.target.id === d.id);
+        }
+
+        function resetHighlight() {
+            node.classed("dimmed", false);
+            link.classed("dimmed", false).classed("highlighted", false);
+        }
+
+        function dragstarted(event) {
+            if (!event.active) simulation.alphaTarget(0.3).restart();
+            event.subject.fx = event.subject.x;
+            event.subject.fy = event.subject.y;
+        }
+
+        function dragged(event) {
+            event.subject.fx = event.x;
+            event.subject.fy = event.y;
+        }
+
+        function dragended(event) {
+            if (!event.active) simulation.alphaTarget(0);
+            event.subject.fx = null;
+            event.subject.fy = null;
+        }
+
+        // Search
+        document.getElementById("search").addEventListener("input", (e) => {
+            const query = e.target.value.toLowerCase();
+            node.style("opacity", d =>
+                query === "" || d.name.includes(query) || d.desc.toLowerCase().includes(query) ? 1 : 0.2
+            );
+        });
+
+        // Category filter
+        document.getElementById("categoryFilter").addEventListener("change", (e) => {
+            const category = e.target.value;
+            node.style("opacity", d =>
+                category === "all" || d.category === category ? 1 : 0.2
+            );
+            link.style("opacity", 0.6);
+        });
+
+        // Size metric
+        document.getElementById("sizeMetric").addEventListener("change", () => {
+            node.select("circle")
+                .transition()
+                .duration(500)
+                .attr("r", d => getNodeRadius(d));
+
+            node.select("text")
+                .transition()
+                .duration(500)
+                .attr("dy", d => getNodeRadius(d) + 15);
+        });
+
+        // Window resize
+        window.addEventListener("resize", () => {
+            const newWidth = window.innerWidth;
+            const newHeight = window.innerHeight;
+            svg.attr("viewBox", [0, 0, newWidth, newHeight]);
+            simulation.force("center", d3.forceCenter(newWidth / 2, newHeight / 2));
+            simulation.alpha(0.3).restart();
+        });
+    </script>
+</body>
+</html>

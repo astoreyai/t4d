@@ -1,0 +1,71 @@
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#d9534f', 'secondaryColor': '#fff5f5'}}}%%
+flowchart LR
+    subgraph Input["Input Processing"]
+        RawText[Raw Text/Event]
+        Embedding[BGE-M3 Embedding<br/>1024-dim]
+        Metadata[Metadata<br/>timestamp, session, context]
+    end
+
+    subgraph Encoding["Bioinspired Encoding"]
+        Sparse[Sparse Encoding<br/>k-WTA 2%]
+        Dendritic[Dendritic Gating<br/>Context Modulation]
+        Neuromod[Neuromodulator State<br/>DA/NE/ACh]
+    end
+
+    subgraph Storage["Memory Storage"]
+        direction TB
+        FES[Fast Episodic<br/>One-Shot]
+        Episodic[Episodic Memory<br/>Vectorized]
+        Semantic[Semantic Memory<br/>Graph KB]
+        Procedural[Procedural<br/>Skill Patterns]
+    end
+
+    subgraph Consolidation["Memory Consolidation"]
+        Replay[Experience Replay]
+        Extract[Entity Extraction]
+        Strengthen[Pattern Strengthening]
+        Prune[Weak Memory Pruning]
+    end
+
+    subgraph Retrieval["Retrieval Pipeline"]
+        Query[Query Embedding]
+        VectorSearch[Vector Similarity]
+        GraphTraversal[Graph Traversal]
+        Rerank[Relevance Reranking]
+        Result[Retrieved Memories]
+    end
+
+    subgraph Output["Output Formation"]
+        Context[Context Assembly]
+        Response[Response Generation]
+    end
+
+    RawText --> Embedding
+    Embedding --> Metadata
+    Metadata -->|"Distributed representation:<br/>memory = attractor state in<br/>high-dim energy landscape"| Sparse
+
+    Sparse --> Dendritic
+    Dendritic --> Neuromod
+    Neuromod --> FES
+    Neuromod --> Episodic
+
+    FES -->|"100x faster"| Consolidation
+    Episodic --> Consolidation
+
+    Replay --> Semantic
+    Extract --> Semantic
+    Strengthen --> Procedural
+    Prune --> Storage
+
+    Query --> VectorSearch
+    Query --> GraphTraversal
+    VectorSearch --> Rerank
+    GraphTraversal --> Rerank
+    Rerank --> Result
+
+    FES --> VectorSearch
+    Episodic --> VectorSearch
+    Semantic --> GraphTraversal
+
+    Result --> Context
+    Context --> Response

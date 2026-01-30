@@ -1,0 +1,93 @@
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#6b8e23', 'secondaryColor': '#f5f5dc'}}}%%
+flowchart TB
+    subgraph Encoding["Pattern Encoding (Hippocampal DG)"]
+        Input[Input Embedding<br/>1024-dim]
+
+        subgraph SparseEnc["Sparse Encoder"]
+            Linear1[Linear Transform]
+            KWTA[k-Winner-Take-All<br/>Top 4% Active]
+            Inhibition[Lateral Inhibition]
+        end
+
+        SparseOut[Sparse Output<br/>8192-dim, ~328 active]
+
+        Input --> Linear1
+        Linear1 --> KWTA
+        KWTA --> Inhibition
+        Inhibition --> SparseOut
+    end
+
+    subgraph Dendritic["Dendritic Processing"]
+        subgraph Neuron["Two-Compartment Neuron"]
+            Basal[Basal Compartment<br/>Feedforward Input]
+            Apical[Apical Compartment<br/>Context/Feedback]
+            Soma[Soma Integration]
+            Gate[Context Gate<br/>Learned]
+        end
+
+        Basal --> Soma
+        Apical --> Gate
+        Gate --> Soma
+
+        Mismatch[Mismatch Signal<br/>Prediction Error]
+        Soma --> Mismatch
+    end
+
+    subgraph Attractor["Attractor Network (CA3)"]
+        PatternIn[Pattern Input]
+
+        subgraph Hopfield["Hopfield Network"]
+            Weights[Hebbian Weights<br/>Outer Product]
+            Energy[Energy Function]
+            Dynamics[Settling Dynamics]
+        end
+
+        Retrieved[Retrieved Pattern]
+
+        PatternIn --> Weights
+        Weights --> Energy
+        Energy --> Dynamics
+        Dynamics --> Retrieved
+    end
+
+    subgraph Eligibility["Temporal Credit Assignment"]
+        Activity[Memory Activity]
+
+        subgraph Traces["Eligibility Traces"]
+            FastTrace[Fast Trace<br/>tau=5s]
+            SlowTrace[Slow Trace<br/>tau=60s]
+            Decay[Exponential Decay]
+        end
+
+        Reward[Reward Signal]
+        Credit[Credit Assignment<br/>TD-lambda]
+
+        Activity --> FastTrace
+        Activity --> SlowTrace
+        FastTrace --> Decay
+        SlowTrace --> Decay
+        Decay --> Credit
+        Reward --> Credit
+    end
+
+    subgraph FastEpisodic["Fast Episodic Store"]
+        Episode[Episode Input]
+
+        subgraph FES["One-Shot Learning"]
+            Salience[Salience Calc<br/>w₁·DA + w₂·NE + w₃·DA·NE + w₄·ACh_gate]
+            Eviction[Capacity Eviction<br/>10K limit]
+            Index[Vector Index]
+        end
+
+        Retrieval[Fast Retrieval]
+
+        Episode --> Salience
+        Salience --> Eviction
+        Eviction --> Index
+        Index --> Retrieval
+    end
+
+    SparseOut --> FastEpisodic
+    SparseOut --> Attractor
+    Mismatch --> Eligibility
+    Retrieved --> Retrieval

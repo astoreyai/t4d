@@ -1,0 +1,106 @@
+%%{init: {'theme': 'dark', 'themeVariables': { 'primaryColor': '#6366f1', 'primaryTextColor': '#e8e8f0', 'primaryBorderColor': '#818cf8', 'lineColor': '#a0a0b0', 'secondaryColor': '#1e1e2a', 'tertiaryColor': '#2a2a3a'}}}%%
+sequenceDiagram
+    autonumber
+    participant T as Trigger
+    participant C as Consolidation Engine
+    participant EM as Episodic Memory
+    participant SM as Semantic Memory
+    participant LLM as LLM Abstractor<br/>(PLANNED):::planned
+    participant H as Hebbian Learner
+    participant P as Pruning Engine
+    participant BG as Basal Ganglia
+    participant MC as Motor Cortex
+
+    T->>+C: trigger_consolidation()
+    C->>C: enter_sleep_state()
+    C->>C: classify_memory_types()
+
+    rect rgb(30, 30, 60)
+        Note over C,EM: NREM Phase (75% of cycle)
+
+        C->>+EM: get_consolidation_candidates(top_k=100)
+        EM->>EM: priority_sort(outcome, importance, recency)
+        EM-->>-C: episodes[100]
+
+        loop SWR Replay Sequences
+            C->>C: build_swr_sequence(similarity>0.5)
+            C->>C: temporal_compress(10-20x)
+
+            C->>+SM: extract_entities(sequence)
+            SM->>SM: identify_recurring_patterns(min=3)
+            SM->>SM: create_entity_nodes()
+            SM-->>-C: entities[]
+
+            C->>+SM: store_entities(entities)
+            SM-->>-C: entity_ids[]
+
+            C->>+EM: mark_consolidated(episode_ids)
+            EM-->>-C: marked
+        end
+    end
+
+    rect rgb(60, 30, 60)
+        Note over C,LLM: REM Phase (25% of cycle)<br/>HDBSCAN clustering implemented; LLM abstraction planned
+
+        C->>+SM: get_recent_semantic(n=1000)
+        SM-->>-C: semantic_memories[]
+
+        C->>C: hdbscan_cluster(min_size=3)
+
+        loop For each cluster
+            C->>+LLM: abstract_concept(cluster_members)<br/>[PLANNED]
+            LLM->>LLM: identify_common_theme():::planned
+            LLM->>LLM: generate_abstraction():::planned
+            LLM-->>-C: concept
+
+            C->>+SM: store_concept(concept)
+            SM-->>-C: concept_id
+
+            C->>+SM: link_to_members(concept_id, member_ids)
+            SM-->>-C: linked
+        end
+    end
+
+    rect rgb(30, 60, 30)
+        Note over C,MC: Procedural consolidation uses RL plasticity rules<br/>within shared SWR replay substrate
+
+        C->>+BG: get_procedural_candidates()
+        BG-->>-C: procedural_memories[]
+
+        loop SWR Replay (shared substrate)
+            C->>+BG: apply_rl_plasticity(sequence)
+            BG->>BG: td_learning_update()
+            BG-->>-C: updated
+
+            C->>+MC: skill_stabilization(sequence)
+            MC->>MC: motor_pattern_consolidation()
+            MC-->>-C: consolidated
+        end
+    end
+
+    rect rgb(60, 30, 30)
+        Note over C,P: Pruning Phase: Homeostatic scaling<br/>Target activity 3%, multiplicative downscale<br/>Note: 3% is system param; biological targets firing rate (Turrigiano 2008; Tononi SHY 2006)
+
+        C->>+H: get_all_weights()
+        H-->>-C: weights{}
+
+        C->>+P: calculate_activity(weights)
+        P-->>-C: activity=0.08
+
+        loop Until activity <= 0.03
+            C->>+P: multiplicative_downscale(factor=0.9)
+            P->>P: preserve_tagged()
+            P-->>-C: scaled
+
+            C->>+P: calculate_activity()
+            P-->>-C: activity
+        end
+    end
+
+    C->>C: exit_sleep_state()
+    C-->>T: {episodes_processed, entities_created, concepts_abstracted, connections_pruned}
+
+    Note over T,P: Cycle typically 10-60s (compressed simulation;<br/>biological equivalent: 90-min ultradian cycle)
+    Note over T,C: Multi-night progressive deepening:<br/>Night 1: light, Night 2-3: deep, Night 4+: all<br/>(service.py:311-369)
+
+    classDef planned fill:#ffecb3,stroke:#ffa726,stroke-dasharray: 5 5

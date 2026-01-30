@@ -5,6 +5,16 @@ flowchart TD
     TAN[TANs Cholinergic<br/>Interneurons] --> Striatum
     NeuralField[Neural Field<br/>GABA Level] --> Striatum
 
+    %% Basal Ganglia nuclei
+    STN["Subthalamic Nucleus"]:::planned
+    GPe["Globus Pallidus External"]:::planned
+    GPi["Globus Pallidus Internal"]:::planned
+
+    %% Hyperdirect pathway
+    Cortex -.->|"Glu (hyperdirect)"| STN
+    STN -.->|"Glu"| GPi
+    GPe -.->|"GABA"| STN
+
     %% TAN pause mechanism
     TAN --> TANState{TAN State}
     TANState -->|Tonic Firing| BaselineACh[Baseline ACh<br/>0.5 tonic firing]
@@ -72,6 +82,8 @@ flowchart TD
     Plasticity -->|Low DA < 0.4| D2LTP[D2 LTP<br/>D1 LTD]
 
     D1LTP --> HabitForm[Habit Formation<br/>D1 Strength ↑]
+
+    classDef planned fill:#e0e0e0,stroke:#999,stroke-dasharray: 5 5
 
     style VTA fill:#e1f5ff
     style D1Activity fill:#e1ffe1

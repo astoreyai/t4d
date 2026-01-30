@@ -1,0 +1,79 @@
+%%{init: {'theme': 'dark', 'themeVariables': { 'primaryColor': '#6366f1', 'primaryTextColor': '#e8e8f0', 'primaryBorderColor': '#818cf8', 'lineColor': '#a0a0b0', 'secondaryColor': '#1e1e2a', 'tertiaryColor': '#2a2a3a'}}}%%
+flowchart TB
+    subgraph L1["NEUROMODULATION SUBSYSTEM"]
+        direction TB
+
+        subgraph ORCH["Orchestra Coordinator"]
+            O_STATE[Unified State<br/>5 modulators]
+            O_BLEND[State Blending<br/>Weighted combination]
+            O_ADAPT[Adaptive Baseline<br/>Homeostatic]
+        end
+
+        subgraph DA["Dopamine System"]
+            DA_RPE[RPE Calculator<br/>delta=actual-expected]
+            DA_PRED[Prediction Model<br/>TD learning]
+            DA_BURST[Burst/Dip Signals<br/>RPE = R - V; burst if RPE > 0, dip if RPE < 0]
+        end
+
+        subgraph NE["Norepinephrine System"]
+            NE_AROU[Arousal Detector<br/>5 modes]
+            NE_NOVL[Novelty Tracker<br/>Surprise signal]
+            NE_EXPL[Exploration Rate<br/>exp-epsilon]
+        end
+
+        subgraph ACH["Acetylcholine System"]
+            ACH_MODE[Encoding Mode<br/>ACh > 0.6]
+            ACH_RETR[Retrieval Mode<br/>ACh < 0.4]
+            ACH_PLAS[Plasticity Gate<br/>LTP/LTD]
+            NBM[NBM<br/>Nucleus Basalis of Meynert]
+        end
+
+        subgraph SER["Serotonin System"]
+            SER_TEMP[Temporal Discount<br/>Patience factor]
+            SER_CRED[Long-term Credit<br/>Eligibility mod]
+            SER_MOOD[Mood State<br/>Baseline affect]
+        end
+
+        subgraph E_I_BALANCE["Excitatory/Inhibitory Balance"]
+            GLU[Glutamate<br/>Fast Excitation<br/>Ionotropic NMDA/AMPA]
+            GABA_LAT[GABA<br/>Fast Inhibition<br/>Ionotropic]
+            GABA_WTA[Winner-Take-All<br/>k=2% active]
+            GABA_SPAR[Sparsity Control<br/>Target 2-5%]
+        end
+    end
+
+    ORCH --> DA
+    ORCH --> NE
+    ORCH --> ACH
+    ORCH --> SER
+
+    %% NBM to Hippocampus connection (Hasselmo 2006)
+    HPC[Hippocampus]
+    NBM -->|"ACh: encoding mode switch<br/>(high ACh=encode, low ACh=retrieve)<br/>Hasselmo 2006"| HPC
+
+    Note over E_I_BALANCE: GABA/Glu are fast neurotransmitters, not neuromodulators
+
+    DA -->|reward signal| ORCH
+    NE -->|arousal| ORCH
+    ACH -->|mode| ORCH
+    SER -->|patience| ORCH
+    E_I_BALANCE -.->|E/I balance| ORCH
+
+    DA -.->|"inhibits (0.3)"| SER
+    NE -.->|"excites (0.4)"| ACH
+    ACH -.->|"gates (sigmoid)"| DA
+    Note over DA,SER: Crosstalk: neuromod_crosstalk.py
+
+    classDef orch fill:#6366f1,stroke:#818cf8,color:#fff
+    classDef da fill:#ef4444,stroke:#f87171,color:#fff
+    classDef ne fill:#f97316,stroke:#fb923c,color:#fff
+    classDef ach fill:#22c55e,stroke:#4ade80,color:#fff
+    classDef ser fill:#eab308,stroke:#facc15,color:#000
+    classDef ei fill:#9333ea,stroke:#a855f7,color:#fff
+
+    class O_STATE,O_BLEND,O_ADAPT orch
+    class DA_RPE,DA_PRED,DA_BURST da
+    class NE_AROU,NE_NOVL,NE_EXPL ne
+    class ACH_MODE,ACH_RETR,ACH_PLAS ach
+    class SER_TEMP,SER_CRED,SER_MOOD ser
+    class GLU,GABA_LAT,GABA_WTA,GABA_SPAR ei

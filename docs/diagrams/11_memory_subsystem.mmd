@@ -1,0 +1,46 @@
+%%{init: {'theme': 'dark', 'themeVariables': { 'primaryColor': '#6366f1', 'primaryTextColor': '#e8e8f0', 'primaryBorderColor': '#818cf8', 'lineColor': '#a0a0b0', 'secondaryColor': '#1e1e2a', 'tertiaryColor': '#2a2a3a'}}}%%
+flowchart TB
+    subgraph L1["MEMORY SUBSYSTEM"]
+        direction TB
+
+        subgraph WM["Working Memory"]
+            WM_BUF[Buffer Manager<br/>4±1 items Cowan 2001]
+            WM_ATT[Attentional Blink<br/>300ms window]
+            WM_PRI[Priority Queue<br/>FIFO + Salience]
+        end
+
+        subgraph EM["Episodic Memory"]
+            EM_FES[Fast Episodic Store<br/>One-shot, 10K cap]
+            EM_IDX[Temporal Index<br/>Bi-temporal T_ref/T_sys]
+            EM_RET[Retrieval Scorer<br/>Multi-factor]
+        end
+
+        subgraph SM["Semantic Memory"]
+            SM_KG[Knowledge Graph<br/>Neo4j entities]
+            SM_VEC[Vector Store<br/>Qdrant embeddings]
+            SM_HEB[Hebbian Links<br/>Co-retrieval weights]
+        end
+
+        subgraph PM["Procedural Memory"]
+            PM_SKL[Skill Store<br/>Build/Retrieve/Update]
+            PM_TRJ[Trajectory Parser<br/>Episode sequences]
+            PM_SUC[Success Tracker<br/>Rate-based ranking]
+        end
+    end
+
+    WM --> EM
+    WM --> SM
+    WM --> PM
+    EM -->|consolidate| SM
+    EM -->|trajectories| PM
+    SM -->|context| EM
+
+    classDef working fill:#8b5cf6,stroke:#a78bfa,color:#fff
+    classDef episodic fill:#3b82f6,stroke:#60a5fa,color:#fff
+    classDef semantic fill:#10b981,stroke:#34d399,color:#fff
+    classDef procedural fill:#f97316,stroke:#fb923c,color:#fff
+
+    class WM_BUF,WM_ATT,WM_PRI working
+    class EM_FES,EM_IDX,EM_RET episodic
+    class SM_KG,SM_VEC,SM_HEB semantic
+    class PM_SKL,PM_TRJ,PM_SUC procedural

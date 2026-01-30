@@ -1,10 +1,15 @@
 sequenceDiagram
+    participant MS as Medial Septum /<br/>Diagonal Band
     participant Neuromod as Neuromodulators<br/>ACh, DA, NE, Glu, GABA
     participant Osc as Frequency Band<br/>Generator
     participant Theta as Theta Oscillator<br/>4-8 Hz
     participant Gamma as Gamma Oscillator<br/>30-80 Hz
-    participant WM as Working Memory<br/>7 slots
+    participant WM as Working Memory<br/>4 slots
     participant Plasticity as Plasticity<br/>Modules
+
+    Note over MS,Theta: Theta Source: Medial Septum
+
+    MS->>Theta: ACh + GABA pacemaker
 
     Note over Neuromod,Plasticity: Step 1: Oscillator Update
 

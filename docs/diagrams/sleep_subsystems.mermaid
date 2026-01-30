@@ -6,7 +6,7 @@ flowchart TB
     end
 
     subgraph SWR["Sharp-Wave Ripples"]
-        SWR_DET["Ripple Detection<br/>(80-120 Hz)"]
+        SWR_DET["Ripple Detection<br/>(150-250 Hz)"]
         SWR_REP["Memory Replay"]
         SWR_CON["Consolidation"]
     end
@@ -25,6 +25,7 @@ flowchart TB
 
     AD_ACC --> AD_THR
     AD_THR -->|"Threshold crossed"| SWR
+    AD_ACC -.->|"suppresses DA/NE/ACh<br/>potentiates GABA"| SWR_DET
     SWR_DET --> SWR_REP --> SWR_CON
 
     AD_CLR <--> GLY_FLOW

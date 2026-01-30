@@ -1,0 +1,87 @@
+%%{init: {'theme': 'dark', 'themeVariables': { 'primaryColor': '#6366f1', 'primaryTextColor': '#e8e8f0', 'primaryBorderColor': '#818cf8', 'lineColor': '#a0a0b0', 'secondaryColor': '#1e1e2a', 'tertiaryColor': '#2a2a3a'}}}%%
+stateDiagram-v2
+    [*] --> AWAKE: System start
+
+    state AWAKE {
+        [*] --> Encoding
+        Encoding --> Encoding: store_memory()
+        Encoding --> TriggerSleep: consolidation_trigger
+        TriggerSleep --> Encoding: not enough candidates
+    }
+
+    state NREM_SLEEP {
+        [*] --> SelectEpisodes
+        SelectEpisodes --> PrioritySort: get candidates
+        PrioritySort --> SWRReplay: top-k selected
+
+        state SWRReplay {
+            [*] --> BuildSequence
+            BuildSequence --> Compress: similarity > 0.5
+            Compress --> ExtractEntities: 10-20x compression
+            ExtractEntities --> NextSequence: entities created
+            NextSequence --> BuildSequence: more sequences
+            NextSequence --> Complete: no more
+        }
+
+        SWRReplay --> TransferSemantic: entities extracted
+        TransferSemantic --> MarkConsolidated: stored in graph
+    }
+
+    state REM_SLEEP {
+        [*] --> ClusterMemories
+        ClusterMemories --> HDBSCAN: semantic memories
+        HDBSCAN --> AbstractConcepts: min_cluster=3
+        AbstractConcepts --> LLMAbstraction: cluster found [PLANNED]
+        LLMAbstraction --> CreateConcept: abstraction ready [PLANNED]
+        CreateConcept --> ClusterMemories: more clusters
+        CreateConcept --> Complete: no more
+    }
+
+    state PRUNING {
+        [*] --> CalculateActivity
+        CalculateActivity --> IdentifyWeak: current > target
+        IdentifyWeak --> SynapticScale: weak < 0.1
+        SynapticScale --> RemoveConnections: multiplicative
+        RemoveConnections --> PreserveStrong: tagged connections
+        PreserveStrong --> VerifyTarget: check 3% activity
+        VerifyTarget --> Complete: target met
+        VerifyTarget --> CalculateActivity: iterate
+    }
+
+    state PROCEDURAL_CONSOLIDATION {
+        [*] --> StriatalReplay
+        StriatalReplay --> MotorCortexTransfer: replay complete
+        MotorCortexTransfer --> SkillStabilization: transferred
+        SkillStabilization --> Complete: stabilized
+    }
+
+    AWAKE --> NREM_SLEEP: TriggerSleep (episodic/semantic)
+    AWAKE --> PROCEDURAL_CONSOLIDATION: TriggerSleep (procedural)
+    NREM_SLEEP --> REM_SLEEP: NREM complete (75%)
+    REM_SLEEP --> PRUNING: REM complete (25%)
+    PROCEDURAL_CONSOLIDATION --> PRUNING: procedural done
+    PRUNING --> AWAKE: Consolidation done
+
+    note right of NREM_SLEEP
+        Sharp-Wave Ripple Replay
+        Episodic to Semantic transfer
+        Entity extraction
+    end note
+
+    note right of REM_SLEEP
+        HDBSCAN clustering implemented
+        LLM abstraction planned
+        Creative integration
+    end note
+
+    note right of PROCEDURAL_CONSOLIDATION
+        Procedural consolidation uses
+        RL plasticity rules within
+        shared SWR replay substrate
+    end note
+
+    note right of PRUNING
+        Homeostatic plasticity
+        Target: 3% activity
+        Preserve tagged synapses
+    end note

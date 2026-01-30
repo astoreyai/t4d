@@ -48,12 +48,17 @@ flowchart TD
     CouplingMatrix --> DelayedCoupling[Delayed Coupling<br/>Σ Kᵢⱼ · Uⱼx,t-τⱼ]
 
     %% Plasticity (optional)
-    Velocity -.-> Plasticity[Velocity Plasticity<br/>Activity-Dependent<br/>Myelination]
+    Velocity -.-> Plasticity[Velocity Plasticity<br/>Activity-Dependent<br/>Myelination]:::planned
 
-    Plasticity -.-> UpdateVel[High activity →<br/>↑ velocity up to 100 m/s]
+    Plasticity -.-> UpdateVel[High activity →<br/>↑ velocity up to 100 m/s]:::planned
 
     %% Statistics
     DelayedCoupling --> Stats[Delay Statistics<br/>mean, max, total buffered]
+
+    %% Cross-reference
+    Note over Stats: See spindle_ripple_coupling.mermaid for how<br/>these delays affect SO→spindle→SWR timing
+
+    classDef planned fill:#e0e0e0,stroke:#999,stroke-dasharray: 5 5
 
     style Config fill:#e1f5ff
     style CircBuf fill:#fff4e1

@@ -1,0 +1,72 @@
+%%{init: {'theme': 'dark', 'themeVariables': { 'primaryColor': '#6366f1', 'primaryTextColor': '#e8e8f0', 'primaryBorderColor': '#818cf8', 'lineColor': '#a0a0b0', 'secondaryColor': '#1e1e2a', 'tertiaryColor': '#2a2a3a'}}}%%
+stateDiagram-v2
+    [*] --> Baseline: Initialize
+
+    state Baseline {
+        [*] --> Equilibrium
+        note right of Equilibrium
+            DA: 0.3, NE: 0.5
+            ACh: 0.3, 5-HT: 0.4
+            Note: E/I balance (GABA/Glu)
+            is a separate fast system
+        end note
+    }
+
+    state DopamineStates {
+        [*] --> DA_Baseline
+        DA_Baseline --> DA_Burst: reward > expected
+        DA_Baseline --> DA_Dip: reward < expected
+        DA_Burst --> DA_Baseline: decay (tau=2s)
+        DA_Dip --> DA_Baseline: decay (tau=5s)
+
+        note right of DA_Burst
+            RPE positive
+            Strengthen active traces
+            RPE > 0 → burst
+        end note
+
+        note right of DA_Dip
+            RPE negative
+            Weaken active traces
+            DA < 0.5
+        end note
+    }
+
+    state ArousalStates {
+        [*] --> NE_Continuum
+
+        note right of NE_Continuum
+            Continuous NE axis:
+            NE < 0.4: DROWSY
+            NE 0.4-0.6: ALERT
+            NE > 1.5: HYPERAROUSED
+        end note
+    }
+
+    state ACHModes {
+        [*] --> BALANCED
+        BALANCED --> ENCODING: learning context
+        BALANCED --> RETRIEVAL: query context
+        ENCODING --> BALANCED: task complete
+        RETRIEVAL --> BALANCED: task complete
+
+        note right of ENCODING
+            ACh > 0.6
+            High plasticity
+            LTP enabled
+        end note
+
+        note right of RETRIEVAL
+            ACh < 0.4
+            Low plasticity
+            Pattern completion
+        end note
+    }
+
+    Baseline --> DopamineStates: reward event
+    Baseline --> ArousalStates: arousal change
+    Baseline --> ACHModes: task mode change
+
+    DopamineStates --> Baseline: equilibrium
+    ArousalStates --> Baseline: equilibrium
+    ACHModes --> Baseline: equilibrium

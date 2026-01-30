@@ -1,0 +1,50 @@
+%%{init: {'theme': 'dark', 'themeVariables': { 'primaryColor': '#6366f1', 'primaryTextColor': '#e8e8f0', 'primaryBorderColor': '#818cf8', 'lineColor': '#a0a0b0', 'secondaryColor': '#1e1e2a', 'tertiaryColor': '#2a2a3a'}}}%%
+stateDiagram-v2
+    [*] --> CLOSED: Initialize
+
+    state CLOSED {
+        [*] --> Monitoring
+        Monitoring --> Monitoring: success
+        Monitoring --> CheckThreshold: failure
+        CheckThreshold --> Monitoring: count < 5
+        CheckThreshold --> TriggerOpen: count >= 5
+    }
+
+    state OPEN {
+        [*] --> Rejecting
+        Rejecting --> Rejecting: request arrives
+        Rejecting --> TimeoutCheck: timer tick
+        TimeoutCheck --> Rejecting: elapsed < 60s
+        TimeoutCheck --> TryReset: elapsed >= 60s
+    }
+
+    state HALF_OPEN {
+        [*] --> Testing
+        Testing --> CountSuccess: success
+        Testing --> ReOpen: failure
+        CountSuccess --> Testing: count < 2
+        CountSuccess --> FullReset: count >= 2
+    }
+
+    CLOSED --> OPEN: TriggerOpen
+    OPEN --> HALF_OPEN: TryReset
+    HALF_OPEN --> CLOSED: FullReset
+    HALF_OPEN --> OPEN: ReOpen
+
+    note right of CLOSED
+        Normal operation
+        Track failure count
+        Threshold: 5 consecutive
+    end note
+
+    note right of OPEN
+        Reject all requests
+        Return cached/fallback
+        Timeout: 60 seconds
+    end note
+
+    note right of HALF_OPEN
+        Probe with limited requests
+        Success threshold: 2
+        Quick fail on error
+    end note

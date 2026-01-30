@@ -5,10 +5,13 @@ flowchart TB
         CP[LearnableCoupling<br/>Biological Bounds]
         EN[EnergyLandscape<br/>Hopfield Integration]
         AT[AttractorBasin<br/>State Transitions]
+        STAB[StabilityAnalyzer<br/>Hessian + Lyapunov]
     end
 
     subgraph Neuromod["Neuromodulatory Systems"]
         VTA[VTACircuit<br/>DA Production]
+        SNc[SubstantiaNigraCir<br/>Motor DA (nigrostriatal)]
+        DAI[DopamineIntegration<br/>VTA+Field+HPC bridge]
         RP[RapheNucleus<br/>5-HT + Patience]
         LC[LocusCoeruleus<br/>NE + Surprise]
         PFC_NEURO[PFC Backprojections<br/>Glutamatergic]
@@ -16,6 +19,7 @@ flowchart TB
 
     subgraph MotorAction["Motor/Action Selection"]
         STR[StriatalMSN<br/>D1/D2 Populations]
+        CEREBELLUM["Cerebellum (PLANNED)"]:::planned
     end
 
     subgraph HPC["Hippocampal System"]
@@ -23,12 +27,14 @@ flowchart TB
         CA3[CA3 Layer<br/>Pattern Completion]
         CA1[CA1 Layer<br/>Novelty Detection]
         SPC[SpatialCells<br/>Place/Grid Cells]
+        AMY[AmygdalaCircuit<br/>Emotional Valence]
     end
 
     subgraph Learning["Learning Mechanisms"]
         FF[ForwardForward<br/>Local Goodness]
         CAP[CapsuleNetwork<br/>Dynamic Routing]
         TG[ThetaGamma<br/>WM Slots]
+        XMB[CrossModalBinding<br/>Episodic↔Semantic↔Procedural<br/>gamma synchrony]
     end
 
     subgraph Sleep["Sleep/Wake Cycle"]
@@ -47,6 +53,7 @@ flowchart TB
     NF --> CP
     CP --> EN
     EN --> AT
+    EN --> STAB
 
     %% Neuromod to Core
     VTA --> CP
@@ -61,13 +68,20 @@ flowchart TB
     %% Auto 5-HT↔DA loop
     RP <-.->|"auto-wired<br/>set_raphe/set_vta"| VTA
 
+    %% DopamineIntegration bridge
+    VTA --> DAI
+    DAI --> NF
+    DAI --> CA1
+
     %% Motor/Action to Core (STR is DA target, not source)
     VTA -->|"DA modulates"| STR
+    SNc -->|"DA modulates"| STR
     STR --> CP
 
     %% HPC internal
     DG --> CA3 --> CA1
     SPC --> DG
+    AMY --> CA1
 
     %% HPC to Core
     CA1 --> EN
@@ -75,8 +89,10 @@ flowchart TB
 
     %% Learning to Core
     FF --> EN
-    CAP --> FF
+    CAP -->|"agreement scores → FF goodness"| FF
+    FF -->|"per-layer energy → routing precision"| CAP
     TG --> CA3
+    TG --> XMB
 
     %% Sleep to Core
     AD --> NF
@@ -90,5 +106,6 @@ flowchart TB
 
     %% Coupling bridges
     FF -.->|FF-NCA Coupling| EN
-    CAP -.->|Capsule-NCA Coupling| FF
     GLY -.->|Glymphatic Bridge| SWR
+
+    classDef planned fill:#e0e0e0,stroke:#999,stroke-dasharray: 5 5

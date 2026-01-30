@@ -2,7 +2,10 @@
 flowchart TB
     subgraph Input["Cortical Input"]
         EC["Entorhinal Cortex<br/>(1024-dim)"]
+        PFC["Prefrontal Cortex<br/>(contextual/goal)"]:::planned
     end
+
+    PFC -.->|"contextual/goal modulation (PLANNED)"| EC
 
     subgraph DG_Block["Dentate Gyrus - Pattern Separation"]
         DG["DG Layer<br/>(4096-dim, 4% sparse)"]
@@ -27,18 +30,19 @@ flowchart TB
     end
 
     subgraph Grid["Spatial Module"]
-        GRID["Grid Cells<br/>(EC - Hexagonal)"]
-        PLACE_CA1["Place Cells<br/>(CA1 - Location-specific)"]
-        PLACE_CA3["Place Cells<br/>(CA3 - Auto-association)"]
+        MEC_GRID["Medial EC<br/>(Grid Cells - INPUT)"]:::planned
+        PLACE_CA1["Place Cells<br/>(emerge in CA1 - OUTPUT)"]:::planned
+        PLACE_CA3["Place Cells<br/>(emerge in CA3 - OUTPUT)"]:::planned
+        GRID_NOTE["Note: Grid cells are INPUT via MEC;<br/>place cells EMERGE in CA3/CA1 (Moser 2008)<br/>Note: spatial_cells.py exists separately; not wired to hippocampus.py"]
     end
 
     %% Main pathway
-    EC -->|"Perforant Path"| DG
+    EC -->|"Perforant Path (Glu)"| DG
     DG --> DG_OP
-    DG_OP -->|"Mossy Fibers<br/>(sparse)"| CA3
+    DG_OP -->|"Mossy Fibers (Glu)<br/>(sparse)"| CA3
     CA3 --> CA3_OP
     CA3 <--> REC
-    CA3 -->|"Schaffer<br/>Collaterals"| CA1
+    CA3 -->|"Schaffer Collaterals (Glu)"| CA1
     EC -->|"Direct Path"| CA1
     CA1 --> CA1_OP
 
@@ -49,22 +53,42 @@ flowchart TB
     MODE -->|"Retrieval (<0.3)"| CA3
     CA1 --> OUT
 
+    %% Reconsolidation pathway
+    CA1 -.->|"retrieval destabilizes (PLANNED)"| LABILITY["Lability Window"]:::planned
+    LABILITY -.->|"reconsolidation (PLANNED)"| CA3
+
     %% Spatial cells: Grid cells (EC) feed INTO hippocampus
-    %% Place cells EMERGE in CA3/CA1
-    GRID -->|"Spatial input"| DG
-    GRID -->|"Spatial input"| EC
-    CA3 --- PLACE_CA3
-    CA1 --- PLACE_CA1
+    %% Place cells EMERGE in CA3/CA1 (Moser 2008)
+    MEC_GRID -.->|"Spatial input"| DG
+    MEC_GRID -.->|"Spatial input"| EC
+    CA3 -.->|"emerge from"| PLACE_CA3
+    CA1 -.->|"emerge from"| PLACE_CA1
+
+    %% Amygdala input
+    BLA["Basolateral Amygdala<br/>(PLANNED)"]:::planned
+    BLA -.->|"emotional salience"| CA1
+    BLA -.->|"valence tag"| EC
 
     %% Neuromodulation
     subgraph NM["Neuromodulation"]
         ACH["ACh<br/>(Encoding Gate)"]
         DA["DA<br/>(Learning Rate)"]
+        LC["Locus Coeruleus<br/>(NE Source)"]
+        MS["Medial Septum<br/>(Theta Source - PARTIAL)"]:::partial
+        ACH_NOTE["ACh gating: _apply_ach_gating() active in process()<br/>High ACh suppresses CA3→CA1 path (max 80%)"]
+        NE_NOTE["⚠ _apply_ne_encoding_gain() exists<br/>in hippocampus.py but not called"]:::partial
     end
 
     ACH -.->|"High: Encode"| DG
     ACH -.->|"Low: Retrieve"| CA3
     DA -.->|"Modulate"| CA3_OP
+    LC -.->|"NE: novelty tagging"| DG
+    LC -.->|"NE: arousal gain"| CA3
+    MS -.->|"ACh + GABA pacemaker (theta)"| CA3
+
+    classDef partial fill:#fff3cd,stroke:#ffc107,stroke-dasharray: 5 5
+    classDef planned fill:#e0e0e0,stroke:#999,stroke-dasharray: 5 5
+    class ACH_NOTE partial
 
     style DG fill:#e8f4ea,stroke:#2d6a4f
     style CA3 fill:#fef3c7,stroke:#d97706

@@ -1,0 +1,47 @@
+%%{init: {'theme': 'dark', 'themeVariables': { 'primaryColor': '#6366f1', 'primaryTextColor': '#e8e8f0', 'primaryBorderColor': '#818cf8', 'lineColor': '#a0a0b0', 'secondaryColor': '#1e1e2a', 'tertiaryColor': '#2a2a3a'}}}%%
+flowchart TB
+    subgraph L1["LEARNING SUBSYSTEM"]
+        direction TB
+
+        subgraph GATE["Learned Memory Gate"]
+            G_BAYES[Bayesian LR<br/>Online updates]
+            G_THOMP[Thompson Sampling<br/>Exploration/Exploitation]
+            G_FEAT[Feature Extractor<br/>Content + Context]
+            G_PRIOR[Population Prior<br/>Cold start]
+        end
+
+        subgraph ELIG["Eligibility Traces"]
+            E_STD[Standard Trace<br/>tau=20s decay]
+            E_FAST[Fast Trace<br/>tau=5s]
+            E_SLOW[Slow Trace<br/>tau=60s]
+            E_CRED[Credit Assigner<br/>reward * trace]
+            E_NOTE["Note: Fast τ≈1-5s Ca²⁺ transients,<br/>Slow τ≈minutes CaMKII/protein synthesis.<br/>Standard τ=20s is software interpolation<br/>He 2015; Gerstner 2018"]
+        end
+
+        subgraph HEBB["Hebbian Learning"]
+            H_CORE[HebbianLearner<br/>dw = eta*pre*post*DA]
+            H_NORM[Normalization<br/>Weight bounds]
+            H_DECAY[Synaptic Decay<br/>Use-dependent]
+        end
+
+        subgraph RETR["Learned Retrieval"]
+            R_SCOR[Neural Reranker<br/>MLP scorer]
+            R_FEAT[Retrieval Features<br/>Query + Candidate]
+            R_TRAIN[Online Training<br/>Implicit feedback]
+        end
+    end
+
+    GATE -->|store decision| ELIG
+    ELIG -->|credit| HEBB
+    HEBB -->|weights| RETR
+    RETR -->|"retrieval outcome<br/>(helpful/not)<br/>Bayesian LR gate update"| GATE
+
+    classDef gate fill:#ef4444,stroke:#f87171,color:#fff
+    classDef elig fill:#eab308,stroke:#facc15,color:#000
+    classDef hebb fill:#22c55e,stroke:#4ade80,color:#fff
+    classDef retr fill:#6366f1,stroke:#818cf8,color:#fff
+
+    class G_BAYES,G_THOMP,G_FEAT,G_PRIOR gate
+    class E_STD,E_FAST,E_SLOW,E_CRED elig
+    class H_CORE,H_NORM,H_DECAY hebb
+    class R_SCOR,R_FEAT,R_TRAIN retr

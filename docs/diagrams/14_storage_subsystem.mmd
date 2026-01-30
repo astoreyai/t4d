@@ -1,0 +1,58 @@
+%%{init: {'theme': 'dark', 'themeVariables': { 'primaryColor': '#6366f1', 'primaryTextColor': '#e8e8f0', 'primaryBorderColor': '#818cf8', 'lineColor': '#a0a0b0', 'secondaryColor': '#1e1e2a', 'tertiaryColor': '#2a2a3a'}}}%%
+flowchart TB
+    subgraph L1["STORAGE SUBSYSTEM"]
+        direction TB
+
+        subgraph SAGA["Saga Coordinator"]
+            S_PREP[Prepare Phase<br/>Validate both]
+            S_COMMIT[Commit Phase<br/>Write both]
+            S_ROLL[Rollback<br/>On failure]
+            S_COMP[Compensate<br/>Undo actions]
+        end
+
+        subgraph NEO["Neo4j Graph Store"]
+            N_NODE[Node Operations<br/>CRUD entities]
+            N_EDGE[Edge Operations<br/>Relationships]
+            N_CYPHER[Query Engine<br/>Cypher DSL]
+            N_SESS[Session Pool<br/>Connection mgmt]
+        end
+
+        subgraph QDRANT["Qdrant Vector Store"]
+            Q_COLL[Collections<br/>Per memory type]
+            Q_VEC[Vector Ops<br/>HNSW index]
+            Q_FILT[Payload Filter<br/>Metadata queries]
+            Q_BATCH[Batch Upsert<br/>Optimized writes]
+        end
+
+        subgraph CB["Circuit Breakers"]
+            CB_NEO[Neo4j Breaker<br/>5 failures open]
+            CB_QDR[Qdrant Breaker<br/>5 failures open]
+            CB_HALF[Half-Open<br/>60s timeout]
+            CB_RESET[Reset Logic<br/>2 success close]
+        end
+
+        subgraph CACHE["Fallback Cache"]
+            C_LRU[LRU Cache<br/>1000 items]
+            C_PEND[Pending Queue<br/>Replay buffer]
+            C_DRAIN[Drain Worker<br/>On recovery]
+        end
+    end
+
+    SAGA --> NEO
+    SAGA --> QDRANT
+    CB --> NEO
+    CB --> QDRANT
+    CB -->|fallback| CACHE
+    CACHE -->|recover| SAGA
+
+    classDef saga fill:#8b5cf6,stroke:#a78bfa,color:#fff
+    classDef neo fill:#10b981,stroke:#34d399,color:#fff
+    classDef qdrant fill:#3b82f6,stroke:#60a5fa,color:#fff
+    classDef cb fill:#ef4444,stroke:#f87171,color:#fff
+    classDef cache fill:#eab308,stroke:#facc15,color:#000
+
+    class S_PREP,S_COMMIT,S_ROLL,S_COMP saga
+    class N_NODE,N_EDGE,N_CYPHER,N_SESS neo
+    class Q_COLL,Q_VEC,Q_FILT,Q_BATCH qdrant
+    class CB_NEO,CB_QDR,CB_HALF,CB_RESET cb
+    class C_LRU,C_PEND,C_DRAIN cache

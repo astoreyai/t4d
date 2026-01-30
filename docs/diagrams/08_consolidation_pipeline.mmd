@@ -1,0 +1,132 @@
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#27ae60', 'secondaryColor': '#e8f8e8'}}}%%
+flowchart TB
+    subgraph Triggers["Consolidation Triggers"]
+        TimeBasedTrigger[Time-Based<br/>Every 1.5h default]
+        ThresholdTrigger[Threshold<br/>Replay count > N]
+        SleepTrigger[Sleep Cycle<br/>Low activity period]
+        ManualTrigger[Manual<br/>API call]
+    end
+
+    subgraph FESConsolidation["FES Consolidation"]
+        direction TB
+
+        subgraph Selection["Candidate Selection"]
+            ReplayCount[Replay Count > Threshold]
+            SalienceScore[High Salience Episodes]
+            AgeFilter[Age-Based Filtering]
+        end
+
+        subgraph Processing["Processing Steps"]
+            BatchSelect[Select Batch<br/>Max 100 episodes]
+            ComputeScore[Compute Consolidation Score<br/>replays * salience * age_factor]
+            SortByScore[Sort by Score]
+        end
+
+        Selection --> Processing
+    end
+
+    subgraph EpisodicConsolidation["Episodic Consolidation"]
+        direction TB
+
+        subgraph Replay["Experience Replay"]
+            SelectMemories[Select High-Value Memories]
+            ReplayBuffer[Replay Buffer]
+            StrengthUpdate[Strength Update]
+        end
+
+        subgraph PatternExtraction["Pattern Extraction"]
+            ClusterAnalysis[Cluster Similar Episodes]
+            PrototypeExtract[Extract Prototypes]
+            CommonFeatures[Identify Common Features]
+        end
+
+        Replay --> PatternExtraction
+    end
+
+    subgraph SemanticConsolidation["Semantic Consolidation"]
+        direction TB
+
+        subgraph EntityExtraction["Entity Extraction"]
+            NER[Named Entity Recognition]
+            RelationExtract[Relation Extraction]
+            ConceptLink[Concept Linking]
+        end
+
+        subgraph KnowledgeIntegration["Knowledge Integration"]
+            MergeEntities[Merge Similar Entities]
+            UpdateRelations[Update Relations]
+            IncrementConfidence[Increment Confidence]
+            LLMAbstract[LLM Abstraction<br/>PLANNED]:::planned
+        end
+
+        EntityExtraction --> KnowledgeIntegration
+    end
+
+    subgraph ProceduralConsolidation["Procedural Consolidation"]
+        direction TB
+
+        subgraph SkillExtraction["Skill Extraction"]
+            PatternRecognition[Pattern Recognition]
+            SequenceAnalysis[Sequence Analysis]
+            GeneralizationOps[Generalization]
+        end
+
+        subgraph SkillRefinement["Skill Refinement"]
+            MergeSkills[Merge Similar Skills]
+            UpdateConfidence[Update Confidence]
+            PruneWeak[Homeostatic Scaling<br/>Weight target: 10.0, factor: 0.9<br/>Bio equiv: ~3% activity<br/>Turrigiano 2008; Tononi SHY 2006]
+        end
+
+        SkillExtraction --> SkillRefinement
+    end
+
+    subgraph SleepConsolidation["Sleep Consolidation"]
+        direction TB
+
+        subgraph Phases["Sleep Phases"]
+            LightSleep[Light Sleep<br/>Initial processing]
+            DeepSleep[Deep Sleep<br/>Memory strengthening]
+            REMSleep[REM Sleep<br/>Pattern integration]
+        end
+
+        subgraph Operations["Operations"]
+            ReplayAll[Replay All Memories]
+            StrengthenStrong[Strengthen Strong]
+            WeakenWeak[Weaken Weak]
+            IntegratePatterns[Integrate Patterns]
+        end
+
+        Phases --> Operations
+    end
+
+    Triggers --> FESConsolidation
+    FESConsolidation --> EpisodicConsolidation
+    EpisodicConsolidation --> SemanticConsolidation
+    EpisodicConsolidation --> ProceduralConsolidation
+
+    TimeBasedTrigger --> FESConsolidation
+    ThresholdTrigger --> FESConsolidation
+    SleepTrigger --> SleepConsolidation
+    ManualTrigger --> FESConsolidation
+
+    SleepConsolidation -->|"Hippocampal SWR"| SemanticConsolidation
+
+    Note over ProceduralConsolidation: Procedural consolidation uses<br/>RL plasticity rules within<br/>shared SWR replay substrate
+
+    subgraph Output["Consolidated Output"]
+        UpdatedEpisodic[Updated Episodic Store]
+        UpdatedSemantic[Updated Semantic Graph]
+        UpdatedProcedural[Updated Skill Library]
+        Metrics[Consolidation Metrics]
+        UpdatedContext[Updated Context<br/>to Working Memory]
+    end
+
+    SemanticConsolidation --> UpdatedSemantic
+    ProceduralConsolidation --> UpdatedProcedural
+    EpisodicConsolidation --> UpdatedEpisodic
+    FESConsolidation --> Metrics
+
+    UpdatedSemantic -->|"updated context"| UpdatedContext
+    UpdatedEpisodic -->|"updated context"| UpdatedContext
+
+    classDef planned fill:#ffecb3,stroke:#ffa726,stroke-dasharray: 5 5

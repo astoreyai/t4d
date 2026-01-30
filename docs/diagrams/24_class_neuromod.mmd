@@ -1,0 +1,97 @@
+%%{init: {'theme': 'dark', 'themeVariables': { 'primaryColor': '#6366f1', 'primaryTextColor': '#e8e8f0', 'primaryBorderColor': '#818cf8', 'lineColor': '#a0a0b0', 'secondaryColor': '#1e1e2a', 'tertiaryColor': '#2a2a3a'}}}%%
+classDiagram
+    %% GABA/Glu: fast ionotropic, not neuromodulation
+    class NeuromodulatorOrchestra {
+        -dopamine: DopamineSystem
+        -norepinephrine: NorepinephrineSystem
+        -acetylcholine: AcetylcholineSystem
+        -serotonin: SerotoninSystem
+        -state: UnifiedState
+        +get_state() NeuroState
+        +update_from_event(event)
+        +compute_modulation() float
+        +reset_to_baseline()
+    }
+
+    class NeuromodulatorSystem {
+        <<abstract>>
+        -level: float
+        -baseline: float
+        -range: Tuple~float, float~
+        +get_level() float
+        +set_level(value)
+        +update(signal)
+        +decay_to_baseline(rate)
+    }
+
+    class DopamineSystem {
+        -prediction_model: TDModel
+        -rpe: float
+        +compute_rpe(actual, expected) float
+        +update_prediction(state, reward)
+        +get_burst_signal() float
+        +get_dip_signal() float
+    }
+
+    class NorepinephrineSystem {
+        -arousal_state: ArousalState
+        -novelty_tracker: NoveltyTracker
+        +get_arousal() ArousalState
+        +compute_exploration_rate() float
+        +update_novelty(observation)
+    }
+
+    class AcetylcholineSystem {
+        -mode: ACHMode
+        +get_mode() ACHMode
+        +set_encoding_mode()
+        +set_retrieval_mode()
+        +get_plasticity_gate() float
+    }
+
+    class SerotoninSystem {
+        -patience_factor: float
+        -eligibility_mod: float
+        +get_temporal_discount() float
+        +update_from_delay(delay)
+        +get_credit_modifier() float
+    }
+
+    class UnifiedState {
+        +dopamine: float
+        +norepinephrine: float
+        +acetylcholine: float
+        +serotonin: float
+        +timestamp: datetime
+        +to_dict() Dict
+        +from_dict(d) UnifiedState
+    }
+
+    class ArousalState {
+        <<enumeration>>
+        DROWSY
+        ALERT
+        VIGILANT
+        HYPERAROUSED
+    }
+
+    class ACHMode {
+        <<enumeration>>
+        ENCODING
+        RETRIEVAL
+        BALANCED
+    }
+
+    NeuromodulatorSystem <|-- DopamineSystem
+    NeuromodulatorSystem <|-- NorepinephrineSystem
+    NeuromodulatorSystem <|-- AcetylcholineSystem
+    NeuromodulatorSystem <|-- SerotoninSystem
+
+    NeuromodulatorOrchestra *-- DopamineSystem
+    NeuromodulatorOrchestra *-- NorepinephrineSystem
+    NeuromodulatorOrchestra *-- AcetylcholineSystem
+    NeuromodulatorOrchestra *-- SerotoninSystem
+    NeuromodulatorOrchestra *-- UnifiedState
+
+    NorepinephrineSystem --> ArousalState
+    AcetylcholineSystem --> ACHMode

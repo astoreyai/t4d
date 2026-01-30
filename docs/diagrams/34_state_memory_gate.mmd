@@ -1,0 +1,75 @@
+%%{init: {'theme': 'dark', 'themeVariables': { 'primaryColor': '#6366f1', 'primaryTextColor': '#e8e8f0', 'primaryBorderColor': '#818cf8', 'lineColor': '#a0a0b0', 'secondaryColor': '#1e1e2a', 'tertiaryColor': '#2a2a3a'}}}%%
+stateDiagram-v2
+    [*] --> Idle: Initialize
+
+    state Idle {
+        [*] --> WaitingForContent
+        note right of WaitingForContent
+            Gate ready
+            No pending decisions
+        end note
+    }
+
+    state Evaluation {
+        [*] --> ExtractFeatures
+        ExtractFeatures --> ComputePrior: features ready
+
+        state ComputePrior {
+            [*] --> CheckColdStart
+            CheckColdStart --> UsePopulation: no history
+            CheckColdStart --> UseBayesian: has history
+            UsePopulation --> CombinePriors
+            UseBayesian --> CombinePriors
+        }
+
+        ComputePrior --> ThompsonSample: prior computed
+        ThompsonSample --> MakeDecision: sample drawn
+
+        state MakeDecision {
+            [*] --> CompareThreshold
+            CompareThreshold --> DecideStore: p > threshold
+            CompareThreshold --> DecideSkip: p <= threshold
+        }
+    }
+
+    state PendingFeedback {
+        [*] --> Registered
+        Registered --> RetrievalFeedback: memory retrieved
+        Registered --> OutcomeFeedback: outcome received
+        Registered --> Timeout: 24h elapsed
+        RetrievalFeedback --> UpdateModel: was_helpful known
+        OutcomeFeedback --> UpdateModel: outcome_value known
+        Timeout --> UpdateModel: assume neutral
+    }
+
+    state ModelUpdate {
+        [*] --> ComputeLabel
+        ComputeLabel --> WeightByDA: label ready
+        WeightByDA --> BayesianUpdate: weight computed
+        BayesianUpdate --> UpdateThompson: posterior updated
+        UpdateThompson --> ClearPending: samplers updated
+    }
+
+    Idle --> Evaluation: should_store()
+    Evaluation --> Idle: DecideSkip
+    Evaluation --> PendingFeedback: DecideStore + register
+    PendingFeedback --> ModelUpdate: feedback received
+    ModelUpdate --> Idle: ClearPending
+
+    note right of Evaluation
+        Thompson sampling
+        Exploration vs exploitation
+        DA modulation
+    end note
+
+    note right of PendingFeedback
+        Track stored memories
+        Wait for feedback
+        Max 24h timeout
+    end note
+
+    note right of ModelUpdate
+        Bayesian LR update
+        Weight by DA signal
+        Update Thompson params
+    end note

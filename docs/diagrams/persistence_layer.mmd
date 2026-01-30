@@ -1,0 +1,73 @@
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#4a90d9', 'secondaryColor': '#f0f4f8', 'tertiaryColor': '#e8f4e8'}}}%%
+
+flowchart TB
+    subgraph Entry["Entry Points"]
+        MCP[MCP Server]
+        REST[REST API]
+        SDK[Python SDK]
+    end
+
+    subgraph Persistence["Persistence Layer"]
+        PM[PersistenceManager<br/>manager.py]
+
+        subgraph WAL["Write-Ahead Log"]
+            WAL_W[WAL Writer<br/>wal.py]
+            WAL_SEG[(WAL Segments<br/>64MB each)]
+            WAL_CRC[CRC32 Checksums]
+        end
+
+        subgraph Checkpoint["Checkpoint System"]
+            CP_MGR[CheckpointManager<br/>checkpoint.py]
+            CP_FILE[(Checkpoint Files<br/>gzip + SHA-256)]
+            CP_SCHED[Scheduler<br/>300s / 1000 ops]
+        end
+
+        subgraph Recovery["Recovery System"]
+            REC[RecoveryManager<br/>recovery.py]
+            COLD[Cold Start<br/>No checkpoint]
+            WARM[Warm Start<br/>Checkpoint + WAL]
+        end
+
+        subgraph Shutdown["Shutdown Handler"]
+            SH[ShutdownManager<br/>shutdown.py]
+            DRAIN[Drain Operations<br/>30s timeout]
+            FINAL[Final Checkpoint]
+        end
+    end
+
+    subgraph Storage["Data Storage"]
+        DATA_DIR[/var/lib/world-weaver/]
+        WAL_DIR[wal/]
+        CP_DIR[checkpoints/]
+    end
+
+    MCP --> PM
+    REST --> PM
+    SDK --> PM
+
+    PM --> WAL_W
+    WAL_W --> WAL_SEG
+    WAL_W --> WAL_CRC
+
+    PM --> CP_MGR
+    CP_MGR --> CP_FILE
+    CP_SCHED --> CP_MGR
+
+    PM --> REC
+    REC --> COLD
+    REC --> WARM
+
+    PM --> SH
+    SH --> DRAIN
+    SH --> FINAL
+
+    WAL_SEG --> WAL_DIR
+    CP_FILE --> CP_DIR
+    WAL_DIR --> DATA_DIR
+    CP_DIR --> DATA_DIR
+
+    style PM fill:#4a90d9,color:#fff
+    style WAL_W fill:#e74c3c,color:#fff
+    style CP_MGR fill:#27ae60,color:#fff
+    style REC fill:#9b59b6,color:#fff
+    style SH fill:#f39c12,color:#fff

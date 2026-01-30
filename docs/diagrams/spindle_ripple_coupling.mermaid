@@ -23,9 +23,10 @@ flowchart TB
 
     subgraph Nesting["Hierarchical Nesting"]
         direction TB
-        SO_UP["SO Up State<br/>triggers spindles"]
-        SP_TROUGH["Spindle Troughs<br/>nest ripples"]
+        SO_UP_DRIVER["SO Up-State<br/>(Common Driver)"]
+        SP_TROUGH["Spindle Troughs<br/>correlate with ripples"]
         OPTIMAL["Optimal Timing<br/>for plasticity"]
+        NOTE_NOCAUSE["Note: SO up-state independently drives spindles and SWRs;<br/>spindles do not trigger SWRs (Clemens 2011; Staresina 2015)"]
     end
 
     subgraph PlasticityWindow["Plasticity Windows"]
@@ -35,34 +36,36 @@ flowchart TB
     end
 
     subgraph Timing["Temporal Sequence"]
-        T0["t=0: SO Up State"]
-        T1["t+50ms: Spindle onset"]
-        T2["t+200ms: Spindle peak"]
-        T3["t+100ms: SWR nested"]
-        T4["t+500ms: Plasticity"]
+        T0["t=0ms: SO Up State"]
+        T1["t=200ms: Spindle onset"]
+        T2["t=400ms: Spindle peak"]
+        T3["t=500ms: SWR nested in spindle trough"]
+        T4["t=600ms: Plasticity"]
     end
 
     %% Connections
     CORTEX --> DOWN
     DOWN --> UP
 
-    %% SO up-state triggers BOTH spindles and SWRs in parallel
-    %% (Staresina et al. 2015)
+    %% SO up-state independently drives BOTH spindles and SWRs
+    %% NO causal link from spindles to SWRs (Clemens 2011; Staresina 2015)
     UP --> TRN
     TRN --> TC
     TC --> SIGMA
 
-    UP -->|"triggers in parallel"| CA3
+    UP -->|"independent driver"| CA3
     CA3 --> CA1
     CA1 --> REPLAY
 
-    %% SWR-Spindle temporal coupling enables consolidation
-    SIGMA <-->|"SWR-Spindle\ntemporal coupling"| CA1
+    %% SWR-Spindle temporal correlation (not causation)
+    SIGMA <-.->|"temporal correlation<br/>(not causal)"| CA1
 
-    %% Nesting
-    UP --> SO_UP
-    SO_UP -->|"triggers both"| SP_TROUGH
-    SO_UP -->|"triggers both"| OPTIMAL
+    %% SO up-state is common driver
+    UP --> SO_UP_DRIVER
+    SO_UP_DRIVER -->|"drives"| TRN
+    SO_UP_DRIVER -->|"drives"| CA3
+    SO_UP_DRIVER --> SP_TROUGH
+    SO_UP_DRIVER --> OPTIMAL
 
     %% Plasticity
     OPTIMAL --> LTP_WIN

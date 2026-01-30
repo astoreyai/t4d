@@ -1,0 +1,72 @@
+%%{init: {'theme': 'dark', 'themeVariables': { 'primaryColor': '#6366f1', 'primaryTextColor': '#e8e8f0', 'primaryBorderColor': '#818cf8', 'lineColor': '#a0a0b0', 'secondaryColor': '#1e1e2a', 'tertiaryColor': '#2a2a3a'}}}%%
+sequenceDiagram
+    autonumber
+    participant C as Client
+    participant MCP as MCP Gateway
+    participant G as Memory Gate
+    participant O as Orchestra
+    participant E as Embedder
+    participant S as Saga Coordinator
+    participant N as Neo4j
+    participant Q as Qdrant
+    participant T as Eligibility Trace
+
+    C->>+MCP: store_memory(content, metadata)
+    MCP->>MCP: validate_input()
+
+    MCP->>+G: should_store(content, context)
+    G->>G: extract_features()
+    G->>+O: get_state()
+    O-->>-G: NeuroState{DA, NE, ACh...}
+    G->>G: thompson_sample()
+    G->>G: bayesian_predict()
+    G-->>-MCP: (should_store=true, confidence=0.85)
+
+    alt should_store = true
+        MCP->>+E: embed(content)
+        E->>E: check_cache()
+        E->>E: bge_m3_encode()
+        E-->>-MCP: vector[1024]
+
+        rect rgb(30, 50, 30)
+            Note over MCP,E: Hippocampal Circuit Processing
+            MCP->>MCP: DG_pattern_separation(vector)
+            Note over MCP: Sparse expansion + orthogonalization
+            MCP->>MCP: CA3_association(sparse_vector)
+            Note over MCP: Autoassociative binding with context
+            MCP->>MCP: CA1_output(associated_vector)
+            Note over MCP: Novelty check + output preparation
+        end
+
+        MCP->>+S: begin_transaction()
+        S-->>-MCP: txn_id
+
+        par Store in Neo4j
+            MCP->>+S: prepare_neo4j(node_data)
+            S->>+N: CREATE (m:Memory {...})
+            N-->>-S: node_id
+            S-->>-MCP: prepared
+        and Store in Qdrant
+            MCP->>+S: prepare_qdrant(vector, payload)
+            S->>+Q: upsert(collection, point)
+            Q-->>-S: point_id
+            S-->>-MCP: prepared
+        end
+
+        MCP->>+S: commit(txn_id)
+        S->>N: COMMIT
+        S->>Q: COMMIT
+        S-->>-MCP: committed
+
+        MCP->>+G: register_pending(memory_id, features)
+        G-->>-MCP: registered
+
+        MCP->>+T: update(memory_id, activation=1.0)
+        T-->>-MCP: trace_updated
+
+        MCP-->>C: {status: "success", memory_id}
+    else should_store = false
+        MCP-->>C: {status: "skipped", reason: "low_value"}
+    end
+
+    Note over G,T: Feedback loop closes on retrieval or outcome

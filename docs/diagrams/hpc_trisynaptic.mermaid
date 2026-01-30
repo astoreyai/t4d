@@ -1,17 +1,20 @@
 %%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#e8f5e9'}}}%%
 flowchart TB
     subgraph Input["Cortical Input"]
-        EC_II["Entorhinal Cortex<br/>Layer II"]
-        EC_III["Entorhinal Cortex<br/>Layer III"]
+        EC_II["Entorhinal Cortex<br/>Layer II<br/>(ec_layer2_input param)"]
+        EC_III["Entorhinal Cortex<br/>Layer III<br/>(ec_layer3_input param)"]
+        PFC["Prefrontal Cortex<br/>(top-down control)"]
     end
+
+    PFC -.->|"top-down"| EC_III
 
     subgraph DG["Dentate Gyrus"]
         direction TB
         GC["Granule Cells<br/>(~1M neurons)"]
-        MOSSY["Mossy Cells"]
-        HILUS["Hilar Interneurons"]
+        MOSSY["Mossy Cells"]:::planned
+        HILAR_IN["Hilar Interneurons"]:::planned
 
-        PATTERN_SEP["Pattern Separation<br/>(sparse coding ~2%)"]
+        PATTERN_SEP["Pattern Separation<br/>(sparse coding 4%)"]
     end
 
     subgraph CA3["CA3 Region"]
@@ -31,7 +34,7 @@ flowchart TB
     end
 
     subgraph Output["Output Pathways"]
-        SUBICULUM["Subiculum"]
+        SUBICULUM["Subiculum<br/>(1024-dim, gain modulation)"]
         EC_V["Entorhinal Cortex<br/>Layer V"]
         CORTEX["Neocortex<br/>(consolidation)"]
     end
@@ -42,10 +45,21 @@ flowchart TB
         NE_MOD["NE: Arousal gain"]
     end
 
+    %% Amygdala input
+    BLA["Basolateral Amygdala"]
+
     %% Trisynaptic pathway
     EC_II -->|"Perforant Path"| GC
     GC --> PATTERN_SEP
     GC -->|"Mossy Fibers<br/>(giant synapses)"| PYR_CA3
+
+    %% Mossy cell feedback loop
+    GC -.->|"excite"| MOSSY
+    MOSSY -.->|"excite (feedback)"| GC
+    GC -.->|"excite"| HILAR_IN
+    HILAR_IN -.->|"inhibit (feedback)"| GC
+
+    Note over MOSSY,HILAR_IN: (PLANNED) Mossy cell excitation + interneuron inhibition<br/>modulates pattern separation (Scharfman 2007)
     PYR_CA3 --> PATTERN_COMP
     PYR_CA3 --> RECURRENT
     RECURRENT --> PYR_CA3
@@ -63,13 +77,31 @@ flowchart TB
     SUBICULUM --> EC_V
     EC_V --> CORTEX
 
+    %% EC feedback loops
+    EC_V -->|"feedback"| EC_II
+    EC_V -->|"feedback"| EC_III
+
     %% Modulation
     ACH_MOD -.->|"high=encode"| DG
     ACH_MOD -.->|"low=retrieve"| CA3
     DA_MOD -.->|"gates LTP"| CA1
     NE_MOD -.->|"gain control"| CA3
 
+    subgraph LC_SOURCE["Locus Coeruleus"]
+        LC["LC<br/>(NE source)"]
+    end
+
+    LC -.->|"NE: novelty tagging"| GC
+    LC -.->|"NE: arousal gain"| PYR_CA3
+
+    %% Amygdala emotional tagging
+    BLA -->|"emotional salience"| PYR_CA1
+    BLA -->|"valence tag"| GC
+
     %% Styling
+    classDef code_needed fill:#fff3cd,stroke:#ffc107,stroke-width:2px,stroke-dasharray: 5 5
+    classDef planned fill:#e0e0e0,stroke:#999,stroke-dasharray: 5 5
+
     style DG fill:#e8f5e9,stroke:#4caf50
     style CA3 fill:#e3f2fd,stroke:#1976d2
     style CA1 fill:#fff3e0,stroke:#f57c00

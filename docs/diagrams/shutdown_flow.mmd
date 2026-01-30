@@ -1,0 +1,68 @@
+%%{init: {'theme': 'base'}}%%
+
+sequenceDiagram
+    participant OS as Operating System
+    participant SH as ShutdownManager
+    participant PM as PersistenceManager
+    participant OPS as In-Flight Operations
+    participant CP as CheckpointManager
+    participant WAL as WriteAheadLog
+    participant CONN as Connections
+
+    Note over OS,CONN: Graceful Shutdown Sequence
+
+    OS->>SH: SIGTERM / SIGINT
+    activate SH
+
+    Note right of SH: Signal handler:<br/>- Sets flag ONLY<br/>- No async!<br/>- No logging!
+
+    SH->>SH: Set shutdown_requested flag
+    SH->>OS: Return immediately
+
+    Note over SH: Main thread detects flag
+
+    SH->>PM: Begin shutdown
+    activate PM
+
+    PM->>OPS: Stop accepting new requests
+
+    PM->>OPS: Wait for in-flight ops
+    activate OPS
+
+    alt Drain succeeds (< 30s)
+        OPS-->>PM: All ops complete
+    else Drain timeout
+        OPS-->>PM: Timeout after 30s
+        Note right of PM: Log warning:<br/>N ops abandoned
+    end
+    deactivate OPS
+
+    PM->>CP: Create final checkpoint
+    activate CP
+    CP->>CP: Serialize all state
+    CP->>CP: Compress (gzip)
+    CP->>CP: Write atomically
+    CP-->>PM: Checkpoint complete
+    deactivate CP
+
+    PM->>WAL: Flush and close
+    activate WAL
+    WAL->>WAL: fsync()
+    WAL->>WAL: Close segments
+    WAL-->>PM: WAL closed
+    deactivate WAL
+
+    PM->>CONN: Close connections
+    activate CONN
+    CONN->>CONN: Close Qdrant
+    CONN->>CONN: Close Neo4j
+    CONN-->>PM: Connections closed
+    deactivate CONN
+
+    PM-->>SH: Shutdown complete
+    deactivate PM
+
+    SH->>OS: Exit(0)
+    deactivate SH
+
+    Note over OS,CONN: Clean exit - no data loss

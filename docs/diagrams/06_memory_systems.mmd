@@ -1,0 +1,134 @@
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#9b59b6', 'secondaryColor': '#f5eef8'}}}%%
+flowchart TB
+    subgraph Working["Working Memory"]
+        direction TB
+        ActiveContext[Active Context<br/>Current Session]
+        AttentionBuffer[Attention Buffer<br/>Recent Items]
+        GoalStack[Goal Stack<br/>Active Objectives]
+
+        ActiveContext --> AttentionBuffer
+        AttentionBuffer --> GoalStack
+    end
+
+    subgraph FastEpisodic["Fast Episodic Store"]
+        direction TB
+
+        subgraph FESConfig["Configuration"]
+            Capacity["Capacity: 10,000"]
+            LearningRate["Learning: 100x faster"]
+            Consolidation["Threshold: 0.7"]
+        end
+
+        subgraph FESProcess["Processing"]
+            OneShot[One-Shot Storage]
+            SalienceCalc["Salience = w₁·DA + w₂·NE + w₃·DA·NE + w₄·ACh_gate"]
+            EvictionPolicy[Salience-Based Eviction]
+        end
+
+        FESConfig --> FESProcess
+    end
+
+    subgraph Episodic["Episodic Memory"]
+        direction TB
+
+        subgraph EpisodicSchema["Schema"]
+            EpisodeID["id: UUID"]
+            Content["content: str"]
+            Embedding["embedding: float[1024]"]
+            Timestamp["timestamp: datetime"]
+            SessionID["session_id: str"]
+            Valence["emotional_valence: float"]
+            Importance["importance: float"]
+        end
+
+        subgraph EpisodicOps["Operations"]
+            Store[Store Episode]
+            Retrieve[Retrieve by Similarity]
+            Temporal[Temporal Query]
+            Cluster[Cluster Analysis]
+        end
+
+        EpisodicSchema --> EpisodicOps
+    end
+
+    subgraph Semantic["Semantic Memory"]
+        direction TB
+
+        subgraph SemanticEntities["Entity Types"]
+            Person["Person<br/>name, attributes"]
+            Place["Place<br/>location, features"]
+            Thing["Thing<br/>properties"]
+            Concept["Concept<br/>definition, examples"]
+            Skill["Skill<br/>pattern, confidence"]
+        end
+
+        subgraph SemanticRelations["Relations"]
+            IsA["IS_A (taxonomy)"]
+            HasProperty["HAS_PROPERTY"]
+            RelatedTo2["RELATED_TO"]
+            LearnedFrom2["LEARNED_FROM"]
+        end
+
+        SemanticEntities --> SemanticRelations
+    end
+
+    subgraph Procedural["Procedural Memory"]
+        direction TB
+
+        subgraph ProceduralSchema["Schema"]
+            SkillID["id: UUID"]
+            Pattern["pattern: str"]
+            Embedding2["embedding: float[1024]"]
+            Confidence["confidence: float"]
+            UsageCount["usage_count: int"]
+            LastUsed["last_used: datetime"]
+        end
+
+        subgraph ProceduralOps["Operations"]
+            StoreSkill[Store Skill]
+            MatchPattern[Pattern Matching]
+            Execute[Execute Skill]
+            Strengthen[Strengthen on Use]
+        end
+
+        ProceduralSchema --> ProceduralOps
+    end
+
+    subgraph Consolidation["Consolidation Pipeline"]
+        direction LR
+        Replay[Experience Replay]
+        Extract[Entity Extraction]
+        Merge[Pattern Merging]
+        Prune[Weak Pruning]
+
+        Replay --> Extract
+        Extract --> Merge
+        Merge --> Prune
+    end
+
+    Working -->|"attention"| FastEpisodic
+    FastEpisodic -->|"consolidate"| Episodic
+    Episodic -->|"extract"| Semantic
+    Episodic -->|"generalize"| Procedural
+
+    FastEpisodic --> Consolidation
+    Episodic --> Consolidation
+    Consolidation --> Semantic
+    Consolidation --> Procedural
+
+    subgraph Retrieval["Unified Retrieval"]
+        MultiStore[Multi-Store Search]
+        Fusion[Result Fusion]
+        Rerank[Reranking]
+
+        DistNote["NOTE: Memories are distributed patterns<br/>across sparse encoder units. Retrieval =<br/>pattern completion via attractor dynamics<br/>Hopfield, not database lookup."]:::note
+    end
+
+    FastEpisodic --> MultiStore
+    Episodic --> MultiStore
+    Semantic --> MultiStore
+    Procedural --> MultiStore
+    MultiStore --> Fusion
+    Fusion --> Rerank
+
+    classDef note fill:#fffacd,stroke:#ffd700,stroke-width:2px

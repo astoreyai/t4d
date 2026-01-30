@@ -1,0 +1,117 @@
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#e74c3c', 'secondaryColor': '#fdf2f2'}}}%%
+flowchart TB
+    subgraph Application["Application Layer"]
+        MCPTools[MCP Tools]
+        MemoryServices[Memory Services]
+        Consolidation[Consolidation]
+        Storage[Storage Layer]
+    end
+
+    subgraph Instrumentation["Instrumentation"]
+        TracedDecorator["@traced decorator<br/>Automatic spans"]
+        MetricsCollector["Metrics Collector<br/>Counters, Histograms"]
+        LoggingIntegration["Structured Logging<br/>JSON format"]
+    end
+
+    subgraph Tracing["Distributed Tracing"]
+        direction TB
+
+        subgraph OTel["OpenTelemetry"]
+            Tracer[Tracer Provider]
+            SpanProcessor[Span Processor]
+            Exporter[OTLP Exporter]
+        end
+
+        subgraph Spans["Span Types"]
+            ServerSpan["SERVER spans<br/>MCP endpoints"]
+            ClientSpan["CLIENT spans<br/>Storage calls"]
+            InternalSpan["INTERNAL spans<br/>Processing"]
+        end
+
+        OTel --> Spans
+    end
+
+    subgraph Metrics["Prometheus Metrics"]
+        direction TB
+
+        subgraph Counters["Counters"]
+            RequestCount["memory_store_count"]
+            ErrorCount["memory_error_count"]
+            MemoryOps["memory_operations_total"]
+        end
+
+        subgraph Histograms["Histograms (milliseconds)"]
+            Latency["store_latency_ms"]
+            EmbeddingTime["embedding_time_ms"]
+            SearchTime["search_latency_ms"]
+        end
+
+        subgraph Gauges["Gauges"]
+            ActiveSessions["active_sessions"]
+            MemoryUsage["memory_usage_bytes"]
+            TraceCount["eligibility_trace_count"]
+        end
+
+        Counters --> Histograms
+        Histograms --> Gauges
+    end
+
+    subgraph Logging["Logging System"]
+        direction TB
+
+        subgraph LogLevels["Log Levels"]
+            Debug["DEBUG<br/>Verbose details"]
+            Info["INFO<br/>Normal ops"]
+            Warning["WARNING<br/>Concerns"]
+            Error["ERROR<br/>Failures"]
+        end
+
+        subgraph LogContext["Log Context"]
+            RequestID["request_id"]
+            SessionID["session_id"]
+            TraceID["trace_id"]
+            SpanID["span_id"]
+        end
+
+        LogLevels --> LogContext
+    end
+
+    subgraph Health["Health Checks"]
+        direction TB
+
+        subgraph Checks["Health Checks"]
+            QdrantHealth["Qdrant connectivity"]
+            Neo4jHealth["Neo4j connectivity"]
+            MemoryHealth["Memory subsystems"]
+            SystemHealth["System resources"]
+        end
+
+        subgraph Status["Status"]
+            Healthy["healthy: all OK"]
+            Degraded["degraded: partial"]
+            Unhealthy["unhealthy: critical"]
+        end
+
+        Checks --> Status
+    end
+
+    subgraph Backends["Observability Backends"]
+        Jaeger[(Jaeger<br/>Traces)]
+        PromServer[(Prometheus<br/>Metrics)]
+        Loki[(Loki<br/>Logs)]
+        Grafana[Grafana<br/>Dashboards]
+    end
+
+    Application --> Instrumentation
+    Instrumentation --> Tracing
+    Instrumentation --> Metrics
+    Instrumentation --> Logging
+    Instrumentation --> Health
+
+    Tracing --> Jaeger
+    Metrics --> PromServer
+    Logging --> Loki
+
+    Jaeger --> Grafana
+    PromServer --> Grafana
+    Loki --> Grafana

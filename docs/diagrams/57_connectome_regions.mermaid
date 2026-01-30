@@ -66,7 +66,8 @@ graph TB
     Striatum -->|GABA 0.8<br/>Inhibitory| GP
 
     %% Basal ganglia loop
-    GP -->|Glu| Thalamus
+    %% Basal ganglia output is tonic GABAergic inhibition; D1 striatal activity disinhibits thalamus (Albin 1989)
+    GP -->|"GABA (inhibitory)"| Thalamus
     Thalamus -->|Glu| PFC
     Thalamus -->|Glu| Motor
 
