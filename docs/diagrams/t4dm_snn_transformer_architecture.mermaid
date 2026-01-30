@@ -63,12 +63,12 @@ flowchart TB
             direction LR
             FIELDS["id · content · embedding<br/>event_time · record_time<br/>valid_from · valid_until<br/>κ ∈ [0,1] consolidation<br/>graph_delta · spike_trace"]
         end
-        subgraph BACKENDS["Dual-Store + Saga"]
+        subgraph T4DX["T4DX (Unified 4D Index)"]
             direction LR
-            QDRANT["Qdrant<br/>vector ANN<br/>1024d HNSW"]
-            NEO4J["Neo4j<br/>graph adjacency<br/>temporal edges"]
-            SAGA["Saga Pattern<br/>consistency<br/>WAL recovery"]
-            QDRANT ~~~ SAGA ~~~ NEO4J
+            VIDX["4D Vector Index<br/>d² = α²‖Δv‖² + (1-α)²|Δt|²/τ²<br/>temporal HNSW"]
+            TGRAPH["Temporal Graph<br/>built-in adjacency<br/>causal + temporal edges"]
+            PROV["Provenance<br/>output→input backtrace<br/>EU AI Act audit"]
+            VIDX ~~~ TGRAPH ~~~ PROV
         end
         subgraph QUERYPOLICIES["3 Query Policies (NOT 3 stores)"]
             direction LR
@@ -77,8 +77,8 @@ flowchart TB
             QP["Procedural<br/>type=proc<br/>success-ranked"]
             QE ~~~ QS ~~~ QP
         end
-        SCHEMA --> BACKENDS
-        BACKENDS --> QUERYPOLICIES
+        SCHEMA --> T4DX
+        T4DX --> QUERYPOLICIES
     end
 
     subgraph LEARNING["6. THREE-FACTOR SELF-LEARNING"]
@@ -176,7 +176,7 @@ flowchart TB
     class EMB,T2V,KWTA,VSA encoderStyle
     class LIF,ATTN,RWKV,THETA,GAMMA,DELTA,FF,CAPS coreStyle
     class PE,TAU,BOUNDARY temporalStyle
-    class FIELDS,QDRANT,NEO4J,SAGA,QE,QS,QP memoryStyle
+    class FIELDS,VIDX,TGRAPH,PROV,QE,QS,QP memoryStyle
     class FAST,SLOW,DA,NE,ACH,SHT,STDP,MODGATE learnStyle
     class NREM,REM,PRUNE,SWR,REINJ consolidateStyle
     class SCALE,BCM,DECORR homeoStyle

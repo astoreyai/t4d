@@ -25,7 +25,7 @@
 | **Neuromodulation** | Synapsis (DA-like) | No | No | No | No | No | **6 NT (DA/NE/ACh/5-HT/Glu/GABA)** |
 | **Oscillatory scaffold** | No | No | No | No | No | No | **Yes (θ/γ/δ coupling)** |
 | **Homeostasis** | No | No | No | No | No | No | **Yes (BCM + synaptic scaling)** |
-| **Graph backend** | No | No | No | No | No | No | **Yes (Neo4j temporal edges)** |
+| **Unified 4D index** | No | No | No | No | No | No | **Yes (T4DX: vector+graph+provenance)** |
 | **Prediction error gating** | No | No | No | No | No | Confidence | **Yes (τ(t) gates all)** |
 | **Capsule routing** | No | No | No | No | No | No | **Yes (pose equivariance)** |
 | **Forward-Forward** | No | No | No | No | No | No | **Yes (goodness-based)** |
@@ -36,9 +36,9 @@
 ## Novelty Claims
 
 ### 1. Unified 4D Memory Substrate (NOVEL)
-No published SNN-LLM has a persistent memory system. All operate as stateless sequence models. T4DM introduces a single canonical `MemoryItem` with consolidation level κ ∈ [0,1], bitemporal fields (event_time, record_time, valid_from, valid_until), and dual-store backends (vector + graph). This replaces the traditional episodic/semantic/procedural split with query policies over a unified store.
+No published SNN-LLM has a persistent memory system. All operate as stateless sequence models. T4DM introduces a single canonical `MemoryItem` with consolidation level κ ∈ [0,1] and bitemporal fields (event_time, record_time, valid_from, valid_until), stored in T4DX — a unified 4D index combining vector similarity (temporal HNSW), graph adjacency (causal + temporal edges), and provenance tracking in a single backend. This eliminates dual-store consistency problems (no Saga needed) and replaces the traditional episodic/semantic/procedural split with query policies over one store.
 
-**Closest work**: MemGPT (2023) has tiered memory but no consolidation, no graph, no biological dynamics.
+**Closest work**: MemGPT (2023) has tiered memory but no consolidation, no unified index, no biological dynamics.
 
 ### 2. Three-Factor Local Learning Without Backprop (NOVEL in LLM context)
 Published SNN-LLMs (BrainTransformers, SpikeGPT, SpikeLLM) all use surrogate gradient backpropagation. T4DM uses Δw = η · δ(t) · e_ij(t) where eligibility traces accumulate STDP-driven correlations and neuromodulatory signals gate plasticity. This is biologically faithful and avoids the non-local credit assignment problem.
@@ -70,7 +70,7 @@ No published SNN-LLM couples theta (4-8Hz hippocampal), gamma (30-100Hz cortical
 | VSA binding codes | Plate (2003), Gayler (2004) |
 | k-WTA sparse coding | Makhzani & Frey (2014) |
 | Hopfield retrieval | Ramsauer et al. (2021) |
-| Saga pattern for dual-store | Standard distributed systems |
+| HNSW vector index | Malkov & Yashunin (2018) |
 
 ---
 
