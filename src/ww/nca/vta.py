@@ -50,7 +50,7 @@ class VTAFiringMode(Enum):
     PHASIC_PAUSE = "pause"  # Reward < expectation (0-2 Hz)
 
 
-@dataclass
+@dataclass(frozen=True)
 class VTAConfig:
     """Configuration for VTA circuit dynamics."""
 
@@ -94,6 +94,9 @@ class VTAState:
     # RPE tracking
     last_rpe: float = 0.0
     cumulative_rpe: float = 0.0    # Running RPE for eligibility
+
+    # PFC modulation (dlPFC modulates tonic DA, stored in state not config)
+    tonic_modulation: float = 0.0  # Additive modulation to tonic_da_level
 
     # Value function state
     value_estimate: float = 0.5    # V(s) - expected future reward
@@ -170,6 +173,10 @@ class VTACircuit:
 
         # P2.1 Autowiring: Reference to raphe nucleus for automatic modulation
         self._raphe: RapheNucleus | None = None
+
+        # ATOM-P3-9: DA homeostatic regulation
+        self._da_history: list[float] = []
+        self._homeostatic_target = 0.3
 
         logger.info(
             f"VTACircuit initialized: tonic_da={self.config.tonic_da_level}, "
@@ -308,6 +315,30 @@ class VTACircuit:
         """Get value estimate for state."""
         return self._value_table.get(state, 0.5)
 
+    # ATOM-P2-5: Value table accessor methods
+    def update_value_estimate(self, key: str, value: float) -> None:
+        """
+        Update value estimate for a state key.
+
+        Args:
+            key: State identifier
+            value: Value estimate [0, 1]
+        """
+        self._value_table[key] = float(np.clip(value, 0.0, 1.0))
+
+    def get_value_estimate(self, key: str, default: float = 0.5) -> float:
+        """
+        Get value estimate for a state key.
+
+        Args:
+            key: State identifier
+            default: Default value if key not found
+
+        Returns:
+            Value estimate [0, 1]
+        """
+        return self._value_table.get(key, default)
+
     def update_value(
         self,
         state: str,
@@ -364,6 +395,15 @@ class VTACircuit:
         Returns:
             New DA concentration
         """
+        # ATOM-P2-1: Input validation at NCA layer boundary
+        from ww.core.validation import ValidationError
+        if isinstance(rpe, np.ndarray) and not np.all(np.isfinite(rpe)):
+            raise ValidationError("rpe", "Contains NaN or Inf values")
+        if not np.isfinite(rpe):
+            raise ValidationError("rpe", "Contains NaN or Inf values")
+        if not np.isfinite(dt):
+            raise ValidationError("dt", "Contains NaN or Inf values")
+
         # Store RPE
         self.state.last_rpe = rpe
         self._reward_history.append(rpe)
@@ -428,13 +468,19 @@ class VTACircuit:
         DA level decays exponentially to baseline with tau_decay time constant.
         """
         self.state.firing_mode = VTAFiringMode.TONIC
-        self.state.current_rate = self.config.tonic_rate
+
+        # ATOM-P2-8: D2 autoreceptor feedback (Bhatt et al. 1998)
+        # High DA suppresses VTA firing rate via D2 autoreceptors
+        d2_inhibition = self.state.current_da ** 2  # Hill-like function
+        effective_rate = self.config.tonic_rate * (1.0 - 0.3 * d2_inhibition)
+        self.state.current_rate = effective_rate
 
         # Fix 1: Exponential decay (Grace & Bunney 1984)
         # da_level = da_target + (da_level - da_target) * exp(-dt / tau_decay)
-        da_target = self.config.tonic_da_level
+        # Effective tonic DA includes PFC modulation from state
+        effective_tonic = self.config.tonic_da_level + self.state.tonic_modulation
         da_level = self.state.current_da
-        self.state.current_da = da_target + (da_level - da_target) * np.exp(-dt / self.config.tau_decay)
+        self.state.current_da = effective_tonic + (da_level - effective_tonic) * np.exp(-dt / self.config.tau_decay)
 
         # Update timing
         self.state.time_since_phasic += dt
@@ -499,11 +545,21 @@ class VTACircuit:
 
         Handles decay back to tonic state.
         P2.1: Auto-calls raphe inhibition if wired.
+        ATOM-P3-9: Homeostatic regulation of DA levels.
 
         Args:
             dt: Timestep in seconds
         """
         self.state.time_since_phasic += dt
+
+        # ATOM-P3-9: DA homeostatic mechanism
+        self._da_history.append(self.state.current_da)
+        if len(self._da_history) > 1000:
+            self._da_history = self._da_history[-1000:]
+            mean_da = np.mean(self._da_history)
+            if mean_da > self._homeostatic_target * 1.2:
+                # Reduce tonic rate to bring DA back to target
+                self.state.current_rate *= 0.995
 
         # P2.1: Auto-receive serotonin inhibition if raphe is wired
         if self._raphe is not None:
@@ -534,7 +590,13 @@ class VTACircuit:
 
         Args:
             callback: Function to call on DA change
+
+        Raises:
+            ValueError: If callback limit (100) exceeded
         """
+        # ATOM-P3-8: Callback registration limit
+        if len(self._da_callbacks) >= 100:
+            raise ValueError("Max 100 callbacks")
         self._da_callbacks.append(callback)
 
     def get_da_for_neural_field(self) -> float:
@@ -664,14 +726,9 @@ class VTACircuit:
         pfc_signal = float(np.clip(pfc_signal, 0, 1))
 
         if context == "goal":
-            # dlPFC modulates tonic DA firing rate
-            # High PFC → increase tonic baseline (focused motivation)
-            tonic_modulation = 0.2 * pfc_signal  # Up to 20% increase
-            self.config.tonic_da_level = np.clip(
-                self.config.tonic_da_level * (1 + tonic_modulation),
-                0.1,
-                0.5
-            )
+            # dlPFC modulates tonic DA firing rate — stored in STATE not CONFIG
+            tonic_mod_delta = 0.2 * pfc_signal  # Up to 20% increase
+            self.state.tonic_modulation = min(0.2, self.state.tonic_modulation + tonic_mod_delta * 0.01)
         elif context == "value":
             # vmPFC biases expected reward baseline
             # Shifts value estimate toward PFC prediction
@@ -736,7 +793,8 @@ class VTACircuit:
         """Reset VTA to initial state."""
         self.state = VTAState(
             current_da=self.config.tonic_da_level,
-            current_rate=self.config.tonic_rate
+            current_rate=self.config.tonic_rate,
+            tonic_modulation=0.0
         )
         self._trace_history.clear()
         self._reward_history.clear()

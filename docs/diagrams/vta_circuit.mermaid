@@ -11,8 +11,8 @@ flowchart TB
     subgraph VTA["Ventral Tegmental Area"]
         direction TB
         DA_NEURON["DA Neurons<br/>(~60%)"]
-        GABA_NEURON["GABA Neurons<br/>(~35%)"]
-        GLU_NEURON["Glu Neurons<br/>(~5%)"]
+        GABA_NEURON["GABA Neurons<br/>(~35%)"]:::planned
+        GLU_NEURON["Glu Neurons<br/>(~5%)"]:::planned
 
         subgraph Firing["Firing Modes"]
             TONIC["Tonic<br/>(3-5 Hz)"]
@@ -49,7 +49,7 @@ flowchart TB
     %% VTA internal
     DA_NEURON --> TONIC
     DA_NEURON --> PHASIC
-    GABA_NEURON -.->|"local inhibition"| DA_NEURON
+    GABA_NEURON -.->|"local inhibition (planned)"| DA_NEURON
 
     %% Computation
     REWARD --> RPE
@@ -64,7 +64,7 @@ flowchart TB
     DA_NEURON --> AMY
 
     %% Mesolimbic feedback loop (Watabe-Uchida 2012)
-    NAC -.->|"GABA feedback"| GABA_NEURON
+    NAC -.->|"GABA feedback (planned)"| GABA_NEURON
 
     %% Effects
     NAC --> VIGOR

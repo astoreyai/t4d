@@ -76,14 +76,14 @@ flowchart TB
         LC["Locus Coeruleus<br/>(NE Source)"]
         MS["Medial Septum<br/>(Theta Source - PARTIAL)"]:::partial
         ACH_NOTE["ACh gating: _apply_ach_gating() active in process()<br/>High ACh suppresses CA3→CA1 path (max 80%)"]
-        NE_NOTE["⚠ _apply_ne_encoding_gain() exists<br/>in hippocampus.py but not called"]:::partial
+        NE_NOTE["✓ _apply_ne_encoding_gain() wired<br/>to DG, CA3 via LC modulation"]
     end
 
     ACH -.->|"High: Encode"| DG
     ACH -.->|"Low: Retrieve"| CA3
     DA -.->|"Modulate"| CA3_OP
-    LC -.->|"NE: novelty tagging"| DG
-    LC -.->|"NE: arousal gain"| CA3
+    LC -->|"NE: novelty tagging (wired)"| DG
+    LC -->|"NE: arousal gain (wired)"| CA3
     MS -.->|"ACh + GABA pacemaker (theta)"| CA3
 
     classDef partial fill:#fff3cd,stroke:#ffc107,stroke-dasharray: 5 5

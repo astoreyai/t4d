@@ -45,11 +45,12 @@ flowchart TB
         CONSOLIDATE["Memory<br/>Consolidation"]
     end
 
-    subgraph Timing["Temporal Coupling"]
-        T1["SO Up State<br/>(t=0)"]
-        T2["Spindle Start<br/>(t+200ms)"]
-        T3["SWR Nested<br/>(t+300ms)"]
-        T4["Plasticity Window<br/>(t+500ms)"]
+    subgraph Timing["Temporal Coupling"]:::planned
+        T1["SO Up State<br/>(t=0)"]:::planned
+        T2["Spindle Start<br/>(t+200ms)"]:::planned
+        T3["SWR Nested<br/>(t+300ms)"]:::planned
+        T4["Plasticity Window<br/>(t+500ms)"]:::planned
+        TIMING_NOTE["Note: Spindle-SWR precise nesting<br/>timing not yet implemented"]:::planned
     end
 
     %% Sleep state transitions
@@ -95,9 +96,12 @@ flowchart TB
     SPINDLE_LTP --> CONSOLIDATE
 
     %% Timing sequence
-    T1 --> T2 --> T3 --> T4
+    T1 -.->|"planned"| T2
+    T2 -.->|"planned"| T3
+    T3 -.->|"planned"| T4
 
     %% Styling
+    classDef planned fill:#e0e0e0,stroke:#999,stroke-dasharray: 5 5
     style HPC_SWR fill:#e1f5fe,stroke:#03a9f4
     style RIPPLE fill:#b3e5fc,stroke:#0288d1
     style CONSOLIDATE fill:#c8e6c9,stroke:#388e3c

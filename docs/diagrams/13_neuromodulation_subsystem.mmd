@@ -3,10 +3,11 @@ flowchart TB
     subgraph L1["NEUROMODULATION SUBSYSTEM"]
         direction TB
 
-        subgraph ORCH["Orchestra Coordinator"]
-            O_STATE[Unified State<br/>5 modulators]
-            O_BLEND[State Blending<br/>Weighted combination]
-            O_ADAPT[Adaptive Baseline<br/>Homeostatic]
+        subgraph ORCH["Orchestra Coordinator"]:::planned
+            O_STATE[Unified State<br/>5 modulators]:::planned
+            O_BLEND[State Blending<br/>Weighted combination]:::planned
+            O_ADAPT[Adaptive Baseline<br/>Homeostatic]:::planned
+            ORCH_NOTE["Note: Not yet implemented<br/>Individual modulators operate independently"]
         end
 
         subgraph DA["Dopamine System"]
@@ -70,8 +71,9 @@ flowchart TB
     classDef ach fill:#22c55e,stroke:#4ade80,color:#fff
     classDef ser fill:#eab308,stroke:#facc15,color:#000
     classDef ei fill:#9333ea,stroke:#a855f7,color:#fff
+    classDef planned fill:#e0e0e0,stroke:#999,stroke-dasharray: 5 5
 
-    class O_STATE,O_BLEND,O_ADAPT orch
+    class O_STATE,O_BLEND,O_ADAPT,ORCH_NOTE orch
     class DA_RPE,DA_PRED,DA_BURST da
     class NE_AROU,NE_NOVL,NE_EXPL ne
     class ACH_MODE,ACH_RETR,ACH_PLAS ach

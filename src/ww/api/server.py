@@ -210,14 +210,20 @@ app.add_middleware(SecurityHeadersMiddleware)
 
 
 # P3-SEC-L7: Request size limit middleware to prevent DoS via large payloads
+# ATOM-P0-10: Enhanced to prevent chunked transfer encoding bypass
 class RequestSizeLimitMiddleware(BaseHTTPMiddleware):
     """Limit request body size to prevent DoS attacks."""
 
     MAX_REQUEST_SIZE = 5 * 1024 * 1024  # 5MB default limit
 
     async def dispatch(self, request: Request, call_next) -> Response:
+        # Only check body size for methods that can have request bodies
+        if request.method in ("GET", "HEAD", "OPTIONS"):
+            return await call_next(request)
+
         content_length = request.headers.get("content-length")
         if content_length:
+            # Content-Length header present: check size upfront
             try:
                 if int(content_length) > self.MAX_REQUEST_SIZE:
                     from fastapi.responses import JSONResponse
@@ -227,6 +233,27 @@ class RequestSizeLimitMiddleware(BaseHTTPMiddleware):
                     )
             except ValueError:
                 pass  # Invalid content-length header, let it proceed
+        else:
+            # No Content-Length: chunked transfer or no body
+            # Wrap receive to count bytes as they arrive
+            bytes_received = 0
+            original_receive = request.receive
+
+            async def counting_receive():
+                nonlocal bytes_received
+                message = await original_receive()
+                if message.get("type") == "http.request":
+                    body = message.get("body", b"")
+                    bytes_received += len(body)
+                    if bytes_received > self.MAX_REQUEST_SIZE:
+                        # Raise error to abort request processing
+                        from fastapi.responses import JSONResponse
+                        raise ValueError(f"Request body exceeds {self.MAX_REQUEST_SIZE // (1024*1024)}MB")
+                return message
+
+            # Replace receive callable
+            request._receive = counting_receive
+
         return await call_next(request)
 
 
@@ -274,9 +301,10 @@ class ApiKeyAuthMiddleware(BaseHTTPMiddleware):
     - Root endpoint (redirect to docs)
     - OpenAPI schema (required for docs UI)
     - OPTIONS requests (for CORS preflight)
+    ATOM-P2-13: /metrics removed from exempt paths (now requires authentication)
     """
 
-    EXEMPT_PATHS = {"/", "/api/v1/health", "/openapi.json", "/docs", "/redoc", "/metrics"}
+    EXEMPT_PATHS = {"/", "/api/v1/health", "/openapi.json", "/docs", "/redoc"}
 
     async def dispatch(self, request: Request, call_next) -> Response:
         # Skip OPTIONS requests (CORS preflight)

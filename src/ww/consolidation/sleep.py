@@ -480,6 +480,8 @@ class SleepConsolidation:
         vae_enabled: bool = True,
         vae_latent_dim: int = 128,
         embedding_dim: int = 1024,
+        # ATOM-P2-19: Seedable consolidation for reproducibility
+        seed: int | None = None,
     ):
         """
         Initialize sleep consolidation.
@@ -508,6 +510,7 @@ class SleepConsolidation:
             vae_enabled: Enable VAE-based generative replay (P7)
             vae_latent_dim: Latent dimension for VAE generator
             embedding_dim: Embedding dimension (should match memory system)
+            seed: Random seed for reproducibility (ATOM-P2-19)
         """
         self.episodic = episodic_memory
         self.semantic = semantic_memory
@@ -537,6 +540,9 @@ class SleepConsolidation:
         self.interleave_enabled = interleave_enabled
         self.recent_ratio = recent_ratio
         self.replay_batch_size = replay_batch_size
+
+        # ATOM-P2-19: Seedable RNG for reproducibility
+        self._rng = np.random.default_rng(seed)
 
         # Sharp-wave ripple generator for compressed replay
         self.swr = SharpWaveRipple(
@@ -1744,11 +1750,12 @@ class SleepConsolidation:
                 from ww.consolidation.lability import is_reconsolidation_eligible
 
                 # Check if episode has last_accessed (retrieval time) for lability window
+                # ATOM-P1-8: Require retrieval before reconsolidation (no last_accessed = not retrieved)
                 last_retrieval = getattr(episode, "last_accessed", None)
                 if last_retrieval is None:
                     # No retrieval timestamp - memory hasn't been retrieved yet
-                    # Allow reconsolidation for initial consolidation
-                    can_reconsolidate = True
+                    # Cannot reconsolidate until retrieved (biological requirement)
+                    can_reconsolidate = False
                 else:
                     # Check if within lability window
                     can_reconsolidate = is_reconsolidation_eligible(
@@ -1960,6 +1967,22 @@ class SleepConsolidation:
         else:
             return None
 
+        # ATOM-P2-12: Semantic coherence validation for abstractions
+        # Verify minimum coherence of ALL cluster members (not just average)
+        if len(cluster_embs) > 1:
+            for emb in cluster_embs:
+                cos_sim = np.dot(centroid, emb) / (np.linalg.norm(centroid) * np.linalg.norm(emb) + 1e-8)
+                if cos_sim < 0.3:  # Minimum coherence threshold
+                    logger.warning(f"Incoherent cluster member: cos_sim={cos_sim:.3f} < 0.3")
+                    return None  # Reject this abstraction
+
+        # ATOM-P0-6: Add provenance tracking to consolidation outputs
+        from ww.core.provenance import sign_embedding
+
+        provenance = sign_embedding(
+            centroid, origin="rem_abstraction", creator_id="consolidation.sleep"
+        )
+
         # Compute confidence (average similarity to centroid)
         sims = cluster_embs @ centroid
         confidence = float(np.mean(sims))
@@ -2004,17 +2027,23 @@ class SleepConsolidation:
         # Persist to semantic memory
         entity_id: UUID | None = None
         try:
+            # ATOM-P0-6: Include provenance in entity metadata
             entity = await self.semantic.create_entity(
                 name=concept_name,
                 entity_type="CONCEPT",
                 summary=summary,
                 details=f"REM abstraction with confidence {confidence:.3f}. "
-                        f"Source entities: {len(cluster_ids)}",
+                        f"Source entities: {len(cluster_ids)}. "
+                        f"Provenance: hash={provenance.content_hash[:16]}..., "
+                        f"record_id={provenance.record_id}",
                 embedding=centroid.tolist(),
                 source="rem_abstraction",
             )
             entity_id = entity.id
-            logger.info(f"Created abstract concept: {concept_name} (id={entity_id})")
+            logger.info(
+                f"Created abstract concept: {concept_name} (id={entity_id}, "
+                f"provenance={provenance.record_id})"
+            )
 
             # Create ABSTRACTS relationships to source entities
             for source_id in source_entity_ids:

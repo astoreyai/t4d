@@ -18,14 +18,14 @@ class TestVTAPFCModulation:
     def test_vta_pfc_goal_context(self):
         """Test dlPFC goal-directed modulation of VTA."""
         vta = VTACircuit()
-        initial_tonic = vta.config.tonic_da_level
+        initial_modulation = vta.state.tonic_modulation
 
         # High PFC signal (goal-directed)
         vta.receive_pfc_modulation(pfc_signal=0.8, context="goal")
 
-        # Should increase tonic DA level
-        assert vta.config.tonic_da_level > initial_tonic
-        assert vta.config.tonic_da_level <= 0.5  # Within bounds
+        # Should increase tonic modulation (stored in state, not config)
+        assert vta.state.tonic_modulation > initial_modulation
+        assert vta.state.tonic_modulation <= 0.2  # Capped at 20%
 
     def test_vta_pfc_value_context(self):
         """Test vmPFC value-based modulation of VTA."""
@@ -40,15 +40,16 @@ class TestVTAPFCModulation:
         assert 0.0 <= vta.state.value_estimate <= 1.0
 
     def test_vta_pfc_low_signal(self):
-        """Test low PFC signal reduces modulation."""
+        """Test low PFC signal has minimal effect on modulation."""
         vta = VTACircuit()
-        initial_tonic = vta.config.tonic_da_level
+        initial_modulation = vta.state.tonic_modulation
 
         # Low PFC signal
         vta.receive_pfc_modulation(pfc_signal=0.1, context="goal")
 
-        # Should decrease or maintain tonic DA
-        assert vta.config.tonic_da_level <= initial_tonic * 1.1
+        # Should have minimal increase in modulation
+        assert vta.state.tonic_modulation >= initial_modulation
+        assert vta.state.tonic_modulation < 0.01  # Very small increase
 
     def test_vta_pfc_invalid_context(self):
         """Test invalid context is handled gracefully."""
@@ -268,8 +269,8 @@ class TestIntegratedPFCModulation:
         lc.receive_pfc_modulation(pfc_signal)
         raphe.receive_pfc_modulation(pfc_signal)
 
-        # VTA should increase tonic DA
-        assert vta.config.tonic_da_level > 0.3
+        # VTA should have increased tonic modulation (stored in state)
+        assert vta.state.tonic_modulation > 0.0
 
         # LC should increase arousal
         assert lc.state.arousal_drive > 0.5
@@ -308,6 +309,7 @@ class TestIntegratedPFCModulation:
         raphe.receive_pfc_modulation(pfc_signal=2.0)  # Over max
 
         # All should be within bounds
-        assert 0.1 <= vta.config.tonic_da_level <= 0.5
+        # VTA tonic modulation is capped at 0.2
+        assert 0.0 <= vta.state.tonic_modulation <= 0.2
         assert 0.0 <= lc.state.arousal_drive <= 1.0
         assert 0.0 <= raphe.state.extracellular_5ht <= 1.0

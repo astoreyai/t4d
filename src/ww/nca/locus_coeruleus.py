@@ -478,6 +478,7 @@ class LocusCoeruleus:
         self,
         config: LCConfig | None = None,
         surprise_config: SurpriseConfig | None = None,
+        seed: int | None = None,
     ):
         """
         Initialize locus coeruleus.
@@ -485,6 +486,7 @@ class LocusCoeruleus:
         Args:
             config: LC configuration parameters
             surprise_config: Surprise model configuration (Phase 2)
+            seed: Random seed for phasic decision (ATOM-P4-10)
         """
         self.config = config or LCConfig()
         self.state = LCState(
@@ -494,6 +496,9 @@ class LocusCoeruleus:
 
         # Phase 2: Surprise model integration
         self.surprise = SurpriseModel(surprise_config)
+
+        # ATOM-P4-10: Seeded RNG for reproducible phasic decisions
+        self._rng = np.random.default_rng(seed)
 
         # Callbacks
         self._ne_callbacks: list[Callable[[float], None]] = []
@@ -506,9 +511,13 @@ class LocusCoeruleus:
         # Simulation time
         self._simulation_time = 0.0
 
+        # ATOM-P3-10: NE arousal ceiling with habituation
+        self._high_arousal_duration = 0.0
+        self._habituation_factor = 1.0
+
         logger.info(
             f"LocusCoeruleus initialized: tonic_optimal={self.config.tonic_optimal_rate}Hz, "
-            "surprise_model=enabled"
+            f"surprise_model=enabled, seed={seed}"
         )
 
     # =========================================================================
@@ -525,6 +534,11 @@ class LocusCoeruleus:
         Returns:
             Current NE level
         """
+        # ATOM-P2-1: Input validation at NCA layer boundary
+        from ww.core.validation import ValidationError
+        if not np.isfinite(dt):
+            raise ValidationError("dt", "Contains NaN or Inf values")
+
         self._simulation_time += dt
 
         # 1. Update phasic state
@@ -670,6 +684,19 @@ class LocusCoeruleus:
         # Clamp
         self.state.ne_level = float(np.clip(self.state.ne_level, 0.0, 1.0))
 
+        # ATOM-P3-10: Arousal ceiling with habituation
+        # Track high arousal duration and apply habituation
+        if self.state.ne_level > 0.8:
+            self._high_arousal_duration += dt
+            if self._high_arousal_duration > 60.0:  # 60 sim-seconds
+                self._habituation_factor *= 0.99
+        else:
+            self._high_arousal_duration = 0.0
+            self._habituation_factor = min(1.0, self._habituation_factor + 0.001)
+
+        # Apply habituation factor
+        self.state.ne_level *= self._habituation_factor
+
     def _update_gain_modulation(self) -> None:
         """
         Compute Yerkes-Dodson performance modulation.
@@ -719,9 +746,9 @@ class LocusCoeruleus:
 
         # Check salience threshold
         if salience < self.config.phasic_threshold:
-            # Probabilistic trigger based on salience
+            # ATOM-P4-10: Use seeded RNG for reproducible probabilistic trigger
             prob = salience / self.config.phasic_threshold
-            if np.random.random() > prob:
+            if self._rng.random() > prob:
                 return False
 
         # Trigger phasic burst
@@ -803,16 +830,9 @@ class LocusCoeruleus:
             1.0
         ))
 
-        # High PFC also reduces phasic responsiveness
-        # (implements top-down attentional control)
-        # Store as gain modulation for use in trigger_phasic
-        if not hasattr(self.state, 'pfc_gain'):
-            # Add attribute dynamically if not present
-            self.state.pfc_gain = 1.0
-
-        # High PFC → reduce phasic gain (less distractible)
-        # Low PFC → increase phasic gain (more distractible)
-        self.state.pfc_gain = 0.5 + 0.5 * (1 - pfc_signal)  # Range [0.5, 1.0]
+        # ATOM-P4-11: TODO: PFC modulation planned for future enhancement
+        # High PFC should reduce phasic responsiveness (top-down control)
+        # Currently not implemented - pfc_gain attribute removed (was dead code)
 
     # =========================================================================
     # Integration Methods

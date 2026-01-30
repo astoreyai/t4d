@@ -43,6 +43,11 @@ import numpy as np
 logger = logging.getLogger(__name__)
 
 
+class DalesLawViolation(ValueError):
+    """Raised when Dale's law is violated with strict enforcement."""
+    pass
+
+
 class RegionType(Enum):
     """Types of brain regions."""
     CORTICAL = auto()           # Neocortex
@@ -110,6 +115,7 @@ class ProjectionPathway:
         strength: Connection strength (0-1)
         probability: Connection probability
         is_inhibitory: Whether projection is inhibitory
+        weight_source: ATOM-P3-28: Literature citation for weight value
     """
     source: str
     target: str
@@ -117,6 +123,7 @@ class ProjectionPathway:
     strength: float = 0.5
     probability: float = 1.0
     is_inhibitory: bool = False
+    weight_source: str = "default"  # ATOM-P3-28: Citation for parameterization
 
     @property
     def signed_strength(self) -> float:
@@ -143,6 +150,7 @@ class ConnectomeConfig:
     max_long_range_strength: float = 0.3   # Long-range weaker
     local_ei_ratio: float = 0.8            # E/I balance ~4:1
     enforce_dale_law: bool = True          # Neurons are E or I, not both
+    strict_dales_law: bool = False         # P1-5: Raise error instead of warning on violation
 
     # Distance parameters (mm)
     cortical_spacing: float = 15.0         # Between cortical regions
@@ -312,11 +320,13 @@ class Connectome:
         # Dopaminergic pathways
         if "VTA" in self.regions:
             # Mesolimbic: VTA → NAcc
+            # ATOM-P3-28: Strength based on Schultz (1998) - reward pathway
             if "NAcc" in self.regions:
                 self.pathways.append(ProjectionPathway(
                     source="VTA", target="NAcc",
                     nt_system=NTSystem.DOPAMINE,
-                    strength=0.8, probability=0.9
+                    strength=0.8, probability=0.9,
+                    weight_source="Schultz (1998) - dopamine reward prediction"
                 ))
             # Mesocortical: VTA → PFC
             if "PFC" in self.regions:
@@ -712,9 +722,15 @@ class Connectome:
         if self.config.enforce_dale_law:
             for pathway in self.pathways:
                 if pathway.nt_system == NTSystem.GABA and not pathway.is_inhibitory:
-                    issues.append(f"GABA pathway {pathway.source}→{pathway.target} not inhibitory")
+                    msg = f"GABA pathway {pathway.source}→{pathway.target} not inhibitory"
+                    if self.config.strict_dales_law:
+                        raise DalesLawViolation(msg)
+                    issues.append(msg)
                 if pathway.nt_system == NTSystem.GLUTAMATE and pathway.is_inhibitory:
-                    issues.append(f"Glu pathway {pathway.source}→{pathway.target} is inhibitory")
+                    msg = f"Glu pathway {pathway.source}→{pathway.target} is inhibitory"
+                    if self.config.strict_dales_law:
+                        raise DalesLawViolation(msg)
+                    issues.append(msg)
 
         # Check for isolated regions
         combined = self.get_combined_connectivity()
