@@ -1,447 +1,368 @@
-# World Weaver Architecture Diagrams
-
-**Version**: 0.1.0 | **Status**: Complete | **Last Updated**: 2025-12-06
-
-This directory contains comprehensive Mermaid-based architecture diagrams for the World Weaver memory system. Each diagram is self-contained with embedded descriptions, metrics, and implementation details.
-
-## Quick Navigation
-
-| Diagram | Focus | Key Concepts |
-|---------|-------|--------------|
-| [System Architecture](system_architecture.md) | Complete system overview | Layers, components, data flow |
-| [Memory Subsystems](memory_subsystems.md) | Tripartite memory interactions | Episodic, Semantic, Procedural, Working |
-| [Neural Pathways](neural_pathways.md) | Neuromodulator orchestra | DA, NE, 5-HT, ACh, GABA, plasticity |
-| [Storage Resilience](storage_resilience.md) | Fault tolerance patterns | Circuit breakers, saga, fallback |
-| [Embedding Pipeline](embedding_pipeline.md) | Vector generation & caching | BGE-M3, L1/L2 cache, adapters |
-| [Consolidation Flow](consolidation_flow.md) | Sleep-based memory transfer | NREM, REM, SWR, pruning |
-
-## Diagram Hierarchy
-
-```
-System Architecture (Top-level)
-├── Memory Subsystems
-│   ├── Episodic Memory
-│   ├── Semantic Memory
-│   ├── Procedural Memory
-│   └── Working Memory
-├── Neural Pathways
-│   ├── Neuromodulator Systems
-│   ├── Learned Memory Gate
-│   └── Plasticity Mechanisms
-├── Storage Resilience
-│   ├── Circuit Breakers
-│   ├── Saga Coordinator
-│   └── Graceful Degradation
-├── Embedding Pipeline
-│   ├── Provider Adapters
-│   ├── Caching Strategy
-│   └── Integration
-└── Consolidation Flow
-    ├── NREM Phase (SWR Replay)
-    ├── REM Phase (Abstraction)
-    └── Pruning Phase (Homeostasis)
-```
-
-## Detailed Breakdown
-
-### 1. System Architecture
-
-**Purpose**: 30,000-foot view of the entire World Weaver system
-
-**Layers**:
-- Client Layer: MCP, SDK, REST API
-- Memory Orchestration: Working Memory, Pattern Separation, Learned Gate
-- Tripartite Memory: Episodic, Semantic, Procedural
-- Neural Mechanisms: Neuromodulators, Plasticity, Reconsolidation
-- Consolidation: NREM, REM, Pruning
-- Storage: Neo4j, Qdrant, Circuit Breakers
-- Embedding: BGE-M3, Caching
-
-**Use Cases**:
-- Onboarding new developers
-- Architecture presentations
-- System documentation
-- Planning discussions
-
-**Key Metrics**:
-- 1259 tests, 79% coverage
-- <5ms learned gate latency
-- 10-20x SWR compression
-- >80% embedding cache hit rate
-
-### 2. Memory Subsystems
-
-**Purpose**: Deep dive into how the four memory types interact
-
-**Memory Types**:
-1. **Working Memory** (7±2 items)
-   - Prefrontal cortex analog
-   - Attentional blink modeling
-   - FIFO + priority eviction
-
-2. **Episodic Memory** (Autobiographical events)
-   - Hippocampus analog
-   - Bi-temporal versioning (T_ref, T_sys)
-   - Multi-factor retrieval scoring
-
-3. **Semantic Memory** (Knowledge graph)
-   - Neocortex analog
-   - Hebbian learning on co-retrieval
-   - ACT-R activation-based retrieval
-
-4. **Procedural Memory** (Skills & workflows)
-   - Basal ganglia analog
-   - Memp Build-Retrieve-Update lifecycle
-   - Success rate tracking
-
-**Interactions**:
-- Episodic → Semantic (Consolidation)
-- Semantic → Episodic (Context for retrieval)
-- Procedural → Episodic (Skill building from trajectories)
-- Working → All (Active processing hub)
-
-**Retrieval Algorithms**:
-- Episodic: 0.4×semantic + 0.25×recency + 0.2×outcome + 0.15×importance
-- Semantic: ACT-R (base-level + spreading activation)
-- Procedural: 0.6×semantic + 0.4×success_rate
-
-### 3. Neural Pathways
-
-**Purpose**: Neuromodulator systems and their effects on learning/plasticity
-
-**Neuromodulator Systems**:
-
-1. **Dopamine** (Reward Prediction Error)
-   - Range: [0, 2], baseline 1.0
-   - RPE: δ = actual - expected
-   - Effect: Reinforcement signal, exploration
-
-2. **Norepinephrine** (Arousal & Attention)
-   - Range: [0, 2], baseline 0.5
-   - Arousal states: Drowsy, Alert, Vigilant, Hyperaroused
-   - Effect: Novelty detection, exploration/exploitation
-
-3. **Acetylcholine** (Encoding/Retrieval Mode)
-   - Range: [0, 1], baseline 0.5
-   - Modes: ENCODING (>0.6), RETRIEVAL (<0.4), BALANCED (0.4-0.6)
-   - Effect: Plasticity modulation
-
-4. **Serotonin** (Long-term Credit Assignment)
-   - Range: [0, 1], baseline 0.5
-   - Eligibility traces for delayed rewards
-   - Effect: Patience, temporal credit
-
-5. **GABA/Inhibition** (Competition & Sparsity)
-   - Range: [0, 1]
-   - Lateral inhibition, winner-take-all
-   - Effect: Sparse retrieval (2-5% active)
-
-**Learning Components**:
-- Learned Memory Gate: Online Bayesian LR, Thompson sampling
-- Learned Retrieval Scorer: Neural reranker
-- Reconsolidation Engine: Dopamine-modulated updating
-- Homeostatic Plasticity: Synaptic scaling
-
-**Integration**:
-- Orchestra computes unified state
-- State modulates gate, scorer, plasticity
-- Feedback from outcomes updates systems
-
-### 4. Storage Resilience
-
-**Purpose**: Fault tolerance and graceful degradation patterns
-
-**Resilience Patterns**:
-
-1. **Circuit Breaker**
-   - States: CLOSED → OPEN → HALF_OPEN → CLOSED
-   - Failure threshold: 5 consecutive failures
-   - Reset timeout: 60 seconds
-   - Success threshold: 2 in HALF_OPEN
-
-2. **Saga Pattern** (Distributed Transactions)
-   - Two-phase commit across Neo4j + Qdrant
-   - Automatic rollback on failure
-   - Ensures atomicity
-
-3. **Graceful Degradation**
-   - Level 0: Normal (both backends up)
-   - Level 1: No graph features (Neo4j down)
-   - Level 2: No vector search (Qdrant down)
-   - Level 3: In-memory only (both down)
-
-4. **Fallback Cache**
-   - LRU cache (1000 items)
-   - Pending queue for replay
-   - Drain to backends on recovery
-
-5. **Health Monitoring**
-   - Periodic health checks (30s interval)
-   - Metrics collection
-   - Alert system on state transitions
-
-**Performance Impact**:
-- Circuit breaker: <100μs overhead
-- Saga coordinator: ~1-5ms overhead
-- Fallback cache: <50μs overhead
-- Total: <5ms latency impact
-
-### 5. Embedding Pipeline
-
-**Purpose**: Vector generation, caching, and provider abstraction
-
-**Architecture**:
-
-1. **Adapter Layer**
-   - Abstract EmbeddingProvider protocol
-   - Statistics tracking
-   - Health monitoring
-
-2. **Provider Implementations**
-   - **BGE-M3** (Primary): Local GPU, 1024-dim, FP16
-   - **Mock**: Deterministic for testing
-   - **Future**: Sentence Transformer, OpenAI Ada-003
-
-3. **Caching Strategy**
-   - **L1**: In-memory LRU (1000 items, ~1μs hit)
-   - **L2**: Disk SQLite (100K items, ~1ms hit)
-   - **Combined hit rate**: 95-98%
-
-4. **Integration**
-   - All memory systems use adapter
-   - Automatic cache invalidation
-   - Batch processing support
-
-**Performance**:
-- GPU latency: ~10ms/query, ~200ms/batch-32
-- CPU latency: ~100ms/query, ~3s/batch-32
-- Cache hit latency: ~1μs (L1), ~1ms (L2)
-- Throughput: ~100 queries/sec (GPU), ~10 queries/sec (CPU)
-
-**Configuration**:
-- Provider: bge_m3, mock, sentence_transformer, openai
-- Device: cuda, cpu
-- Precision: FP16 (GPU), FP32 (CPU)
-- Cache: L1 + L2 enabled by default
-
-### 6. Consolidation Flow
-
-**Purpose**: Sleep-based memory consolidation with biological inspiration
-
-**Sleep Phases**:
-
-1. **NREM Sleep** (~75% of cycle)
-   - Sharp-Wave Ripple (SWR) replay
-   - Temporal compression (10-20x)
-   - Priority-based episode selection
-   - Entity extraction from recurring patterns
-   - Episodic → Semantic transfer
-
-2. **REM Sleep** (~25% of cycle)
-   - HDBSCAN clustering of semantic memories
-   - LLM-based concept abstraction
-   - Creative cross-cluster integration
-   - Pattern discovery
-
-3. **Pruning Phase**
-   - Synaptic downscaling (homeostatic)
-   - Weak connection removal
-   - Strong connection preservation (synaptic tagging)
-   - Target: 3% network activity
-
-**Key Algorithms**:
-
-- **Priority Scoring**: 0.3×outcome + 0.25×importance + 0.25×recency + 0.2×novelty
-- **SWR Sequence**: Coherent episodes with similarity >0.5
-- **Clustering**: HDBSCAN with min_cluster_size=3
-- **Abstraction**: LLM extracts common concept from cluster
-- **Pruning**: Multiplicative scaling to target activity
-
-**Statistics** (typical cycle):
-- Episodes processed: 100-1000
-- SWR sequences: 10-50
-- Entities created: 5-20
-- Concepts abstracted: 2-5
-- Connections pruned: 50-200
-- Connections strengthened: 100-500
-- Duration: 10-60 seconds
-
-**Configuration**:
-- NREM: Priority top-k=100, min_recurrence=3
-- REM: Min_cluster_size=3, abstraction_threshold=0.7
-- Prune: Target_activity=0.03, weak_threshold=0.1
-
-## Rendering the Diagrams
-
-### In GitHub/GitLab
-
-All diagrams use Mermaid syntax and render automatically in:
-- GitHub Markdown preview
-- GitLab Markdown preview
-- VS Code with Mermaid extension
-- Obsidian with Mermaid plugin
-
-### Standalone Rendering
-
-To render diagrams as PNG/SVG:
-
-```bash
-# Install mermaid-cli
-npm install -g @mermaid-js/mermaid-cli
-
-# Render all diagrams
-for file in docs/diagrams/*.md; do
-    mmdc -i "$file" -o "${file%.md}.png"
-done
-```
-
-### In Documentation Sites
-
-For Sphinx/MkDocs/Docusaurus:
-
-```bash
-# Install mermaid plugin
-pip install sphinxcontrib-mermaid  # Sphinx
-pip install mkdocs-mermaid2-plugin  # MkDocs
-npm install @docusaurus/plugin-mermaid  # Docusaurus
-```
-
-## Color Scheme
-
-Diagrams use consistent color coding:
-
-| Color | Hex | Usage |
-|-------|-----|-------|
-| Light Blue | #e1f5ff | Client/API layer, orchestration |
-| Light Yellow | #fff4e1 | Working memory, active processing |
-| Light Green | #e8f5e9| Memory storage (episodic, semantic, procedural) |
-| Light Purple | #f3e5f5 | Neural mechanisms, neuromodulators |
-| Light Orange | #ffe0b2 | Consolidation, sleep phases |
-| Light Red | #ffebee | Storage backends, infrastructure |
-| Light Teal | #e0f2f1 | Embeddings, caching |
-
-## Integration with Documentation
-
-These diagrams complement:
-
-1. **Code Documentation**
-   - `/mnt/projects/ww/src/ww/` - Source code with docstrings
-   - `/mnt/projects/ww/tests/` - Test suite (1259 tests)
-
-2. **Written Documentation**
-   - `/mnt/projects/ww/ARCHITECTURE.md` - Original architecture design
-   - `/mnt/projects/ww/MEMORY_ARCHITECTURE.md` - Tripartite memory spec
-   - `/mnt/projects/ww/docs/FUNCTIONAL_ARCHITECTURE.md` - Functional overview
-   - `/mnt/projects/ww/docs/LEARNING_ARCHITECTURE.md` - Learning system details
-   - `/mnt/projects/ww/docs/NEUROTRANSMITTER_ARCHITECTURE.md` - Neuromodulator deep dive
-
-3. **API Documentation**
-   - `/mnt/projects/ww/docs/API.md` - REST API reference
-   - `/mnt/projects/ww/docs/SDK.md` - Python SDK guide
-   - `http://localhost:8765/docs` - Interactive OpenAPI docs (when running)
-
-## Maintenance
-
-**Updating Diagrams**:
-1. Edit the Mermaid code blocks directly in the `.md` files
-2. Preview in VS Code or GitHub
-3. Ensure consistency with color scheme
-4. Update metrics/numbers if implementation changes
-5. Keep synchronized with code changes
-
-**Version Control**:
-- Diagrams live in `/mnt/projects/ww/docs/diagrams/`
-- Tracked in Git with rest of documentation
-- Update timestamps in this README when modified
-
-**Review Checklist**:
-- [ ] Mermaid syntax is valid
-- [ ] Colors follow scheme
-- [ ] Metrics are accurate
-- [ ] Code examples are correct
-- [ ] Links to related docs work
-- [ ] Renders in GitHub preview
-
-## Contributing
-
-When adding new diagrams:
-
-1. Follow existing naming convention: `<topic>_<aspect>.md`
-2. Include comprehensive description sections
-3. Add metrics and performance data
-4. Provide implementation examples
-5. Use consistent color scheme
-6. Update this README with new entry
-7. Link to related documentation
-
-## Questions & Feedback
-
-For questions about the diagrams or World Weaver architecture:
-
-1. Check related documentation (links above)
-2. Review source code and tests
-3. Open GitHub issue with `[docs]` tag
-4. Contact maintainer
+# T4DM Architecture Diagrams
+
+**Last Updated**: 2026-01-30
+**Total Diagrams**: 59 (57 source files + 2 HTML visualizations)
+**Formats**: Mermaid source (.mmd, .mermaid) → Rendered (PNG, SVG)
 
 ---
 
-**Generated**: 2025-12-07 | **World Weaver Version**: 0.1.0 | **Diagram Count**: 16
+## Overview
+
+This directory contains the complete visual documentation for T4DM's biologically-inspired memory architecture. Diagrams are organized by UML category with numbered prefixes for systematic coverage.
+
+### Diagram Categories
+
+| Prefix | Category | Count | Description |
+|--------|----------|-------|-------------|
+| **01-10** | System Architecture | 9 | High-level system views, data flow, storage |
+| **11-20** | Subsystem Decomposition | 5 | Detailed subsystem breakdowns |
+| **21-30** | Class Diagrams | 5 | Object-oriented design (Memory, Learning, Storage, Neuromod, Consolidation) |
+| **31-40** | State Diagrams | 4 | State machines for stateful components |
+| **41-49** | Sequence Diagrams | 4 | Temporal interaction flows |
+| **50-59** | Biology/NCA Specific | 10 | Neural cellular automata and biological circuits |
+| **Named** | Feature Diagrams | 23 | Specific subsystems and features |
 
 ---
 
-## Complete Diagram Hierarchy (26 Diagrams)
+## Map of Maps
 
-### Level 0: System Overview (10 diagrams)
-| # | Diagram | Description |
-|---|---------|-------------|
-| 01 | System Architecture | Complete system layers |
-| 02 | Bioinspired Components | Encoding, attractor, eligibility |
-| 03 | Data Flow | End-to-end processing |
-| 04 | MCP Tools API | MCP tools & middleware |
-| 05 | Storage Architecture | Qdrant, Neo4j, PostgreSQL |
-| 06 | Memory Systems | All 4 memory types |
-| 07 | Class Bioinspired | Bioinspired UML classes |
-| 08 | Consolidation Pipeline | Sleep & memory transfer |
-| 09 | MCP Request Sequence | Request lifecycle |
-| 10 | Observability | Tracing, metrics, logging |
+### Hierarchy and Cross-References
 
-### Level 1: Subsystem Diagrams (5 diagrams)
-| # | Diagram | Description |
-|---|---------|-------------|
-| 11 | Memory Subsystem | Working, Episodic, Semantic, Procedural |
-| 12 | Learning Subsystem | Gate, Eligibility, Hebbian, Retrieval |
-| 13 | Neuromodulation Subsystem | DA, NE, ACh, 5-HT, GABA orchestra |
-| 14 | Storage Subsystem | Saga, Neo4j, Qdrant, CircuitBreaker |
-| 15 | API Subsystem | MCP, REST, SDK, Visualization |
+```
+01_system_architecture (TOP LEVEL)
+├── 02_bioinspired_components
+│   ├── 50-59_biology/* (NCA details)
+│   ├── ff_nca_coupling
+│   ├── capsule_routing
+│   └── hippocampal_circuit
+├── 03_data_flow
+│   ├── 41_seq_store_memory
+│   ├── 42_seq_retrieve_memory
+│   └── 43_seq_consolidation
+├── 05_storage_architecture
+│   ├── 14_storage_subsystem
+│   ├── 23_class_storage
+│   ├── persistence_layer
+│   ├── checkpoint_lifecycle
+│   ├── recovery_flow
+│   ├── shutdown_flow
+│   └── wal_flow
+├── 06_memory_systems
+│   ├── 11_memory_subsystem
+│   ├── 21_class_memory
+│   ├── 34_state_memory_gate
+│   ├── memory_lifecycle
+│   └── eligibility_trace
+├── 07_class_bioinspired → Forward-Forward, Capsules
+├── 08_consolidation_pipeline
+│   ├── 25_class_consolidation (NEW)
+│   ├── 32_state_consolidation
+│   ├── 43_seq_consolidation
+│   ├── 44_seq_sleep_replay (NEW)
+│   ├── consolidation_stages
+│   ├── sleep_cycle
+│   ├── sleep_subsystems
+│   ├── swr_replay
+│   └── spindle_ripple_coupling
+└── 10_observability
 
-### Level 2: Class Diagrams (4 diagrams)
-| # | Diagram | Description |
-|---|---------|-------------|
-| 21 | Class Memory | Memory subsystem class hierarchy |
-| 22 | Class Learning | Learning components UML |
-| 23 | Class Storage | Storage backends & coordination |
-| 24 | Class Neuromod | Neuromodulator system classes |
+Learning Subsystem Tree:
+12_learning_subsystem
+├── 22_class_learning
+├── three_factor_rule
+├── credit_assignment_flow
+└── eligibility_trace
 
-### Level 3: State Diagrams (4 diagrams)
-| # | Diagram | Description |
-|---|---------|-------------|
-| 31 | State Circuit Breaker | CLOSED→OPEN→HALF_OPEN states |
-| 32 | State Consolidation | AWAKE→NREM→REM→PRUNING cycle |
-| 33 | State Neuromod | DA/NE/ACh state transitions |
-| 34 | State Memory Gate | Evaluation→Pending→Update cycle |
+Neuromodulation Subsystem Tree:
+13_neuromodulation_subsystem
+├── 24_class_neuromod
+├── 33_state_neuromod
+├── neuromod_orchestra
+├── neuromodulator_pathways
+├── adenosine_homeostasis
+└── vta_circuit (dopamine)
 
-### Level 4: Sequence Diagrams (3 diagrams)
-| # | Diagram | Description |
-|---|---------|-------------|
-| 41 | Seq Store Memory | Full store flow with gate & saga |
-| 42 | Seq Retrieve Memory | Retrieval with Hebbian updates |
-| 43 | Seq Consolidation | NREM/REM/Pruning sequence |
+NCA/Biology Tree:
+50_vae_generator
+51_glymphatic_system
+52_spatial_cells
+53_theta_gamma_integration
+54_transmission_delays
+55_astrocyte_tripartite
+56_striatal_msn_d1d2
+57_connectome_regions
+58_causal_discovery
+59_self_supervised_credit
+```
 
-### Regenerating PNGs
+---
+
+## System Architecture (01-10)
+
+High-level system views showing the overall design.
+
+| Diagram | Description | Links To |
+|---------|-------------|----------|
+| ![01](01_system_architecture.png) | **System Architecture** - Top-level component view | 02, 03, 05, 06, 10 |
+| ![02](02_bioinspired_components.png) | **Bio-inspired Components** - Hinton architectures (FF, Capsules, NCA) | 07, 50-59 |
+| ![03](03_data_flow.png) | **Data Flow** - How information moves through the system | 41, 42, 43 |
+| ![05](05_storage_architecture.png) | **Storage Architecture** - Dual-store (Neo4j + Qdrant) with Saga | 14, 23 |
+| ![06](06_memory_systems.png) | **Memory Systems** - Tripartite memory (Episodic, Semantic, Procedural) | 11, 21 |
+| ![07](07_class_bioinspired.png) | **Class: Bio-inspired** - Forward-Forward and Capsule Network classes | 02 |
+| ![08](08_consolidation_pipeline.png) | **Consolidation Pipeline** - Memory consolidation flow | 25, 32, 43, 44 |
+| ![10](10_observability.png) | **Observability** - Telemetry, tracing, and monitoring | 01 |
+
+### Missing (Intentional Gaps)
+- **04**: Reserved for future architecture diagram (possibly distributed deployment)
+- **09**: Reserved for future architecture diagram
+
+---
+
+## Subsystem Decomposition (11-20)
+
+Detailed breakdowns of major subsystems.
+
+| Diagram | Description | Links To |
+|---------|-------------|----------|
+| ![11](11_memory_subsystem.png) | **Memory Subsystem** - Episodic, Semantic, Procedural stores | 21, 34, 41, 42 |
+| ![12](12_learning_subsystem.png) | **Learning Subsystem** - Hebbian, STDP, Forward-Forward | 22, three_factor_rule |
+| ![13](13_neuromodulation_subsystem.png) | **Neuromodulation Subsystem** - Dopamine, Serotonin, Acetylcholine, Adenosine | 24, 33 |
+| ![14](14_storage_subsystem.png) | **Storage Subsystem** - Persistence layer with Saga pattern | 23, 05 |
+| ![15](15_api_subsystem.png) | **API Subsystem** - REST endpoints and SDK | 01 |
+
+### Missing (Optional Extensions)
+- **16-20**: Could add Consolidation, NCA, Dreaming subsystem diagrams in future
+
+---
+
+## Class Diagrams (21-30)
+
+Object-oriented design for each major subsystem.
+
+| Diagram | Description | Key Classes |
+|---------|-------------|-------------|
+| ![21](21_class_memory.png) | **Class: Memory** | `MemoryStore`, `EpisodicMemory`, `SemanticMemory`, `ProceduralMemory` |
+| ![22](22_class_learning.png) | **Class: Learning** | `HebbianLearner`, `STDPLearner`, `ForwardForwardLearner` |
+| ![23](23_class_storage.png) | **Class: Storage** | `Neo4jBridge`, `QdrantBridge`, `SagaCoordinator` |
+| ![24](24_class_neuromod.png) | **Class: Neuromodulation** | `DopamineModulator`, `SerotoninModulator`, `AdenosineMonitor` |
+| ![25](25_class_consolidation.png) | **Class: Consolidation** - NEW | `ConsolidationService`, `HDBSCANClusterer`, `FESConsolidator`, `LabilityTracker` |
+
+### Missing (Optional Extensions)
+- **26**: Class diagram for NCA subsystem
+- **27**: Class diagram for Dreaming subsystem
+- **28-30**: Reserved for future class diagrams
+
+---
+
+## State Diagrams (31-40)
+
+State machines for stateful components.
+
+| Diagram | Description | States |
+|---------|-------------|--------|
+| ![31](31_state_circuit_breaker.png) | **State: Circuit Breaker** | Closed → Open → Half-Open |
+| ![32](32_state_consolidation.png) | **State: Consolidation** | Idle → Clustering → Merging → Complete |
+| ![33](33_state_neuromod.png) | **State: Neuromodulation** | Baseline → Elevated → Depleted |
+| ![34](34_state_memory_gate.png) | **State: Memory Gate** | Open → Filtering → Closed |
+
+**Note**: Sleep cycle states are documented in `sleep_cycle.mermaid` (Wake → NREM1 → NREM2 → NREM3 → REM)
+
+### Missing (Optional Extensions)
+- **35-40**: Could add state diagrams for Learning phases, Dreaming modes, etc.
+
+---
+
+## Sequence Diagrams (41-49)
+
+Temporal interaction flows showing how components collaborate over time.
+
+| Diagram | Description | Participants |
+|---------|-------------|--------------|
+| ![41](41_seq_store_memory.png) | **Sequence: Store Memory** | API → MemoryStore → Neo4j/Qdrant (Saga) |
+| ![42](42_seq_retrieve_memory.png) | **Sequence: Retrieve Memory** | Query → MemoryStore → VectorSearch → GraphTraversal |
+| ![43](43_seq_consolidation.png) | **Sequence: Consolidation** | Scheduler → Consolidator → HDBSCAN → MemoryStore |
+| ![44](44_seq_sleep_replay.png) | **Sequence: Sleep Replay** - NEW | Sleep → Hippocampus → SWR → Neocortex → Consolidation → Glymphatic |
+
+### Missing (Optional Extensions)
+- **45**: Sequence diagram for learning (STDP flow)
+- **46-49**: Reserved for future sequence diagrams (e.g., dreaming, neuromodulation propagation)
+
+---
+
+## Biology & NCA Diagrams (50-59)
+
+Neural Cellular Automata and biological circuit implementations.
+
+| Diagram | Description | Bio Inspiration |
+|---------|-------------|-----------------|
+| ![50](50_vae_generator.png) | **VAE Generator** | Generative model for pattern completion |
+| ![51](51_glymphatic_system.png) | **Glymphatic System** | Metabolic waste clearance during sleep |
+| ![52](52_spatial_cells.png) | **Spatial Cells** | Place cells, Grid cells, Border cells |
+| ![53](53_theta_gamma_integration.png) | **Theta-Gamma Integration** | Nested oscillations for sequence encoding |
+| ![54](54_transmission_delays.png) | **Transmission Delays** | Axonal conduction delays for temporal credit |
+| ![55](55_astrocyte_tripartite.png) | **Astrocyte Tripartite Synapse** | Glial modulation of synaptic plasticity |
+| ![56](56_striatal_msn_d1d2.png) | **Striatal MSN D1/D2** | Direct/Indirect pathway competition |
+| ![57](57_connectome_regions.png) | **Connectome Regions** | Brain region connectivity map |
+| ![58](58_causal_discovery.png) | **Causal Discovery** | Temporal causality inference |
+| ![59](59_self_supervised_credit.png) | **Self-Supervised Credit** | Credit assignment without labels |
+
+---
+
+## Feature Diagrams (Named)
+
+Specific subsystems and mechanisms not in numbered categories.
+
+### Memory Features
+| Diagram | Description |
+|---------|-------------|
+| ![memory_lifecycle](memory_lifecycle.png) | Memory lifecycle: Store → Encode → Consolidate → Retrieve → Decay |
+| ![eligibility_trace](eligibility_trace.png) | Eligibility traces for delayed reward attribution |
+
+### Learning Features
+| Diagram | Description |
+|---------|-------------|
+| ![three_factor_rule](three_factor_rule.png) | Three-factor Hebbian rule: Pre × Post × Neuromodulator |
+| ![credit_assignment_flow](credit_assignment_flow.png) | Temporal credit assignment flow |
+
+### Consolidation Features
+| Diagram | Description |
+|---------|-------------|
+| ![consolidation_stages](consolidation_stages.png) | Synaptic → Systems consolidation stages |
+| ![swr_replay](swr_replay.png) | Sharp-Wave Ripple replay mechanism |
+| ![spindle_ripple_coupling](spindle_ripple_coupling.png) | Sleep spindle ↔ hippocampal ripple coordination |
+| ![sleep_cycle](sleep_cycle.png) | Sleep cycle state machine (Wake → NREM → REM) |
+| ![sleep_subsystems](sleep_subsystems.png) | Sleep subsystems: Spindles, SWR, Glymphatic |
+
+### Neuromodulation Features
+| Diagram | Description |
+|---------|-------------|
+| ![neuromod_orchestra](neuromod_orchestra.png) | Orchestrated neuromodulator dynamics |
+| ![neuromodulator_pathways](neuromodulator_pathways.png) | Dopamine, Serotonin, ACh, Adenosine pathways |
+| ![adenosine_homeostasis](adenosine_homeostasis.png) | Adenosine accumulation and sleep pressure |
+| ![vta_circuit](vta_circuit.png) | Ventral Tegmental Area dopamine circuit |
+
+### NCA/Hinton Architecture Features
+| Diagram | Description |
+|---------|-------------|
+| ![nca_module_map](nca_module_map.png) | NCA module connectivity map |
+| ![ff_nca_coupling](ff_nca_coupling.png) | Forward-Forward ↔ NCA integration |
+| ![capsule_routing](capsule_routing.png) | Capsule network routing-by-agreement |
+| ![hippocampal_circuit](hippocampal_circuit.png) | Hippocampal CA1/CA3/DG circuit |
+| ![hpc_trisynaptic](hpc_trisynaptic.png) | Trisynaptic loop: EC → DG → CA3 → CA1 |
+
+### Persistence Features
+| Diagram | Description |
+|---------|-------------|
+| ![persistence_layer](persistence_layer.png) | Persistence layer architecture |
+| ![checkpoint_lifecycle](checkpoint_lifecycle.png) | Checkpoint create/restore lifecycle |
+| ![recovery_flow](recovery_flow.png) | System recovery from failure |
+| ![shutdown_flow](shutdown_flow.png) | Graceful shutdown sequence |
+| ![wal_flow](wal_flow.png) | Write-Ahead Log for durability |
+
+---
+
+## Interactive Visualizations
+
+In addition to static diagrams, two interactive HTML visualizations are available:
+
+| File | Description | Technology |
+|------|-------------|------------|
+| `architecture_3d.html` | 3D force-directed graph of system architecture | Three.js, D3.js |
+| `interactive_network.html` | Interactive network map of components | vis.js |
+
+Open these files in a web browser for exploration.
+
+---
+
+## Rendering
+
+All diagrams are available in three formats:
+
+1. **Source**: `.mmd` or `.mermaid` files (editable Mermaid syntax)
+2. **PNG**: Rasterized images at 2400×1800 resolution
+3. **SVG**: Vector graphics (scalable, recommended for documentation)
+
+### Regenerating Diagrams
+
+To re-render all diagrams:
 
 ```bash
-cd docs/diagrams
-for f in *.mmd; do
-    mmdc -i "$f" -o "${f%.mmd}.png" -b transparent -w 1600 -H 1200
-done
+cd /mnt/projects/t4d/t4dm/docs/diagrams
+python generate_diagrams.py  # Renders all to /tmp/t4dm-diagrams/
 ```
+
+Or manually with `mermaid-cli`:
+
+```bash
+mmdc -i <source>.mmd -o <output>.png -w 2400 -H 1800
+mmdc -i <source>.mmd -o <output>.svg -w 2400 -H 1800
+```
+
+---
+
+## Diagram Dependencies
+
+Key dependency relationships:
+
+```
+Store/Retrieve Flow:
+  41_seq_store_memory → 21_class_memory → 11_memory_subsystem
+  42_seq_retrieve_memory → 21_class_memory → 11_memory_subsystem
+
+Consolidation Flow:
+  44_seq_sleep_replay → 43_seq_consolidation → 25_class_consolidation → 08_consolidation_pipeline
+  44_seq_sleep_replay → sleep_cycle, swr_replay, spindle_ripple_coupling
+
+Learning Flow:
+  22_class_learning → 12_learning_subsystem → three_factor_rule, eligibility_trace
+
+Neuromodulation Flow:
+  24_class_neuromod → 13_neuromodulation_subsystem → neuromod_orchestra
+  adenosine_homeostasis → sleep_cycle → 44_seq_sleep_replay
+
+NCA/Biology:
+  02_bioinspired_components → 07_class_bioinspired → 50-59_biology/*
+  hippocampal_circuit, hpc_trisynaptic → 52_spatial_cells, swr_replay
+```
+
+---
+
+## Coverage Analysis
+
+### Complete Coverage
+- ✅ System Architecture (9/10 diagrams, intentional gaps at 04, 09)
+- ✅ Class Diagrams for all core subsystems (Memory, Learning, Storage, Neuromod, Consolidation)
+- ✅ State Diagrams for all stateful components (Circuit Breaker, Consolidation, Neuromod, Memory Gate)
+- ✅ Sequence Diagrams for critical flows (Store, Retrieve, Consolidate, Sleep Replay)
+- ✅ Biology/NCA coverage (10 diagrams for neural mechanisms)
+- ✅ Feature diagrams for all major subsystems
+
+### Optional Extensions (Future Work)
+- 26_class_nca: NCA subsystem class diagram
+- 27_class_dreaming: Dreaming subsystem class diagram
+- 35_state_learning: Learning state machine (if needed)
+- 45_seq_learning: Learning interaction sequence (STDP flow)
+- 16-20_subsystems: Additional subsystem decompositions (NCA, Dreaming, Consolidation)
+
+---
+
+## References
+
+For implementation details, see:
+- **Architecture**: `/mnt/projects/t4d/t4dm/docs/ARCHITECTURE.md`
+- **Memory**: `/mnt/projects/t4d/t4dm/docs/MEMORY_ARCHITECTURE.md`
+- **Learning**: `/mnt/projects/t4d/t4dm/docs/LEARNING_ARCHITECTURE.md`
+- **Biology**: `/mnt/projects/t4d/t4dm/docs/BRAIN_REGION_MAPPING.md`
+- **Math**: `/mnt/projects/t4d/t4dm/docs/MATHEMATICAL_FOUNDATIONS.md`
+
+For code implementation:
+- **Memory**: `/mnt/projects/t4d/t4dm/src/ww/memory/`
+- **Learning**: `/mnt/projects/t4d/t4dm/src/ww/learning/`
+- **Consolidation**: `/mnt/projects/t4d/t4dm/src/ww/consolidation/`
+- **NCA**: `/mnt/projects/t4d/t4dm/src/ww/nca/`
+
+---
+
+**Maintained by**: T4DM Architecture Team
+**Diagram Standard**: Mermaid.js (UML-compliant)
+**Rendering**: mermaid-cli (mmdc) v10+

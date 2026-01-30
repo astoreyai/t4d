@@ -45,7 +45,7 @@ flowchart TB
         CONSOLIDATE["Memory<br/>Consolidation"]
     end
 
-    subgraph Timing["Temporal Coupling"]:::planned
+    subgraph Timing["Temporal Coupling"]
         T1["SO Up State<br/>(t=0)"]:::planned
         T2["Spindle Start<br/>(t+200ms)"]:::planned
         T3["SWR Nested<br/>(t+300ms)"]:::planned
@@ -60,7 +60,7 @@ flowchart TB
     %% ACh modulation of SWR generation
     ACH_REM -.->|"suppresses"| CA3_BURST
 
-    Note over ACH_REM: High ACh during REM suppresses SWRs; replay is NREM-specific (Hasselmo 1999)
+    %% Note: High ACh during REM suppresses SWRs; replay is NREM-specific (Hasselmo 1999)
 
     %% SWR generation
     SO -->|"triggers"| CA3_BURST
@@ -86,8 +86,7 @@ flowchart TB
     THAL --> SPINDLE
     SPINDLE --> NCX
 
-    %% TRN note
-    Note over TRN: TRN inhibition generates spindles<br/>via rebound bursting (Steriade 1993)
+    %% TRN note: TRN inhibition generates spindles via rebound bursting (Steriade 1993)
 
     %% Plasticity
     CA1_FIRE --> SWR_LTP

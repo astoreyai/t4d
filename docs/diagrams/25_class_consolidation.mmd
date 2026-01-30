@@ -1,0 +1,121 @@
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#2e86ab', 'primaryTextColor': '#1a1a1a', 'primaryBorderColor': '#2e86ab', 'lineColor': '#2e86ab', 'secondaryColor': '#a8dadc', 'tertiaryColor': '#f1faee'}}}%%
+classDiagram
+    %% Core Consolidation Service
+    class ConsolidationService {
+        -HDBSCANClusterer clusterer
+        -MemoryStore store
+        -Config config
+        +consolidate(memories: List) MemoryCluster[]
+        +schedule_consolidation(interval: Duration)
+        +get_consolidation_metrics() Metrics
+    }
+
+    %% HDBSCAN-based clustering
+    class HDBSCANClusterer {
+        -min_cluster_size: int
+        -min_samples: int
+        -metric: str
+        +fit_predict(embeddings: ndarray) labels
+        +get_cluster_probabilities() ndarray
+        +extract_condensed_tree() Tree
+    }
+
+    %% Parallel consolidation
+    class ParallelConsolidator {
+        -num_workers: int
+        -batch_size: int
+        -executor: ThreadPoolExecutor
+        +consolidate_batches(memories: List) Future[]
+        +wait_for_completion() Result[]
+    }
+
+    %% FES (Fast Episodic Storage) consolidator
+    class FESConsolidator {
+        -fes_store: FESStore
+        -semantic_store: SemanticStore
+        -transfer_threshold: float
+        +check_transfer_eligibility(memory: Memory) bool
+        +transfer_to_semantic(memory: Memory)
+        +update_transfer_metrics()
+    }
+
+    %% Memory lability tracking
+    class LabilityTracker {
+        -lability_scores: Dict
+        -decay_rate: float
+        +track_lability(memory_id: str, score: float)
+        +get_lability(memory_id: str) float
+        +apply_decay(elapsed_time: float)
+        +is_stable(memory_id: str) bool
+    }
+
+    %% STDP integration for consolidation
+    class STDPIntegration {
+        -learning_rate: float
+        -trace_decay: float
+        +compute_weight_update(pre: float, post: float, dt: float) float
+        +apply_stdp_to_cluster(cluster: MemoryCluster)
+    }
+
+    %% Consolidation metrics
+    class ConsolidationMetrics {
+        +clusters_formed: int
+        +memories_consolidated: int
+        +avg_cluster_size: float
+        +silhouette_score: float
+        +consolidation_time: Duration
+        +export() Dict
+    }
+
+    %% Memory cluster result
+    class MemoryCluster {
+        +cluster_id: str
+        +centroid: ndarray
+        +members: List~Memory~
+        +importance_weight: float
+        +timestamp: DateTime
+        +get_representative_memory() Memory
+    }
+
+    %% Sleep-wake consolidation scheduler
+    class ConsolidationScheduler {
+        -sleep_phase: SleepPhase
+        -scheduler: AsyncScheduler
+        +schedule_nrem_consolidation()
+        +schedule_rem_consolidation()
+        +trigger_on_sleep_transition(phase: SleepPhase)
+    }
+
+    %% Relationships
+    ConsolidationService --> HDBSCANClusterer : uses
+    ConsolidationService --> ParallelConsolidator : delegates
+    ConsolidationService --> FESConsolidator : coordinates
+    ConsolidationService --> LabilityTracker : tracks
+    ConsolidationService --> STDPIntegration : applies
+    ConsolidationService --> ConsolidationMetrics : produces
+    ConsolidationService --> MemoryCluster : creates
+
+    ParallelConsolidator --> HDBSCANClusterer : parallelizes
+    FESConsolidator --> LabilityTracker : queries
+    STDPIntegration --> MemoryCluster : updates
+
+    ConsolidationScheduler --> ConsolidationService : triggers
+    ConsolidationScheduler ..> SleepPhase : monitors
+
+    %% External dependencies
+    class MemoryStore {
+        <<interface>>
+        +get_memories() List~Memory~
+        +update_memory(memory: Memory)
+    }
+
+    class SleepPhase {
+        <<enumeration>>
+        WAKE
+        NREM1
+        NREM2
+        NREM3
+        REM
+    }
+
+    ConsolidationService --> MemoryStore : reads/writes

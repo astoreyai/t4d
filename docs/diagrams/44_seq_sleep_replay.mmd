@@ -1,0 +1,81 @@
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#2e86ab'}}}%%
+sequenceDiagram
+    participant Sleep as Sleep Controller
+    participant Ade as Adenosine Monitor
+    participant HPC as Hippocampus (CA3)
+    participant Ctx as Neocortex
+    participant Gly as Glymphatic System
+    participant Con as Consolidation Service
+    participant Store as Memory Store
+
+    Note over Sleep,Store: WAKE → NREM Transition
+
+    Sleep->>Ade: check_sleep_pressure()
+    Ade-->>Sleep: adenosine_high=True
+    Sleep->>Sleep: transition_to(NREM1)
+
+    Note over Sleep,Store: NREM Stage 2-3: Consolidation Window
+
+    Sleep->>HPC: trigger_swr_replay()
+    activate HPC
+    HPC->>HPC: detect_ripple_event() (150-250 Hz)
+    HPC->>Store: fetch_recent_episodes(time_window=2h)
+    Store-->>HPC: episode_memories[]
+
+    loop For each episode in reverse-chronological order
+        HPC->>HPC: replay_sequence(episode, time_compressed=20x)
+        Note right of HPC: Reactivate CA3→CA1 pattern
+        HPC->>Ctx: transmit_replay_pattern(episode)
+        Ctx->>Ctx: bind_to_existing_schema(episode)
+        Ctx->>Con: consolidate_episodic_to_semantic(episode)
+        activate Con
+        Con->>Store: fetch_similar_memories(episode.embedding)
+        Store-->>Con: similar_memories[]
+        Con->>Con: cluster_with_hdbscan(similar_memories)
+        Con->>Store: update_semantic_cluster(cluster_id)
+        Con-->>Ctx: consolidation_complete
+        deactivate Con
+    end
+
+    HPC->>HPC: swr_event_complete
+    deactivate HPC
+
+    Note over Sleep,Store: Glymphatic Clearance (Peak in NREM3)
+
+    Sleep->>Gly: activate_flow()
+    activate Gly
+    Gly->>Gly: increase_interstitial_space(+60%)
+    Gly->>HPC: clear_metabolic_waste(adenosine, tau)
+    Gly->>Ctx: clear_metabolic_waste(β-amyloid)
+    Gly-->>Sleep: clearance_complete
+    deactivate Gly
+
+    Note over Sleep,Store: NREM → REM Transition (~90 min)
+
+    Sleep->>Sleep: transition_to(REM)
+    Sleep->>HPC: theta_mode(4-8 Hz)
+    HPC->>HPC: pattern_separation_active()
+    HPC->>Ctx: cross_cortical_integration()
+
+    Note over Sleep,Store: REM: Schema Integration
+
+    Ctx->>Ctx: activate_remote_associations()
+    Ctx->>Store: strengthen_semantic_links()
+    Store-->>Ctx: links_updated
+
+    Note over Sleep,Store: REM → NREM Cycle Repeat or Wake
+
+    alt Continue Sleep (Process S still high)
+        Sleep->>Sleep: transition_to(NREM2)
+        Note right of Sleep: Ultradian cycle repeats
+    else Wake Up (Process S dissipated)
+        Sleep->>Sleep: transition_to(WAKE)
+        Sleep->>Ade: reset_homeostatic_pressure()
+        Ade-->>Sleep: adenosine_cleared
+    end
+
+    Note over Sleep,Store: Post-Sleep Memory Assessment
+
+    Store->>Con: get_consolidation_metrics()
+    Con-->>Store: {clusters_formed: 47, memories_consolidated: 312}
+    Store->>Store: update_memory_strengths()

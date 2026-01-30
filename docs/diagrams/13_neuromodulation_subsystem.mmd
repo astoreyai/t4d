@@ -3,7 +3,7 @@ flowchart TB
     subgraph L1["NEUROMODULATION SUBSYSTEM"]
         direction TB
 
-        subgraph ORCH["Orchestra Coordinator"]:::planned
+        subgraph ORCH["Orchestra Coordinator"]
             O_STATE[Unified State<br/>5 modulators]:::planned
             O_BLEND[State Blending<br/>Weighted combination]:::planned
             O_ADAPT[Adaptive Baseline<br/>Homeostatic]:::planned
@@ -52,7 +52,7 @@ flowchart TB
     HPC[Hippocampus]
     NBM -->|"ACh: encoding mode switch<br/>(high ACh=encode, low ACh=retrieve)<br/>Hasselmo 2006"| HPC
 
-    Note over E_I_BALANCE: GABA/Glu are fast neurotransmitters, not neuromodulators
+    %% Note: GABA/Glu are fast neurotransmitters, not neuromodulators
 
     DA -->|reward signal| ORCH
     NE -->|arousal| ORCH
@@ -63,7 +63,7 @@ flowchart TB
     DA -.->|"inhibits (0.3)"| SER
     NE -.->|"excites (0.4)"| ACH
     ACH -.->|"gates (sigmoid)"| DA
-    Note over DA,SER: Crosstalk: neuromod_crosstalk.py
+    %% Note: Crosstalk implemented in neuromod_crosstalk.py
 
     classDef orch fill:#6366f1,stroke:#818cf8,color:#fff
     classDef da fill:#ef4444,stroke:#f87171,color:#fff

@@ -16,7 +16,7 @@ sequenceDiagram
     C->>C: classify_memory_types()
 
     rect rgb(30, 30, 60)
-        Note over C,EM: NREM Phase (75% of cycle)
+        Note over C,EM: NREM Phase
 
         C->>+EM: get_consolidation_candidates(top_k=100)
         EM->>EM: priority_sort(outcome, importance, recency)
@@ -40,7 +40,7 @@ sequenceDiagram
     end
 
     rect rgb(60, 30, 60)
-        Note over C,LLM: REM Phase (25% of cycle)<br/>HDBSCAN clustering implemented; LLM abstraction planned
+        Note over C,LLM: REM Phase - HDBSCAN clustering implemented, LLM abstraction planned
 
         C->>+SM: get_recent_semantic(n=1000)
         SM-->>-C: semantic_memories[]
@@ -62,7 +62,7 @@ sequenceDiagram
     end
 
     rect rgb(30, 60, 30)
-        Note over C,MC: Procedural consolidation uses RL plasticity rules<br/>within shared SWR replay substrate
+        Note over C,MC: Procedural consolidation via RL plasticity in shared SWR replay
 
         C->>+BG: get_procedural_candidates()
         BG-->>-C: procedural_memories[]
@@ -79,7 +79,7 @@ sequenceDiagram
     end
 
     rect rgb(60, 30, 30)
-        Note over C,P: Pruning Phase: Homeostatic scaling<br/>Target activity 3%, multiplicative downscale<br/>Note: 3% is system param; biological targets firing rate (Turrigiano 2008; Tononi SHY 2006)
+        Note over C,P: Pruning - Homeostatic scaling to 3% activity target
 
         C->>+H: get_all_weights()
         H-->>-C: weights{}
@@ -98,9 +98,4 @@ sequenceDiagram
     end
 
     C->>C: exit_sleep_state()
-    C-->>T: {episodes_processed, entities_created, concepts_abstracted, connections_pruned}
-
-    Note over T,P: Cycle typically 10-60s (compressed simulation;<br/>biological equivalent: 90-min ultradian cycle)
-    Note over T,C: Multi-night progressive deepening:<br/>Night 1: light, Night 2-3: deep, Night 4+: all<br/>(service.py:311-369)
-
-    classDef planned fill:#ffecb3,stroke:#ffa726,stroke-dasharray: 5 5
+    C-->>-T: consolidation_metrics
