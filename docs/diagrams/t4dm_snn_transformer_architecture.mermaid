@@ -1,0 +1,183 @@
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#1a1a2e', 'primaryTextColor': '#e8e8f0', 'primaryBorderColor': '#6366f1', 'lineColor': '#818cf8', 'secondaryColor': '#16213e', 'tertiaryColor': '#0f3460', 'background': '#0a0a1a', 'mainBkg': '#1a1a2e', 'nodeBorder': '#6366f1', 'clusterBkg': '#16213e', 'clusterBorder': '#4f46e5', 'titleColor': '#e8e8f0', 'edgeLabelBackground': '#1a1a2e'}}}%%
+
+flowchart TB
+    %% ═══════════════════════════════════════════════════
+    %% T4DM: SPIKING TRANSFORMER WITH ADAPTIVE MEMORY
+    %% ═══════════════════════════════════════════════════
+
+    subgraph INPUT["1. INPUT STREAM"]
+        direction LR
+        TOKENS["Token Stream<br/>text / tool / sensor"]
+        EVENTS["Event Stream<br/>actions / outcomes"]
+    end
+
+    subgraph ENCODER["2. ENCODER (Sparse + Temporal)"]
+        direction TB
+        EMB["Embedding<br/>BGE-M3 1024d"]
+        T2V["Time2Vec<br/>t2v(τ) = sin(ωτ+φ)"]
+        KWTA["k-WTA Sparse<br/>8x expansion → top-k"]
+        VSA["VSA Binding<br/>binary symbolic code"]
+        EMB --> KWTA
+        T2V --> KWTA
+        KWTA --> VSA
+    end
+
+    subgraph CORE["3. SPIKING TEMPORAL CORE"]
+        direction TB
+        subgraph SNNRWKV["Spiking RWKV Blocks (6-12 layers)"]
+            direction LR
+            LIF["LIF Neurons<br/>Norse GPU<br/>u(t+Δt) = αu + I - βa"]
+            ATTN["Spike Attention<br/>STDP-weighted<br/>S²TDPT-inspired"]
+            RWKV["Linear Recurrence<br/>O(N) streaming<br/>SpikeGPT-style"]
+            LIF --> ATTN --> RWKV
+        end
+        subgraph OSCILLATORS["Oscillatory Scaffolding"]
+            direction LR
+            THETA["θ 4-8Hz<br/>Hippocampal"]
+            GAMMA["γ 30-100Hz<br/>Cortical PING"]
+            DELTA["δ 0.5-4Hz<br/>Sleep SWO"]
+            THETA ~~~ GAMMA ~~~ DELTA
+        end
+        subgraph HINTON["Hinton Local Learning"]
+            direction LR
+            FF["Forward-Forward<br/>goodness-based<br/>no backprop"]
+            CAPS["Capsule Routing<br/>pose equivariance<br/>part-whole"]
+            FF ~~~ CAPS
+        end
+        SNNRWKV --> OSCILLATORS
+        SNNRWKV --> HINTON
+    end
+
+    subgraph TEMPORAL["4. TEMPORAL CONTROL (τ-FIRST)"]
+        direction TB
+        PE["Prediction Error<br/>ε(t) = ‖y - ŷ‖"]
+        TAU["τ(t) = σ(λ_ε·ε + λ_Δ·novelty + λ_r·reward)"]
+        BOUNDARY["Event Boundary<br/>b(t) = 𝟙[ε > θ_ε ∨ Δz > θ_Δ]"]
+        PE --> TAU
+        PE --> BOUNDARY
+    end
+
+    subgraph MEMORY["5. UNIFIED 4D MEMORY SUBSTRATE"]
+        direction TB
+        subgraph SCHEMA["MemoryItem (single canonical record)"]
+            direction LR
+            FIELDS["id · content · embedding<br/>event_time · record_time<br/>valid_from · valid_until<br/>κ ∈ [0,1] consolidation<br/>graph_delta · spike_trace"]
+        end
+        subgraph BACKENDS["Dual-Store + Saga"]
+            direction LR
+            QDRANT["Qdrant<br/>vector ANN<br/>1024d HNSW"]
+            NEO4J["Neo4j<br/>graph adjacency<br/>temporal edges"]
+            SAGA["Saga Pattern<br/>consistency<br/>WAL recovery"]
+            QDRANT ~~~ SAGA ~~~ NEO4J
+        end
+        subgraph QUERYPOLICIES["3 Query Policies (NOT 3 stores)"]
+            direction LR
+            QE["Episodic<br/>κ < 0.3<br/>tight Δt"]
+            QS["Semantic<br/>κ > 0.7<br/>wide Δt"]
+            QP["Procedural<br/>type=proc<br/>success-ranked"]
+            QE ~~~ QS ~~~ QP
+        end
+        SCHEMA --> BACKENDS
+        BACKENDS --> QUERYPOLICIES
+    end
+
+    subgraph LEARNING["6. THREE-FACTOR SELF-LEARNING"]
+        direction TB
+        subgraph ELIGIBILITY["Eligibility Traces"]
+            direction LR
+            FAST["Fast e<br/>τ=2s"]
+            SLOW["Slow e<br/>τ=20s"]
+            FAST ~~~ SLOW
+        end
+        subgraph NEUROMOD["Neuromodulator Orchestra (6 NT)"]
+            direction LR
+            DA["DA<br/>reward<br/>VTA/SNc"]
+            NE["NE<br/>arousal<br/>LC"]
+            ACH["ACh<br/>encoding<br/>NBM"]
+            SHT["5-HT<br/>patience<br/>Raphe"]
+            DA ~~~ NE ~~~ ACH ~~~ SHT
+        end
+        subgraph THREEFACTOR["Δw = η · δ(t) · e_ij(t)"]
+            direction LR
+            STDP["STDP<br/>Bi-Poo 1998<br/>A+exp(-Δt/τ+)"]
+            MODGATE["δ(t) = g(ε, r, τ)"]
+            STDP ~~~ MODGATE
+        end
+        ELIGIBILITY --> THREEFACTOR
+        NEUROMOD --> THREEFACTOR
+    end
+
+    subgraph CONSOLIDATION["7. SLEEP REPLAY CONSOLIDATION"]
+        direction TB
+        subgraph SLEEPPHASES["Adenosine-Driven Sleep Cycle"]
+            direction LR
+            NREM["NREM<br/>SWR replay<br/>STDP strengthen<br/>κ += 0.05"]
+            REM["REM<br/>HDBSCAN cluster<br/>semantic abstract<br/>κ += 0.2"]
+            PRUNE["PRUNE<br/>forget low-κ<br/>glymphatic clear"]
+            NREM --> REM --> PRUNE
+        end
+        subgraph REPLAY["Replay Mechanism"]
+            direction LR
+            SWR["Sharp-Wave Ripple<br/>10x compression<br/>PE-weighted priority"]
+            REINJ["Spike Reinjection<br/>z_replay → LIF → spikes<br/>α·z_live + (1-α)·z_replay"]
+            SWR --> REINJ
+        end
+        SLEEPPHASES --> REPLAY
+    end
+
+    subgraph HOMEOSTASIS["8. HOMEOSTATIC STABILIZATION"]
+        direction LR
+        SCALE["Synaptic Scaling<br/>w ← w·(r*/r̂)^γ"]
+        BCM["BCM Metaplasticity<br/>sliding threshold"]
+        DECORR["Decorrelation<br/>reduce interference"]
+        SCALE ~~~ BCM ~~~ DECORR
+    end
+
+    subgraph OUTPUT["9. OUTPUT + API"]
+        direction LR
+        READOUT["Readout Layer<br/>Hopfield completion"]
+        API["FastAPI REST<br/>WebSocket stream<br/>Python SDK"]
+        READOUT --> API
+    end
+
+    %% ═══════════════════════════════════════════════════
+    %% SIGNAL FLOW
+    %% ═══════════════════════════════════════════════════
+
+    INPUT --> ENCODER
+    ENCODER --> CORE
+    CORE --> OUTPUT
+    CORE --> TEMPORAL
+    TEMPORAL -->|"τ(t) gates write"| MEMORY
+    TEMPORAL -->|"τ(t) gates plasticity"| LEARNING
+    TEMPORAL -->|"τ(t) gates replay"| CONSOLIDATION
+    MEMORY -->|"C(t) = TopK(R(t))"| CORE
+    LEARNING -->|"Δw_ij"| CORE
+    CONSOLIDATION -->|"spike reinjection"| CORE
+    CONSOLIDATION -->|"κ update"| MEMORY
+    HOMEOSTASIS -->|"scaling + threshold"| CORE
+    HOMEOSTASIS -->|"norm monitoring"| LEARNING
+
+    %% ═══════════════════════════════════════════════════
+    %% STYLING
+    %% ═══════════════════════════════════════════════════
+
+    classDef inputStyle fill:#1e3a5f,stroke:#4a9eff,color:#e8e8f0,stroke-width:2px
+    classDef encoderStyle fill:#2d1b4e,stroke:#a855f7,color:#e8e8f0,stroke-width:2px
+    classDef coreStyle fill:#4a1942,stroke:#ec4899,color:#e8e8f0,stroke-width:2px
+    classDef temporalStyle fill:#4a3000,stroke:#f59e0b,color:#e8e8f0,stroke-width:2px
+    classDef memoryStyle fill:#064e3b,stroke:#10b981,color:#e8e8f0,stroke-width:2px
+    classDef learnStyle fill:#7f1d1d,stroke:#ef4444,color:#e8e8f0,stroke-width:2px
+    classDef consolidateStyle fill:#1e1b4b,stroke:#6366f1,color:#e8e8f0,stroke-width:2px
+    classDef homeoStyle fill:#3b3100,stroke:#eab308,color:#e8e8f0,stroke-width:2px
+    classDef outputStyle fill:#164e63,stroke:#06b6d4,color:#e8e8f0,stroke-width:2px
+
+    class TOKENS,EVENTS inputStyle
+    class EMB,T2V,KWTA,VSA encoderStyle
+    class LIF,ATTN,RWKV,THETA,GAMMA,DELTA,FF,CAPS coreStyle
+    class PE,TAU,BOUNDARY temporalStyle
+    class FIELDS,QDRANT,NEO4J,SAGA,QE,QS,QP memoryStyle
+    class FAST,SLOW,DA,NE,ACH,SHT,STDP,MODGATE learnStyle
+    class NREM,REM,PRUNE,SWR,REINJ consolidateStyle
+    class SCALE,BCM,DECORR homeoStyle
+    class READOUT,API outputStyle
