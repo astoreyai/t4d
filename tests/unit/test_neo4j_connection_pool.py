@@ -11,8 +11,8 @@ Tests cover:
 import pytest
 from unittest.mock import AsyncMock, MagicMock, patch
 
-from ww.storage.neo4j_store import Neo4jStore
-from ww.core.config import Settings, get_settings
+from t4dm.storage.neo4j_store import Neo4jStore
+from t4dm.core.config import Settings, get_settings
 
 
 class TestNeo4jConnectionPoolConfiguration:
@@ -51,7 +51,7 @@ class TestNeo4jConnectionPoolConfiguration:
         """Test that driver is initialized with pool settings."""
         store = Neo4jStore()
 
-        with patch('ww.storage.neo4j_store.AsyncGraphDatabase.driver') as mock_driver:
+        with patch('t4dm.storage.neo4j_store.AsyncGraphDatabase.driver') as mock_driver:
             mock_driver.return_value = MagicMock()
 
             await store._get_driver()
@@ -73,7 +73,7 @@ class TestNeo4jConnectionPoolConfiguration:
         store = Neo4jStore()
         settings = get_settings()
 
-        with patch('ww.storage.neo4j_store.AsyncGraphDatabase.driver') as mock_driver:
+        with patch('t4dm.storage.neo4j_store.AsyncGraphDatabase.driver') as mock_driver:
             mock_driver.return_value = MagicMock()
 
             await store._get_driver()
@@ -90,7 +90,7 @@ class TestNeo4jConnectionPoolConfiguration:
         """Test that driver is only created once (cached)."""
         store = Neo4jStore()
 
-        with patch('ww.storage.neo4j_store.AsyncGraphDatabase.driver') as mock_driver:
+        with patch('t4dm.storage.neo4j_store.AsyncGraphDatabase.driver') as mock_driver:
             mock_driver.return_value = MagicMock()
 
             # Call _get_driver multiple times
@@ -324,10 +324,10 @@ class TestNeo4jPoolLogging:
         """Test that driver initialization logs pool configuration."""
         store = Neo4jStore()
 
-        with patch('ww.storage.neo4j_store.AsyncGraphDatabase.driver') as mock_driver:
+        with patch('t4dm.storage.neo4j_store.AsyncGraphDatabase.driver') as mock_driver:
             mock_driver.return_value = MagicMock()
 
-            with patch('ww.storage.neo4j_store.logger') as mock_logger:
+            with patch('t4dm.storage.neo4j_store.logger') as mock_logger:
                 await store._get_driver()
 
                 # Should log pool configuration

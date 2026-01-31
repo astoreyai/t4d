@@ -12,7 +12,7 @@ Tests cover:
 import numpy as np
 import pytest
 
-from ww.nca.vta import (
+from t4dm.nca.vta import (
     VTACircuit,
     VTAConfig,
     VTAState,

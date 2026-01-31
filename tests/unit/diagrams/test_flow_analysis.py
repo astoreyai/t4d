@@ -1,13 +1,13 @@
 """Tests for flow analysis engine."""
 
-from ww.diagrams.flow_analysis import (
+from t4dm.diagrams.flow_analysis import (
     betweenness_centrality,
     degree_analysis,
     detect_cycles,
     find_bottlenecks,
     subgraph_coupling_matrix,
 )
-from ww.diagrams.schema import GraphEdge, GraphNode, UnifiedGraph
+from t4dm.diagrams.schema import GraphEdge, GraphNode, UnifiedGraph
 
 
 def _diamond_graph() -> UnifiedGraph:

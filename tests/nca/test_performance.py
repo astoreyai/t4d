@@ -20,13 +20,13 @@ import numpy as np
 import pytest
 from typing import Callable, Tuple
 
-from ww.nca.neural_field import NeuralFieldSolver, NeuralFieldConfig
-from ww.nca.hippocampus import HippocampalCircuit, HippocampalConfig
-from ww.nca.vta import VTACircuit, VTAConfig
-from ww.nca.raphe import RapheNucleus, RapheConfig
-from ww.nca.swr_coupling import SWRNeuralFieldCoupling, SWRConfig
-from ww.nca.striatal_msn import StriatalMSN, MSNConfig
-from ww.nca.coupling import LearnableCoupling, CouplingConfig
+from t4dm.nca.neural_field import NeuralFieldSolver, NeuralFieldConfig
+from t4dm.nca.hippocampus import HippocampalCircuit, HippocampalConfig
+from t4dm.nca.vta import VTACircuit, VTAConfig
+from t4dm.nca.raphe import RapheNucleus, RapheConfig
+from t4dm.nca.swr_coupling import SWRNeuralFieldCoupling, SWRConfig
+from t4dm.nca.striatal_msn import StriatalMSN, MSNConfig
+from t4dm.nca.coupling import LearnableCoupling, CouplingConfig
 
 
 def benchmark(func: Callable, iterations: int = 100) -> Tuple[float, float, float]:
@@ -317,7 +317,7 @@ class TestCouplingPerformance:
     def test_compute_coupling_performance(self, coupling):
         """Coupling computation should be <0.5ms."""
         # Create mock NT state
-        from ww.nca.neural_field import NeurotransmitterState
+        from t4dm.nca.neural_field import NeurotransmitterState
         state = NeurotransmitterState()
 
         def compute():

@@ -8,7 +8,7 @@ import pytest
 import numpy as np
 from uuid import UUID
 
-from ww.nca.hippocampus import (
+from t4dm.nca.hippocampus import (
     HippocampalConfig,
     HippocampalState,
     HippocampalMode,

@@ -9,7 +9,7 @@ import time
 
 import pytest
 
-from ww.core.emergency import (
+from t4dm.core.emergency import (
     CircuitBreaker,
     CircuitBreakerConfig,
     CircuitState,

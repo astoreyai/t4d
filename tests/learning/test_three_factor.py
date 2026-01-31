@@ -12,15 +12,15 @@ import numpy as np
 from uuid import uuid4
 from datetime import datetime
 
-from ww.learning.three_factor import (
+from t4dm.learning.three_factor import (
     ThreeFactorSignal,
     ThreeFactorLearningRule,
     ThreeFactorReconsolidation,
     create_three_factor_rule,
 )
-from ww.learning.eligibility import EligibilityTrace, LayeredEligibilityTrace
-from ww.learning.neuromodulators import NeuromodulatorOrchestra, NeuromodulatorState
-from ww.learning.dopamine import DopamineSystem, RewardPredictionError
+from t4dm.learning.eligibility import EligibilityTrace, LayeredEligibilityTrace
+from t4dm.learning.neuromodulators import NeuromodulatorOrchestra, NeuromodulatorState
+from t4dm.learning.dopamine import DopamineSystem, RewardPredictionError
 
 
 class TestThreeFactorSignal:
@@ -644,14 +644,14 @@ class TestThreeFactorEdgeCases:
 
     def test_validate_scalar_nan(self):
         """_validate_scalar raises on NaN."""
-        from ww.learning.three_factor import _validate_scalar
+        from t4dm.learning.three_factor import _validate_scalar
 
         with pytest.raises(ValueError, match="NaN detected"):
             _validate_scalar(float("nan"), "test_value")
 
     def test_validate_scalar_inf(self):
         """_validate_scalar raises on Inf."""
-        from ww.learning.three_factor import _validate_scalar
+        from t4dm.learning.three_factor import _validate_scalar
 
         with pytest.raises(ValueError, match="Inf detected"):
             _validate_scalar(float("inf"), "test_value")
@@ -661,7 +661,7 @@ class TestThreeFactorEdgeCases:
 
     def test_validate_scalar_normal(self):
         """_validate_scalar passes for normal values."""
-        from ww.learning.three_factor import _validate_scalar
+        from t4dm.learning.three_factor import _validate_scalar
 
         # Should not raise
         _validate_scalar(0.0, "zero")

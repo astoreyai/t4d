@@ -9,8 +9,8 @@ from unittest.mock import Mock, patch, AsyncMock, MagicMock
 from datetime import datetime
 from uuid import uuid4
 
-from ww.integration.ccapi_memory import WWMemory, Message, create_ww_memory
-from ww.integration.ccapi_observer import WWObserver, Event, Span, EventType, create_ww_observer
+from t4dm.integration.ccapi_memory import WWMemory, Message, create_ww_memory
+from t4dm.integration.ccapi_observer import WWObserver, Event, Span, EventType, create_ww_observer
 
 
 class TestMessage:

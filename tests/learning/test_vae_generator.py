@@ -8,7 +8,7 @@ for use with the GenerativeReplaySystem.
 import numpy as np
 import pytest
 
-from ww.learning.vae_generator import (
+from t4dm.learning.vae_generator import (
     MLPLayer,
     VAEConfig,
     VAEGenerator,
@@ -17,7 +17,7 @@ from ww.learning.vae_generator import (
     relu,
     relu_backward,
 )
-from ww.learning.generative_replay import (
+from t4dm.learning.generative_replay import (
     GenerativeReplayConfig,
     GenerativeReplaySystem,
 )

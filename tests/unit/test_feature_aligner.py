@@ -7,7 +7,7 @@ Phase 3: Validates feature alignment and joint loss computation.
 import pytest
 import numpy as np
 
-from ww.memory.feature_aligner import (
+from t4dm.memory.feature_aligner import (
     FeatureAligner,
     AlignmentResult,
     JointLossWeights,

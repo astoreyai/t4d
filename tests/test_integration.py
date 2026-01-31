@@ -31,10 +31,10 @@ async def test_full_memory_workflow():
     - Procedure building
     - Cross-memory retrieval
     """
-    from ww.memory.episodic import get_episodic_memory
-    from ww.memory.semantic import get_semantic_memory
-    from ww.memory.procedural import get_procedural_memory
-    from ww.consolidation.service import get_consolidation_service
+    from t4dm.memory.episodic import get_episodic_memory
+    from t4dm.memory.semantic import get_semantic_memory
+    from t4dm.memory.procedural import get_procedural_memory
+    from t4dm.consolidation.service import get_consolidation_service
 
     session_id = f"int-test-{uuid4().hex[:8]}"
     print(f"\n{'='*60}")
@@ -260,8 +260,8 @@ async def test_multi_session_isolation():
     - Episodes are isolated by session
     - Semantic/procedural knowledge is shared
     """
-    from ww.memory.episodic import get_episodic_memory
-    from ww.memory.semantic import get_semantic_memory
+    from t4dm.memory.episodic import get_episodic_memory
+    from t4dm.memory.semantic import get_semantic_memory
 
     session_a = f"session-a-{uuid4().hex[:6]}"
     session_b = f"session-b-{uuid4().hex[:6]}"

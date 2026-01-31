@@ -3,7 +3,7 @@
 import pytest
 import torch
 
-from ww.spiking.cortical_stack import CorticalStack
+from t4dm.spiking.cortical_stack import CorticalStack
 
 
 class TestCorticalStack:

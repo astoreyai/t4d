@@ -9,7 +9,7 @@ from pathlib import Path
 
 import pytest
 
-from ww.storage.archive import (
+from t4dm.storage.archive import (
     ArchiveConfig,
     ArchiveMetadata,
     ColdStorageManager,

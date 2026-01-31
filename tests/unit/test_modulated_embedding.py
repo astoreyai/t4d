@@ -7,8 +7,8 @@ Tests ModulatedEmbeddingAdapter and neuromodulator state handling.
 import pytest
 import numpy as np
 
-from ww.embedding.adapter import MockEmbeddingAdapter
-from ww.embedding.modulated import (
+from t4dm.embedding.adapter import MockEmbeddingAdapter
+from t4dm.embedding.modulated import (
     CognitiveMode,
     NeuromodulatorState,
     ModulationConfig,

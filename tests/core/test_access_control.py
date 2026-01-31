@@ -2,7 +2,7 @@
 
 import pytest
 
-from ww.core.access_control import (
+from t4dm.core.access_control import (
     API_TOKEN,
     AccessDenied,
     CallerToken,

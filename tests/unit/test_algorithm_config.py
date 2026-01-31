@@ -9,7 +9,7 @@ import os
 import pytest
 from pydantic import ValidationError
 
-from ww.core.config import Settings, get_settings
+from t4dm.core.config import Settings, get_settings
 
 
 class TestFSRSParameters:
@@ -51,8 +51,8 @@ class TestFSRSParameters:
 
     def test_fsrs_env_override(self, monkeypatch):
         """Test FSRS parameters can be overridden via environment."""
-        monkeypatch.setenv("WW_FSRS_DECAY_FACTOR", "0.8")
-        monkeypatch.setenv("WW_FSRS_DEFAULT_STABILITY", "2.0")
+        monkeypatch.setenv("T4DM_FSRS_DECAY_FACTOR", "0.8")
+        monkeypatch.setenv("T4DM_FSRS_DEFAULT_STABILITY", "2.0")
 
         settings = Settings()
         assert settings.fsrs_decay_factor == 0.8
@@ -99,8 +99,8 @@ class TestACTRParameters:
 
     def test_actr_env_override(self, monkeypatch):
         """Test ACT-R parameters can be overridden via environment."""
-        monkeypatch.setenv("WW_ACTR_SPREADING_STRENGTH", "2.0")
-        monkeypatch.setenv("WW_ACTR_NOISE", "0.3")
+        monkeypatch.setenv("T4DM_ACTR_SPREADING_STRENGTH", "2.0")
+        monkeypatch.setenv("T4DM_ACTR_NOISE", "0.3")
 
         settings = Settings()
         assert settings.actr_spreading_strength == 2.0
@@ -147,8 +147,8 @@ class TestHebbianParameters:
 
     def test_hebbian_env_override(self, monkeypatch):
         """Test Hebbian parameters can be overridden via environment."""
-        monkeypatch.setenv("WW_HEBBIAN_LEARNING_RATE", "0.2")
-        monkeypatch.setenv("WW_HEBBIAN_STALE_DAYS", "60")
+        monkeypatch.setenv("T4DM_HEBBIAN_LEARNING_RATE", "0.2")
+        monkeypatch.setenv("T4DM_HEBBIAN_STALE_DAYS", "60")
 
         settings = Settings()
         assert settings.hebbian_learning_rate == 0.2
@@ -190,8 +190,8 @@ class TestHDBSCANParameters:
 
     def test_hdbscan_env_override(self, monkeypatch):
         """Test HDBSCAN parameters can be overridden via environment."""
-        monkeypatch.setenv("WW_HDBSCAN_MIN_CLUSTER_SIZE", "5")
-        monkeypatch.setenv("WW_HDBSCAN_METRIC", "euclidean")
+        monkeypatch.setenv("T4DM_HDBSCAN_MIN_CLUSTER_SIZE", "5")
+        monkeypatch.setenv("T4DM_HDBSCAN_METRIC", "euclidean")
 
         settings = Settings()
         assert settings.hdbscan_min_cluster_size == 5
@@ -240,10 +240,10 @@ class TestEpisodicRetrievalWeights:
 
     def test_episodic_weights_env_override(self, monkeypatch):
         """Test episodic weights can be overridden via environment."""
-        monkeypatch.setenv("WW_EPISODIC_WEIGHT_SEMANTIC", "0.5")
-        monkeypatch.setenv("WW_EPISODIC_WEIGHT_RECENCY", "0.3")
-        monkeypatch.setenv("WW_EPISODIC_WEIGHT_OUTCOME", "0.1")
-        monkeypatch.setenv("WW_EPISODIC_WEIGHT_IMPORTANCE", "0.1")
+        monkeypatch.setenv("T4DM_EPISODIC_WEIGHT_SEMANTIC", "0.5")
+        monkeypatch.setenv("T4DM_EPISODIC_WEIGHT_RECENCY", "0.3")
+        monkeypatch.setenv("T4DM_EPISODIC_WEIGHT_OUTCOME", "0.1")
+        monkeypatch.setenv("T4DM_EPISODIC_WEIGHT_IMPORTANCE", "0.1")
 
         settings = Settings()
         assert settings.episodic_weight_semantic == 0.5
@@ -279,9 +279,9 @@ class TestSemanticRetrievalWeights:
 
     def test_semantic_weights_env_override(self, monkeypatch):
         """Test semantic weights can be overridden via environment."""
-        monkeypatch.setenv("WW_SEMANTIC_WEIGHT_SIMILARITY", "0.5")
-        monkeypatch.setenv("WW_SEMANTIC_WEIGHT_ACTIVATION", "0.3")
-        monkeypatch.setenv("WW_SEMANTIC_WEIGHT_RETRIEVABILITY", "0.2")
+        monkeypatch.setenv("T4DM_SEMANTIC_WEIGHT_SIMILARITY", "0.5")
+        monkeypatch.setenv("T4DM_SEMANTIC_WEIGHT_ACTIVATION", "0.3")
+        monkeypatch.setenv("T4DM_SEMANTIC_WEIGHT_RETRIEVABILITY", "0.2")
 
         settings = Settings()
         assert settings.semantic_weight_similarity == 0.5
@@ -317,9 +317,9 @@ class TestProceduralRetrievalWeights:
 
     def test_procedural_weights_env_override(self, monkeypatch):
         """Test procedural weights can be overridden via environment."""
-        monkeypatch.setenv("WW_PROCEDURAL_WEIGHT_SIMILARITY", "0.7")
-        monkeypatch.setenv("WW_PROCEDURAL_WEIGHT_SUCCESS", "0.2")
-        monkeypatch.setenv("WW_PROCEDURAL_WEIGHT_EXPERIENCE", "0.1")
+        monkeypatch.setenv("T4DM_PROCEDURAL_WEIGHT_SIMILARITY", "0.7")
+        monkeypatch.setenv("T4DM_PROCEDURAL_WEIGHT_SUCCESS", "0.2")
+        monkeypatch.setenv("T4DM_PROCEDURAL_WEIGHT_EXPERIENCE", "0.1")
 
         settings = Settings()
         assert settings.procedural_weight_similarity == 0.7
@@ -364,8 +364,8 @@ class TestConsolidationParameters:
 
     def test_consolidation_env_override(self, monkeypatch):
         """Test consolidation parameters can be overridden via environment."""
-        monkeypatch.setenv("WW_CONSOLIDATION_MIN_SIMILARITY", "0.8")
-        monkeypatch.setenv("WW_CONSOLIDATION_MIN_OCCURRENCES", "5")
+        monkeypatch.setenv("T4DM_CONSOLIDATION_MIN_SIMILARITY", "0.8")
+        monkeypatch.setenv("T4DM_CONSOLIDATION_MIN_OCCURRENCES", "5")
 
         settings = Settings()
         assert settings.consolidation_min_similarity == 0.8
@@ -398,7 +398,7 @@ class TestSettingsCaching:
     def test_get_settings_caches(self):
         """Test get_settings returns same instance."""
         # Clear cache by reimporting
-        from ww.core import config
+        from t4dm.core import config
         config._settings = None
 
         settings1 = get_settings()

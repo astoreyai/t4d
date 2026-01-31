@@ -6,9 +6,9 @@ import pytest
 from datetime import datetime
 from uuid import uuid4
 
-from ww.consolidation import HDBSCAN_AVAILABLE
-from ww.consolidation.service import ConsolidationService
-from ww.core.types import Episode, EpisodeContext, Domain
+from t4dm.consolidation import HDBSCAN_AVAILABLE
+from t4dm.consolidation.service import ConsolidationService
+from t4dm.core.types import Episode, EpisodeContext, Domain
 
 # Skip all tests if HDBSCAN not installed
 pytestmark = pytest.mark.skipif(
@@ -214,7 +214,7 @@ async def test_cluster_procedures_complexity(consolidation_service):
     """Verify O(n log n) complexity vs O(n²) for large inputs."""
     # This is more of a performance test, not run by default
     # Just verify the implementation exists and handles reasonable inputs
-    from ww.core.types import Procedure, ProcedureStep
+    from t4dm.core.types import Procedure, ProcedureStep
 
     procedures = [
         Procedure(

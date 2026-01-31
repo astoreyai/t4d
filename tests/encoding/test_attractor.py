@@ -6,7 +6,7 @@ import pytest
 import torch
 import torch.nn.functional as F
 
-from ww.encoding.attractor import (
+from t4dm.encoding.attractor import (
     AttractorNetwork,
     ModernHopfieldNetwork,
     RetrievalResult

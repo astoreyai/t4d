@@ -28,7 +28,7 @@ class TestBGEM3HybridEmbedding:
     @pytest.fixture
     def embedding_provider(self, mock_flag_model):
         """Create embedding provider with mocked model."""
-        with patch("ww.embedding.bge_m3.get_settings") as mock_settings:
+        with patch("t4dm.embedding.bge_m3.get_settings") as mock_settings:
             mock_settings.return_value = MagicMock(
                 embedding_model="BAAI/bge-m3",
                 embedding_device="cpu",
@@ -40,7 +40,7 @@ class TestBGEM3HybridEmbedding:
                 embedding_cache_size=100,
                 embedding_cache_ttl=3600,
             )
-            from ww.embedding.bge_m3 import BGEM3Embedding
+            from t4dm.embedding.bge_m3 import BGEM3Embedding
             provider = BGEM3Embedding()
             provider._model = mock_flag_model
             provider._initialized = True
@@ -147,7 +147,7 @@ class TestQdrantStoreHybrid:
     @pytest.fixture
     def qdrant_store(self, mock_qdrant_client):
         """Create QdrantStore with mocked client."""
-        with patch("ww.storage.qdrant_store.get_settings") as mock_settings:
+        with patch("t4dm.storage.qdrant_store.get_settings") as mock_settings:
             mock_settings.return_value = MagicMock(
                 qdrant_url="http://localhost:6333",
                 qdrant_api_key=None,
@@ -156,7 +156,7 @@ class TestQdrantStoreHybrid:
                 qdrant_collection_entities="ww_entities",
                 qdrant_collection_procedures="ww_procedures",
             )
-            from ww.storage.qdrant_store import QdrantStore
+            from t4dm.storage.qdrant_store import QdrantStore
             store = QdrantStore()
             store._client = mock_qdrant_client
             return store
@@ -281,10 +281,10 @@ class TestEpisodicMemoryHybrid:
     @pytest.fixture
     def episodic_memory(self, mock_embedding, mock_vector_store, mock_graph_store):
         """Create EpisodicMemory with mocked dependencies."""
-        with patch("ww.memory.episodic.get_settings") as mock_settings, \
-             patch("ww.memory.episodic.get_embedding_provider") as mock_emb, \
-             patch("ww.memory.episodic.get_qdrant_store") as mock_qdrant, \
-             patch("ww.memory.episodic.get_neo4j_store") as mock_neo4j:
+        with patch("t4dm.memory.episodic.get_settings") as mock_settings, \
+             patch("t4dm.memory.episodic.get_embedding_provider") as mock_emb, \
+             patch("t4dm.memory.episodic.get_qdrant_store") as mock_qdrant, \
+             patch("t4dm.memory.episodic.get_neo4j_store") as mock_neo4j:
 
             mock_settings.return_value = MagicMock(
                 session_id="test",
@@ -305,8 +305,8 @@ class TestEpisodicMemoryHybrid:
             mock_qdrant.return_value = mock_vector_store
             mock_neo4j.return_value = mock_graph_store
 
-            with patch("ww.memory.episodic.get_ff_encoder", return_value=None):
-                from ww.memory.episodic import EpisodicMemory
+            with patch("t4dm.memory.episodic.get_ff_encoder", return_value=None):
+                from t4dm.memory.episodic import EpisodicMemory
                 memory = EpisodicMemory(session_id="test")
                 memory._hybrid_initialized = True
                 return memory
@@ -348,8 +348,8 @@ class TestHybridSearchIntegration:
         """Test complete hybrid search workflow with mocks."""
         # This test verifies the full flow from embedding to search
 
-        with patch("ww.embedding.bge_m3.get_settings") as mock_emb_settings, \
-             patch("ww.storage.qdrant_store.get_settings") as mock_store_settings:
+        with patch("t4dm.embedding.bge_m3.get_settings") as mock_emb_settings, \
+             patch("t4dm.storage.qdrant_store.get_settings") as mock_store_settings:
 
             mock_emb_settings.return_value = MagicMock(
                 embedding_model="BAAI/bge-m3",
@@ -363,7 +363,7 @@ class TestHybridSearchIntegration:
                 embedding_cache_ttl=3600,
             )
 
-            from ww.embedding.bge_m3 import BGEM3Embedding
+            from t4dm.embedding.bge_m3 import BGEM3Embedding
 
             # Create embedding provider with mock model
             provider = BGEM3Embedding()

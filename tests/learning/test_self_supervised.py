@@ -5,7 +5,7 @@ import pytest
 from datetime import datetime, timedelta
 from uuid import uuid4
 
-from ww.learning.self_supervised import (
+from t4dm.learning.self_supervised import (
     ImplicitCredit,
     SelfSupervisedCredit,
     RetrievalEvent,

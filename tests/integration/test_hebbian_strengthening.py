@@ -41,8 +41,8 @@ async def neo4j_store():
     Skips test if Neo4j is not available or configured.
     """
     import os
-    from ww.storage.neo4j_store import Neo4jStore
-    from ww.core.config import get_settings
+    from t4dm.storage.neo4j_store import Neo4jStore
+    from t4dm.core.config import get_settings
 
     settings = get_settings()
 
@@ -289,8 +289,8 @@ class TestSemanticHebbianIntegration:
     @pytest.mark.skip(reason="Requires full infrastructure - run manually")
     async def test_recall_strengthens_coretrieval(self):
         """Test that recall() actually strengthens co-retrieved relationships."""
-        from ww.memory.semantic import get_semantic_memory
-        from ww.core.types import EntityType
+        from t4dm.memory.semantic import get_semantic_memory
+        from t4dm.core.types import EntityType
 
         semantic = get_semantic_memory("test-semantic-hebbian")
         await semantic.initialize()

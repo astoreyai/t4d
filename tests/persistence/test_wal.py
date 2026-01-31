@@ -7,7 +7,7 @@ import pytest
 import tempfile
 from pathlib import Path
 
-from ww.persistence.wal import (
+from t4dm.persistence.wal import (
     WriteAheadLog,
     WALConfig,
     WALEntry,

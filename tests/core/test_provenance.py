@@ -3,7 +3,7 @@
 import numpy as np
 import pytest
 
-from ww.core.provenance import (
+from t4dm.core.provenance import (
     IntegrityError,
     ProvenanceRecord,
     hash_content,

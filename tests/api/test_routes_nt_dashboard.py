@@ -16,7 +16,7 @@ from time import sleep
 
 import numpy as np
 
-from ww.api.routes.nt_dashboard import (
+from t4dm.api.routes.nt_dashboard import (
     NeurotransmitterLevels,
     ReceptorSaturation,
     CognitiveMode,

@@ -14,7 +14,7 @@ import pytest
 from datetime import datetime
 from unittest.mock import AsyncMock, Mock
 
-from ww.hooks.base import (
+from t4dm.hooks.base import (
     Hook,
     HookRegistry,
     HookContext,
@@ -23,9 +23,9 @@ from ww.hooks.base import (
     HookError,
     with_hooks,
 )
-from ww.hooks.core import InitHook, ShutdownHook, HealthCheckHook
-from ww.hooks.memory import CreateHook, RecallHook, AccessHook
-from ww.hooks.storage import QueryHook, ErrorHook, RetryHook
+from t4dm.hooks.core import InitHook, ShutdownHook, HealthCheckHook
+from t4dm.hooks.memory import CreateHook, RecallHook, AccessHook
+from t4dm.hooks.storage import QueryHook, ErrorHook, RetryHook
 
 
 class TestHookContext:

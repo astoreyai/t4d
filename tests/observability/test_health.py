@@ -4,7 +4,7 @@ import pytest
 from datetime import datetime
 from unittest.mock import AsyncMock, MagicMock, patch
 
-from ww.observability.health import (
+from t4dm.observability.health import (
     HealthStatus,
     ComponentHealth,
     SystemHealth,
@@ -127,7 +127,7 @@ class TestHealthChecker:
         mock_store.count = AsyncMock(return_value=100)
         mock_store.episodes_collection = "episodes"
 
-        with patch("ww.storage.qdrant_store.get_qdrant_store", return_value=mock_store):
+        with patch("t4dm.storage.qdrant_store.get_qdrant_store", return_value=mock_store):
             result = await checker.check_qdrant()
             assert result.status == HealthStatus.HEALTHY
             assert result.name == "qdrant"
@@ -136,7 +136,7 @@ class TestHealthChecker:
     @pytest.mark.asyncio
     async def test_check_qdrant_connection_error(self, checker):
         """Qdrant health check on connection error."""
-        with patch("ww.storage.qdrant_store.get_qdrant_store", side_effect=ConnectionError("Refused")):
+        with patch("t4dm.storage.qdrant_store.get_qdrant_store", side_effect=ConnectionError("Refused")):
             result = await checker.check_qdrant()
             assert result.status == HealthStatus.UNHEALTHY
             assert "Connection failed" in result.message
@@ -147,7 +147,7 @@ class TestHealthChecker:
         mock_store = MagicMock()
         mock_store.query = AsyncMock(return_value=[{"n": 1}])
 
-        with patch("ww.storage.neo4j_store.get_neo4j_store", return_value=mock_store):
+        with patch("t4dm.storage.neo4j_store.get_neo4j_store", return_value=mock_store):
             result = await checker.check_neo4j()
             assert result.status == HealthStatus.HEALTHY
             assert result.name == "neo4j"
@@ -155,7 +155,7 @@ class TestHealthChecker:
     @pytest.mark.asyncio
     async def test_check_neo4j_connection_error(self, checker):
         """Neo4j health check on connection error."""
-        with patch("ww.storage.neo4j_store.get_neo4j_store", side_effect=ConnectionError("Refused")):
+        with patch("t4dm.storage.neo4j_store.get_neo4j_store", side_effect=ConnectionError("Refused")):
             result = await checker.check_neo4j()
             assert result.status == HealthStatus.UNHEALTHY
 
@@ -165,7 +165,7 @@ class TestHealthChecker:
         mock_provider = MagicMock()
         mock_provider.embed_query = AsyncMock(return_value=[0.1] * 1024)
 
-        with patch("ww.embedding.bge_m3.get_embedding_provider", return_value=mock_provider):
+        with patch("t4dm.embedding.bge_m3.get_embedding_provider", return_value=mock_provider):
             result = await checker.check_embedding()
             assert result.status == HealthStatus.HEALTHY
             assert result.name == "embedding"
@@ -174,7 +174,7 @@ class TestHealthChecker:
     @pytest.mark.asyncio
     async def test_check_embedding_unavailable(self, checker):
         """Embedding health check when unavailable."""
-        with patch("ww.embedding.bge_m3.get_embedding_provider", side_effect=ImportError("No model")):
+        with patch("t4dm.embedding.bge_m3.get_embedding_provider", side_effect=ImportError("No model")):
             result = await checker.check_embedding()
             assert result.status == HealthStatus.DEGRADED
 
@@ -184,7 +184,7 @@ class TestHealthChecker:
         mock_metrics = MagicMock()
         mock_metrics.get_summary.return_value = {"total_operations": 1000}
 
-        with patch("ww.observability.health.get_metrics", return_value=mock_metrics):
+        with patch("t4dm.observability.health.get_metrics", return_value=mock_metrics):
             result = await checker.check_metrics()
             assert result.status == HealthStatus.HEALTHY
             assert result.name == "metrics"
@@ -271,7 +271,7 @@ class TestGetHealthChecker:
     def test_returns_singleton(self):
         """Returns same instance."""
         # Reset singleton
-        import ww.observability.health as health_module
+        import t4dm.observability.health as health_module
         health_module._health_checker = None
 
         h1 = get_health_checker()
@@ -280,7 +280,7 @@ class TestGetHealthChecker:
 
     def test_creates_new_if_none(self):
         """Creates new checker if none exists."""
-        import ww.observability.health as health_module
+        import t4dm.observability.health as health_module
         health_module._health_checker = None
 
         checker = get_health_checker()

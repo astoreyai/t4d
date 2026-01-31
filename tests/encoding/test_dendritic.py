@@ -6,7 +6,7 @@ import pytest
 import torch
 import torch.nn as nn
 
-from ww.encoding.dendritic import DendriticNeuron, DendriticProcessor
+from t4dm.encoding.dendritic import DendriticNeuron, DendriticProcessor
 
 
 class TestDendriticNeuron:

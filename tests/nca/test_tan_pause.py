@@ -7,7 +7,7 @@ Verifies cholinergic interneuron pause responses following Aosaki et al. 1994.
 import numpy as np
 import pytest
 
-from ww.nca.striatal_msn import (
+from t4dm.nca.striatal_msn import (
     CholinergicInterneuron,
     MSNConfig,
     StriatalMSN,

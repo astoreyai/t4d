@@ -3,7 +3,7 @@
 import pytest
 from datetime import datetime
 
-from ww.hooks.consolidation import (
+from t4dm.hooks.consolidation import (
     ConsolidationHook,
     PreConsolidateHook,
     PostConsolidateHook,
@@ -16,7 +16,7 @@ from ww.hooks.consolidation import (
     EntityValidationHook,
     ConsolidationProgressHook,
 )
-from ww.hooks.base import HookContext, HookPhase, HookPriority
+from t4dm.hooks.base import HookContext, HookPhase, HookPriority
 
 
 class TestConsolidationHook:

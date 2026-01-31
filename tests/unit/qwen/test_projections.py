@@ -3,7 +3,7 @@
 import torch
 import pytest
 
-from ww.qwen.projections import MemoryProjection
+from t4dm.qwen.projections import MemoryProjection
 
 
 class TestProjections:

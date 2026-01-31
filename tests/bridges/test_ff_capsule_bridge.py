@@ -8,7 +8,7 @@ capsule routing agreement for combined confidence scoring and joint learning.
 import numpy as np
 import pytest
 
-from ww.bridges.ff_capsule_bridge import (
+from t4dm.bridges.ff_capsule_bridge import (
     CapsuleState,
     FFCapsuleBridge,
     FFCapsuleBridgeConfig,
@@ -768,7 +768,7 @@ class TestFFCapsuleIntegration:
     def test_with_real_ff_encoder(self):
         """Test integration with real FFEncoder."""
         try:
-            from ww.encoding.ff_encoder import FFEncoder, FFEncoderConfig
+            from t4dm.encoding.ff_encoder import FFEncoder, FFEncoderConfig
 
             ff_config = FFEncoderConfig(
                 input_dim=1024,
@@ -791,7 +791,7 @@ class TestFFCapsuleIntegration:
     def test_with_real_capsule_layer(self):
         """Test integration with real CapsuleLayer."""
         try:
-            from ww.nca.capsules import CapsuleLayer, CapsuleConfig
+            from t4dm.nca.capsules import CapsuleLayer, CapsuleConfig
 
             caps_config = CapsuleConfig(
                 input_dim=1024,
@@ -815,8 +815,8 @@ class TestFFCapsuleIntegration:
     def test_with_both_real_components(self):
         """Test integration with both real components."""
         try:
-            from ww.encoding.ff_encoder import FFEncoder, FFEncoderConfig
-            from ww.nca.capsules import CapsuleLayer, CapsuleConfig
+            from t4dm.encoding.ff_encoder import FFEncoder, FFEncoderConfig
+            from t4dm.nca.capsules import CapsuleLayer, CapsuleConfig
 
             # Create real components
             ff_config = FFEncoderConfig(input_dim=1024, hidden_dims=(256,), output_dim=1024)

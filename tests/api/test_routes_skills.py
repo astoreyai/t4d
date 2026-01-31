@@ -4,7 +4,7 @@ import pytest
 from datetime import datetime
 from uuid import uuid4
 
-from ww.api.routes.skills import (
+from t4dm.api.routes.skills import (
     StepCreate,
     SkillCreate,
     SkillResponse,
@@ -13,7 +13,7 @@ from ww.api.routes.skills import (
     ExecutionRequest,
     HowToResponse,
 )
-from ww.core.types import Domain
+from t4dm.core.types import Domain
 
 
 class TestStepCreate:

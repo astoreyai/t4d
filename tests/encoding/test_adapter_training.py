@@ -20,7 +20,7 @@ from datetime import datetime, timedelta
 from unittest.mock import AsyncMock, MagicMock, patch, call
 from uuid import uuid4
 
-from ww.encoding.adapter_training import (
+from t4dm.encoding.adapter_training import (
     TrainingConfig,
     TrainingStats,
     EmbeddingCache,
@@ -29,7 +29,7 @@ from ww.encoding.adapter_training import (
     create_adapter_trainer,
     create_continuous_trainer,
 )
-from ww.learning.retrieval_feedback import RetrievalFeedback
+from t4dm.learning.retrieval_feedback import RetrievalFeedback
 
 
 # ============================================================================

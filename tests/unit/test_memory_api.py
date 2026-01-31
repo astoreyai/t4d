@@ -1,14 +1,14 @@
 """
 Tests for the simplified memory API.
 
-Tests the ww.memory_api module and its exports from ww package.
+Tests the t4dm.memory_api module and its exports from t4dm package.
 """
 
 import pytest
 from unittest.mock import AsyncMock, MagicMock, patch
 from datetime import datetime
 
-from ww.memory_api import Memory, MemoryResult, memory
+from t4dm.memory_api import Memory, MemoryResult, memory
 
 
 class TestMemoryResult:
@@ -74,7 +74,7 @@ class TestMemoryClass:
         m = Memory(session_id="custom")
         assert m.session_id == "custom"
 
-    @patch("ww.memory_api.get_settings")
+    @patch("t4dm.memory_api.get_settings")
     def test_memory_session_property_default(self, mock_settings):
         """session_id property returns default from settings."""
         mock_settings.return_value.session_id = "settings-session"
@@ -86,7 +86,7 @@ class TestMemoryStore:
     """Tests for Memory store methods."""
 
     @pytest.mark.asyncio
-    @patch("ww.memory_api.get_services")
+    @patch("t4dm.memory_api.get_services")
     async def test_store_content(self, mock_services):
         """store() stores episodic content."""
         mock_episodic = MagicMock()
@@ -103,7 +103,7 @@ class TestMemoryStore:
         assert call_args.emotional_valence == 0.8
 
     @pytest.mark.asyncio
-    @patch("ww.memory_api.get_services")
+    @patch("t4dm.memory_api.get_services")
     async def test_store_episode(self, mock_services):
         """store_episode() stores episodic memory."""
         mock_episodic = MagicMock()
@@ -116,7 +116,7 @@ class TestMemoryStore:
         assert result == "ep-456"
 
     @pytest.mark.asyncio
-    @patch("ww.memory_api.get_services")
+    @patch("t4dm.memory_api.get_services")
     async def test_store_entity(self, mock_services):
         """store_entity() stores semantic entity."""
         mock_semantic = MagicMock()
@@ -137,7 +137,7 @@ class TestMemoryStore:
         assert call_args.summary == "A programming language"
 
     @pytest.mark.asyncio
-    @patch("ww.memory_api.get_services")
+    @patch("t4dm.memory_api.get_services")
     async def test_store_entity_type_mapping(self, mock_services):
         """store_entity() maps string types to enums."""
         mock_semantic = MagicMock()
@@ -152,7 +152,7 @@ class TestMemoryStore:
         assert mock_semantic.add_entity.call_count == 6
 
     @pytest.mark.asyncio
-    @patch("ww.memory_api.get_services")
+    @patch("t4dm.memory_api.get_services")
     async def test_store_skill(self, mock_services):
         """store_skill() stores procedural skill."""
         mock_procedural = MagicMock()
@@ -173,7 +173,7 @@ class TestMemoryStore:
         assert "git add" in call_args.script
 
     @pytest.mark.asyncio
-    @patch("ww.memory_api.get_services")
+    @patch("t4dm.memory_api.get_services")
     async def test_store_skill_domain_mapping(self, mock_services):
         """store_skill() maps string domains to enums."""
         mock_procedural = MagicMock()
@@ -192,7 +192,7 @@ class TestMemoryRecall:
     """Tests for Memory recall methods."""
 
     @pytest.mark.asyncio
-    @patch("ww.memory_api.get_services")
+    @patch("t4dm.memory_api.get_services")
     async def test_recall_all_types(self, mock_services):
         """recall() searches all memory types."""
         # Setup mocks
@@ -233,7 +233,7 @@ class TestMemoryRecall:
         assert "procedural" in types
 
     @pytest.mark.asyncio
-    @patch("ww.memory_api.get_services")
+    @patch("t4dm.memory_api.get_services")
     async def test_recall_episodes_only(self, mock_services):
         """recall_episodes() only searches episodic memory."""
         mock_episodic = MagicMock()
@@ -258,7 +258,7 @@ class TestMemoryRecall:
         mock_procedural.find_relevant_skills.assert_not_called()
 
     @pytest.mark.asyncio
-    @patch("ww.memory_api.get_services")
+    @patch("t4dm.memory_api.get_services")
     async def test_recall_entities_only(self, mock_services):
         """recall_entities() only searches semantic memory."""
         mock_episodic = MagicMock()
@@ -282,7 +282,7 @@ class TestMemoryRecall:
         mock_procedural.find_relevant_skills.assert_not_called()
 
     @pytest.mark.asyncio
-    @patch("ww.memory_api.get_services")
+    @patch("t4dm.memory_api.get_services")
     async def test_recall_skills_only(self, mock_services):
         """recall_skills() only searches procedural memory."""
         mock_episodic = MagicMock()
@@ -306,7 +306,7 @@ class TestMemoryRecall:
         mock_semantic.search_similar.assert_not_called()
 
     @pytest.mark.asyncio
-    @patch("ww.memory_api.get_services")
+    @patch("t4dm.memory_api.get_services")
     async def test_recall_sorts_by_score(self, mock_services):
         """recall() sorts results by score descending."""
         mock_episodic = MagicMock()
@@ -342,7 +342,7 @@ class TestMemoryRecall:
         assert results[0].score > results[1].score
 
     @pytest.mark.asyncio
-    @patch("ww.memory_api.get_services")
+    @patch("t4dm.memory_api.get_services")
     async def test_get_recent(self, mock_services):
         """get_recent() returns recent episodes."""
         mock_episodic = MagicMock()
@@ -367,7 +367,7 @@ class TestMemorySession:
     """Tests for Memory session context manager."""
 
     @pytest.mark.asyncio
-    @patch("ww.memory_api.get_services")
+    @patch("t4dm.memory_api.get_services")
     async def test_session_context_manager(self, mock_services):
         """session() provides context manager for custom session."""
         mock_episodic = MagicMock()
@@ -383,7 +383,7 @@ class TestMemorySession:
         mock_episodic.add_episode.assert_called_once()
 
     @pytest.mark.asyncio
-    @patch("ww.memory_api.get_services")
+    @patch("t4dm.memory_api.get_services")
     async def test_session_clears_cache_on_exit(self, mock_services):
         """session() clears services cache on exit."""
         mock_services.return_value = (MagicMock(), MagicMock(), MagicMock())
@@ -403,10 +403,10 @@ class TestModuleLevelFunctions:
     """Tests for module-level convenience functions."""
 
     @pytest.mark.asyncio
-    @patch("ww.memory_api.memory")
+    @patch("t4dm.memory_api.memory")
     async def test_module_store(self, mock_memory):
         """Module-level store() delegates to memory instance."""
-        from ww.memory_api import store
+        from t4dm.memory_api import store
 
         mock_memory.store = AsyncMock(return_value="ep-123")
 
@@ -421,10 +421,10 @@ class TestModuleLevelFunctions:
         )
 
     @pytest.mark.asyncio
-    @patch("ww.memory_api.memory")
+    @patch("t4dm.memory_api.memory")
     async def test_module_recall(self, mock_memory):
         """Module-level recall() delegates to memory instance."""
-        from ww.memory_api import recall
+        from t4dm.memory_api import recall
 
         mock_memory.recall = AsyncMock(return_value=[])
 
@@ -438,10 +438,10 @@ class TestModuleLevelFunctions:
         )
 
     @pytest.mark.asyncio
-    @patch("ww.memory_api.memory")
+    @patch("t4dm.memory_api.memory")
     async def test_module_store_episode(self, mock_memory):
         """Module-level store_episode() delegates to memory instance."""
-        from ww.memory_api import store_episode
+        from t4dm.memory_api import store_episode
 
         mock_memory.store_episode = AsyncMock(return_value="ep-456")
 
@@ -450,10 +450,10 @@ class TestModuleLevelFunctions:
         assert result == "ep-456"
 
     @pytest.mark.asyncio
-    @patch("ww.memory_api.memory")
+    @patch("t4dm.memory_api.memory")
     async def test_module_store_entity(self, mock_memory):
         """Module-level store_entity() delegates to memory instance."""
-        from ww.memory_api import store_entity
+        from t4dm.memory_api import store_entity
 
         mock_memory.store_entity = AsyncMock(return_value="ent-789")
 
@@ -462,10 +462,10 @@ class TestModuleLevelFunctions:
         assert result == "ent-789"
 
     @pytest.mark.asyncio
-    @patch("ww.memory_api.memory")
+    @patch("t4dm.memory_api.memory")
     async def test_module_store_skill(self, mock_memory):
         """Module-level store_skill() delegates to memory instance."""
-        from ww.memory_api import store_skill
+        from t4dm.memory_api import store_skill
 
         mock_memory.store_skill = AsyncMock(return_value="sk-101")
 
@@ -475,42 +475,42 @@ class TestModuleLevelFunctions:
 
 
 class TestPackageExports:
-    """Tests for ww package exports."""
+    """Tests for t4dm package exports."""
 
     def test_memory_exported_from_ww(self):
-        """memory is exported from ww package."""
-        from ww import memory
+        """memory is exported from t4dm package."""
+        from t4dm import memory
 
         assert memory is not None
         assert isinstance(memory, Memory)
 
     def test_memory_class_exported_from_ww(self):
-        """Memory class is exported from ww package."""
-        from ww import Memory
+        """Memory class is exported from t4dm package."""
+        from t4dm import Memory
 
         assert Memory is not None
 
     def test_memory_result_exported_from_ww(self):
-        """MemoryResult is exported from ww package."""
-        from ww import MemoryResult
+        """MemoryResult is exported from t4dm package."""
+        from t4dm import MemoryResult
 
         assert MemoryResult is not None
 
     def test_store_exported_from_ww(self):
-        """store function is exported from ww package."""
-        from ww import store
+        """store function is exported from t4dm package."""
+        from t4dm import store
 
         assert callable(store)
 
     def test_recall_exported_from_ww(self):
-        """recall function is exported from ww package."""
-        from ww import recall
+        """recall function is exported from t4dm package."""
+        from t4dm import recall
 
         assert callable(recall)
 
     def test_all_memory_functions_exported(self):
-        """All memory functions are exported from ww package."""
-        from ww import (
+        """All memory functions are exported from t4dm package."""
+        from t4dm import (
             store,
             recall,
             store_episode,
@@ -539,7 +539,7 @@ class TestServicesCaching:
     """Tests for services caching behavior."""
 
     @pytest.mark.asyncio
-    @patch("ww.memory_api.get_services")
+    @patch("t4dm.memory_api.get_services")
     async def test_services_cached_within_instance(self, mock_services):
         """Services are cached within a Memory instance."""
         mock_services.return_value = (MagicMock(), MagicMock(), MagicMock())
@@ -554,7 +554,7 @@ class TestServicesCaching:
         mock_services.assert_called_once()
 
     @pytest.mark.asyncio
-    @patch("ww.memory_api.get_services")
+    @patch("t4dm.memory_api.get_services")
     async def test_different_instances_get_own_cache(self, mock_services):
         """Different Memory instances have separate caches."""
         mock_services.return_value = (MagicMock(), MagicMock(), MagicMock())

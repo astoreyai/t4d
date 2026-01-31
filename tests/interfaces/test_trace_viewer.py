@@ -11,9 +11,9 @@ class TestTraceViewer:
     @pytest.fixture
     def mock_stores(self):
         """Create mock storage backends."""
-        with patch("ww.interfaces.trace_viewer.EpisodicMemory") as mock_ep, \
-             patch("ww.interfaces.trace_viewer.SemanticMemory") as mock_sem, \
-             patch("ww.interfaces.trace_viewer.get_qdrant_store") as mock_qdrant:
+        with patch("t4dm.interfaces.trace_viewer.EpisodicMemory") as mock_ep, \
+             patch("t4dm.interfaces.trace_viewer.SemanticMemory") as mock_sem, \
+             patch("t4dm.interfaces.trace_viewer.get_qdrant_store") as mock_qdrant:
 
             mock_ep_instance = MagicMock()
             mock_ep_instance.initialize = AsyncMock()
@@ -40,17 +40,17 @@ class TestTraceViewer:
 
     def test_init_without_rich(self, mock_stores):
         """Test initialization fails without rich library."""
-        with patch("ww.interfaces.trace_viewer.RICH_AVAILABLE", False):
-            from ww.interfaces.trace_viewer import TraceViewer
+        with patch("t4dm.interfaces.trace_viewer.RICH_AVAILABLE", False):
+            from t4dm.interfaces.trace_viewer import TraceViewer
 
             with pytest.raises(ImportError, match="rich library required"):
                 TraceViewer(session_id="test")
 
     def test_init_with_rich(self, mock_stores):
         """Test initialization with rich library."""
-        with patch("ww.interfaces.trace_viewer.RICH_AVAILABLE", True), \
-             patch("ww.interfaces.trace_viewer.Console"):
-            from ww.interfaces.trace_viewer import TraceViewer
+        with patch("t4dm.interfaces.trace_viewer.RICH_AVAILABLE", True), \
+             patch("t4dm.interfaces.trace_viewer.Console"):
+            from t4dm.interfaces.trace_viewer import TraceViewer
 
             viewer = TraceViewer(session_id="test")
             assert viewer.session_id == "test"
@@ -59,10 +59,10 @@ class TestTraceViewer:
     @pytest.mark.asyncio
     async def test_initialize(self, mock_stores):
         """Test initialization of storage backends."""
-        with patch("ww.interfaces.trace_viewer.RICH_AVAILABLE", True), \
-             patch("ww.interfaces.trace_viewer.Console"), \
-             patch("ww.interfaces.trace_viewer.Progress"):
-            from ww.interfaces.trace_viewer import TraceViewer
+        with patch("t4dm.interfaces.trace_viewer.RICH_AVAILABLE", True), \
+             patch("t4dm.interfaces.trace_viewer.Console"), \
+             patch("t4dm.interfaces.trace_viewer.Progress"):
+            from t4dm.interfaces.trace_viewer import TraceViewer
 
             viewer = TraceViewer(session_id="test")
             await viewer.initialize()
@@ -79,15 +79,15 @@ class TestTraceViewer:
             ("id2", {"last_accessed": (now - timedelta(hours=25)).isoformat(), "access_count": 3, "content": "Old episode"}, None),
         ], None))
 
-        with patch("ww.interfaces.trace_viewer.RICH_AVAILABLE", True), \
-             patch("ww.interfaces.trace_viewer.Console") as mock_console, \
-             patch("ww.interfaces.trace_viewer.Progress"), \
-             patch("ww.interfaces.trace_viewer.Table"):
+        with patch("t4dm.interfaces.trace_viewer.RICH_AVAILABLE", True), \
+             patch("t4dm.interfaces.trace_viewer.Console") as mock_console, \
+             patch("t4dm.interfaces.trace_viewer.Progress"), \
+             patch("t4dm.interfaces.trace_viewer.Table"):
             mock_console_instance = MagicMock()
             mock_console.return_value = mock_console_instance
             mock_console_instance.status = MagicMock(return_value=MagicMock(__enter__=MagicMock(), __exit__=MagicMock()))
 
-            from ww.interfaces.trace_viewer import TraceViewer
+            from t4dm.interfaces.trace_viewer import TraceViewer
 
             viewer = TraceViewer(session_id="test")
             await viewer.show_access_timeline(hours=24)
@@ -108,15 +108,15 @@ class TestTraceViewer:
             }, None),
         ], None))
 
-        with patch("ww.interfaces.trace_viewer.RICH_AVAILABLE", True), \
-             patch("ww.interfaces.trace_viewer.Console") as mock_console, \
-             patch("ww.interfaces.trace_viewer.Progress"), \
-             patch("ww.interfaces.trace_viewer.Table"):
+        with patch("t4dm.interfaces.trace_viewer.RICH_AVAILABLE", True), \
+             patch("t4dm.interfaces.trace_viewer.Console") as mock_console, \
+             patch("t4dm.interfaces.trace_viewer.Progress"), \
+             patch("t4dm.interfaces.trace_viewer.Table"):
             mock_console_instance = MagicMock()
             mock_console.return_value = mock_console_instance
             mock_console_instance.status = MagicMock(return_value=MagicMock(__enter__=MagicMock(), __exit__=MagicMock()))
 
-            from ww.interfaces.trace_viewer import TraceViewer
+            from t4dm.interfaces.trace_viewer import TraceViewer
 
             viewer = TraceViewer(session_id="test")
             await viewer.show_decay_curves(sample_size=5)
@@ -125,9 +125,9 @@ class TestTraceViewer:
 
     def test_render_decay_curve(self, mock_stores):
         """Test rendering ASCII decay curve."""
-        with patch("ww.interfaces.trace_viewer.RICH_AVAILABLE", True), \
-             patch("ww.interfaces.trace_viewer.Console"):
-            from ww.interfaces.trace_viewer import TraceViewer
+        with patch("t4dm.interfaces.trace_viewer.RICH_AVAILABLE", True), \
+             patch("t4dm.interfaces.trace_viewer.Console"):
+            from t4dm.interfaces.trace_viewer import TraceViewer
 
             viewer = TraceViewer(session_id="test")
 
@@ -154,15 +154,15 @@ class TestTraceViewer:
             }, None),
         ], None))
 
-        with patch("ww.interfaces.trace_viewer.RICH_AVAILABLE", True), \
-             patch("ww.interfaces.trace_viewer.Console") as mock_console, \
-             patch("ww.interfaces.trace_viewer.Progress"), \
-             patch("ww.interfaces.trace_viewer.Table"):
+        with patch("t4dm.interfaces.trace_viewer.RICH_AVAILABLE", True), \
+             patch("t4dm.interfaces.trace_viewer.Console") as mock_console, \
+             patch("t4dm.interfaces.trace_viewer.Progress"), \
+             patch("t4dm.interfaces.trace_viewer.Table"):
             mock_console_instance = MagicMock()
             mock_console.return_value = mock_console_instance
             mock_console_instance.status = MagicMock(return_value=MagicMock(__enter__=MagicMock(), __exit__=MagicMock()))
 
-            from ww.interfaces.trace_viewer import TraceViewer
+            from t4dm.interfaces.trace_viewer import TraceViewer
 
             viewer = TraceViewer(session_id="test")
             await viewer.show_consolidation_events(limit=10)
@@ -176,14 +176,14 @@ class TestTraceViewer:
             ("id1", {"name": "User Entity", "source": "user_provided", "created_at": datetime.now().isoformat()}, None),
         ], None))
 
-        with patch("ww.interfaces.trace_viewer.RICH_AVAILABLE", True), \
-             patch("ww.interfaces.trace_viewer.Console") as mock_console, \
-             patch("ww.interfaces.trace_viewer.Progress"):
+        with patch("t4dm.interfaces.trace_viewer.RICH_AVAILABLE", True), \
+             patch("t4dm.interfaces.trace_viewer.Console") as mock_console, \
+             patch("t4dm.interfaces.trace_viewer.Progress"):
             mock_console_instance = MagicMock()
             mock_console.return_value = mock_console_instance
             mock_console_instance.status = MagicMock(return_value=MagicMock(__enter__=MagicMock(), __exit__=MagicMock()))
 
-            from ww.interfaces.trace_viewer import TraceViewer
+            from t4dm.interfaces.trace_viewer import TraceViewer
 
             viewer = TraceViewer(session_id="test")
             await viewer.show_consolidation_events(limit=10)
@@ -201,15 +201,15 @@ class TestTraceViewer:
             ("id2", {"last_accessed": (now - timedelta(hours=2)).isoformat()}, None),
         ], None))
 
-        with patch("ww.interfaces.trace_viewer.RICH_AVAILABLE", True), \
-             patch("ww.interfaces.trace_viewer.Console") as mock_console, \
-             patch("ww.interfaces.trace_viewer.Progress"), \
-             patch("ww.interfaces.trace_viewer.Table"):
+        with patch("t4dm.interfaces.trace_viewer.RICH_AVAILABLE", True), \
+             patch("t4dm.interfaces.trace_viewer.Console") as mock_console, \
+             patch("t4dm.interfaces.trace_viewer.Progress"), \
+             patch("t4dm.interfaces.trace_viewer.Table"):
             mock_console_instance = MagicMock()
             mock_console.return_value = mock_console_instance
             mock_console_instance.status = MagicMock(return_value=MagicMock(__enter__=MagicMock(), __exit__=MagicMock()))
 
-            from ww.interfaces.trace_viewer import TraceViewer
+            from t4dm.interfaces.trace_viewer import TraceViewer
 
             viewer = TraceViewer(session_id="test")
             await viewer.show_access_heatmap(hours=24, bucket_minutes=60)
@@ -227,15 +227,15 @@ class TestTraceViewer:
             {"other_id": "other-id", "type": "RELATED", "properties": {"weight": 0.5, "coAccessCount": 10}},
         ])
 
-        with patch("ww.interfaces.trace_viewer.RICH_AVAILABLE", True), \
-             patch("ww.interfaces.trace_viewer.Console") as mock_console, \
-             patch("ww.interfaces.trace_viewer.Progress"), \
-             patch("ww.interfaces.trace_viewer.Table"):
+        with patch("t4dm.interfaces.trace_viewer.RICH_AVAILABLE", True), \
+             patch("t4dm.interfaces.trace_viewer.Console") as mock_console, \
+             patch("t4dm.interfaces.trace_viewer.Progress"), \
+             patch("t4dm.interfaces.trace_viewer.Table"):
             mock_console_instance = MagicMock()
             mock_console.return_value = mock_console_instance
             mock_console_instance.status = MagicMock(return_value=MagicMock(__enter__=MagicMock(), __exit__=MagicMock()))
 
-            from ww.interfaces.trace_viewer import TraceViewer
+            from t4dm.interfaces.trace_viewer import TraceViewer
 
             viewer = TraceViewer(session_id="test")
             await viewer.show_activation_history("entity-id")
@@ -247,14 +247,14 @@ class TestTraceViewer:
         """Test activation history for non-existent entity."""
         mock_stores["semantic"].get_entity = AsyncMock(return_value=None)
 
-        with patch("ww.interfaces.trace_viewer.RICH_AVAILABLE", True), \
-             patch("ww.interfaces.trace_viewer.Console") as mock_console, \
-             patch("ww.interfaces.trace_viewer.Progress"):
+        with patch("t4dm.interfaces.trace_viewer.RICH_AVAILABLE", True), \
+             patch("t4dm.interfaces.trace_viewer.Console") as mock_console, \
+             patch("t4dm.interfaces.trace_viewer.Progress"):
             mock_console_instance = MagicMock()
             mock_console.return_value = mock_console_instance
             mock_console_instance.status = MagicMock(return_value=MagicMock(__enter__=MagicMock(), __exit__=MagicMock()))
 
-            from ww.interfaces.trace_viewer import TraceViewer
+            from t4dm.interfaces.trace_viewer import TraceViewer
 
             viewer = TraceViewer(session_id="test")
             await viewer.show_activation_history("nonexistent-id")

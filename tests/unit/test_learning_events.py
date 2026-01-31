@@ -9,7 +9,7 @@ import pytest
 from datetime import datetime
 from uuid import UUID, uuid4
 
-from ww.learning.events import (
+from t4dm.learning.events import (
     OutcomeType,
     FeedbackSignal,
     MemoryType,

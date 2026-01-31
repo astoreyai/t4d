@@ -3,8 +3,8 @@
 import torch
 import pytest
 
-from ww.qwen.training import Phase1Trainer, TrainingConfig
-from ww.qwen.unified_model import UnifiedModel
+from t4dm.qwen.training import Phase1Trainer, TrainingConfig
+from t4dm.qwen.unified_model import UnifiedModel
 
 
 class TestTraining:

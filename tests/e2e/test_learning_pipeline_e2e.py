@@ -108,7 +108,7 @@ class TestEndToEndLearningPipeline:
 
     def test_three_factor_learning_rule_computes_effective_lr(self):
         """Verify three-factor rule computes modulated learning rates."""
-        from ww.learning.three_factor import ThreeFactorLearningRule
+        from t4dm.learning.three_factor import ThreeFactorLearningRule
 
         rule = ThreeFactorLearningRule()
         memory_id = uuid4()
@@ -132,8 +132,8 @@ class TestEndToEndLearningPipeline:
 
     def test_reconsolidation_engine_updates_embeddings(self):
         """Verify reconsolidation produces updated embeddings."""
-        from ww.learning.reconsolidation import ReconsolidationEngine
-        from ww.learning.three_factor import ThreeFactorLearningRule
+        from t4dm.learning.reconsolidation import ReconsolidationEngine
+        from t4dm.learning.three_factor import ThreeFactorLearningRule
 
         three_factor = ThreeFactorLearningRule()
         engine = ReconsolidationEngine(
@@ -165,7 +165,7 @@ class TestEndToEndLearningPipeline:
 
     def test_ff_encoder_learns_from_outcome(self):
         """Verify FF encoder updates internal weights on learning."""
-        from ww.encoding.ff_encoder import FFEncoder, FFEncoderConfig
+        from t4dm.encoding.ff_encoder import FFEncoder, FFEncoderConfig
 
         config = FFEncoderConfig(
             input_dim=128,
@@ -192,9 +192,9 @@ class TestEndToEndLearningPipeline:
 
     def test_ff_capsule_bridge_computes_joint_confidence(self):
         """Verify FF-Capsule bridge combines goodness and routing agreement."""
-        from ww.bridges.ff_capsule_bridge import FFCapsuleBridge, FFCapsuleBridgeConfig
-        from ww.nca.forward_forward import ForwardForwardLayer, ForwardForwardConfig
-        from ww.nca.capsules import CapsuleLayer, CapsuleConfig
+        from t4dm.bridges.ff_capsule_bridge import FFCapsuleBridge, FFCapsuleBridgeConfig
+        from t4dm.nca.forward_forward import ForwardForwardLayer, ForwardForwardConfig
+        from t4dm.nca.capsules import CapsuleLayer, CapsuleConfig
 
         # Create FF layer
         ff_config = ForwardForwardConfig(input_dim=128, hidden_dim=64)
@@ -230,8 +230,8 @@ class TestEndToEndLearningPipeline:
 
     def test_sleep_consolidation_calls_reconsolidation(self):
         """Verify sleep consolidation triggers reconsolidation during replay."""
-        from ww.consolidation.sleep import SleepConsolidation
-        from ww.learning.reconsolidation import ReconsolidationEngine
+        from t4dm.consolidation.sleep import SleepConsolidation
+        from t4dm.learning.reconsolidation import ReconsolidationEngine
 
         # Create mocks
         mock_episodic = MagicMock()
@@ -258,7 +258,7 @@ class TestEndToEndLearningPipeline:
 
     def test_vae_training_stats_include_timestamp(self):
         """Verify TrainingStats includes timestamp for tracking."""
-        from ww.learning.vae_training import TrainingStats
+        from t4dm.learning.vae_training import TrainingStats
 
         stats = TrainingStats(
             epochs_completed=5,
@@ -274,7 +274,7 @@ class TestEndToEndLearningPipeline:
 
     def test_generative_replay_not_stub_mode(self):
         """Verify GenerativeReplaySystem doesn't log 'stub mode'."""
-        from ww.learning.generative_replay import GenerativeReplaySystem
+        from t4dm.learning.generative_replay import GenerativeReplaySystem
 
         # Create with generator
         system = GenerativeReplaySystem(generator=None)
@@ -297,8 +297,8 @@ class TestEndToEndLearningPipeline:
         4. Reconsolidation updates embedding
         5. Updated embedding is persisted
         """
-        from ww.learning.three_factor import ThreeFactorLearningRule
-        from ww.learning.reconsolidation import ReconsolidationEngine
+        from t4dm.learning.three_factor import ThreeFactorLearningRule
+        from t4dm.learning.reconsolidation import ReconsolidationEngine
 
         # Setup
         three_factor = ThreeFactorLearningRule()
@@ -352,8 +352,8 @@ class TestLearningWiringVerification:
     def test_episodic_memory_has_ff_encoder(self):
         """Verify EpisodicMemory initializes FFEncoder."""
         # Import check
-        from ww.memory.episodic import EpisodicMemory
-        from ww.encoding.ff_encoder import FFEncoder
+        from t4dm.memory.episodic import EpisodicMemory
+        from t4dm.encoding.ff_encoder import FFEncoder
 
         # These should be importable and used together
         assert FFEncoder is not None
@@ -361,31 +361,31 @@ class TestLearningWiringVerification:
 
     def test_episodic_memory_has_ff_capsule_bridge(self):
         """Verify EpisodicMemory uses FFCapsuleBridge."""
-        from ww.memory.episodic import EpisodicMemory
-        from ww.bridges.ff_capsule_bridge import FFCapsuleBridge
+        from t4dm.memory.episodic import EpisodicMemory
+        from t4dm.bridges.ff_capsule_bridge import FFCapsuleBridge
 
         assert FFCapsuleBridge is not None
         logger.info("✅ EpisodicMemory -> FFCapsuleBridge import verified")
 
     def test_episodic_memory_has_reconsolidation(self):
         """Verify EpisodicMemory has reconsolidation engine."""
-        from ww.memory.episodic import EpisodicMemory
-        from ww.learning.reconsolidation import ReconsolidationEngine
+        from t4dm.memory.episodic import EpisodicMemory
+        from t4dm.learning.reconsolidation import ReconsolidationEngine
 
         assert ReconsolidationEngine is not None
         logger.info("✅ EpisodicMemory -> ReconsolidationEngine import verified")
 
     def test_sleep_consolidation_has_vta_access(self):
         """Verify sleep consolidation can access VTA for RPE."""
-        from ww.consolidation.sleep import SleepConsolidation
-        from ww.nca.vta import VTACircuit
+        from t4dm.consolidation.sleep import SleepConsolidation
+        from t4dm.nca.vta import VTACircuit
 
         assert VTACircuit is not None
         logger.info("✅ SleepConsolidation -> VTACircuit import verified")
 
     def test_learning_module_exports(self):
         """Verify learning module exports all required components."""
-        from ww.learning import (
+        from t4dm.learning import (
             ThreeFactorLearningRule,
             ReconsolidationEngine,
             DopamineSystem,
@@ -401,7 +401,7 @@ class TestLearningWiringVerification:
 
     def test_bridges_module_exports(self):
         """Verify bridges module exports all required components."""
-        from ww.bridges import (
+        from t4dm.bridges import (
             FFCapsuleBridge,
             FFCapsuleBridgeConfig,
             create_ff_capsule_bridge,

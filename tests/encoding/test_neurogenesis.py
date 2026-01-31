@@ -10,14 +10,14 @@ Validates biologically-inspired neuron birth/death mechanisms based on:
 import numpy as np
 import pytest
 
-from ww.encoding.neurogenesis import (
+from t4dm.encoding.neurogenesis import (
     NeurogenesisConfig,
     NeurogenesisManager,
     NeurogenesisState,
     NeuronMetadata,
     NeuronState,
 )
-from ww.nca.forward_forward import ForwardForwardConfig, ForwardForwardLayer
+from t4dm.nca.forward_forward import ForwardForwardConfig, ForwardForwardLayer
 
 
 class TestNeurogenesisConfig:

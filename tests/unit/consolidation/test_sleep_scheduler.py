@@ -5,7 +5,7 @@ import time
 
 import pytest
 
-from ww.consolidation.sleep_scheduler import (
+from t4dm.consolidation.sleep_scheduler import (
     SleepScheduler,
     SleepSchedulerConfig,
     SleepTrigger,

@@ -12,7 +12,7 @@ import pytest
 from fastapi import FastAPI, Request
 from starlette.testclient import TestClient
 
-from ww.api.middleware.rate_limit import (
+from t4dm.api.middleware.rate_limit import (
     RateLimitMiddleware,
     TokenBucket,
     TokenBucketRateLimiter,
@@ -310,7 +310,7 @@ class TestRateLimitMiddlewareFunction:
         call_next = AsyncMock(return_value=MagicMock(headers={}))
 
         # Reset global limiter to known state
-        with patch("ww.api.middleware.rate_limit._rate_limiter", None):
+        with patch("t4dm.api.middleware.rate_limit._rate_limiter", None):
             response = await rate_limit_middleware(request, call_next)
 
         call_next.assert_called_once_with(request)
@@ -330,7 +330,7 @@ class TestRateLimitMiddlewareFunction:
 
         call_next = AsyncMock(return_value=MagicMock(headers={}))
 
-        with patch("ww.api.middleware.rate_limit._rate_limiter", limiter):
+        with patch("t4dm.api.middleware.rate_limit._rate_limiter", limiter):
             # First request succeeds
             response1 = await rate_limit_middleware(request, call_next)
             assert response1.status_code != 429
@@ -487,14 +487,14 @@ class TestGetRateLimiter:
 
     def test_creates_limiter_on_first_call(self):
         """get_rate_limiter creates limiter on first call."""
-        with patch("ww.api.middleware.rate_limit._rate_limiter", None):
+        with patch("t4dm.api.middleware.rate_limit._rate_limiter", None):
             limiter = get_rate_limiter()
             assert limiter is not None
             assert isinstance(limiter, TokenBucketRateLimiter)
 
     def test_returns_same_instance(self):
         """get_rate_limiter returns same instance on subsequent calls."""
-        with patch("ww.api.middleware.rate_limit._rate_limiter", None):
+        with patch("t4dm.api.middleware.rate_limit._rate_limiter", None):
             limiter1 = get_rate_limiter()
             limiter2 = get_rate_limiter()
             assert limiter1 is limiter2

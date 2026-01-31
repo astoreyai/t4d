@@ -15,21 +15,21 @@ from unittest.mock import AsyncMock, MagicMock, patch
 from fastapi import FastAPI, HTTPException, status
 from starlette.testclient import TestClient
 
-from ww.core.emergency import (
+from t4dm.core.emergency import (
     CircuitBreakerConfig,
     PanicLevel,
     EmergencyManager,
     CircuitBreaker,
     CircuitState,
 )
-from ww.core.feature_flags import FeatureFlag, FeatureFlags, FlagConfig
-from ww.core.secrets import SecretsManager
+from t4dm.core.feature_flags import FeatureFlag, FeatureFlags, FlagConfig
+from t4dm.core.secrets import SecretsManager
 
 
 # Create test app with control router
 test_app = FastAPI()
-from ww.api.routes.control import router as control_router
-from ww.api.deps import require_admin_auth
+from t4dm.api.routes.control import router as control_router
+from t4dm.api.deps import require_admin_auth
 test_app.include_router(control_router)
 
 # Override admin auth dependency for testing
@@ -184,17 +184,17 @@ def mock_secrets_manager():
 
     # Mock list_keys
     mock_sm.list_keys.return_value = [
-        "WW_DATABASE_PASSWORD",
-        "WW_DATABASE_URL",
-        "WW_JWT_SECRET",
+        "T4DM_DATABASE_PASSWORD",
+        "T4DM_DATABASE_URL",
+        "T4DM_JWT_SECRET",
         "OPENAI_API_KEY",
-        "WW_ENCRYPTION_KEY",
+        "T4DM_ENCRYPTION_KEY",
     ]
 
     # Mock access log
     mock_sm.get_access_log.return_value = [
         {
-            "key": "WW_DATABASE_PASSWORD",
+            "key": "T4DM_DATABASE_PASSWORD",
             "timestamp": "2025-01-07T12:00:00",
             "source": "api",
             "status": "success",
@@ -226,7 +226,7 @@ class TestFeatureFlagsEndpoints:
 
     def test_list_flags_success(self, test_client, mock_feature_flags, admin_headers):
         """List all feature flags with admin auth."""
-        with patch("ww.api.routes.control.get_feature_flags", return_value=mock_feature_flags):
+        with patch("t4dm.api.routes.control.get_feature_flags", return_value=mock_feature_flags):
             response = test_client.get("/control/flags", headers=admin_headers)
 
         assert response.status_code == 200
@@ -240,7 +240,7 @@ class TestFeatureFlagsEndpoints:
     @pytest.mark.skip(reason="Dependency override prevents auth testing")
     def test_list_flags_no_admin_auth(self, test_client, mock_feature_flags):
         """List flags without admin key fails."""
-        with patch("ww.api.routes.control.get_feature_flags", return_value=mock_feature_flags):
+        with patch("t4dm.api.routes.control.get_feature_flags", return_value=mock_feature_flags):
             response = test_client.get("/control/flags")
 
         assert response.status_code == 401
@@ -249,7 +249,7 @@ class TestFeatureFlagsEndpoints:
     @pytest.mark.skip(reason="Dependency override prevents auth testing")
     def test_list_flags_invalid_admin_key(self, test_client, mock_feature_flags):
         """List flags with invalid admin key fails."""
-        with patch("ww.api.routes.control.get_feature_flags", return_value=mock_feature_flags):
+        with patch("t4dm.api.routes.control.get_feature_flags", return_value=mock_feature_flags):
             response = test_client.get(
                 "/control/flags",
                 headers={"X-Admin-Key": "wrong-key"},
@@ -260,7 +260,7 @@ class TestFeatureFlagsEndpoints:
 
     def test_get_flag_success(self, test_client, mock_feature_flags, admin_headers):
         """Get specific feature flag."""
-        with patch("ww.api.routes.control.get_feature_flags", return_value=mock_feature_flags):
+        with patch("t4dm.api.routes.control.get_feature_flags", return_value=mock_feature_flags):
             response = test_client.get(
                 "/control/flags/ff_encoder",
                 headers=admin_headers,
@@ -276,10 +276,10 @@ class TestFeatureFlagsEndpoints:
 
     def test_get_flag_not_found(self, test_client, mock_feature_flags, admin_headers):
         """Get nonexistent feature flag returns 404."""
-        with patch("ww.api.routes.control.get_feature_flags", return_value=mock_feature_flags):
+        with patch("t4dm.api.routes.control.get_feature_flags", return_value=mock_feature_flags):
             # FeatureFlag will raise ValueError for unknown flag
             with patch(
-                "ww.api.routes.control.FeatureFlag",
+                "t4dm.api.routes.control.FeatureFlag",
                 side_effect=ValueError("Unknown flag"),
             ):
                 response = test_client.get(
@@ -307,7 +307,7 @@ class TestFeatureFlagsEndpoints:
 
         mock_feature_flags.get_config.side_effect = mock_get_config
 
-        with patch("ww.api.routes.control.get_feature_flags", return_value=mock_feature_flags):
+        with patch("t4dm.api.routes.control.get_feature_flags", return_value=mock_feature_flags):
             response = test_client.patch(
                 "/control/flags/capsule_routing",
                 json={"enabled": True},
@@ -336,7 +336,7 @@ class TestFeatureFlagsEndpoints:
 
         mock_feature_flags.get_config.side_effect = mock_get_config
 
-        with patch("ww.api.routes.control.get_feature_flags", return_value=mock_feature_flags):
+        with patch("t4dm.api.routes.control.get_feature_flags", return_value=mock_feature_flags):
             response = test_client.patch(
                 "/control/flags/capsule_routing",
                 json={"rollout_percentage": 75.0},
@@ -364,7 +364,7 @@ class TestFeatureFlagsEndpoints:
 
         mock_feature_flags.get_config.side_effect = mock_get_config
 
-        with patch("ww.api.routes.control.get_feature_flags", return_value=mock_feature_flags):
+        with patch("t4dm.api.routes.control.get_feature_flags", return_value=mock_feature_flags):
             response = test_client.patch(
                 "/control/flags/ff_encoder",
                 json={"enabled": True, "rollout_percentage": 50.0},
@@ -377,7 +377,7 @@ class TestFeatureFlagsEndpoints:
 
     def test_update_flag_invalid_rollout(self, test_client, mock_feature_flags, admin_headers):
         """Update flag with invalid rollout percentage fails."""
-        with patch("ww.api.routes.control.get_feature_flags", return_value=mock_feature_flags):
+        with patch("t4dm.api.routes.control.get_feature_flags", return_value=mock_feature_flags):
             response = test_client.patch(
                 "/control/flags/ff_encoder",
                 json={"rollout_percentage": 150.0},  # Invalid: > 100
@@ -389,7 +389,7 @@ class TestFeatureFlagsEndpoints:
     @pytest.mark.skip(reason="Dependency override prevents auth testing")
     def test_update_flag_no_admin_auth(self, test_client, mock_feature_flags):
         """Update flag without admin auth fails."""
-        with patch("ww.api.routes.control.get_feature_flags", return_value=mock_feature_flags):
+        with patch("t4dm.api.routes.control.get_feature_flags", return_value=mock_feature_flags):
             response = test_client.patch(
                 "/control/flags/ff_encoder",
                 json={"enabled": True},
@@ -408,7 +408,7 @@ class TestEmergencyStatusEndpoints:
 
     def test_get_emergency_status_success(self, test_client, mock_emergency_manager, admin_headers):
         """Get emergency manager status."""
-        with patch("ww.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
+        with patch("t4dm.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
             response = test_client.get("/control/emergency", headers=admin_headers)
 
         assert response.status_code == 200
@@ -423,14 +423,14 @@ class TestEmergencyStatusEndpoints:
     @pytest.mark.skip(reason="Dependency override prevents auth testing")
     def test_get_emergency_status_no_admin(self, test_client, mock_emergency_manager):
         """Get emergency status without admin auth fails."""
-        with patch("ww.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
+        with patch("t4dm.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
             response = test_client.get("/control/emergency")
 
         assert response.status_code == 401
 
     def test_get_panic_events_success(self, test_client, mock_emergency_manager, admin_headers):
         """Get recent panic events."""
-        with patch("ww.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
+        with patch("t4dm.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
             response = test_client.get("/control/emergency/events", headers=admin_headers)
 
         assert response.status_code == 200
@@ -441,7 +441,7 @@ class TestEmergencyStatusEndpoints:
 
     def test_get_panic_events_with_limit(self, test_client, mock_emergency_manager, admin_headers):
         """Get panic events with custom limit."""
-        with patch("ww.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
+        with patch("t4dm.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
             response = test_client.get(
                 "/control/emergency/events?limit=50",
                 headers=admin_headers,
@@ -469,7 +469,7 @@ class TestPanicModeEndpoints:
             "circuit_breakers": {},
         }
 
-        with patch("ww.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
+        with patch("t4dm.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
             response = test_client.post(
                 "/control/emergency/panic",
                 json={
@@ -496,7 +496,7 @@ class TestPanicModeEndpoints:
             "circuit_breakers": {},
         }
 
-        with patch("ww.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
+        with patch("t4dm.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
             response = test_client.post(
                 "/control/emergency/panic",
                 json={
@@ -520,7 +520,7 @@ class TestPanicModeEndpoints:
             "circuit_breakers": {},
         }
 
-        with patch("ww.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
+        with patch("t4dm.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
             response = test_client.post(
                 "/control/emergency/panic",
                 json={
@@ -536,7 +536,7 @@ class TestPanicModeEndpoints:
 
     def test_trigger_panic_invalid_level(self, test_client, mock_emergency_manager, admin_headers):
         """Trigger panic with invalid level fails."""
-        with patch("ww.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
+        with patch("t4dm.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
             response = test_client.post(
                 "/control/emergency/panic",
                 json={
@@ -551,7 +551,7 @@ class TestPanicModeEndpoints:
 
     def test_trigger_panic_short_reason(self, test_client, mock_emergency_manager, admin_headers):
         """Trigger panic with too-short reason fails."""
-        with patch("ww.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
+        with patch("t4dm.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
             response = test_client.post(
                 "/control/emergency/panic",
                 json={
@@ -566,7 +566,7 @@ class TestPanicModeEndpoints:
     @pytest.mark.skip(reason="Dependency override prevents auth testing")
     def test_trigger_panic_no_admin(self, test_client, mock_emergency_manager):
         """Trigger panic without admin auth fails."""
-        with patch("ww.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
+        with patch("t4dm.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
             response = test_client.post(
                 "/control/emergency/panic",
                 json={
@@ -588,7 +588,7 @@ class TestPanicModeEndpoints:
             "circuit_breakers": {},
         }
 
-        with patch("ww.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
+        with patch("t4dm.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
             response = test_client.post(
                 "/control/emergency/recover",
                 json={"level": "NONE"},
@@ -610,7 +610,7 @@ class TestPanicModeEndpoints:
             "circuit_breakers": {},
         }
 
-        with patch("ww.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
+        with patch("t4dm.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
             response = test_client.post(
                 "/control/emergency/recover",
                 json={"level": "DEGRADED"},
@@ -622,7 +622,7 @@ class TestPanicModeEndpoints:
 
     def test_recover_invalid_target_level(self, test_client, mock_emergency_manager, admin_headers):
         """Recover to invalid level fails."""
-        with patch("ww.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
+        with patch("t4dm.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
             response = test_client.post(
                 "/control/emergency/recover",
                 json={"level": "INVALID"},
@@ -636,7 +636,7 @@ class TestPanicModeEndpoints:
         """Cannot recover to higher panic level than current."""
         mock_emergency_manager.panic_level = PanicLevel.DEGRADED
 
-        with patch("ww.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
+        with patch("t4dm.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
             response = test_client.post(
                 "/control/emergency/recover",
                 json={"level": "CRITICAL"},  # Higher than current DEGRADED
@@ -649,7 +649,7 @@ class TestPanicModeEndpoints:
     @pytest.mark.skip(reason="Dependency override prevents auth testing")
     def test_recover_no_admin(self, test_client, mock_emergency_manager):
         """Recover without admin auth fails."""
-        with patch("ww.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
+        with patch("t4dm.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
             response = test_client.post(
                 "/control/emergency/recover",
                 json={"level": "NONE"},
@@ -668,7 +668,7 @@ class TestCircuitBreakerEndpoints:
 
     def test_list_circuit_breakers(self, test_client, mock_emergency_manager, admin_headers):
         """List all circuit breakers."""
-        with patch("ww.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
+        with patch("t4dm.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
             response = test_client.get("/control/circuits", headers=admin_headers)
 
         assert response.status_code == 200
@@ -682,14 +682,14 @@ class TestCircuitBreakerEndpoints:
     @pytest.mark.skip(reason="Dependency override prevents auth testing")
     def test_list_circuit_breakers_no_admin(self, test_client, mock_emergency_manager):
         """List circuit breakers without admin auth fails."""
-        with patch("ww.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
+        with patch("t4dm.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
             response = test_client.get("/control/circuits")
 
         assert response.status_code == 401
 
     def test_get_circuit_breaker_success(self, test_client, mock_emergency_manager, admin_headers):
         """Get specific circuit breaker."""
-        with patch("ww.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
+        with patch("t4dm.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
             response = test_client.get("/control/circuits/database", headers=admin_headers)
 
         assert response.status_code == 200
@@ -703,7 +703,7 @@ class TestCircuitBreakerEndpoints:
         mock_stats = mock_emergency_manager.get_stats.return_value
         mock_stats["circuit_breakers"] = {}  # Empty
 
-        with patch("ww.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
+        with patch("t4dm.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
             response = test_client.get("/control/circuits/unknown", headers=admin_headers)
 
         assert response.status_code == 404
@@ -713,7 +713,7 @@ class TestCircuitBreakerEndpoints:
         """Reset circuit breaker action."""
         mock_cb = mock_emergency_manager.get_circuit_breaker.return_value
 
-        with patch("ww.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
+        with patch("t4dm.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
             response = test_client.post(
                 "/control/circuits/database",
                 json={"action": "reset"},
@@ -728,7 +728,7 @@ class TestCircuitBreakerEndpoints:
         mock_cb = mock_emergency_manager.get_circuit_breaker.return_value
         mock_cb.config = CircuitBreakerConfig(failure_threshold=5)
 
-        with patch("ww.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
+        with patch("t4dm.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
             response = test_client.post(
                 "/control/circuits/database",
                 json={"action": "open"},
@@ -743,7 +743,7 @@ class TestCircuitBreakerEndpoints:
         """Force close circuit breaker."""
         mock_cb = mock_emergency_manager.get_circuit_breaker.return_value
 
-        with patch("ww.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
+        with patch("t4dm.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
             response = test_client.post(
                 "/control/circuits/cache",
                 json={"action": "close"},
@@ -755,7 +755,7 @@ class TestCircuitBreakerEndpoints:
 
     def test_update_circuit_breaker_invalid_action(self, test_client, mock_emergency_manager, admin_headers):
         """Update circuit breaker with invalid action fails."""
-        with patch("ww.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
+        with patch("t4dm.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
             response = test_client.post(
                 "/control/circuits/database",
                 json={"action": "invalid_action"},
@@ -769,7 +769,7 @@ class TestCircuitBreakerEndpoints:
         """Update nonexistent circuit breaker fails."""
         mock_emergency_manager.get_circuit_breaker.side_effect = Exception("Not found")
 
-        with patch("ww.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
+        with patch("t4dm.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
             response = test_client.post(
                 "/control/circuits/unknown",
                 json={"action": "reset"},
@@ -782,7 +782,7 @@ class TestCircuitBreakerEndpoints:
     @pytest.mark.skip(reason="Dependency override prevents auth testing")
     def test_update_circuit_breaker_no_admin(self, test_client, mock_emergency_manager):
         """Update circuit breaker without admin auth fails."""
-        with patch("ww.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
+        with patch("t4dm.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
             response = test_client.post(
                 "/control/circuits/database",
                 json={"action": "reset"},
@@ -801,7 +801,7 @@ class TestSecretsStatusEndpoints:
 
     def test_get_secrets_status(self, test_client, mock_secrets_manager, admin_headers):
         """Get secrets manager status."""
-        with patch("ww.api.routes.control.get_secrets_manager", return_value=mock_secrets_manager):
+        with patch("t4dm.api.routes.control.get_secrets_manager", return_value=mock_secrets_manager):
             response = test_client.get("/control/secrets", headers=admin_headers)
 
         assert response.status_code == 200
@@ -814,14 +814,14 @@ class TestSecretsStatusEndpoints:
     @pytest.mark.skip(reason="Dependency override prevents auth testing")
     def test_get_secrets_status_no_admin(self, test_client, mock_secrets_manager):
         """Get secrets status without admin auth fails."""
-        with patch("ww.api.routes.control.get_secrets_manager", return_value=mock_secrets_manager):
+        with patch("t4dm.api.routes.control.get_secrets_manager", return_value=mock_secrets_manager):
             response = test_client.get("/control/secrets")
 
         assert response.status_code == 401
 
     def test_list_secret_keys(self, test_client, mock_secrets_manager, admin_headers):
         """List available secret keys (not values)."""
-        with patch("ww.api.routes.control.get_secrets_manager", return_value=mock_secrets_manager):
+        with patch("t4dm.api.routes.control.get_secrets_manager", return_value=mock_secrets_manager):
             response = test_client.get("/control/secrets/keys", headers=admin_headers)
 
         assert response.status_code == 200
@@ -829,7 +829,7 @@ class TestSecretsStatusEndpoints:
         assert "keys" in data
         assert "count" in data
         assert len(data["keys"]) == 5
-        assert "WW_DATABASE_PASSWORD" in data["keys"]
+        assert "T4DM_DATABASE_PASSWORD" in data["keys"]
         assert "OPENAI_API_KEY" in data["keys"]
         # Verify no actual secret values in response
         for key in data["keys"]:
@@ -838,14 +838,14 @@ class TestSecretsStatusEndpoints:
     @pytest.mark.skip(reason="Dependency override prevents auth testing")
     def test_list_secret_keys_no_admin(self, test_client, mock_secrets_manager):
         """List secret keys without admin auth fails."""
-        with patch("ww.api.routes.control.get_secrets_manager", return_value=mock_secrets_manager):
+        with patch("t4dm.api.routes.control.get_secrets_manager", return_value=mock_secrets_manager):
             response = test_client.get("/control/secrets/keys")
 
         assert response.status_code == 401
 
     def test_get_secrets_audit_log(self, test_client, mock_secrets_manager, admin_headers):
         """Get secrets access audit log."""
-        with patch("ww.api.routes.control.get_secrets_manager", return_value=mock_secrets_manager):
+        with patch("t4dm.api.routes.control.get_secrets_manager", return_value=mock_secrets_manager):
             response = test_client.get("/control/secrets/audit", headers=admin_headers)
 
         assert response.status_code == 200
@@ -861,7 +861,7 @@ class TestSecretsStatusEndpoints:
 
     def test_get_secrets_audit_log_with_limit(self, test_client, mock_secrets_manager, admin_headers):
         """Get secrets audit log with custom limit."""
-        with patch("ww.api.routes.control.get_secrets_manager", return_value=mock_secrets_manager):
+        with patch("t4dm.api.routes.control.get_secrets_manager", return_value=mock_secrets_manager):
             response = test_client.get(
                 "/control/secrets/audit?limit=25",
                 headers=admin_headers,
@@ -874,7 +874,7 @@ class TestSecretsStatusEndpoints:
     @pytest.mark.skip(reason="Dependency override prevents auth testing")
     def test_get_secrets_audit_log_no_admin(self, test_client, mock_secrets_manager):
         """Get audit log without admin auth fails."""
-        with patch("ww.api.routes.control.get_secrets_manager", return_value=mock_secrets_manager):
+        with patch("t4dm.api.routes.control.get_secrets_manager", return_value=mock_secrets_manager):
             response = test_client.get("/control/secrets/audit")
 
         assert response.status_code == 401
@@ -894,7 +894,7 @@ class TestControlPlaneIntegration:
         assert mock_emergency_manager.panic_level == PanicLevel.NONE
 
         # Trigger panic
-        with patch("ww.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
+        with patch("t4dm.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
             response1 = test_client.post(
                 "/control/emergency/panic",
                 json={"level": "DEGRADED", "reason": "Test panic trigger"},
@@ -919,7 +919,7 @@ class TestControlPlaneIntegration:
 
     def test_circuit_breaker_full_lifecycle(self, test_client, mock_emergency_manager, admin_headers):
         """Test circuit breaker state transitions."""
-        with patch("ww.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
+        with patch("t4dm.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
             # List breakers
             response1 = test_client.get("/control/circuits", headers=admin_headers)
             assert response1.status_code == 200
@@ -950,7 +950,7 @@ class TestControlPlaneIntegration:
 
     def test_feature_flag_update_workflow(self, test_client, mock_feature_flags, admin_headers):
         """Test feature flag enable/disable workflow."""
-        with patch("ww.api.routes.control.get_feature_flags", return_value=mock_feature_flags):
+        with patch("t4dm.api.routes.control.get_feature_flags", return_value=mock_feature_flags):
             # List all flags
             response1 = test_client.get("/control/flags", headers=admin_headers)
             assert response1.status_code == 200
@@ -973,7 +973,7 @@ class TestControlPlaneIntegration:
 
     def test_secrets_read_only_access(self, test_client, mock_secrets_manager, admin_headers):
         """Test that secrets endpoints only expose status, never values."""
-        with patch("ww.api.routes.control.get_secrets_manager", return_value=mock_secrets_manager):
+        with patch("t4dm.api.routes.control.get_secrets_manager", return_value=mock_secrets_manager):
             # Status endpoint
             response1 = test_client.get("/control/secrets", headers=admin_headers)
             assert response1.status_code == 200
@@ -1007,7 +1007,7 @@ class TestErrorHandling:
 
     def test_missing_required_panic_reason(self, test_client, mock_emergency_manager, admin_headers):
         """Panic request missing required reason field fails."""
-        with patch("ww.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
+        with patch("t4dm.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
             response = test_client.post(
                 "/control/emergency/panic",
                 json={"level": "DEGRADED"},  # Missing 'reason'
@@ -1018,7 +1018,7 @@ class TestErrorHandling:
 
     def test_circuit_breaker_missing_action(self, test_client, mock_emergency_manager, admin_headers):
         """Circuit breaker update missing action field fails."""
-        with patch("ww.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
+        with patch("t4dm.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
             response = test_client.post(
                 "/control/circuits/database",
                 json={},  # Missing 'action'
@@ -1034,7 +1034,7 @@ class TestErrorHandling:
             rollout_percentage=100.0,
         )
 
-        with patch("ww.api.routes.control.get_feature_flags", return_value=mock_feature_flags):
+        with patch("t4dm.api.routes.control.get_feature_flags", return_value=mock_feature_flags):
             response = test_client.patch(
                 "/control/flags/ff_encoder",
                 json={},  # No fields to update
@@ -1045,7 +1045,7 @@ class TestErrorHandling:
 
     def test_concurrent_panic_requests(self, test_client, mock_emergency_manager, admin_headers):
         """Multiple panic requests in sequence."""
-        with patch("ww.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
+        with patch("t4dm.api.routes.control.get_emergency_manager", return_value=mock_emergency_manager):
             # First panic
             response1 = test_client.post(
                 "/control/emergency/panic",

@@ -3,13 +3,13 @@
 import numpy as np
 import pytest
 
-from ww.nca.energy import (
+from t4dm.nca.energy import (
     EnergyConfig,
     EnergyLandscape,
     HopfieldIntegration,
 )
-from ww.nca.coupling import LearnableCoupling
-from ww.nca.attractors import StateTransitionManager
+from t4dm.nca.coupling import LearnableCoupling
+from t4dm.nca.attractors import StateTransitionManager
 
 
 class TestEnergyConfig:

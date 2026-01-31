@@ -8,7 +8,7 @@ import pytest
 from datetime import datetime, timedelta
 from uuid import uuid4, UUID
 
-from ww.core.types import (
+from t4dm.core.types import (
     Outcome,
     EntityType,
     RelationType,

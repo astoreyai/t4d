@@ -13,8 +13,8 @@ import torch
 from unittest.mock import AsyncMock, MagicMock, patch
 from uuid import uuid4
 
-from ww.learning.reconsolidation import ReconsolidationEngine, reconsolidate
-from ww.memory.episodic import EpisodicMemory
+from t4dm.learning.reconsolidation import ReconsolidationEngine, reconsolidate
+from t4dm.memory.episodic import EpisodicMemory
 
 
 class TestReconsolidationEngine:
@@ -295,11 +295,11 @@ class TestEpisodicMemoryReconsolidation:
         self.test_uuid1 = uuid4()
         self.test_uuid2 = uuid4()
 
-        with patch('ww.memory.episodic.get_settings') as mock_settings, \
-             patch('ww.memory.episodic.get_embedding_provider') as mock_embedding, \
-             patch('ww.memory.episodic.get_qdrant_store') as mock_qdrant, \
-             patch('ww.memory.episodic.get_neo4j_store') as mock_neo4j, \
-             patch('ww.memory.episodic.get_ff_encoder', return_value=None):
+        with patch('t4dm.memory.episodic.get_settings') as mock_settings, \
+             patch('t4dm.memory.episodic.get_embedding_provider') as mock_embedding, \
+             patch('t4dm.memory.episodic.get_qdrant_store') as mock_qdrant, \
+             patch('t4dm.memory.episodic.get_neo4j_store') as mock_neo4j, \
+             patch('t4dm.memory.episodic.get_ff_encoder', return_value=None):
 
             # Configure settings
             settings = MagicMock()
@@ -429,7 +429,7 @@ class TestLearnedFusionEnabled:
 
     def test_learned_fusion_default_enabled(self):
         """NeuroSymbolicReasoner should have learned fusion enabled by default."""
-        from ww.learning.neuro_symbolic import NeuroSymbolicReasoner
+        from t4dm.learning.neuro_symbolic import NeuroSymbolicReasoner
 
         reasoner = NeuroSymbolicReasoner()
 
@@ -442,7 +442,7 @@ class TestDopamineRPE:
 
     def test_compute_rpe_positive_surprise(self):
         """Better than expected should give positive RPE."""
-        from ww.learning.dopamine import DopamineSystem
+        from t4dm.learning.dopamine import DopamineSystem
 
         dopamine = DopamineSystem(default_expected=0.5)
         mem_id = uuid4()
@@ -456,7 +456,7 @@ class TestDopamineRPE:
 
     def test_compute_rpe_negative_surprise(self):
         """Worse than expected should give negative RPE."""
-        from ww.learning.dopamine import DopamineSystem
+        from t4dm.learning.dopamine import DopamineSystem
 
         dopamine = DopamineSystem(default_expected=0.5)
         mem_id = uuid4()
@@ -468,7 +468,7 @@ class TestDopamineRPE:
 
     def test_value_estimate_updates(self):
         """Value estimates should update toward actual outcomes."""
-        from ww.learning.dopamine import DopamineSystem
+        from t4dm.learning.dopamine import DopamineSystem
 
         dopamine = DopamineSystem(default_expected=0.5, value_learning_rate=0.2)
         mem_id = uuid4()
@@ -489,7 +489,7 @@ class TestDopamineRPE:
 
     def test_surprise_modulates_learning_rate(self):
         """Higher surprise should increase learning rate."""
-        from ww.learning.dopamine import DopamineSystem
+        from t4dm.learning.dopamine import DopamineSystem
 
         dopamine = DopamineSystem(default_expected=0.5)
 
@@ -506,7 +506,7 @@ class TestDopamineRPE:
 
     def test_rpe_for_fusion_training(self):
         """RPE should be converted to [0,1] range for ranking loss."""
-        from ww.learning.dopamine import DopamineSystem
+        from t4dm.learning.dopamine import DopamineSystem
 
         dopamine = DopamineSystem(default_expected=0.5)
 
@@ -535,7 +535,7 @@ class TestLearnedFusionTraining:
 
     def test_train_fusion_step_updates_weights(self):
         """Training step should update fusion network weights."""
-        from ww.learning.neuro_symbolic import NeuroSymbolicReasoner
+        from t4dm.learning.neuro_symbolic import NeuroSymbolicReasoner
 
         reasoner = NeuroSymbolicReasoner()
 
@@ -573,7 +573,7 @@ class TestLearnedFusionTraining:
 
     def test_train_fusion_step_reduces_loss(self):
         """Training should reduce loss over time."""
-        from ww.learning.neuro_symbolic import NeuroSymbolicReasoner
+        from t4dm.learning.neuro_symbolic import NeuroSymbolicReasoner
 
         reasoner = NeuroSymbolicReasoner()
 
@@ -599,7 +599,7 @@ class TestLearnedFusionTraining:
 
     def test_train_fusion_stats_tracking(self):
         """Training stats should be tracked correctly."""
-        from ww.learning.neuro_symbolic import NeuroSymbolicReasoner
+        from t4dm.learning.neuro_symbolic import NeuroSymbolicReasoner
 
         reasoner = NeuroSymbolicReasoner()
 

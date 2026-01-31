@@ -11,7 +11,7 @@ import numpy as np
 from datetime import datetime, timedelta
 from uuid import uuid4
 
-from ww.memory.buffer_manager import (
+from t4dm.memory.buffer_manager import (
     BufferManager,
     BufferedItem,
     PromotionAction,

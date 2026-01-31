@@ -13,12 +13,12 @@ import pytest
 from unittest.mock import AsyncMock, patch
 from typing import Any
 
-from ww.storage.neo4j_store import (
+from t4dm.storage.neo4j_store import (
     Neo4jStore,
     DatabaseTimeoutError as Neo4jDatabaseTimeoutError,
     DEFAULT_DB_TIMEOUT as NEO4J_DEFAULT_TIMEOUT,
 )
-from ww.storage.qdrant_store import (
+from t4dm.storage.qdrant_store import (
     QdrantStore,
     DatabaseTimeoutError as QdrantDatabaseTimeoutError,
     DEFAULT_DB_TIMEOUT as QDRANT_DEFAULT_TIMEOUT,

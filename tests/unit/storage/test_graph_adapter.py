@@ -4,8 +4,8 @@ import uuid
 
 import pytest
 
-from ww.storage.t4dx.engine import T4DXEngine
-from ww.storage.t4dx.graph_adapter import T4DXGraphStore
+from t4dm.storage.t4dx.engine import T4DXEngine
+from t4dm.storage.t4dx.graph_adapter import T4DXGraphStore
 
 
 @pytest.fixture

@@ -13,7 +13,7 @@ Validates:
 import numpy as np
 import pytest
 
-from ww.nca.adenosine import (
+from t4dm.nca.adenosine import (
     AdenosineConfig,
     AdenosineDynamics,
     AdenosineState,
@@ -415,7 +415,7 @@ class TestNeuralFieldIntegration:
 
     def test_solver_with_adenosine(self):
         """Test neural field solver accepts adenosine."""
-        from ww.nca import NeuralFieldSolver, AdenosineDynamics
+        from t4dm.nca import NeuralFieldSolver, AdenosineDynamics
 
         adenosine = AdenosineDynamics()
         solver = NeuralFieldSolver(adenosine=adenosine)
@@ -424,7 +424,7 @@ class TestNeuralFieldIntegration:
 
     def test_adenosine_affects_dynamics(self):
         """Test adenosine modulates field dynamics."""
-        from ww.nca import NeuralFieldSolver, AdenosineDynamics
+        from t4dm.nca import NeuralFieldSolver, AdenosineDynamics
 
         # Rested system
         adenosine_rested = AdenosineDynamics()
@@ -448,7 +448,7 @@ class TestNeuralFieldIntegration:
 
     def test_sleep_pressure_accessible(self):
         """Test sleep pressure getter works."""
-        from ww.nca import NeuralFieldSolver, AdenosineDynamics
+        from t4dm.nca import NeuralFieldSolver, AdenosineDynamics
 
         adenosine = AdenosineDynamics()
         solver = NeuralFieldSolver(adenosine=adenosine)
@@ -462,7 +462,7 @@ class TestNeuralFieldIntegration:
 
     def test_should_consolidate(self):
         """Test should_consolidate accessor."""
-        from ww.nca import NeuralFieldSolver, AdenosineDynamics
+        from t4dm.nca import NeuralFieldSolver, AdenosineDynamics
 
         adenosine = AdenosineDynamics()
         solver = NeuralFieldSolver(adenosine=adenosine)

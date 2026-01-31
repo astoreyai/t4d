@@ -9,7 +9,7 @@ import numpy as np
 from uuid import uuid4
 from datetime import datetime, timedelta
 
-from ww.learning.reconsolidation import (
+from t4dm.learning.reconsolidation import (
     ReconsolidationEngine,
     ReconsolidationUpdate,
     reconsolidate,

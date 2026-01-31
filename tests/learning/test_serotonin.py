@@ -13,7 +13,7 @@ from datetime import datetime, timedelta
 from unittest.mock import patch
 from uuid import uuid4
 
-from ww.learning.serotonin import (
+from t4dm.learning.serotonin import (
     TemporalContext,
     SerotoninSystem,
 )

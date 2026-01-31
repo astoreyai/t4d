@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 from dataclasses import dataclass
 import numpy as np
 
-from ww.visualization.telemetry_hub import (
+from t4dm.visualization.telemetry_hub import (
     TelemetryHub,
     TelemetryConfig,
     TimeScale,
@@ -129,7 +129,7 @@ class TestModuleIntegration:
 
     def test_with_da_telemetry(self):
         """Test integration with DA telemetry."""
-        from ww.visualization.da_telemetry import DATelemetry
+        from t4dm.visualization.da_telemetry import DATelemetry
 
         hub = TelemetryHub()
         da = DATelemetry()
@@ -148,7 +148,7 @@ class TestModuleIntegration:
 
     def test_with_pac_telemetry(self):
         """Test integration with PAC telemetry."""
-        from ww.visualization.pac_telemetry import PACTelemetry
+        from t4dm.visualization.pac_telemetry import PACTelemetry
 
         hub = TelemetryHub()
         pac = PACTelemetry()
@@ -165,7 +165,7 @@ class TestModuleIntegration:
 
     def test_with_stability_monitor(self):
         """Test integration with stability monitor."""
-        from ww.visualization.stability_monitor import StabilityMonitor
+        from t4dm.visualization.stability_monitor import StabilityMonitor
 
         hub = TelemetryHub()
         stability = StabilityMonitor()
@@ -180,7 +180,7 @@ class TestModuleIntegration:
 
     def test_with_swr_telemetry(self):
         """Test integration with SWR telemetry."""
-        from ww.visualization.swr_telemetry import SWRTelemetry
+        from t4dm.visualization.swr_telemetry import SWRTelemetry
 
         hub = TelemetryHub()
         swr = SWRTelemetry()
@@ -201,9 +201,9 @@ class TestCrossScaleCorrelation:
 
     def test_correlation_with_data(self):
         """Correlation with sufficient data."""
-        from ww.visualization.da_telemetry import DATelemetry
-        from ww.visualization.pac_telemetry import PACTelemetry
-        from ww.visualization.stability_monitor import StabilityMonitor
+        from t4dm.visualization.da_telemetry import DATelemetry
+        from t4dm.visualization.pac_telemetry import PACTelemetry
+        from t4dm.visualization.stability_monitor import StabilityMonitor
 
         hub = TelemetryHub()
         da = DATelemetry()
@@ -238,7 +238,7 @@ class TestHealthMonitoring:
 
     def test_health_with_da(self):
         """Health with DA module."""
-        from ww.visualization.da_telemetry import DATelemetry
+        from t4dm.visualization.da_telemetry import DATelemetry
 
         hub = TelemetryHub()
         da = DATelemetry()
@@ -289,7 +289,7 @@ class TestExport:
 
     def test_export_with_data(self):
         """Export with module data."""
-        from ww.visualization.da_telemetry import DATelemetry
+        from t4dm.visualization.da_telemetry import DATelemetry
 
         hub = TelemetryHub()
         da = DATelemetry()
@@ -314,7 +314,7 @@ class TestSummaryStatistics:
 
     def test_summary_with_modules(self):
         """Summary with registered modules."""
-        from ww.visualization.da_telemetry import DATelemetry
+        from t4dm.visualization.da_telemetry import DATelemetry
 
         hub = TelemetryHub()
         da = DATelemetry()
@@ -418,7 +418,7 @@ class TestVisualization:
 
     def test_create_dashboard_with_data(self):
         """Dashboard with module data."""
-        from ww.visualization.da_telemetry import DATelemetry
+        from t4dm.visualization.da_telemetry import DATelemetry
 
         hub = TelemetryHub()
         da = DATelemetry()
@@ -456,7 +456,7 @@ class TestModuleExports:
 
     def test_all_exports_available(self):
         """Verify all exports are importable."""
-        from ww.visualization.telemetry_hub import (
+        from t4dm.visualization.telemetry_hub import (
             TelemetryHub,
             TelemetryConfig,
             TimeScale,
@@ -585,7 +585,7 @@ class TestRecordState:
 
     def test_record_state_with_nt(self):
         """Record state with NT dashboard."""
-        from ww.visualization.nt_state_dashboard import NTStateDashboard
+        from t4dm.visualization.nt_state_dashboard import NTStateDashboard
 
         hub = TelemetryHub()
         nt = NTStateDashboard()
@@ -597,7 +597,7 @@ class TestRecordState:
 
     def test_record_state_with_stability(self):
         """Record state with stability monitor."""
-        from ww.visualization.stability_monitor import StabilityMonitor
+        from t4dm.visualization.stability_monitor import StabilityMonitor
 
         hub = TelemetryHub()
         stability = StabilityMonitor()
@@ -1012,7 +1012,7 @@ class TestBiologicalValidity:
 
     def test_validity_with_da(self):
         """Validity with DA validation."""
-        from ww.visualization.da_telemetry import DATelemetry
+        from t4dm.visualization.da_telemetry import DATelemetry
 
         hub = TelemetryHub()
         da = DATelemetry()
@@ -1027,7 +1027,7 @@ class TestBiologicalValidity:
 
     def test_validity_with_pac(self):
         """Validity with PAC validation."""
-        from ww.visualization.pac_telemetry import PACTelemetry
+        from t4dm.visualization.pac_telemetry import PACTelemetry
 
         hub = TelemetryHub()
         pac = PACTelemetry()
@@ -1044,7 +1044,7 @@ class TestBiologicalValidity:
 
     def test_validity_with_swr(self):
         """Validity with SWR validation."""
-        from ww.visualization.swr_telemetry import SWRTelemetry
+        from t4dm.visualization.swr_telemetry import SWRTelemetry
 
         hub = TelemetryHub()
         swr = SWRTelemetry()
@@ -1065,7 +1065,7 @@ class TestGetTraces:
 
     def test_get_da_trace_with_data(self):
         """DA trace with data."""
-        from ww.visualization.da_telemetry import DATelemetry
+        from t4dm.visualization.da_telemetry import DATelemetry
 
         hub = TelemetryHub()
         da = DATelemetry()
@@ -1085,7 +1085,7 @@ class TestGetTraces:
 
     def test_get_pac_trace_with_data(self):
         """PAC trace with data."""
-        from ww.visualization.pac_telemetry import PACTelemetry
+        from t4dm.visualization.pac_telemetry import PACTelemetry
 
         hub = TelemetryHub()
         pac = PACTelemetry()
@@ -1105,7 +1105,7 @@ class TestGetTraces:
 
     def test_get_stability_trace_with_data(self):
         """Stability trace with data."""
-        from ww.visualization.stability_monitor import StabilityMonitor
+        from t4dm.visualization.stability_monitor import StabilityMonitor
 
         hub = TelemetryHub()
         stability = StabilityMonitor()
@@ -1130,7 +1130,7 @@ class TestStabilityScore:
 
     def test_stability_score_stable(self):
         """Stability score when stable."""
-        from ww.visualization.stability_monitor import StabilityMonitor
+        from t4dm.visualization.stability_monitor import StabilityMonitor
 
         hub = TelemetryHub()
         stability = StabilityMonitor()
@@ -1145,7 +1145,7 @@ class TestStabilityScore:
 
     def test_stability_score_unstable(self):
         """Stability score when unstable."""
-        from ww.visualization.stability_monitor import StabilityMonitor
+        from t4dm.visualization.stability_monitor import StabilityMonitor
 
         hub = TelemetryHub()
         stability = StabilityMonitor()
@@ -1356,7 +1356,7 @@ class TestVisualizationPlots:
         except ImportError:
             pytest.skip("matplotlib not available")
 
-        from ww.visualization.da_telemetry import DATelemetry
+        from t4dm.visualization.da_telemetry import DATelemetry
 
         hub = TelemetryHub()
         da = DATelemetry()
@@ -1392,9 +1392,9 @@ class TestVisualizationPlots:
         except ImportError:
             pytest.skip("matplotlib not available")
 
-        from ww.visualization.da_telemetry import DATelemetry
-        from ww.visualization.pac_telemetry import PACTelemetry
-        from ww.visualization.stability_monitor import StabilityMonitor
+        from t4dm.visualization.da_telemetry import DATelemetry
+        from t4dm.visualization.pac_telemetry import PACTelemetry
+        from t4dm.visualization.stability_monitor import StabilityMonitor
 
         hub = TelemetryHub()
         da = DATelemetry()
@@ -1477,7 +1477,7 @@ class TestVisualizationPlots:
         except ImportError:
             pytest.skip("matplotlib not available")
 
-        from ww.visualization.da_telemetry import DATelemetry
+        from t4dm.visualization.da_telemetry import DATelemetry
 
         hub = TelemetryHub()
         da = DATelemetry()
@@ -1499,9 +1499,9 @@ class TestVisualizationPlots:
         except ImportError:
             pytest.skip("matplotlib not available")
 
-        from ww.visualization.da_telemetry import DATelemetry
-        from ww.visualization.pac_telemetry import PACTelemetry
-        from ww.visualization.stability_monitor import StabilityMonitor
+        from t4dm.visualization.da_telemetry import DATelemetry
+        from t4dm.visualization.pac_telemetry import PACTelemetry
+        from t4dm.visualization.stability_monitor import StabilityMonitor
 
         hub = TelemetryHub()
         da = DATelemetry()

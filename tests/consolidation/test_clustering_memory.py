@@ -7,13 +7,13 @@ from uuid import uuid4
 from unittest.mock import patch, MagicMock
 
 # Set test mode to bypass password validation
-os.environ["WW_TEST_MODE"] = "true"
+os.environ["T4DM_TEST_MODE"] = "true"
 
 # Skip entire module if HDBSCAN not available
 hdbscan = pytest.importorskip("hdbscan", reason="HDBSCAN not installed (pip install hdbscan)")
 
-from ww.consolidation.service import ConsolidationService
-from ww.core.types import Episode
+from t4dm.consolidation.service import ConsolidationService
+from t4dm.core.types import Episode
 
 
 class TestStratifiedSampling:
@@ -242,7 +242,7 @@ class TestHDBSCANMemoryLimit:
         service = ConsolidationService()
 
         # Mock HDBSCAN to track what it receives
-        with patch("ww.consolidation.service.HDBSCAN") as mock_hdbscan:
+        with patch("t4dm.consolidation.service.HDBSCAN") as mock_hdbscan:
             mock_clusterer = MagicMock()
             mock_clusterer.fit_predict.return_value = np.zeros(5000)  # 5000 samples
             mock_hdbscan.return_value = mock_clusterer
@@ -277,7 +277,7 @@ class TestHDBSCANMemoryLimit:
 
         service = ConsolidationService()
 
-        with patch("ww.consolidation.service.HDBSCAN") as mock_hdbscan:
+        with patch("t4dm.consolidation.service.HDBSCAN") as mock_hdbscan:
             mock_clusterer = MagicMock()
             mock_clusterer.fit_predict.return_value = np.zeros(100)
             mock_hdbscan.return_value = mock_clusterer
@@ -310,7 +310,7 @@ class TestHDBSCANMemoryLimit:
 
         service = ConsolidationService()
 
-        with patch("ww.consolidation.service.HDBSCAN") as mock_hdbscan:
+        with patch("t4dm.consolidation.service.HDBSCAN") as mock_hdbscan:
             mock_hdbscan.return_value.fit_predict.side_effect = MemoryError("OOM")
 
             with patch.object(service.embedding, 'embed') as mock_embed:
@@ -339,7 +339,7 @@ class TestHDBSCANMemoryLimit:
 
         service = ConsolidationService()
 
-        with patch("ww.consolidation.service.HDBSCAN") as mock_hdbscan:
+        with patch("t4dm.consolidation.service.HDBSCAN") as mock_hdbscan:
             mock_hdbscan.return_value.fit_predict.side_effect = MemoryError("OOM")
 
             with patch.object(service.embedding, 'embed') as mock_embed:
@@ -381,7 +381,7 @@ class TestHDBSCANMemoryLimit:
 
         service = ConsolidationService()
 
-        with patch("ww.consolidation.service.HDBSCAN") as mock_hdbscan:
+        with patch("t4dm.consolidation.service.HDBSCAN") as mock_hdbscan:
             # Mock to return 2 clusters from sampled data
             mock_clusterer = MagicMock()
 
@@ -422,21 +422,21 @@ class TestConfigParameters:
 
     def test_hdbscan_max_samples_config(self):
         """Test that max_samples is configurable."""
-        from ww.core.config import Settings
+        from t4dm.core.config import Settings
 
         settings = Settings(hdbscan_max_samples=10000)
         assert settings.hdbscan_max_samples == 10000
 
     def test_hdbscan_max_samples_default(self):
         """Test default max_samples value."""
-        from ww.core.config import Settings
+        from t4dm.core.config import Settings
 
         settings = Settings()
         assert settings.hdbscan_max_samples == 5000
 
     def test_hdbscan_max_samples_validation_too_small(self):
         """Test max_samples validation - too small."""
-        from ww.core.config import Settings
+        from t4dm.core.config import Settings
         from pydantic import ValidationError
 
         with pytest.raises(ValidationError) as exc_info:
@@ -446,7 +446,7 @@ class TestConfigParameters:
 
     def test_hdbscan_max_samples_validation_too_large(self):
         """Test max_samples validation - too large."""
-        from ww.core.config import Settings
+        from t4dm.core.config import Settings
         from pydantic import ValidationError
 
         with pytest.raises(ValidationError) as exc_info:
@@ -456,14 +456,14 @@ class TestConfigParameters:
 
     def test_service_uses_config_max_samples(self):
         """Test that service uses configured max_samples."""
-        from ww.core.config import Settings, get_settings
+        from t4dm.core.config import Settings, get_settings
         from functools import lru_cache
 
         # Clear cache
         get_settings.cache_clear()
 
         # Mock settings
-        with patch("ww.consolidation.service.get_settings") as mock_get_settings:
+        with patch("t4dm.consolidation.service.get_settings") as mock_get_settings:
             mock_settings = MagicMock()
             mock_settings.hdbscan_max_samples = 1000
             mock_settings.hdbscan_min_cluster_size = 3

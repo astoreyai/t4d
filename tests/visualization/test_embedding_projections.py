@@ -4,7 +4,7 @@ import pytest
 import numpy as np
 from unittest.mock import patch, MagicMock
 
-from ww.visualization.embedding_projections import (
+from t4dm.visualization.embedding_projections import (
     EmbeddingProjector,
     plot_tsne_projection,
     plot_umap_projection,

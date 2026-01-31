@@ -16,15 +16,15 @@ import numpy as np
 import pytest
 import pytest_asyncio
 
-from ww.consolidation import HDBSCAN_AVAILABLE
-from ww.consolidation.service import ConsolidationService, get_consolidation_service
+from t4dm.consolidation import HDBSCAN_AVAILABLE
+from t4dm.consolidation.service import ConsolidationService, get_consolidation_service
 
 # Marker for tests that require HDBSCAN
 requires_hdbscan = pytest.mark.skipif(
     not HDBSCAN_AVAILABLE,
     reason="HDBSCAN not installed. Install with: pip install hdbscan"
 )
-from ww.core.types import (
+from t4dm.core.types import (
     ConsolidationType,
     Domain,
     EntityType,

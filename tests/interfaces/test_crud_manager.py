@@ -12,9 +12,9 @@ class TestCRUDManager:
     @pytest.fixture
     def mock_stores(self):
         """Create mock storage backends."""
-        with patch("ww.interfaces.crud_manager.EpisodicMemory") as mock_ep, \
-             patch("ww.interfaces.crud_manager.SemanticMemory") as mock_sem, \
-             patch("ww.interfaces.crud_manager.ProceduralMemory") as mock_proc:
+        with patch("t4dm.interfaces.crud_manager.EpisodicMemory") as mock_ep, \
+             patch("t4dm.interfaces.crud_manager.SemanticMemory") as mock_sem, \
+             patch("t4dm.interfaces.crud_manager.ProceduralMemory") as mock_proc:
 
             mock_ep_instance = MagicMock()
             mock_ep_instance.initialize = AsyncMock()
@@ -60,17 +60,17 @@ class TestCRUDManager:
 
     def test_init_without_rich(self, mock_stores):
         """Test initialization fails without rich library."""
-        with patch("ww.interfaces.crud_manager.RICH_AVAILABLE", False):
-            from ww.interfaces.crud_manager import CRUDManager
+        with patch("t4dm.interfaces.crud_manager.RICH_AVAILABLE", False):
+            from t4dm.interfaces.crud_manager import CRUDManager
 
             with pytest.raises(ImportError, match="rich library required"):
                 CRUDManager(session_id="test")
 
     def test_init_with_rich(self, mock_stores):
         """Test initialization with rich library."""
-        with patch("ww.interfaces.crud_manager.RICH_AVAILABLE", True), \
-             patch("ww.interfaces.crud_manager.Console"):
-            from ww.interfaces.crud_manager import CRUDManager
+        with patch("t4dm.interfaces.crud_manager.RICH_AVAILABLE", True), \
+             patch("t4dm.interfaces.crud_manager.Console"):
+            from t4dm.interfaces.crud_manager import CRUDManager
 
             manager = CRUDManager(session_id="test")
             assert manager.session_id == "test"
@@ -79,10 +79,10 @@ class TestCRUDManager:
     @pytest.mark.asyncio
     async def test_initialize(self, mock_stores):
         """Test initialization of storage backends."""
-        with patch("ww.interfaces.crud_manager.RICH_AVAILABLE", True), \
-             patch("ww.interfaces.crud_manager.Console"), \
-             patch("ww.interfaces.crud_manager.Progress"):
-            from ww.interfaces.crud_manager import CRUDManager
+        with patch("t4dm.interfaces.crud_manager.RICH_AVAILABLE", True), \
+             patch("t4dm.interfaces.crud_manager.Console"), \
+             patch("t4dm.interfaces.crud_manager.Progress"):
+            from t4dm.interfaces.crud_manager import CRUDManager
 
             manager = CRUDManager(session_id="test")
             await manager.initialize()
@@ -97,10 +97,10 @@ class TestCRUDManager:
         mock_episode.id = UUID("12345678-1234-1234-1234-123456789012")
         mock_stores["episodic"].store = AsyncMock(return_value=mock_episode)
 
-        with patch("ww.interfaces.crud_manager.RICH_AVAILABLE", True), \
-             patch("ww.interfaces.crud_manager.Console"), \
-             patch("ww.interfaces.crud_manager.Progress"):
-            from ww.interfaces.crud_manager import CRUDManager
+        with patch("t4dm.interfaces.crud_manager.RICH_AVAILABLE", True), \
+             patch("t4dm.interfaces.crud_manager.Console"), \
+             patch("t4dm.interfaces.crud_manager.Progress"):
+            from t4dm.interfaces.crud_manager import CRUDManager
 
             manager = CRUDManager(session_id="test")
             episode = await manager.create_episode(
@@ -119,10 +119,10 @@ class TestCRUDManager:
         mock_entity.id = UUID("12345678-1234-1234-1234-123456789012")
         mock_stores["semantic"].create_entity = AsyncMock(return_value=mock_entity)
 
-        with patch("ww.interfaces.crud_manager.RICH_AVAILABLE", True), \
-             patch("ww.interfaces.crud_manager.Console"), \
-             patch("ww.interfaces.crud_manager.Progress"):
-            from ww.interfaces.crud_manager import CRUDManager
+        with patch("t4dm.interfaces.crud_manager.RICH_AVAILABLE", True), \
+             patch("t4dm.interfaces.crud_manager.Console"), \
+             patch("t4dm.interfaces.crud_manager.Progress"):
+            from t4dm.interfaces.crud_manager import CRUDManager
 
             manager = CRUDManager(session_id="test")
             entity = await manager.create_entity(
@@ -151,10 +151,10 @@ class TestCRUDManager:
             }),
         ])
 
-        with patch("ww.interfaces.crud_manager.RICH_AVAILABLE", True), \
-             patch("ww.interfaces.crud_manager.Console"), \
-             patch("ww.interfaces.crud_manager.Progress"):
-            from ww.interfaces.crud_manager import CRUDManager
+        with patch("t4dm.interfaces.crud_manager.RICH_AVAILABLE", True), \
+             patch("t4dm.interfaces.crud_manager.Console"), \
+             patch("t4dm.interfaces.crud_manager.Progress"):
+            from t4dm.interfaces.crud_manager import CRUDManager
 
             manager = CRUDManager(session_id="test")
             episode = await manager.get_episode("12345678-1234-1234-1234-123456789012")
@@ -167,10 +167,10 @@ class TestCRUDManager:
         """Test getting non-existent episode."""
         mock_stores["episodic"].vector_store.get = AsyncMock(return_value=[])
 
-        with patch("ww.interfaces.crud_manager.RICH_AVAILABLE", True), \
-             patch("ww.interfaces.crud_manager.Console"), \
-             patch("ww.interfaces.crud_manager.Progress"):
-            from ww.interfaces.crud_manager import CRUDManager
+        with patch("t4dm.interfaces.crud_manager.RICH_AVAILABLE", True), \
+             patch("t4dm.interfaces.crud_manager.Console"), \
+             patch("t4dm.interfaces.crud_manager.Progress"):
+            from t4dm.interfaces.crud_manager import CRUDManager
 
             manager = CRUDManager(session_id="test")
             episode = await manager.get_episode("nonexistent-id")
@@ -184,10 +184,10 @@ class TestCRUDManager:
         mock_new_entity.id = UUID("22222222-2222-2222-2222-222222222222")
         mock_stores["semantic"].supersede = AsyncMock(return_value=mock_new_entity)
 
-        with patch("ww.interfaces.crud_manager.RICH_AVAILABLE", True), \
-             patch("ww.interfaces.crud_manager.Console"), \
-             patch("ww.interfaces.crud_manager.Progress"):
-            from ww.interfaces.crud_manager import CRUDManager
+        with patch("t4dm.interfaces.crud_manager.RICH_AVAILABLE", True), \
+             patch("t4dm.interfaces.crud_manager.Console"), \
+             patch("t4dm.interfaces.crud_manager.Progress"):
+            from t4dm.interfaces.crud_manager import CRUDManager
 
             manager = CRUDManager(session_id="test")
             new_entity = await manager.update_entity(
@@ -201,10 +201,10 @@ class TestCRUDManager:
     @pytest.mark.asyncio
     async def test_delete_episode_without_confirm(self, mock_stores):
         """Test deleting episode without confirmation."""
-        with patch("ww.interfaces.crud_manager.RICH_AVAILABLE", True), \
-             patch("ww.interfaces.crud_manager.Console"), \
-             patch("ww.interfaces.crud_manager.Progress"):
-            from ww.interfaces.crud_manager import CRUDManager
+        with patch("t4dm.interfaces.crud_manager.RICH_AVAILABLE", True), \
+             patch("t4dm.interfaces.crud_manager.Console"), \
+             patch("t4dm.interfaces.crud_manager.Progress"):
+            from t4dm.interfaces.crud_manager import CRUDManager
 
             manager = CRUDManager(session_id="test")
             result = await manager.delete_episode("episode-id", confirm=False)
@@ -215,10 +215,10 @@ class TestCRUDManager:
     @pytest.mark.asyncio
     async def test_delete_entity_without_confirm(self, mock_stores):
         """Test deleting entity without confirmation."""
-        with patch("ww.interfaces.crud_manager.RICH_AVAILABLE", True), \
-             patch("ww.interfaces.crud_manager.Console"), \
-             patch("ww.interfaces.crud_manager.Progress"):
-            from ww.interfaces.crud_manager import CRUDManager
+        with patch("t4dm.interfaces.crud_manager.RICH_AVAILABLE", True), \
+             patch("t4dm.interfaces.crud_manager.Console"), \
+             patch("t4dm.interfaces.crud_manager.Progress"):
+            from t4dm.interfaces.crud_manager import CRUDManager
 
             manager = CRUDManager(session_id="test")
             result = await manager.delete_entity("entity-id", confirm=False)
@@ -234,15 +234,15 @@ class TestCRUDManager:
         mock_episode.id = UUID("12345678-1234-1234-1234-123456789012")
         mock_stores["episodic"].store = AsyncMock(return_value=mock_episode)
 
-        with patch("ww.interfaces.crud_manager.RICH_AVAILABLE", True), \
-             patch("ww.interfaces.crud_manager.Console"), \
-             patch("ww.interfaces.crud_manager.Progress") as mock_progress:
+        with patch("t4dm.interfaces.crud_manager.RICH_AVAILABLE", True), \
+             patch("t4dm.interfaces.crud_manager.Console"), \
+             patch("t4dm.interfaces.crud_manager.Progress") as mock_progress:
             mock_progress.return_value.__enter__ = MagicMock(return_value=mock_progress.return_value)
             mock_progress.return_value.__exit__ = MagicMock(return_value=False)
             mock_progress.return_value.add_task = MagicMock(return_value=0)
             mock_progress.return_value.advance = MagicMock()
 
-            from ww.interfaces.crud_manager import CRUDManager
+            from t4dm.interfaces.crud_manager import CRUDManager
 
             manager = CRUDManager(session_id="test")
             episodes = await manager.batch_create_episodes([
@@ -257,15 +257,15 @@ class TestCRUDManager:
     @pytest.mark.asyncio
     async def test_batch_delete_episodes_without_confirm(self, mock_stores):
         """Test batch deleting episodes."""
-        with patch("ww.interfaces.crud_manager.RICH_AVAILABLE", True), \
-             patch("ww.interfaces.crud_manager.Console"), \
-             patch("ww.interfaces.crud_manager.Progress") as mock_progress:
+        with patch("t4dm.interfaces.crud_manager.RICH_AVAILABLE", True), \
+             patch("t4dm.interfaces.crud_manager.Console"), \
+             patch("t4dm.interfaces.crud_manager.Progress") as mock_progress:
             mock_progress.return_value.__enter__ = MagicMock(return_value=mock_progress.return_value)
             mock_progress.return_value.__exit__ = MagicMock(return_value=False)
             mock_progress.return_value.add_task = MagicMock(return_value=0)
             mock_progress.return_value.update = MagicMock()
 
-            from ww.interfaces.crud_manager import CRUDManager
+            from t4dm.interfaces.crud_manager import CRUDManager
 
             manager = CRUDManager(session_id="test")
             count = await manager.batch_delete_episodes(

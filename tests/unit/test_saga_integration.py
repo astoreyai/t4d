@@ -9,10 +9,10 @@ import pytest
 from unittest.mock import AsyncMock, patch
 from uuid import uuid4
 
-from ww.memory.episodic import EpisodicMemory
-from ww.memory.semantic import SemanticMemory
-from ww.memory.procedural import ProceduralMemory
-from ww.storage.saga import SagaState
+from t4dm.memory.episodic import EpisodicMemory
+from t4dm.memory.semantic import SemanticMemory
+from t4dm.memory.procedural import ProceduralMemory
+from t4dm.storage.saga import SagaState
 
 
 # ============================================================================
@@ -55,9 +55,9 @@ async def test_episodic_create_success(mock_stores, mock_embedding):
     """Test successful episodic memory creation with saga."""
     qdrant, neo4j = mock_stores
 
-    with patch("ww.memory.episodic.get_qdrant_store", return_value=qdrant), \
-         patch("ww.memory.episodic.get_neo4j_store", return_value=neo4j), \
-         patch("ww.memory.episodic.get_embedding_provider", return_value=mock_embedding):
+    with patch("t4dm.memory.episodic.get_qdrant_store", return_value=qdrant), \
+         patch("t4dm.memory.episodic.get_neo4j_store", return_value=neo4j), \
+         patch("t4dm.memory.episodic.get_embedding_provider", return_value=mock_embedding):
 
         memory = EpisodicMemory(session_id="test-session")
         # Disable FF encoding and gating for predictable test behavior
@@ -87,9 +87,9 @@ async def test_episodic_create_neo4j_failure_rollback(mock_stores, mock_embeddin
     qdrant, neo4j = mock_stores
     neo4j.create_node.side_effect = RuntimeError("Neo4j connection error")
 
-    with patch("ww.memory.episodic.get_qdrant_store", return_value=qdrant), \
-         patch("ww.memory.episodic.get_neo4j_store", return_value=neo4j), \
-         patch("ww.memory.episodic.get_embedding_provider", return_value=mock_embedding):
+    with patch("t4dm.memory.episodic.get_qdrant_store", return_value=qdrant), \
+         patch("t4dm.memory.episodic.get_neo4j_store", return_value=neo4j), \
+         patch("t4dm.memory.episodic.get_embedding_provider", return_value=mock_embedding):
 
         memory = EpisodicMemory(session_id="test-session")
 
@@ -125,9 +125,9 @@ async def test_episodic_mark_important_success(mock_stores, mock_embedding):
         })
     ])
 
-    with patch("ww.memory.episodic.get_qdrant_store", return_value=qdrant), \
-         patch("ww.memory.episodic.get_neo4j_store", return_value=neo4j), \
-         patch("ww.memory.episodic.get_embedding_provider", return_value=mock_embedding):
+    with patch("t4dm.memory.episodic.get_qdrant_store", return_value=qdrant), \
+         patch("t4dm.memory.episodic.get_neo4j_store", return_value=neo4j), \
+         patch("t4dm.memory.episodic.get_embedding_provider", return_value=mock_embedding):
 
         memory = EpisodicMemory(session_id="test-session")
 
@@ -166,9 +166,9 @@ async def test_episodic_mark_important_rollback(mock_stores, mock_embedding):
         })
     ])
 
-    with patch("ww.memory.episodic.get_qdrant_store", return_value=qdrant), \
-         patch("ww.memory.episodic.get_neo4j_store", return_value=neo4j), \
-         patch("ww.memory.episodic.get_embedding_provider", return_value=mock_embedding):
+    with patch("t4dm.memory.episodic.get_qdrant_store", return_value=qdrant), \
+         patch("t4dm.memory.episodic.get_neo4j_store", return_value=neo4j), \
+         patch("t4dm.memory.episodic.get_embedding_provider", return_value=mock_embedding):
 
         memory = EpisodicMemory(session_id="test-session")
 
@@ -188,9 +188,9 @@ async def test_semantic_create_entity_success(mock_stores, mock_embedding):
     """Test successful semantic entity creation with saga."""
     qdrant, neo4j = mock_stores
 
-    with patch("ww.memory.semantic.get_qdrant_store", return_value=qdrant), \
-         patch("ww.memory.semantic.get_neo4j_store", return_value=neo4j), \
-         patch("ww.memory.semantic.get_embedding_provider", return_value=mock_embedding):
+    with patch("t4dm.memory.semantic.get_qdrant_store", return_value=qdrant), \
+         patch("t4dm.memory.semantic.get_neo4j_store", return_value=neo4j), \
+         patch("t4dm.memory.semantic.get_embedding_provider", return_value=mock_embedding):
 
         memory = SemanticMemory(session_id="test-session")
         entity = await memory.create_entity(
@@ -215,9 +215,9 @@ async def test_semantic_create_entity_rollback(mock_stores, mock_embedding):
     qdrant, neo4j = mock_stores
     neo4j.create_node.side_effect = RuntimeError("Neo4j error")
 
-    with patch("ww.memory.semantic.get_qdrant_store", return_value=qdrant), \
-         patch("ww.memory.semantic.get_neo4j_store", return_value=neo4j), \
-         patch("ww.memory.semantic.get_embedding_provider", return_value=mock_embedding):
+    with patch("t4dm.memory.semantic.get_qdrant_store", return_value=qdrant), \
+         patch("t4dm.memory.semantic.get_neo4j_store", return_value=neo4j), \
+         patch("t4dm.memory.semantic.get_embedding_provider", return_value=mock_embedding):
 
         memory = SemanticMemory(session_id="test-session")
 
@@ -259,9 +259,9 @@ async def test_semantic_supersede_success(mock_stores, mock_embedding):
         })
     ])
 
-    with patch("ww.memory.semantic.get_qdrant_store", return_value=qdrant), \
-         patch("ww.memory.semantic.get_neo4j_store", return_value=neo4j), \
-         patch("ww.memory.semantic.get_embedding_provider", return_value=mock_embedding):
+    with patch("t4dm.memory.semantic.get_qdrant_store", return_value=qdrant), \
+         patch("t4dm.memory.semantic.get_neo4j_store", return_value=neo4j), \
+         patch("t4dm.memory.semantic.get_embedding_provider", return_value=mock_embedding):
 
         memory = SemanticMemory(session_id="test-session")
 
@@ -289,9 +289,9 @@ async def test_procedural_create_skill_success(mock_stores, mock_embedding):
     """Test successful procedural skill creation with saga."""
     qdrant, neo4j = mock_stores
 
-    with patch("ww.memory.procedural.get_qdrant_store", return_value=qdrant), \
-         patch("ww.memory.procedural.get_neo4j_store", return_value=neo4j), \
-         patch("ww.memory.procedural.get_embedding_provider", return_value=mock_embedding):
+    with patch("t4dm.memory.procedural.get_qdrant_store", return_value=qdrant), \
+         patch("t4dm.memory.procedural.get_neo4j_store", return_value=neo4j), \
+         patch("t4dm.memory.procedural.get_embedding_provider", return_value=mock_embedding):
 
         memory = ProceduralMemory(session_id="test-session")
 
@@ -323,9 +323,9 @@ async def test_procedural_create_skill_rollback(mock_stores, mock_embedding):
     qdrant, neo4j = mock_stores
     neo4j.create_node.side_effect = RuntimeError("Neo4j error")
 
-    with patch("ww.memory.procedural.get_qdrant_store", return_value=qdrant), \
-         patch("ww.memory.procedural.get_neo4j_store", return_value=neo4j), \
-         patch("ww.memory.procedural.get_embedding_provider", return_value=mock_embedding):
+    with patch("t4dm.memory.procedural.get_qdrant_store", return_value=qdrant), \
+         patch("t4dm.memory.procedural.get_neo4j_store", return_value=neo4j), \
+         patch("t4dm.memory.procedural.get_embedding_provider", return_value=mock_embedding):
 
         memory = ProceduralMemory(session_id="test-session")
 
@@ -373,9 +373,9 @@ async def test_procedural_update_success(mock_stores, mock_embedding):
         })
     ])
 
-    with patch("ww.memory.procedural.get_qdrant_store", return_value=qdrant), \
-         patch("ww.memory.procedural.get_neo4j_store", return_value=neo4j), \
-         patch("ww.memory.procedural.get_embedding_provider", return_value=mock_embedding):
+    with patch("t4dm.memory.procedural.get_qdrant_store", return_value=qdrant), \
+         patch("t4dm.memory.procedural.get_neo4j_store", return_value=neo4j), \
+         patch("t4dm.memory.procedural.get_embedding_provider", return_value=mock_embedding):
 
         memory = ProceduralMemory(session_id="test-session")
 
@@ -415,9 +415,9 @@ async def test_procedural_update_rollback(mock_stores, mock_embedding):
         })
     ])
 
-    with patch("ww.memory.procedural.get_qdrant_store", return_value=qdrant), \
-         patch("ww.memory.procedural.get_neo4j_store", return_value=neo4j), \
-         patch("ww.memory.procedural.get_embedding_provider", return_value=mock_embedding):
+    with patch("t4dm.memory.procedural.get_qdrant_store", return_value=qdrant), \
+         patch("t4dm.memory.procedural.get_neo4j_store", return_value=neo4j), \
+         patch("t4dm.memory.procedural.get_embedding_provider", return_value=mock_embedding):
 
         memory = ProceduralMemory(session_id="test-session")
 
@@ -434,9 +434,9 @@ async def test_procedural_deprecate_success(mock_stores, mock_embedding):
     qdrant, neo4j = mock_stores
     from datetime import datetime
 
-    with patch("ww.memory.procedural.get_qdrant_store", return_value=qdrant), \
-         patch("ww.memory.procedural.get_neo4j_store", return_value=neo4j), \
-         patch("ww.memory.procedural.get_embedding_provider", return_value=mock_embedding):
+    with patch("t4dm.memory.procedural.get_qdrant_store", return_value=qdrant), \
+         patch("t4dm.memory.procedural.get_neo4j_store", return_value=neo4j), \
+         patch("t4dm.memory.procedural.get_embedding_provider", return_value=mock_embedding):
 
         memory = ProceduralMemory(session_id="test-session")
         procedure_id = uuid4()
@@ -483,9 +483,9 @@ async def test_idempotent_create_handling(mock_stores, mock_embedding):
     # First call succeeds
     qdrant.add.side_effect = [None, RuntimeError("Already exists")]
 
-    with patch("ww.memory.episodic.get_qdrant_store", return_value=qdrant), \
-         patch("ww.memory.episodic.get_neo4j_store", return_value=neo4j), \
-         patch("ww.memory.episodic.get_embedding_provider", return_value=mock_embedding):
+    with patch("t4dm.memory.episodic.get_qdrant_store", return_value=qdrant), \
+         patch("t4dm.memory.episodic.get_neo4j_store", return_value=neo4j), \
+         patch("t4dm.memory.episodic.get_embedding_provider", return_value=mock_embedding):
 
         memory = EpisodicMemory(session_id="test-session")
 

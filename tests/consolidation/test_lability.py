@@ -9,7 +9,7 @@ from uuid import uuid4
 
 import pytest
 
-from ww.consolidation.lability import (
+from t4dm.consolidation.lability import (
     DEFAULT_LABILITY_WINDOW_HOURS,
     LabilityConfig,
     LabilityManager,

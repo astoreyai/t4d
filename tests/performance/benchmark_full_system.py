@@ -14,9 +14,9 @@ import numpy as np
 import pytest
 import torch
 
-from ww.spiking.cortical_stack import CorticalStack
-from ww.storage.t4dx.engine import T4DXEngine
-from ww.storage.t4dx.types import ItemRecord
+from t4dm.spiking.cortical_stack import CorticalStack
+from t4dm.storage.t4dx.engine import T4DXEngine
+from t4dm.storage.t4dx.types import ItemRecord
 
 
 def _make_item(dim=32, **kwargs):
@@ -57,7 +57,7 @@ class TestInsertBenchmark:
 
     def test_insert_edge_latency(self, tmp_path):
         """INSERT_EDGE should complete in < 1ms average."""
-        from ww.storage.t4dx.types import EdgeRecord
+        from t4dm.storage.t4dx.types import EdgeRecord
 
         engine = T4DXEngine(tmp_path / "bench_edge", flush_threshold=10000)
         engine.startup()

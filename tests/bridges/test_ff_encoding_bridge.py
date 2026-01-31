@@ -8,7 +8,7 @@ to provide novelty detection and encoding guidance.
 import numpy as np
 import pytest
 
-from ww.bridges.ff_encoding_bridge import (
+from t4dm.bridges.ff_encoding_bridge import (
     EncodingGuidance,
     FFEncodingBridge,
     FFEncodingConfig,
@@ -320,7 +320,7 @@ class TestFFEncodingIntegration:
     def test_with_real_ff_layer(self):
         """Test integration with actual ForwardForwardLayer."""
         try:
-            from ww.nca.forward_forward import ForwardForwardLayer, ForwardForwardConfig
+            from t4dm.nca.forward_forward import ForwardForwardLayer, ForwardForwardConfig
 
             # Create real FF layer
             ff_config = ForwardForwardConfig(input_dim=1024, hidden_dim=256)

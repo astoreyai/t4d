@@ -1,7 +1,7 @@
 """Tests for memory injection prevention."""
 import numpy as np
 import pytest
-from ww.core.access_control import API_TOKEN, HIPPOCAMPUS_TOKEN, CONSOLIDATION_TOKEN, AccessDenied
+from t4dm.core.access_control import API_TOKEN, HIPPOCAMPUS_TOKEN, CONSOLIDATION_TOKEN, AccessDenied
 
 
 class TestHippocampalAccessControl:
@@ -9,7 +9,7 @@ class TestHippocampalAccessControl:
 
     def test_ca3_process_with_token(self):
         """P0-3: Internal token allows hippocampal operations."""
-        from ww.nca.hippocampus import HippocampalCircuit, HippocampalConfig
+        from t4dm.nca.hippocampus import HippocampalCircuit, HippocampalConfig
         hpc = HippocampalCircuit(HippocampalConfig(ec_dim=128))
         # Internal token should work
         hpc.receive_ach(0.7, token=HIPPOCAMPUS_TOKEN)
@@ -17,22 +17,22 @@ class TestHippocampalAccessControl:
 
     def test_neuromod_rejects_external(self):
         """P0-3: External token cannot set ACh/NE."""
-        from ww.nca.hippocampus import HippocampalCircuit, HippocampalConfig
+        from t4dm.nca.hippocampus import HippocampalCircuit, HippocampalConfig
         hpc = HippocampalCircuit(HippocampalConfig(ec_dim=128))
         with pytest.raises(AccessDenied):
             hpc.receive_ach(0.7, token=API_TOKEN)
 
     def test_backward_compat_no_token(self):
         """P0-3: No token = backward compatible (no check)."""
-        from ww.nca.hippocampus import HippocampalCircuit, HippocampalConfig
+        from t4dm.nca.hippocampus import HippocampalCircuit, HippocampalConfig
         hpc = HippocampalCircuit(HippocampalConfig(ec_dim=128))
         hpc.receive_ach(0.7)  # Should not raise
         assert hpc._ach_level == 0.7
 
     def test_dg_rejects_wrong_dimension(self):
         """P0-3: Mismatched input dimension raises ValidationError."""
-        from ww.nca.hippocampus import HippocampalCircuit, HippocampalConfig
-        from ww.core.validation import ValidationError
+        from t4dm.nca.hippocampus import HippocampalCircuit, HippocampalConfig
+        from t4dm.core.validation import ValidationError
         hpc = HippocampalCircuit(HippocampalConfig(ec_dim=128))
         wrong_dim = np.random.default_rng(42).random(64).astype(np.float32)
         with pytest.raises(ValidationError):
@@ -40,7 +40,7 @@ class TestHippocampalAccessControl:
 
     def test_ne_access_control(self):
         """P0-3: Test NE access control."""
-        from ww.nca.hippocampus import HippocampalCircuit, HippocampalConfig
+        from t4dm.nca.hippocampus import HippocampalCircuit, HippocampalConfig
         hpc = HippocampalCircuit(HippocampalConfig(ec_dim=128))
         
         # Internal token should work
@@ -61,7 +61,7 @@ class TestSWRAccessControl:
 
     def test_trigger_replay_validates_pattern(self):
         """P0-5: NaN pattern rejected."""
-        from ww.nca.swr_coupling import SWRNeuralFieldCoupling
+        from t4dm.nca.swr_coupling import SWRNeuralFieldCoupling
         swr = SWRNeuralFieldCoupling()
         nan_pattern = np.full(128, float('nan'))
         with pytest.raises(ValueError, match="NaN or Inf"):
@@ -69,7 +69,7 @@ class TestSWRAccessControl:
 
     def test_trigger_replay_access_control(self):
         """P0-5: Test trigger_replay access control."""
-        from ww.nca.swr_coupling import SWRNeuralFieldCoupling
+        from t4dm.nca.swr_coupling import SWRNeuralFieldCoupling
         swr = SWRNeuralFieldCoupling()
         
         # Force SWR state for testing
@@ -90,7 +90,7 @@ class TestSWRAccessControl:
 
     def test_force_swr_access_control(self):
         """P0-5: Test force_swr access control."""
-        from ww.nca.swr_coupling import SWRNeuralFieldCoupling
+        from t4dm.nca.swr_coupling import SWRNeuralFieldCoupling
         swr = SWRNeuralFieldCoupling()
         
         # Internal token should work
@@ -110,7 +110,7 @@ class TestSWRAccessControl:
 
     def test_inf_pattern_rejected(self):
         """P0-5: Inf pattern rejected."""
-        from ww.nca.swr_coupling import SWRNeuralFieldCoupling
+        from t4dm.nca.swr_coupling import SWRNeuralFieldCoupling
         swr = SWRNeuralFieldCoupling()
         swr._initiate_swr()
 
@@ -124,7 +124,7 @@ class TestConsolidationSecurity:
 
     def test_consolidation_type_validated(self):
         """P0-14: Invalid consolidation type rejected."""
-        from ww.consolidation.service import ConsolidationService
+        from t4dm.consolidation.service import ConsolidationService
         import asyncio
 
         service = ConsolidationService()
@@ -136,7 +136,7 @@ class TestConsolidationSecurity:
 
     def test_consolidation_accepts_valid_types(self):
         """P0-14: Valid consolidation types accepted."""
-        from ww.consolidation.service import ConsolidationService
+        from t4dm.consolidation.service import ConsolidationService
         import asyncio
 
         service = ConsolidationService()
@@ -155,7 +155,7 @@ class TestConsolidationSecurity:
 
     def test_consolidation_requires_token_capability(self):
         """P0-14: Consolidation requires trigger_consolidation capability."""
-        from ww.consolidation.service import ConsolidationService
+        from t4dm.consolidation.service import ConsolidationService
         import asyncio
 
         service = ConsolidationService()
@@ -170,7 +170,7 @@ class TestSWRPhaseSetters:
 
     def test_swr_phase_setters_accept_internal(self):
         """P0-12: Consolidation token can set sleep state."""
-        from ww.nca.swr_coupling import SWRNeuralFieldCoupling, WakeSleepMode
+        from t4dm.nca.swr_coupling import SWRNeuralFieldCoupling, WakeSleepMode
 
         swr = SWRNeuralFieldCoupling()
 
@@ -185,7 +185,7 @@ class TestSWRPhaseSetters:
 
     def test_swr_phase_setters_reject_external(self):
         """P0-12: API token cannot set neuromodulator levels."""
-        from ww.nca.swr_coupling import SWRNeuralFieldCoupling, WakeSleepMode
+        from t4dm.nca.swr_coupling import SWRNeuralFieldCoupling, WakeSleepMode
 
         swr = SWRNeuralFieldCoupling()
 
@@ -202,7 +202,7 @@ class TestSWRPhaseSetters:
 
     def test_swr_phase_setters_optional_token(self):
         """P0-12: Phase setters work without token (backward compat)."""
-        from ww.nca.swr_coupling import SWRNeuralFieldCoupling, WakeSleepMode
+        from t4dm.nca.swr_coupling import SWRNeuralFieldCoupling, WakeSleepMode
 
         swr = SWRNeuralFieldCoupling()
 
@@ -219,7 +219,7 @@ class TestNucleusBasalisSecurity:
 
     def test_salience_clamped_to_valid_range(self):
         """P0-13: Salience values clamped to [0, 1]."""
-        from ww.nca.nucleus_basalis import NucleusBasalisCircuit
+        from t4dm.nca.nucleus_basalis import NucleusBasalisCircuit
 
         nbm = NucleusBasalisCircuit()
 
@@ -233,7 +233,7 @@ class TestNucleusBasalisSecurity:
     def test_salience_rate_limited(self):
         """P0-13: Phasic bursts rate-limited to 10/minute."""
         from unittest.mock import patch
-        from ww.nca.nucleus_basalis import NucleusBasalisCircuit
+        from t4dm.nca.nucleus_basalis import NucleusBasalisCircuit
 
         nbm = NucleusBasalisCircuit()
 
@@ -260,7 +260,7 @@ class TestNucleusBasalisSecurity:
 
     def test_salience_requires_token_capability(self):
         """P0-13: Salience submission requires submit_salience capability."""
-        from ww.nca.nucleus_basalis import NucleusBasalisCircuit
+        from t4dm.nca.nucleus_basalis import NucleusBasalisCircuit
 
         nbm = NucleusBasalisCircuit()
 
@@ -274,7 +274,7 @@ class TestNucleusBasalisSecurity:
 
     def test_salience_optional_token(self):
         """P0-13: Salience processing works without token (backward compat)."""
-        from ww.nca.nucleus_basalis import NucleusBasalisCircuit
+        from t4dm.nca.nucleus_basalis import NucleusBasalisCircuit
 
         nbm = NucleusBasalisCircuit()
 

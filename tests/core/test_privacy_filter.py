@@ -2,7 +2,7 @@
 
 import pytest
 
-from ww.core.privacy_filter import (
+from t4dm.core.privacy_filter import (
     SensitivityLevel,
     RedactionResult,
     PrivacyRule,

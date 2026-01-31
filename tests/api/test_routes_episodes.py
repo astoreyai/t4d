@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 from uuid import uuid4
 from pydantic import ValidationError
 
-from ww.api.routes.episodes import (
+from t4dm.api.routes.episodes import (
     EpisodeCreate,
     EpisodeResponse,
     EpisodeList,
@@ -17,7 +17,7 @@ from ww.api.routes.episodes import (
     RecallRequest,
     RecallResponse,
 )
-from ww.core.types import Outcome, EpisodeContext
+from t4dm.core.types import Outcome, EpisodeContext
 
 
 # =============================================================================

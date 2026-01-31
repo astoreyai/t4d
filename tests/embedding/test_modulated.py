@@ -4,7 +4,7 @@ import pytest
 import numpy as np
 from unittest.mock import AsyncMock, MagicMock
 
-from ww.embedding.modulated import (
+from t4dm.embedding.modulated import (
     CognitiveMode,
     NeuromodulatorState,
     ModulationConfig,

@@ -12,7 +12,7 @@ Tests cover:
 import numpy as np
 import pytest
 
-from ww.nca.raphe import (
+from t4dm.nca.raphe import (
     RapheNucleus,
     RapheConfig,
     RapheNucleusState,

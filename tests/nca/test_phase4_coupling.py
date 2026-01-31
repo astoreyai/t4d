@@ -17,21 +17,21 @@ from dataclasses import dataclass
 from datetime import datetime, timedelta
 from unittest.mock import MagicMock
 
-from ww.nca.forward_forward_nca_coupling import (
+from t4dm.nca.forward_forward_nca_coupling import (
     FFNCACoupling,
     FFNCACouplingConfig,
     FFNCACouplingState,
     FFPhase,
     EnergyAlignment,
 )
-from ww.nca.capsule_nca_coupling import (
+from t4dm.nca.capsule_nca_coupling import (
     CapsuleNCACoupling,
     CapsuleNCACouplingConfig,
     CapsuleNCACouplingState,
     CapsuleMode,
     CouplingStrength,
 )
-from ww.nca.glymphatic_consolidation_bridge import (
+from t4dm.nca.glymphatic_consolidation_bridge import (
     GlymphaticConsolidationBridge,
     GlymphaticConsolidationConfig,
     ConsolidationBridgeState,

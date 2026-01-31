@@ -10,7 +10,7 @@ from datetime import datetime
 from unittest.mock import MagicMock
 from uuid import uuid4
 
-from ww.bridges.dopamine_bridge import (
+from t4dm.bridges.dopamine_bridge import (
     BridgeConfig,
     BridgeState,
     PredictiveCodingDopamineBridge,

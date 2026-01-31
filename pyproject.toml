@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "world-weaver"
+name = "t4dm"
 version = "1.0.0"
 description = "Biologically-inspired memory system for AI agents"
 readme = "README.md"
@@ -79,21 +79,21 @@ flash = [
 ]
 
 [project.scripts]
-ww = "ww.cli.main:main"
-ww-api = "ww.api.server:main"
+t4dm = "t4dm.cli.main:main"
+t4dm-api = "t4dm.api.server:main"
 
 [project.urls]
 Homepage = "https://github.com/astoreyai/world-weaver"
 Documentation = "https://github.com/astoreyai/world-weaver#readme"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/ww"]
+packages = ["src/t4dm"]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "session"
 testpaths = ["tests"]
-addopts = "-v --cov=src/ww --cov-report=term-missing"
+addopts = "-v --cov=src/t4dm --cov-report=term-missing"
 markers = [
     "slow: marks tests as slow (deselect with '-m \"not slow\"')",
     "benchmark: marks tests as benchmarks",
@@ -119,11 +119,11 @@ ignore = [
 ]
 
 [tool.ruff.lint.per-file-ignores]
-"src/ww/interfaces/*.py" = ["F401"]  # Unused imports for optional rich
-"src/ww/observability/prometheus.py" = ["F401", "E402"]  # Unused Info import, late asyncio
-"src/ww/api/server.py" = ["E402"]  # Router imports after app definition
-"src/ww/api/routes/visualization.py" = ["E402"]  # Late import for specific functions
-"src/ww/storage/qdrant_store.py" = ["E402"]  # Singleton management section
+"src/t4dm/interfaces/*.py" = ["F401"]  # Unused imports for optional rich
+"src/t4dm/observability/prometheus.py" = ["F401", "E402"]  # Unused Info import, late asyncio
+"src/t4dm/api/server.py" = ["E402"]  # Router imports after app definition
+"src/t4dm/api/routes/visualization.py" = ["E402"]  # Late import for specific functions
+"src/t4dm/storage/qdrant_store.py" = ["E402"]  # Singleton management section
 
 [tool.mypy]
 python_version = "3.11"
@@ -141,19 +141,19 @@ disable_error_code = ["attr-defined", "index", "call-overload", "override", "mis
 
 # Per-module strictness - only enforce on core types
 [[tool.mypy.overrides]]
-module = "ww.core.types"
+module = "t4dm.core.types"
 disallow_untyped_defs = true
 disallow_incomplete_defs = true
 
 [[tool.mypy.overrides]]
-module = "ww.core.config"
+module = "t4dm.core.config"
 disallow_untyped_defs = true
 disallow_incomplete_defs = true
 
 [tool.coverage.run]
-source = ["src/ww"]
+source = ["src/t4dm"]
 omit = [
-    "src/ww/memory/episodic_ORIGINAL_BACKUP.py",
+    "src/t4dm/memory/episodic_ORIGINAL_BACKUP.py",
     "*/__pycache__/*",
     "*/tests/*",
 ]

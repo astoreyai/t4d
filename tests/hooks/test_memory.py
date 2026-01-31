@@ -3,7 +3,7 @@
 import pytest
 from datetime import datetime
 
-from ww.hooks.memory import (
+from t4dm.hooks.memory import (
     CreateHook,
     RecallHook,
     UpdateHook,
@@ -12,7 +12,7 @@ from ww.hooks.memory import (
     CachingRecallHook,
     ValidationHook,
 )
-from ww.hooks.base import HookContext, HookPhase, HookPriority
+from t4dm.hooks.base import HookContext, HookPhase, HookPriority
 
 
 class TestCreateHook:
@@ -331,7 +331,7 @@ class TestAuditTrailHook:
 
     def test_initialization_default(self):
         """Test hook initialization with default audit store."""
-        from ww.hooks.memory import AuditTrailHook
+        from t4dm.hooks.memory import AuditTrailHook
         hook = AuditTrailHook()
         assert hook.name == "audit_trail"
         assert hook.priority == HookPriority.HIGH
@@ -339,7 +339,7 @@ class TestAuditTrailHook:
 
     def test_initialization_custom_store(self):
         """Test hook initialization with custom audit store."""
-        from ww.hooks.memory import AuditTrailHook
+        from t4dm.hooks.memory import AuditTrailHook
         custom_store = {"entries": []}  # Use dict to ensure identity check works
         hook = AuditTrailHook(audit_store=custom_store)
         assert hook.audit_store is custom_store
@@ -347,7 +347,7 @@ class TestAuditTrailHook:
     @pytest.mark.asyncio
     async def test_execute_records_audit(self):
         """Test execute records audit entry."""
-        from ww.hooks.memory import AuditTrailHook
+        from t4dm.hooks.memory import AuditTrailHook
         hook = AuditTrailHook()
         ctx = HookContext(
             phase=HookPhase.PRE,
@@ -368,7 +368,7 @@ class TestAuditTrailHook:
     @pytest.mark.asyncio
     async def test_execute_records_multiple_operations(self):
         """Test execute records multiple operations."""
-        from ww.hooks.memory import AuditTrailHook
+        from t4dm.hooks.memory import AuditTrailHook
         hook = AuditTrailHook()
 
         for op in ["create", "recall", "update"]:
@@ -384,7 +384,7 @@ class TestAuditTrailHook:
     @pytest.mark.asyncio
     async def test_execute_records_error_state(self):
         """Test execute records error state."""
-        from ww.hooks.memory import AuditTrailHook
+        from t4dm.hooks.memory import AuditTrailHook
         hook = AuditTrailHook()
         ctx = HookContext(
             phase=HookPhase.POST,
@@ -401,7 +401,7 @@ class TestHebbianUpdateHook:
 
     def test_initialization_default(self):
         """Test hook initialization with defaults."""
-        from ww.hooks.memory import HebbianUpdateHook
+        from t4dm.hooks.memory import HebbianUpdateHook
         hook = HebbianUpdateHook()
         assert hook.name == "hebbian_update"
         assert hook.priority == HookPriority.NORMAL
@@ -409,14 +409,14 @@ class TestHebbianUpdateHook:
 
     def test_initialization_custom_rate(self):
         """Test hook initialization with custom learning rate."""
-        from ww.hooks.memory import HebbianUpdateHook
+        from t4dm.hooks.memory import HebbianUpdateHook
         hook = HebbianUpdateHook(learning_rate=0.05)
         assert hook.learning_rate == 0.05
 
     @pytest.mark.asyncio
     async def test_execute_no_context_ids(self):
         """Test execute with no co-accessed memories."""
-        from ww.hooks.memory import HebbianUpdateHook
+        from t4dm.hooks.memory import HebbianUpdateHook
         hook = HebbianUpdateHook()
         ctx = HookContext(
             phase=HookPhase.ON,
@@ -432,7 +432,7 @@ class TestHebbianUpdateHook:
     @pytest.mark.asyncio
     async def test_execute_with_context_ids(self):
         """Test execute with co-accessed memories."""
-        from ww.hooks.memory import HebbianUpdateHook
+        from t4dm.hooks.memory import HebbianUpdateHook
         hook = HebbianUpdateHook()
         ctx = HookContext(
             phase=HookPhase.ON,
@@ -448,7 +448,7 @@ class TestHebbianUpdateHook:
     @pytest.mark.asyncio
     async def test_execute_with_empty_context_ids(self):
         """Test execute with empty context_ids list."""
-        from ww.hooks.memory import HebbianUpdateHook
+        from t4dm.hooks.memory import HebbianUpdateHook
         hook = HebbianUpdateHook()
         ctx = HookContext(
             phase=HookPhase.ON,

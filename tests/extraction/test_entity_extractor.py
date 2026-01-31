@@ -11,7 +11,7 @@ import pytest
 import pytest_asyncio
 from unittest.mock import AsyncMock, MagicMock, patch
 
-from ww.extraction.entity_extractor import (
+from t4dm.extraction.entity_extractor import (
     ExtractedEntity,
     RegexEntityExtractor,
     LLMEntityExtractor,

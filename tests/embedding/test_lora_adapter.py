@@ -12,7 +12,7 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-from ww.embedding.lora_adapter import (
+from t4dm.embedding.lora_adapter import (
     LoRAConfig,
     LoRAEmbeddingAdapter,
     LoRAState,

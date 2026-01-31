@@ -8,7 +8,7 @@ to enhance memory retrieval scoring.
 import numpy as np
 import pytest
 
-from ww.bridges.capsule_bridge import (
+from t4dm.bridges.capsule_bridge import (
     CapsuleBridgeConfig,
     CapsuleBridgeState,
     CapsuleRepresentation,
@@ -318,7 +318,7 @@ class TestCapsuleIntegration:
     def test_with_real_capsule_layer(self):
         """Test integration with actual CapsuleLayer (if available)."""
         try:
-            from ww.nca.capsules import CapsuleLayer, CapsuleConfig
+            from t4dm.nca.capsules import CapsuleLayer, CapsuleConfig
 
             # Create real capsule layer
             caps_config = CapsuleConfig(

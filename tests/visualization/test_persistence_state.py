@@ -10,7 +10,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from unittest.mock import patch, MagicMock
 
-from ww.visualization.persistence_state import (
+from t4dm.visualization.persistence_state import (
     WALSegmentInfo,
     CheckpointInfo,
     PersistenceMetrics,
@@ -460,7 +460,7 @@ class TestPlotCheckpointHistory:
             visualizer.record_checkpoint(checkpoint)
         return visualizer
 
-    @patch("ww.visualization.persistence_state.logger")
+    @patch("t4dm.visualization.persistence_state.logger")
     def test_checkpoint_history_empty(self, mock_logger):
         """Test checkpoint history with empty data."""
         visualizer = PersistenceVisualizer()

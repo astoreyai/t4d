@@ -3,7 +3,7 @@ import pytest
 import numpy as np
 from uuid import uuid4
 
-from ww.learning.dopamine import (
+from t4dm.learning.dopamine import (
     LearnedValueEstimator,
     DopamineSystem,
     RewardPredictionError,

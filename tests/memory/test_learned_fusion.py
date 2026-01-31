@@ -5,7 +5,7 @@ import numpy as np
 from unittest.mock import MagicMock
 from dataclasses import dataclass
 
-from ww.memory.episodic import LearnedFusionWeights, LearnedReranker
+from t4dm.memory.episodic import LearnedFusionWeights, LearnedReranker
 
 
 class TestLearnedFusionWeights:

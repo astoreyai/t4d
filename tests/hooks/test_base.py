@@ -4,7 +4,7 @@ import pytest
 from datetime import datetime, timedelta
 from unittest.mock import AsyncMock, MagicMock
 
-from ww.hooks.base import (
+from t4dm.hooks.base import (
     Hook,
     HookContext,
     HookError,

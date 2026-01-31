@@ -13,8 +13,8 @@ import torch.nn as nn
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[3] / "src"))
 
-from ww.storage.t4dx.engine import T4DXEngine
-from ww.storage.t4dx.types import EdgeRecord, ItemRecord
+from t4dm.storage.t4dx.engine import T4DXEngine
+from t4dm.storage.t4dx.types import EdgeRecord, ItemRecord
 
 
 def make_item(

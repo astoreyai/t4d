@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from ww.storage.t4dx.wal import OpType, WAL
+from t4dm.storage.t4dx.wal import OpType, WAL
 
 
 class TestWAL:

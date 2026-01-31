@@ -10,7 +10,7 @@ import signal
 import pytest
 from unittest.mock import AsyncMock, MagicMock, patch
 
-from ww.persistence.shutdown import (
+from t4dm.persistence.shutdown import (
     ShutdownPhase,
     ShutdownConfig,
     ShutdownManager,

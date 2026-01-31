@@ -5,8 +5,8 @@ Unit tests for sparse encoder implementation.
 import pytest
 import torch
 
-from ww.encoding.sparse import SparseEncoder, kwta, AdaptiveSparseEncoder
-from ww.encoding.utils import compute_sparsity
+from t4dm.encoding.sparse import SparseEncoder, kwta, AdaptiveSparseEncoder
+from t4dm.encoding.utils import compute_sparsity
 
 
 class TestKWTA:

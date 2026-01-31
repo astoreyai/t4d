@@ -8,7 +8,7 @@ import pytest
 import torch
 from uuid import uuid4
 
-from ww.learning.scorer import (
+from t4dm.learning.scorer import (
     LearnedRetrievalScorer,
     PrioritizedReplayBuffer,
     ReplayItem,
@@ -18,7 +18,7 @@ from ww.learning.scorer import (
     create_scorer,
     create_trainer,
 )
-from ww.learning.events import MemoryType, Experience
+from t4dm.learning.events import MemoryType, Experience
 
 
 class TestLearnedRetrievalScorer:

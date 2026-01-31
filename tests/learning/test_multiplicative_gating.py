@@ -4,7 +4,7 @@ import pytest
 import numpy as np
 from uuid import uuid4
 
-from ww.learning.neuromodulators import (
+from t4dm.learning.neuromodulators import (
     LearningParams,
     NeuromodulatorOrchestra,
 )
@@ -227,19 +227,19 @@ class TestNeuromodulatorIntegratedReconsolidation:
 
     def test_import(self):
         """Can import NeuromodulatorIntegratedReconsolidation."""
-        from ww.learning.reconsolidation import NeuromodulatorIntegratedReconsolidation
+        from t4dm.learning.reconsolidation import NeuromodulatorIntegratedReconsolidation
         assert NeuromodulatorIntegratedReconsolidation is not None
 
     def test_creation(self):
         """Can create NeuromodulatorIntegratedReconsolidation."""
-        from ww.learning.reconsolidation import NeuromodulatorIntegratedReconsolidation
+        from t4dm.learning.reconsolidation import NeuromodulatorIntegratedReconsolidation
         recon = NeuromodulatorIntegratedReconsolidation()
         assert recon.orchestra is not None
         assert recon.reconsolidation is not None
 
     def test_update_with_orchestra(self):
         """Update uses orchestra for learning params."""
-        from ww.learning.reconsolidation import NeuromodulatorIntegratedReconsolidation
+        from t4dm.learning.reconsolidation import NeuromodulatorIntegratedReconsolidation
 
         recon = NeuromodulatorIntegratedReconsolidation()
 

@@ -10,7 +10,7 @@ from unittest.mock import MagicMock, AsyncMock, patch
 from datetime import datetime
 import json
 
-from ww.api.websocket import (
+from t4dm.api.websocket import (
     EventType,
     WebSocketEvent,
     ConnectionManager,

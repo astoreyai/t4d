@@ -14,7 +14,7 @@ Tests cover:
 import numpy as np
 import pytest
 
-from ww.nca.neural_field import (
+from t4dm.nca.neural_field import (
     NeuralFieldConfig,
     NeuralFieldSolver,
     NeurotransmitterState,
@@ -504,7 +504,7 @@ class TestIntegrationWithCoupling:
 
     def test_coupling_integration(self):
         """Test that coupling modulates NT dynamics."""
-        from ww.nca.coupling import LearnableCoupling
+        from t4dm.nca.coupling import LearnableCoupling
 
         coupling = LearnableCoupling()
 
@@ -534,7 +534,7 @@ class TestIntegrationWithAttractors:
 
     def test_attractor_integration(self):
         """Test that attractor forces pull state toward basin."""
-        from ww.nca.attractors import StateTransitionManager
+        from t4dm.nca.attractors import StateTransitionManager
 
         attractor_manager = StateTransitionManager()
 

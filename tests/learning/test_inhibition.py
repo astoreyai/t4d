@@ -4,7 +4,7 @@ import pytest
 import numpy as np
 from datetime import datetime
 
-from ww.learning.inhibition import (
+from t4dm.learning.inhibition import (
     InhibitionResult,
     InhibitoryNetwork,
     SparseRetrieval,

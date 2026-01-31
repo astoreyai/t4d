@@ -6,8 +6,8 @@ import numpy as np
 import pytest
 
 from tests.unit.storage.conftest import make_item
-from ww.storage.t4dx.engine import T4DXEngine
-from ww.storage.t4dx.vector_adapter import T4DXVectorStore
+from t4dm.storage.t4dx.engine import T4DXEngine
+from t4dm.storage.t4dx.vector_adapter import T4DXVectorStore
 
 
 @pytest.fixture

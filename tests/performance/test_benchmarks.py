@@ -93,11 +93,11 @@ async def test_create_1000_episodes(
     - Neo4j graph node creation
     - Overall throughput
     """
-    from ww.memory.episodic import EpisodicMemory
+    from t4dm.memory.episodic import EpisodicMemory
 
-    with patch("ww.memory.episodic.get_embedding_provider", return_value=mock_embedding_provider):
-        with patch("ww.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
-            with patch("ww.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
+    with patch("t4dm.memory.episodic.get_embedding_provider", return_value=mock_embedding_provider):
+        with patch("t4dm.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
+            with patch("t4dm.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
                 episodic = EpisodicMemory(test_session_id)
                 await episodic.initialize()
 
@@ -143,12 +143,12 @@ async def test_recall_from_10000_episodes(
     - Post-filtering and scoring
     - Result ranking performance
     """
-    from ww.memory.episodic import EpisodicMemory
+    from t4dm.memory.episodic import EpisodicMemory
     from uuid import UUID
 
-    with patch("ww.memory.episodic.get_embedding_provider", return_value=mock_embedding_provider):
-        with patch("ww.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
-            with patch("ww.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
+    with patch("t4dm.memory.episodic.get_embedding_provider", return_value=mock_embedding_provider):
+        with patch("t4dm.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
+            with patch("t4dm.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
                 episodic = EpisodicMemory(test_session_id)
                 await episodic.initialize()
 
@@ -214,12 +214,12 @@ async def test_consolidate_1000_episodes(
     - Graph node creation performance
     """
     from uuid import UUID
-    from ww.consolidation.service import ConsolidationService
-    from ww.memory.episodic import EpisodicMemory
+    from t4dm.consolidation.service import ConsolidationService
+    from t4dm.memory.episodic import EpisodicMemory
 
-    with patch("ww.memory.episodic.get_embedding_provider", return_value=mock_embedding_provider):
-        with patch("ww.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
-            with patch("ww.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
+    with patch("t4dm.memory.episodic.get_embedding_provider", return_value=mock_embedding_provider):
+        with patch("t4dm.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
+            with patch("t4dm.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
                 # Setup mock to simulate 1000 episodes
                 episodic = EpisodicMemory(test_session_id)
                 await episodic.initialize()
@@ -285,11 +285,11 @@ async def test_100_concurrent_operations(
     - 30 recalls
     - 20 semantic queries
     """
-    from ww.memory.episodic import EpisodicMemory
+    from t4dm.memory.episodic import EpisodicMemory
 
-    with patch("ww.memory.episodic.get_embedding_provider", return_value=mock_embedding_provider):
-        with patch("ww.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
-            with patch("ww.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
+    with patch("t4dm.memory.episodic.get_embedding_provider", return_value=mock_embedding_provider):
+        with patch("t4dm.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
+            with patch("t4dm.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
                 episodic = EpisodicMemory(test_session_id)
                 await episodic.initialize()
 
@@ -433,7 +433,7 @@ async def test_embedding_generation_performance(
     - Batch embeddings: embed_documents()
     - Vector dimension handling (1024-dim BGE-M3)
     """
-    from ww.embedding.bge_m3 import get_embedding_provider
+    from t4dm.embedding.bge_m3 import get_embedding_provider
 
     start = time.time()
 
@@ -477,12 +477,12 @@ async def test_vector_search_performance(
     - Filtering overhead
     - Result ranking
     """
-    from ww.memory.episodic import EpisodicMemory
+    from t4dm.memory.episodic import EpisodicMemory
     from uuid import UUID
 
-    with patch("ww.memory.episodic.get_embedding_provider", return_value=mock_embedding_provider):
-        with patch("ww.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
-            with patch("ww.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
+    with patch("t4dm.memory.episodic.get_embedding_provider", return_value=mock_embedding_provider):
+        with patch("t4dm.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
+            with patch("t4dm.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
                 episodic = EpisodicMemory(test_session_id)
                 await episodic.initialize()
 

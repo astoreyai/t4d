@@ -12,7 +12,7 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[3] / "src"))
 
-from ww.storage.t4dx.types import EdgeRecord, ItemRecord
+from t4dm.storage.t4dx.types import EdgeRecord, ItemRecord
 
 
 def make_item(

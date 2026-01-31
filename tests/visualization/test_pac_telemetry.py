@@ -17,7 +17,7 @@ from datetime import datetime
 from dataclasses import dataclass
 from unittest.mock import MagicMock, patch
 
-from ww.visualization.pac_telemetry import PACTelemetry, PACSnapshot
+from t4dm.visualization.pac_telemetry import PACTelemetry, PACSnapshot
 
 
 # =============================================================================

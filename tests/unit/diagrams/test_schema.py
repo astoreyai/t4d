@@ -1,6 +1,6 @@
 """Tests for the unified graph schema."""
 
-from ww.diagrams.schema import (
+from t4dm.diagrams.schema import (
     DiagramType,
     EdgeType,
     GraphEdge,

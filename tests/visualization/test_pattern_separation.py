@@ -4,7 +4,7 @@ import pytest
 import numpy as np
 from unittest.mock import patch, MagicMock
 
-from ww.visualization.pattern_separation import (
+from t4dm.visualization.pattern_separation import (
     PatternSeparationVisualizer,
     plot_separation_comparison,
     plot_sparsity_distribution,

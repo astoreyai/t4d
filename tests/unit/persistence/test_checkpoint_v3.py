@@ -5,16 +5,16 @@ import torch
 import torch.nn as nn
 from pathlib import Path
 
-from ww.persistence.checkpoint import CheckpointConfig
-from ww.persistence.checkpoint_v3 import (
+from t4dm.persistence.checkpoint import CheckpointConfig
+from t4dm.persistence.checkpoint_v3 import (
     CheckpointManagerV3,
     CheckpointV3Config,
     SpikingCheckpointable,
     T4DXCheckpointable,
 )
-from ww.spiking.cortical_stack import CorticalStack
-from ww.storage.t4dx.engine import T4DXEngine
-from ww.storage.t4dx.types import EdgeRecord, ItemRecord
+from t4dm.spiking.cortical_stack import CorticalStack
+from t4dm.storage.t4dx.engine import T4DXEngine
+from t4dm.storage.t4dx.types import EdgeRecord, ItemRecord
 
 import numpy as np
 import time

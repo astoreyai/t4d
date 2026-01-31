@@ -4,9 +4,9 @@ import asyncio
 
 import pytest
 
-from ww.consolidation.background_service import BackgroundConsolidationService
-from ww.consolidation.sleep_scheduler import SleepSchedulerConfig, SleepTrigger
-from ww.consolidation.sleep_cycle_v2 import SleepCycleV2Config
+from t4dm.consolidation.background_service import BackgroundConsolidationService
+from t4dm.consolidation.sleep_scheduler import SleepSchedulerConfig, SleepTrigger
+from t4dm.consolidation.sleep_cycle_v2 import SleepCycleV2Config
 from tests.unit.consolidation.conftest import make_item
 
 

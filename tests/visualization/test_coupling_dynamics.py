@@ -14,7 +14,7 @@ import numpy as np
 import pytest
 from datetime import datetime
 
-from ww.visualization.coupling_dynamics import (
+from t4dm.visualization.coupling_dynamics import (
     CouplingDynamicsVisualizer,
     CouplingSnapshot,
     LearningEvent,
@@ -577,7 +577,7 @@ class TestWithCoupling:
 
     def test_with_learnable_coupling(self):
         """Test with LearnableCoupling instance."""
-        from ww.nca.coupling import LearnableCoupling
+        from t4dm.nca.coupling import LearnableCoupling
 
         coupling = LearnableCoupling()
         viz = CouplingDynamicsVisualizer(coupling=coupling)
@@ -590,7 +590,7 @@ class TestWithCoupling:
 
     def test_bounds_violation_detection(self):
         """Test bounds violation detection with coupling."""
-        from ww.nca.coupling import LearnableCoupling
+        from t4dm.nca.coupling import LearnableCoupling
 
         coupling = LearnableCoupling()
         viz = CouplingDynamicsVisualizer(coupling=coupling)
@@ -603,7 +603,7 @@ class TestWithCoupling:
 
     def test_eligibility_from_coupling(self):
         """Test eligibility trace from coupling."""
-        from ww.nca.coupling import LearnableCoupling
+        from t4dm.nca.coupling import LearnableCoupling
 
         coupling = LearnableCoupling()
         viz = CouplingDynamicsVisualizer(coupling=coupling)
@@ -620,7 +620,7 @@ class TestWithCoupling:
 
     def test_get_k_bounds_from_coupling(self):
         """Test getting bounds from coupling."""
-        from ww.nca.coupling import LearnableCoupling
+        from t4dm.nca.coupling import LearnableCoupling
 
         coupling = LearnableCoupling()
         viz = CouplingDynamicsVisualizer(coupling=coupling)
@@ -647,8 +647,8 @@ class TestIntegration:
 
     def test_full_integration(self):
         """Test with full NCA integration."""
-        from ww.nca.coupling import LearnableCoupling
-        from ww.nca.energy import EnergyLandscape
+        from t4dm.nca.coupling import LearnableCoupling
+        from t4dm.nca.energy import EnergyLandscape
 
         coupling = LearnableCoupling()
         viz = CouplingDynamicsVisualizer(coupling=coupling)
@@ -672,7 +672,7 @@ class TestIntegration:
 
     def test_learning_with_rpe(self):
         """Test learning with RPE updates."""
-        from ww.nca.coupling import LearnableCoupling
+        from t4dm.nca.coupling import LearnableCoupling
 
         coupling = LearnableCoupling()
         viz = CouplingDynamicsVisualizer(coupling=coupling)
@@ -713,7 +713,7 @@ class TestPlotCouplingHeatmap:
 
     def test_plot_coupling_heatmap(self, populated_visualizer):
         """Test coupling heatmap plotting."""
-        from ww.visualization.coupling_dynamics import plot_coupling_heatmap
+        from t4dm.visualization.coupling_dynamics import plot_coupling_heatmap
         try:
             import matplotlib
             matplotlib.use("Agg")
@@ -727,7 +727,7 @@ class TestPlotCouplingHeatmap:
 
     def test_plot_coupling_heatmap_with_bounds(self, populated_visualizer):
         """Test heatmap with bounds indicators."""
-        from ww.visualization.coupling_dynamics import plot_coupling_heatmap
+        from t4dm.visualization.coupling_dynamics import plot_coupling_heatmap
         try:
             import matplotlib
             matplotlib.use("Agg")
@@ -741,7 +741,7 @@ class TestPlotCouplingHeatmap:
 
     def test_plot_coupling_heatmap_with_values(self, populated_visualizer):
         """Test heatmap with value annotations."""
-        from ww.visualization.coupling_dynamics import plot_coupling_heatmap
+        from t4dm.visualization.coupling_dynamics import plot_coupling_heatmap
         try:
             import matplotlib
             matplotlib.use("Agg")
@@ -755,7 +755,7 @@ class TestPlotCouplingHeatmap:
 
     def test_plot_coupling_heatmap_empty(self):
         """Test heatmap with no data."""
-        from ww.visualization.coupling_dynamics import plot_coupling_heatmap
+        from t4dm.visualization.coupling_dynamics import plot_coupling_heatmap
         try:
             import matplotlib
             matplotlib.use("Agg")
@@ -775,7 +775,7 @@ class TestPlotEligibilityHeatmap:
     @pytest.fixture
     def visualizer_with_coupling(self):
         """Create visualizer with LearnableCoupling."""
-        from ww.nca.coupling import LearnableCoupling
+        from t4dm.nca.coupling import LearnableCoupling
 
         coupling = LearnableCoupling()
         viz = CouplingDynamicsVisualizer(coupling=coupling)
@@ -790,7 +790,7 @@ class TestPlotEligibilityHeatmap:
 
     def test_plot_eligibility_heatmap(self, visualizer_with_coupling):
         """Test eligibility heatmap plotting."""
-        from ww.visualization.coupling_dynamics import plot_eligibility_heatmap
+        from t4dm.visualization.coupling_dynamics import plot_eligibility_heatmap
         try:
             import matplotlib
             matplotlib.use("Agg")
@@ -804,7 +804,7 @@ class TestPlotEligibilityHeatmap:
 
     def test_plot_eligibility_heatmap_no_coupling(self):
         """Test eligibility heatmap without coupling."""
-        from ww.visualization.coupling_dynamics import plot_eligibility_heatmap
+        from t4dm.visualization.coupling_dynamics import plot_eligibility_heatmap
         try:
             import matplotlib
             matplotlib.use("Agg")
@@ -832,7 +832,7 @@ class TestPlotSpectralRadiusTimeline:
 
     def test_plot_spectral_radius_timeline(self, populated_visualizer):
         """Test spectral radius timeline plotting."""
-        from ww.visualization.coupling_dynamics import plot_spectral_radius_timeline
+        from t4dm.visualization.coupling_dynamics import plot_spectral_radius_timeline
         try:
             import matplotlib
             matplotlib.use("Agg")
@@ -846,7 +846,7 @@ class TestPlotSpectralRadiusTimeline:
 
     def test_plot_spectral_radius_with_threshold(self, populated_visualizer):
         """Test spectral radius timeline with threshold line."""
-        from ww.visualization.coupling_dynamics import plot_spectral_radius_timeline
+        from t4dm.visualization.coupling_dynamics import plot_spectral_radius_timeline
         try:
             import matplotlib
             matplotlib.use("Agg")
@@ -860,7 +860,7 @@ class TestPlotSpectralRadiusTimeline:
 
     def test_plot_spectral_radius_empty(self):
         """Test spectral radius timeline with no data."""
-        from ww.visualization.coupling_dynamics import plot_spectral_radius_timeline
+        from t4dm.visualization.coupling_dynamics import plot_spectral_radius_timeline
         try:
             import matplotlib
             matplotlib.use("Agg")
@@ -890,7 +890,7 @@ class TestPlotEIBalanceTimeline:
 
     def test_plot_ei_balance_timeline(self, populated_visualizer):
         """Test E/I balance timeline plotting."""
-        from ww.visualization.coupling_dynamics import plot_ei_balance_timeline
+        from t4dm.visualization.coupling_dynamics import plot_ei_balance_timeline
         try:
             import matplotlib
             matplotlib.use("Agg")
@@ -904,7 +904,7 @@ class TestPlotEIBalanceTimeline:
 
     def test_plot_ei_balance_empty(self):
         """Test E/I balance timeline with no data."""
-        from ww.visualization.coupling_dynamics import plot_ei_balance_timeline
+        from t4dm.visualization.coupling_dynamics import plot_ei_balance_timeline
         try:
             import matplotlib
             matplotlib.use("Agg")
@@ -931,7 +931,7 @@ class TestPlotEigenvalueSpectrum:
 
     def test_plot_eigenvalue_spectrum(self, populated_visualizer):
         """Test eigenvalue spectrum plotting."""
-        from ww.visualization.coupling_dynamics import plot_eigenvalue_spectrum
+        from t4dm.visualization.coupling_dynamics import plot_eigenvalue_spectrum
         try:
             import matplotlib
             matplotlib.use("Agg")
@@ -945,7 +945,7 @@ class TestPlotEigenvalueSpectrum:
 
     def test_plot_eigenvalue_spectrum_empty(self):
         """Test eigenvalue spectrum with no data."""
-        from ww.visualization.coupling_dynamics import plot_eigenvalue_spectrum
+        from t4dm.visualization.coupling_dynamics import plot_eigenvalue_spectrum
         try:
             import matplotlib
             matplotlib.use("Agg")
@@ -965,7 +965,7 @@ class TestCreateCouplingDashboard:
     @pytest.fixture
     def populated_visualizer(self):
         """Create visualizer with comprehensive data."""
-        from ww.nca.coupling import LearnableCoupling
+        from t4dm.nca.coupling import LearnableCoupling
 
         coupling = LearnableCoupling()
         viz = CouplingDynamicsVisualizer(coupling=coupling)
@@ -981,7 +981,7 @@ class TestCreateCouplingDashboard:
 
     def test_create_coupling_dashboard(self, populated_visualizer):
         """Test full dashboard creation."""
-        from ww.visualization.coupling_dynamics import create_coupling_dashboard
+        from t4dm.visualization.coupling_dynamics import create_coupling_dashboard
         try:
             import matplotlib
             matplotlib.use("Agg")
@@ -995,7 +995,7 @@ class TestCreateCouplingDashboard:
 
     def test_create_coupling_dashboard_custom_size(self, populated_visualizer):
         """Test dashboard with custom figure size."""
-        from ww.visualization.coupling_dynamics import create_coupling_dashboard
+        from t4dm.visualization.coupling_dynamics import create_coupling_dashboard
         try:
             import matplotlib
             matplotlib.use("Agg")
@@ -1009,7 +1009,7 @@ class TestCreateCouplingDashboard:
 
     def test_create_coupling_dashboard_with_alerts(self):
         """Test dashboard with active alerts."""
-        from ww.visualization.coupling_dynamics import create_coupling_dashboard
+        from t4dm.visualization.coupling_dynamics import create_coupling_dashboard
         try:
             import matplotlib
             matplotlib.use("Agg")
@@ -1033,7 +1033,7 @@ class TestCouplingDynamicsEdgeCases:
 
     def test_single_sample(self):
         """Test with single sample."""
-        from ww.visualization.coupling_dynamics import (
+        from t4dm.visualization.coupling_dynamics import (
             plot_coupling_heatmap,
             plot_spectral_radius_timeline,
             create_coupling_dashboard,
@@ -1063,7 +1063,7 @@ class TestCouplingDynamicsEdgeCases:
 
     def test_extreme_eigenvalues(self):
         """Test with extreme eigenvalues."""
-        from ww.visualization.coupling_dynamics import plot_eigenvalue_spectrum
+        from t4dm.visualization.coupling_dynamics import plot_eigenvalue_spectrum
         try:
             import matplotlib
             matplotlib.use("Agg")
@@ -1082,7 +1082,7 @@ class TestCouplingDynamicsEdgeCases:
 
     def test_diagonal_matrix(self):
         """Test with diagonal coupling matrix."""
-        from ww.visualization.coupling_dynamics import (
+        from t4dm.visualization.coupling_dynamics import (
             plot_coupling_heatmap,
             plot_eigenvalue_spectrum,
         )
@@ -1107,7 +1107,7 @@ class TestCouplingDynamicsEdgeCases:
 
     def test_zero_matrix(self):
         """Test with zero coupling matrix."""
-        from ww.visualization.coupling_dynamics import create_coupling_dashboard
+        from t4dm.visualization.coupling_dynamics import create_coupling_dashboard
         try:
             import matplotlib
             matplotlib.use("Agg")
@@ -1125,7 +1125,7 @@ class TestCouplingDynamicsEdgeCases:
 
     def test_constant_spectral_radius(self):
         """Test timeline with constant spectral radius."""
-        from ww.visualization.coupling_dynamics import plot_spectral_radius_timeline
+        from t4dm.visualization.coupling_dynamics import plot_spectral_radius_timeline
         try:
             import matplotlib
             matplotlib.use("Agg")
@@ -1144,7 +1144,7 @@ class TestCouplingDynamicsEdgeCases:
 
     def test_all_negative_ei_balance(self):
         """Test with strongly inhibitory E/I balance."""
-        from ww.visualization.coupling_dynamics import plot_ei_balance_timeline
+        from t4dm.visualization.coupling_dynamics import plot_ei_balance_timeline
         try:
             import matplotlib
             matplotlib.use("Agg")

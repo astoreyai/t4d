@@ -13,16 +13,16 @@ import numpy as np
 import pytest
 from uuid import uuid4
 
-from ww.nca.dopamine_integration import (
+from t4dm.nca.dopamine_integration import (
     DopamineIntegration,
     DopamineIntegrationConfig,
     IntegratedDAState,
     create_dopamine_integration,
 )
-from ww.nca.vta import VTACircuit, VTAConfig
-from ww.nca.neural_field import NeuralFieldSolver, NeuralFieldConfig
-from ww.nca.coupling import LearnableCoupling
-from ww.learning.dopamine import DopamineSystem
+from t4dm.nca.vta import VTACircuit, VTAConfig
+from t4dm.nca.neural_field import NeuralFieldSolver, NeuralFieldConfig
+from t4dm.nca.coupling import LearnableCoupling
+from t4dm.learning.dopamine import DopamineSystem
 
 
 # =============================================================================

@@ -3,7 +3,7 @@
 import pytest
 
 from tests.unit.consolidation.conftest import make_item
-from ww.consolidation.prune_phase import PruneConfig, PrunePhase
+from t4dm.consolidation.prune_phase import PruneConfig, PrunePhase
 
 
 class TestPrunePhase:

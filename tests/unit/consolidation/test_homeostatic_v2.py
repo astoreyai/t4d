@@ -3,8 +3,8 @@
 import pytest
 
 from tests.unit.consolidation.conftest import make_item
-from ww.consolidation.homeostatic_v2 import HomeostaticScalingV2, HomeostaticV2Config
-from ww.storage.t4dx.types import EdgeRecord
+from t4dm.consolidation.homeostatic_v2 import HomeostaticScalingV2, HomeostaticV2Config
+from t4dm.storage.t4dx.types import EdgeRecord
 
 
 class TestHomeostaticV2:

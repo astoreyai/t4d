@@ -18,14 +18,14 @@ References:
 import numpy as np
 import pytest
 
-from ww.nca.forward_forward import (
+from t4dm.nca.forward_forward import (
     ForwardForwardConfig,
     ForwardForwardLayer,
     ForwardForwardNetwork,
     create_ff_layer,
     create_ff_network,
 )
-from ww.nca.spatial_cells import (
+from t4dm.nca.spatial_cells import (
     SpatialCellSystem,
     SpatialConfig,
     GridModule,

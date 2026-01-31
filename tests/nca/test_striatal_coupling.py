@@ -12,12 +12,12 @@ Validates:
 import numpy as np
 import pytest
 
-from ww.nca.striatal_coupling import (
+from t4dm.nca.striatal_coupling import (
     DAACHCoupling,
     DAACHCouplingConfig,
     DAACHState,
 )
-from ww.nca.neural_field import (
+from t4dm.nca.neural_field import (
     NeuralFieldSolver,
     NeuralFieldConfig,
     NeurotransmitterType,

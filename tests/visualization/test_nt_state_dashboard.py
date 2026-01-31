@@ -15,7 +15,7 @@ import numpy as np
 import pytest
 from datetime import datetime
 
-from ww.visualization.nt_state_dashboard import (
+from t4dm.visualization.nt_state_dashboard import (
     NTStateDashboard,
     NTSnapshot,
     NTStatistics,
@@ -572,7 +572,7 @@ class TestWithNeurotransmitterState:
 
     def test_record_from_nt_state(self):
         """Test recording from NeurotransmitterState object."""
-        from ww.nca.neural_field import NeurotransmitterState
+        from t4dm.nca.neural_field import NeurotransmitterState
 
         dashboard = NTStateDashboard()
         nt_state = NeurotransmitterState(
@@ -592,7 +592,7 @@ class TestWithNeurotransmitterState:
 
     def test_record_from_nt_state_with_firing_rates(self):
         """Test recording from NeurotransmitterState with firing rates."""
-        from ww.nca.neural_field import NeurotransmitterState
+        from t4dm.nca.neural_field import NeurotransmitterState
 
         dashboard = NTStateDashboard()
         nt_state = NeurotransmitterState()
@@ -690,7 +690,7 @@ class TestPlotNTChannels:
 
     def test_plot_nt_channels(self, populated_dashboard):
         """Test NT channels plotting."""
-        from ww.visualization.nt_state_dashboard import plot_nt_channels
+        from t4dm.visualization.nt_state_dashboard import plot_nt_channels
         try:
             import matplotlib
             matplotlib.use("Agg")
@@ -704,7 +704,7 @@ class TestPlotNTChannels:
 
     def test_plot_nt_channels_with_setpoints(self, populated_dashboard):
         """Test NT channels with setpoint lines."""
-        from ww.visualization.nt_state_dashboard import plot_nt_channels
+        from t4dm.visualization.nt_state_dashboard import plot_nt_channels
         try:
             import matplotlib
             matplotlib.use("Agg")
@@ -718,7 +718,7 @@ class TestPlotNTChannels:
 
     def test_plot_nt_channels_empty(self):
         """Test NT channels with no data."""
-        from ww.visualization.nt_state_dashboard import plot_nt_channels
+        from t4dm.visualization.nt_state_dashboard import plot_nt_channels
         try:
             import matplotlib
             matplotlib.use("Agg")
@@ -754,7 +754,7 @@ class TestPlotDeviationHeatmap:
 
     def test_plot_deviation_heatmap(self, populated_dashboard):
         """Test deviation heatmap plotting."""
-        from ww.visualization.nt_state_dashboard import plot_deviation_heatmap
+        from t4dm.visualization.nt_state_dashboard import plot_deviation_heatmap
         try:
             import matplotlib
             matplotlib.use("Agg")
@@ -768,7 +768,7 @@ class TestPlotDeviationHeatmap:
 
     def test_plot_deviation_heatmap_with_window(self, populated_dashboard):
         """Test deviation heatmap with window."""
-        from ww.visualization.nt_state_dashboard import plot_deviation_heatmap
+        from t4dm.visualization.nt_state_dashboard import plot_deviation_heatmap
         try:
             import matplotlib
             matplotlib.use("Agg")
@@ -782,7 +782,7 @@ class TestPlotDeviationHeatmap:
 
     def test_plot_deviation_heatmap_empty(self):
         """Test deviation heatmap with no data."""
-        from ww.visualization.nt_state_dashboard import plot_deviation_heatmap
+        from t4dm.visualization.nt_state_dashboard import plot_deviation_heatmap
         try:
             import matplotlib
             matplotlib.use("Agg")
@@ -809,7 +809,7 @@ class TestPlotSaturationCurves:
 
     def test_plot_saturation_curves(self, populated_dashboard):
         """Test saturation curves plotting."""
-        from ww.visualization.nt_state_dashboard import plot_saturation_curves
+        from t4dm.visualization.nt_state_dashboard import plot_saturation_curves
         try:
             import matplotlib
             matplotlib.use("Agg")
@@ -823,7 +823,7 @@ class TestPlotSaturationCurves:
 
     def test_plot_saturation_curves_show_current(self, populated_dashboard):
         """Test saturation curves with current marker."""
-        from ww.visualization.nt_state_dashboard import plot_saturation_curves
+        from t4dm.visualization.nt_state_dashboard import plot_saturation_curves
         try:
             import matplotlib
             matplotlib.use("Agg")
@@ -837,7 +837,7 @@ class TestPlotSaturationCurves:
 
     def test_plot_saturation_curves_no_current(self, populated_dashboard):
         """Test saturation curves without current marker."""
-        from ww.visualization.nt_state_dashboard import plot_saturation_curves
+        from t4dm.visualization.nt_state_dashboard import plot_saturation_curves
         try:
             import matplotlib
             matplotlib.use("Agg")
@@ -865,7 +865,7 @@ class TestPlotCorrelationMatrix:
 
     def test_plot_correlation_matrix(self, populated_dashboard):
         """Test correlation matrix plotting."""
-        from ww.visualization.nt_state_dashboard import plot_correlation_matrix
+        from t4dm.visualization.nt_state_dashboard import plot_correlation_matrix
         try:
             import matplotlib
             matplotlib.use("Agg")
@@ -900,7 +900,7 @@ class TestPlotAutocorrelation:
 
     def test_plot_autocorrelation(self, populated_dashboard):
         """Test autocorrelation plotting."""
-        from ww.visualization.nt_state_dashboard import plot_autocorrelation
+        from t4dm.visualization.nt_state_dashboard import plot_autocorrelation
         try:
             import matplotlib
             matplotlib.use("Agg")
@@ -934,7 +934,7 @@ class TestPlotOpponentProcesses:
 
     def test_plot_opponent_processes(self, populated_dashboard):
         """Test opponent processes plotting."""
-        from ww.visualization.nt_state_dashboard import plot_opponent_processes
+        from t4dm.visualization.nt_state_dashboard import plot_opponent_processes
         try:
             import matplotlib
             matplotlib.use("Agg")
@@ -948,7 +948,7 @@ class TestPlotOpponentProcesses:
 
     def test_plot_opponent_processes_empty(self):
         """Test opponent processes with no data."""
-        from ww.visualization.nt_state_dashboard import plot_opponent_processes
+        from t4dm.visualization.nt_state_dashboard import plot_opponent_processes
         try:
             import matplotlib
             matplotlib.use("Agg")
@@ -984,7 +984,7 @@ class TestCreateNTDashboard:
 
     def test_create_nt_dashboard(self, populated_dashboard):
         """Test full dashboard creation."""
-        from ww.visualization.nt_state_dashboard import create_nt_dashboard
+        from t4dm.visualization.nt_state_dashboard import create_nt_dashboard
         try:
             import matplotlib
             matplotlib.use("Agg")
@@ -998,7 +998,7 @@ class TestCreateNTDashboard:
 
     def test_create_nt_dashboard_custom_size(self, populated_dashboard):
         """Test dashboard with custom figure size."""
-        from ww.visualization.nt_state_dashboard import create_nt_dashboard
+        from t4dm.visualization.nt_state_dashboard import create_nt_dashboard
         try:
             import matplotlib
             matplotlib.use("Agg")
@@ -1012,7 +1012,7 @@ class TestCreateNTDashboard:
 
     def test_create_nt_dashboard_with_alerts(self):
         """Test dashboard with active alerts."""
-        from ww.visualization.nt_state_dashboard import create_nt_dashboard
+        from t4dm.visualization.nt_state_dashboard import create_nt_dashboard
         try:
             import matplotlib
             matplotlib.use("Agg")
@@ -1037,7 +1037,7 @@ class TestNTDashboardEdgeCases:
 
     def test_single_sample(self):
         """Test with single sample."""
-        from ww.visualization.nt_state_dashboard import (
+        from t4dm.visualization.nt_state_dashboard import (
             plot_nt_channels,
             plot_deviation_heatmap,
             create_nt_dashboard,
@@ -1066,7 +1066,7 @@ class TestNTDashboardEdgeCases:
 
     def test_extreme_values(self):
         """Test with extreme NT values."""
-        from ww.visualization.nt_state_dashboard import create_nt_dashboard
+        from t4dm.visualization.nt_state_dashboard import create_nt_dashboard
         try:
             import matplotlib
             matplotlib.use("Agg")
@@ -1085,7 +1085,7 @@ class TestNTDashboardEdgeCases:
 
     def test_constant_values(self):
         """Test with constant NT values."""
-        from ww.visualization.nt_state_dashboard import (
+        from t4dm.visualization.nt_state_dashboard import (
             plot_correlation_matrix,
             plot_autocorrelation,
         )
@@ -1121,7 +1121,7 @@ class TestNTDashboardEdgeCases:
 
     def test_all_plots_with_firing_rates(self):
         """Test plots with firing rate data."""
-        from ww.visualization.nt_state_dashboard import create_nt_dashboard
+        from t4dm.visualization.nt_state_dashboard import create_nt_dashboard
         try:
             import matplotlib
             matplotlib.use("Agg")

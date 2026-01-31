@@ -14,7 +14,7 @@ import numpy as np
 import pytest
 from datetime import datetime
 
-from ww.visualization.energy_landscape import (
+from t4dm.visualization.energy_landscape import (
     EnergyLandscapeVisualizer,
     EnergySnapshot,
     TrajectoryPoint,
@@ -337,7 +337,7 @@ class TestWithCoupling:
 
     def test_energy_from_coupling(self):
         """Test energy computation using coupling matrix."""
-        from ww.nca.coupling import LearnableCoupling
+        from t4dm.nca.coupling import LearnableCoupling
 
         coupling = LearnableCoupling()
         viz = EnergyLandscapeVisualizer(coupling=coupling)
@@ -351,7 +351,7 @@ class TestWithCoupling:
 
     def test_gradient_with_coupling(self):
         """Test gradient computation with coupling."""
-        from ww.nca.coupling import LearnableCoupling
+        from t4dm.nca.coupling import LearnableCoupling
 
         coupling = LearnableCoupling()
         viz = EnergyLandscapeVisualizer(coupling=coupling, grid_resolution=10)
@@ -371,7 +371,7 @@ class TestWithAttractors:
 
     def test_with_state_manager(self):
         """Test with full state manager."""
-        from ww.nca.attractors import AttractorBasin, CognitiveState, StateTransitionManager
+        from t4dm.nca.attractors import AttractorBasin, CognitiveState, StateTransitionManager
 
         # Create state manager with default attractors
         manager = StateTransitionManager()
@@ -387,7 +387,7 @@ class TestWithAttractors:
 
     def test_attractor_positions(self):
         """Test attractor position retrieval."""
-        from ww.nca.attractors import StateTransitionManager
+        from t4dm.nca.attractors import StateTransitionManager
 
         manager = StateTransitionManager()
         viz = EnergyLandscapeVisualizer(state_manager=manager)
@@ -407,7 +407,7 @@ class TestWithAttractors:
 
     def test_basin_classification(self):
         """Test basin classification with attractors."""
-        from ww.nca.attractors import StateTransitionManager
+        from t4dm.nca.attractors import StateTransitionManager
 
         manager = StateTransitionManager()
         viz = EnergyLandscapeVisualizer(state_manager=manager)
@@ -424,7 +424,7 @@ class TestWithAttractors:
 
     def test_basin_occupancy(self):
         """Test basin occupancy computation."""
-        from ww.nca.attractors import StateTransitionManager
+        from t4dm.nca.attractors import StateTransitionManager
 
         manager = StateTransitionManager()
         viz = EnergyLandscapeVisualizer(state_manager=manager)
@@ -448,9 +448,9 @@ class TestIntegrationWithEnergyLandscape:
 
     def test_full_integration(self):
         """Test with full energy landscape integration."""
-        from ww.nca.coupling import LearnableCoupling
-        from ww.nca.attractors import StateTransitionManager
-        from ww.nca.energy import EnergyLandscape
+        from t4dm.nca.coupling import LearnableCoupling
+        from t4dm.nca.attractors import StateTransitionManager
+        from t4dm.nca.energy import EnergyLandscape
 
         coupling = LearnableCoupling()
         manager = StateTransitionManager()

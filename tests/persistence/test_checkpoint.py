@@ -9,7 +9,7 @@ from pathlib import Path
 from dataclasses import dataclass
 from typing import Any
 
-from ww.persistence.checkpoint import (
+from t4dm.persistence.checkpoint import (
     CheckpointManager,
     CheckpointConfig,
     Checkpoint,

@@ -5,7 +5,7 @@ import numpy as np
 from datetime import datetime
 from unittest.mock import AsyncMock, MagicMock
 
-from ww.memory.pattern_separation import (
+from t4dm.memory.pattern_separation import (
     SeparationResult,
     DentateGyrus,
     PatternCompletion,

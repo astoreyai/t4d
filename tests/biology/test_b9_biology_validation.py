@@ -103,7 +103,7 @@ class TestVTADopamineParameters:
     def test_tonic_firing_rate_in_biological_range(self):
         """VTA tonic firing should be 1-8 Hz (Schultz 1998)."""
         try:
-            from ww.nca.vta import VTA
+            from t4dm.nca.vta import VTA
             vta = VTA()
         except ImportError:
             pytest.skip("VTA class not available with expected interface")
@@ -117,7 +117,7 @@ class TestVTADopamineParameters:
     def test_burst_peak_rate_in_biological_range(self):
         """VTA burst peak should be 15-30 Hz (Grace & Bunney 1984)."""
         try:
-            from ww.nca.vta import VTA
+            from t4dm.nca.vta import VTA
             vta = VTA()
         except ImportError:
             pytest.skip("VTA class not available with expected interface")
@@ -131,7 +131,7 @@ class TestVTADopamineParameters:
     def test_discount_factor_in_td_range(self):
         """Discount gamma should be 0.9-0.99 for TD learning."""
         try:
-            from ww.nca.vta import VTA
+            from t4dm.nca.vta import VTA
             vta = VTA()
         except ImportError:
             pytest.skip("VTA class not available with expected interface")
@@ -145,7 +145,7 @@ class TestVTADopamineParameters:
     def test_positive_rpe_produces_burst(self):
         """Positive RPE should trigger phasic burst."""
         try:
-            from ww.nca.vta import VTA
+            from t4dm.nca.vta import VTA
             vta = VTA()
         except ImportError:
             pytest.skip("VTA class not available with expected interface")
@@ -173,7 +173,7 @@ class TestVTADopamineParameters:
     def test_negative_rpe_produces_pause(self):
         """Negative RPE should trigger pause/dip."""
         try:
-            from ww.nca.vta import VTA
+            from t4dm.nca.vta import VTA
             vta = VTA()
         except ImportError:
             pytest.skip("VTA class not available with expected interface")
@@ -205,7 +205,7 @@ class TestRapheSerotoninParameters:
 
     def test_baseline_firing_rate(self):
         """Raphe baseline should be 1-3 Hz (Jacobs & Azmitia 1992)."""
-        from ww.nca.raphe import RapheNucleus
+        from t4dm.nca.raphe import RapheNucleus
 
         raphe = RapheNucleus()
         rate = getattr(raphe, 'baseline_rate', None)
@@ -219,7 +219,7 @@ class TestRapheSerotoninParameters:
 
     def test_serotonin_responds_to_setpoint_deviation(self):
         """5-HT should respond to homeostatic setpoint deviations."""
-        from ww.nca.raphe import RapheNucleus
+        from t4dm.nca.raphe import RapheNucleus
 
         raphe = RapheNucleus()
 
@@ -234,7 +234,7 @@ class TestLocusCoeruleusParameters:
 
     def test_tonic_rate_in_range(self):
         """LC tonic should be 2-5 Hz (Aston-Jones 2005)."""
-        from ww.nca.locus_coeruleus import LocusCoeruleus
+        from t4dm.nca.locus_coeruleus import LocusCoeruleus
 
         lc = LocusCoeruleus()
         rate = getattr(lc, 'tonic_optimal_rate', None)
@@ -248,7 +248,7 @@ class TestLocusCoeruleusParameters:
 
     def test_phasic_burst_rate(self):
         """LC phasic burst should reach 10-20 Hz."""
-        from ww.nca.locus_coeruleus import LocusCoeruleus
+        from t4dm.nca.locus_coeruleus import LocusCoeruleus
 
         lc = LocusCoeruleus()
         rate = getattr(lc, 'phasic_peak_rate', None)
@@ -262,7 +262,7 @@ class TestLocusCoeruleusParameters:
 
     def test_arousal_modulates_ne(self):
         """Arousal level should modulate NE release."""
-        from ww.nca.locus_coeruleus import LocusCoeruleus
+        from t4dm.nca.locus_coeruleus import LocusCoeruleus
 
         lc = LocusCoeruleus()
 
@@ -316,7 +316,7 @@ class TestHippocampalParameters:
     def test_dg_sparsity_in_range(self):
         """DG sparsity should be 0.5-5% (Jung & McNaughton 1993)."""
         try:
-            from ww.nca.hippocampus import HippocampalCircuit, HippocampalConfig
+            from t4dm.nca.hippocampus import HippocampalCircuit, HippocampalConfig
             config = HippocampalConfig(ec_dim=64)  # Use small dim for tests
             hpc = HippocampalCircuit(config)
         except ImportError:
@@ -330,7 +330,7 @@ class TestHippocampalParameters:
     def test_dg_pattern_separation(self):
         """DG should perform pattern separation - similar inputs, sparse different outputs."""
         try:
-            from ww.nca.hippocampus import HippocampalCircuit, HippocampalConfig
+            from t4dm.nca.hippocampus import HippocampalCircuit, HippocampalConfig
             config = HippocampalConfig(ec_dim=64, dg_dim=256, ca3_dim=64, ca1_dim=64)
             hpc = HippocampalCircuit(config)
         except ImportError:
@@ -363,7 +363,7 @@ class TestHippocampalParameters:
     def test_ca3_pattern_completion(self):
         """CA3 should perform pattern completion - store then retrieve with partial cue."""
         try:
-            from ww.nca.hippocampus import HippocampalCircuit, HippocampalConfig
+            from t4dm.nca.hippocampus import HippocampalCircuit, HippocampalConfig
             config = HippocampalConfig(ec_dim=64, dg_dim=256, ca3_dim=64, ca1_dim=64)
             hpc = HippocampalCircuit(config)
         except ImportError:
@@ -393,7 +393,7 @@ class TestHippocampalParameters:
     def test_ca1_novelty_detection(self):
         """CA1 should detect mismatches between expectation and input."""
         try:
-            from ww.nca.hippocampus import HippocampalCircuit, HippocampalConfig
+            from t4dm.nca.hippocampus import HippocampalCircuit, HippocampalConfig
             config = HippocampalConfig(ec_dim=64, dg_dim=256, ca3_dim=64, ca1_dim=64)
             hpc = HippocampalCircuit(config)
         except ImportError:
@@ -436,7 +436,7 @@ class TestStriatalParameters:
 
     def test_d2_higher_affinity_than_d1(self):
         """D2 receptors should have higher DA affinity than D1."""
-        from ww.nca.striatal_msn import StriatalMSN
+        from t4dm.nca.striatal_msn import StriatalMSN
 
         msn = StriatalMSN()
         d1_aff = getattr(msn, 'd1_affinity', None)
@@ -452,7 +452,7 @@ class TestStriatalParameters:
 
     def test_go_nogo_balance(self):
         """D1 (Go) and D2 (NoGo) pathways should balance at baseline DA."""
-        from ww.nca.striatal_msn import StriatalMSN
+        from t4dm.nca.striatal_msn import StriatalMSN
 
         msn = StriatalMSN()
 
@@ -467,7 +467,7 @@ class TestStriatalParameters:
 
     def test_high_da_favors_go(self):
         """High DA should favor Go pathway (D1 activation)."""
-        from ww.nca.striatal_msn import StriatalMSN
+        from t4dm.nca.striatal_msn import StriatalMSN
 
         msn = StriatalMSN()
 
@@ -488,7 +488,7 @@ class TestOscillationFrequencies:
 
     def test_theta_frequency_range(self):
         """Theta should be 4-8 Hz."""
-        from ww.nca.oscillators import OscillatorBank
+        from t4dm.nca.oscillators import OscillatorBank
 
         osc = OscillatorBank()
         theta_freq = getattr(osc, 'theta_freq', None) or \
@@ -500,7 +500,7 @@ class TestOscillationFrequencies:
 
     def test_gamma_frequency_range(self):
         """Gamma should be 30-100 Hz."""
-        from ww.nca.oscillators import OscillatorBank
+        from t4dm.nca.oscillators import OscillatorBank
 
         osc = OscillatorBank()
         gamma_freq = getattr(osc, 'gamma_freq', None) or \
@@ -512,7 +512,7 @@ class TestOscillationFrequencies:
 
     def test_ripple_frequency_range(self):
         """Ripples should be 140-250 Hz."""
-        from ww.nca.oscillators import OscillatorBank
+        from t4dm.nca.oscillators import OscillatorBank
 
         osc = OscillatorBank()
         ripple_freq = getattr(osc, 'ripple_freq', None) or \
@@ -524,7 +524,7 @@ class TestOscillationFrequencies:
 
     def test_theta_gamma_coupling(self):
         """Gamma should modulate with theta phase."""
-        from ww.nca.oscillators import OscillatorBank
+        from t4dm.nca.oscillators import OscillatorBank
 
         osc = OscillatorBank()
 
@@ -543,7 +543,7 @@ class TestSWRCoupling:
 
     def test_ripple_duration(self):
         """Ripples should last 50-200 ms."""
-        from ww.nca.swr_coupling import SWRCoupling
+        from t4dm.nca.swr_coupling import SWRCoupling
 
         swr = SWRCoupling()
         duration = getattr(swr, 'ripple_duration', None)
@@ -559,7 +559,7 @@ class TestSWRCoupling:
 
     def test_ach_blocks_swr(self):
         """High ACh should block SWR (waking state)."""
-        from ww.nca.swr_coupling import SWRCoupling
+        from t4dm.nca.swr_coupling import SWRCoupling
 
         swr = SWRCoupling()
 
@@ -575,7 +575,7 @@ class TestSWRCoupling:
 
     def test_replay_compression(self):
         """Replay should compress time by 5-20x."""
-        from ww.nca.swr_coupling import SWRCoupling
+        from t4dm.nca.swr_coupling import SWRCoupling
 
         swr = SWRCoupling()
         compression = getattr(swr, 'replay_compression', None)
@@ -591,7 +591,7 @@ class TestAstrocyteParameters:
 
     def test_glutamate_clearance(self):
         """Astrocytes should clear synaptic glutamate quickly."""
-        from ww.nca.astrocyte import AstrocyteNetwork
+        from t4dm.nca.astrocyte import AstrocyteNetwork
 
         astro = AstrocyteNetwork()
         clearance = getattr(astro, 'eaat2_vmax', None)
@@ -604,7 +604,7 @@ class TestAstrocyteParameters:
 
     def test_calcium_wave_timing(self):
         """Astrocyte Ca2+ waves should be on seconds timescale."""
-        from ww.nca.astrocyte import AstrocyteNetwork
+        from t4dm.nca.astrocyte import AstrocyteNetwork
 
         astro = AstrocyteNetwork()
         rise = getattr(astro, 'ca_rise_rate', None)
@@ -627,7 +627,7 @@ class TestGlutamateSignaling:
 
     def test_nr2b_higher_affinity_than_nr2a(self):
         """NR2B should have higher glutamate affinity than NR2A."""
-        from ww.nca.glutamate_signaling import GlutamateSignaling
+        from t4dm.nca.glutamate_signaling import GlutamateSignaling
 
         glu = GlutamateSignaling()
         nr2a_ec50 = getattr(glu, 'nr2a_ec50', None)
@@ -643,7 +643,7 @@ class TestGlutamateSignaling:
 
     def test_ltp_ltd_thresholds(self):
         """LTP threshold should differ from LTD threshold."""
-        from ww.nca.glutamate_signaling import GlutamateSignaling
+        from t4dm.nca.glutamate_signaling import GlutamateSignaling
 
         glu = GlutamateSignaling()
         ltp_thresh = getattr(glu, 'ltp_threshold', None)
@@ -663,7 +663,7 @@ class TestSTDPBiologicalConstraints:
 
     def test_tau_plus_in_range(self):
         """tau_plus should be 15-20ms (Bi & Poo 1998)."""
-        from ww.learning.stdp import STDPConfig
+        from t4dm.learning.stdp import STDPConfig
 
         config = STDPConfig()
         tau_plus_ms = config.tau_plus * 1000  # Convert s to ms
@@ -673,7 +673,7 @@ class TestSTDPBiologicalConstraints:
 
     def test_tau_minus_in_range(self):
         """tau_minus should be 25-40ms (Bi & Poo 1998, Morrison 2008)."""
-        from ww.learning.stdp import STDPConfig
+        from t4dm.learning.stdp import STDPConfig
 
         config = STDPConfig()
         tau_minus_ms = config.tau_minus * 1000  # Convert s to ms
@@ -683,7 +683,7 @@ class TestSTDPBiologicalConstraints:
 
     def test_asymmetric_time_constants(self):
         """tau_minus should be ~2x tau_plus for stability (Morrison 2008)."""
-        from ww.learning.stdp import STDPConfig
+        from t4dm.learning.stdp import STDPConfig
 
         config = STDPConfig()
         ratio = config.tau_minus / config.tau_plus
@@ -694,7 +694,7 @@ class TestSTDPBiologicalConstraints:
 
     def test_ltd_slightly_stronger(self):
         """A_minus should be slightly larger than A_plus for homeostasis."""
-        from ww.learning.stdp import STDPConfig
+        from t4dm.learning.stdp import STDPConfig
 
         config = STDPConfig()
         ratio = config.a_minus / config.a_plus
@@ -705,7 +705,7 @@ class TestSTDPBiologicalConstraints:
 
     def test_spike_window_reasonable(self):
         """STDP window should be 50-200ms (Markram et al. 1997)."""
-        from ww.learning.stdp import STDPConfig
+        from t4dm.learning.stdp import STDPConfig
 
         config = STDPConfig()
 
@@ -714,7 +714,7 @@ class TestSTDPBiologicalConstraints:
 
     def test_stdp_learning_produces_correct_signs(self):
         """Pre-before-post should strengthen, post-before-pre should weaken."""
-        from ww.learning.stdp import STDPLearner
+        from t4dm.learning.stdp import STDPLearner
 
         learner = STDPLearner()
 
@@ -732,7 +732,7 @@ class TestAdenosineSleepPressure:
 
     def test_accumulation_over_wake(self):
         """Adenosine should accumulate during waking."""
-        from ww.nca.adenosine import AdenosineSystem
+        from t4dm.nca.adenosine import AdenosineSystem
 
         ado = AdenosineSystem()
         rate = getattr(ado, 'accumulation_rate', None)
@@ -745,7 +745,7 @@ class TestAdenosineSleepPressure:
 
     def test_sleep_onset_threshold(self):
         """Sleep should onset at high adenosine."""
-        from ww.nca.adenosine import AdenosineSystem
+        from t4dm.nca.adenosine import AdenosineSystem
 
         ado = AdenosineSystem()
         threshold = getattr(ado, 'sleep_onset_threshold', None)
@@ -757,7 +757,7 @@ class TestAdenosineSleepPressure:
 
     def test_caffeine_blocks_adenosine(self):
         """Caffeine should block adenosine receptors."""
-        from ww.nca.adenosine import AdenosineSystem
+        from t4dm.nca.adenosine import AdenosineSystem
 
         ado = AdenosineSystem()
 
@@ -777,9 +777,9 @@ class TestCrossModuleTimingConsistency:
 
     def test_neuromodulator_timescales(self):
         """All neuromodulators should be on 100-500ms timescale."""
-        from ww.nca.vta import VTACircuit
-        from ww.nca.raphe import RapheNucleus
-        from ww.nca.locus_coeruleus import LocusCoeruleus
+        from t4dm.nca.vta import VTACircuit
+        from t4dm.nca.raphe import RapheNucleus
+        from t4dm.nca.locus_coeruleus import LocusCoeruleus
 
         vta = VTACircuit()
         raphe = RapheNucleus()
@@ -796,7 +796,7 @@ class TestCrossModuleTimingConsistency:
 
     def test_hippocampal_faster_than_neocortex(self):
         """Hippocampal learning should be faster than neocortical."""
-        from ww.nca.hippocampus import HippocampalSystem
+        from t4dm.nca.hippocampus import HippocampalSystem
 
         hpc = HippocampalSystem()
         hpc_lr = getattr(hpc, 'learning_rate', None)
@@ -811,7 +811,7 @@ class TestCrossModuleTimingConsistency:
 
     def test_swr_timing_matches_sleep(self):
         """SWR should occur during sleep-like low ACh/NE states."""
-        from ww.nca.swr_coupling import SWRCoupling
+        from t4dm.nca.swr_coupling import SWRCoupling
 
         swr = SWRCoupling()
         ach_threshold = getattr(swr, 'ach_block_threshold', None)
@@ -828,7 +828,7 @@ class TestGlymphaticBiologicalConstraints:
 
     def test_clearance_higher_in_sleep(self):
         """Glymphatic clearance should be higher during sleep."""
-        from ww.nca.glymphatic import GlymphaticSystem
+        from t4dm.nca.glymphatic import GlymphaticSystem
 
         gly = GlymphaticSystem()
 
@@ -841,7 +841,7 @@ class TestGlymphaticBiologicalConstraints:
 
     def test_nrem_deep_highest_clearance(self):
         """NREM deep sleep should have highest clearance."""
-        from ww.nca.glymphatic import GlymphaticSystem
+        from t4dm.nca.glymphatic import GlymphaticSystem
 
         gly = GlymphaticSystem()
 
@@ -861,7 +861,7 @@ class TestCapsuleBiologicalConstraints:
 
     def test_routing_temperature_range(self):
         """Capsule routing temperature should be modulated by DA."""
-        from ww.nca.capsules import CapsuleNetwork, CapsuleConfig
+        from t4dm.nca.capsules import CapsuleNetwork, CapsuleConfig
 
         # Create minimal network for testing
         try:
@@ -882,7 +882,7 @@ class TestCapsuleBiologicalConstraints:
 
     def test_squash_threshold_range(self):
         """Capsule squash threshold should be 0.3-0.7."""
-        from ww.nca.capsules import CapsuleNetwork, CapsuleConfig
+        from t4dm.nca.capsules import CapsuleNetwork, CapsuleConfig
 
         # Create minimal network for testing
         try:
@@ -907,7 +907,7 @@ class TestForwardForwardBiologicalConstraints:
 
     def test_goodness_threshold_range(self):
         """FF goodness threshold should be positive."""
-        from ww.nca.forward_forward import ForwardForwardLayer, ForwardForwardConfig
+        from t4dm.nca.forward_forward import ForwardForwardLayer, ForwardForwardConfig
 
         config = ForwardForwardConfig(input_dim=64, hidden_dim=32)
         ff = ForwardForwardLayer(config=config)
@@ -921,7 +921,7 @@ class TestForwardForwardBiologicalConstraints:
 
     def test_energy_decreases_for_good_data(self):
         """Energy should decrease for positive examples."""
-        from ww.nca.forward_forward import ForwardForwardLayer, ForwardForwardConfig
+        from t4dm.nca.forward_forward import ForwardForwardLayer, ForwardForwardConfig
 
         config = ForwardForwardConfig(input_dim=64, hidden_dim=32)
         ff = ForwardForwardLayer(config=config)
@@ -945,7 +945,7 @@ class TestNCAEnergyLandscape:
 
     def test_attractor_stability(self):
         """Energy should be lower at attractor basins."""
-        from ww.nca.energy import EnergyLandscape
+        from t4dm.nca.energy import EnergyLandscape
 
         energy = EnergyLandscape()
 
@@ -969,7 +969,7 @@ class TestNCAEnergyLandscape:
 
     def test_energy_gradient_toward_attractor(self):
         """Energy gradient should point toward nearest attractor."""
-        from ww.nca.energy import EnergyLandscape
+        from t4dm.nca.energy import EnergyLandscape
 
         energy = EnergyLandscape()
 

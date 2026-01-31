@@ -8,7 +8,7 @@ import threading
 import numpy as np
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-from ww.learning.eligibility import (
+from t4dm.learning.eligibility import (
     EligibilityTrace,
     LayeredEligibilityTrace,
     MAX_TRACES,

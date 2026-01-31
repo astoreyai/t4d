@@ -2,7 +2,7 @@
 
 import pytest
 
-from ww.qwen.rank_search import (
+from t4dm.qwen.rank_search import (
     RankSearchConfig,
     estimate_lora_params,
     estimate_vram_mb,

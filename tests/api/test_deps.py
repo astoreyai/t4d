@@ -12,19 +12,19 @@ class TestGetSessionId:
     @pytest.mark.asyncio
     async def test_returns_header_session(self):
         """Returns session ID from header when valid."""
-        from ww.api.deps import get_session_id
+        from t4dm.api.deps import get_session_id
 
-        with patch("ww.api.deps.validate_session_id", return_value="valid-session"):
+        with patch("t4dm.api.deps.validate_session_id", return_value="valid-session"):
             result = await get_session_id("my-session")
             assert result == "valid-session"
 
     @pytest.mark.asyncio
     async def test_returns_default_when_none(self):
         """Returns default session when header is None."""
-        from ww.api.deps import get_session_id
+        from t4dm.api.deps import get_session_id
 
-        with patch("ww.api.deps.validate_session_id", return_value=None):
-            with patch("ww.api.deps.get_settings") as mock_settings:
+        with patch("t4dm.api.deps.validate_session_id", return_value=None):
+            with patch("t4dm.api.deps.get_settings") as mock_settings:
                 mock_settings.return_value.session_id = "default-session"
                 result = await get_session_id(None)
                 assert result == "default-session"
@@ -32,11 +32,11 @@ class TestGetSessionId:
     @pytest.mark.asyncio
     async def test_raises_on_invalid_session(self):
         """Raises HTTPException for invalid session."""
-        from ww.api.deps import get_session_id
-        from ww.core.validation import SessionValidationError
+        from t4dm.api.deps import get_session_id
+        from t4dm.core.validation import SessionValidationError
 
         with patch(
-            "ww.api.deps.validate_session_id",
+            "t4dm.api.deps.validate_session_id",
             side_effect=SessionValidationError("session_id", "Invalid session"),
         ):
             with pytest.raises(HTTPException) as exc:
@@ -46,7 +46,7 @@ class TestGetSessionId:
     @pytest.mark.asyncio
     async def test_rejects_reserved_session_ids(self):
         """P2-SEC-M2: Reserved session IDs are rejected for security."""
-        from ww.api.deps import get_session_id
+        from t4dm.api.deps import get_session_id
 
         # Reserved IDs like "admin", "system", "root" should be rejected
         reserved_ids = ["admin", "system", "root", "default", "test"]
@@ -63,19 +63,19 @@ class TestRateLimiter:
     @pytest.mark.asyncio
     async def test_allows_under_limit(self):
         """Allows requests under rate limit."""
-        from ww.api.deps import check_rate_limit, _rate_limiter
+        from t4dm.api.deps import check_rate_limit, _rate_limiter
 
         # Clear any existing state
         _rate_limiter.requests.clear()
 
-        with patch("ww.api.deps.get_session_id", return_value="test-session"):
+        with patch("t4dm.api.deps.get_session_id", return_value="test-session"):
             result = await check_rate_limit("test-session")
             assert result == "test-session"
 
     @pytest.mark.asyncio
     async def test_blocks_over_limit(self):
         """Blocks requests over rate limit."""
-        from ww.api.deps import check_rate_limit, _rate_limiter
+        from t4dm.api.deps import check_rate_limit, _rate_limiter
 
         # Simulate hitting rate limit
         session = "rate-limited-session"
@@ -100,7 +100,7 @@ class TestUUIDValidation:
     def test_parse_uuid_valid(self):
         """Valid UUID string is parsed correctly."""
         from uuid import UUID
-        from ww.api.deps import parse_uuid
+        from t4dm.api.deps import parse_uuid
 
         valid_uuid = "12345678-1234-5678-1234-567812345678"
         result = parse_uuid(valid_uuid, "test_id")
@@ -110,7 +110,7 @@ class TestUUIDValidation:
 
     def test_parse_uuid_invalid_format(self):
         """Invalid UUID format raises 400 HTTPException."""
-        from ww.api.deps import parse_uuid
+        from t4dm.api.deps import parse_uuid
 
         with pytest.raises(HTTPException) as exc:
             parse_uuid("not-a-valid-uuid", "test_id")
@@ -121,7 +121,7 @@ class TestUUIDValidation:
 
     def test_parse_uuid_empty_string(self):
         """Empty string raises 400 HTTPException."""
-        from ww.api.deps import parse_uuid
+        from t4dm.api.deps import parse_uuid
 
         with pytest.raises(HTTPException) as exc:
             parse_uuid("", "test_id")
@@ -131,7 +131,7 @@ class TestUUIDValidation:
 
     def test_parse_uuid_malformed(self):
         """Malformed UUID raises 400 HTTPException."""
-        from ww.api.deps import parse_uuid
+        from t4dm.api.deps import parse_uuid
 
         # Too short
         with pytest.raises(HTTPException) as exc:
@@ -146,7 +146,7 @@ class TestUUIDValidation:
     def test_validate_uuid_path(self):
         """validate_uuid_path works as dependency."""
         from uuid import UUID
-        from ww.api.deps import validate_uuid_path
+        from t4dm.api.deps import validate_uuid_path
 
         valid_uuid = "12345678-1234-5678-1234-567812345678"
         result = validate_uuid_path(valid_uuid)
@@ -155,7 +155,7 @@ class TestUUIDValidation:
 
     def test_validate_uuid_path_invalid(self):
         """validate_uuid_path raises 400 for invalid input."""
-        from ww.api.deps import validate_uuid_path
+        from t4dm.api.deps import validate_uuid_path
 
         with pytest.raises(HTTPException) as exc:
             validate_uuid_path("bad-uuid")
@@ -169,14 +169,14 @@ class TestMemoryServices:
     @pytest.mark.asyncio
     async def test_returns_services(self):
         """Returns initialized services."""
-        from ww.api.deps import get_memory_services
+        from t4dm.api.deps import get_memory_services
 
         mock_episodic = MagicMock()
         mock_semantic = MagicMock()
         mock_procedural = MagicMock()
 
         with patch(
-            "ww.api.deps.get_services",
+            "t4dm.api.deps.get_services",
             new=AsyncMock(
                 return_value=(mock_episodic, mock_semantic, mock_procedural)
             ),
@@ -191,10 +191,10 @@ class TestMemoryServices:
     @pytest.mark.asyncio
     async def test_raises_on_service_error(self):
         """Raises 503 when services unavailable."""
-        from ww.api.deps import get_memory_services
+        from t4dm.api.deps import get_memory_services
 
         with patch(
-            "ww.api.deps.get_services",
+            "t4dm.api.deps.get_services",
             new=AsyncMock(side_effect=Exception("Connection failed")),
         ):
             with pytest.raises(HTTPException) as exc:

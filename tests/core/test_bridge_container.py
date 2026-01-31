@@ -8,16 +8,16 @@ bridges are available after init, and cleanup works properly.
 import pytest
 from unittest.mock import AsyncMock, patch, MagicMock
 
-from ww.core.bridge_container import (
+from t4dm.core.bridge_container import (
     BridgeContainer,
     BridgeContainerConfig,
     clear_bridge_containers,
     get_bridge_container,
 )
-from ww.core.services import cleanup_services, get_services, reset_services
-from ww.learning.dopamine import DopamineSystem
-from ww.nca.capsules import CapsuleConfig, CapsuleLayer
-from ww.nca.forward_forward import ForwardForwardConfig, ForwardForwardLayer
+from t4dm.core.services import cleanup_services, get_services, reset_services
+from t4dm.learning.dopamine import DopamineSystem
+from t4dm.nca.capsules import CapsuleConfig, CapsuleLayer
+from t4dm.nca.forward_forward import ForwardForwardConfig, ForwardForwardLayer
 
 
 @pytest.fixture(autouse=True)
@@ -31,10 +31,10 @@ def cleanup():
 @pytest.fixture
 def mock_storage():
     """Mock storage backends to avoid connection issues."""
-    with patch("ww.storage.qdrant_store.QdrantStore") as mock_qdrant, \
-         patch("ww.storage.neo4j_store.Neo4jStore") as mock_neo4j, \
-         patch("ww.storage.qdrant_store.close_qdrant_store", new=AsyncMock()), \
-         patch("ww.storage.neo4j_store.close_neo4j_store", new=AsyncMock()):
+    with patch("t4dm.storage.qdrant_store.QdrantStore") as mock_qdrant, \
+         patch("t4dm.storage.neo4j_store.Neo4jStore") as mock_neo4j, \
+         patch("t4dm.storage.qdrant_store.close_qdrant_store", new=AsyncMock()), \
+         patch("t4dm.storage.neo4j_store.close_neo4j_store", new=AsyncMock()):
         # Mock Qdrant
         qdrant_instance = MagicMock()
         qdrant_instance.initialize = AsyncMock()

@@ -4,7 +4,7 @@ import pytest
 from datetime import datetime
 from uuid import uuid4
 
-from ww.sdk.models import (
+from t4dm.sdk.models import (
     Episode,
     Entity,
     Skill,

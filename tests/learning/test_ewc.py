@@ -56,7 +56,7 @@ def simple_dataloader():
 @pytest.fixture
 def ewc_regularizer():
     """Create an EWC regularizer with default settings."""
-    from ww.learning.plasticity import EWCRegularizer
+    from t4dm.learning.plasticity import EWCRegularizer
     return EWCRegularizer(
         lambda_ewc=100.0,  # Lower for testing
         fisher_n_samples=20,
@@ -75,7 +75,7 @@ class TestEWCInitialization:
 
     def test_default_initialization(self):
         """Test EWC initializes with defaults."""
-        from ww.learning.plasticity import EWCRegularizer
+        from t4dm.learning.plasticity import EWCRegularizer
         ewc = EWCRegularizer()
 
         assert ewc.lambda_ewc == 1000.0
@@ -87,7 +87,7 @@ class TestEWCInitialization:
 
     def test_custom_initialization(self):
         """Test EWC with custom parameters."""
-        from ww.learning.plasticity import EWCRegularizer
+        from t4dm.learning.plasticity import EWCRegularizer
         ewc = EWCRegularizer(
             lambda_ewc=500.0,
             fisher_n_samples=100,
@@ -102,7 +102,7 @@ class TestEWCInitialization:
 
     def test_stats_initialized(self):
         """Test stats are initialized."""
-        from ww.learning.plasticity import EWCRegularizer
+        from t4dm.learning.plasticity import EWCRegularizer
         ewc = EWCRegularizer()
 
         stats = ewc.get_stats()
@@ -255,7 +255,7 @@ class TestEWCPenalty:
 
     def test_penalty_scales_with_lambda(self, simple_model, simple_dataloader):
         """Test penalty scales with lambda_ewc."""
-        from ww.learning.plasticity import EWCRegularizer
+        from t4dm.learning.plasticity import EWCRegularizer
 
         ewc_low = EWCRegularizer(lambda_ewc=100.0, fisher_n_samples=20)
         ewc_high = EWCRegularizer(lambda_ewc=1000.0, fisher_n_samples=20)
@@ -399,7 +399,7 @@ class TestSaveLoad:
             ewc_regularizer.save(path)
 
             # Create new EWC and load
-            from ww.learning.plasticity import EWCRegularizer
+            from t4dm.learning.plasticity import EWCRegularizer
             ewc_new = EWCRegularizer()
             ewc_new.load(path)
 
@@ -460,7 +460,7 @@ class TestCreateEWCRegularizer:
 
     def test_create_with_defaults(self):
         """Test factory with defaults."""
-        from ww.learning.plasticity import create_ewc_regularizer
+        from t4dm.learning.plasticity import create_ewc_regularizer
         ewc = create_ewc_regularizer()
 
         assert ewc.lambda_ewc == 1000.0
@@ -469,7 +469,7 @@ class TestCreateEWCRegularizer:
 
     def test_create_with_custom_params(self):
         """Test factory with custom parameters."""
-        from ww.learning.plasticity import create_ewc_regularizer
+        from t4dm.learning.plasticity import create_ewc_regularizer
         ewc = create_ewc_regularizer(
             lambda_ewc=500.0,
             online=False,
@@ -491,7 +491,7 @@ class TestLoRAIntegration:
 
     def test_lora_ewc_config(self):
         """Test LoRA config includes EWC settings."""
-        from ww.embedding.lora_adapter import LoRAConfig
+        from t4dm.embedding.lora_adapter import LoRAConfig
 
         config = LoRAConfig(
             ewc_enabled=True,
@@ -507,7 +507,7 @@ class TestLoRAIntegration:
 
     def test_lora_stats_include_ewc(self):
         """Test LoRA adapter stats include EWC when enabled."""
-        from ww.embedding.lora_adapter import LoRAEmbeddingAdapter, LoRAConfig
+        from t4dm.embedding.lora_adapter import LoRAEmbeddingAdapter, LoRAConfig
 
         config = LoRAConfig(ewc_enabled=True, ewc_lambda=100.0)
         adapter = LoRAEmbeddingAdapter(config=config, device="cpu")
@@ -527,7 +527,7 @@ class TestScorerIntegration:
 
     def test_scorer_ewc_config(self):
         """Test ScorerTrainer config includes EWC settings."""
-        from ww.learning.scorer import TrainerConfig
+        from t4dm.learning.scorer import TrainerConfig
 
         config = TrainerConfig(
             ewc_enabled=True,

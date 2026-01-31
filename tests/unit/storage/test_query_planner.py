@@ -4,10 +4,10 @@ import numpy as np
 import pytest
 
 from tests.unit.storage.conftest import make_item
-from ww.storage.t4dx.global_index import GlobalIndex
-from ww.storage.t4dx.memtable import MemTable
-from ww.storage.t4dx.query_planner import QueryPlanner
-from ww.storage.t4dx.segment import SegmentBuilder, SegmentReader
+from t4dm.storage.t4dx.global_index import GlobalIndex
+from t4dm.storage.t4dx.memtable import MemTable
+from t4dm.storage.t4dx.query_planner import QueryPlanner
+from t4dm.storage.t4dx.segment import SegmentBuilder, SegmentReader
 
 
 class TestQueryPlanner:

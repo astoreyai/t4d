@@ -48,7 +48,7 @@ def pytest_configure(config):
 def reset_circuit_breakers():
     """Reset circuit breakers before each test to ensure test isolation."""
     # Import here to avoid circular imports
-    from ww.storage.resilience import _circuit_breakers
+    from t4dm.storage.resilience import _circuit_breakers
 
     # Clear all circuit breakers before each test
     _circuit_breakers.clear()
@@ -69,7 +69,7 @@ def auto_patch_settings(monkeypatch, request):
     2. Test mode enabled to bypass external connections (unit tests only)
     3. Consistent configuration across all unit tests
     """
-    from ww.core.config import get_settings
+    from t4dm.core.config import get_settings
 
     # Check if this is an integration test BEFORE clearing caches
     markers = [m.name for m in request.node.iter_markers()]
@@ -83,20 +83,20 @@ def auto_patch_settings(monkeypatch, request):
     # For unit tests, clear everything to ensure isolation
     if not is_integration:
         try:
-            from ww.core.services import reset_services
+            from t4dm.core.services import reset_services
             reset_services()
         except ImportError:
             pass
 
         # Also clear storage instance caches to prevent test pollution
         try:
-            from ww.storage.neo4j_store import _neo4j_instances
+            from t4dm.storage.neo4j_store import _neo4j_instances
             _neo4j_instances.clear()
         except ImportError:
             pass
 
         try:
-            from ww.storage.qdrant_store import _qdrant_instances
+            from t4dm.storage.qdrant_store import _qdrant_instances
             _qdrant_instances.clear()
         except ImportError:
             pass
@@ -108,10 +108,10 @@ def auto_patch_settings(monkeypatch, request):
     if is_integration:
         return
 
-    monkeypatch.setenv("WW_NEO4J_PASSWORD", "TestPassword123!")
+    monkeypatch.setenv("T4DM_NEO4J_PASSWORD", "TestPassword123!")
     monkeypatch.setenv("NEO4J_PASSWORD", "TestPassword123!")
-    monkeypatch.setenv("WW_TEST_MODE", "true")
-    monkeypatch.setenv("WW_SESSION_ID", "test-session")
+    monkeypatch.setenv("T4DM_TEST_MODE", "true")
+    monkeypatch.setenv("T4DM_SESSION_ID", "test-session")
 
 
 @pytest.fixture(scope="session")
@@ -200,7 +200,7 @@ def neo4j_available():
         from neo4j import GraphDatabase
         driver = GraphDatabase.driver(
             "bolt://localhost:7687",
-            auth=("neo4j", os.environ.get("WW_NEO4J_PASSWORD", "neo4j")),
+            auth=("neo4j", os.environ.get("T4DM_NEO4J_PASSWORD", "neo4j")),
         )
         with driver.session() as session:
             session.run("RETURN 1")
@@ -322,12 +322,12 @@ async def mock_episodic_memory(mock_qdrant_store, mock_neo4j_store, mock_embeddi
 
     Useful for testing episodic memory in isolation.
     """
-    from ww.memory.episodic import EpisodicMemory
+    from t4dm.memory.episodic import EpisodicMemory
 
     # Patch the storage getters
-    with patch('ww.memory.episodic.get_qdrant_store', return_value=mock_qdrant_store), \
-         patch('ww.memory.episodic.get_neo4j_store', return_value=mock_neo4j_store), \
-         patch('ww.memory.episodic.get_embedding_provider', return_value=mock_embedding_provider):
+    with patch('t4dm.memory.episodic.get_qdrant_store', return_value=mock_qdrant_store), \
+         patch('t4dm.memory.episodic.get_neo4j_store', return_value=mock_neo4j_store), \
+         patch('t4dm.memory.episodic.get_embedding_provider', return_value=mock_embedding_provider):
 
         memory = EpisodicMemory(session_id=test_session_id)
         await memory.initialize()
@@ -341,11 +341,11 @@ async def mock_semantic_memory(mock_qdrant_store, mock_neo4j_store, mock_embeddi
 
     Useful for testing semantic memory in isolation.
     """
-    from ww.memory.semantic import SemanticMemory
+    from t4dm.memory.semantic import SemanticMemory
 
-    with patch('ww.memory.semantic.get_qdrant_store', return_value=mock_qdrant_store), \
-         patch('ww.memory.semantic.get_neo4j_store', return_value=mock_neo4j_store), \
-         patch('ww.memory.semantic.get_embedding_provider', return_value=mock_embedding_provider):
+    with patch('t4dm.memory.semantic.get_qdrant_store', return_value=mock_qdrant_store), \
+         patch('t4dm.memory.semantic.get_neo4j_store', return_value=mock_neo4j_store), \
+         patch('t4dm.memory.semantic.get_embedding_provider', return_value=mock_embedding_provider):
 
         memory = SemanticMemory(session_id=test_session_id)
         await memory.initialize()
@@ -359,11 +359,11 @@ async def mock_procedural_memory(mock_qdrant_store, mock_neo4j_store, mock_embed
 
     Useful for testing procedural memory in isolation.
     """
-    from ww.memory.procedural import ProceduralMemory
+    from t4dm.memory.procedural import ProceduralMemory
 
-    with patch('ww.memory.procedural.get_qdrant_store', return_value=mock_qdrant_store), \
-         patch('ww.memory.procedural.get_neo4j_store', return_value=mock_neo4j_store), \
-         patch('ww.memory.procedural.get_embedding_provider', return_value=mock_embedding_provider):
+    with patch('t4dm.memory.procedural.get_qdrant_store', return_value=mock_qdrant_store), \
+         patch('t4dm.memory.procedural.get_neo4j_store', return_value=mock_neo4j_store), \
+         patch('t4dm.memory.procedural.get_embedding_provider', return_value=mock_embedding_provider):
 
         memory = ProceduralMemory(session_id=test_session_id)
         await memory.initialize()
@@ -445,10 +445,10 @@ def mock_graph_relationship():
 def mock_settings():
     """Provide mock settings for testing."""
     import os
-    from ww.core.config import Settings
+    from t4dm.core.config import Settings
 
     # Set test mode to bypass validation
-    os.environ["WW_TEST_MODE"] = "true"
+    os.environ["T4DM_TEST_MODE"] = "true"
 
     settings = Settings(
         session_id="test-session",
@@ -471,7 +471,7 @@ def mock_settings():
 @pytest.fixture
 def patch_settings(mock_settings):
     """Patch get_settings() with mock settings."""
-    with patch('ww.core.config.get_settings', return_value=mock_settings):
+    with patch('t4dm.core.config.get_settings', return_value=mock_settings):
         yield mock_settings
 
 
@@ -494,7 +494,7 @@ async def cleanup_after_test(test_session_id, request):
     markers = [m.name for m in request.node.iter_markers()]
     if "integration" in markers:
         try:
-            from ww.core.services import cleanup_services
+            from t4dm.core.services import cleanup_services
             await cleanup_services()
         except Exception as e:
             # Log but don't fail - cleanup is best effort

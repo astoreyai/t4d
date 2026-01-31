@@ -10,7 +10,7 @@ import pytest
 import numpy as np
 from unittest.mock import AsyncMock, MagicMock, patch
 
-from ww.storage.qdrant_store import (
+from t4dm.storage.qdrant_store import (
     QdrantStore,
     CapsulePoseData,
     CAPSULE_PAYLOAD_FIELDS,
@@ -87,7 +87,7 @@ def mock_qdrant_client():
 @pytest.fixture
 def qdrant_store(mock_qdrant_client):
     """Create a QdrantStore with mocked client."""
-    with patch("ww.storage.qdrant_store.get_settings") as mock_settings:
+    with patch("t4dm.storage.qdrant_store.get_settings") as mock_settings:
         mock_settings.return_value.qdrant_url = "http://localhost:6333"
         mock_settings.return_value.qdrant_api_key = None
         mock_settings.return_value.embedding_dimension = 1024

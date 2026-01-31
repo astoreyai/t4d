@@ -3,8 +3,8 @@
 import torch
 import pytest
 
-from ww.qwen.inference import InferenceConfig, InferencePipeline
-from ww.qwen.unified_model import UnifiedModel
+from t4dm.qwen.inference import InferenceConfig, InferencePipeline
+from t4dm.qwen.unified_model import UnifiedModel
 
 
 class TestInference:

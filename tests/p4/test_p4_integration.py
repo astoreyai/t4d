@@ -12,7 +12,7 @@ import pytest
 from uuid import uuid4
 
 # P4-1: Hierarchical Prediction
-from ww.prediction import (
+from t4dm.prediction import (
     HierarchicalPredictor,
     HierarchicalConfig,
     HierarchicalPrediction,
@@ -21,7 +21,7 @@ from ww.prediction import (
 )
 
 # P4-2: Causal Discovery
-from ww.learning import (
+from t4dm.learning import (
     CausalLearner,
     CausalGraph,
     CausalAttributor,
@@ -30,14 +30,14 @@ from ww.learning import (
 )
 
 # P4-3: Spatial Cells
-from ww.nca import (
+from t4dm.nca import (
     SpatialCellSystem,
     SpatialConfig,
     Position2D,
 )
 
 # P4-4: Theta-Gamma Integration
-from ww.nca import (
+from t4dm.nca import (
     ThetaGammaIntegration,
     ThetaGammaConfig,
     CognitivePhase,

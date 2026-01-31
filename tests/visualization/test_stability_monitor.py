@@ -15,7 +15,7 @@ import pytest
 from datetime import datetime, timedelta
 from unittest.mock import MagicMock, patch
 
-from ww.visualization.stability_monitor import (
+from t4dm.visualization.stability_monitor import (
     StabilityMonitor,
     StabilitySnapshot,
     StabilityType,
@@ -862,7 +862,7 @@ class TestIntegrationWithNCA:
     def test_with_learnable_coupling(self):
         """Test integration with LearnableCoupling if available."""
         try:
-            from ww.nca.coupling import LearnableCoupling
+            from t4dm.nca.coupling import LearnableCoupling
 
             coupling = LearnableCoupling()  # Uses default config
             monitor = StabilityMonitor(coupling=coupling)
@@ -878,7 +878,7 @@ class TestIntegrationWithNCA:
     def test_with_energy_landscape(self):
         """Test integration with EnergyLandscape if available."""
         try:
-            from ww.nca.energy import EnergyLandscape
+            from t4dm.nca.energy import EnergyLandscape
 
             energy = EnergyLandscape()
             monitor = StabilityMonitor(energy_landscape=energy)
@@ -1264,14 +1264,14 @@ class TestModuleExports:
 
     def test_all_exports_available(self):
         """Test all __all__ exports are accessible."""
-        from ww.visualization import stability_monitor
+        from t4dm.visualization import stability_monitor
 
         for name in stability_monitor.__all__:
             assert hasattr(stability_monitor, name)
 
     def test_main_exports_in_package(self):
         """Test main exports in package __init__."""
-        from ww.visualization import (
+        from t4dm.visualization import (
             StabilityMonitor,
             StabilitySnapshot,
             StabilityType,

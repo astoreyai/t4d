@@ -10,7 +10,7 @@ from pathlib import Path
 from unittest.mock import MagicMock, patch
 from uuid import uuid4
 
-from ww.learning.persistence import (
+from t4dm.learning.persistence import (
     LearnedGateState,
     ScorerState,
     NeuromodulatorState,

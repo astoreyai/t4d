@@ -14,7 +14,7 @@ Validates:
 import numpy as np
 import pytest
 
-from ww.embedding.contrastive_trainer import (
+from t4dm.embedding.contrastive_trainer import (
     ContrastiveAdapter,
     ContrastiveConfig,
     AdapterStats,

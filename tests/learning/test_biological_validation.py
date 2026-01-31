@@ -20,16 +20,16 @@ import numpy as np
 import pytest
 from uuid import uuid4
 
-from ww.learning.dopamine import DopamineSystem
-from ww.learning.norepinephrine import NorepinephrineSystem
-from ww.learning.acetylcholine import AcetylcholineSystem, CognitiveMode
-from ww.learning.serotonin import SerotoninSystem
-from ww.learning.inhibition import InhibitoryNetwork
-from ww.learning.eligibility import EligibilityTrace, LayeredEligibilityTrace
-from ww.learning.three_factor import ThreeFactorLearningRule
-from ww.learning.homeostatic import HomeostaticPlasticity
-from ww.learning.neuromodulators import NeuromodulatorOrchestra
-from ww.api.routes.config import PRESETS
+from t4dm.learning.dopamine import DopamineSystem
+from t4dm.learning.norepinephrine import NorepinephrineSystem
+from t4dm.learning.acetylcholine import AcetylcholineSystem, CognitiveMode
+from t4dm.learning.serotonin import SerotoninSystem
+from t4dm.learning.inhibition import InhibitoryNetwork
+from t4dm.learning.eligibility import EligibilityTrace, LayeredEligibilityTrace
+from t4dm.learning.three_factor import ThreeFactorLearningRule
+from t4dm.learning.homeostatic import HomeostaticPlasticity
+from t4dm.learning.neuromodulators import NeuromodulatorOrchestra
+from t4dm.api.routes.config import PRESETS
 
 
 class TestNeuromodulatorParameterRanges:
@@ -448,7 +448,7 @@ class TestWeightSumConstraints:
 
     def test_episodic_weights_sum(self):
         """Episodic retrieval weights must sum to 1.0."""
-        from ww.api.routes.config import EpisodicWeightsConfig
+        from t4dm.api.routes.config import EpisodicWeightsConfig
 
         config = EpisodicWeightsConfig(
             semanticWeight=0.4,
@@ -468,7 +468,7 @@ class TestWeightSumConstraints:
 
     def test_semantic_weights_sum(self):
         """Semantic retrieval weights must sum to 1.0."""
-        from ww.api.routes.config import SemanticWeightsConfig
+        from t4dm.api.routes.config import SemanticWeightsConfig
 
         config = SemanticWeightsConfig(
             similarityWeight=0.4,
@@ -486,7 +486,7 @@ class TestWeightSumConstraints:
 
     def test_procedural_weights_sum(self):
         """Procedural retrieval weights must sum to 1.0."""
-        from ww.api.routes.config import ProceduralWeightsConfig
+        from t4dm.api.routes.config import ProceduralWeightsConfig
 
         config = ProceduralWeightsConfig(
             similarityWeight=0.6,
@@ -741,7 +741,7 @@ class TestParameterDocumentation:
 
         Read from docs and compare to Pydantic Field constraints.
         """
-        from ww.api.routes.config import (
+        from t4dm.api.routes.config import (
             NeuromodConfig,
             PatternSepConfig,
             EligibilityConfig as APIEligibilityConfig,

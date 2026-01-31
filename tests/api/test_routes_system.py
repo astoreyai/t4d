@@ -3,7 +3,7 @@
 import pytest
 from unittest.mock import AsyncMock, MagicMock, patch
 
-from ww.api.routes.system import (
+from t4dm.api.routes.system import (
     HealthResponse,
     StatsResponse,
     ConsolidationRequest,
@@ -81,7 +81,7 @@ class TestHealthCheckEndpoint:
     @pytest.mark.asyncio
     async def test_health_returns_healthy(self):
         """Health check returns healthy status."""
-        from ww.api.routes.system import health_check
+        from t4dm.api.routes.system import health_check
 
         result = await health_check(session_id="test")
 
@@ -92,7 +92,7 @@ class TestHealthCheckEndpoint:
     @pytest.mark.asyncio
     async def test_health_includes_timestamp(self):
         """Health check includes timestamp."""
-        from ww.api.routes.system import health_check
+        from t4dm.api.routes.system import health_check
 
         result = await health_check()
 
@@ -106,7 +106,7 @@ class TestStatsEndpoint:
     @pytest.mark.asyncio
     async def test_stats_returns_counts(self):
         """Stats returns memory counts."""
-        from ww.api.routes.system import get_stats
+        from t4dm.api.routes.system import get_stats
 
         mock_episodic = MagicMock()
         mock_episodic.count = AsyncMock(return_value=10)
@@ -135,7 +135,7 @@ class TestStatsEndpoint:
     @pytest.mark.asyncio
     async def test_stats_handles_missing_methods(self):
         """Stats handles services without count methods."""
-        from ww.api.routes.system import get_stats
+        from t4dm.api.routes.system import get_stats
 
         # Services without count methods
         mock_episodic = MagicMock(spec=[])
@@ -162,7 +162,7 @@ class TestConsolidateEndpoint:
     @pytest.mark.asyncio
     async def test_light_consolidation(self):
         """Light consolidation is triggered."""
-        from ww.api.routes.system import consolidate_memory
+        from t4dm.api.routes.system import consolidate_memory
 
         mock_service = MagicMock()
         mock_service.light_consolidate = AsyncMock(
@@ -170,7 +170,7 @@ class TestConsolidateEndpoint:
         )
 
         with patch(
-            "ww.api.routes.system.get_consolidation_service",
+            "t4dm.api.routes.system.get_consolidation_service",
             return_value=mock_service,
         ):
             request = ConsolidationRequest(deep=False)
@@ -186,7 +186,7 @@ class TestConsolidateEndpoint:
     @pytest.mark.asyncio
     async def test_deep_consolidation(self):
         """Deep consolidation is triggered."""
-        from ww.api.routes.system import consolidate_memory
+        from t4dm.api.routes.system import consolidate_memory
 
         mock_service = MagicMock()
         mock_service.deep_consolidate = AsyncMock(
@@ -194,7 +194,7 @@ class TestConsolidateEndpoint:
         )
 
         with patch(
-            "ww.api.routes.system.get_consolidation_service",
+            "t4dm.api.routes.system.get_consolidation_service",
             return_value=mock_service,
         ):
             request = ConsolidationRequest(deep=True)
@@ -210,7 +210,7 @@ class TestConsolidateEndpoint:
     @pytest.mark.asyncio
     async def test_consolidation_error(self):
         """Consolidation error is handled."""
-        from ww.api.routes.system import consolidate_memory
+        from t4dm.api.routes.system import consolidate_memory
         from fastapi import HTTPException
 
         mock_service = MagicMock()
@@ -219,7 +219,7 @@ class TestConsolidateEndpoint:
         )
 
         with patch(
-            "ww.api.routes.system.get_consolidation_service",
+            "t4dm.api.routes.system.get_consolidation_service",
             return_value=mock_service,
         ):
             request = ConsolidationRequest(deep=False)
@@ -237,9 +237,9 @@ class TestSessionEndpoint:
     @pytest.mark.asyncio
     async def test_session_info(self):
         """Session info is returned with sanitized URIs (SEC-001 fix)."""
-        from ww.api.routes.system import get_session_info
+        from t4dm.api.routes.system import get_session_info
 
-        with patch("ww.api.routes.system.get_settings") as mock_settings:
+        with patch("t4dm.api.routes.system.get_settings") as mock_settings:
             settings = MagicMock()
             settings.session_id = "configured-session"
             settings.neo4j_uri = "bolt://user:password@localhost:7687"

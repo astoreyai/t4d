@@ -10,15 +10,15 @@ import tempfile
 from pathlib import Path
 from unittest.mock import AsyncMock, MagicMock, patch, PropertyMock
 
-from ww.persistence.manager import (
+from t4dm.persistence.manager import (
     PersistenceConfig,
     PersistenceManager,
     create_persistence_manager,
     PersistentBuffer,
 )
-from ww.persistence.recovery import RecoveryMode, RecoveryResult
-from ww.persistence.shutdown import ShutdownPhase
-from ww.persistence.wal import WALOperation
+from t4dm.persistence.recovery import RecoveryMode, RecoveryResult
+from t4dm.persistence.shutdown import ShutdownPhase
+from t4dm.persistence.wal import WALOperation
 
 
 # =============================================================================

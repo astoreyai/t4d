@@ -7,14 +7,14 @@ from uuid import uuid4
 
 import httpx
 
-from ww.sdk.client import (
+from t4dm.sdk.client import (
     AsyncWorldWeaverClient,
     WorldWeaverError,
     ConnectionError,
     NotFoundError,
     RateLimitError,
 )
-from ww.sdk.models import Episode, Entity, Skill, Step, EpisodeContext
+from t4dm.sdk.models import Episode, Entity, Skill, Step, EpisodeContext
 
 
 class TestWorldWeaverError:
@@ -735,7 +735,7 @@ class TestAsyncClientMoreEpisodes:
 class TestWorldWeaverSyncClient:
     """Tests for synchronous WorldWeaverClient."""
 
-    from ww.sdk.client import WorldWeaverClient
+    from t4dm.sdk.client import WorldWeaverClient
 
     def test_initialization(self):
         """Sync client initializes correctly."""
@@ -771,7 +771,7 @@ class TestWorldWeaverSyncClient:
 
     def test_get_client_raises_when_not_connected(self):
         """Get client raises when not connected."""
-        from ww.sdk.client import WorldWeaverError
+        from t4dm.sdk.client import WorldWeaverError
         client = self.WorldWeaverClient()
         with pytest.raises(WorldWeaverError, match="not connected"):
             client._get_client()
@@ -780,7 +780,7 @@ class TestWorldWeaverSyncClient:
 class TestWorldWeaverSyncClientMethods:
     """Tests for sync client API methods."""
 
-    from ww.sdk.client import WorldWeaverClient
+    from t4dm.sdk.client import WorldWeaverClient
 
     def _make_episode_response(self, content="test content"):
         """Helper to create episode response."""
@@ -983,7 +983,7 @@ class TestWorldWeaverSyncClientMethods:
 class TestSyncClientErrorHandling:
     """Tests for sync client error handling."""
 
-    from ww.sdk.client import WorldWeaverClient
+    from t4dm.sdk.client import WorldWeaverClient
 
     def test_404_raises_not_found(self):
         """404 raises NotFoundError in sync client."""

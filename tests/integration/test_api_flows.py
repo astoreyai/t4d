@@ -11,8 +11,8 @@ from uuid import uuid4
 
 from fastapi.testclient import TestClient
 
-from ww.core.types import Episode, EpisodeContext, Outcome, Entity, EntityType
-from ww.sdk.models import Skill, Step
+from t4dm.core.types import Episode, EpisodeContext, Outcome, Entity, EntityType
+from t4dm.sdk.models import Skill, Step
 
 
 # ============================================================================
@@ -70,7 +70,7 @@ def mock_skill():
 @pytest.fixture
 def mock_episodic_service(mock_episode):
     """Create mock episodic memory service."""
-    from ww.core.types import ScoredResult
+    from t4dm.core.types import ScoredResult
     service = AsyncMock()
     service.create = AsyncMock(return_value=mock_episode)
     service.get = AsyncMock(return_value=mock_episode)
@@ -84,7 +84,7 @@ def mock_episodic_service(mock_episode):
 @pytest.fixture
 def mock_semantic_service(mock_entity):
     """Create mock semantic memory service."""
-    from ww.core.types import ScoredResult
+    from t4dm.core.types import ScoredResult
     service = AsyncMock()
     service.create_entity = AsyncMock(return_value=mock_entity)
     service.get_entity = AsyncMock(return_value=mock_entity)
@@ -106,7 +106,7 @@ def mock_semantic_service(mock_entity):
 @pytest.fixture
 def mock_procedural_service(mock_skill):
     """Create mock procedural memory service."""
-    from ww.core.types import ScoredResult, Procedure, ProcedureStep, Domain
+    from t4dm.core.types import ScoredResult, Procedure, ProcedureStep, Domain
     from datetime import datetime
 
     # Convert SDK Skill to core Procedure
@@ -146,8 +146,8 @@ def mock_services(mock_episodic_service, mock_semantic_service, mock_procedural_
 @pytest.fixture
 def api_client(mock_services):
     """Create test client with mocked dependencies."""
-    from ww.api.server import app
-    from ww.api import deps
+    from t4dm.api.server import app
+    from t4dm.api import deps
 
     async def override_get_memory_services():
         return mock_services
@@ -431,8 +431,8 @@ class TestSessionIsolation:
 
     def test_different_sessions_isolated(self, mock_services):
         """Verify different sessions don't share data."""
-        from ww.api.server import app
-        from ww.api import deps
+        from t4dm.api.server import app
+        from t4dm.api import deps
 
         session_a_episodes = []
         session_b_episodes = []
@@ -461,7 +461,7 @@ class TestSessionIsolation:
 
     def test_invalid_session_id(self):
         """Test handling of invalid session ID."""
-        from ww.api.server import app
+        from t4dm.api.server import app
 
         client = TestClient(app, raise_server_exceptions=False)
 

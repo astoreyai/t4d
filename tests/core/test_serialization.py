@@ -8,7 +8,7 @@ import pytest
 from datetime import datetime, timezone
 from uuid import uuid4
 
-from ww.core.serialization import (
+from t4dm.core.serialization import (
     DateTimeSerializer,
     EpisodeSerializer,
     EntitySerializer,
@@ -17,7 +17,7 @@ from ww.core.serialization import (
     register_serializer,
     Serializer,
 )
-from ww.core.types import (
+from t4dm.core.types import (
     Episode,
     EpisodeContext,
     Outcome,

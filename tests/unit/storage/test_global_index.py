@@ -2,8 +2,8 @@
 
 import uuid
 
-from ww.storage.t4dx.global_index import GlobalIndex
-from ww.storage.t4dx.types import EdgeRecord
+from t4dm.storage.t4dx.global_index import GlobalIndex
+from t4dm.storage.t4dx.types import EdgeRecord
 
 
 class TestGlobalIndex:

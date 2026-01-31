@@ -4,7 +4,7 @@ import pytest
 from datetime import datetime
 import numpy as np
 
-from ww.visualization.validation import (
+from t4dm.visualization.validation import (
     BiologicalValidator,
     ValidationResult,
     ValidationReport,
@@ -201,7 +201,7 @@ class TestSWRValidation:
 
     def test_validate_swr_valid(self):
         """Validate valid SWR telemetry."""
-        from ww.visualization.swr_telemetry import SWRTelemetry
+        from t4dm.visualization.swr_telemetry import SWRTelemetry
 
         swr = SWRTelemetry()
         # Use record_event with correct parameter names
@@ -223,7 +223,7 @@ class TestPACValidation:
 
     def test_validate_pac_valid(self):
         """Validate valid PAC telemetry."""
-        from ww.visualization.pac_telemetry import PACTelemetry
+        from t4dm.visualization.pac_telemetry import PACTelemetry
 
         pac = PACTelemetry()
         for i in range(150):
@@ -241,7 +241,7 @@ class TestDAValidation:
 
     def test_validate_da_valid(self):
         """Validate valid DA telemetry."""
-        from ww.visualization.da_telemetry import DATelemetry
+        from t4dm.visualization.da_telemetry import DATelemetry
 
         da = DATelemetry()
         # Mix of signal types
@@ -262,7 +262,7 @@ class TestStabilityValidation:
 
     def test_validate_stability_stable(self):
         """Validate stable system."""
-        from ww.visualization.stability_monitor import StabilityMonitor
+        from t4dm.visualization.stability_monitor import StabilityMonitor
 
         monitor = StabilityMonitor()
         jacobian = np.array([[-0.5, 0.1], [0.1, -0.3]])
@@ -282,7 +282,7 @@ class TestStabilityValidation:
 
     def test_validate_stability_unstable(self):
         """Validate unstable system detects issues."""
-        from ww.visualization.stability_monitor import StabilityMonitor
+        from t4dm.visualization.stability_monitor import StabilityMonitor
 
         monitor = StabilityMonitor()
         # Create Jacobian - validation should return results
@@ -351,7 +351,7 @@ class TestValidateAll:
 
     def test_validate_all_with_da(self):
         """Validate with DA module."""
-        from ww.visualization.da_telemetry import DATelemetry
+        from t4dm.visualization.da_telemetry import DATelemetry
 
         da = DATelemetry()
         for _ in range(10):
@@ -419,7 +419,7 @@ class TestConvenienceFunctions:
 
     def test_validate_telemetry_hub(self):
         """Test hub validation function."""
-        from ww.visualization.telemetry_hub import TelemetryHub
+        from t4dm.visualization.telemetry_hub import TelemetryHub
 
         hub = TelemetryHub()
         report = validate_telemetry_hub(hub)
@@ -436,7 +436,7 @@ class TestModuleExports:
 
     def test_all_exports_available(self):
         """Verify all exports are importable."""
-        from ww.visualization.validation import (
+        from t4dm.visualization.validation import (
             BiologicalValidator,
             ValidationResult,
             ValidationReport,

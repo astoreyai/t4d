@@ -13,7 +13,7 @@ from unittest.mock import patch
 import pytest
 from pydantic import ValidationError
 
-from ww.core.config import (
+from t4dm.core.config import (
     Settings,
     check_file_permissions,
     load_secret_from_env,
@@ -256,7 +256,7 @@ class TestSettingsValidation:
 
     def test_default_weights_valid(self):
         """Test that default weights are valid."""
-        with patch.dict(os.environ, {"WW_TEST_MODE": "true"}):
+        with patch.dict(os.environ, {"T4DM_TEST_MODE": "true"}):
             settings = Settings()
             assert settings.retrieval_semantic_weight == 0.4
             assert settings.retrieval_recency_weight == 0.25
@@ -423,7 +423,7 @@ class TestSettingsSecurityMethods:
         env_file.write_text("SECRET=value")
         env_file.chmod(0o644)
 
-        with patch.dict(os.environ, {"WW_ENVIRONMENT": "production"}):
+        with patch.dict(os.environ, {"T4DM_ENVIRONMENT": "production"}):
             with pytest.raises(PermissionError, match="permissive permissions"):
                 Settings.validate_permissions(env_file)
 
@@ -444,15 +444,15 @@ class TestEnvironmentOverrides:
 
     def test_neo4j_password_override(self):
         """Test Neo4j password override from environment."""
-        with patch.dict(os.environ, {"WW_NEO4J_PASSWORD": "Env@P4ssw0rd!x"}):  # 14 chars
+        with patch.dict(os.environ, {"T4DM_NEO4J_PASSWORD": "Env@P4ssw0rd!x"}):  # 14 chars
             settings = Settings()
             assert settings.neo4j_password == "Env@P4ssw0rd!x"
 
     def test_qdrant_api_key_override(self):
         """Test Qdrant API key override from environment."""
         with patch.dict(os.environ, {
-            "WW_NEO4J_PASSWORD": "ValidP@ss123!x",  # 14 chars, 4 classes
-            "WW_QDRANT_API_KEY": "env_api_key",
+            "T4DM_NEO4J_PASSWORD": "ValidP@ss123!x",  # 14 chars, 4 classes
+            "T4DM_QDRANT_API_KEY": "env_api_key",
         }):
             settings = Settings()
             assert settings.qdrant_api_key == "env_api_key"
@@ -462,11 +462,11 @@ class TestEnvironmentOverrides:
         with patch.dict(
             os.environ,
             {
-                "WW_NEO4J_PASSWORD": "ValidP@ss123!x",  # 14 chars, 4 classes
-                "WW_EPISODIC_WEIGHT_SEMANTIC": "0.5",
-                "WW_EPISODIC_WEIGHT_RECENCY": "0.3",
-                "WW_EPISODIC_WEIGHT_OUTCOME": "0.1",
-                "WW_EPISODIC_WEIGHT_IMPORTANCE": "0.05",  # Sum = 0.95
+                "T4DM_NEO4J_PASSWORD": "ValidP@ss123!x",  # 14 chars, 4 classes
+                "T4DM_EPISODIC_WEIGHT_SEMANTIC": "0.5",
+                "T4DM_EPISODIC_WEIGHT_RECENCY": "0.3",
+                "T4DM_EPISODIC_WEIGHT_OUTCOME": "0.1",
+                "T4DM_EPISODIC_WEIGHT_IMPORTANCE": "0.05",  # Sum = 0.95
             },
         ):
             with pytest.raises(ValueError, match="must sum to 1.0"):

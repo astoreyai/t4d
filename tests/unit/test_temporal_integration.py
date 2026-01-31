@@ -9,10 +9,10 @@ import numpy as np
 from dataclasses import dataclass
 from uuid import uuid4
 
-from ww.embedding.modulated import CognitiveMode, NeuromodulatorState
-from ww.embedding.adapter import MockEmbeddingAdapter
-from ww.embedding.modulated import ModulatedEmbeddingAdapter
-from ww.temporal.integration import (
+from t4dm.embedding.modulated import CognitiveMode, NeuromodulatorState
+from t4dm.embedding.adapter import MockEmbeddingAdapter
+from t4dm.embedding.modulated import ModulatedEmbeddingAdapter
+from t4dm.temporal.integration import (
     adapt_orchestra_state,
     LearnedSalienceProvider,
     get_consolidation_state,

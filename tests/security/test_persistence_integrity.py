@@ -12,7 +12,7 @@ class TestWALIntegrity:
     @pytest.mark.asyncio
     async def test_wal_tamper_detection(self):
         """Flip 1 bit in WAL entry, verify replay raises."""
-        from ww.persistence.wal import WriteAheadLog, WALOperation, WALConfig
+        from t4dm.persistence.wal import WriteAheadLog, WALOperation, WALConfig
 
         with tempfile.TemporaryDirectory() as tmpdir:
             config = WALConfig(directory=Path(tmpdir))
@@ -50,7 +50,7 @@ class TestWALIntegrity:
     @pytest.mark.asyncio
     async def test_wal_hmac_verification_async(self):
         """Test HMAC verification in async context."""
-        from ww.persistence.wal import WriteAheadLog, WALOperation, WALConfig
+        from t4dm.persistence.wal import WriteAheadLog, WALOperation, WALConfig
 
         with tempfile.TemporaryDirectory() as tmpdir:
             config = WALConfig(directory=Path(tmpdir))
@@ -92,7 +92,7 @@ class TestWALIntegrity:
 
     def test_wal_custom_key(self):
         """Test WAL with custom HMAC key."""
-        from ww.persistence.wal import WALEntry, WALOperation
+        from t4dm.persistence.wal import WALEntry, WALOperation
 
         # Set custom key
         original_key = os.environ.get("T4DM_WAL_KEY")
@@ -130,7 +130,7 @@ class TestWALIntegrity:
         """Test that v1 (CRC32) entries are still readable."""
         import struct
         import zlib
-        from ww.persistence.wal import (
+        from t4dm.persistence.wal import (
             WALEntry,
             WALOperation,
             WAL_MAGIC,
@@ -171,7 +171,7 @@ class TestWALIntegrity:
 
     def test_wal_v2_hmac_format(self):
         """Test that v2 (HMAC) entries are written and verified."""
-        from ww.persistence.wal import WALEntry, WALOperation, HEADER_SIZE, HMAC_SIZE
+        from t4dm.persistence.wal import WALEntry, WALOperation, HEADER_SIZE, HMAC_SIZE
 
         entry = WALEntry(
             lsn=100,
@@ -199,7 +199,7 @@ class TestWALIntegrity:
 
     def test_wal_tamper_in_header(self):
         """Test tampering detection in header."""
-        from ww.persistence.wal import WALEntry, WALOperation
+        from t4dm.persistence.wal import WALEntry, WALOperation
 
         entry = WALEntry(
             lsn=50,
@@ -220,7 +220,7 @@ class TestWALIntegrity:
 
     def test_wal_tamper_in_payload(self):
         """Test tampering detection in payload."""
-        from ww.persistence.wal import WALEntry, WALOperation
+        from t4dm.persistence.wal import WALEntry, WALOperation
 
         entry = WALEntry(
             lsn=60,

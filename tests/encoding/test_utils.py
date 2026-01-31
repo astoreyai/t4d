@@ -4,7 +4,7 @@ import pytest
 import torch
 import numpy as np
 
-from ww.encoding.utils import (
+from t4dm.encoding.utils import (
     compute_sparsity,
     validate_sparsity,
     cosine_similarity_matrix,

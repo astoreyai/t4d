@@ -10,11 +10,11 @@ import numpy as np
 from datetime import datetime, timedelta
 from unittest.mock import Mock, AsyncMock, patch, MagicMock
 
-from ww.consolidation.sleep import SleepConsolidation
-from ww.learning.vae_training import VAEReplayTrainer, VAETrainingConfig, TrainingStats
-from ww.learning.vae_generator import VAEGenerator, VAEConfig
-from ww.hooks.session_lifecycle import SessionEndHook, SessionContext
-from ww.sdk.agent_client import AgentMemoryClient
+from t4dm.consolidation.sleep import SleepConsolidation
+from t4dm.learning.vae_training import VAEReplayTrainer, VAETrainingConfig, TrainingStats
+from t4dm.learning.vae_generator import VAEGenerator, VAEConfig
+from t4dm.hooks.session_lifecycle import SessionEndHook, SessionContext
+from t4dm.sdk.agent_client import AgentMemoryClient
 
 
 @pytest.fixture
@@ -244,7 +244,7 @@ class TestVAETrainingTrigger:
         )
 
         # Create hook context with session context
-        from ww.hooks.base import HookContext
+        from t4dm.hooks.base import HookContext
         session_ctx = SessionContext(
             session_id="test-session",
             start_time=datetime.now() - timedelta(hours=1),
@@ -283,7 +283,7 @@ class TestVAETrainingTrigger:
             train_vae_before_sleep=True,
         )
 
-        from ww.hooks.base import HookContext
+        from t4dm.hooks.base import HookContext
         session_ctx = SessionContext(
             session_id="test-session",
             start_time=datetime.now(),

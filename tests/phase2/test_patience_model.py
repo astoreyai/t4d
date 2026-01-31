@@ -14,7 +14,7 @@ import sys
 
 sys.path.insert(0, "src")
 
-from ww.nca.raphe import (
+from t4dm.nca.raphe import (
     RapheNucleus,
     RapheConfig,
     PatienceModel,

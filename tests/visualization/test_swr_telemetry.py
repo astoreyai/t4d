@@ -17,7 +17,7 @@ from dataclasses import dataclass
 from typing import List
 from unittest.mock import MagicMock, patch
 
-from ww.visualization.swr_telemetry import SWRTelemetry, SWRTelemetryEvent
+from t4dm.visualization.swr_telemetry import SWRTelemetry, SWRTelemetryEvent
 
 
 # =============================================================================

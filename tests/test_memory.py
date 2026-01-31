@@ -17,7 +17,7 @@ from datetime import datetime
 @pytest.mark.asyncio
 async def test_episodic_memory_create():
     """Test creating and retrieving episodic memories."""
-    from ww.memory.episodic import get_episodic_memory
+    from t4dm.memory.episodic import get_episodic_memory
 
     # Initialize episodic memory with test session
     episodic = get_episodic_memory("test-session-001")
@@ -52,7 +52,7 @@ async def test_episodic_memory_create():
 @pytest.mark.asyncio
 async def test_episodic_memory_recall():
     """Test recalling episodic memories by semantic similarity."""
-    from ww.memory.episodic import get_episodic_memory
+    from t4dm.memory.episodic import get_episodic_memory
 
     episodic = get_episodic_memory("test-session-001")
     await episodic.initialize()
@@ -76,7 +76,7 @@ async def test_episodic_memory_recall():
 @pytest.mark.asyncio
 async def test_semantic_memory_create():
     """Test creating semantic entities and relationships."""
-    from ww.memory.semantic import get_semantic_memory
+    from t4dm.memory.semantic import get_semantic_memory
 
     semantic = get_semantic_memory()
     await semantic.initialize()
@@ -102,7 +102,7 @@ async def test_semantic_memory_create():
 @pytest.mark.asyncio
 async def test_semantic_recall_with_activation():
     """Test ACT-R activation-based retrieval."""
-    from ww.memory.semantic import get_semantic_memory
+    from t4dm.memory.semantic import get_semantic_memory
 
     semantic = get_semantic_memory()
     await semantic.initialize()
@@ -123,7 +123,7 @@ async def test_semantic_recall_with_activation():
 @pytest.mark.asyncio
 async def test_procedural_memory_build():
     """Test building procedural memories from trajectories."""
-    from ww.memory.procedural import get_procedural_memory
+    from t4dm.memory.procedural import get_procedural_memory
 
     procedural = get_procedural_memory()
     await procedural.initialize()
@@ -171,7 +171,7 @@ async def test_procedural_memory_build():
 @pytest.mark.asyncio
 async def test_procedural_retrieve():
     """Test retrieving procedures by task similarity."""
-    from ww.memory.procedural import get_procedural_memory
+    from t4dm.memory.procedural import get_procedural_memory
 
     procedural = get_procedural_memory()
     await procedural.initialize()

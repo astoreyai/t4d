@@ -7,7 +7,7 @@ Tests theta-gamma modulation, encoding/retrieval gates, and maintenance.
 import numpy as np
 import pytest
 
-from ww.nca.wm_gating import (
+from t4dm.nca.wm_gating import (
     WMGatingConfig,
     WMItem,
     EncodingGate,

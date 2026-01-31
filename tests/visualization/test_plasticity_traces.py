@@ -5,7 +5,7 @@ import numpy as np
 from datetime import datetime
 from unittest.mock import patch, MagicMock
 
-from ww.visualization.plasticity_traces import (
+from t4dm.visualization.plasticity_traces import (
     PlasticityTracer,
     WeightUpdate,
     plot_bcm_curve,
@@ -292,7 +292,7 @@ class TestPlotBcmCurve:
         # Should not raise, just log warning
         plot_bcm_curve(tracer)
 
-    @patch("ww.visualization.plasticity_traces.logger")
+    @patch("t4dm.visualization.plasticity_traces.logger")
     def test_bcm_curve_logs_warning_when_empty(self, mock_logger):
         """Test that empty tracer logs warning."""
         tracer = PlasticityTracer()
@@ -372,7 +372,7 @@ class TestPlotWeightChanges:
         # Should not raise, just log warning
         plot_weight_changes(tracer)
 
-    @patch("ww.visualization.plasticity_traces.logger")
+    @patch("t4dm.visualization.plasticity_traces.logger")
     def test_weight_changes_logs_warning_when_empty(self, mock_logger):
         """Test that empty tracer logs warning."""
         tracer = PlasticityTracer()
@@ -449,7 +449,7 @@ class TestPlotLtpLtdDistribution:
         # Should not raise, just log warning
         plot_ltp_ltd_distribution(tracer)
 
-    @patch("ww.visualization.plasticity_traces.logger")
+    @patch("t4dm.visualization.plasticity_traces.logger")
     def test_ltp_ltd_logs_warning_when_empty(self, mock_logger):
         """Test that empty tracer logs warning."""
         tracer = PlasticityTracer()

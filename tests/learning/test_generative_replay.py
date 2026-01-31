@@ -8,7 +8,7 @@ import numpy as np
 import pytest
 from unittest.mock import MagicMock, AsyncMock
 
-from ww.learning.generative_replay import (
+from t4dm.learning.generative_replay import (
     GenerativeReplaySystem,
     GenerativeReplayConfig,
     GeneratedSample,

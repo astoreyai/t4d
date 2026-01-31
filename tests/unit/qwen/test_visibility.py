@@ -3,7 +3,7 @@
 import torch
 import pytest
 
-from ww.qwen.visibility import ActivationCollector
+from t4dm.qwen.visibility import ActivationCollector
 
 
 class TestVisibility:

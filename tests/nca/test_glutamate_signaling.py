@@ -11,7 +11,7 @@ Literature References:
 import numpy as np
 import pytest
 
-from ww.nca.glutamate_signaling import (
+from t4dm.nca.glutamate_signaling import (
     GlutamateSignaling,
     GlutamateConfig,
     GlutamateState,

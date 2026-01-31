@@ -13,7 +13,7 @@ class TestTTLCache:
 
     def test_cache_set_and_get(self):
         """Test basic set and get operations."""
-        from ww.embedding.bge_m3 import TTLCache
+        from t4dm.embedding.bge_m3 import TTLCache
 
         cache = TTLCache(max_size=10, ttl_seconds=60)
         cache.set("key1", "value1")
@@ -22,14 +22,14 @@ class TestTTLCache:
 
     def test_cache_miss_returns_none(self):
         """Test that missing keys return None."""
-        from ww.embedding.bge_m3 import TTLCache
+        from t4dm.embedding.bge_m3 import TTLCache
 
         cache = TTLCache()
         assert cache.get("nonexistent") is None
 
     def test_cache_ttl_expiry(self):
         """Test that entries expire after TTL."""
-        from ww.embedding.bge_m3 import TTLCache
+        from t4dm.embedding.bge_m3 import TTLCache
 
         cache = TTLCache(max_size=10, ttl_seconds=0.1)  # 100ms TTL
         cache.set("key1", "value1")
@@ -42,7 +42,7 @@ class TestTTLCache:
 
     def test_cache_max_size_eviction(self):
         """Test that oldest entries are evicted when full."""
-        from ww.embedding.bge_m3 import TTLCache
+        from t4dm.embedding.bge_m3 import TTLCache
 
         cache = TTLCache(max_size=3, ttl_seconds=60)
 
@@ -61,7 +61,7 @@ class TestTTLCache:
 
     def test_cache_thread_safety(self):
         """Test concurrent access doesn't cause race conditions."""
-        from ww.embedding.bge_m3 import TTLCache
+        from t4dm.embedding.bge_m3 import TTLCache
 
         cache = TTLCache(max_size=1000, ttl_seconds=60)
         errors = []
@@ -91,7 +91,7 @@ class TestTTLCache:
 
     def test_cache_evict_expired(self):
         """Test manual eviction of expired entries."""
-        from ww.embedding.bge_m3 import TTLCache
+        from t4dm.embedding.bge_m3 import TTLCache
 
         cache = TTLCache(max_size=10, ttl_seconds=0.1)
 
@@ -108,7 +108,7 @@ class TestTTLCache:
 
     def test_cache_stats(self):
         """Test cache statistics."""
-        from ww.embedding.bge_m3 import TTLCache
+        from t4dm.embedding.bge_m3 import TTLCache
 
         cache = TTLCache(max_size=10, ttl_seconds=60)
 
@@ -126,7 +126,7 @@ class TestTTLCache:
 
     def test_cache_clear(self):
         """Test cache clearing."""
-        from ww.embedding.bge_m3 import TTLCache
+        from t4dm.embedding.bge_m3 import TTLCache
 
         cache = TTLCache()
         cache.set("key1", "value1")
@@ -139,7 +139,7 @@ class TestTTLCache:
 
     def test_cache_update_existing_key(self):
         """Test that updating an existing key refreshes TTL."""
-        from ww.embedding.bge_m3 import TTLCache
+        from t4dm.embedding.bge_m3 import TTLCache
 
         cache = TTLCache(max_size=10, ttl_seconds=0.2)
 
@@ -155,7 +155,7 @@ class TestTTLCache:
 
     def test_cache_partial_expiry(self):
         """Test that only expired entries are evicted, not all."""
-        from ww.embedding.bge_m3 import TTLCache
+        from t4dm.embedding.bge_m3 import TTLCache
 
         cache = TTLCache(max_size=10, ttl_seconds=0.2)
 
@@ -192,7 +192,7 @@ class TestBGEM3EmbeddingWithCache:
         from unittest.mock import patch
 
         with patch("FlagEmbedding.BGEM3FlagModel", return_value=mock_model):
-            from ww.embedding.bge_m3 import BGEM3Embedding
+            from t4dm.embedding.bge_m3 import BGEM3Embedding
 
             provider = BGEM3Embedding(
                 embedding_cache_size=100, embedding_cache_ttl=60
@@ -211,7 +211,7 @@ class TestBGEM3EmbeddingWithCache:
         from unittest.mock import patch
 
         with patch("FlagEmbedding.BGEM3FlagModel", return_value=mock_model):
-            from ww.embedding.bge_m3 import BGEM3Embedding
+            from t4dm.embedding.bge_m3 import BGEM3Embedding
 
             provider = BGEM3Embedding(
                 embedding_cache_size=100, embedding_cache_ttl=60
@@ -230,7 +230,7 @@ class TestBGEM3EmbeddingWithCache:
         from unittest.mock import patch
 
         with patch("FlagEmbedding.BGEM3FlagModel", return_value=mock_model):
-            from ww.embedding.bge_m3 import BGEM3Embedding
+            from t4dm.embedding.bge_m3 import BGEM3Embedding
 
             provider = BGEM3Embedding(
                 embedding_cache_size=100, embedding_cache_ttl=0.1  # 100ms
@@ -248,7 +248,7 @@ class TestBGEM3EmbeddingWithCache:
         from unittest.mock import patch
 
         with patch("FlagEmbedding.BGEM3FlagModel", return_value=mock_model):
-            from ww.embedding.bge_m3 import BGEM3Embedding
+            from t4dm.embedding.bge_m3 import BGEM3Embedding
 
             provider = BGEM3Embedding()
 
@@ -267,7 +267,7 @@ class TestBGEM3EmbeddingWithCache:
         from unittest.mock import patch
 
         with patch("FlagEmbedding.BGEM3FlagModel", return_value=mock_model):
-            from ww.embedding.bge_m3 import BGEM3Embedding
+            from t4dm.embedding.bge_m3 import BGEM3Embedding
 
             provider = BGEM3Embedding()
 
@@ -288,7 +288,7 @@ class TestBGEM3EmbeddingWithCache:
         from unittest.mock import patch
 
         with patch("FlagEmbedding.BGEM3FlagModel", return_value=mock_model):
-            from ww.embedding.bge_m3 import BGEM3Embedding
+            from t4dm.embedding.bge_m3 import BGEM3Embedding
 
             provider = BGEM3Embedding(
                 embedding_cache_size=100, embedding_cache_ttl=0.1
@@ -310,7 +310,7 @@ class TestBGEM3EmbeddingWithCache:
         from unittest.mock import patch
 
         with patch("FlagEmbedding.BGEM3FlagModel", return_value=mock_model):
-            from ww.embedding.bge_m3 import BGEM3Embedding
+            from t4dm.embedding.bge_m3 import BGEM3Embedding
 
             provider = BGEM3Embedding(
                 embedding_cache_size=3, embedding_cache_ttl=60

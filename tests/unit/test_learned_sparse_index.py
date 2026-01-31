@@ -8,7 +8,7 @@ import pytest
 import numpy as np
 from datetime import datetime, timedelta
 
-from ww.memory.learned_sparse_index import (
+from t4dm.memory.learned_sparse_index import (
     LearnedSparseIndex,
     SparseAddressingResult,
     PendingUpdate,

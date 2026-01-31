@@ -4,7 +4,7 @@ import numpy as np
 import pytest
 from uuid import uuid4
 
-from ww.prediction import (
+from t4dm.prediction import (
     ContextEncoder,
     ContextEncoderConfig,
     EncodedContext,

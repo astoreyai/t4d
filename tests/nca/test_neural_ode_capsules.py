@@ -7,7 +7,7 @@ Tests continuous-time capsule dynamics via ODE integration.
 import numpy as np
 import pytest
 
-from ww.nca.neural_ode_capsules import (
+from t4dm.nca.neural_ode_capsules import (
     NeuralODECapsuleConfig,
     CapsuleState,
     CapsuleODEFunc,

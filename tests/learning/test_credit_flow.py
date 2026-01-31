@@ -11,9 +11,9 @@ import pytest
 import numpy as np
 from uuid import uuid4
 
-from ww.learning.credit_flow import CreditFlowEngine
-from ww.learning.neuromodulators import NeuromodulatorOrchestra
-from ww.learning.reconsolidation import ReconsolidationEngine
+from t4dm.learning.credit_flow import CreditFlowEngine
+from t4dm.learning.neuromodulators import NeuromodulatorOrchestra
+from t4dm.learning.reconsolidation import ReconsolidationEngine
 
 
 class TestCreditFlowEngine:
@@ -594,8 +594,8 @@ class TestFSRSIntegration:
 
     def test_outcome_to_rating_conversion(self):
         """Outcome scores convert to correct FSRS ratings."""
-        from ww.learning.credit_flow import outcome_to_rating
-        from ww.learning.fsrs import Rating
+        from t4dm.learning.credit_flow import outcome_to_rating
+        from t4dm.learning.fsrs import Rating
 
         assert outcome_to_rating(0.0) == Rating.AGAIN
         assert outcome_to_rating(0.2) == Rating.AGAIN
@@ -609,7 +609,7 @@ class TestFSRSIntegration:
     def test_get_due_memories(self, credit_flow, orchestra):
         """Can retrieve memories due for review."""
         from datetime import datetime, timedelta
-        from ww.learning.fsrs import Rating
+        from t4dm.learning.fsrs import Rating
 
         # Add a memory with old review
         mem_id = "test_memory_123"
@@ -626,7 +626,7 @@ class TestFSRSIntegration:
     def test_get_memory_retrievability(self, credit_flow):
         """Can get retrievability for a memory."""
         from datetime import datetime
-        from ww.learning.fsrs import Rating
+        from t4dm.learning.fsrs import Rating
 
         mem_id = "test_memory_456"
 

@@ -7,7 +7,7 @@ Tests hierarchical prediction, precision weighting, and free energy minimization
 import numpy as np
 import pytest
 
-from ww.prediction.active_inference import (
+from t4dm.prediction.active_inference import (
     ActiveInferenceConfig,
     BeliefState,
     PrecisionWeightedLevel,

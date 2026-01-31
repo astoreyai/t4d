@@ -15,7 +15,7 @@ from uuid import uuid4
 from datetime import datetime
 from dataclasses import dataclass
 
-from ww.learning.unified_signals import (
+from t4dm.learning.unified_signals import (
     UnifiedLearningSignal,
     UnifiedSignalConfig,
     LearningContext,
@@ -26,7 +26,7 @@ from ww.learning.unified_signals import (
     create_unified_signal,
     create_fully_integrated_signal,
 )
-from ww.learning.three_factor import ThreeFactorLearningRule, ThreeFactorSignal
+from t4dm.learning.three_factor import ThreeFactorLearningRule, ThreeFactorSignal
 
 
 class TestLearningContext:

@@ -1,6 +1,6 @@
 """Tests for renderer protocol and registry."""
 
-from ww.t4dv.renderers.protocol import RendererProtocol, RendererRegistry
+from t4dm.t4dv.renderers.protocol import RendererProtocol, RendererRegistry
 
 
 class DummyRenderer:

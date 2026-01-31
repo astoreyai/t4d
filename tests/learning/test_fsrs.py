@@ -6,7 +6,7 @@ import pytest
 import math
 from datetime import datetime, timedelta
 
-from ww.learning.fsrs import (
+from t4dm.learning.fsrs import (
     Rating,
     FSRSParameters,
     MemoryState,

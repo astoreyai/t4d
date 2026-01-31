@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 import numpy as np
 import pytest
 
-from ww.learning.bcm_metaplasticity import (
+from t4dm.learning.bcm_metaplasticity import (
     BCMConfig,
     BCMLearningRule,
     BCMMetaplasticityManager,

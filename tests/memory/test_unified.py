@@ -11,8 +11,8 @@ from uuid import uuid4
 from unittest.mock import AsyncMock, MagicMock, patch
 import asyncio
 
-from ww.memory.unified import UnifiedMemoryService, get_unified_memory_service, _get_learning_hooks
-from ww.core.types import (
+from t4dm.memory.unified import UnifiedMemoryService, get_unified_memory_service, _get_learning_hooks
+from t4dm.core.types import (
     Episode,
     Entity,
     EntityType,
@@ -124,8 +124,8 @@ class TestUnifiedMemoryServiceInit:
     def service(self, mock_memories):
         """Create UnifiedMemoryService instance."""
         episodic, semantic, procedural = mock_memories
-        with patch("ww.memory.unified.get_bridge_container"):
-            with patch("ww.core.config.get_settings"):
+        with patch("t4dm.memory.unified.get_bridge_container"):
+            with patch("t4dm.core.config.get_settings"):
                 return UnifiedMemoryService(episodic, semantic, procedural)
 
     def test_initialization(self, service, mock_memories):
@@ -140,8 +140,8 @@ class TestUnifiedMemoryServiceInit:
         episodic, semantic, procedural = mock_memories
         mock_bridge = MagicMock()
 
-        with patch("ww.memory.unified.get_bridge_container", return_value=mock_bridge) as mock_get_bridge:
-            with patch("ww.core.config.get_settings"):
+        with patch("t4dm.memory.unified.get_bridge_container", return_value=mock_bridge) as mock_get_bridge:
+            with patch("t4dm.core.config.get_settings"):
                 service = UnifiedMemoryService(episodic, semantic, procedural)
                 mock_get_bridge.assert_called_once_with("test-session")
                 assert service._bridge_container is mock_bridge
@@ -152,8 +152,8 @@ class TestUnifiedMemoryServiceInit:
         mock_settings = MagicMock()
         mock_settings.nca_modulation_enabled = True
 
-        with patch("ww.memory.unified.get_bridge_container"):
-            with patch("ww.core.config.get_settings", return_value=mock_settings):
+        with patch("t4dm.memory.unified.get_bridge_container"):
+            with patch("t4dm.core.config.get_settings", return_value=mock_settings):
                 service = UnifiedMemoryService(episodic, semantic, procedural)
                 assert service._nca_modulation_enabled is True
 
@@ -163,8 +163,8 @@ class TestUnifiedMemoryServiceInit:
         mock_settings = MagicMock()
         mock_settings.nca_modulation_enabled = False
 
-        with patch("ww.memory.unified.get_bridge_container"):
-            with patch("ww.core.config.get_settings", return_value=mock_settings):
+        with patch("t4dm.memory.unified.get_bridge_container"):
+            with patch("t4dm.core.config.get_settings", return_value=mock_settings):
                 service = UnifiedMemoryService(episodic, semantic, procedural)
                 assert service._nca_modulation_enabled is False
 
@@ -190,8 +190,8 @@ class TestUnifiedMemorySearch:
     def service(self, mock_memories):
         """Create UnifiedMemoryService instance."""
         episodic, semantic, procedural = mock_memories
-        with patch("ww.memory.unified.get_bridge_container"):
-            with patch("ww.core.config.get_settings"):
+        with patch("t4dm.memory.unified.get_bridge_container"):
+            with patch("t4dm.core.config.get_settings"):
                 return UnifiedMemoryService(episodic, semantic, procedural)
 
     @pytest.fixture
@@ -420,8 +420,8 @@ class TestNCAModulation:
     def service(self, mock_memories):
         """Create UnifiedMemoryService with NCA enabled."""
         episodic, semantic, procedural = mock_memories
-        with patch("ww.memory.unified.get_bridge_container"):
-            with patch("ww.core.config.get_settings") as mock_settings:
+        with patch("t4dm.memory.unified.get_bridge_container"):
+            with patch("t4dm.core.config.get_settings") as mock_settings:
                 mock_settings_obj = MagicMock()
                 mock_settings_obj.nca_modulation_enabled = True
                 mock_settings.return_value = mock_settings_obj
@@ -457,7 +457,7 @@ class TestNCAModulation:
 
         # Mock NCA bridge with FOCUS state
         mock_bridge = MagicMock()
-        from ww.nca.attractors import CognitiveState
+        from t4dm.nca.attractors import CognitiveState
         mock_bridge.get_current_cognitive_state = MagicMock(return_value=CognitiveState.FOCUS)
         mock_bridge.get_current_nt_state = MagicMock(return_value=[1.0, 0.0, 0.0])
         service._bridge_container.get_nca_bridge = MagicMock(return_value=mock_bridge)
@@ -483,7 +483,7 @@ class TestNCAModulation:
 
         # Mock NCA bridge with EXPLORE state
         mock_bridge = MagicMock()
-        from ww.nca.attractors import CognitiveState
+        from t4dm.nca.attractors import CognitiveState
         mock_bridge.get_current_cognitive_state = MagicMock(return_value=CognitiveState.EXPLORE)
         mock_bridge.get_current_nt_state = MagicMock(return_value=[0.0, 1.0, 0.0])
         service._bridge_container.get_nca_bridge = MagicMock(return_value=mock_bridge)
@@ -500,8 +500,8 @@ class TestNCAModulation:
         """NCA modulation is skipped when disabled."""
         episodic, semantic, procedural = mock_memories
 
-        with patch("ww.memory.unified.get_bridge_container"):
-            with patch("ww.core.config.get_settings") as mock_settings:
+        with patch("t4dm.memory.unified.get_bridge_container"):
+            with patch("t4dm.core.config.get_settings") as mock_settings:
                 mock_settings_obj = MagicMock()
                 mock_settings_obj.nca_modulation_enabled = False
                 mock_settings.return_value = mock_settings_obj
@@ -572,8 +572,8 @@ class TestGetRelated:
     def service(self, mock_memories):
         """Create UnifiedMemoryService instance."""
         episodic, semantic, procedural = mock_memories
-        with patch("ww.memory.unified.get_bridge_container"):
-            with patch("ww.core.config.get_settings"):
+        with patch("t4dm.memory.unified.get_bridge_container"):
+            with patch("t4dm.core.config.get_settings"):
                 return UnifiedMemoryService(episodic, semantic, procedural)
 
     @pytest.fixture
@@ -759,8 +759,8 @@ class TestResultFormatting:
     def service(self, mock_memories):
         """Create UnifiedMemoryService instance."""
         episodic, semantic, procedural = mock_memories
-        with patch("ww.memory.unified.get_bridge_container"):
-            with patch("ww.core.config.get_settings"):
+        with patch("t4dm.memory.unified.get_bridge_container"):
+            with patch("t4dm.core.config.get_settings"):
                 return UnifiedMemoryService(episodic, semantic, procedural)
 
     def test_to_unified_result_episodic(self, service):
@@ -927,8 +927,8 @@ class TestFactoryFunction:
         semantic = AsyncMock()
         procedural = AsyncMock()
 
-        with patch("ww.memory.unified.get_bridge_container"):
-            with patch("ww.core.config.get_settings"):
+        with patch("t4dm.memory.unified.get_bridge_container"):
+            with patch("t4dm.core.config.get_settings"):
                 service = get_unified_memory_service(episodic, semantic, procedural)
 
         assert isinstance(service, UnifiedMemoryService)
@@ -943,8 +943,8 @@ class TestFactoryFunction:
         semantic = AsyncMock()
         procedural = AsyncMock()
 
-        with patch("ww.memory.unified.get_bridge_container"):
-            with patch("ww.core.config.get_settings"):
+        with patch("t4dm.memory.unified.get_bridge_container"):
+            with patch("t4dm.core.config.get_settings"):
                 service = get_unified_memory_service(episodic, semantic, procedural)
                 assert type(service).__name__ == "UnifiedMemoryService"
 
@@ -970,8 +970,8 @@ class TestIntegration:
     def service(self, mock_memories):
         """Create UnifiedMemoryService instance."""
         episodic, semantic, procedural = mock_memories
-        with patch("ww.memory.unified.get_bridge_container"):
-            with patch("ww.core.config.get_settings"):
+        with patch("t4dm.memory.unified.get_bridge_container"):
+            with patch("t4dm.core.config.get_settings"):
                 return UnifiedMemoryService(episodic, semantic, procedural)
 
     @pytest.mark.asyncio

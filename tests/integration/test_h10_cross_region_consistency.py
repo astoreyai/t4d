@@ -14,21 +14,21 @@ import pytest
 import numpy as np
 from datetime import datetime, timedelta
 
-from ww.nca.capsule_nca_coupling import (
+from t4dm.nca.capsule_nca_coupling import (
     CapsuleNCACoupling,
     CapsuleNCACouplingConfig,
     CapsuleMode,
     CouplingStrength,
     create_capsule_nca_coupling,
 )
-from ww.nca.forward_forward_nca_coupling import (
+from t4dm.nca.forward_forward_nca_coupling import (
     FFNCACoupling,
     FFNCACouplingConfig,
     FFPhase,
     EnergyAlignment,
     create_ff_nca_coupling,
 )
-from ww.nca.glymphatic_consolidation_bridge import (
+from t4dm.nca.glymphatic_consolidation_bridge import (
     GlymphaticConsolidationBridge,
     GlymphaticConsolidationConfig,
     SleepStage,
@@ -36,7 +36,7 @@ from ww.nca.glymphatic_consolidation_bridge import (
     ClearanceMode,
     create_glymphatic_consolidation_bridge,
 )
-from ww.nca.neural_field import NeurotransmitterState
+from t4dm.nca.neural_field import NeurotransmitterState
 
 
 # =============================================================================

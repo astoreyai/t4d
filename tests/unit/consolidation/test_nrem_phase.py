@@ -3,7 +3,7 @@
 import pytest
 
 from tests.unit.consolidation.conftest import make_item
-from ww.consolidation.nrem_phase import NREMConfig, NREMPhase
+from t4dm.consolidation.nrem_phase import NREMConfig, NREMPhase
 
 
 class TestNREMPhase:

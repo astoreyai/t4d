@@ -14,10 +14,10 @@ class TestExportUtility:
     @pytest.fixture
     def mock_stores(self):
         """Create mock storage backends."""
-        with patch("ww.interfaces.export_utils.EpisodicMemory") as mock_ep, \
-             patch("ww.interfaces.export_utils.SemanticMemory") as mock_sem, \
-             patch("ww.interfaces.export_utils.ProceduralMemory") as mock_proc, \
-             patch("ww.interfaces.export_utils.get_qdrant_store") as mock_qdrant:
+        with patch("t4dm.interfaces.export_utils.EpisodicMemory") as mock_ep, \
+             patch("t4dm.interfaces.export_utils.SemanticMemory") as mock_sem, \
+             patch("t4dm.interfaces.export_utils.ProceduralMemory") as mock_proc, \
+             patch("t4dm.interfaces.export_utils.get_qdrant_store") as mock_qdrant:
 
             # Configure mocks
             mock_ep_instance = MagicMock()
@@ -50,8 +50,8 @@ class TestExportUtility:
     @pytest.mark.asyncio
     async def test_init_without_rich(self, mock_stores):
         """Test initialization without rich library."""
-        with patch("ww.interfaces.export_utils.RICH_AVAILABLE", False):
-            from ww.interfaces.export_utils import ExportUtility
+        with patch("t4dm.interfaces.export_utils.RICH_AVAILABLE", False):
+            from t4dm.interfaces.export_utils import ExportUtility
 
             exporter = ExportUtility(session_id="test")
             assert exporter.session_id == "test"
@@ -60,9 +60,9 @@ class TestExportUtility:
     @pytest.mark.asyncio
     async def test_initialize(self, mock_stores):
         """Test initialization of storage backends."""
-        from ww.interfaces.export_utils import ExportUtility
+        from t4dm.interfaces.export_utils import ExportUtility
 
-        with patch("ww.interfaces.export_utils.RICH_AVAILABLE", False):
+        with patch("t4dm.interfaces.export_utils.RICH_AVAILABLE", False):
             exporter = ExportUtility(session_id="test")
             await exporter.initialize()
 
@@ -78,9 +78,9 @@ class TestExportUtility:
             ("id2", {"session_id": "test", "content": "Episode 2", "timestamp": "2024-01-02T12:00:00"}, None),
         ], None))
 
-        from ww.interfaces.export_utils import ExportUtility
+        from t4dm.interfaces.export_utils import ExportUtility
 
-        with patch("ww.interfaces.export_utils.RICH_AVAILABLE", False):
+        with patch("t4dm.interfaces.export_utils.RICH_AVAILABLE", False):
             exporter = ExportUtility(session_id="test")
 
             with tempfile.TemporaryDirectory() as tmpdir:
@@ -104,9 +104,9 @@ class TestExportUtility:
                      "stability": 2.0, "last_accessed": "2024-01-02T12:00:00"}, None),
         ], None))
 
-        from ww.interfaces.export_utils import ExportUtility
+        from t4dm.interfaces.export_utils import ExportUtility
 
-        with patch("ww.interfaces.export_utils.RICH_AVAILABLE", False):
+        with patch("t4dm.interfaces.export_utils.RICH_AVAILABLE", False):
             exporter = ExportUtility(session_id="test")
 
             with tempfile.TemporaryDirectory() as tmpdir:
@@ -127,9 +127,9 @@ class TestExportUtility:
             ("id1", {"name": "Entity 1", "entity_type": "CONCEPT", "summary": "Test entity"}, None),
         ], None))
 
-        from ww.interfaces.export_utils import ExportUtility
+        from t4dm.interfaces.export_utils import ExportUtility
 
-        with patch("ww.interfaces.export_utils.RICH_AVAILABLE", False):
+        with patch("t4dm.interfaces.export_utils.RICH_AVAILABLE", False):
             exporter = ExportUtility(session_id="test")
 
             with tempfile.TemporaryDirectory() as tmpdir:
@@ -148,9 +148,9 @@ class TestExportUtility:
             ("id3", {"content": "Episode 3", "timestamp": "2024-01-01T12:00:00"}, None),
         ], None))
 
-        from ww.interfaces.export_utils import ExportUtility
+        from t4dm.interfaces.export_utils import ExportUtility
 
-        with patch("ww.interfaces.export_utils.RICH_AVAILABLE", False):
+        with patch("t4dm.interfaces.export_utils.RICH_AVAILABLE", False):
             exporter = ExportUtility(session_id="test")
 
             with tempfile.TemporaryDirectory() as tmpdir:
@@ -162,9 +162,9 @@ class TestExportUtility:
     @pytest.mark.asyncio
     async def test_escape_xml(self, mock_stores):
         """Test XML escaping function."""
-        from ww.interfaces.export_utils import ExportUtility
+        from t4dm.interfaces.export_utils import ExportUtility
 
-        with patch("ww.interfaces.export_utils.RICH_AVAILABLE", False):
+        with patch("t4dm.interfaces.export_utils.RICH_AVAILABLE", False):
             exporter = ExportUtility()
 
             escaped = exporter._escape_xml("<test>&'\"value>")
@@ -181,9 +181,9 @@ class TestExportUtility:
             ("id1", {"name": "Skill 1", "domain": "coding", "steps": [], "success_rate": 0.9}, None),
         ], None))
 
-        from ww.interfaces.export_utils import ExportUtility
+        from t4dm.interfaces.export_utils import ExportUtility
 
-        with patch("ww.interfaces.export_utils.RICH_AVAILABLE", False):
+        with patch("t4dm.interfaces.export_utils.RICH_AVAILABLE", False):
             exporter = ExportUtility(session_id="test")
 
             with tempfile.TemporaryDirectory() as tmpdir:
@@ -200,9 +200,9 @@ class TestExportUtility:
         mock_stores["semantic"].graph_store = MagicMock()
         mock_stores["semantic"].graph_store.get_relationships = AsyncMock(return_value=[])
 
-        from ww.interfaces.export_utils import ExportUtility
+        from t4dm.interfaces.export_utils import ExportUtility
 
-        with patch("ww.interfaces.export_utils.RICH_AVAILABLE", False):
+        with patch("t4dm.interfaces.export_utils.RICH_AVAILABLE", False):
             exporter = ExportUtility(session_id="test")
             exporter.semantic = mock_stores["semantic"]
 
@@ -221,10 +221,10 @@ class TestExportGraphML:
     @pytest.fixture
     def mock_stores_with_graph(self):
         """Create mock stores with graph support."""
-        with patch("ww.interfaces.export_utils.EpisodicMemory") as mock_ep, \
-             patch("ww.interfaces.export_utils.SemanticMemory") as mock_sem, \
-             patch("ww.interfaces.export_utils.ProceduralMemory") as mock_proc, \
-             patch("ww.interfaces.export_utils.get_qdrant_store") as mock_qdrant:
+        with patch("t4dm.interfaces.export_utils.EpisodicMemory") as mock_ep, \
+             patch("t4dm.interfaces.export_utils.SemanticMemory") as mock_sem, \
+             patch("t4dm.interfaces.export_utils.ProceduralMemory") as mock_proc, \
+             patch("t4dm.interfaces.export_utils.get_qdrant_store") as mock_qdrant:
 
             mock_ep_instance = MagicMock()
             mock_ep_instance.initialize = AsyncMock()
@@ -259,9 +259,9 @@ class TestExportGraphML:
     @pytest.mark.asyncio
     async def test_export_graph_graphml(self, mock_stores_with_graph):
         """Test exporting to GraphML format."""
-        from ww.interfaces.export_utils import ExportUtility
+        from t4dm.interfaces.export_utils import ExportUtility
 
-        with patch("ww.interfaces.export_utils.RICH_AVAILABLE", False):
+        with patch("t4dm.interfaces.export_utils.RICH_AVAILABLE", False):
             exporter = ExportUtility(session_id="test")
             exporter.semantic = mock_stores_with_graph["semantic"]
 
@@ -282,7 +282,7 @@ class TestPathTraversalProtection:
 
     def test_validate_export_path_traversal_detected(self):
         """Test that path traversal patterns are rejected."""
-        from ww.interfaces.export_utils import _validate_export_path
+        from t4dm.interfaces.export_utils import _validate_export_path
 
         # Various traversal attempts
         with pytest.raises(ValueError, match="Path traversal detected"):
@@ -299,7 +299,7 @@ class TestPathTraversalProtection:
 
     def test_validate_export_path_outside_allowed_dirs(self):
         """Test that paths outside allowed directories are rejected."""
-        from ww.interfaces.export_utils import _validate_export_path
+        from t4dm.interfaces.export_utils import _validate_export_path
 
         # Path outside any allowed directory
         with pytest.raises(ValueError, match="not within allowed directories"):
@@ -310,14 +310,14 @@ class TestPathTraversalProtection:
 
     def test_validate_export_path_valid_tmp(self):
         """Test that valid /tmp paths are accepted."""
-        from ww.interfaces.export_utils import _validate_export_path
+        from t4dm.interfaces.export_utils import _validate_export_path
 
         result = _validate_export_path("/tmp/export.json")
         assert result == Path("/tmp/export.json")
 
     def test_validate_export_path_valid_home_dirs(self):
         """Test that valid home directory paths are accepted."""
-        from ww.interfaces.export_utils import _validate_export_path
+        from t4dm.interfaces.export_utils import _validate_export_path
 
         home = Path.home()
 
@@ -335,7 +335,7 @@ class TestPathTraversalProtection:
 
     def test_validate_export_path_custom_allowed_dirs(self):
         """Test custom allowed directories."""
-        from ww.interfaces.export_utils import _validate_export_path
+        from t4dm.interfaces.export_utils import _validate_export_path
 
         custom_dirs = [Path("/custom/exports")]
 
@@ -353,10 +353,10 @@ class TestPathTraversalProtection:
     @pytest.fixture
     def mock_stores(self):
         """Create mock storage backends for export tests."""
-        with patch("ww.interfaces.export_utils.EpisodicMemory") as mock_ep, \
-             patch("ww.interfaces.export_utils.SemanticMemory") as mock_sem, \
-             patch("ww.interfaces.export_utils.ProceduralMemory") as mock_proc, \
-             patch("ww.interfaces.export_utils.get_qdrant_store") as mock_qdrant:
+        with patch("t4dm.interfaces.export_utils.EpisodicMemory") as mock_ep, \
+             patch("t4dm.interfaces.export_utils.SemanticMemory") as mock_sem, \
+             patch("t4dm.interfaces.export_utils.ProceduralMemory") as mock_proc, \
+             patch("t4dm.interfaces.export_utils.get_qdrant_store") as mock_qdrant:
 
             mock_ep_instance = MagicMock()
             mock_ep_instance.initialize = AsyncMock()
@@ -387,9 +387,9 @@ class TestPathTraversalProtection:
     @pytest.mark.asyncio
     async def test_export_episodes_json_path_traversal(self, mock_stores):
         """Test export_episodes_json rejects path traversal."""
-        from ww.interfaces.export_utils import ExportUtility
+        from t4dm.interfaces.export_utils import ExportUtility
 
-        with patch("ww.interfaces.export_utils.RICH_AVAILABLE", False):
+        with patch("t4dm.interfaces.export_utils.RICH_AVAILABLE", False):
             exporter = ExportUtility(session_id="test")
 
             with pytest.raises(ValueError, match="Path traversal detected"):
@@ -398,9 +398,9 @@ class TestPathTraversalProtection:
     @pytest.mark.asyncio
     async def test_export_episodes_csv_path_traversal(self, mock_stores):
         """Test export_episodes_csv rejects path traversal."""
-        from ww.interfaces.export_utils import ExportUtility
+        from t4dm.interfaces.export_utils import ExportUtility
 
-        with patch("ww.interfaces.export_utils.RICH_AVAILABLE", False):
+        with patch("t4dm.interfaces.export_utils.RICH_AVAILABLE", False):
             exporter = ExportUtility(session_id="test")
 
             with pytest.raises(ValueError, match="Path traversal detected"):
@@ -409,9 +409,9 @@ class TestPathTraversalProtection:
     @pytest.mark.asyncio
     async def test_export_entities_json_path_traversal(self, mock_stores):
         """Test export_entities_json rejects path traversal."""
-        from ww.interfaces.export_utils import ExportUtility
+        from t4dm.interfaces.export_utils import ExportUtility
 
-        with patch("ww.interfaces.export_utils.RICH_AVAILABLE", False):
+        with patch("t4dm.interfaces.export_utils.RICH_AVAILABLE", False):
             exporter = ExportUtility(session_id="test")
 
             with pytest.raises(ValueError, match="Path traversal detected"):
@@ -420,9 +420,9 @@ class TestPathTraversalProtection:
     @pytest.mark.asyncio
     async def test_export_entities_csv_path_traversal(self, mock_stores):
         """Test export_entities_csv rejects path traversal."""
-        from ww.interfaces.export_utils import ExportUtility
+        from t4dm.interfaces.export_utils import ExportUtility
 
-        with patch("ww.interfaces.export_utils.RICH_AVAILABLE", False):
+        with patch("t4dm.interfaces.export_utils.RICH_AVAILABLE", False):
             exporter = ExportUtility(session_id="test")
 
             with pytest.raises(ValueError, match="Path traversal detected"):
@@ -431,9 +431,9 @@ class TestPathTraversalProtection:
     @pytest.mark.asyncio
     async def test_export_skills_json_path_traversal(self, mock_stores):
         """Test export_skills_json rejects path traversal."""
-        from ww.interfaces.export_utils import ExportUtility
+        from t4dm.interfaces.export_utils import ExportUtility
 
-        with patch("ww.interfaces.export_utils.RICH_AVAILABLE", False):
+        with patch("t4dm.interfaces.export_utils.RICH_AVAILABLE", False):
             exporter = ExportUtility(session_id="test")
 
             with pytest.raises(ValueError, match="Path traversal detected"):
@@ -442,9 +442,9 @@ class TestPathTraversalProtection:
     @pytest.mark.asyncio
     async def test_export_graph_graphml_path_traversal(self, mock_stores):
         """Test export_graph_graphml rejects path traversal."""
-        from ww.interfaces.export_utils import ExportUtility
+        from t4dm.interfaces.export_utils import ExportUtility
 
-        with patch("ww.interfaces.export_utils.RICH_AVAILABLE", False):
+        with patch("t4dm.interfaces.export_utils.RICH_AVAILABLE", False):
             exporter = ExportUtility(session_id="test")
             exporter.semantic = mock_stores["semantic"]
 
@@ -454,9 +454,9 @@ class TestPathTraversalProtection:
     @pytest.mark.asyncio
     async def test_backup_session_path_traversal(self, mock_stores):
         """Test backup_session rejects path traversal."""
-        from ww.interfaces.export_utils import ExportUtility
+        from t4dm.interfaces.export_utils import ExportUtility
 
-        with patch("ww.interfaces.export_utils.RICH_AVAILABLE", False):
+        with patch("t4dm.interfaces.export_utils.RICH_AVAILABLE", False):
             exporter = ExportUtility(session_id="test")
             exporter.semantic = mock_stores["semantic"]
 

@@ -13,8 +13,8 @@ from datetime import datetime, timedelta
 from unittest.mock import AsyncMock, MagicMock, patch
 from uuid import uuid4
 
-from ww.core.types import Episode, EpisodeContext, Outcome, ScoredResult
-from ww.memory.episodic import EpisodicMemory
+from t4dm.core.types import Episode, EpisodeContext, Outcome, ScoredResult
+from t4dm.memory.episodic import EpisodicMemory
 
 
 class TestEpisodicMemoryBasics:
@@ -1172,7 +1172,7 @@ class TestP54QueryMemorySeparation:
     @pytest.mark.asyncio
     async def test_projection_normalizes_to_unit_sphere(self, episodic):
         """Query projection normalizes output to unit sphere."""
-        from ww.embedding.query_memory_separation import QueryMemorySeparator
+        from t4dm.embedding.query_memory_separation import QueryMemorySeparator
         import numpy as np
 
         # Use fresh separator to avoid singleton state issues
@@ -1186,7 +1186,7 @@ class TestP54QueryMemorySeparation:
     @pytest.mark.asyncio
     async def test_query_and_memory_projections_differ(self, episodic):
         """Query and memory projections produce different outputs."""
-        from ww.embedding.query_memory_separation import QueryMemorySeparator
+        from t4dm.embedding.query_memory_separation import QueryMemorySeparator
         import numpy as np
 
         # Use fresh separator to avoid singleton state issues
@@ -1225,7 +1225,7 @@ class TestP54QueryMemorySeparatorUnit:
 
     def test_separator_initialization(self):
         """QueryMemorySeparator initializes with correct dimensions."""
-        from ww.embedding.query_memory_separation import QueryMemorySeparator, SeparationConfig
+        from t4dm.embedding.query_memory_separation import QueryMemorySeparator, SeparationConfig
 
         config = SeparationConfig(embedding_dim=512, hidden_dim=128)
         separator = QueryMemorySeparator(config)
@@ -1237,7 +1237,7 @@ class TestP54QueryMemorySeparatorUnit:
 
     def test_batch_projection(self):
         """Separator handles batch projections."""
-        from ww.embedding.query_memory_separation import QueryMemorySeparator, SeparationConfig
+        from t4dm.embedding.query_memory_separation import QueryMemorySeparator, SeparationConfig
         import numpy as np
 
         config = SeparationConfig(embedding_dim=256, hidden_dim=64)
@@ -1255,7 +1255,7 @@ class TestP54QueryMemorySeparatorUnit:
 
     def test_compute_similarity(self):
         """compute_similarity works with projection."""
-        from ww.embedding.query_memory_separation import QueryMemorySeparator, SeparationConfig
+        from t4dm.embedding.query_memory_separation import QueryMemorySeparator, SeparationConfig
         import numpy as np
 
         config = SeparationConfig(embedding_dim=256, hidden_dim=64)
@@ -1272,7 +1272,7 @@ class TestP54QueryMemorySeparatorUnit:
 
     def test_train_step_reduces_loss(self):
         """Training step can reduce triplet loss."""
-        from ww.embedding.query_memory_separation import QueryMemorySeparator, SeparationConfig
+        from t4dm.embedding.query_memory_separation import QueryMemorySeparator, SeparationConfig
         import numpy as np
 
         config = SeparationConfig(
@@ -1298,7 +1298,7 @@ class TestP54QueryMemorySeparatorUnit:
 
     def test_save_and_load_state(self):
         """Separator state can be saved and loaded."""
-        from ww.embedding.query_memory_separation import QueryMemorySeparator, SeparationConfig
+        from t4dm.embedding.query_memory_separation import QueryMemorySeparator, SeparationConfig
         import numpy as np
 
         config = SeparationConfig(embedding_dim=128, hidden_dim=32)
@@ -1322,7 +1322,7 @@ class TestP54QueryMemorySeparatorUnit:
 
     def test_get_stats(self):
         """get_stats returns projection statistics."""
-        from ww.embedding.query_memory_separation import QueryMemorySeparator
+        from t4dm.embedding.query_memory_separation import QueryMemorySeparator
         import numpy as np
 
         separator = QueryMemorySeparator()

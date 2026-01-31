@@ -2,7 +2,7 @@
 
 from datetime import datetime
 
-from ww.t4dv.events import (
+from t4dm.t4dv.events import (
     ConsolidationEvent,
     NeuromodEvent,
     ObservationEvent,

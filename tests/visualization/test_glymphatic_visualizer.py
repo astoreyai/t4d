@@ -9,7 +9,7 @@ import pytest
 from datetime import datetime, timedelta
 from unittest.mock import MagicMock
 
-from ww.visualization.glymphatic_visualizer import (
+from t4dm.visualization.glymphatic_visualizer import (
     SleepStage,
     GlymphaticSnapshot,
     ClearanceEvent,
@@ -579,7 +579,7 @@ class TestGlymphaticVisualizerPlots:
         except ImportError:
             pytest.skip("matplotlib not available")
 
-        from ww.visualization.glymphatic_visualizer import plot_sleep_stage_timeline
+        from t4dm.visualization.glymphatic_visualizer import plot_sleep_stage_timeline
 
         result = plot_sleep_stage_timeline(populated_visualizer)
         assert result is not None
@@ -594,7 +594,7 @@ class TestGlymphaticVisualizerPlots:
         except ImportError:
             pytest.skip("matplotlib not available")
 
-        from ww.visualization.glymphatic_visualizer import plot_sleep_stage_timeline
+        from t4dm.visualization.glymphatic_visualizer import plot_sleep_stage_timeline
 
         visualizer = GlymphaticVisualizer()
         # Only one stage - not enough for timeline
@@ -618,7 +618,7 @@ class TestGlymphaticVisualizerPlots:
         except ImportError:
             pytest.skip("matplotlib not available")
 
-        from ww.visualization.glymphatic_visualizer import plot_sleep_stage_timeline
+        from t4dm.visualization.glymphatic_visualizer import plot_sleep_stage_timeline
 
         fig, ax = plt.subplots()
         result = plot_sleep_stage_timeline(populated_visualizer, ax=ax)
@@ -634,7 +634,7 @@ class TestGlymphaticVisualizerPlots:
         except ImportError:
             pytest.skip("matplotlib not available")
 
-        from ww.visualization.glymphatic_visualizer import plot_clearance_and_waste
+        from t4dm.visualization.glymphatic_visualizer import plot_clearance_and_waste
 
         result = plot_clearance_and_waste(populated_visualizer)
         assert result is not None
@@ -649,7 +649,7 @@ class TestGlymphaticVisualizerPlots:
         except ImportError:
             pytest.skip("matplotlib not available")
 
-        from ww.visualization.glymphatic_visualizer import plot_clearance_and_waste
+        from t4dm.visualization.glymphatic_visualizer import plot_clearance_and_waste
 
         visualizer = GlymphaticVisualizer()
         result = plot_clearance_and_waste(visualizer)
@@ -665,7 +665,7 @@ class TestGlymphaticVisualizerPlots:
         except ImportError:
             pytest.skip("matplotlib not available")
 
-        from ww.visualization.glymphatic_visualizer import plot_clearance_by_stage
+        from t4dm.visualization.glymphatic_visualizer import plot_clearance_by_stage
 
         result = plot_clearance_by_stage(populated_visualizer)
         assert result is not None
@@ -680,7 +680,7 @@ class TestGlymphaticVisualizerPlots:
         except ImportError:
             pytest.skip("matplotlib not available")
 
-        from ww.visualization.glymphatic_visualizer import plot_clearance_by_stage
+        from t4dm.visualization.glymphatic_visualizer import plot_clearance_by_stage
 
         visualizer = GlymphaticVisualizer()
         result = plot_clearance_by_stage(visualizer)
@@ -696,7 +696,7 @@ class TestGlymphaticVisualizerPlots:
         except ImportError:
             pytest.skip("matplotlib not available")
 
-        from ww.visualization.glymphatic_visualizer import plot_stage_pie
+        from t4dm.visualization.glymphatic_visualizer import plot_stage_pie
 
         result = plot_stage_pie(populated_visualizer)
         assert result is not None
@@ -711,7 +711,7 @@ class TestGlymphaticVisualizerPlots:
         except ImportError:
             pytest.skip("matplotlib not available")
 
-        from ww.visualization.glymphatic_visualizer import plot_stage_pie
+        from t4dm.visualization.glymphatic_visualizer import plot_stage_pie
 
         visualizer = GlymphaticVisualizer()
         result = plot_stage_pie(visualizer)
@@ -727,7 +727,7 @@ class TestGlymphaticVisualizerPlots:
         except ImportError:
             pytest.skip("matplotlib not available")
 
-        from ww.visualization.glymphatic_visualizer import create_glymphatic_dashboard
+        from t4dm.visualization.glymphatic_visualizer import create_glymphatic_dashboard
 
         result = create_glymphatic_dashboard(populated_visualizer)
         assert result is not None
@@ -742,7 +742,7 @@ class TestGlymphaticVisualizerPlots:
         except ImportError:
             pytest.skip("matplotlib not available")
 
-        from ww.visualization.glymphatic_visualizer import create_glymphatic_dashboard
+        from t4dm.visualization.glymphatic_visualizer import create_glymphatic_dashboard
 
         result = create_glymphatic_dashboard(populated_visualizer, figsize=(20, 12))
         assert result is not None

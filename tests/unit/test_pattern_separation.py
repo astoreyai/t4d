@@ -8,7 +8,7 @@ import pytest
 import numpy as np
 from unittest.mock import AsyncMock, MagicMock
 
-from ww.memory.pattern_separation import (
+from t4dm.memory.pattern_separation import (
     DentateGyrus,
     PatternCompletion,
     SeparationResult,

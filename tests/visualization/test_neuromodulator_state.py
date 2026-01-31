@@ -5,7 +5,7 @@ import numpy as np
 from datetime import datetime
 from unittest.mock import patch, MagicMock
 
-from ww.visualization.neuromodulator_state import (
+from t4dm.visualization.neuromodulator_state import (
     NeuromodulatorDashboard,
     NeuromodulatorSnapshot,
     plot_neuromodulator_traces,
@@ -258,7 +258,7 @@ class TestPlotNeuromodulatorTraces:
         # Should not raise, just log warning
         plot_neuromodulator_traces(dashboard)
 
-    @patch("ww.visualization.neuromodulator_state.logger")
+    @patch("t4dm.visualization.neuromodulator_state.logger")
     def test_plot_traces_logs_warning_when_empty(self, mock_logger):
         """Test that empty dashboard logs warning."""
         dashboard = NeuromodulatorDashboard()
@@ -335,7 +335,7 @@ class TestPlotNeuromodulatorRadar:
         # Should not raise, just log warning
         plot_neuromodulator_radar(dashboard)
 
-    @patch("ww.visualization.neuromodulator_state.logger")
+    @patch("t4dm.visualization.neuromodulator_state.logger")
     def test_radar_logs_warning_when_empty(self, mock_logger):
         """Test that empty dashboard logs warning."""
         dashboard = NeuromodulatorDashboard()

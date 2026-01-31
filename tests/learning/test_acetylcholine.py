@@ -3,7 +3,7 @@ import pytest
 import numpy as np
 from datetime import datetime
 
-from ww.learning.acetylcholine import (
+from t4dm.learning.acetylcholine import (
     AcetylcholineState,
     AcetylcholineSystem,
     CognitiveMode,

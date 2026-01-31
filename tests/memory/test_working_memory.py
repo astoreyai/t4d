@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 from uuid import uuid4
 from unittest.mock import MagicMock, AsyncMock
 
-from ww.memory.working_memory import (
+from t4dm.memory.working_memory import (
     ItemState,
     WorkingMemoryItem,
     EvictionEvent,

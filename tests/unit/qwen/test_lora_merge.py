@@ -2,7 +2,7 @@
 
 import pytest
 
-from ww.qwen.lora_merge import merge_lora, save_lora_only
+from t4dm.qwen.lora_merge import merge_lora, save_lora_only
 
 
 class TestLoraMerge:

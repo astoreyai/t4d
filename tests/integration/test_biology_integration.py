@@ -27,7 +27,7 @@ class TestP5IntegrationSTDPConsolidation:
     @pytest.mark.asyncio
     async def test_stdp_records_spikes_during_retrieval(self):
         """STDP records spike events when memories are retrieved."""
-        from ww.learning.stdp import STDPLearner
+        from t4dm.learning.stdp import STDPLearner
 
         stdp = STDPLearner()
 
@@ -50,7 +50,7 @@ class TestP5IntegrationSTDPConsolidation:
     @pytest.mark.asyncio
     async def test_stdp_weight_updates_from_co_retrieval(self):
         """Co-retrieved memories update STDP weights correctly."""
-        from ww.learning.stdp import STDPLearner
+        from t4dm.learning.stdp import STDPLearner
 
         stdp = STDPLearner()
         now = datetime.now()
@@ -69,7 +69,7 @@ class TestP5IntegrationSTDPConsolidation:
     @pytest.mark.asyncio
     async def test_stdp_anti_causal_weakens(self):
         """Anti-causal retrieval order weakens connections."""
-        from ww.learning.stdp import STDPLearner
+        from t4dm.learning.stdp import STDPLearner
 
         stdp = STDPLearner()
         now = datetime.now()
@@ -92,7 +92,7 @@ class TestP5IntegrationQueryMemorySeparation:
     @pytest.mark.asyncio
     async def test_separation_produces_different_projections(self):
         """Query and memory projections differ appropriately."""
-        from ww.embedding.query_memory_separation import QueryMemorySeparator
+        from t4dm.embedding.query_memory_separation import QueryMemorySeparator
 
         separator = QueryMemorySeparator()
 
@@ -109,7 +109,7 @@ class TestP5IntegrationQueryMemorySeparation:
     @pytest.mark.asyncio
     async def test_batch_separation_maintains_consistency(self):
         """Batch projections maintain individual consistency."""
-        from ww.embedding.query_memory_separation import QueryMemorySeparator
+        from t4dm.embedding.query_memory_separation import QueryMemorySeparator
 
         separator = QueryMemorySeparator()
 
@@ -135,7 +135,7 @@ class TestP5IntegrationTemporalSequencing:
     @pytest.mark.asyncio
     async def test_temporal_links_form_chain(self):
         """Episodes form temporal chains with bidirectional links."""
-        from ww.core.types import Episode
+        from t4dm.core.types import Episode
         from uuid import uuid4
 
         # Create linked episodes
@@ -164,7 +164,7 @@ class TestP5IntegrationTemporalSequencing:
     @pytest.mark.asyncio
     async def test_duration_tracking(self):
         """Episodes track duration correctly."""
-        from ww.core.types import Episode
+        from t4dm.core.types import Episode
         from uuid import uuid4
 
         now = datetime.now()
@@ -187,7 +187,7 @@ class TestP5IntegrationSynapticTagging:
     @pytest.mark.asyncio
     async def test_synaptic_tag_types(self):
         """Synaptic tagging distinguishes early and late LTP."""
-        from ww.learning.plasticity import SynapticTagger
+        from t4dm.learning.plasticity import SynapticTagger
 
         tagger = SynapticTagger()
 
@@ -210,7 +210,7 @@ class TestP5IntegrationSynapticTagging:
     @pytest.mark.asyncio
     async def test_tag_capture_during_consolidation(self):
         """Tags are captured during consolidation window."""
-        from ww.learning.plasticity import SynapticTagger
+        from t4dm.learning.plasticity import SynapticTagger
 
         tagger = SynapticTagger()
 
@@ -233,7 +233,7 @@ class TestP5IntegrationREMAbstractions:
     @pytest.mark.asyncio
     async def test_abstraction_event_creation(self):
         """REM phase can record abstractions from episodes."""
-        from ww.consolidation.sleep import AbstractionEvent
+        from t4dm.consolidation.sleep import AbstractionEvent
 
         # Create an abstraction event
         event = AbstractionEvent(
@@ -254,8 +254,8 @@ class TestP5IntegrationFullPipeline:
     @pytest.mark.asyncio
     async def test_retrieval_triggers_stdp_and_tagging(self):
         """Memory retrieval triggers both STDP and synaptic tagging."""
-        from ww.learning.stdp import STDPLearner
-        from ww.learning.plasticity import SynapticTagger
+        from t4dm.learning.stdp import STDPLearner
+        from t4dm.learning.plasticity import SynapticTagger
 
         stdp = STDPLearner()
         tagger = SynapticTagger()
@@ -287,8 +287,8 @@ class TestP5IntegrationFullPipeline:
     @pytest.mark.asyncio
     async def test_query_projection_with_stdp_update(self):
         """Query-memory separation works with STDP learning."""
-        from ww.embedding.query_memory_separation import QueryMemorySeparator
-        from ww.learning.stdp import STDPLearner
+        from t4dm.embedding.query_memory_separation import QueryMemorySeparator
+        from t4dm.learning.stdp import STDPLearner
 
         separator = QueryMemorySeparator()
         stdp = STDPLearner()
@@ -318,8 +318,8 @@ class TestP5IntegrationFullPipeline:
     @pytest.mark.asyncio
     async def test_temporal_sequence_with_stdp(self):
         """Temporal episode sequences trigger appropriate STDP."""
-        from ww.learning.stdp import STDPLearner
-        from ww.core.types import Episode
+        from t4dm.learning.stdp import STDPLearner
+        from t4dm.core.types import Episode
         from uuid import uuid4
 
         stdp = STDPLearner()

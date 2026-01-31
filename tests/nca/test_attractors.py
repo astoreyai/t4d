@@ -3,12 +3,12 @@
 import numpy as np
 import pytest
 
-from ww.nca.attractors import (
+from t4dm.nca.attractors import (
     AttractorBasin,
     CognitiveState,
     StateTransitionManager,
 )
-from ww.nca.neural_field import NeurotransmitterState
+from t4dm.nca.neural_field import NeurotransmitterState
 
 
 class TestCognitiveState:

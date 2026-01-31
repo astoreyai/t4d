@@ -14,7 +14,7 @@ import pytest
 from unittest.mock import AsyncMock, MagicMock, patch, call
 from typing import Any
 
-from ww.storage.qdrant_store import QdrantStore
+from t4dm.storage.qdrant_store import QdrantStore
 from qdrant_client.http import models
 
 
@@ -40,7 +40,7 @@ class TestLazyClientInitialization:
                 # Simulate some initialization delay
                 # In real code, this might be network connection
 
-        with patch('ww.storage.qdrant_store.AsyncQdrantClient', MockAsyncQdrantClient):
+        with patch('t4dm.storage.qdrant_store.AsyncQdrantClient', MockAsyncQdrantClient):
             # Launch many concurrent requests for the client
             tasks = [store._get_client() for _ in range(20)]
             results = await asyncio.gather(*tasks)
@@ -81,7 +81,7 @@ class TestLazyClientInitialization:
             def __init__(self, **kwargs):
                 constructor_calls.append(kwargs)
 
-        with patch('ww.storage.qdrant_store.QdrantClient', MockQdrantClient):
+        with patch('t4dm.storage.qdrant_store.QdrantClient', MockQdrantClient):
             import threading
             results = []
             errors = []

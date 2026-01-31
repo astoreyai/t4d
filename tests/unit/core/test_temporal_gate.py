@@ -3,7 +3,7 @@
 import pytest
 import torch
 
-from ww.core.temporal_gate import TemporalGate
+from t4dm.core.temporal_gate import TemporalGate
 
 
 class TestTemporalGate:

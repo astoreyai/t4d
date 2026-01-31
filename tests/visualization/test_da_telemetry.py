@@ -4,7 +4,7 @@ import pytest
 from datetime import datetime, timedelta
 import numpy as np
 
-from ww.visualization.da_telemetry import (
+from t4dm.visualization.da_telemetry import (
     DATelemetry,
     DASnapshot,
     DASignalType,
@@ -560,7 +560,7 @@ class TestModuleExports:
 
     def test_all_exports_available(self):
         """Verify all exports are importable."""
-        from ww.visualization.da_telemetry import (
+        from t4dm.visualization.da_telemetry import (
             DATelemetry,
             DASnapshot,
             DASignalType,

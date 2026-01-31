@@ -8,7 +8,7 @@ import pytest
 from datetime import datetime, timedelta
 from unittest.mock import AsyncMock, MagicMock
 
-from ww.learning.plasticity import (
+from t4dm.learning.plasticity import (
     PlasticityType,
     PlasticityEvent,
     SynapseState,

@@ -4,9 +4,9 @@ from pathlib import Path
 
 import pytest
 
-from ww.diagrams.graph_merger import merge_from_directory
-from ww.diagrams.schema import GraphEdge, GraphNode, Subgraph, UnifiedGraph
-from ww.diagrams.graph_merger import merge_graphs
+from t4dm.diagrams.graph_merger import merge_from_directory
+from t4dm.diagrams.schema import GraphEdge, GraphNode, Subgraph, UnifiedGraph
+from t4dm.diagrams.graph_merger import merge_graphs
 
 DIAGRAMS_DIR = Path(__file__).resolve().parents[3] / "docs" / "diagrams"
 

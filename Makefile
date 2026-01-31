@@ -1,4 +1,4 @@
-# World Weaver Makefile
+# T4DM Makefile
 # System startup, common commands, and graceful shutdown
 
 .PHONY: help start stop restart health logs test lint clean deps api mcp docker-up docker-down install dev-install \
@@ -7,7 +7,7 @@
 
 # Default target
 help:
-	@echo "World Weaver Memory System - Make Commands"
+	@echo "T4DM Memory System - Make Commands"
 	@echo ""
 	@echo "Setup:"
 	@echo "  make install       Install production dependencies"
@@ -61,9 +61,9 @@ API_HOST := 0.0.0.0
 FRONTEND_PORT := 3000
 DATA_DIR := .data
 FRONTEND_DIR := frontend
-PID_FILE := .ww-api.pid
-MCP_PID_FILE := .ww-mcp.pid
-FRONTEND_PID_FILE := .ww-frontend.pid
+PID_FILE := .t4dm-api.pid
+MCP_PID_FILE := .t4dm-mcp.pid
+FRONTEND_PID_FILE := .t4dm-frontend.pid
 
 # Ensure data directory exists
 $(DATA_DIR):
@@ -79,12 +79,12 @@ dev-install:
 # Docker services (Neo4j + Qdrant)
 docker-up:
 	@echo "Starting Neo4j and Qdrant..."
-	docker run -d --name ww-neo4j \
+	docker run -d --name t4dm-neo4j \
 		-p 7474:7474 -p 7687:7687 \
 		-e NEO4J_AUTH=neo4j/password \
 		-e NEO4J_PLUGINS='["apoc"]' \
 		neo4j:5.15.0 || true
-	docker run -d --name ww-qdrant \
+	docker run -d --name t4dm-qdrant \
 		-p 6333:6333 -p 6334:6334 \
 		qdrant/qdrant:latest || true
 	@echo "Waiting for services to start..."
@@ -92,11 +92,11 @@ docker-up:
 	@echo "Services started. Neo4j: http://localhost:7474 | Qdrant: http://localhost:6333"
 
 docker-down:
-	docker stop ww-neo4j ww-qdrant 2>/dev/null || true
-	docker rm ww-neo4j ww-qdrant 2>/dev/null || true
+	docker stop t4dm-neo4j t4dm-qdrant 2>/dev/null || true
+	docker rm t4dm-neo4j t4dm-qdrant 2>/dev/null || true
 
 docker-logs:
-	docker logs -f ww-neo4j ww-qdrant
+	docker logs -f t4dm-neo4j t4dm-qdrant
 
 deps: docker-up
 
@@ -152,12 +152,12 @@ frontend-stop:
 
 # API Server
 start: $(DATA_DIR)
-	@echo "Starting World Weaver API Server on $(API_HOST):$(API_PORT)..."
-	WW_DATA_DIR=$(DATA_DIR) $(PYTHON) -m ww.api.server
+	@echo "Starting T4DM API Server on $(API_HOST):$(API_PORT)..."
+	T4DM_DATA_DIR=$(DATA_DIR) $(PYTHON) -m t4dm.api.server
 
 start-bg: $(DATA_DIR)
-	@echo "Starting World Weaver API Server in background..."
-	@WW_DATA_DIR=$(DATA_DIR) nohup $(PYTHON) -m ww.api.server > $(DATA_DIR)/api.log 2>&1 & echo $$! > $(PID_FILE)
+	@echo "Starting T4DM API Server in background..."
+	@T4DM_DATA_DIR=$(DATA_DIR) nohup $(PYTHON) -m t4dm.api.server > $(DATA_DIR)/api.log 2>&1 & echo $$! > $(PID_FILE)
 	@sleep 2
 	@if [ -f $(PID_FILE) ] && kill -0 $$(cat $(PID_FILE)) 2>/dev/null; then \
 		echo "API Server started (PID: $$(cat $(PID_FILE)))"; \
@@ -171,12 +171,12 @@ api: start
 
 # MCP Server
 mcp:
-	@echo "Starting World Weaver MCP Server..."
-	$(PYTHON) -m ww.mcp.server
+	@echo "Starting T4DM MCP Server..."
+	$(PYTHON) -m t4dm.mcp.server
 
 mcp-bg:
-	@echo "Starting World Weaver MCP Server in background..."
-	@nohup $(PYTHON) -m ww.mcp.server > $(DATA_DIR)/mcp.log 2>&1 & echo $$! > $(MCP_PID_FILE)
+	@echo "Starting T4DM MCP Server in background..."
+	@nohup $(PYTHON) -m t4dm.mcp.server > $(DATA_DIR)/mcp.log 2>&1 & echo $$! > $(MCP_PID_FILE)
 	@sleep 2
 	@if [ -f $(MCP_PID_FILE) ] && kill -0 $$(cat $(MCP_PID_FILE)) 2>/dev/null; then \
 		echo "MCP Server started (PID: $$(cat $(MCP_PID_FILE)))"; \
@@ -187,7 +187,7 @@ mcp-bg:
 
 # Stop servers gracefully
 stop:
-	@echo "Stopping World Weaver servers..."
+	@echo "Stopping T4DM servers..."
 	@if [ -f $(PID_FILE) ]; then \
 		PID=$$(cat $(PID_FILE)); \
 		if kill -0 $$PID 2>/dev/null; then \
@@ -228,8 +228,8 @@ stop:
 		rm -f $(FRONTEND_PID_FILE); \
 	fi
 	@# Also kill any orphaned processes
-	@pkill -f "python -m ww.api.server" 2>/dev/null || true
-	@pkill -f "python -m ww.mcp.server" 2>/dev/null || true
+	@pkill -f "python -m t4dm.api.server" 2>/dev/null || true
+	@pkill -f "python -m t4dm.mcp.server" 2>/dev/null || true
 	@pkill -f "npm run dev" 2>/dev/null || true
 	@echo "Servers stopped."
 
@@ -243,7 +243,7 @@ stats:
 	@curl -s http://localhost:$(API_PORT)/api/v1/stats | python -m json.tool 2>/dev/null || echo "API server not responding"
 
 status:
-	@echo "World Weaver Process Status:"
+	@echo "T4DM Process Status:"
 	@echo "----------------------------"
 	@echo "Backend:"
 	@ps aux | grep -E "(ww\.(api|mcp)\.server)" | grep -v grep || echo "  No backend processes running"
@@ -271,24 +271,24 @@ test-fast:
 	$(PYTHON) -m pytest tests/ -v -m "not slow and not benchmark"
 
 test-cov:
-	$(PYTHON) -m pytest tests/ -v --cov=src/ww --cov-report=term-missing --cov-report=html
+	$(PYTHON) -m pytest tests/ -v --cov=src/t4dm --cov-report=term-missing --cov-report=html
 
 test-integration:
 	$(PYTHON) -m pytest tests/integration/ -v
 
 # Linting and formatting
 lint:
-	$(PYTHON) -m ruff check src/ww tests/
-	$(PYTHON) -m mypy src/ww --ignore-missing-imports
+	$(PYTHON) -m ruff check src/t4dm tests/
+	$(PYTHON) -m mypy src/t4dm --ignore-missing-imports
 
 format:
-	$(PYTHON) -m black src/ww tests/
-	$(PYTHON) -m ruff check --fix src/ww tests/
+	$(PYTHON) -m black src/t4dm tests/
+	$(PYTHON) -m ruff check --fix src/t4dm tests/
 
 # Cleanup
 clean:
 	rm -rf .pytest_cache __pycache__ .mypy_cache .ruff_cache
-	rm -rf src/ww/__pycache__ tests/__pycache__
+	rm -rf src/t4dm/__pycache__ tests/__pycache__
 	rm -rf htmlcov .coverage coverage.xml
 	rm -rf dist build *.egg-info
 	find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
@@ -304,7 +304,7 @@ dev: docker-up dev-install start
 # All-in-one startup (backend only)
 up: docker-up start-bg
 	@echo ""
-	@echo "World Weaver Backend is running!"
+	@echo "T4DM Backend is running!"
 	@echo "  API:    http://localhost:$(API_PORT)"
 	@echo "  Docs:   http://localhost:$(API_PORT)/docs"
 	@echo "  Health: http://localhost:$(API_PORT)/api/v1/health"
@@ -314,7 +314,7 @@ up: docker-up start-bg
 # Full stack startup (Docker + API + Frontend)
 up-all: docker-up start-bg frontend-bg
 	@echo ""
-	@echo "World Weaver Full Stack is running!"
+	@echo "T4DM Full Stack is running!"
 	@echo "  Frontend: http://localhost:$(FRONTEND_PORT)"
 	@echo "  API:      http://localhost:$(API_PORT)"
 	@echo "  Docs:     http://localhost:$(API_PORT)/docs"
@@ -324,8 +324,8 @@ up-all: docker-up start-bg frontend-bg
 
 # All-in-one shutdown (backend only)
 down: stop docker-down
-	@echo "World Weaver backend fully stopped."
+	@echo "T4DM backend fully stopped."
 
 # Full stack shutdown
 down-all: stop docker-down
-	@echo "World Weaver fully stopped."
+	@echo "T4DM fully stopped."

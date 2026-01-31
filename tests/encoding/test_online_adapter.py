@@ -22,7 +22,7 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-from ww.encoding.online_adapter import (
+from t4dm.encoding.online_adapter import (
     AdapterConfig,
     AdapterState,
     OnlineEmbeddingAdapter,

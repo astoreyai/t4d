@@ -8,8 +8,8 @@ import pytest
 import numpy as np
 from unittest.mock import AsyncMock
 
-from ww.embedding.adapter import MockEmbeddingAdapter, EmbeddingAdapter
-from ww.embedding.ensemble import (
+from t4dm.embedding.adapter import MockEmbeddingAdapter, EmbeddingAdapter
+from t4dm.embedding.ensemble import (
     EnsembleStrategy,
     AdapterWeight,
     EnsembleEmbeddingAdapter,

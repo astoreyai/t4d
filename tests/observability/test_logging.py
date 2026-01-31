@@ -6,7 +6,7 @@ import pytest
 from io import StringIO
 from unittest.mock import patch
 
-from ww.observability.logging import (
+from t4dm.observability.logging import (
     StructuredFormatter,
     LogContext,
     configure_logging,
@@ -152,7 +152,7 @@ class TestStructuredLogging:
         set_context("session-abc", "operation-xyz")
 
         # Context should be set
-        from ww.observability.logging import _session_id, _operation_id
+        from t4dm.observability.logging import _session_id, _operation_id
         assert _session_id.get() == "session-abc"
         assert _operation_id.get() == "operation-xyz"
 

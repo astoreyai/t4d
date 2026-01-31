@@ -13,15 +13,15 @@ import numpy as np
 import pytest
 import torch
 
-from ww.spiking.cortical_block import CorticalBlock
-from ww.spiking.cortical_stack import CorticalStack
-from ww.spiking.lif import LIFNeuron
-from ww.spiking.spike_attention import SpikeAttention
-from ww.spiking.thalamic_gate import ThalamicGate
-from ww.spiking.apical_modulation import ApicalModulation
-from ww.spiking.rwkv_recurrence import RWKVRecurrence
-from ww.storage.t4dx.engine import T4DXEngine
-from ww.storage.t4dx.types import ItemRecord
+from t4dm.spiking.cortical_block import CorticalBlock
+from t4dm.spiking.cortical_stack import CorticalStack
+from t4dm.spiking.lif import LIFNeuron
+from t4dm.spiking.spike_attention import SpikeAttention
+from t4dm.spiking.thalamic_gate import ThalamicGate
+from t4dm.spiking.apical_modulation import ApicalModulation
+from t4dm.spiking.rwkv_recurrence import RWKVRecurrence
+from t4dm.storage.t4dx.engine import T4DXEngine
+from t4dm.storage.t4dx.types import ItemRecord
 
 
 DIM = 32
@@ -223,7 +223,7 @@ class TestT4DXOperationVisibility:
 
     def test_traverse_returns_edges(self, tmp_path):
         """TRAVERSE returns connected edges."""
-        from ww.storage.t4dx.types import EdgeRecord
+        from t4dm.storage.t4dx.types import EdgeRecord
 
         engine = T4DXEngine(tmp_path / "vis_traverse")
         engine.startup()

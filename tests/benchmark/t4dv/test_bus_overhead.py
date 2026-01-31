@@ -9,8 +9,8 @@ import time
 
 import pytest
 
-from ww.t4dv.bus import ObservationBus
-from ww.t4dv.events import SpikeEvent, StorageEvent
+from t4dm.t4dv.bus import ObservationBus
+from t4dm.t4dv.events import SpikeEvent, StorageEvent
 
 
 class TestBusOverhead:

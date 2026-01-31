@@ -3,7 +3,7 @@
 import pytest
 import torch
 
-from ww.spiking.apical_modulation import ApicalModulation
+from t4dm.spiking.apical_modulation import ApicalModulation
 
 
 class TestApicalModulation:

@@ -18,7 +18,7 @@ class TestFigureLeakPrevention:
 
     def test_activation_heatmap_closes_figure_on_show(self):
         """Test activation heatmap code has proper plt.close(fig) pattern."""
-        from ww.visualization import activation_heatmap
+        from t4dm.visualization import activation_heatmap
 
         source = inspect.getsource(activation_heatmap)
 
@@ -31,7 +31,7 @@ class TestFigureLeakPrevention:
 
     def test_pattern_separation_closes_figure_on_show(self):
         """Test pattern separation code has proper plt.close(fig) pattern."""
-        from ww.visualization import pattern_separation
+        from t4dm.visualization import pattern_separation
 
         source = inspect.getsource(pattern_separation)
 
@@ -42,7 +42,7 @@ class TestFigureLeakPrevention:
 
     def test_plasticity_traces_closes_figure_on_show(self):
         """Test plasticity traces code has proper plt.close(fig) pattern."""
-        from ww.visualization import plasticity_traces
+        from t4dm.visualization import plasticity_traces
 
         source = inspect.getsource(plasticity_traces)
 
@@ -53,7 +53,7 @@ class TestFigureLeakPrevention:
 
     def test_embedding_projections_closes_figure_on_show(self):
         """Test embedding projections code has proper plt.close(fig) pattern."""
-        from ww.visualization import embedding_projections
+        from t4dm.visualization import embedding_projections
 
         source = inspect.getsource(embedding_projections)
 
@@ -65,7 +65,7 @@ class TestFigureLeakPrevention:
     def test_consolidation_replay_code_closes_figure(self):
         """Test consolidation replay code has proper plt.close(fig) pattern."""
         import inspect
-        from ww.visualization import consolidation_replay
+        from t4dm.visualization import consolidation_replay
 
         # Read the source code and verify the fix pattern exists
         source = inspect.getsource(consolidation_replay)
@@ -84,7 +84,7 @@ class TestFigureCloseOnSave:
 
     def test_savefig_closes_figure(self):
         """Verify code closes figure after savefig."""
-        from ww.visualization import activation_heatmap
+        from t4dm.visualization import activation_heatmap
 
         source = inspect.getsource(activation_heatmap)
 

@@ -17,7 +17,7 @@ References:
 import numpy as np
 import pytest
 
-from ww.nca.pose_learner import (
+from t4dm.nca.pose_learner import (
     PoseDimensionDiscovery,
     PoseLearnerConfig,
     PoseLearnerState,
@@ -594,7 +594,7 @@ class TestCapsuleIntegration:
 
     def test_integrate_with_capsule_layer(self):
         """Integration with capsule layer works."""
-        from ww.nca.capsules import CapsuleConfig, CapsuleLayer
+        from t4dm.nca.capsules import CapsuleConfig, CapsuleLayer
 
         # Create capsule layer
         capsule_config = CapsuleConfig(

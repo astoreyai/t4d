@@ -10,13 +10,13 @@ from pathlib import Path
 from datetime import datetime, timedelta
 from uuid import uuid4, UUID
 
-from ww.learning.collector import (
+from t4dm.learning.collector import (
     EventStore,
     EventCollector,
     CollectorConfig,
     get_collector,
 )
-from ww.learning.events import (
+from t4dm.learning.events import (
     RetrievalEvent,
     OutcomeEvent,
     Experience,
@@ -657,7 +657,7 @@ class TestGetCollector:
     def test_returns_instance(self, tmp_path, monkeypatch):
         """Test singleton creation."""
         # Reset global
-        import ww.learning.collector as collector_module
+        import t4dm.learning.collector as collector_module
         collector_module._collector_instance = None
 
         monkeypatch.setenv("HOME", str(tmp_path))
@@ -666,7 +666,7 @@ class TestGetCollector:
 
     def test_returns_same_instance(self, tmp_path, monkeypatch):
         """Test singleton behavior."""
-        import ww.learning.collector as collector_module
+        import t4dm.learning.collector as collector_module
         collector_module._collector_instance = None
 
         monkeypatch.setenv("HOME", str(tmp_path))

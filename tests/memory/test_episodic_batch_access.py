@@ -4,8 +4,8 @@ from datetime import datetime, timedelta
 from uuid import uuid4
 from unittest.mock import AsyncMock, MagicMock, patch
 
-from ww.memory.episodic import EpisodicMemory
-from ww.core.types import Episode
+from t4dm.memory.episodic import EpisodicMemory
+from t4dm.core.types import Episode
 
 
 class TestBatchAccessUpdate:

@@ -12,7 +12,7 @@ Tests cover:
 import numpy as np
 import pytest
 
-from ww.nca.swr_coupling import (
+from t4dm.nca.swr_coupling import (
     SWRNeuralFieldCoupling,
     SWRConfig,
     SWRCouplingState,
@@ -20,7 +20,7 @@ from ww.nca.swr_coupling import (
     SWRPhase,
     create_swr_coupling,
 )
-from ww.nca.neural_field import NeuralFieldSolver, NeuralFieldConfig
+from t4dm.nca.neural_field import NeuralFieldSolver, NeuralFieldConfig
 
 
 # =============================================================================

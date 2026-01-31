@@ -3,10 +3,10 @@
 import pytest
 from fastapi.testclient import TestClient
 
-from ww.t4dv.aggregator import SnapshotAggregator
-from ww.t4dv.bus import ObservationBus
-from ww.t4dv.events import SpikeEvent
-from ww.t4dv.server import create_app
+from t4dm.t4dv.aggregator import SnapshotAggregator
+from t4dm.t4dv.bus import ObservationBus
+from t4dm.t4dv.events import SpikeEvent
+from t4dm.t4dv.server import create_app
 
 
 @pytest.fixture

@@ -20,9 +20,9 @@ from datetime import datetime, timedelta
 from typing import Dict, List, Set
 from uuid import uuid4
 
-from ww.core.learned_gate import LearnedMemoryGate, GateDecision
-from ww.core.memory_gate import GateContext, StorageDecision
-from ww.learning.neuromodulators import NeuromodulatorState
+from t4dm.core.learned_gate import LearnedMemoryGate, GateDecision
+from t4dm.core.memory_gate import GateContext, StorageDecision
+from t4dm.learning.neuromodulators import NeuromodulatorState
 
 
 # =============================================================================

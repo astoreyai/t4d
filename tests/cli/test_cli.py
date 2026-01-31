@@ -14,7 +14,7 @@ import tempfile
 import pytest
 from typer.testing import CliRunner
 
-from ww.cli.main import app
+from t4dm.cli.main import app
 
 
 runner = CliRunner()
@@ -36,14 +36,14 @@ class TestStatusCommand:
 
     def test_status_shows_configuration(self):
         """Status command shows configuration table."""
-        with patch("ww.core.config.get_settings") as mock_settings:
+        with patch("t4dm.core.config.get_settings") as mock_settings:
             mock_settings.return_value = MagicMock(
                 environment="test",
                 qdrant_host="localhost",
                 neo4j_uri="bolt://localhost:7687",
                 embedding_model="bge-m3",
             )
-            with patch("ww.core.services.get_services", new=AsyncMock()):
+            with patch("t4dm.core.services.get_services", new=AsyncMock()):
                 result = runner.invoke(app, ["status"])
                 assert result.exit_code == 0
                 assert "World Weaver Status" in result.stdout
@@ -65,7 +65,7 @@ class TestConfigCommand:
 
     def test_config_show_displays_settings(self):
         """Config show displays current settings."""
-        with patch("ww.core.config.get_settings") as mock_settings:
+        with patch("t4dm.core.config.get_settings") as mock_settings:
             mock_obj = MagicMock()
             mock_obj.__fields__ = {"environment": None, "qdrant_host": None}
             mock_obj.environment = "test"
@@ -80,7 +80,7 @@ class TestConfigCommand:
 class TestStoreCommand:
     """Tests for store command."""
 
-    @patch("ww.core.services.get_services")
+    @patch("t4dm.core.services.get_services")
     def test_store_episodic(self, mock_services):
         """Store command creates episodic memory."""
         mock_episodic = MagicMock()
@@ -96,7 +96,7 @@ class TestStoreCommand:
         assert result.exit_code == 0
         assert "Stored episode" in result.stdout
 
-    @patch("ww.core.services.get_services")
+    @patch("t4dm.core.services.get_services")
     def test_store_semantic(self, mock_services):
         """Store command creates semantic entity."""
         mock_semantic = MagicMock()
@@ -112,7 +112,7 @@ class TestStoreCommand:
         assert result.exit_code == 0
         assert "Stored entity" in result.stdout
 
-    @patch("ww.core.services.get_services")
+    @patch("t4dm.core.services.get_services")
     def test_store_procedural(self, mock_services):
         """Store command creates procedural skill."""
         mock_procedural = MagicMock()
@@ -130,7 +130,7 @@ class TestStoreCommand:
 
     def test_store_with_tags(self):
         """Store command parses comma-separated tags."""
-        with patch("ww.core.services.get_services") as mock_services:
+        with patch("t4dm.core.services.get_services") as mock_services:
             mock_episodic = MagicMock()
             mock_episodic.add_episode = AsyncMock(
                 return_value=MagicMock(id="test-uuid")
@@ -145,7 +145,7 @@ class TestStoreCommand:
 
     def test_store_with_metadata(self):
         """Store command parses JSON metadata."""
-        with patch("ww.core.services.get_services") as mock_services:
+        with patch("t4dm.core.services.get_services") as mock_services:
             mock_episodic = MagicMock()
             mock_episodic.add_episode = AsyncMock(
                 return_value=MagicMock(id="test-uuid")
@@ -160,7 +160,7 @@ class TestStoreCommand:
 
     def test_store_invalid_type(self):
         """Store command rejects invalid memory type."""
-        with patch("ww.core.services.get_services") as mock_services:
+        with patch("t4dm.core.services.get_services") as mock_services:
             mock_services.return_value = (MagicMock(), MagicMock(), MagicMock())
 
             result = runner.invoke(
@@ -173,7 +173,7 @@ class TestStoreCommand:
 class TestRecallCommand:
     """Tests for recall command."""
 
-    @patch("ww.core.services.get_services")
+    @patch("t4dm.core.services.get_services")
     def test_recall_table_format(self, mock_services):
         """Recall command shows results in table format."""
         mock_episodic = MagicMock()
@@ -198,7 +198,7 @@ class TestRecallCommand:
         assert result.exit_code == 0
         assert "Recall Results" in result.stdout
 
-    @patch("ww.core.services.get_services")
+    @patch("t4dm.core.services.get_services")
     def test_recall_json_format(self, mock_services):
         """Recall command shows results in JSON format."""
         mock_episodic = MagicMock()
@@ -224,7 +224,7 @@ class TestRecallCommand:
         # JSON output should be parseable
         assert "episodic" in result.stdout
 
-    @patch("ww.core.services.get_services")
+    @patch("t4dm.core.services.get_services")
     def test_recall_specific_type(self, mock_services):
         """Recall command filters by memory type."""
         mock_episodic = MagicMock()
@@ -239,7 +239,7 @@ class TestRecallCommand:
         assert result.exit_code == 0
         mock_episodic.recall_similar.assert_called_once()
 
-    @patch("ww.core.services.get_services")
+    @patch("t4dm.core.services.get_services")
     def test_recall_with_limit(self, mock_services):
         """Recall command respects limit parameter."""
         mock_episodic = MagicMock()
@@ -263,7 +263,7 @@ class TestConsolidateCommand:
 
     def test_consolidate_dry_run(self):
         """Consolidate dry run shows pending stats."""
-        with patch("ww.consolidation.service.get_consolidation_service") as mock_service:
+        with patch("t4dm.consolidation.service.get_consolidation_service") as mock_service:
             mock_svc = MagicMock()
             mock_svc.get_scheduler_stats = MagicMock(return_value={"pending_count": 5})
             mock_service.return_value = mock_svc
@@ -274,7 +274,7 @@ class TestConsolidateCommand:
 
     def test_consolidate_incremental(self):
         """Consolidate runs light mode by default."""
-        with patch("ww.consolidation.service.get_consolidation_service") as mock_service:
+        with patch("t4dm.consolidation.service.get_consolidation_service") as mock_service:
             mock_svc = MagicMock()
             mock_svc.consolidate = AsyncMock(
                 return_value={
@@ -292,7 +292,7 @@ class TestConsolidateCommand:
 
     def test_consolidate_full(self):
         """Consolidate --full runs deep mode."""
-        with patch("ww.consolidation.service.get_consolidation_service") as mock_service:
+        with patch("t4dm.consolidation.service.get_consolidation_service") as mock_service:
             mock_svc = MagicMock()
             mock_svc.consolidate = AsyncMock(
                 return_value={
@@ -323,7 +323,7 @@ class TestEpisodicSubcommands:
         assert "valence" in result.stdout.lower()
         assert "tags" in result.stdout.lower()
 
-    @patch("ww.core.services.get_services")
+    @patch("t4dm.core.services.get_services")
     def test_episodic_search(self, mock_services):
         """Episodic search filters to episodic type."""
         mock_episodic = MagicMock()
@@ -333,7 +333,7 @@ class TestEpisodicSubcommands:
         result = runner.invoke(app, ["episodic", "search", "test query"])
         assert result.exit_code == 0
 
-    @patch("ww.core.services.get_services")
+    @patch("t4dm.core.services.get_services")
     def test_episodic_recent(self, mock_services):
         """Episodic recent shows recent episodes."""
         mock_episodic = MagicMock()
@@ -363,7 +363,7 @@ class TestSemanticSubcommands:
         assert result.exit_code == 0
         assert "desc" in result.stdout.lower() or "description" in result.stdout.lower()
 
-    @patch("ww.core.services.get_services")
+    @patch("t4dm.core.services.get_services")
     def test_semantic_search(self, mock_services):
         """Semantic search filters to semantic type."""
         mock_semantic = MagicMock()
@@ -386,7 +386,7 @@ class TestProceduralSubcommands:
         assert result.exit_code == 0
         assert "desc" in result.stdout.lower() or "description" in result.stdout.lower()
 
-    @patch("ww.core.services.get_services")
+    @patch("t4dm.core.services.get_services")
     def test_procedural_search(self, mock_services):
         """Procedural search filters to procedural type."""
         mock_procedural = MagicMock()
@@ -420,27 +420,27 @@ class TestSessionManagement:
     """Tests for session ID handling."""
 
     def test_session_from_environment(self):
-        """CLI uses WW_SESSION_ID from environment."""
-        os.environ["WW_SESSION_ID"] = "test-session-123"
+        """CLI uses T4DM_SESSION_ID from environment."""
+        os.environ["T4DM_SESSION_ID"] = "test-session-123"
         try:
-            from ww.cli.main import get_session_id
+            from t4dm.cli.main import get_session_id
             assert get_session_id() == "test-session-123"
         finally:
-            del os.environ["WW_SESSION_ID"]
+            del os.environ["T4DM_SESSION_ID"]
 
     def test_default_session_id(self):
         """CLI uses default session when not set."""
-        if "WW_SESSION_ID" in os.environ:
-            del os.environ["WW_SESSION_ID"]
+        if "T4DM_SESSION_ID" in os.environ:
+            del os.environ["T4DM_SESSION_ID"]
 
-        from ww.cli.main import get_session_id
+        from t4dm.cli.main import get_session_id
         assert get_session_id() == "cli-session"
 
 
 class TestErrorHandling:
     """Tests for error handling in CLI."""
 
-    @patch("ww.core.services.get_services")
+    @patch("t4dm.core.services.get_services")
     def test_store_handles_errors(self, mock_services):
         """Store command handles service errors gracefully."""
         mock_services.side_effect = Exception("Connection failed")
@@ -449,7 +449,7 @@ class TestErrorHandling:
         assert result.exit_code == 1
         assert "Error" in result.stdout
 
-    @patch("ww.core.services.get_services")
+    @patch("t4dm.core.services.get_services")
     def test_recall_handles_errors(self, mock_services):
         """Recall command handles service errors gracefully."""
         mock_services.side_effect = Exception("Connection failed")

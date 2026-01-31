@@ -4,8 +4,8 @@ import asyncio
 
 import pytest
 
-from ww.t4dv.bus import ObservationBus
-from ww.t4dv.events import ObservationEvent, SpikeEvent
+from t4dm.t4dv.bus import ObservationBus
+from t4dm.t4dv.events import ObservationEvent, SpikeEvent
 
 
 class TestObservationBus:

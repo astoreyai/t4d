@@ -4,7 +4,7 @@ import pytest
 from datetime import datetime, date, timedelta
 from uuid import uuid4
 
-from ww.core.personal_entities import (
+from t4dm.core.personal_entities import (
     # Enums
     ContactType,
     RelationshipType,

@@ -11,14 +11,14 @@ from uuid import uuid4
 
 import pytest
 
-from ww.sdk.agent_client import (
+from t4dm.sdk.agent_client import (
     AgentMemoryClient,
     CreditAssignmentResult,
     RetrievalContext,
     ScoredMemory,
     create_agent_memory_client,
 )
-from ww.sdk.models import Episode, EpisodeContext
+from t4dm.sdk.models import Episode, EpisodeContext
 
 
 @pytest.fixture
@@ -40,7 +40,7 @@ def mock_episode():
 @pytest.fixture
 def mock_recall_result(mock_episode):
     """Create a mock recall result."""
-    from ww.sdk.models import RecallResult
+    from t4dm.sdk.models import RecallResult
     return RecallResult(
         query="Python decorators",
         episodes=[mock_episode],
@@ -145,7 +145,7 @@ class TestAgentMemoryClientRetrieval:
     @pytest.mark.asyncio
     async def test_retrieve_for_task_marks_eligibility(self, mock_recall_result):
         """Test that retrieval marks memories as active in eligibility traces."""
-        with patch("ww.sdk.agent_client.AsyncWorldWeaverClient") as MockClient:
+        with patch("t4dm.sdk.agent_client.AsyncWorldWeaverClient") as MockClient:
             mock_client_instance = AsyncMock()
             mock_client_instance.recall_episodes = AsyncMock(return_value=mock_recall_result)
             MockClient.return_value = mock_client_instance
@@ -166,7 +166,7 @@ class TestAgentMemoryClientRetrieval:
     @pytest.mark.asyncio
     async def test_retrieve_stores_context(self, mock_recall_result):
         """Test that retrieval stores context for credit assignment."""
-        with patch("ww.sdk.agent_client.AsyncWorldWeaverClient") as MockClient:
+        with patch("t4dm.sdk.agent_client.AsyncWorldWeaverClient") as MockClient:
             mock_client_instance = AsyncMock()
             mock_client_instance.recall_episodes = AsyncMock(return_value=mock_recall_result)
             MockClient.return_value = mock_client_instance
@@ -191,7 +191,7 @@ class TestAgentMemoryClientOutcomes:
     @pytest.mark.asyncio
     async def test_report_outcome_success(self, mock_recall_result):
         """Test successful outcome reporting."""
-        with patch("ww.sdk.agent_client.AsyncWorldWeaverClient") as MockClient:
+        with patch("t4dm.sdk.agent_client.AsyncWorldWeaverClient") as MockClient:
             mock_client_instance = AsyncMock()
             mock_client_instance.recall_episodes = AsyncMock(return_value=mock_recall_result)
             mock_client_instance._request = AsyncMock(return_value={})
@@ -217,7 +217,7 @@ class TestAgentMemoryClientOutcomes:
     @pytest.mark.asyncio
     async def test_report_outcome_failure(self, mock_recall_result):
         """Test failure outcome reporting."""
-        with patch("ww.sdk.agent_client.AsyncWorldWeaverClient") as MockClient:
+        with patch("t4dm.sdk.agent_client.AsyncWorldWeaverClient") as MockClient:
             mock_client_instance = AsyncMock()
             mock_client_instance.recall_episodes = AsyncMock(return_value=mock_recall_result)
             mock_client_instance._request = AsyncMock(return_value={})
@@ -238,7 +238,7 @@ class TestAgentMemoryClientOutcomes:
     @pytest.mark.asyncio
     async def test_report_outcome_partial_credit(self, mock_recall_result):
         """Test partial credit reporting."""
-        with patch("ww.sdk.agent_client.AsyncWorldWeaverClient") as MockClient:
+        with patch("t4dm.sdk.agent_client.AsyncWorldWeaverClient") as MockClient:
             mock_client_instance = AsyncMock()
             mock_client_instance.recall_episodes = AsyncMock(return_value=mock_recall_result)
             mock_client_instance._request = AsyncMock(return_value={})
@@ -293,8 +293,8 @@ class TestFFRetrievalScorerIntegration:
 
     def test_ff_scorer_parameter(self):
         """Test that FFRetrievalScorer can be passed to client."""
-        from ww.bridges.ff_retrieval_scorer import FFRetrievalScorer, FFRetrievalConfig
-        from ww.nca.forward_forward import ForwardForwardLayer, ForwardForwardConfig
+        from t4dm.bridges.ff_retrieval_scorer import FFRetrievalScorer, FFRetrievalConfig
+        from t4dm.nca.forward_forward import ForwardForwardLayer, ForwardForwardConfig
 
         ff_config = ForwardForwardConfig(input_dim=64, hidden_dim=32)
         ff_layer = ForwardForwardLayer(ff_config)
@@ -306,8 +306,8 @@ class TestFFRetrievalScorerIntegration:
     def test_compute_ff_relevance_with_scorer(self, mock_episode):
         """Test FF relevance computation with actual scorer."""
         import numpy as np
-        from ww.bridges.ff_retrieval_scorer import FFRetrievalScorer, FFRetrievalConfig
-        from ww.nca.forward_forward import ForwardForwardLayer, ForwardForwardConfig
+        from t4dm.bridges.ff_retrieval_scorer import FFRetrievalScorer, FFRetrievalConfig
+        from t4dm.nca.forward_forward import ForwardForwardLayer, ForwardForwardConfig
 
         ff_config = ForwardForwardConfig(input_dim=64, hidden_dim=32)
         ff_layer = ForwardForwardLayer(ff_config)
@@ -330,8 +330,8 @@ class TestFFRetrievalScorerIntegration:
 
     def test_compute_ff_relevance_fallback_no_embeddings(self, mock_episode):
         """Test FF relevance falls back when no embeddings provided."""
-        from ww.bridges.ff_retrieval_scorer import FFRetrievalScorer
-        from ww.nca.forward_forward import ForwardForwardLayer, ForwardForwardConfig
+        from t4dm.bridges.ff_retrieval_scorer import FFRetrievalScorer
+        from t4dm.nca.forward_forward import ForwardForwardLayer, ForwardForwardConfig
 
         ff_config = ForwardForwardConfig(input_dim=64, hidden_dim=32)
         ff_layer = ForwardForwardLayer(ff_config)
@@ -379,8 +379,8 @@ class TestConvenienceFunctions:
 
     def test_create_agent_memory_client_with_ff_scorer(self):
         """Test client creation with FF scorer."""
-        from ww.bridges.ff_retrieval_scorer import FFRetrievalScorer
-        from ww.nca.forward_forward import ForwardForwardLayer, ForwardForwardConfig
+        from t4dm.bridges.ff_retrieval_scorer import FFRetrievalScorer
+        from t4dm.nca.forward_forward import ForwardForwardLayer, ForwardForwardConfig
 
         ff_config = ForwardForwardConfig(input_dim=128, hidden_dim=64)
         ff_layer = ForwardForwardLayer(ff_config)

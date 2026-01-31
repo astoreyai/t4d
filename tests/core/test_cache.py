@@ -17,7 +17,7 @@ from datetime import datetime, timedelta
 import numpy as np
 import pytest
 
-from ww.core.cache import (
+from t4dm.core.cache import (
     CacheStats,
     InMemoryCache,
     RedisCache,
@@ -27,7 +27,7 @@ from ww.core.cache import (
     hash_text,
     reset_cache,
 )
-from ww.core.cache_config import RedisCacheConfig
+from t4dm.core.cache_config import RedisCacheConfig
 
 
 class TestInMemoryCache:
@@ -338,7 +338,7 @@ class TestCacheIntegration:
 
     async def test_embedding_adapter_cache_integration(self, cache):
         """Test cache integration with embedding adapter."""
-        from ww.embedding.adapter import BGEM3Adapter
+        from t4dm.embedding.adapter import BGEM3Adapter
 
         # Create adapter
         adapter = BGEM3Adapter(dimension=128)
@@ -402,9 +402,9 @@ class TestCacheConfig:
 
     def test_cache_config_from_env(self, monkeypatch):
         """Test creating config from environment variables."""
-        monkeypatch.setenv("WW_REDIS_URL", "redis://test:6379")
-        monkeypatch.setenv("WW_REDIS_ENABLED", "true")
-        monkeypatch.setenv("WW_CACHE_EMBEDDING_TTL", "7200")
+        monkeypatch.setenv("T4DM_REDIS_URL", "redis://test:6379")
+        monkeypatch.setenv("T4DM_REDIS_ENABLED", "true")
+        monkeypatch.setenv("T4DM_CACHE_EMBEDDING_TTL", "7200")
 
         config = RedisCacheConfig.from_env()
 

@@ -13,7 +13,7 @@ from uuid import uuid4
 import numpy as np
 import pytest
 
-from ww.consolidation.sleep import SleepConsolidation, SleepPhase
+from t4dm.consolidation.sleep import SleepConsolidation, SleepPhase
 
 
 # =============================================================================
@@ -380,7 +380,7 @@ class TestEpisodicMemoryProtocol:
 
     def test_protocol_includes_sample_random(self):
         """Test EpisodicMemory protocol includes sample_random."""
-        from ww.consolidation.sleep import EpisodicMemory
+        from t4dm.consolidation.sleep import EpisodicMemory
         import inspect
 
         # Check that sample_random is in the protocol
@@ -389,7 +389,7 @@ class TestEpisodicMemoryProtocol:
 
     def test_protocol_includes_get_recent(self):
         """Test EpisodicMemory protocol includes get_recent."""
-        from ww.consolidation.sleep import EpisodicMemory
+        from t4dm.consolidation.sleep import EpisodicMemory
         import inspect
 
         methods = [name for name, _ in inspect.getmembers(EpisodicMemory)]

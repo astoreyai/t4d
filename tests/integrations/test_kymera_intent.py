@@ -4,12 +4,12 @@ import pytest
 from datetime import datetime, timedelta
 from unittest.mock import AsyncMock, MagicMock
 
-from ww.integrations.kymera.intent_parser import (
+from t4dm.integrations.kymera.intent_parser import (
     VoiceIntentParser,
     ParsedIntent,
     TimeParser,
 )
-from ww.core.actions import ActionCategory
+from t4dm.core.actions import ActionCategory
 
 
 class TestParsedIntent:

@@ -11,7 +11,7 @@ from unittest.mock import patch
 
 import pytest
 
-from ww.core.secrets import (
+from t4dm.core.secrets import (
     ChainedBackend,
     EnvironmentBackend,
     FileBackend,
@@ -41,8 +41,8 @@ class TestEnvironmentBackend:
 
     def test_get_with_prefix(self):
         """Test getting with a prefix."""
-        with patch.dict(os.environ, {"WW_TEST_SECRET": "prefixed_value"}):
-            backend = EnvironmentBackend(prefix="WW_")
+        with patch.dict(os.environ, {"T4DM_TEST_SECRET": "prefixed_value"}):
+            backend = EnvironmentBackend(prefix="T4DM_")
             assert backend.get("TEST_SECRET") == "prefixed_value"
 
     def test_has_existing(self):
@@ -59,11 +59,11 @@ class TestEnvironmentBackend:
     def test_list_keys_with_prefix(self):
         """Test listing keys with prefix."""
         with patch.dict(os.environ, {
-            "WW_SECRET1": "v1",
-            "WW_SECRET2": "v2",
+            "T4DM_SECRET1": "v1",
+            "T4DM_SECRET2": "v2",
             "OTHER_VAR": "v3",
         }, clear=True):
-            backend = EnvironmentBackend(prefix="WW_")
+            backend = EnvironmentBackend(prefix="T4DM_")
             keys = backend.list_keys()
             assert "SECRET1" in keys
             assert "SECRET2" in keys
@@ -186,9 +186,9 @@ class TestSecretsConfig:
     def test_from_env(self):
         """Test configuration from environment."""
         with patch.dict(os.environ, {
-            "WW_SECRETS_BACKEND": "file",
-            "WW_SECRETS_DIR": "/custom/secrets",
-            "WW_SECRETS_AUDIT": "false",
+            "T4DM_SECRETS_BACKEND": "file",
+            "T4DM_SECRETS_DIR": "/custom/secrets",
+            "T4DM_SECRETS_AUDIT": "false",
         }):
             config = SecretsConfig.from_env()
             assert config.backend == "file"
@@ -287,8 +287,8 @@ class TestSecretKey:
     def test_known_keys(self):
         """Test known secret keys exist."""
         assert SecretKey.OPENAI_API_KEY.value == "OPENAI_API_KEY"
-        assert SecretKey.DATABASE_PASSWORD.value == "WW_DATABASE_PASSWORD"
-        assert SecretKey.JWT_SECRET.value == "WW_JWT_SECRET"
+        assert SecretKey.DATABASE_PASSWORD.value == "T4DM_DATABASE_PASSWORD"
+        assert SecretKey.JWT_SECRET.value == "T4DM_JWT_SECRET"
 
     def test_all_keys_have_values(self):
         """Test all keys have string values."""

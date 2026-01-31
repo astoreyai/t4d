@@ -1,8 +1,8 @@
 """Tests for biological correctness fixes."""
 import numpy as np
 import pytest
-from ww.nca.neuromod_crosstalk import NeuromodCrosstalk, NeuromodCrosstalkConfig
-from ww.nca.hippocampus import HippocampalCircuit, HippocampalConfig
+from t4dm.nca.neuromod_crosstalk import NeuromodCrosstalk, NeuromodCrosstalkConfig
+from t4dm.nca.hippocampus import HippocampalCircuit, HippocampalConfig
 
 
 class TestAChDAGating:
@@ -213,21 +213,21 @@ class TestNBMCognitiveMode:
 
     def test_ach_encoding_threshold(self):
         """P1-11: ACh=0.7 → ENCODING."""
-        from ww.nca.nucleus_basalis import NucleusBasalisCircuit
+        from t4dm.nca.nucleus_basalis import NucleusBasalisCircuit
         nbm = NucleusBasalisCircuit()
         nbm.state.ach_level = 0.7
         assert nbm.get_cognitive_mode() == "ENCODING"
 
     def test_ach_retrieval_threshold(self):
         """P1-11: ACh=0.3 → RETRIEVAL."""
-        from ww.nca.nucleus_basalis import NucleusBasalisCircuit
+        from t4dm.nca.nucleus_basalis import NucleusBasalisCircuit
         nbm = NucleusBasalisCircuit()
         nbm.state.ach_level = 0.3
         assert nbm.get_cognitive_mode() == "RETRIEVAL"
 
     def test_ach_transitional(self):
         """P1-11: ACh=0.5 → TRANSITIONAL."""
-        from ww.nca.nucleus_basalis import NucleusBasalisCircuit
+        from t4dm.nca.nucleus_basalis import NucleusBasalisCircuit
         nbm = NucleusBasalisCircuit()
         nbm.state.ach_level = 0.5
         assert nbm.get_cognitive_mode() == "TRANSITIONAL"
@@ -239,7 +239,7 @@ class TestReconsolidationRequiresRetrieval:
     @pytest.mark.asyncio
     async def test_no_reconsolidation_without_retrieval(self):
         """P1-8: Episode without last_accessed should not reconsolidate."""
-        from ww.consolidation.lability import is_reconsolidation_eligible
+        from t4dm.consolidation.lability import is_reconsolidation_eligible
         from datetime import datetime
 
         # Episode with no last_accessed (never retrieved)
@@ -265,7 +265,7 @@ class TestReconsolidationRequiresRetrieval:
     @pytest.mark.asyncio
     async def test_reconsolidation_with_recent_retrieval(self):
         """P1-8: Episode with recent retrieval CAN reconsolidate."""
-        from ww.consolidation.lability import is_reconsolidation_eligible
+        from t4dm.consolidation.lability import is_reconsolidation_eligible
         from datetime import datetime, timedelta
 
         # Episode retrieved 2 hours ago (within 6h window)
@@ -294,7 +294,7 @@ class TestNeuralFieldNaN:
 
     def test_nan_injection_detected_in_state(self):
         """NaN injected into neural field state is detected immediately."""
-        from ww.nca.neural_field import NeuralFieldSolver, NeuralFieldConfig, NumericalInstabilityError
+        from t4dm.nca.neural_field import NeuralFieldSolver, NeuralFieldConfig, NumericalInstabilityError
 
         config = NeuralFieldConfig(spatial_dims=1, grid_size=16)
         solver = NeuralFieldSolver(config)
@@ -307,7 +307,7 @@ class TestNeuralFieldNaN:
 
     def test_inf_injection_detected(self):
         """Inf injected into neural field state is detected immediately."""
-        from ww.nca.neural_field import NeuralFieldSolver, NeuralFieldConfig, NumericalInstabilityError
+        from t4dm.nca.neural_field import NeuralFieldSolver, NeuralFieldConfig, NumericalInstabilityError
 
         config = NeuralFieldConfig(spatial_dims=1, grid_size=16)
         solver = NeuralFieldSolver(config)
@@ -320,7 +320,7 @@ class TestNeuralFieldNaN:
 
     def test_negative_inf_detected(self):
         """Negative Inf is also detected."""
-        from ww.nca.neural_field import NeuralFieldSolver, NeuralFieldConfig, NumericalInstabilityError
+        from t4dm.nca.neural_field import NeuralFieldSolver, NeuralFieldConfig, NumericalInstabilityError
 
         config = NeuralFieldConfig(spatial_dims=1, grid_size=16)
         solver = NeuralFieldSolver(config)
@@ -333,7 +333,7 @@ class TestNeuralFieldNaN:
 
     def test_normal_step_does_not_raise(self):
         """Normal step with finite values does not raise."""
-        from ww.nca.neural_field import NeuralFieldSolver, NeuralFieldConfig
+        from t4dm.nca.neural_field import NeuralFieldSolver, NeuralFieldConfig
 
         config = NeuralFieldConfig(spatial_dims=1, grid_size=16)
         solver = NeuralFieldSolver(config)
@@ -345,7 +345,7 @@ class TestNeuralFieldNaN:
 
     def test_multiple_nans_reported(self):
         """Error message includes count of non-finite values."""
-        from ww.nca.neural_field import NeuralFieldSolver, NeuralFieldConfig, NumericalInstabilityError
+        from t4dm.nca.neural_field import NeuralFieldSolver, NeuralFieldConfig, NumericalInstabilityError
 
         config = NeuralFieldConfig(spatial_dims=1, grid_size=16)
         solver = NeuralFieldSolver(config)
@@ -364,7 +364,7 @@ class TestDalesLaw:
 
     def test_dales_law_strict_rejects_gaba_excitatory(self):
         """GABA pathway that is not inhibitory raises in strict mode."""
-        from ww.nca.connectome import ConnectomeConfig, Connectome, DalesLawViolation, ProjectionPathway, NTSystem
+        from t4dm.nca.connectome import ConnectomeConfig, Connectome, DalesLawViolation, ProjectionPathway, NTSystem
 
         config = ConnectomeConfig(enforce_dale_law=True, strict_dales_law=True)
         conn = Connectome(config)
@@ -382,7 +382,7 @@ class TestDalesLaw:
 
     def test_dales_law_strict_rejects_glutamate_inhibitory(self):
         """Glutamate pathway that is inhibitory raises in strict mode."""
-        from ww.nca.connectome import ConnectomeConfig, Connectome, DalesLawViolation, ProjectionPathway, NTSystem
+        from t4dm.nca.connectome import ConnectomeConfig, Connectome, DalesLawViolation, ProjectionPathway, NTSystem
 
         config = ConnectomeConfig(enforce_dale_law=True, strict_dales_law=True)
         conn = Connectome(config)
@@ -400,7 +400,7 @@ class TestDalesLaw:
 
     def test_dales_law_non_strict_warns_only(self):
         """Non-strict mode returns issues but does not raise."""
-        from ww.nca.connectome import ConnectomeConfig, Connectome, ProjectionPathway, NTSystem
+        from t4dm.nca.connectome import ConnectomeConfig, Connectome, ProjectionPathway, NTSystem
 
         config = ConnectomeConfig(enforce_dale_law=True, strict_dales_law=False)
         conn = Connectome(config)
@@ -420,7 +420,7 @@ class TestDalesLaw:
 
     def test_dales_law_strict_allows_correct_gaba(self):
         """Correct GABA pathway (inhibitory) passes in strict mode."""
-        from ww.nca.connectome import ConnectomeConfig, Connectome, DalesLawViolation, ProjectionPathway, NTSystem
+        from t4dm.nca.connectome import ConnectomeConfig, Connectome, DalesLawViolation, ProjectionPathway, NTSystem
 
         config = ConnectomeConfig(enforce_dale_law=True, strict_dales_law=True)
         conn = Connectome(config)
@@ -444,7 +444,7 @@ class TestDalesLaw:
 
     def test_dales_law_strict_allows_correct_glutamate(self):
         """Correct Glutamate pathway (excitatory) passes in strict mode."""
-        from ww.nca.connectome import ConnectomeConfig, Connectome, DalesLawViolation, ProjectionPathway, NTSystem
+        from t4dm.nca.connectome import ConnectomeConfig, Connectome, DalesLawViolation, ProjectionPathway, NTSystem
 
         config = ConnectomeConfig(enforce_dale_law=True, strict_dales_law=True)
         conn = Connectome(config)
@@ -468,7 +468,7 @@ class TestDalesLaw:
 
     def test_dales_law_disabled_allows_violations(self):
         """When enforce_dale_law=False, violations are allowed."""
-        from ww.nca.connectome import ConnectomeConfig, Connectome, ProjectionPathway, NTSystem
+        from t4dm.nca.connectome import ConnectomeConfig, Connectome, ProjectionPathway, NTSystem
 
         config = ConnectomeConfig(enforce_dale_law=False, strict_dales_law=True)
         conn = Connectome(config)
@@ -492,7 +492,7 @@ class TestDADelay:
 
     def test_default_delay_200ms(self):
         """P1-2: Default DA delay should be 200ms (Schultz 1997)."""
-        from ww.nca.dopamine_integration import DopamineIntegration, DopamineIntegrationConfig, DelayBuffer
+        from t4dm.nca.dopamine_integration import DopamineIntegration, DopamineIntegrationConfig, DelayBuffer
 
         # Check config default
         config = DopamineIntegrationConfig()
@@ -508,7 +508,7 @@ class TestDADelay:
 
     def test_delay_buffer_uses_sim_time(self):
         """P1-2: DelayBuffer should use simulation time, not wall-clock time."""
-        from ww.nca.dopamine_integration import DelayBuffer
+        from t4dm.nca.dopamine_integration import DelayBuffer
 
         buffer = DelayBuffer(delay_ms=200.0)  # 0.2 seconds
 
@@ -526,7 +526,7 @@ class TestDADelay:
 
     def test_integration_tracks_sim_time(self):
         """P1-2: DopamineIntegration should track simulation time."""
-        from ww.nca.dopamine_integration import DopamineIntegration
+        from t4dm.nca.dopamine_integration import DopamineIntegration
 
         integration = DopamineIntegration()
 
@@ -543,7 +543,7 @@ class TestDADelay:
 
     def test_integration_reset_clears_sim_time(self):
         """P1-2: Reset should clear simulation time."""
-        from ww.nca.dopamine_integration import DopamineIntegration
+        from t4dm.nca.dopamine_integration import DopamineIntegration
 
         integration = DopamineIntegration()
         integration.step(dt=1.0)

@@ -3,8 +3,8 @@
 import pytest
 from datetime import datetime
 
-from ww.learning.neuromodulators import NeuromodulatorState
-from ww.spiking.neuromod_bus import NeuromodBus
+from t4dm.learning.neuromodulators import NeuromodulatorState
+from t4dm.spiking.neuromod_bus import NeuromodBus
 
 
 class TestNeuromodBus:

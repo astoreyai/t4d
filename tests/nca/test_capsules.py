@@ -8,7 +8,7 @@ pose matrix operations, and Forward-Forward integration.
 import numpy as np
 import pytest
 
-from ww.nca.capsules import (
+from t4dm.nca.capsules import (
     CapsuleConfig,
     CapsuleState,
     CapsuleLayer,
@@ -18,7 +18,7 @@ from ww.nca.capsules import (
     create_capsule_layer,
     create_capsule_network,
 )
-from ww.nca.pose import (
+from t4dm.nca.pose import (
     PoseConfig,
     PoseMatrix,
     SemanticDimension,

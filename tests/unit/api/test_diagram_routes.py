@@ -6,8 +6,8 @@ import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
-from ww.api.routes.diagrams import router
-from ww.diagrams.schema import GraphEdge, GraphNode, UnifiedGraph, GraphMetadata
+from t4dm.api.routes.diagrams import router
+from t4dm.diagrams.schema import GraphEdge, GraphNode, UnifiedGraph, GraphMetadata
 
 
 @pytest.fixture
@@ -39,7 +39,7 @@ def _mock_graph() -> UnifiedGraph:
 
 
 def test_get_diagram_graph(client):
-    with patch("ww.api.routes.diagrams._get_cached_graph", return_value=_mock_graph()):
+    with patch("t4dm.api.routes.diagrams._get_cached_graph", return_value=_mock_graph()):
         resp = client.get("/api/v1/diagrams/graph")
     assert resp.status_code == 200
     data = resp.json()
@@ -48,7 +48,7 @@ def test_get_diagram_graph(client):
 
 
 def test_get_diagram_graph_filter_subgraph(client):
-    with patch("ww.api.routes.diagrams._get_cached_graph", return_value=_mock_graph()):
+    with patch("t4dm.api.routes.diagrams._get_cached_graph", return_value=_mock_graph()):
         resp = client.get("/api/v1/diagrams/graph?subgraph=sg1")
     assert resp.status_code == 200
     data = resp.json()
@@ -56,7 +56,7 @@ def test_get_diagram_graph_filter_subgraph(client):
 
 
 def test_get_diagram_metrics(client):
-    with patch("ww.api.routes.diagrams._get_cached_graph", return_value=_mock_graph()):
+    with patch("t4dm.api.routes.diagrams._get_cached_graph", return_value=_mock_graph()):
         resp = client.get("/api/v1/diagrams/graph/metrics")
     assert resp.status_code == 200
     data = resp.json()

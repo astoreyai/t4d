@@ -6,7 +6,7 @@ import os
 from unittest.mock import AsyncMock, patch, MagicMock
 
 # Set test mode to bypass password validation
-os.environ["WW_TEST_MODE"] = "true"
+os.environ["T4DM_TEST_MODE"] = "true"
 
 
 class TestParallelBatchUpdate:
@@ -15,7 +15,7 @@ class TestParallelBatchUpdate:
     @pytest.mark.asyncio
     async def test_parallel_faster_than_sequential(self):
         """Test that parallel updates are faster than sequential."""
-        from ww.storage.qdrant_store import QdrantStore
+        from t4dm.storage.qdrant_store import QdrantStore
 
         delay_per_update = 0.05  # 50ms per update
         num_updates = 20
@@ -51,7 +51,7 @@ class TestParallelBatchUpdate:
     @pytest.mark.asyncio
     async def test_concurrency_limit_respected(self):
         """Test that max_concurrency is respected."""
-        from ww.storage.qdrant_store import QdrantStore
+        from t4dm.storage.qdrant_store import QdrantStore
 
         max_concurrent = 0
         current_concurrent = 0
@@ -86,7 +86,7 @@ class TestParallelBatchUpdate:
     @pytest.mark.asyncio
     async def test_partial_failure_continues(self):
         """Test that partial failures don't stop other updates."""
-        from ww.storage.qdrant_store import QdrantStore
+        from t4dm.storage.qdrant_store import QdrantStore
 
         call_count = 0
 
@@ -118,7 +118,7 @@ class TestParallelBatchUpdate:
     @pytest.mark.asyncio
     async def test_empty_updates_returns_zero(self):
         """Test that empty updates list returns 0."""
-        from ww.storage.qdrant_store import QdrantStore
+        from t4dm.storage.qdrant_store import QdrantStore
 
         store = QdrantStore()
         result = await store.batch_update_payloads(
@@ -135,7 +135,7 @@ class TestParallelBatchDelete:
     @pytest.mark.asyncio
     async def test_parallel_delete(self):
         """Test parallel delete operation."""
-        from ww.storage.qdrant_store import QdrantStore
+        from t4dm.storage.qdrant_store import QdrantStore
 
         deleted_ids = []
 
@@ -165,7 +165,7 @@ class TestParallelBatchDelete:
     @pytest.mark.asyncio
     async def test_delete_empty_list(self):
         """Test deleting empty list returns 0."""
-        from ww.storage.qdrant_store import QdrantStore
+        from t4dm.storage.qdrant_store import QdrantStore
 
         store = QdrantStore()
         result = await store.batch_delete(
@@ -181,14 +181,14 @@ class TestConfigParameters:
 
     def test_batch_concurrency_config(self):
         """Test batch_max_concurrency is configurable."""
-        from ww.core.config import Settings
+        from t4dm.core.config import Settings
 
         settings = Settings(batch_max_concurrency=20)
         assert settings.batch_max_concurrency == 20
 
     def test_batch_concurrency_validation(self):
         """Test batch_max_concurrency validation."""
-        from ww.core.config import Settings
+        from t4dm.core.config import Settings
         from pydantic import ValidationError
 
         with pytest.raises(ValidationError):

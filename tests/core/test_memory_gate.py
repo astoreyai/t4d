@@ -3,7 +3,7 @@
 import pytest
 from datetime import datetime, timedelta
 
-from ww.core.memory_gate import (
+from t4dm.core.memory_gate import (
     StorageDecision,
     GateContext,
     GateResult,

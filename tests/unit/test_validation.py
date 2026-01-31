@@ -20,7 +20,7 @@ from enum import Enum
 from datetime import datetime, timezone
 import numpy as np
 
-from ww.core.validation import (
+from t4dm.core.validation import (
     ValidationError,
     validate_uuid,
     validate_uuid_list,

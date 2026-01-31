@@ -4,16 +4,16 @@ import numpy as np
 import pytest
 from uuid import uuid4
 
-from ww.bridge.memory_nca import (
+from t4dm.bridge.memory_nca import (
     BridgeConfig,
     EncodingContext,
     MemoryNCABridge,
     RetrievalContext,
 )
-from ww.nca.neural_field import NeuralFieldSolver, NeurotransmitterState
-from ww.nca.coupling import LearnableCoupling
-from ww.nca.attractors import StateTransitionManager, CognitiveState
-from ww.nca.energy import EnergyLandscape
+from t4dm.nca.neural_field import NeuralFieldSolver, NeurotransmitterState
+from t4dm.nca.coupling import LearnableCoupling
+from t4dm.nca.attractors import StateTransitionManager, CognitiveState
+from t4dm.nca.energy import EnergyLandscape
 
 
 class TestBridgeConfig:
@@ -105,7 +105,7 @@ class TestMemoryNCABridge:
 
     def test_get_current_nt_state_with_field(self):
         """With field, should return field's state."""
-        from ww.nca.neural_field import NeurotransmitterType
+        from t4dm.nca.neural_field import NeurotransmitterType
         field = NeuralFieldSolver()
         field.inject_stimulus(NeurotransmitterType.DOPAMINE, 0.2)
         bridge = MemoryNCABridge(neural_field=field)

@@ -6,8 +6,8 @@ from uuid import uuid4
 
 from pydantic import ValidationError
 
-from ww.core.memory_item import MemoryItem
-from ww.core.types import (
+from t4dm.core.memory_item import MemoryItem
+from t4dm.core.types import (
     Domain,
     Entity,
     EntityType,

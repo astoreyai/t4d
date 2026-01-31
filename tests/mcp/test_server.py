@@ -11,14 +11,14 @@ from uuid import uuid4
 
 import pytest
 
-from ww.mcp.server import (
+from t4dm.mcp.server import (
     WorldWeaverMCPServer,
     create_mcp_server,
     handle_request,
 )
-from ww.mcp.tools import MEMORY_PROMPTS, MEMORY_TOOLS, ToolResult
-from ww.sdk.agent_client import ScoredMemory
-from ww.sdk.models import Episode, EpisodeContext
+from t4dm.mcp.tools import MEMORY_PROMPTS, MEMORY_TOOLS, ToolResult
+from t4dm.sdk.agent_client import ScoredMemory
+from t4dm.sdk.models import Episode, EpisodeContext
 
 
 @pytest.fixture
@@ -71,7 +71,7 @@ class TestMCPServerInit:
     @pytest.mark.asyncio
     async def test_initialize_creates_client(self, mcp_server):
         """Test initialization creates memory client."""
-        with patch("ww.mcp.server.AgentMemoryClient") as MockClient:
+        with patch("t4dm.mcp.server.AgentMemoryClient") as MockClient:
             mock_instance = AsyncMock()
             MockClient.return_value = mock_instance
 
@@ -84,7 +84,7 @@ class TestMCPServerInit:
     @pytest.mark.asyncio
     async def test_initialize_idempotent(self, mcp_server):
         """Test initialization is idempotent."""
-        with patch("ww.mcp.server.AgentMemoryClient") as MockClient:
+        with patch("t4dm.mcp.server.AgentMemoryClient") as MockClient:
             mock_instance = AsyncMock()
             MockClient.return_value = mock_instance
 
@@ -97,7 +97,7 @@ class TestMCPServerInit:
     @pytest.mark.asyncio
     async def test_shutdown(self, mcp_server):
         """Test shutdown cleans up resources."""
-        with patch("ww.mcp.server.AgentMemoryClient") as MockClient:
+        with patch("t4dm.mcp.server.AgentMemoryClient") as MockClient:
             mock_instance = AsyncMock()
             MockClient.return_value = mock_instance
 
@@ -115,7 +115,7 @@ class TestMCPProtocolHandlers:
     @pytest.mark.asyncio
     async def test_handle_initialize(self, mcp_server):
         """Test initialize handler."""
-        with patch("ww.mcp.server.AgentMemoryClient") as MockClient:
+        with patch("t4dm.mcp.server.AgentMemoryClient") as MockClient:
             mock_instance = AsyncMock()
             MockClient.return_value = mock_instance
 
@@ -147,7 +147,7 @@ class TestMCPProtocolHandlers:
     @pytest.mark.asyncio
     async def test_handle_read_resource_session(self, mcp_server):
         """Test read session resource."""
-        with patch("ww.mcp.server.AgentMemoryClient") as MockClient:
+        with patch("t4dm.mcp.server.AgentMemoryClient") as MockClient:
             mock_instance = AsyncMock()
             mock_instance.get_stats.return_value = {"session_id": "test"}
             MockClient.return_value = mock_instance
@@ -188,7 +188,7 @@ class TestMCPToolHandlers:
     @pytest.mark.asyncio
     async def test_handle_call_tool_unknown(self, mcp_server):
         """Test calling unknown tool returns error."""
-        with patch("ww.mcp.server.AgentMemoryClient") as MockClient:
+        with patch("t4dm.mcp.server.AgentMemoryClient") as MockClient:
             mock_instance = AsyncMock()
             MockClient.return_value = mock_instance
 
@@ -199,7 +199,7 @@ class TestMCPToolHandlers:
     @pytest.mark.asyncio
     async def test_handle_store(self, mcp_server, mock_episode):
         """Test ww_store tool."""
-        with patch("ww.mcp.server.AgentMemoryClient") as MockClient:
+        with patch("t4dm.mcp.server.AgentMemoryClient") as MockClient:
             mock_instance = AsyncMock()
             mock_instance.store_experience.return_value = mock_episode
             MockClient.return_value = mock_instance
@@ -218,7 +218,7 @@ class TestMCPToolHandlers:
     @pytest.mark.asyncio
     async def test_handle_store_missing_content(self, mcp_server):
         """Test ww_store requires content."""
-        with patch("ww.mcp.server.AgentMemoryClient") as MockClient:
+        with patch("t4dm.mcp.server.AgentMemoryClient") as MockClient:
             mock_instance = AsyncMock()
             MockClient.return_value = mock_instance
 
@@ -231,7 +231,7 @@ class TestMCPToolHandlers:
     @pytest.mark.asyncio
     async def test_handle_recall(self, mcp_server, mock_episode):
         """Test ww_recall tool."""
-        with patch("ww.mcp.server.AgentMemoryClient") as MockClient:
+        with patch("t4dm.mcp.server.AgentMemoryClient") as MockClient:
             mock_instance = AsyncMock()
             mock_instance.retrieve_for_task.return_value = [
                 ScoredMemory(episode=mock_episode, similarity_score=0.9)
@@ -252,7 +252,7 @@ class TestMCPToolHandlers:
     @pytest.mark.asyncio
     async def test_handle_recall_missing_query(self, mcp_server):
         """Test ww_recall requires query."""
-        with patch("ww.mcp.server.AgentMemoryClient") as MockClient:
+        with patch("t4dm.mcp.server.AgentMemoryClient") as MockClient:
             mock_instance = AsyncMock()
             MockClient.return_value = mock_instance
 
@@ -265,7 +265,7 @@ class TestMCPToolHandlers:
     @pytest.mark.asyncio
     async def test_handle_learn_outcome(self, mcp_server):
         """Test ww_learn_outcome tool."""
-        with patch("ww.mcp.server.AgentMemoryClient") as MockClient:
+        with patch("t4dm.mcp.server.AgentMemoryClient") as MockClient:
             mock_instance = AsyncMock()
             mock_instance.report_task_outcome.return_value = MagicMock(
                 credited=3,
@@ -286,7 +286,7 @@ class TestMCPToolHandlers:
     @pytest.mark.asyncio
     async def test_handle_learn_outcome_missing_task_id(self, mcp_server):
         """Test ww_learn_outcome requires task_id."""
-        with patch("ww.mcp.server.AgentMemoryClient") as MockClient:
+        with patch("t4dm.mcp.server.AgentMemoryClient") as MockClient:
             mock_instance = AsyncMock()
             MockClient.return_value = mock_instance
 
@@ -302,7 +302,7 @@ class TestMCPToolHandlers:
     @pytest.mark.asyncio
     async def test_handle_consolidate(self, mcp_server):
         """Test ww_consolidate tool."""
-        with patch("ww.mcp.server.AgentMemoryClient") as MockClient:
+        with patch("t4dm.mcp.server.AgentMemoryClient") as MockClient:
             mock_instance = AsyncMock()
             mock_instance.trigger_consolidation.return_value = {"status": "complete"}
             MockClient.return_value = mock_instance
@@ -320,7 +320,7 @@ class TestMCPToolHandlers:
     @pytest.mark.asyncio
     async def test_handle_get_context(self, mcp_server, mock_episode):
         """Test ww_get_context tool."""
-        with patch("ww.mcp.server.AgentMemoryClient") as MockClient:
+        with patch("t4dm.mcp.server.AgentMemoryClient") as MockClient:
             mock_instance = AsyncMock()
             mock_instance.get_stats.return_value = {"total_retrievals": 5}
             mock_instance.retrieve_for_task.return_value = [
@@ -373,7 +373,7 @@ class TestHandleRequest:
     @pytest.mark.asyncio
     async def test_handle_initialize_request(self, mcp_server):
         """Test handling initialize request."""
-        with patch("ww.mcp.server.AgentMemoryClient") as MockClient:
+        with patch("t4dm.mcp.server.AgentMemoryClient") as MockClient:
             mock_instance = AsyncMock()
             MockClient.return_value = mock_instance
 
@@ -409,7 +409,7 @@ class TestHandleRequest:
     @pytest.mark.asyncio
     async def test_handle_tools_call_request(self, mcp_server, mock_episode):
         """Test handling tools/call request."""
-        with patch("ww.mcp.server.AgentMemoryClient") as MockClient:
+        with patch("t4dm.mcp.server.AgentMemoryClient") as MockClient:
             mock_instance = AsyncMock()
             mock_instance.store_experience.return_value = mock_episode
             MockClient.return_value = mock_instance
@@ -483,9 +483,9 @@ class TestCreateMCPServer:
 
     def test_create_from_env(self, monkeypatch):
         """Test creating server from environment variables."""
-        monkeypatch.setenv("WW_API_URL", "http://env:8000")
-        monkeypatch.setenv("WW_SESSION_ID", "env-session")
-        monkeypatch.setenv("WW_API_KEY", "env-key")
+        monkeypatch.setenv("T4DM_API_URL", "http://env:8000")
+        monkeypatch.setenv("T4DM_SESSION_ID", "env-session")
+        monkeypatch.setenv("T4DM_API_KEY", "env-key")
 
         server = create_mcp_server()
 

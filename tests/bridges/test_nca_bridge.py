@@ -10,7 +10,7 @@ from datetime import datetime
 from unittest.mock import MagicMock, patch
 from uuid import uuid4
 
-from ww.bridges.nca_bridge import (
+from t4dm.bridges.nca_bridge import (
     NCABridgeConfig,
     BridgeConfig,
     EncodingContext,

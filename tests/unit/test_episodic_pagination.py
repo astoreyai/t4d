@@ -10,7 +10,7 @@ from datetime import datetime, timedelta
 from unittest.mock import AsyncMock, MagicMock, patch
 from uuid import uuid4
 
-from ww.core.types import Episode, EpisodeContext, Outcome
+from t4dm.core.types import Episode, EpisodeContext, Outcome
 
 
 class TestEpisodicPagination:
@@ -44,12 +44,12 @@ class TestEpisodicPagination:
         mock_settings.embedding_dimension = 1024
 
         # Patch all dependencies
-        with patch("ww.memory.episodic.get_settings", return_value=mock_settings):
-            with patch("ww.memory.episodic.get_qdrant_store", return_value=mock_qdrant):
-                with patch("ww.memory.episodic.get_neo4j_store", return_value=mock_neo4j):
-                    with patch("ww.memory.episodic.get_embedding_provider", return_value=mock_embedding):
-                        with patch("ww.memory.episodic.get_ff_encoder", return_value=None):
-                            from ww.memory.episodic import EpisodicMemory
+        with patch("t4dm.memory.episodic.get_settings", return_value=mock_settings):
+            with patch("t4dm.memory.episodic.get_qdrant_store", return_value=mock_qdrant):
+                with patch("t4dm.memory.episodic.get_neo4j_store", return_value=mock_neo4j):
+                    with patch("t4dm.memory.episodic.get_embedding_provider", return_value=mock_embedding):
+                        with patch("t4dm.memory.episodic.get_ff_encoder", return_value=None):
+                            from t4dm.memory.episodic import EpisodicMemory
                             episodic = EpisodicMemory(session_id=test_session_id)
                             yield episodic
 
@@ -305,13 +305,13 @@ class TestConsolidationPagination:
         hdbscan_mock = MagicMock()
         sys.modules['hdbscan'] = hdbscan_mock
 
-        from ww.consolidation.service import ConsolidationService
+        from t4dm.consolidation.service import ConsolidationService
 
         # Mock all the get_* functions
-        with patch("ww.consolidation.service.get_settings") as mock_settings:
-            with patch("ww.consolidation.service.get_embedding_provider") as mock_emb:
-                with patch("ww.consolidation.service.get_qdrant_store") as mock_qdrant:
-                    with patch("ww.consolidation.service.get_neo4j_store") as mock_neo4j:
+        with patch("t4dm.consolidation.service.get_settings") as mock_settings:
+            with patch("t4dm.consolidation.service.get_embedding_provider") as mock_emb:
+                with patch("t4dm.consolidation.service.get_qdrant_store") as mock_qdrant:
+                    with patch("t4dm.consolidation.service.get_neo4j_store") as mock_neo4j:
                         mock_settings.return_value.consolidation_min_similarity = 0.75
                         mock_settings.return_value.consolidation_min_occurrences = 3
                         mock_settings.return_value.consolidation_skill_similarity = 0.85

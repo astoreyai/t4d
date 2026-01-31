@@ -3,7 +3,7 @@ import pytest
 from datetime import datetime, timedelta
 from unittest.mock import AsyncMock, patch
 
-from ww.storage.neo4j_store import Neo4jStore
+from t4dm.storage.neo4j_store import Neo4jStore
 
 
 class TestBatchDecayRelationships:
@@ -178,7 +178,7 @@ class TestBatchDecayIntegration:
         # Skip in unit test runs
         pytest.skip("Integration test - requires Neo4j instance")
 
-        from ww.storage.neo4j_store import get_neo4j_store
+        from t4dm.storage.neo4j_store import get_neo4j_store
 
         store = get_neo4j_store("test-session")
         await store.initialize()

@@ -3,7 +3,7 @@
 import pytest
 from datetime import datetime
 
-from ww.observability.metrics import (
+from t4dm.observability.metrics import (
     get_metrics,
     OperationMetrics,
     MetricsCollector,
@@ -134,7 +134,7 @@ class TestMetricsDecorator:
     @pytest.mark.asyncio
     async def test_timed_operation_decorator(self):
         """Async function can be timed with decorator."""
-        from ww.observability.metrics import timed_operation
+        from t4dm.observability.metrics import timed_operation
 
         @timed_operation("test_async_op")
         async def async_func():
@@ -146,7 +146,7 @@ class TestMetricsDecorator:
     @pytest.mark.asyncio
     async def test_timed_operation_records_metrics(self):
         """Timed operation decorator records to metrics."""
-        from ww.observability.metrics import timed_operation
+        from t4dm.observability.metrics import timed_operation
 
         @timed_operation("recorded_op")
         async def timed_func():

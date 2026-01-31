@@ -4,10 +4,10 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from ww.t4dv.bus import ObservationBus
-from ww.t4dv.emitters.consolidation import attach_consolidation_hooks
-from ww.t4dv.emitters.neuromod import sample_neuromod
-from ww.t4dv.emitters.storage import attach_storage_hooks
+from t4dm.t4dv.bus import ObservationBus
+from t4dm.t4dv.emitters.consolidation import attach_consolidation_hooks
+from t4dm.t4dv.emitters.neuromod import sample_neuromod
+from t4dm.t4dv.emitters.storage import attach_storage_hooks
 
 
 class TestStorageEmitter:

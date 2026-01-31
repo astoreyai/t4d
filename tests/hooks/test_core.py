@@ -3,7 +3,7 @@
 import pytest
 from datetime import datetime
 
-from ww.hooks.core import (
+from t4dm.hooks.core import (
     InitHook,
     ShutdownHook,
     HealthCheckHook,
@@ -14,7 +14,7 @@ from ww.hooks.core import (
     ConfigValidationHook,
     CoreHook,
 )
-from ww.hooks.base import HookContext, HookPhase, HookPriority
+from t4dm.hooks.base import HookContext, HookPhase, HookPriority
 
 
 class TestInitHook:

@@ -3,7 +3,7 @@
 import pytest
 from unittest.mock import patch
 
-from ww.hooks.registry import (
+from t4dm.hooks.registry import (
     get_global_registry,
     clear_global_registry,
     get_registry_stats,
@@ -16,7 +16,7 @@ from ww.hooks.registry import (
     REGISTRY_CONSOLIDATION,
     REGISTRY_MCP,
 )
-from ww.hooks.base import HookRegistry, HookPhase, HookPriority
+from t4dm.hooks.base import HookRegistry, HookPhase, HookPriority
 
 
 class ConcreteHook:
@@ -63,7 +63,7 @@ class TestGlobalRegistry:
 
     def test_clear_global_registry_by_name(self):
         """Test clearing a specific registry."""
-        from ww.hooks.base import HookPhase
+        from t4dm.hooks.base import HookPhase
 
         registry = get_global_registry("test")
         hook = ConcreteHook(name="test")

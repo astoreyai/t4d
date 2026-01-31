@@ -11,14 +11,14 @@ class TestAtomP010ChunkedTransferBypass:
 
     def test_middleware_class_updated(self):
         """RequestSizeLimitMiddleware handles chunked transfers."""
-        from ww.api.server import RequestSizeLimitMiddleware
+        from t4dm.api.server import RequestSizeLimitMiddleware
 
         assert RequestSizeLimitMiddleware is not None
         assert RequestSizeLimitMiddleware.MAX_REQUEST_SIZE == 5 * 1024 * 1024
 
     def test_get_requests_bypass_size_check(self):
         """GET requests skip body size validation."""
-        from ww.api.server import app
+        from t4dm.api.server import app
 
         client = TestClient(app)
         # GET with fake large content-length should still work (content-length ignored for GET)
@@ -28,7 +28,7 @@ class TestAtomP010ChunkedTransferBypass:
 
     def test_content_length_header_checked(self):
         """Requests with Content-Length header are checked upfront."""
-        from ww.api.server import app
+        from t4dm.api.server import app
 
         client = TestClient(app)
         # POST with large content-length header should be rejected
@@ -43,7 +43,7 @@ class TestAtomP010ChunkedTransferBypass:
     @pytest.mark.asyncio
     async def test_chunked_transfer_counting_logic_exists(self):
         """Middleware has logic to count chunked transfer bytes."""
-        from ww.api.server import RequestSizeLimitMiddleware
+        from t4dm.api.server import RequestSizeLimitMiddleware
         import inspect
 
         # Check that the dispatch method contains chunked transfer handling
@@ -60,7 +60,7 @@ class TestAtomP011ImmutableTimestamps:
 
     def test_create_episode_imports_timezone(self):
         """Episode routes import timezone for server-side timestamps."""
-        from ww.api.routes import episodes
+        from t4dm.api.routes import episodes
 
         # Check that timezone is imported
         assert hasattr(episodes, "timezone")
@@ -69,7 +69,7 @@ class TestAtomP011ImmutableTimestamps:
     async def test_create_episode_adds_ingested_at(self):
         """create_episode endpoint adds server-controlled ingested_at timestamp."""
         import inspect
-        from ww.api.routes.episodes import create_episode
+        from t4dm.api.routes.episodes import create_episode
 
         # Check the function source contains ingested_at logic
         source = inspect.getsource(create_episode)
@@ -81,7 +81,7 @@ class TestAtomP011ImmutableTimestamps:
     async def test_update_episode_preserves_timestamp(self):
         """update_episode endpoint documents timestamp immutability."""
         import inspect
-        from ww.api.routes.episodes import update_episode
+        from t4dm.api.routes.episodes import update_episode
 
         # Check the function documents timestamp preservation
         source = inspect.getsource(update_episode)
@@ -94,14 +94,14 @@ class TestAtomP213MetricsAuthentication:
 
     def test_metrics_not_in_exempt_paths(self):
         """EXEMPT_PATHS does not include /metrics."""
-        from ww.api.server import ApiKeyAuthMiddleware
+        from t4dm.api.server import ApiKeyAuthMiddleware
 
         assert "/metrics" not in ApiKeyAuthMiddleware.EXEMPT_PATHS
 
     def test_exempt_paths_documented(self):
         """ApiKeyAuthMiddleware documents that /metrics requires auth."""
         import inspect
-        from ww.api.server import ApiKeyAuthMiddleware
+        from t4dm.api.server import ApiKeyAuthMiddleware
 
         source = inspect.getsource(ApiKeyAuthMiddleware)
         # Check that ATOM-P2-13 is mentioned or /metrics is removed
@@ -109,13 +109,13 @@ class TestAtomP213MetricsAuthentication:
 
     def test_health_still_exempt(self):
         """Health check endpoint remains exempt for load balancer probes."""
-        from ww.api.server import ApiKeyAuthMiddleware
+        from t4dm.api.server import ApiKeyAuthMiddleware
 
         assert "/api/v1/health" in ApiKeyAuthMiddleware.EXEMPT_PATHS
 
     def test_docs_still_exempt(self):
         """Docs endpoints remain exempt."""
-        from ww.api.server import ApiKeyAuthMiddleware
+        from t4dm.api.server import ApiKeyAuthMiddleware
 
         assert "/docs" in ApiKeyAuthMiddleware.EXEMPT_PATHS
         assert "/redoc" in ApiKeyAuthMiddleware.EXEMPT_PATHS
@@ -127,7 +127,7 @@ class TestSecurityAtomsIntegration:
 
     def test_all_middleware_classes_exist(self):
         """All required middleware classes are present."""
-        from ww.api.server import (
+        from t4dm.api.server import (
             RequestSizeLimitMiddleware,
             ApiKeyAuthMiddleware,
             SecurityHeadersMiddleware,
@@ -141,7 +141,7 @@ class TestSecurityAtomsIntegration:
 
     def test_middleware_stack_includes_all(self):
         """Middleware stack includes all security middleware."""
-        from ww.api.server import app
+        from t4dm.api.server import app
 
         # Get middleware class names
         middleware_names = [type(m.cls).__name__ if hasattr(m, 'cls') else type(m).__name__
@@ -152,7 +152,7 @@ class TestSecurityAtomsIntegration:
 
     def test_security_headers_on_root(self):
         """Security headers are applied to responses."""
-        from ww.api.server import app
+        from t4dm.api.server import app
 
         client = TestClient(app)
         response = client.get("/")

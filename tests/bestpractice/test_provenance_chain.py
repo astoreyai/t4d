@@ -14,7 +14,7 @@ class TestCA3Provenance:
 
     def test_ca3_store_accepts_provenance(self):
         """P2-2: CA3 can store patterns with provenance."""
-        from ww.nca.hippocampus import HippocampalCircuit, HippocampalConfig
+        from t4dm.nca.hippocampus import HippocampalCircuit, HippocampalConfig
 
         hpc = HippocampalCircuit(HippocampalConfig(ec_dim=128, ca3_dim=128))
         pattern = np.random.default_rng(42).random(128).astype(np.float32)
@@ -41,7 +41,7 @@ class TestCA3Provenance:
 
     def test_ca3_store_without_provenance(self):
         """P2-2: CA3 can store patterns without provenance (backward compat)."""
-        from ww.nca.hippocampus import HippocampalCircuit, HippocampalConfig
+        from t4dm.nca.hippocampus import HippocampalCircuit, HippocampalConfig
 
         hpc = HippocampalCircuit(HippocampalConfig(ec_dim=128, ca3_dim=128))
         pattern = np.random.default_rng(42).random(128).astype(np.float32)
@@ -58,7 +58,7 @@ class TestCA3Provenance:
 
     def test_ca3_provenance_eviction(self):
         """P2-2: Provenance is cleaned up when patterns are evicted."""
-        from ww.nca.hippocampus import HippocampalCircuit, HippocampalConfig
+        from t4dm.nca.hippocampus import HippocampalCircuit, HippocampalConfig
 
         config = HippocampalConfig(ec_dim=128, ca3_dim=128, ca3_max_patterns=2)
         hpc = HippocampalCircuit(config)

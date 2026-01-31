@@ -17,9 +17,9 @@ from uuid import uuid4
 import numpy as np
 import pytest
 
-from ww.core.learned_gate import GateDecision, LearnedMemoryGate, sigmoid
-from ww.core.memory_gate import GateContext, StorageDecision
-from ww.learning.neuromodulators import NeuromodulatorState
+from t4dm.core.learned_gate import GateDecision, LearnedMemoryGate, sigmoid
+from t4dm.core.memory_gate import GateContext, StorageDecision
+from t4dm.learning.neuromodulators import NeuromodulatorState
 
 
 @pytest.fixture

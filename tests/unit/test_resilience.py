@@ -8,7 +8,7 @@ import pytest
 import asyncio
 from datetime import datetime
 
-from ww.storage.resilience import (
+from t4dm.storage.resilience import (
     CircuitState,
     CircuitBreaker,
     CircuitBreakerConfig,

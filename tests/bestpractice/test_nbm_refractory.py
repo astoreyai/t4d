@@ -16,7 +16,7 @@ class TestNBMRefractory:
 
     def test_nbm_respects_refractory_period(self):
         """P2-6: NBM skips phasic bursts during refractory period."""
-        from ww.nca.nucleus_basalis import NucleusBasalisCircuit, NBMConfig
+        from t4dm.nca.nucleus_basalis import NucleusBasalisCircuit, NBMConfig
 
         config = NBMConfig(phasic_refractory_ms=100.0)
         nbm = NucleusBasalisCircuit(config)
@@ -36,7 +36,7 @@ class TestNBMRefractory:
 
     def test_nbm_allows_burst_after_refractory(self):
         """P2-6: NBM allows phasic bursts after refractory period."""
-        from ww.nca.nucleus_basalis import NucleusBasalisCircuit, NBMConfig
+        from t4dm.nca.nucleus_basalis import NucleusBasalisCircuit, NBMConfig
 
         config = NBMConfig(phasic_refractory_ms=50.0)  # Short refractory for test
         nbm = NucleusBasalisCircuit(config)
@@ -59,7 +59,7 @@ class TestNBMRefractory:
 
     def test_nbm_first_burst_always_allowed(self):
         """P2-6: First phasic burst is always allowed (no prior timing)."""
-        from ww.nca.nucleus_basalis import NucleusBasalisCircuit, NBMConfig
+        from t4dm.nca.nucleus_basalis import NucleusBasalisCircuit, NBMConfig
 
         nbm = NucleusBasalisCircuit(NBMConfig())
 

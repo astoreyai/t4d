@@ -3,7 +3,7 @@
 import pytest
 import torch
 
-from ww.spiking.lif import LIFNeuron
+from t4dm.spiking.lif import LIFNeuron
 
 
 class TestLIFNeuron:

@@ -10,7 +10,7 @@ from unittest.mock import AsyncMock, MagicMock
 import numpy as np
 import pytest
 
-from ww.memory.forgetting import (
+from t4dm.memory.forgetting import (
     ActiveForgettingSystem,
     ForgettingCandidate,
     ForgettingResult,

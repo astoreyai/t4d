@@ -8,7 +8,7 @@ projection pathways and biological plausibility.
 import numpy as np
 import pytest
 
-from ww.nca.connectome import (
+from t4dm.nca.connectome import (
     Connectome,
     ConnectomeConfig,
     ConnectomeIntegrator,
@@ -444,7 +444,7 @@ class TestConnectomeIntegrator:
 
     def test_configure_delay_system(self):
         """Should configure delay system with distances."""
-        from ww.nca.delays import TransmissionDelaySystem
+        from t4dm.nca.delays import TransmissionDelaySystem
 
         conn = Connectome()
         integrator = ConnectomeIntegrator(conn)
@@ -460,7 +460,7 @@ class TestConnectomeIntegrator:
 
     def test_configure_coupling(self):
         """Should configure coupling from connectome."""
-        from ww.nca.coupling import LearnableCoupling
+        from t4dm.nca.coupling import LearnableCoupling
 
         conn = Connectome()
         integrator = ConnectomeIntegrator(conn)
@@ -523,7 +523,7 @@ class TestNeuralFieldIntegration:
 
     def test_solver_with_connectome(self):
         """Should create solver with connectome."""
-        from ww.nca.neural_field import NeuralFieldSolver, NeuralFieldConfig
+        from t4dm.nca.neural_field import NeuralFieldSolver, NeuralFieldConfig
 
         conn = create_minimal_connectome()
         solver = NeuralFieldSolver(
@@ -535,7 +535,7 @@ class TestNeuralFieldIntegration:
 
     def test_solver_get_connectome_stats(self):
         """Should get stats from connectome."""
-        from ww.nca.neural_field import NeuralFieldSolver
+        from t4dm.nca.neural_field import NeuralFieldSolver
 
         conn = create_minimal_connectome()
         solver = NeuralFieldSolver(connectome=conn)
@@ -546,7 +546,7 @@ class TestNeuralFieldIntegration:
 
     def test_solver_get_region_names(self):
         """Should get region names from connectome."""
-        from ww.nca.neural_field import NeuralFieldSolver
+        from t4dm.nca.neural_field import NeuralFieldSolver
 
         conn = create_minimal_connectome()
         solver = NeuralFieldSolver(connectome=conn)
@@ -556,7 +556,7 @@ class TestNeuralFieldIntegration:
 
     def test_solver_get_nt_sources(self):
         """Should get NT sources from connectome."""
-        from ww.nca.neural_field import NeuralFieldSolver
+        from t4dm.nca.neural_field import NeuralFieldSolver
 
         conn = Connectome()
         solver = NeuralFieldSolver(connectome=conn)
@@ -566,7 +566,7 @@ class TestNeuralFieldIntegration:
 
     def test_solver_without_connectome(self):
         """Solver should work without connectome."""
-        from ww.nca.neural_field import NeuralFieldSolver
+        from t4dm.nca.neural_field import NeuralFieldSolver
 
         solver = NeuralFieldSolver()
         assert solver.connectome is None
@@ -575,9 +575,9 @@ class TestNeuralFieldIntegration:
 
     def test_solver_step_with_connectome(self):
         """Solver should step with connectome configured."""
-        from ww.nca.neural_field import NeuralFieldSolver, NeuralFieldConfig
-        from ww.nca.coupling import LearnableCoupling
-        from ww.nca.delays import TransmissionDelaySystem
+        from t4dm.nca.neural_field import NeuralFieldSolver, NeuralFieldConfig
+        from t4dm.nca.coupling import LearnableCoupling
+        from t4dm.nca.delays import TransmissionDelaySystem
 
         conn = create_minimal_connectome()
         coupling = LearnableCoupling()

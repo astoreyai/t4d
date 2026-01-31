@@ -3,7 +3,7 @@
 import pytest
 import torch
 
-from ww.spiking.rwkv_recurrence import RWKVRecurrence
+from t4dm.spiking.rwkv_recurrence import RWKVRecurrence
 
 
 class TestRWKVRecurrence:

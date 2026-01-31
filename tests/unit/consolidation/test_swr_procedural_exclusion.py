@@ -12,7 +12,7 @@ from datetime import datetime
 from unittest.mock import AsyncMock, MagicMock
 from uuid import uuid4
 
-from ww.consolidation.sleep import SleepConsolidation
+from t4dm.consolidation.sleep import SleepConsolidation
 
 
 # Mock episode classes for testing

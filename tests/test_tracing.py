@@ -7,7 +7,7 @@ Verifies that tracing initializes correctly and decorators work.
 import pytest
 from opentelemetry.trace import SpanKind, get_current_span
 
-from ww.observability.tracing import (
+from t4dm.observability.tracing import (
     init_tracing,
     get_tracer,
     shutdown_tracing,

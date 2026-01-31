@@ -2,7 +2,7 @@
 
 import pytest
 
-from ww.qwen.loader import QwenConfig, get_hidden_dim, get_num_layers
+from t4dm.qwen.loader import QwenConfig, get_hidden_dim, get_num_layers
 
 
 class TestLoader:

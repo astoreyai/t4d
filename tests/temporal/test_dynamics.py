@@ -5,13 +5,13 @@ import numpy as np
 from datetime import datetime, timedelta
 from uuid import uuid4
 
-from ww.temporal.dynamics import (
+from t4dm.temporal.dynamics import (
     TemporalPhase,
     TemporalState,
     TemporalConfig,
     TemporalDynamics,
 )
-from ww.embedding.modulated import CognitiveMode, NeuromodulatorState
+from t4dm.embedding.modulated import CognitiveMode, NeuromodulatorState
 
 
 class TestTemporalPhase:

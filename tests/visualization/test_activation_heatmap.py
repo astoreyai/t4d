@@ -5,7 +5,7 @@ import numpy as np
 from datetime import datetime, timedelta
 from unittest.mock import patch, MagicMock
 
-from ww.visualization.activation_heatmap import (
+from t4dm.visualization.activation_heatmap import (
     ActivationHeatmap,
     ActivationSnapshot,
     plot_activation_heatmap,

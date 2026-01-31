@@ -4,7 +4,7 @@ import numpy as np
 import pytest
 from uuid import uuid4
 
-from ww.dreaming import (
+from t4dm.dreaming import (
     DreamConsolidation,
     DreamConsolidationConfig,
     DreamingConfig,
@@ -15,7 +15,7 @@ from ww.dreaming import (
     DreamTrajectory,
     QualityConfig,
 )
-from ww.prediction import (
+from t4dm.prediction import (
     ContextEncoder,
     LatentPredictor,
     PredictionTracker,

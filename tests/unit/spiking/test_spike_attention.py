@@ -3,7 +3,7 @@
 import pytest
 import torch
 
-from ww.spiking.spike_attention import SpikeAttention
+from t4dm.spiking.spike_attention import SpikeAttention
 
 
 class TestSpikeAttention:

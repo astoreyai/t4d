@@ -8,8 +8,8 @@ produces bidirectional modulation without manual calls.
 import numpy as np
 import pytest
 
-from ww.nca.raphe import RapheConfig, RapheNucleus
-from ww.nca.vta import VTACircuit, VTAConfig
+from t4dm.nca.raphe import RapheConfig, RapheNucleus
+from t4dm.nca.vta import VTACircuit, VTAConfig
 
 
 class TestRapheVTAAutowiring:

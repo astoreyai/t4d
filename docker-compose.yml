@@ -1,6 +1,6 @@
 version: '3.8'
 
-# World Weaver Infrastructure
+# T4DM Infrastructure
 # Neo4j for graph storage, Qdrant for vector storage
 # SECURITY: All passwords must be set via environment variables
 # See .env.example for configuration template
@@ -8,7 +8,7 @@ version: '3.8'
 services:
   neo4j:
     image: neo4j:5-community
-    container_name: ww-neo4j
+    container_name: t4dm-neo4j
     ports:
       - "127.0.0.1:7474:7474"  # HTTP browser (localhost only)
       - "127.0.0.1:7687:7687"  # Bolt protocol (localhost only)
@@ -25,9 +25,9 @@ services:
       - NEO4J_server_bolt_tls__level=DISABLED  # Enable in production with certificates
       - NEO4J_server_https_enabled=false  # Enable in production with certificates
     volumes:
-      - ww_neo4j_data:/data
-      - ww_neo4j_logs:/logs
-      - ww_neo4j_plugins:/plugins
+      - t4dm_neo4j_data:/data
+      - t4dm_neo4j_logs:/logs
+      - t4dm_neo4j_plugins:/plugins
     healthcheck:
       test: ["CMD", "wget", "-q", "--spider", "http://localhost:7474"]
       interval: 10s
@@ -37,12 +37,12 @@ services:
 
   qdrant:
     image: qdrant/qdrant:v1.12.1
-    container_name: ww-qdrant
+    container_name: t4dm-qdrant
     ports:
       - "127.0.0.1:6333:6333"  # REST API (localhost only)
       - "127.0.0.1:6334:6334"  # gRPC (localhost only)
     volumes:
-      - ww_qdrant_storage:/qdrant/storage
+      - t4dm_qdrant_storage:/qdrant/storage
     environment:
       # API key disabled for local development
       # - QDRANT__SERVICE__API_KEY=${QDRANT_API_KEY:-}
@@ -61,15 +61,15 @@ services:
     restart: unless-stopped
 
 volumes:
-  ww_neo4j_data:
+  t4dm_neo4j_data:
     driver: local
-  ww_neo4j_logs:
+  t4dm_neo4j_logs:
     driver: local
-  ww_neo4j_plugins:
+  t4dm_neo4j_plugins:
     driver: local
-  ww_qdrant_storage:
+  t4dm_qdrant_storage:
     driver: local
 
 networks:
   default:
-    name: ww-network
+    name: t4dm-network

@@ -3,7 +3,7 @@
 import pytest
 import time
 
-from ww.hooks.storage import (
+from t4dm.hooks.storage import (
     StorageHook,
     ConnectionHook,
     QueryHook,
@@ -15,7 +15,7 @@ from ww.hooks.storage import (
     CircuitBreakerHook,
     QueryCacheHook,
 )
-from ww.hooks.base import HookContext, HookPhase, HookPriority
+from t4dm.hooks.base import HookContext, HookPhase, HookPriority
 
 
 class TestStorageHook:

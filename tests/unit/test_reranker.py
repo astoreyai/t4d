@@ -23,7 +23,7 @@ class TestLearnedReranker:
     @pytest.fixture
     def reranker(self):
         """Create reranker instance."""
-        from ww.memory.episodic import LearnedReranker
+        from t4dm.memory.episodic import LearnedReranker
         return LearnedReranker(embed_dim=1024, learning_rate=0.005)
 
     def test_initialization(self, reranker):
@@ -150,7 +150,7 @@ class TestLearnedRerankerTraining:
     @pytest.fixture
     def reranker(self):
         """Create reranker instance."""
-        from ww.memory.episodic import LearnedReranker
+        from t4dm.memory.episodic import LearnedReranker
         return LearnedReranker(embed_dim=1024, learning_rate=0.01)  # Higher LR for testing
 
     def test_learns_from_positive_outcomes(self, reranker):
@@ -206,7 +206,7 @@ class TestLearnedRerankerDimensions:
 
     def test_handles_shorter_embedding(self):
         """Should handle embeddings shorter than embed_dim."""
-        from ww.memory.episodic import LearnedReranker
+        from t4dm.memory.episodic import LearnedReranker
         reranker = LearnedReranker(embed_dim=1024)
 
         # 512-dim embedding (shorter)
@@ -217,7 +217,7 @@ class TestLearnedRerankerDimensions:
 
     def test_handles_longer_embedding(self):
         """Should handle embeddings longer than embed_dim."""
-        from ww.memory.episodic import LearnedReranker
+        from t4dm.memory.episodic import LearnedReranker
         reranker = LearnedReranker(embed_dim=1024)
 
         # 2048-dim embedding (longer)

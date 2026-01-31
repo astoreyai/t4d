@@ -7,7 +7,7 @@ Verifies that VTA DA decay follows exponential kinetics from Grace & Bunney 1984
 import numpy as np
 import pytest
 
-from ww.nca.vta import VTACircuit, VTAConfig
+from t4dm.nca.vta import VTACircuit, VTAConfig
 
 
 class TestVTAExponentialDecay:

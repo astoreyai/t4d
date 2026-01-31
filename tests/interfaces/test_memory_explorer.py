@@ -12,9 +12,9 @@ class TestMemoryExplorer:
     @pytest.fixture
     def mock_stores(self):
         """Create mock storage backends."""
-        with patch("ww.interfaces.memory_explorer.EpisodicMemory") as mock_ep, \
-             patch("ww.interfaces.memory_explorer.SemanticMemory") as mock_sem, \
-             patch("ww.interfaces.memory_explorer.ProceduralMemory") as mock_proc:
+        with patch("t4dm.interfaces.memory_explorer.EpisodicMemory") as mock_ep, \
+             patch("t4dm.interfaces.memory_explorer.SemanticMemory") as mock_sem, \
+             patch("t4dm.interfaces.memory_explorer.ProceduralMemory") as mock_proc:
 
             mock_ep_instance = MagicMock()
             mock_ep_instance.initialize = AsyncMock()
@@ -52,17 +52,17 @@ class TestMemoryExplorer:
 
     def test_init_without_rich(self, mock_stores):
         """Test initialization fails without rich library."""
-        with patch("ww.interfaces.memory_explorer.RICH_AVAILABLE", False):
-            from ww.interfaces.memory_explorer import MemoryExplorer
+        with patch("t4dm.interfaces.memory_explorer.RICH_AVAILABLE", False):
+            from t4dm.interfaces.memory_explorer import MemoryExplorer
 
             with pytest.raises(ImportError, match="rich library required"):
                 MemoryExplorer(session_id="test")
 
     def test_init_with_rich(self, mock_stores):
         """Test initialization with rich library."""
-        with patch("ww.interfaces.memory_explorer.RICH_AVAILABLE", True), \
-             patch("ww.interfaces.memory_explorer.Console"):
-            from ww.interfaces.memory_explorer import MemoryExplorer
+        with patch("t4dm.interfaces.memory_explorer.RICH_AVAILABLE", True), \
+             patch("t4dm.interfaces.memory_explorer.Console"):
+            from t4dm.interfaces.memory_explorer import MemoryExplorer
 
             explorer = MemoryExplorer(session_id="test")
             assert explorer.session_id == "test"
@@ -71,10 +71,10 @@ class TestMemoryExplorer:
     @pytest.mark.asyncio
     async def test_initialize(self, mock_stores):
         """Test initialization of storage backends."""
-        with patch("ww.interfaces.memory_explorer.RICH_AVAILABLE", True), \
-             patch("ww.interfaces.memory_explorer.Console"), \
-             patch("ww.interfaces.memory_explorer.Progress"):
-            from ww.interfaces.memory_explorer import MemoryExplorer
+        with patch("t4dm.interfaces.memory_explorer.RICH_AVAILABLE", True), \
+             patch("t4dm.interfaces.memory_explorer.Console"), \
+             patch("t4dm.interfaces.memory_explorer.Progress"):
+            from t4dm.interfaces.memory_explorer import MemoryExplorer
 
             explorer = MemoryExplorer(session_id="test")
             await explorer.initialize()
@@ -96,15 +96,15 @@ class TestMemoryExplorer:
             }, None),
         ], None))
 
-        with patch("ww.interfaces.memory_explorer.RICH_AVAILABLE", True), \
-             patch("ww.interfaces.memory_explorer.Console") as mock_console, \
-             patch("ww.interfaces.memory_explorer.Progress"), \
-             patch("ww.interfaces.memory_explorer.Table"):
+        with patch("t4dm.interfaces.memory_explorer.RICH_AVAILABLE", True), \
+             patch("t4dm.interfaces.memory_explorer.Console") as mock_console, \
+             patch("t4dm.interfaces.memory_explorer.Progress"), \
+             patch("t4dm.interfaces.memory_explorer.Table"):
             mock_console_instance = MagicMock()
             mock_console.return_value = mock_console_instance
             mock_console_instance.status = MagicMock(return_value=MagicMock(__enter__=MagicMock(), __exit__=MagicMock()))
 
-            from ww.interfaces.memory_explorer import MemoryExplorer
+            from t4dm.interfaces.memory_explorer import MemoryExplorer
 
             explorer = MemoryExplorer(session_id="test")
             await explorer.list_episodes(limit=10)
@@ -125,15 +125,15 @@ class TestMemoryExplorer:
             }, None),
         ], None))
 
-        with patch("ww.interfaces.memory_explorer.RICH_AVAILABLE", True), \
-             patch("ww.interfaces.memory_explorer.Console") as mock_console, \
-             patch("ww.interfaces.memory_explorer.Progress"), \
-             patch("ww.interfaces.memory_explorer.Table"):
+        with patch("t4dm.interfaces.memory_explorer.RICH_AVAILABLE", True), \
+             patch("t4dm.interfaces.memory_explorer.Console") as mock_console, \
+             patch("t4dm.interfaces.memory_explorer.Progress"), \
+             patch("t4dm.interfaces.memory_explorer.Table"):
             mock_console_instance = MagicMock()
             mock_console.return_value = mock_console_instance
             mock_console_instance.status = MagicMock(return_value=MagicMock(__enter__=MagicMock(), __exit__=MagicMock()))
 
-            from ww.interfaces.memory_explorer import MemoryExplorer
+            from t4dm.interfaces.memory_explorer import MemoryExplorer
 
             explorer = MemoryExplorer(session_id="test")
             await explorer.list_episodes(
@@ -164,18 +164,18 @@ class TestMemoryExplorer:
             }),
         ])
 
-        with patch("ww.interfaces.memory_explorer.RICH_AVAILABLE", True), \
-             patch("ww.interfaces.memory_explorer.Console") as mock_console, \
-             patch("ww.interfaces.memory_explorer.Progress"), \
-             patch("ww.interfaces.memory_explorer.Layout"), \
-             patch("ww.interfaces.memory_explorer.Panel"), \
-             patch("ww.interfaces.memory_explorer.Table"), \
-             patch("ww.interfaces.memory_explorer.Text"):
+        with patch("t4dm.interfaces.memory_explorer.RICH_AVAILABLE", True), \
+             patch("t4dm.interfaces.memory_explorer.Console") as mock_console, \
+             patch("t4dm.interfaces.memory_explorer.Progress"), \
+             patch("t4dm.interfaces.memory_explorer.Layout"), \
+             patch("t4dm.interfaces.memory_explorer.Panel"), \
+             patch("t4dm.interfaces.memory_explorer.Table"), \
+             patch("t4dm.interfaces.memory_explorer.Text"):
             mock_console_instance = MagicMock()
             mock_console.return_value = mock_console_instance
             mock_console_instance.status = MagicMock(return_value=MagicMock(__enter__=MagicMock(), __exit__=MagicMock()))
 
-            from ww.interfaces.memory_explorer import MemoryExplorer
+            from t4dm.interfaces.memory_explorer import MemoryExplorer
 
             explorer = MemoryExplorer(session_id="test")
             await explorer.view_episode("12345678-1234-1234-1234-123456789012")
@@ -187,14 +187,14 @@ class TestMemoryExplorer:
         """Test viewing non-existent episode."""
         mock_stores["episodic"].vector_store.get = AsyncMock(return_value=[])
 
-        with patch("ww.interfaces.memory_explorer.RICH_AVAILABLE", True), \
-             patch("ww.interfaces.memory_explorer.Console") as mock_console, \
-             patch("ww.interfaces.memory_explorer.Progress"):
+        with patch("t4dm.interfaces.memory_explorer.RICH_AVAILABLE", True), \
+             patch("t4dm.interfaces.memory_explorer.Console") as mock_console, \
+             patch("t4dm.interfaces.memory_explorer.Progress"):
             mock_console_instance = MagicMock()
             mock_console.return_value = mock_console_instance
             mock_console_instance.status = MagicMock(return_value=MagicMock(__enter__=MagicMock(), __exit__=MagicMock()))
 
-            from ww.interfaces.memory_explorer import MemoryExplorer
+            from t4dm.interfaces.memory_explorer import MemoryExplorer
 
             explorer = MemoryExplorer(session_id="test")
             await explorer.view_episode("nonexistent-id")
@@ -216,15 +216,15 @@ class TestMemoryExplorer:
             }, None),
         ], None))
 
-        with patch("ww.interfaces.memory_explorer.RICH_AVAILABLE", True), \
-             patch("ww.interfaces.memory_explorer.Console") as mock_console, \
-             patch("ww.interfaces.memory_explorer.Progress"), \
-             patch("ww.interfaces.memory_explorer.Table"):
+        with patch("t4dm.interfaces.memory_explorer.RICH_AVAILABLE", True), \
+             patch("t4dm.interfaces.memory_explorer.Console") as mock_console, \
+             patch("t4dm.interfaces.memory_explorer.Progress"), \
+             patch("t4dm.interfaces.memory_explorer.Table"):
             mock_console_instance = MagicMock()
             mock_console.return_value = mock_console_instance
             mock_console_instance.status = MagicMock(return_value=MagicMock(__enter__=MagicMock(), __exit__=MagicMock()))
 
-            from ww.interfaces.memory_explorer import MemoryExplorer
+            from t4dm.interfaces.memory_explorer import MemoryExplorer
 
             explorer = MemoryExplorer(session_id="test")
             await explorer.list_entities(limit=10)
@@ -248,16 +248,16 @@ class TestMemoryExplorer:
             {"other_id": "other-id", "type": "RELATED", "properties": {"weight": 0.8}},
         ])
 
-        with patch("ww.interfaces.memory_explorer.RICH_AVAILABLE", True), \
-             patch("ww.interfaces.memory_explorer.Console") as mock_console, \
-             patch("ww.interfaces.memory_explorer.Progress"), \
-             patch("ww.interfaces.memory_explorer.Tree"), \
-             patch("ww.interfaces.memory_explorer.Panel"):
+        with patch("t4dm.interfaces.memory_explorer.RICH_AVAILABLE", True), \
+             patch("t4dm.interfaces.memory_explorer.Console") as mock_console, \
+             patch("t4dm.interfaces.memory_explorer.Progress"), \
+             patch("t4dm.interfaces.memory_explorer.Tree"), \
+             patch("t4dm.interfaces.memory_explorer.Panel"):
             mock_console_instance = MagicMock()
             mock_console.return_value = mock_console_instance
             mock_console_instance.status = MagicMock(return_value=MagicMock(__enter__=MagicMock(), __exit__=MagicMock()))
 
-            from ww.interfaces.memory_explorer import MemoryExplorer
+            from t4dm.interfaces.memory_explorer import MemoryExplorer
 
             explorer = MemoryExplorer(session_id="test")
             await explorer.view_entity_graph("12345678-1234-1234-1234-123456789012")
@@ -277,15 +277,15 @@ class TestMemoryExplorer:
             }, None),
         ], None))
 
-        with patch("ww.interfaces.memory_explorer.RICH_AVAILABLE", True), \
-             patch("ww.interfaces.memory_explorer.Console") as mock_console, \
-             patch("ww.interfaces.memory_explorer.Progress"), \
-             patch("ww.interfaces.memory_explorer.Table"):
+        with patch("t4dm.interfaces.memory_explorer.RICH_AVAILABLE", True), \
+             patch("t4dm.interfaces.memory_explorer.Console") as mock_console, \
+             patch("t4dm.interfaces.memory_explorer.Progress"), \
+             patch("t4dm.interfaces.memory_explorer.Table"):
             mock_console_instance = MagicMock()
             mock_console.return_value = mock_console_instance
             mock_console_instance.status = MagicMock(return_value=MagicMock(__enter__=MagicMock(), __exit__=MagicMock()))
 
-            from ww.interfaces.memory_explorer import MemoryExplorer
+            from t4dm.interfaces.memory_explorer import MemoryExplorer
 
             explorer = MemoryExplorer(session_id="test")
             await explorer.list_skills(limit=10)
@@ -305,15 +305,15 @@ class TestMemoryExplorer:
         mock_stores["semantic"].recall = AsyncMock(return_value=[])
         mock_stores["procedural"].recall_skill = AsyncMock(return_value=[])
 
-        with patch("ww.interfaces.memory_explorer.RICH_AVAILABLE", True), \
-             patch("ww.interfaces.memory_explorer.Console") as mock_console, \
-             patch("ww.interfaces.memory_explorer.Progress"), \
-             patch("ww.interfaces.memory_explorer.Table"):
+        with patch("t4dm.interfaces.memory_explorer.RICH_AVAILABLE", True), \
+             patch("t4dm.interfaces.memory_explorer.Console") as mock_console, \
+             patch("t4dm.interfaces.memory_explorer.Progress"), \
+             patch("t4dm.interfaces.memory_explorer.Table"):
             mock_console_instance = MagicMock()
             mock_console.return_value = mock_console_instance
             mock_console_instance.status = MagicMock(return_value=MagicMock(__enter__=MagicMock(), __exit__=MagicMock()))
 
-            from ww.interfaces.memory_explorer import MemoryExplorer
+            from t4dm.interfaces.memory_explorer import MemoryExplorer
 
             explorer = MemoryExplorer(session_id="test")
             await explorer.search("test query", limit=5)

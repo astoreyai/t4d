@@ -8,7 +8,7 @@ import pytest
 import asyncio
 from unittest.mock import patch
 
-from ww.observability.prometheus import (
+from t4dm.observability.prometheus import (
     PROMETHEUS_AVAILABLE,
     WWMetrics,
     get_metrics,

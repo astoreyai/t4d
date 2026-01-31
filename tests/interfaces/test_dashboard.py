@@ -11,11 +11,11 @@ class TestSystemDashboard:
     @pytest.fixture
     def mock_stores(self):
         """Create mock storage backends."""
-        with patch("ww.interfaces.dashboard.EpisodicMemory") as mock_ep, \
-             patch("ww.interfaces.dashboard.SemanticMemory") as mock_sem, \
-             patch("ww.interfaces.dashboard.ProceduralMemory") as mock_proc, \
-             patch("ww.interfaces.dashboard.get_qdrant_store") as mock_qdrant, \
-             patch("ww.interfaces.dashboard.get_neo4j_store") as mock_neo4j:
+        with patch("t4dm.interfaces.dashboard.EpisodicMemory") as mock_ep, \
+             patch("t4dm.interfaces.dashboard.SemanticMemory") as mock_sem, \
+             patch("t4dm.interfaces.dashboard.ProceduralMemory") as mock_proc, \
+             patch("t4dm.interfaces.dashboard.get_qdrant_store") as mock_qdrant, \
+             patch("t4dm.interfaces.dashboard.get_neo4j_store") as mock_neo4j:
 
             mock_ep_instance = MagicMock()
             mock_ep_instance.initialize = AsyncMock()
@@ -62,17 +62,17 @@ class TestSystemDashboard:
 
     def test_init_without_rich(self, mock_stores):
         """Test initialization fails without rich library."""
-        with patch("ww.interfaces.dashboard.RICH_AVAILABLE", False):
-            from ww.interfaces.dashboard import SystemDashboard
+        with patch("t4dm.interfaces.dashboard.RICH_AVAILABLE", False):
+            from t4dm.interfaces.dashboard import SystemDashboard
 
             with pytest.raises(ImportError, match="rich library required"):
                 SystemDashboard(session_id="test")
 
     def test_init_with_rich(self, mock_stores):
         """Test initialization with rich library."""
-        with patch("ww.interfaces.dashboard.RICH_AVAILABLE", True), \
-             patch("ww.interfaces.dashboard.Console") as mock_console:
-            from ww.interfaces.dashboard import SystemDashboard
+        with patch("t4dm.interfaces.dashboard.RICH_AVAILABLE", True), \
+             patch("t4dm.interfaces.dashboard.Console") as mock_console:
+            from t4dm.interfaces.dashboard import SystemDashboard
 
             dashboard = SystemDashboard(session_id="test")
             assert dashboard.session_id == "test"
@@ -81,9 +81,9 @@ class TestSystemDashboard:
     @pytest.mark.asyncio
     async def test_initialize(self, mock_stores):
         """Test initialization of storage backends."""
-        with patch("ww.interfaces.dashboard.RICH_AVAILABLE", True), \
-             patch("ww.interfaces.dashboard.Console"):
-            from ww.interfaces.dashboard import SystemDashboard
+        with patch("t4dm.interfaces.dashboard.RICH_AVAILABLE", True), \
+             patch("t4dm.interfaces.dashboard.Console"):
+            from t4dm.interfaces.dashboard import SystemDashboard
 
             dashboard = SystemDashboard(session_id="test")
             await dashboard.initialize()
@@ -96,9 +96,9 @@ class TestSystemDashboard:
         """Test getting memory counts."""
         mock_stores["vector_store"].count = AsyncMock(side_effect=[100, 50, 25])
 
-        with patch("ww.interfaces.dashboard.RICH_AVAILABLE", True), \
-             patch("ww.interfaces.dashboard.Console"):
-            from ww.interfaces.dashboard import SystemDashboard
+        with patch("t4dm.interfaces.dashboard.RICH_AVAILABLE", True), \
+             patch("t4dm.interfaces.dashboard.Console"):
+            from t4dm.interfaces.dashboard import SystemDashboard
 
             dashboard = SystemDashboard(session_id="test")
             await dashboard.initialize()
@@ -112,9 +112,9 @@ class TestSystemDashboard:
     @pytest.mark.asyncio
     async def test_get_storage_health(self, mock_stores):
         """Test getting storage health."""
-        with patch("ww.interfaces.dashboard.RICH_AVAILABLE", True), \
-             patch("ww.interfaces.dashboard.Console"):
-            from ww.interfaces.dashboard import SystemDashboard
+        with patch("t4dm.interfaces.dashboard.RICH_AVAILABLE", True), \
+             patch("t4dm.interfaces.dashboard.Console"):
+            from t4dm.interfaces.dashboard import SystemDashboard
 
             dashboard = SystemDashboard(session_id="test")
             await dashboard.initialize()
@@ -141,9 +141,9 @@ class TestSystemDashboard:
             ], None),
         ])
 
-        with patch("ww.interfaces.dashboard.RICH_AVAILABLE", True), \
-             patch("ww.interfaces.dashboard.Console"):
-            from ww.interfaces.dashboard import SystemDashboard
+        with patch("t4dm.interfaces.dashboard.RICH_AVAILABLE", True), \
+             patch("t4dm.interfaces.dashboard.Console"):
+            from t4dm.interfaces.dashboard import SystemDashboard
 
             dashboard = SystemDashboard(session_id="test")
             await dashboard.initialize()
@@ -167,9 +167,9 @@ class TestSystemDashboard:
             ], None),
         ])
 
-        with patch("ww.interfaces.dashboard.RICH_AVAILABLE", True), \
-             patch("ww.interfaces.dashboard.Console"):
-            from ww.interfaces.dashboard import SystemDashboard
+        with patch("t4dm.interfaces.dashboard.RICH_AVAILABLE", True), \
+             patch("t4dm.interfaces.dashboard.Console"):
+            from t4dm.interfaces.dashboard import SystemDashboard
 
             dashboard = SystemDashboard(session_id="test")
             await dashboard.initialize()
@@ -187,9 +187,9 @@ class TestSystemDashboard:
         """Test performance stats with no data."""
         mock_stores["vector_store"].scroll = AsyncMock(return_value=([], None))
 
-        with patch("ww.interfaces.dashboard.RICH_AVAILABLE", True), \
-             patch("ww.interfaces.dashboard.Console"):
-            from ww.interfaces.dashboard import SystemDashboard
+        with patch("t4dm.interfaces.dashboard.RICH_AVAILABLE", True), \
+             patch("t4dm.interfaces.dashboard.Console"):
+            from t4dm.interfaces.dashboard import SystemDashboard
 
             dashboard = SystemDashboard(session_id="test")
             await dashboard.initialize()
@@ -201,10 +201,10 @@ class TestSystemDashboard:
 
     def test_build_layout(self, mock_stores):
         """Test layout building."""
-        with patch("ww.interfaces.dashboard.RICH_AVAILABLE", True), \
-             patch("ww.interfaces.dashboard.Console"), \
-             patch("ww.interfaces.dashboard.Layout") as mock_layout:
-            from ww.interfaces.dashboard import SystemDashboard
+        with patch("t4dm.interfaces.dashboard.RICH_AVAILABLE", True), \
+             patch("t4dm.interfaces.dashboard.Console"), \
+             patch("t4dm.interfaces.dashboard.Layout") as mock_layout:
+            from t4dm.interfaces.dashboard import SystemDashboard
 
             dashboard = SystemDashboard(session_id="test")
             layout = dashboard._build_layout()

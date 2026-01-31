@@ -3,7 +3,7 @@
 import pytest
 from datetime import datetime, timedelta
 
-from ww.core.query_policies import (
+from t4dm.core.query_policies import (
     EpisodicPolicy,
     ProceduralPolicy,
     QueryFilters,

@@ -24,7 +24,7 @@ class TestPersistenceConfig:
 
     def test_persistence_config_defaults(self):
         """Test that PersistenceConfig has sensible defaults."""
-        from ww.persistence import PersistenceConfig
+        from t4dm.persistence import PersistenceConfig
 
         with tempfile.TemporaryDirectory() as tmpdir:
             config = PersistenceConfig(data_directory=Path(tmpdir))
@@ -36,7 +36,7 @@ class TestPersistenceConfig:
 
     def test_persistence_config_custom_values(self):
         """Test PersistenceConfig accepts custom values."""
-        from ww.persistence import PersistenceConfig
+        from t4dm.persistence import PersistenceConfig
 
         with tempfile.TemporaryDirectory() as tmpdir:
             config = PersistenceConfig(
@@ -66,7 +66,7 @@ class TestPersistenceManagerBasics:
 
     def test_persistence_manager_initialization(self, temp_dir):
         """Test PersistenceManager initializes correctly."""
-        from ww.persistence import PersistenceConfig, PersistenceManager
+        from t4dm.persistence import PersistenceConfig, PersistenceManager
 
         config = PersistenceConfig(data_directory=temp_dir)
         manager = PersistenceManager(config)
@@ -76,7 +76,7 @@ class TestPersistenceManagerBasics:
 
     def test_persistence_manager_register_component(self, temp_dir):
         """Test component registration."""
-        from ww.persistence import PersistenceConfig, PersistenceManager
+        from t4dm.persistence import PersistenceConfig, PersistenceManager
 
         config = PersistenceConfig(data_directory=temp_dir)
         manager = PersistenceManager(config)
@@ -89,7 +89,7 @@ class TestPersistenceManagerBasics:
 
     def test_persistence_manager_register_replay_handler(self, temp_dir):
         """Test replay handler registration."""
-        from ww.persistence import PersistenceConfig, PersistenceManager, WALOperation
+        from t4dm.persistence import PersistenceConfig, PersistenceManager, WALOperation
 
         config = PersistenceConfig(data_directory=temp_dir)
         manager = PersistenceManager(config)
@@ -102,7 +102,7 @@ class TestPersistenceManagerBasics:
 
     def test_persistence_manager_register_cleanup(self, temp_dir):
         """Test cleanup callback registration."""
-        from ww.persistence import PersistenceConfig, PersistenceManager
+        from t4dm.persistence import PersistenceConfig, PersistenceManager
 
         config = PersistenceConfig(data_directory=temp_dir)
         manager = PersistenceManager(config)
@@ -119,7 +119,7 @@ class TestWALOperations:
 
     def test_wal_operation_values(self):
         """Test WAL operation enum values."""
-        from ww.persistence import WALOperation
+        from t4dm.persistence import WALOperation
 
         # Verify expected operations exist
         assert hasattr(WALOperation, 'BUFFER_ADD')
@@ -128,7 +128,7 @@ class TestWALOperations:
 
     def test_wal_operation_string_conversion(self):
         """Test WAL operation string representation."""
-        from ww.persistence import WALOperation
+        from t4dm.persistence import WALOperation
 
         # Operations should have string values
         assert WALOperation.BUFFER_ADD.value is not None
@@ -148,7 +148,7 @@ class TestPersistentServerGlobalState:
 
     def test_global_persistence_initial_state(self):
         """Test that global persistence starts as None."""
-        from ww.persistence import get_persistence, set_persistence
+        from t4dm.persistence import get_persistence, set_persistence
 
         # Ensure clean state
         set_persistence(None)
@@ -214,7 +214,7 @@ class TestShutdownPatterns:
     @pytest.mark.asyncio
     async def test_persistence_manager_shutdown_interface(self, temp_dir):
         """Test shutdown method exists and is async."""
-        from ww.persistence import PersistenceConfig, PersistenceManager
+        from t4dm.persistence import PersistenceConfig, PersistenceManager
 
         config = PersistenceConfig(data_directory=temp_dir)
         manager = PersistenceManager(config)
@@ -225,7 +225,7 @@ class TestShutdownPatterns:
     @pytest.mark.asyncio
     async def test_cleanup_callback_priority_ordering(self, temp_dir):
         """Test cleanup callbacks are ordered by priority."""
-        from ww.persistence import PersistenceConfig, PersistenceManager
+        from t4dm.persistence import PersistenceConfig, PersistenceManager
 
         config = PersistenceConfig(data_directory=temp_dir)
         manager = PersistenceManager(config)
@@ -258,7 +258,7 @@ class TestIntegrationPatterns:
     @pytest.mark.asyncio
     async def test_full_lifecycle_pattern(self, temp_dir):
         """Test full persistence lifecycle: init, operations, shutdown."""
-        from ww.persistence import PersistenceConfig, PersistenceManager
+        from t4dm.persistence import PersistenceConfig, PersistenceManager
 
         config = PersistenceConfig(
             data_directory=temp_dir,

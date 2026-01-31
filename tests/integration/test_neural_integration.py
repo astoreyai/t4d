@@ -25,7 +25,7 @@ class TestThreeFactorLearningIntegration:
 
     def test_three_factor_enabled_by_flag(self):
         """Test that enable_three_factor flag creates ThreeFactorLearningRule."""
-        from ww.core.learned_gate import LearnedMemoryGate
+        from t4dm.core.learned_gate import LearnedMemoryGate
 
         # Without flag
         gate_without = LearnedMemoryGate(enable_three_factor=False)
@@ -37,9 +37,9 @@ class TestThreeFactorLearningIntegration:
 
     def test_three_factor_modulates_learning_rate(self):
         """Test that dopamine RPE modulates effective learning rate."""
-        from ww.core.learned_gate import LearnedMemoryGate
-        from ww.learning.neuromodulators import NeuromodulatorState
-        from ww.core.memory_gate import GateContext
+        from t4dm.core.learned_gate import LearnedMemoryGate
+        from t4dm.learning.neuromodulators import NeuromodulatorState
+        from t4dm.core.memory_gate import GateContext
 
         gate = LearnedMemoryGate(enable_three_factor=True)
         context = GateContext(session_id="test")
@@ -74,9 +74,9 @@ class TestThreeFactorLearningIntegration:
 
     def test_neuromod_state_persists_through_pending_labels(self):
         """Test that neuromod_state is preserved from predict to update."""
-        from ww.core.learned_gate import LearnedMemoryGate
-        from ww.learning.neuromodulators import NeuromodulatorState
-        from ww.core.memory_gate import GateContext
+        from t4dm.core.learned_gate import LearnedMemoryGate
+        from t4dm.learning.neuromodulators import NeuromodulatorState
+        from t4dm.core.memory_gate import GateContext
 
         gate = LearnedMemoryGate(enable_three_factor=True)
         context = GateContext(session_id="test")
@@ -120,8 +120,8 @@ class TestNeuromodulatorFlowIntegration:
 
     def test_neuromodulator_orchestra_integration(self):
         """Test that NeuromodulatorOrchestra integrates with LearnedGate."""
-        from ww.core.learned_gate import LearnedMemoryGate
-        from ww.learning.neuromodulators import NeuromodulatorOrchestra
+        from t4dm.core.learned_gate import LearnedMemoryGate
+        from t4dm.learning.neuromodulators import NeuromodulatorOrchestra
 
         orchestra = NeuromodulatorOrchestra()
         gate = LearnedMemoryGate(
@@ -134,9 +134,9 @@ class TestNeuromodulatorFlowIntegration:
 
     def test_acetylcholine_mode_affects_threshold(self):
         """Test that ACh mode modulates storage threshold."""
-        from ww.core.learned_gate import LearnedMemoryGate
-        from ww.learning.neuromodulators import NeuromodulatorState
-        from ww.core.memory_gate import GateContext
+        from t4dm.core.learned_gate import LearnedMemoryGate
+        from t4dm.learning.neuromodulators import NeuromodulatorState
+        from t4dm.core.memory_gate import GateContext
 
         gate = LearnedMemoryGate()
         context = GateContext(session_id="test")
@@ -169,9 +169,9 @@ class TestNeuromodulatorFlowIntegration:
 
     def test_norepinephrine_boosts_exploration(self):
         """Test that high NE boosts Thompson sampling exploration."""
-        from ww.core.learned_gate import LearnedMemoryGate
-        from ww.learning.neuromodulators import NeuromodulatorState
-        from ww.core.memory_gate import GateContext
+        from t4dm.core.learned_gate import LearnedMemoryGate
+        from t4dm.learning.neuromodulators import NeuromodulatorState
+        from t4dm.core.memory_gate import GateContext
 
         gate = LearnedMemoryGate()
         # Warm up gate so exploration is enabled
@@ -210,7 +210,7 @@ class TestDendriticIntegration:
     def test_dendritic_neuron_processes_input(self):
         """Test DendriticNeuron basic processing."""
         import torch
-        from ww.encoding.dendritic import DendriticNeuron
+        from t4dm.encoding.dendritic import DendriticNeuron
 
         neuron = DendriticNeuron(input_dim=1024, hidden_dim=512, context_dim=512)
         # DendriticNeuron uses PyTorch, expects batch dimension
@@ -227,7 +227,7 @@ class TestDendriticIntegration:
     def test_dendritic_integration_with_context(self):
         """Test dendritic neuron with top-down context modulation."""
         import torch
-        from ww.encoding.dendritic import DendriticNeuron
+        from t4dm.encoding.dendritic import DendriticNeuron
 
         neuron = DendriticNeuron(input_dim=128, hidden_dim=64, context_dim=64)
         input_vec = torch.randn(1, 128)
@@ -252,7 +252,7 @@ class TestEligibilityTraceIntegration:
     def test_eligibility_trace_decays(self):
         """Test that eligibility traces decay over time."""
         import time
-        from ww.learning.eligibility import EligibilityTrace
+        from t4dm.learning.eligibility import EligibilityTrace
 
         # Use actual API: decay, tau_trace, etc.
         trace = EligibilityTrace(decay=0.9, tau_trace=0.1)  # Short tau for fast test
@@ -281,7 +281,7 @@ class TestEligibilityTraceIntegration:
 
     def test_eligibility_trace_accumulates(self):
         """Test that repeated activity accumulates eligibility."""
-        from ww.learning.eligibility import EligibilityTrace
+        from t4dm.learning.eligibility import EligibilityTrace
 
         # Use actual API with long tau_trace so decay is minimal
         trace = EligibilityTrace(decay=0.95, tau_trace=1000.0, a_plus=0.1)
@@ -306,7 +306,7 @@ class TestAttractorNetworkIntegration:
     def test_attractor_stores_and_retrieves(self):
         """Test Hopfield attractor stores and retrieves patterns."""
         import torch
-        from ww.encoding.attractor import AttractorNetwork
+        from t4dm.encoding.attractor import AttractorNetwork
 
         # Force CPU for consistent testing
         attractor = AttractorNetwork(dim=128, settling_steps=20, device="cpu")
@@ -332,7 +332,7 @@ class TestAttractorNetworkIntegration:
     def test_attractor_energy_minimization(self):
         """Test that attractor network minimizes energy."""
         import torch
-        from ww.encoding.attractor import AttractorNetwork
+        from t4dm.encoding.attractor import AttractorNetwork
 
         # Force CPU for consistent testing
         attractor = AttractorNetwork(dim=64, settling_steps=20, device="cpu")
@@ -361,9 +361,9 @@ class TestEndToEndNeuralPipeline:
 
     def test_full_learning_cycle(self):
         """Test complete learning cycle: predict → store → feedback → update."""
-        from ww.core.learned_gate import LearnedMemoryGate
-        from ww.learning.neuromodulators import NeuromodulatorState
-        from ww.core.memory_gate import GateContext
+        from t4dm.core.learned_gate import LearnedMemoryGate
+        from t4dm.learning.neuromodulators import NeuromodulatorState
+        from t4dm.core.memory_gate import GateContext
 
         # Setup
         gate = LearnedMemoryGate(enable_three_factor=True)
@@ -407,11 +407,11 @@ class TestEndToEndNeuralPipeline:
     def test_neural_component_composition(self):
         """Test that neural components can be composed together."""
         import torch
-        from ww.core.learned_gate import LearnedMemoryGate
-        from ww.learning.neuromodulators import NeuromodulatorOrchestra
-        from ww.learning.three_factor import ThreeFactorLearningRule
-        from ww.encoding.dendritic import DendriticNeuron
-        from ww.learning.eligibility import EligibilityTrace
+        from t4dm.core.learned_gate import LearnedMemoryGate
+        from t4dm.learning.neuromodulators import NeuromodulatorOrchestra
+        from t4dm.learning.three_factor import ThreeFactorLearningRule
+        from t4dm.encoding.dendritic import DendriticNeuron
+        from t4dm.learning.eligibility import EligibilityTrace
 
         # Create components
         orchestra = NeuromodulatorOrchestra()

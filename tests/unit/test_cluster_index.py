@@ -9,7 +9,7 @@ import numpy as np
 from uuid import uuid4
 from datetime import datetime, timedelta
 
-from ww.memory.cluster_index import ClusterIndex, ClusterMeta
+from t4dm.memory.cluster_index import ClusterIndex, ClusterMeta
 
 
 class TestClusterMeta:

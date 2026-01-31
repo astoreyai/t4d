@@ -3,7 +3,7 @@ import pytest
 import numpy as np
 from datetime import datetime
 
-from ww.learning.norepinephrine import (
+from t4dm.learning.norepinephrine import (
     ArousalState,
     NorepinephrineSystem,
 )

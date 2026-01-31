@@ -53,7 +53,7 @@ class TestSTDPPerformance:
     @pytest.fixture
     def stdp_learner(self):
         """Create STDP learner."""
-        from ww.learning.stdp import STDPLearner
+        from t4dm.learning.stdp import STDPLearner
         return STDPLearner()
 
     def test_spike_recording_performance(self, stdp_learner):
@@ -156,7 +156,7 @@ class TestTripletSTDPPerformance:
     @pytest.fixture
     def triplet_stdp(self):
         """Create triplet STDP learner."""
-        from ww.learning.stdp import TripletSTDP
+        from t4dm.learning.stdp import TripletSTDP
         return TripletSTDP()
 
     def test_triplet_update_performance(self, triplet_stdp):
@@ -187,7 +187,7 @@ class TestQueryMemorySeparationPerformance:
     @pytest.fixture
     def separator(self):
         """Create separator."""
-        from ww.embedding.query_memory_separation import QueryMemorySeparator
+        from t4dm.embedding.query_memory_separation import QueryMemorySeparator
         return QueryMemorySeparator()
 
     def test_query_projection_performance(self, separator):
@@ -277,7 +277,7 @@ class TestSynapticTaggingPerformance:
     @pytest.fixture
     def tagger(self):
         """Create synaptic tagger."""
-        from ww.learning.plasticity import SynapticTagger
+        from t4dm.learning.plasticity import SynapticTagger
         return SynapticTagger()
 
     def test_tag_synapse_performance(self, tagger):
@@ -331,7 +331,7 @@ class TestREMAbstractionPerformance:
 
     def test_abstraction_event_creation_performance(self):
         """Abstraction event creation should be <0.5ms."""
-        from ww.consolidation.sleep import AbstractionEvent
+        from t4dm.consolidation.sleep import AbstractionEvent
 
         i = [0]
 
@@ -350,7 +350,7 @@ class TestREMAbstractionPerformance:
 
     def test_many_abstraction_events_performance(self):
         """Creating 100 abstraction events should be <50ms."""
-        from ww.consolidation.sleep import AbstractionEvent
+        from t4dm.consolidation.sleep import AbstractionEvent
 
         def create_many():
             events = []
@@ -377,7 +377,7 @@ class TestTemporalLinkingPerformance:
 
     def test_episode_creation_performance(self):
         """Episode creation with links should be <0.5ms."""
-        from ww.core.types import Episode
+        from t4dm.core.types import Episode
 
         prev_id = None
         session_id = str(uuid4())
@@ -402,7 +402,7 @@ class TestTemporalLinkingPerformance:
 
     def test_linked_chain_creation_performance(self):
         """Creating linked chain (100 episodes) should be <50ms."""
-        from ww.core.types import Episode
+        from t4dm.core.types import Episode
 
         def create_chain():
             session_id = str(uuid4())
@@ -436,9 +436,9 @@ class TestIntegratedP5Performance:
 
     def test_retrieval_with_stdp_and_tagging(self):
         """Retrieval triggering STDP + tagging should be <10ms."""
-        from ww.learning.stdp import STDPLearner
-        from ww.learning.plasticity import SynapticTagger
-        from ww.embedding.query_memory_separation import QueryMemorySeparator
+        from t4dm.learning.stdp import STDPLearner
+        from t4dm.learning.plasticity import SynapticTagger
+        from t4dm.embedding.query_memory_separation import QueryMemorySeparator
 
         stdp = STDPLearner()
         tagger = SynapticTagger()
@@ -489,9 +489,9 @@ class TestIntegratedP5Performance:
 
     def test_consolidation_cycle_performance(self):
         """Single consolidation cycle should be <50ms."""
-        from ww.learning.stdp import STDPLearner
-        from ww.learning.plasticity import SynapticTagger
-        from ww.consolidation.sleep import AbstractionEvent
+        from t4dm.learning.stdp import STDPLearner
+        from t4dm.learning.plasticity import SynapticTagger
+        from t4dm.consolidation.sleep import AbstractionEvent
 
         stdp = STDPLearner()
         tagger = SynapticTagger()
@@ -528,9 +528,9 @@ class TestIntegratedP5Performance:
         """
         Sustained learning (1000 interactions) should complete in <5s.
         """
-        from ww.learning.stdp import STDPLearner
-        from ww.learning.plasticity import SynapticTagger
-        from ww.embedding.query_memory_separation import QueryMemorySeparator
+        from t4dm.learning.stdp import STDPLearner
+        from t4dm.learning.plasticity import SynapticTagger
+        from t4dm.embedding.query_memory_separation import QueryMemorySeparator
 
         stdp = STDPLearner()
         tagger = SynapticTagger()
@@ -584,7 +584,7 @@ class TestP5MemoryScaling:
     def test_stdp_memory_with_many_entities(self):
         """STDP should handle 10000 entities efficiently."""
         import sys
-        from ww.learning.stdp import STDPLearner
+        from t4dm.learning.stdp import STDPLearner
 
         stdp = STDPLearner()
         base_size = sys.getsizeof(stdp._spike_history)
@@ -604,7 +604,7 @@ class TestP5MemoryScaling:
     def test_separator_memory_constant(self):
         """Separator memory should be constant regardless of usage."""
         import sys
-        from ww.embedding.query_memory_separation import QueryMemorySeparator
+        from t4dm.embedding.query_memory_separation import QueryMemorySeparator
 
         separator = QueryMemorySeparator()
         # Use W_q and W_m matrices for size measurement

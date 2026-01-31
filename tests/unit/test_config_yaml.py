@@ -18,10 +18,10 @@ class TestConfigFileDiscovery:
 
     def test_finds_ww_yaml_in_cwd(self):
         """Finds ww.yaml in current directory."""
-        from ww.core.config import _find_config_file
+        from t4dm.core.config import _find_config_file
 
         with tempfile.TemporaryDirectory() as tmpdir:
-            config_path = Path(tmpdir) / "ww.yaml"
+            config_path = Path(tmpdir) / "t4dm.yaml"
             config_path.write_text("session_id: test")
 
             # Change to temp directory
@@ -29,50 +29,50 @@ class TestConfigFileDiscovery:
             try:
                 os.chdir(tmpdir)
                 result = _find_config_file()
-                assert result == Path("ww.yaml")
+                assert result == Path("t4dm.yaml")
             finally:
                 os.chdir(old_cwd)
 
     def test_finds_ww_yml_in_cwd(self):
         """Finds ww.yml in current directory."""
-        from ww.core.config import _find_config_file
+        from t4dm.core.config import _find_config_file
 
         with tempfile.TemporaryDirectory() as tmpdir:
-            config_path = Path(tmpdir) / "ww.yml"
+            config_path = Path(tmpdir) / "t4dm.yml"
             config_path.write_text("session_id: test")
 
             old_cwd = os.getcwd()
             try:
                 os.chdir(tmpdir)
                 result = _find_config_file()
-                assert result == Path("ww.yml")
+                assert result == Path("t4dm.yml")
             finally:
                 os.chdir(old_cwd)
 
     def test_env_var_overrides_search(self):
-        """WW_CONFIG_FILE environment variable takes precedence."""
-        from ww.core.config import _find_config_file
+        """T4DM_CONFIG_FILE environment variable takes precedence."""
+        from t4dm.core.config import _find_config_file
 
         with tempfile.TemporaryDirectory() as tmpdir:
             config_path = Path(tmpdir) / "custom-config.yaml"
             config_path.write_text("session_id: custom")
 
-            with patch.dict(os.environ, {"WW_CONFIG_FILE": str(config_path)}):
+            with patch.dict(os.environ, {"T4DM_CONFIG_FILE": str(config_path)}):
                 result = _find_config_file()
                 assert result == config_path
 
     def test_returns_none_when_no_file(self):
         """Returns None when no config file found."""
-        from ww.core.config import _find_config_file
+        from t4dm.core.config import _find_config_file
 
         with tempfile.TemporaryDirectory() as tmpdir:
             old_cwd = os.getcwd()
             try:
                 os.chdir(tmpdir)
-                # Clear any WW_CONFIG_FILE env var
-                with patch.dict(os.environ, {"WW_CONFIG_FILE": ""}, clear=False):
-                    if "WW_CONFIG_FILE" in os.environ:
-                        del os.environ["WW_CONFIG_FILE"]
+                # Clear any T4DM_CONFIG_FILE env var
+                with patch.dict(os.environ, {"T4DM_CONFIG_FILE": ""}, clear=False):
+                    if "T4DM_CONFIG_FILE" in os.environ:
+                        del os.environ["T4DM_CONFIG_FILE"]
                     result = _find_config_file()
                     # Note: might find ~/.ww/config.yaml if it exists
                     # Just verify no exception is raised
@@ -85,7 +85,7 @@ class TestYamlLoading:
 
     def test_loads_valid_yaml(self):
         """Loads valid YAML configuration."""
-        from ww.core.config import _load_yaml_config
+        from t4dm.core.config import _load_yaml_config
 
         with tempfile.NamedTemporaryFile(mode="w", suffix=".yaml", delete=False) as f:
             f.write("""
@@ -105,7 +105,7 @@ qdrant_url: http://localhost:6333
 
     def test_handles_empty_yaml(self):
         """Handles empty YAML file."""
-        from ww.core.config import _load_yaml_config
+        from t4dm.core.config import _load_yaml_config
 
         with tempfile.NamedTemporaryFile(mode="w", suffix=".yaml", delete=False) as f:
             f.write("")
@@ -118,7 +118,7 @@ qdrant_url: http://localhost:6333
 
     def test_handles_null_yaml(self):
         """Handles null YAML content."""
-        from ww.core.config import _load_yaml_config
+        from t4dm.core.config import _load_yaml_config
 
         with tempfile.NamedTemporaryFile(mode="w", suffix=".yaml", delete=False) as f:
             f.write("null")
@@ -131,7 +131,7 @@ qdrant_url: http://localhost:6333
 
     def test_rejects_invalid_yaml(self):
         """Rejects invalid YAML syntax."""
-        from ww.core.config import _load_yaml_config
+        from t4dm.core.config import _load_yaml_config
 
         with tempfile.NamedTemporaryFile(mode="w", suffix=".yaml", delete=False) as f:
             f.write("""
@@ -147,7 +147,7 @@ invalid: yaml: content
 
     def test_rejects_non_dict_yaml(self):
         """Rejects YAML that doesn't contain a dictionary."""
-        from ww.core.config import _load_yaml_config
+        from t4dm.core.config import _load_yaml_config
 
         with tempfile.NamedTemporaryFile(mode="w", suffix=".yaml", delete=False) as f:
             f.write("""
@@ -168,7 +168,7 @@ class TestLoadSettingsFromYaml:
 
     def test_loads_settings_from_yaml(self):
         """Loads Settings from YAML file."""
-        from ww.core.config import load_settings_from_yaml, reset_settings
+        from t4dm.core.config import load_settings_from_yaml, reset_settings
 
         reset_settings()
 
@@ -179,11 +179,11 @@ environment: test
 """)
             f.flush()
 
-            # Clear any WW_ env vars that might interfere
-            clean_env = {k: v for k, v in os.environ.items() if not k.startswith("WW_")}
-            # Keep WW_TEST_MODE if set
-            if "WW_TEST_MODE" in os.environ:
-                clean_env["WW_TEST_MODE"] = os.environ["WW_TEST_MODE"]
+            # Clear any T4DM_ env vars that might interfere
+            clean_env = {k: v for k, v in os.environ.items() if not k.startswith("T4DM_")}
+            # Keep T4DM_TEST_MODE if set
+            if "T4DM_TEST_MODE" in os.environ:
+                clean_env["T4DM_TEST_MODE"] = os.environ["T4DM_TEST_MODE"]
 
             with patch.dict(os.environ, clean_env, clear=True):
                 settings = load_settings_from_yaml(f.name)
@@ -196,7 +196,7 @@ environment: test
 
     def test_env_vars_override_yaml(self):
         """Environment variables override YAML values."""
-        from ww.core.config import load_settings_from_yaml, reset_settings
+        from t4dm.core.config import load_settings_from_yaml, reset_settings
 
         reset_settings()
 
@@ -209,8 +209,8 @@ environment: test
 
             # Clear existing env vars and set our test value
             env_overrides = {
-                "WW_SESSION_ID": "env-session",
-                "WW_ENVIRONMENT": "test",  # Keep test mode
+                "T4DM_SESSION_ID": "env-session",
+                "T4DM_ENVIRONMENT": "test",  # Keep test mode
             }
             with patch.dict(os.environ, env_overrides, clear=False):
                 settings = load_settings_from_yaml(f.name)
@@ -225,7 +225,7 @@ environment: test
 
     def test_raises_on_missing_file(self):
         """Raises FileNotFoundError for missing config file."""
-        from ww.core.config import load_settings_from_yaml
+        from t4dm.core.config import load_settings_from_yaml
 
         with pytest.raises(FileNotFoundError):
             load_settings_from_yaml("/nonexistent/config.yaml")
@@ -236,15 +236,15 @@ class TestMergeConfig:
 
     def test_merge_preserves_yaml_values(self):
         """Merge preserves YAML values when no env override."""
-        from ww.core.config import _merge_config_with_env
+        from t4dm.core.config import _merge_config_with_env
 
         yaml_config = {
             "session_id": "yaml-session",
             "environment": "development",
         }
 
-        # Create a clean environment without WW_ prefixed vars for this test
-        clean_env = {k: v for k, v in os.environ.items() if not k.startswith("WW_")}
+        # Create a clean environment without T4DM_ prefixed vars for this test
+        clean_env = {k: v for k, v in os.environ.items() if not k.startswith("T4DM_")}
         with patch.dict(os.environ, clean_env, clear=True):
             result = _merge_config_with_env(yaml_config)
 
@@ -253,14 +253,14 @@ class TestMergeConfig:
 
     def test_merge_applies_env_override(self):
         """Merge applies environment variable overrides."""
-        from ww.core.config import _merge_config_with_env
+        from t4dm.core.config import _merge_config_with_env
 
         yaml_config = {
             "session_id": "yaml-session",
             "environment": "development",
         }
 
-        with patch.dict(os.environ, {"WW_SESSION_ID": "env-session"}):
+        with patch.dict(os.environ, {"T4DM_SESSION_ID": "env-session"}):
             result = _merge_config_with_env(yaml_config)
 
             assert result["session_id"] == "env-session"
@@ -272,7 +272,7 @@ class TestResetSettings:
 
     def test_reset_clears_cache(self):
         """reset_settings clears the settings cache."""
-        from ww.core.config import get_settings, reset_settings
+        from t4dm.core.config import get_settings, reset_settings
 
         # Get settings to populate cache
         settings1 = get_settings()
@@ -296,7 +296,7 @@ class TestGetSettings:
 
     def test_get_settings_returns_settings(self):
         """get_settings returns a Settings instance."""
-        from ww.core.config import Settings, get_settings, reset_settings
+        from t4dm.core.config import Settings, get_settings, reset_settings
 
         reset_settings()  # Clear cache
 
@@ -307,7 +307,7 @@ class TestGetSettings:
 
     def test_get_settings_is_cached(self):
         """get_settings returns cached instance."""
-        from ww.core.config import get_settings, reset_settings
+        from t4dm.core.config import get_settings, reset_settings
 
         reset_settings()  # Clear cache
 

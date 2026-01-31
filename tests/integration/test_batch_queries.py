@@ -9,9 +9,9 @@ import time
 from uuid import uuid4, UUID
 from datetime import datetime
 
-from ww.storage.neo4j_store import get_neo4j_store
-from ww.memory.semantic import get_semantic_memory
-from ww.core.types import ScoredResult, Entity, EntityType
+from t4dm.storage.neo4j_store import get_neo4j_store
+from t4dm.memory.semantic import get_semantic_memory
+from t4dm.core.types import ScoredResult, Entity, EntityType
 
 
 @pytest.mark.integration

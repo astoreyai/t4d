@@ -8,7 +8,7 @@ import pytest
 import numpy as np
 from datetime import datetime, timedelta
 
-from ww.embedding.adapter import (
+from t4dm.embedding.adapter import (
     EmbeddingBackend,
     EmbeddingStats,
     MockEmbeddingAdapter,
@@ -337,7 +337,7 @@ class TestEmbeddingProviderProtocol:
 
     @pytest.mark.asyncio
     async def test_mock_adapter_protocol_compliance(self):
-        from ww.embedding.adapter import EmbeddingProvider
+        from t4dm.embedding.adapter import EmbeddingProvider
 
         adapter = MockEmbeddingAdapter(dimension=64)
 
@@ -354,7 +354,7 @@ class TestEmbeddingProviderProtocol:
 
     @pytest.mark.asyncio
     async def test_cached_adapter_protocol_compliance(self):
-        from ww.embedding.adapter import EmbeddingProvider
+        from t4dm.embedding.adapter import EmbeddingProvider
 
         base = MockEmbeddingAdapter(dimension=64)
         cached = CachedEmbeddingAdapter(base, cache_size=10)

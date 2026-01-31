@@ -6,8 +6,8 @@ from datetime import datetime, timedelta
 from uuid import uuid4
 from unittest.mock import AsyncMock, MagicMock, patch
 
-from ww.consolidation.service import ConsolidationService
-from ww.core.types import Episode, EpisodeContext, Outcome, EntityType, Procedure
+from t4dm.consolidation.service import ConsolidationService
+from t4dm.core.types import Episode, EpisodeContext, Outcome, EntityType, Procedure
 
 
 class TestStratifiedSample:
@@ -248,7 +248,7 @@ class TestConsolidateMain:
     def mock_service(self):
         """Create consolidation service with mocked internals."""
         import asyncio
-        from ww.consolidation.service import ConsolidationScheduler
+        from t4dm.consolidation.service import ConsolidationScheduler
         svc = ConsolidationService.__new__(ConsolidationService)
         svc._consolidate_light = AsyncMock(return_value={"episodes_scanned": 10, "duplicates_found": 2, "cleaned": 2})
         svc._consolidate_deep = AsyncMock(return_value={"consolidated_episodes": 5, "new_entities_created": 1})
@@ -367,5 +367,5 @@ class TestGetConsolidationService:
         """Getter returns singleton instance."""
         # Note: This would need mocking of dependencies
         # Just test the import works
-        from ww.consolidation.service import get_consolidation_service
+        from t4dm.consolidation.service import get_consolidation_service
         assert callable(get_consolidation_service)

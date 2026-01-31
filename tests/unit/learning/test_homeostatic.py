@@ -9,7 +9,7 @@ import pytest
 import numpy as np
 from datetime import datetime, timedelta
 
-from ww.learning.homeostatic import (
+from t4dm.learning.homeostatic import (
     HomeostaticState,
     HomeostaticPlasticity,
     apply_homeostatic_bounds,

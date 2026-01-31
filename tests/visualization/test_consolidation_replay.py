@@ -5,7 +5,7 @@ import numpy as np
 from datetime import datetime
 from unittest.mock import patch, MagicMock
 
-from ww.visualization.consolidation_replay import (
+from t4dm.visualization.consolidation_replay import (
     ConsolidationVisualizer,
     ReplaySequence,
     plot_swr_sequence,

@@ -5,7 +5,7 @@ import uuid
 
 import pytest
 
-from ww.storage.t4dx.types import EdgeRecord, EdgeType, ItemRecord, SegmentMetadata
+from t4dm.storage.t4dx.types import EdgeRecord, EdgeType, ItemRecord, SegmentMetadata
 
 
 class TestItemRecord:
@@ -41,7 +41,7 @@ class TestItemRecord:
         assert rec2.metadata == rec.metadata
 
     def test_memory_item_round_trip(self):
-        from ww.core.memory_item import MemoryItem
+        from t4dm.core.memory_item import MemoryItem
 
         mi = MemoryItem(content="test", embedding=[1.0, 2.0], kappa=0.3)
         rec = ItemRecord.from_memory_item(mi)

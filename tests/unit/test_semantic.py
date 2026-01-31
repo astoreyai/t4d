@@ -13,10 +13,10 @@ from datetime import datetime, timedelta
 from unittest.mock import AsyncMock, MagicMock
 from uuid import uuid4
 
-from ww.core.types import (
+from t4dm.core.types import (
     Entity, EntityType, Relationship, RelationType, ScoredResult
 )
-from ww.memory.semantic import SemanticMemory
+from t4dm.memory.semantic import SemanticMemory
 
 
 class TestSemanticEntityCreation:

@@ -9,7 +9,7 @@ import numpy as np
 from unittest.mock import patch, MagicMock
 from uuid import UUID
 
-from ww.api.routes.explorer import (
+from t4dm.api.routes.explorer import (
     MemoryExplorerState,
     EncodeDemoRequest,
     EncodeDemoResponse,
@@ -721,7 +721,7 @@ class TestExplorerEndpoints:
     @pytest.mark.asyncio
     async def test_endpoint_get_state(self):
         """Test GET /state endpoint returns state."""
-        from ww.api.routes.explorer import get_explorer_state
+        from t4dm.api.routes.explorer import get_explorer_state
 
         result = await get_explorer_state()
 
@@ -731,7 +731,7 @@ class TestExplorerEndpoints:
     @pytest.mark.asyncio
     async def test_endpoint_encode(self):
         """Test POST /demo/encode endpoint."""
-        from ww.api.routes.explorer import demo_encode, _explorer_state
+        from t4dm.api.routes.explorer import demo_encode, _explorer_state
 
         # Reset state first
         _explorer_state._memories.clear()
@@ -746,7 +746,7 @@ class TestExplorerEndpoints:
     @pytest.mark.asyncio
     async def test_endpoint_retrieve(self):
         """Test POST /demo/retrieve endpoint."""
-        from ww.api.routes.explorer import demo_encode, demo_retrieve, _explorer_state
+        from t4dm.api.routes.explorer import demo_encode, demo_retrieve, _explorer_state
 
         # Reset and encode first
         _explorer_state._memories.clear()
@@ -764,7 +764,7 @@ class TestExplorerEndpoints:
     @pytest.mark.asyncio
     async def test_endpoint_reset(self):
         """Test POST /reset endpoint."""
-        from ww.api.routes.explorer import (
+        from t4dm.api.routes.explorer import (
             reset_explorer, demo_encode, _explorer_state
         )
 
@@ -784,10 +784,10 @@ class TestExplorerEndpoints:
     async def test_endpoint_reset_clears_state(self):
         """Test reset endpoint clears state completely."""
         # Need to check the module-level state after reset
-        import ww.api.routes.explorer as explorer_module
+        import t4dm.api.routes.explorer as explorer_module
 
         # Encode and retrieve
-        from ww.api.routes.explorer import demo_encode, reset_explorer
+        from t4dm.api.routes.explorer import demo_encode, reset_explorer
 
         encode_req = EncodeDemoRequest(content="Test memory")
         await demo_encode(encode_req)

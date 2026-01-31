@@ -13,7 +13,7 @@ Validates:
 import numpy as np
 import pytest
 
-from ww.nca.delays import (
+from t4dm.nca.delays import (
     CircularDelayBuffer,
     DelayConfig,
     DelayDifferentialOperator,
@@ -375,7 +375,7 @@ class TestNeuralFieldIntegration:
 
     def test_solver_with_delays(self):
         """Test neural field solver accepts delay system."""
-        from ww.nca import NeuralFieldSolver, TransmissionDelaySystem
+        from t4dm.nca import NeuralFieldSolver, TransmissionDelaySystem
 
         delay_system = TransmissionDelaySystem(grid_shape=(16,))
         solver = NeuralFieldSolver(delay_system=delay_system)
@@ -384,7 +384,7 @@ class TestNeuralFieldIntegration:
 
     def test_delays_affect_dynamics(self):
         """Test delays influence field dynamics."""
-        from ww.nca import NeuralFieldSolver, NeuralFieldConfig, TransmissionDelaySystem
+        from t4dm.nca import NeuralFieldSolver, NeuralFieldConfig, TransmissionDelaySystem
 
         # Without delays
         solver_no_delay = NeuralFieldSolver()
@@ -404,7 +404,7 @@ class TestNeuralFieldIntegration:
 
     def test_get_transmission_delay(self):
         """Test transmission delay accessor."""
-        from ww.nca import NeuralFieldSolver, TransmissionDelaySystem
+        from t4dm.nca import NeuralFieldSolver, TransmissionDelaySystem
 
         delay_system = TransmissionDelaySystem()
         solver = NeuralFieldSolver(delay_system=delay_system)
@@ -419,7 +419,7 @@ class TestNeuralFieldIntegration:
 
     def test_no_delay_returns_zero(self):
         """Test solver without delays returns zero delay."""
-        from ww.nca import NeuralFieldSolver
+        from t4dm.nca import NeuralFieldSolver
 
         solver = NeuralFieldSolver()  # No delay system
         assert solver.get_transmission_delay(0) == 0.0

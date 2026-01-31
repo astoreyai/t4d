@@ -3,7 +3,7 @@
 import numpy as np
 import pytest
 
-from ww.nca.neural_field import (
+from t4dm.nca.neural_field import (
     NeuralFieldConfig,
     NeuralFieldSolver,
     NeurotransmitterState,

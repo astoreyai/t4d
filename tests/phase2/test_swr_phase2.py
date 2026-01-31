@@ -13,7 +13,7 @@ import sys
 
 sys.path.insert(0, "src")
 
-from ww.nca.swr_coupling import (
+from t4dm.nca.swr_coupling import (
     SWRNeuralFieldCoupling,
     SWRConfig,
     WakeSleepMode,

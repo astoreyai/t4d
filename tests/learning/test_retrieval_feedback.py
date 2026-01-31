@@ -12,12 +12,12 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from uuid import uuid4
 
-from ww.learning.retrieval_feedback import (
+from t4dm.learning.retrieval_feedback import (
     RetrievalFeedback,
     RetrievalOutcome,
     RetrievalFeedbackCollector,
 )
-from ww.learning.feedback_signals import (
+from t4dm.learning.feedback_signals import (
     LearningSignal,
     FeedbackSignalProcessor,
     AdapterTrainingSignal,

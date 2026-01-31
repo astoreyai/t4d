@@ -11,8 +11,8 @@ from uuid import uuid4
 
 import pytest
 
-from ww.hooks.base import HookContext
-from ww.hooks.session_lifecycle import (
+from t4dm.hooks.base import HookContext
+from t4dm.hooks.session_lifecycle import (
     IdleConsolidationHook,
     SessionContext,
     SessionEndHook,
@@ -20,8 +20,8 @@ from ww.hooks.session_lifecycle import (
     TaskOutcomeHook,
     create_session_hooks,
 )
-from ww.sdk.agent_client import CreditAssignmentResult, ScoredMemory
-from ww.sdk.models import Episode, EpisodeContext
+from t4dm.sdk.agent_client import CreditAssignmentResult, ScoredMemory
+from t4dm.sdk.models import Episode, EpisodeContext
 
 
 @pytest.fixture

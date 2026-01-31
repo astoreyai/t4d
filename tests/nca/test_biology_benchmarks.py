@@ -19,17 +19,17 @@ import numpy as np
 import pytest
 from typing import Tuple
 
-from ww.nca.hippocampus import (
+from t4dm.nca.hippocampus import (
     HippocampalCircuit,
     HippocampalConfig,
     HippocampalMode,
     DentateGyrusLayer,
     CA3Layer,
 )
-from ww.nca.vta import VTACircuit, VTAConfig, VTAFiringMode
-from ww.nca.raphe import RapheNucleus, RapheConfig, RapheState
-from ww.nca.swr_coupling import SWRNeuralFieldCoupling, SWRConfig, SWRPhase
-from ww.nca.striatal_msn import StriatalMSN, MSNConfig, ActionState
+from t4dm.nca.vta import VTACircuit, VTAConfig, VTAFiringMode
+from t4dm.nca.raphe import RapheNucleus, RapheConfig, RapheState
+from t4dm.nca.swr_coupling import SWRNeuralFieldCoupling, SWRConfig, SWRPhase
+from t4dm.nca.striatal_msn import StriatalMSN, MSNConfig, ActionState
 
 
 # =============================================================================

@@ -11,13 +11,13 @@ class TestVectorStoreFailures:
     @pytest.mark.asyncio
     async def test_vector_store_operation_with_mock_failure(self, patch_settings):
         """Test that vector store operations can fail gracefully."""
-        from ww.storage.qdrant_store import QdrantStore
+        from t4dm.storage.qdrant_store import QdrantStore
 
         # Create a store and inject a failure into an operation
         mock_client = AsyncMock()
         mock_client.upsert = AsyncMock(side_effect=ConnectionError("Connection refused"))
 
-        with patch("ww.storage.qdrant_store.AsyncQdrantClient", return_value=mock_client):
+        with patch("t4dm.storage.qdrant_store.AsyncQdrantClient", return_value=mock_client):
             store = QdrantStore()
 
             # Test that operation fails as expected
@@ -32,7 +32,7 @@ class TestVectorStoreFailures:
     @pytest.mark.asyncio
     async def test_vector_store_timeout_cancellation(self, patch_settings):
         """Test that vector store operations can be cancelled (timeout simulation)."""
-        from ww.storage.qdrant_store import QdrantStore
+        from t4dm.storage.qdrant_store import QdrantStore
 
         async def slow_operation(*args, **kwargs):
             await asyncio.sleep(10)
@@ -41,7 +41,7 @@ class TestVectorStoreFailures:
         mock_client = AsyncMock()
         mock_client.upsert = slow_operation
 
-        with patch("ww.storage.qdrant_store.AsyncQdrantClient", return_value=mock_client):
+        with patch("t4dm.storage.qdrant_store.AsyncQdrantClient", return_value=mock_client):
             store = QdrantStore()
 
             # Create task and cancel it to simulate timeout
@@ -65,7 +65,7 @@ class TestGraphStoreFailures:
     @pytest.mark.asyncio
     async def test_graph_store_operation_with_mock_failure(self, patch_settings):
         """Test that graph store operations can fail gracefully."""
-        from ww.storage.neo4j_store import Neo4jStore
+        from t4dm.storage.neo4j_store import Neo4jStore
 
         # Mock a failing operation
         mock_driver = AsyncMock()
@@ -82,7 +82,7 @@ class TestGraphStoreFailures:
 
         mock_driver.session = MagicMock(return_value=SessionContext())
 
-        with patch("ww.storage.neo4j_store.AsyncGraphDatabase.driver", return_value=mock_driver):
+        with patch("t4dm.storage.neo4j_store.AsyncGraphDatabase.driver", return_value=mock_driver):
             store = Neo4jStore()
 
             with pytest.raises(RuntimeError):
@@ -94,7 +94,7 @@ class TestGraphStoreFailures:
     @pytest.mark.asyncio
     async def test_graph_store_query_timeout(self, patch_settings):
         """Test that graph queries can timeout."""
-        from ww.storage.neo4j_store import Neo4jStore
+        from t4dm.storage.neo4j_store import Neo4jStore
 
         async def slow_query(*args, **kwargs):
             await asyncio.sleep(10)
@@ -112,7 +112,7 @@ class TestGraphStoreFailures:
 
         mock_driver.session = MagicMock(return_value=SessionContext())
 
-        with patch("ww.storage.neo4j_store.AsyncGraphDatabase.driver", return_value=mock_driver):
+        with patch("t4dm.storage.neo4j_store.AsyncGraphDatabase.driver", return_value=mock_driver):
             store = Neo4jStore()
 
             # Test timeout using asyncio.wait_for
@@ -129,7 +129,7 @@ class TestSagaCompensation:
     @pytest.mark.asyncio
     async def test_saga_compensation_on_second_step_failure(self):
         """Test that saga compensates when second step fails."""
-        from ww.storage.saga import Saga
+        from t4dm.storage.saga import Saga
 
         step1_executed = False
         step1_compensated = False
@@ -164,7 +164,7 @@ class TestSagaCompensation:
     @pytest.mark.asyncio
     async def test_saga_compensation_failure_logged(self):
         """Test that compensation failures are logged and raise CompensationError."""
-        from ww.storage.saga import Saga, CompensationError
+        from t4dm.storage.saga import Saga, CompensationError
 
         compensations_attempted = []
 
@@ -206,7 +206,7 @@ class TestPartialBatchFailures:
     @pytest.mark.asyncio
     async def test_batch_partial_success(self, deterministic_chaos, patch_settings):
         """Test batch operation with some failures."""
-        from ww.storage.qdrant_store import QdrantStore
+        from t4dm.storage.qdrant_store import QdrantStore
 
         deterministic_chaos.set_failure_rate(0.5)
 
@@ -216,7 +216,7 @@ class TestPartialBatchFailures:
             await deterministic_chaos.maybe_fail()
             call_results.append("success")
 
-        with patch("ww.storage.qdrant_store.AsyncQdrantClient") as mock_client:
+        with patch("t4dm.storage.qdrant_store.AsyncQdrantClient") as mock_client:
             mock_instance = AsyncMock()
             mock_instance.upsert = chaotic_upsert
             mock_client.return_value = mock_instance

@@ -4,7 +4,7 @@ import pytest
 from fastapi.testclient import TestClient
 from unittest.mock import patch, MagicMock
 
-from ww.api.routes.config import (
+from t4dm.api.routes.config import (
     router,
     FSRSConfig,
     ACTRConfig,
@@ -530,7 +530,7 @@ class TestConfigRouteHelpers:
 
     def test_runtime_config_is_dict(self):
         """Runtime config is a dictionary."""
-        from ww.api.routes.config import _runtime_config
+        from t4dm.api.routes.config import _runtime_config
         assert isinstance(_runtime_config, dict)
 
 
@@ -550,8 +550,8 @@ class TestConfigRouteEndpoints:
     @pytest.fixture(autouse=True)
     def reset_runtime_config(self):
         """Reset runtime config and set admin key before each test."""
-        from ww.api.routes import config as config_module
-        from ww.core.config import get_settings
+        from t4dm.api.routes import config as config_module
+        from t4dm.core.config import get_settings
         config_module._runtime_config = {}
         # Set admin key for tests
         settings = get_settings()

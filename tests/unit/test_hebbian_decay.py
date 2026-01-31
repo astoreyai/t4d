@@ -6,8 +6,8 @@ from datetime import datetime, timedelta
 from unittest.mock import AsyncMock, MagicMock, call
 from uuid import uuid4
 
-from ww.memory.semantic import SemanticMemory
-from ww.core.types import Entity, EntityType
+from t4dm.memory.semantic import SemanticMemory
+from t4dm.core.types import Entity, EntityType
 
 
 @pytest.mark.asyncio

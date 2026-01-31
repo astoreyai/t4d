@@ -11,9 +11,9 @@ from uuid import uuid4
 
 import pytest
 
-from ww.sdk.agent import AgentConfig, AgentPhase, WWAgent
-from ww.sdk.agent_client import AgentMemoryClient, ScoredMemory
-from ww.sdk.models import Episode, EpisodeContext
+from t4dm.sdk.agent import AgentConfig, AgentPhase, WWAgent
+from t4dm.sdk.agent_client import AgentMemoryClient, ScoredMemory
+from t4dm.sdk.models import Episode, EpisodeContext
 
 
 @pytest.fixture

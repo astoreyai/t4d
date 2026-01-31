@@ -4,9 +4,9 @@ import torch
 import pytest
 
 from tests.unit.consolidation.conftest import make_item
-from ww.consolidation.spike_reinjection import SpikeReinjection, ReinjectionConfig
-from ww.spiking.cortical_stack import CorticalStack
-from ww.storage.t4dx.types import EdgeRecord
+from t4dm.consolidation.spike_reinjection import SpikeReinjection, ReinjectionConfig
+from t4dm.spiking.cortical_stack import CorticalStack
+from t4dm.storage.t4dx.types import EdgeRecord
 
 
 class TestSpikeReinjection:

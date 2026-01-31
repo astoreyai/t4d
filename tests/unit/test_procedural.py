@@ -12,10 +12,10 @@ from datetime import datetime, timedelta
 from unittest.mock import AsyncMock, MagicMock
 from uuid import uuid4
 
-from ww.core.types import (
+from t4dm.core.types import (
     Procedure, ProcedureStep, Domain, ScoredResult
 )
-from ww.memory.procedural import ProceduralMemory
+from t4dm.memory.procedural import ProceduralMemory
 
 
 class TestProceduralSkillCreation:

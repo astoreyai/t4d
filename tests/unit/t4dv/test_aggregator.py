@@ -1,7 +1,7 @@
 """Tests for SnapshotAggregator."""
 
-from ww.t4dv.aggregator import SnapshotAggregator
-from ww.t4dv.events import NeuromodEvent, SpikeEvent, StorageEvent
+from t4dm.t4dv.aggregator import SnapshotAggregator
+from t4dm.t4dv.events import NeuromodEvent, SpikeEvent, StorageEvent
 
 
 class TestSnapshotAggregator:

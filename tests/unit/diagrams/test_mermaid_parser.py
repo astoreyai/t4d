@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from ww.diagrams.mermaid_parser import (
+from t4dm.diagrams.mermaid_parser import (
     detect_diagram_type,
     parse_directory,
     parse_file,
@@ -12,7 +12,7 @@ from ww.diagrams.mermaid_parser import (
     parse_sequence_diagram,
     parse_state_diagram,
 )
-from ww.diagrams.schema import DiagramType, EdgeType
+from t4dm.diagrams.schema import DiagramType, EdgeType
 
 DIAGRAMS_DIR = Path(__file__).resolve().parents[3] / "docs" / "diagrams"
 

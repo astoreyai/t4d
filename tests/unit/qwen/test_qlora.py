@@ -3,7 +3,7 @@
 import pytest
 import torch.nn as nn
 
-from ww.qwen.qlora import QLoRAConfig, apply_qlora, get_trainable_params
+from t4dm.qwen.qlora import QLoRAConfig, apply_qlora, get_trainable_params
 
 
 class TestQLoRA:

@@ -12,10 +12,10 @@ import numpy as np
 import pytest
 import torch
 
-from ww.spiking.lif import LIFNeuron
-from ww.spiking.cortical_block import CorticalBlock
-from ww.spiking.cortical_stack import CorticalStack
-from ww.spiking.spike_attention import SpikeAttention
+from t4dm.spiking.lif import LIFNeuron
+from t4dm.spiking.cortical_block import CorticalBlock
+from t4dm.spiking.cortical_stack import CorticalStack
+from t4dm.spiking.spike_attention import SpikeAttention
 
 
 class TestSTDPCurve:
@@ -173,7 +173,7 @@ class TestConsolidationImproval:
 
     def test_kappa_progression_with_replay(self):
         """Verify κ can be incremented through replay cycles."""
-        from ww.storage.t4dx.types import ItemRecord
+        from t4dm.storage.t4dx.types import ItemRecord
         import time
         import uuid
 

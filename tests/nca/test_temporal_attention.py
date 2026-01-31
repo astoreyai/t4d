@@ -7,7 +7,7 @@ Tests theta-gamma positional encoding and temporal attention mechanisms.
 import numpy as np
 import pytest
 
-from ww.nca.temporal_attention import (
+from t4dm.nca.temporal_attention import (
     TemporalAttentionConfig,
     PositionalEncoding,
     RelativePositionEmbedding,

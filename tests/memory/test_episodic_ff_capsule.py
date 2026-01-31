@@ -17,7 +17,7 @@ from datetime import datetime
 from uuid import uuid4
 from unittest.mock import MagicMock, AsyncMock, patch
 
-from ww.bridges.ff_capsule_bridge import (
+from t4dm.bridges.ff_capsule_bridge import (
     FFCapsuleBridge,
     FFCapsuleBridgeConfig,
     FFCapsuleBridgeState,

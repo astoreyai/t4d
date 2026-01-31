@@ -22,7 +22,7 @@ from unittest.mock import AsyncMock, MagicMock, patch, call
 from fastapi import FastAPI, HTTPException
 from fastapi.testclient import TestClient
 
-from ww.api.routes.dream_viewer import (
+from t4dm.api.routes.dream_viewer import (
     dream_router,
     DreamStateManager,
     DreamViewerState,
@@ -61,7 +61,7 @@ def state_manager():
 @pytest.fixture(autouse=True)
 def reset_global_state():
     """Reset global dream state before and after each test."""
-    from ww.api.routes import dream_viewer
+    from t4dm.api.routes import dream_viewer
 
     # Reset before test
     dream_viewer._dream_state = DreamStateManager()

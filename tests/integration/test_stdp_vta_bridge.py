@@ -12,14 +12,14 @@ Tests:
 import pytest
 from datetime import datetime, timedelta
 
-from ww.integration.stdp_vta_bridge import (
+from t4dm.integration.stdp_vta_bridge import (
     STDPVTABridge,
     STDPVTAConfig,
     get_stdp_vta_bridge,
     reset_stdp_vta_bridge,
 )
-from ww.learning.stdp import STDPLearner, STDPConfig, reset_stdp_learner
-from ww.nca.vta import VTACircuit, VTAConfig
+from t4dm.learning.stdp import STDPLearner, STDPConfig, reset_stdp_learner
+from t4dm.nca.vta import VTACircuit, VTAConfig
 
 
 @pytest.fixture

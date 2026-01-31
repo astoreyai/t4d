@@ -11,8 +11,8 @@ from datetime import datetime, timedelta
 from uuid import UUID, uuid4
 from unittest.mock import AsyncMock, Mock, patch
 
-from ww.consolidation.sleep import SleepConsolidation, ReplayEvent, ReplayDirection
-from ww.nca.vta import VTACircuit, VTAConfig
+from t4dm.consolidation.sleep import SleepConsolidation, ReplayEvent, ReplayDirection
+from t4dm.nca.vta import VTACircuit, VTAConfig
 
 
 # Mock episode class for testing

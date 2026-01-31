@@ -5,7 +5,7 @@ import math
 import pytest
 import torch
 
-from ww.spiking.oscillator_bias import OscillatorBias, OscillatorState
+from t4dm.spiking.oscillator_bias import OscillatorBias, OscillatorState
 
 
 class TestOscillatorBias:

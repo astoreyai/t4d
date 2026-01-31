@@ -6,7 +6,7 @@ import pytest
 import time
 import numpy as np
 
-from ww.learning.eligibility import (
+from t4dm.learning.eligibility import (
     EligibilityTrace,
     LayeredEligibilityTrace,
     EligibilityConfig,

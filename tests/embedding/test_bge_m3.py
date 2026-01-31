@@ -30,7 +30,7 @@ class TestBGEM3EmbeddingBasics:
     async def test_embed_query_returns_list(self, mock_flag_model):
         """Test that embed_query returns a list of floats."""
         with patch("FlagEmbedding.BGEM3FlagModel", return_value=mock_flag_model):
-            from ww.embedding.bge_m3 import BGEM3Embedding
+            from t4dm.embedding.bge_m3 import BGEM3Embedding
             provider = BGEM3Embedding()
             result = await provider.embed_query("test query")
 
@@ -46,7 +46,7 @@ class TestBGEM3EmbeddingBasics:
         }
 
         with patch("FlagEmbedding.BGEM3FlagModel", return_value=mock_flag_model):
-            from ww.embedding.bge_m3 import BGEM3Embedding
+            from t4dm.embedding.bge_m3 import BGEM3Embedding
             provider = BGEM3Embedding()
             result = await provider.embed(["text1", "text2", "text3"])
 
@@ -57,7 +57,7 @@ class TestBGEM3EmbeddingBasics:
     async def test_embed_empty_input(self, mock_flag_model):
         """Test empty input handling."""
         with patch("FlagEmbedding.BGEM3FlagModel", return_value=mock_flag_model):
-            from ww.embedding.bge_m3 import BGEM3Embedding
+            from t4dm.embedding.bge_m3 import BGEM3Embedding
             provider = BGEM3Embedding()
             result = await provider.embed([])
 
@@ -73,7 +73,7 @@ class TestBGEM3EmbeddingBasics:
         }
 
         with patch("FlagEmbedding.BGEM3FlagModel", return_value=mock_flag_model):
-            from ww.embedding.bge_m3 import BGEM3Embedding
+            from t4dm.embedding.bge_m3 import BGEM3Embedding
             provider = BGEM3Embedding()
             result = await provider.embed(["single text"])
 
@@ -83,7 +83,7 @@ class TestBGEM3EmbeddingBasics:
     def test_embedding_dimensions(self):
         """Test embedding has correct dimensions."""
         with patch("FlagEmbedding.BGEM3FlagModel"):
-            from ww.embedding.bge_m3 import BGEM3Embedding
+            from t4dm.embedding.bge_m3 import BGEM3Embedding
             provider = BGEM3Embedding()
 
             # Check dimension property
@@ -105,7 +105,7 @@ class TestBGEM3EmbeddingInputTypes:
     async def test_long_text_handling(self, mock_flag_model):
         """Test handling of long text input."""
         with patch("FlagEmbedding.BGEM3FlagModel", return_value=mock_flag_model):
-            from ww.embedding.bge_m3 import BGEM3Embedding
+            from t4dm.embedding.bge_m3 import BGEM3Embedding
             provider = BGEM3Embedding()
 
             # Very long text (should be truncated at max_length)
@@ -122,7 +122,7 @@ class TestBGEM3EmbeddingInputTypes:
     async def test_special_characters(self, mock_flag_model):
         """Test handling of special characters."""
         with patch("FlagEmbedding.BGEM3FlagModel", return_value=mock_flag_model):
-            from ww.embedding.bge_m3 import BGEM3Embedding
+            from t4dm.embedding.bge_m3 import BGEM3Embedding
             provider = BGEM3Embedding()
 
             special_text = "Test with \n\t special chars: \u2603 \u2764"
@@ -135,7 +135,7 @@ class TestBGEM3EmbeddingInputTypes:
     async def test_unicode_text(self, mock_flag_model):
         """Test handling of unicode text."""
         with patch("FlagEmbedding.BGEM3FlagModel", return_value=mock_flag_model):
-            from ww.embedding.bge_m3 import BGEM3Embedding
+            from t4dm.embedding.bge_m3 import BGEM3Embedding
             provider = BGEM3Embedding()
 
             unicode_text = "Chinese: \u4e2d\u6587 Japanese: \u65e5\u672c\u8a9e Korean: \ud55c\uad6d\uc5b4"
@@ -148,7 +148,7 @@ class TestBGEM3EmbeddingInputTypes:
     async def test_empty_string(self, mock_flag_model):
         """Test handling of empty string."""
         with patch("FlagEmbedding.BGEM3FlagModel", return_value=mock_flag_model):
-            from ww.embedding.bge_m3 import BGEM3Embedding
+            from t4dm.embedding.bge_m3 import BGEM3Embedding
             provider = BGEM3Embedding()
 
             result = await provider.embed_query("")
@@ -172,7 +172,7 @@ class TestBGEM3EmbeddingCaching:
     async def test_caching_same_query(self, mock_flag_model):
         """Test that same query uses cache."""
         with patch("FlagEmbedding.BGEM3FlagModel", return_value=mock_flag_model):
-            from ww.embedding.bge_m3 import BGEM3Embedding
+            from t4dm.embedding.bge_m3 import BGEM3Embedding
             provider = BGEM3Embedding()
 
             # First call
@@ -193,7 +193,7 @@ class TestBGEM3EmbeddingCaching:
     async def test_different_query_no_cache(self, mock_flag_model):
         """Test that different queries don't hit cache."""
         with patch("FlagEmbedding.BGEM3FlagModel", return_value=mock_flag_model):
-            from ww.embedding.bge_m3 import BGEM3Embedding
+            from t4dm.embedding.bge_m3 import BGEM3Embedding
             provider = BGEM3Embedding()
 
             await provider.embed_query("query one")
@@ -208,7 +208,7 @@ class TestBGEM3EmbeddingCaching:
     async def test_cache_eviction(self, mock_flag_model):
         """Test LRU cache eviction when full."""
         with patch("FlagEmbedding.BGEM3FlagModel", return_value=mock_flag_model):
-            from ww.embedding.bge_m3 import BGEM3Embedding
+            from t4dm.embedding.bge_m3 import BGEM3Embedding
             # Small cache for testing
             provider = BGEM3Embedding(embedding_cache_size=3)
 
@@ -230,7 +230,7 @@ class TestBGEM3EmbeddingCaching:
     async def test_cache_lru_ordering(self, mock_flag_model):
         """Test that accessing item moves it to end (LRU)."""
         with patch("FlagEmbedding.BGEM3FlagModel", return_value=mock_flag_model):
-            from ww.embedding.bge_m3 import BGEM3Embedding
+            from t4dm.embedding.bge_m3 import BGEM3Embedding
             provider = BGEM3Embedding(embedding_cache_size=3)
 
             # Fill cache (3 misses)
@@ -257,7 +257,7 @@ class TestBGEM3EmbeddingCaching:
     async def test_clear_cache(self, mock_flag_model):
         """Test clearing the cache."""
         with patch("FlagEmbedding.BGEM3FlagModel", return_value=mock_flag_model):
-            from ww.embedding.bge_m3 import BGEM3Embedding
+            from t4dm.embedding.bge_m3 import BGEM3Embedding
             provider = BGEM3Embedding()
 
             await provider.embed_query("query1")
@@ -279,7 +279,7 @@ class TestBGEM3EmbeddingCaching:
     async def test_cache_hit_rate_calculation(self, mock_flag_model):
         """Test cache hit rate calculation."""
         with patch("FlagEmbedding.BGEM3FlagModel", return_value=mock_flag_model):
-            from ww.embedding.bge_m3 import BGEM3Embedding
+            from t4dm.embedding.bge_m3 import BGEM3Embedding
             provider = BGEM3Embedding()
 
             # 3 misses
@@ -314,7 +314,7 @@ class TestBGEM3EmbeddingBatchCached:
     async def test_batch_cached_empty_input(self, mock_flag_model):
         """Test empty batch returns empty list."""
         with patch("FlagEmbedding.BGEM3FlagModel", return_value=mock_flag_model):
-            from ww.embedding.bge_m3 import BGEM3Embedding
+            from t4dm.embedding.bge_m3 import BGEM3Embedding
             provider = BGEM3Embedding()
             result = await provider.embed_batch_cached([])
             assert result == []
@@ -324,7 +324,7 @@ class TestBGEM3EmbeddingBatchCached:
     async def test_batch_cached_all_new(self, mock_flag_model):
         """Test batch where all texts are new (no cache hits)."""
         with patch("FlagEmbedding.BGEM3FlagModel", return_value=mock_flag_model):
-            from ww.embedding.bge_m3 import BGEM3Embedding
+            from t4dm.embedding.bge_m3 import BGEM3Embedding
             provider = BGEM3Embedding()
 
             texts = ["text1", "text2", "text3"]
@@ -342,7 +342,7 @@ class TestBGEM3EmbeddingBatchCached:
     async def test_batch_cached_all_cached(self, mock_flag_model):
         """Test batch where all texts are already cached."""
         with patch("FlagEmbedding.BGEM3FlagModel", return_value=mock_flag_model):
-            from ww.embedding.bge_m3 import BGEM3Embedding
+            from t4dm.embedding.bge_m3 import BGEM3Embedding
             provider = BGEM3Embedding()
 
             texts = ["text1", "text2", "text3"]
@@ -366,7 +366,7 @@ class TestBGEM3EmbeddingBatchCached:
     async def test_batch_cached_partial_cache(self, mock_flag_model):
         """Test batch with some cached and some new texts."""
         with patch("FlagEmbedding.BGEM3FlagModel", return_value=mock_flag_model):
-            from ww.embedding.bge_m3 import BGEM3Embedding
+            from t4dm.embedding.bge_m3 import BGEM3Embedding
             provider = BGEM3Embedding()
 
             # Cache first two texts
@@ -402,7 +402,7 @@ class TestBGEM3EmbeddingBatchCached:
         mock_flag_model.encode.side_effect = mock_encode
 
         with patch("FlagEmbedding.BGEM3FlagModel", return_value=mock_flag_model):
-            from ww.embedding.bge_m3 import BGEM3Embedding
+            from t4dm.embedding.bge_m3 import BGEM3Embedding
             provider = BGEM3Embedding()
 
             # First embed text2 only
@@ -419,7 +419,7 @@ class TestBGEM3EmbeddingBatchCached:
     async def test_batch_cached_with_query_prefix(self, mock_flag_model):
         """Test batch caching with query prefix."""
         with patch("FlagEmbedding.BGEM3FlagModel", return_value=mock_flag_model):
-            from ww.embedding.bge_m3 import BGEM3Embedding
+            from t4dm.embedding.bge_m3 import BGEM3Embedding
             provider = BGEM3Embedding()
 
             # With prefix
@@ -439,10 +439,10 @@ class TestBGEM3EmbeddingSingleton:
     def test_singleton_instance(self):
         """Test that get_embedding_provider returns singleton."""
         with patch("FlagEmbedding.BGEM3FlagModel"):
-            from ww.embedding.bge_m3 import get_embedding_provider, _embedding_instance
+            from t4dm.embedding.bge_m3 import get_embedding_provider, _embedding_instance
 
             # Reset singleton
-            import ww.embedding.bge_m3
+            import t4dm.embedding.bge_m3
             ww.embedding.bge_m3._embedding_instance = None
 
             provider1 = get_embedding_provider()
@@ -453,15 +453,15 @@ class TestBGEM3EmbeddingSingleton:
     def test_singleton_persists(self):
         """Test that singleton persists across imports."""
         with patch("FlagEmbedding.BGEM3FlagModel"):
-            from ww.embedding.bge_m3 import get_embedding_provider
+            from t4dm.embedding.bge_m3 import get_embedding_provider
 
             provider1 = get_embedding_provider()
 
             # Re-import
             import importlib
-            import ww.embedding.bge_m3
+            import t4dm.embedding.bge_m3
             importlib.reload(ww.embedding.bge_m3)
-            from ww.embedding.bge_m3 import get_embedding_provider
+            from t4dm.embedding.bge_m3 import get_embedding_provider
 
             provider2 = get_embedding_provider()
 
@@ -486,7 +486,7 @@ class TestBGEM3EmbeddingFallback:
             mock_flag.side_effect = ImportError("FlagEmbedding not installed")
 
             with patch("sentence_transformers.SentenceTransformer", return_value=mock_st_model):
-                from ww.embedding.bge_m3 import BGEM3Embedding
+                from t4dm.embedding.bge_m3 import BGEM3Embedding
                 provider = BGEM3Embedding()
 
                 # Force initialization
@@ -500,7 +500,7 @@ class TestBGEM3EmbeddingFallback:
         """Test embedding with sentence-transformers backend."""
         with patch("FlagEmbedding.BGEM3FlagModel", side_effect=ImportError):
             with patch("sentence_transformers.SentenceTransformer", return_value=mock_st_model):
-                from ww.embedding.bge_m3 import BGEM3Embedding
+                from t4dm.embedding.bge_m3 import BGEM3Embedding
                 provider = BGEM3Embedding()
 
                 result = await provider.embed(["test1", "test2"])
@@ -530,7 +530,7 @@ class TestBGEM3EmbeddingBatching:
         mock_flag_model.encode.side_effect = mock_encode
 
         with patch("FlagEmbedding.BGEM3FlagModel", return_value=mock_flag_model):
-            from ww.embedding.bge_m3 import BGEM3Embedding
+            from t4dm.embedding.bge_m3 import BGEM3Embedding
             provider = BGEM3Embedding(batch_size=32)
 
             # 100 texts should require multiple batches
@@ -549,7 +549,7 @@ class TestBGEM3EmbeddingBatching:
         }
 
         with patch("FlagEmbedding.BGEM3FlagModel", return_value=mock_flag_model):
-            from ww.embedding.bge_m3 import BGEM3Embedding
+            from t4dm.embedding.bge_m3 import BGEM3Embedding
             provider = BGEM3Embedding(batch_size=10)
 
             texts = [f"text_{i}" for i in range(30)]
@@ -566,7 +566,7 @@ class TestBGEM3EmbeddingBatching:
         }
 
         with patch("FlagEmbedding.BGEM3FlagModel", return_value=mock_flag_model):
-            from ww.embedding.bge_m3 import BGEM3Embedding
+            from t4dm.embedding.bge_m3 import BGEM3Embedding
             provider = BGEM3Embedding(batch_size=32)
 
             texts = [f"text_{i}" for i in range(100)]
@@ -585,7 +585,7 @@ class TestBGEM3EmbeddingSimilarity:
     def test_similarity_identical_vectors(self):
         """Test similarity of identical vectors is 1.0."""
         with patch("FlagEmbedding.BGEM3FlagModel"):
-            from ww.embedding.bge_m3 import BGEM3Embedding
+            from t4dm.embedding.bge_m3 import BGEM3Embedding
             provider = BGEM3Embedding()
 
             vec = [1.0] * 1024
@@ -596,7 +596,7 @@ class TestBGEM3EmbeddingSimilarity:
     def test_similarity_orthogonal_vectors(self):
         """Test similarity of orthogonal vectors is 0.0."""
         with patch("FlagEmbedding.BGEM3FlagModel"):
-            from ww.embedding.bge_m3 import BGEM3Embedding
+            from t4dm.embedding.bge_m3 import BGEM3Embedding
             provider = BGEM3Embedding()
 
             # Create orthogonal vectors
@@ -610,7 +610,7 @@ class TestBGEM3EmbeddingSimilarity:
     def test_similarity_opposite_vectors(self):
         """Test similarity of opposite vectors is -1.0."""
         with patch("FlagEmbedding.BGEM3FlagModel"):
-            from ww.embedding.bge_m3 import BGEM3Embedding
+            from t4dm.embedding.bge_m3 import BGEM3Embedding
             provider = BGEM3Embedding()
 
             vec1 = [1.0] * 1024
@@ -623,7 +623,7 @@ class TestBGEM3EmbeddingSimilarity:
     def test_similarity_normalized_vectors(self):
         """Test similarity with normalized vectors."""
         with patch("FlagEmbedding.BGEM3FlagModel"):
-            from ww.embedding.bge_m3 import BGEM3Embedding
+            from t4dm.embedding.bge_m3 import BGEM3Embedding
             provider = BGEM3Embedding()
 
             # Normalized random vectors
@@ -645,7 +645,7 @@ class TestBGEM3EmbeddingInitialization:
     def test_lazy_initialization(self):
         """Test that model is not loaded until first use."""
         with patch("FlagEmbedding.BGEM3FlagModel") as mock_flag:
-            from ww.embedding.bge_m3 import BGEM3Embedding
+            from t4dm.embedding.bge_m3 import BGEM3Embedding
 
             provider = BGEM3Embedding()
 
@@ -661,7 +661,7 @@ class TestBGEM3EmbeddingInitialization:
         }
 
         with patch("FlagEmbedding.BGEM3FlagModel", return_value=mock_model) as mock_flag:
-            from ww.embedding.bge_m3 import BGEM3Embedding
+            from t4dm.embedding.bge_m3 import BGEM3Embedding
 
             provider = BGEM3Embedding()
             await provider.embed(["test"])
@@ -673,7 +673,7 @@ class TestBGEM3EmbeddingInitialization:
     def test_custom_config(self):
         """Test initialization with custom configuration."""
         with patch("FlagEmbedding.BGEM3FlagModel"):
-            from ww.embedding.bge_m3 import BGEM3Embedding
+            from t4dm.embedding.bge_m3 import BGEM3Embedding
 
             provider = BGEM3Embedding(
                 model_name="custom/model",
@@ -701,7 +701,7 @@ class TestBGEM3EmbeddingInitialization:
         }
 
         with patch("FlagEmbedding.BGEM3FlagModel", return_value=mock_model):
-            from ww.embedding.bge_m3 import BGEM3Embedding
+            from t4dm.embedding.bge_m3 import BGEM3Embedding
 
             provider = BGEM3Embedding()
 
@@ -728,7 +728,7 @@ class TestBGEM3EmbeddingErrors:
             mock_flag.side_effect = Exception("Model not found")
 
             # Should not raise during initialization (lazy loading)
-            from ww.embedding.bge_m3 import BGEM3Embedding
+            from t4dm.embedding.bge_m3 import BGEM3Embedding
             provider = BGEM3Embedding()
 
     @pytest.mark.asyncio
@@ -738,7 +738,7 @@ class TestBGEM3EmbeddingErrors:
         mock_model.encode.side_effect = RuntimeError("CUDA OOM")
 
         with patch("FlagEmbedding.BGEM3FlagModel", return_value=mock_model):
-            from ww.embedding.bge_m3 import BGEM3Embedding
+            from t4dm.embedding.bge_m3 import BGEM3Embedding
             provider = BGEM3Embedding()
 
             with pytest.raises(RuntimeError, match="CUDA OOM"):
@@ -754,7 +754,7 @@ class TestBGEM3EmbeddingErrors:
         }
 
         with patch("FlagEmbedding.BGEM3FlagModel", return_value=mock_model):
-            from ww.embedding.bge_m3 import BGEM3Embedding
+            from t4dm.embedding.bge_m3 import BGEM3Embedding
             provider = BGEM3Embedding()
 
             # Should still return the embedding (no validation in code)
@@ -777,7 +777,7 @@ class TestBGEM3EmbeddingQueryPrefix:
     async def test_query_prefix_added(self, mock_flag_model):
         """Test that query prefix is added to queries."""
         with patch("FlagEmbedding.BGEM3FlagModel", return_value=mock_flag_model):
-            from ww.embedding.bge_m3 import BGEM3Embedding
+            from t4dm.embedding.bge_m3 import BGEM3Embedding
             provider = BGEM3Embedding()
 
             await provider.embed_query("test query")
@@ -792,7 +792,7 @@ class TestBGEM3EmbeddingQueryPrefix:
     async def test_embed_no_prefix(self, mock_flag_model):
         """Test that regular embed doesn't add prefix."""
         with patch("FlagEmbedding.BGEM3FlagModel", return_value=mock_flag_model):
-            from ww.embedding.bge_m3 import BGEM3Embedding
+            from t4dm.embedding.bge_m3 import BGEM3Embedding
             provider = BGEM3Embedding()
 
             test_text = "test document"
@@ -817,7 +817,7 @@ class TestBGEM3EmbeddingResponseFormats:
         }
 
         with patch("FlagEmbedding.BGEM3FlagModel", return_value=mock_model):
-            from ww.embedding.bge_m3 import BGEM3Embedding
+            from t4dm.embedding.bge_m3 import BGEM3Embedding
             provider = BGEM3Embedding()
 
             result = await provider.embed(["text1", "text2"])
@@ -833,7 +833,7 @@ class TestBGEM3EmbeddingResponseFormats:
         mock_model.encode.return_value = np.random.rand(2, 1024).astype(np.float32)
 
         with patch("FlagEmbedding.BGEM3FlagModel", return_value=mock_model):
-            from ww.embedding.bge_m3 import BGEM3Embedding
+            from t4dm.embedding.bge_m3 import BGEM3Embedding
             provider = BGEM3Embedding()
 
             result = await provider.embed(["text1", "text2"])
@@ -850,7 +850,7 @@ class TestBGEM3EmbeddingResponseFormats:
         mock_model.encode.return_value = embeddings
 
         with patch("FlagEmbedding.BGEM3FlagModel", return_value=mock_model):
-            from ww.embedding.bge_m3 import BGEM3Embedding
+            from t4dm.embedding.bge_m3 import BGEM3Embedding
             provider = BGEM3Embedding()
 
             result = await provider.embed(["text1", "text2"])
@@ -867,7 +867,7 @@ class TestTTLCacheCoverage:
 
     def test_cache_len(self):
         """Test __len__ method returns correct count."""
-        from ww.embedding.bge_m3 import TTLCache
+        from t4dm.embedding.bge_m3 import TTLCache
         cache = TTLCache(max_size=100, ttl_seconds=3600)
 
         assert len(cache) == 0
@@ -880,7 +880,7 @@ class TestTTLCacheCoverage:
 
     def test_evict_expired_removes_old_entries(self):
         """Test evict_expired removes expired entries."""
-        from ww.embedding.bge_m3 import TTLCache
+        from t4dm.embedding.bge_m3 import TTLCache
         from datetime import timedelta
 
         # Create cache with very short TTL
@@ -902,7 +902,7 @@ class TestTTLCacheCoverage:
 
     def test_get_expired_entry_returns_none_and_removes(self):
         """Test that getting expired entry returns None and removes it."""
-        from ww.embedding.bge_m3 import TTLCache
+        from t4dm.embedding.bge_m3 import TTLCache
         from datetime import datetime, timedelta
 
         cache = TTLCache(max_size=100, ttl_seconds=1)
@@ -923,7 +923,7 @@ class TestTTLCacheCoverage:
 
     def test_evict_oldest_on_empty_cache(self):
         """Test _evict_oldest does nothing on empty cache."""
-        from ww.embedding.bge_m3 import TTLCache
+        from t4dm.embedding.bge_m3 import TTLCache
 
         cache = TTLCache(max_size=3, ttl_seconds=3600)
 
@@ -952,7 +952,7 @@ class TestEmbedHybrid:
     async def test_embed_hybrid_empty_input(self, mock_flag_model_sparse):
         """Test embed_hybrid with empty input."""
         with patch("FlagEmbedding.BGEM3FlagModel", return_value=mock_flag_model_sparse):
-            from ww.embedding.bge_m3 import BGEM3Embedding
+            from t4dm.embedding.bge_m3 import BGEM3Embedding
             provider = BGEM3Embedding()
 
             dense, sparse = await provider.embed_hybrid([])
@@ -963,7 +963,7 @@ class TestEmbedHybrid:
     async def test_embed_hybrid_returns_both(self, mock_flag_model_sparse):
         """Test embed_hybrid returns both dense and sparse vectors."""
         with patch("FlagEmbedding.BGEM3FlagModel", return_value=mock_flag_model_sparse):
-            from ww.embedding.bge_m3 import BGEM3Embedding
+            from t4dm.embedding.bge_m3 import BGEM3Embedding
             provider = BGEM3Embedding()
 
             dense, sparse = await provider.embed_hybrid(["text1", "text2"])
@@ -982,7 +982,7 @@ class TestEmbedHybrid:
         with patch("FlagEmbedding.BGEM3FlagModel", side_effect=ImportError):
             with patch("sentence_transformers.SentenceTransformer", return_value=mock_st):
                 from importlib import reload
-                import ww.embedding.bge_m3 as bge_module
+                import t4dm.embedding.bge_m3 as bge_module
                 reload(bge_module)
 
                 provider = bge_module.BGEM3Embedding()

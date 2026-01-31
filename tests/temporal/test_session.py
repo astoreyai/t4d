@@ -5,8 +5,8 @@ from datetime import datetime, timedelta
 from uuid import uuid4
 import time
 
-from ww.temporal.session import SessionContext, SessionManager
-from ww.embedding.modulated import CognitiveMode
+from t4dm.temporal.session import SessionContext, SessionManager
+from t4dm.embedding.modulated import CognitiveMode
 
 
 class TestSessionContext:

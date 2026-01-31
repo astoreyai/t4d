@@ -13,16 +13,16 @@ import numpy as np
 import pytest
 from scipy import linalg
 
-from ww.nca.stability import (
+from t4dm.nca.stability import (
     StabilityAnalyzer,
     StabilityConfig,
     StabilityResult,
     StabilityType,
     check_energy_stability,
 )
-from ww.nca.coupling import LearnableCoupling, CouplingConfig
-from ww.nca.energy import EnergyLandscape, EnergyConfig
-from ww.nca.attractors import StateTransitionManager
+from t4dm.nca.coupling import LearnableCoupling, CouplingConfig
+from t4dm.nca.energy import EnergyLandscape, EnergyConfig
+from t4dm.nca.attractors import StateTransitionManager
 
 
 class TestStabilityConfig:

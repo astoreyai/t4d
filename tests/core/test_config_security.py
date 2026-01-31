@@ -5,7 +5,7 @@ from unittest.mock import patch
 import pytest
 from pydantic import ValidationError
 
-from ww.core.config import Settings, validate_password_strength
+from t4dm.core.config import Settings, validate_password_strength
 
 
 class TestPasswordValidation:
@@ -14,7 +14,7 @@ class TestPasswordValidation:
     def test_empty_password_rejected(self):
         """Empty password should be rejected."""
         # Disable test mode to enable password validation
-        with patch.dict(os.environ, {"WW_NEO4J_PASSWORD": "", "WW_TEST_MODE": "false"}, clear=False):
+        with patch.dict(os.environ, {"T4DM_NEO4J_PASSWORD": "", "T4DM_TEST_MODE": "false"}, clear=False):
             with pytest.raises(ValidationError) as exc_info:
                 Settings()
             assert "required" in str(exc_info.value).lower()
@@ -22,7 +22,7 @@ class TestPasswordValidation:
     def test_short_password_rejected(self):
         """Password < 12 chars should be rejected (P2-SEC-M1)."""
         # Disable test mode to enable password validation
-        with patch.dict(os.environ, {"WW_NEO4J_PASSWORD": "Short123!", "WW_TEST_MODE": "false"}, clear=False):
+        with patch.dict(os.environ, {"T4DM_NEO4J_PASSWORD": "Short123!", "T4DM_TEST_MODE": "false"}, clear=False):
             with pytest.raises(ValidationError) as exc_info:
                 Settings()
             assert "12 characters" in str(exc_info.value)
@@ -34,7 +34,7 @@ class TestPasswordValidation:
 
         for weak in weak_passwords:
             # Disable test mode to enable password validation
-            with patch.dict(os.environ, {"WW_NEO4J_PASSWORD": weak, "WW_TEST_MODE": "false"}, clear=False):
+            with patch.dict(os.environ, {"T4DM_NEO4J_PASSWORD": weak, "T4DM_TEST_MODE": "false"}, clear=False):
                 with pytest.raises(ValidationError) as exc_info:
                     Settings()
                 error_msg = str(exc_info.value).lower()
@@ -52,7 +52,7 @@ class TestPasswordValidation:
         ]
 
         for strong in strong_passwords:
-            with patch.dict(os.environ, {"WW_NEO4J_PASSWORD": strong}, clear=False):
+            with patch.dict(os.environ, {"T4DM_NEO4J_PASSWORD": strong}, clear=False):
                 # Should not raise
                 settings = Settings()
                 assert settings.neo4j_password == strong
@@ -60,8 +60,8 @@ class TestPasswordValidation:
     def test_test_mode_allows_empty(self):
         """Test mode should allow empty/weak passwords."""
         with patch.dict(os.environ, {
-            "WW_TEST_MODE": "true",
-            "WW_NEO4J_PASSWORD": "",
+            "T4DM_TEST_MODE": "true",
+            "T4DM_NEO4J_PASSWORD": "",
         }, clear=False):
             settings = Settings()
             assert settings.neo4j_password == "test-password"
@@ -69,8 +69,8 @@ class TestPasswordValidation:
     def test_test_environment_allows_empty(self):
         """Test environment should allow empty passwords."""
         with patch.dict(os.environ, {
-            "WW_ENVIRONMENT": "test",
-            "WW_NEO4J_PASSWORD": "",
+            "T4DM_ENVIRONMENT": "test",
+            "T4DM_NEO4J_PASSWORD": "",
         }, clear=False):
             settings = Settings()
             assert settings.neo4j_password == "test-password"
@@ -82,9 +82,9 @@ class TestProductionValidation:
     def test_production_warns_missing_qdrant_key(self, caplog):
         """Production should warn about missing Qdrant API key."""
         with patch.dict(os.environ, {
-            "WW_ENVIRONMENT": "production",
-            "WW_NEO4J_PASSWORD": "SecureP@ss123!x",  # 15 chars, 4 classes
-            "WW_QDRANT_API_KEY": "",
+            "T4DM_ENVIRONMENT": "production",
+            "T4DM_NEO4J_PASSWORD": "SecureP@ss123!x",  # 15 chars, 4 classes
+            "T4DM_QDRANT_API_KEY": "",
         }, clear=False):
             Settings()
             assert "QDRANT_API_KEY" in caplog.text or "qdrant" in caplog.text.lower()
@@ -92,9 +92,9 @@ class TestProductionValidation:
     def test_production_warns_insecure_otel(self, caplog):
         """Production should warn about insecure OTEL."""
         with patch.dict(os.environ, {
-            "WW_ENVIRONMENT": "production",
-            "WW_NEO4J_PASSWORD": "SecureP@ss123!x",  # 15 chars, 4 classes
-            "WW_OTEL_INSECURE": "true",
+            "T4DM_ENVIRONMENT": "production",
+            "T4DM_NEO4J_PASSWORD": "SecureP@ss123!x",  # 15 chars, 4 classes
+            "T4DM_OTEL_INSECURE": "true",
         }, clear=False):
             Settings()
             assert "insecure" in caplog.text.lower()
@@ -102,10 +102,10 @@ class TestProductionValidation:
     def test_production_multiple_warnings(self, caplog):
         """Production should warn about multiple security issues."""
         with patch.dict(os.environ, {
-            "WW_ENVIRONMENT": "production",
-            "WW_NEO4J_PASSWORD": "SecureP@ss123!x",  # 15 chars, 4 classes
-            "WW_OTEL_INSECURE": "true",
-            "WW_QDRANT_API_KEY": "",
+            "T4DM_ENVIRONMENT": "production",
+            "T4DM_NEO4J_PASSWORD": "SecureP@ss123!x",  # 15 chars, 4 classes
+            "T4DM_OTEL_INSECURE": "true",
+            "T4DM_QDRANT_API_KEY": "",
         }, clear=False):
             Settings()
             log_text = caplog.text.lower()
@@ -227,8 +227,8 @@ class TestEnvironmentValidation:
 
         for env in valid_envs:
             with patch.dict(os.environ, {
-                "WW_ENVIRONMENT": env,
-                "WW_NEO4J_PASSWORD": "SecureP@ss123!x",  # 15 chars, 4 classes
+                "T4DM_ENVIRONMENT": env,
+                "T4DM_NEO4J_PASSWORD": "SecureP@ss123!x",  # 15 chars, 4 classes
             }, clear=False):
                 settings = Settings()
                 assert settings.environment == env.lower()
@@ -236,8 +236,8 @@ class TestEnvironmentValidation:
     def test_invalid_environment_rejected(self):
         """Invalid environment values should be rejected."""
         with patch.dict(os.environ, {
-            "WW_ENVIRONMENT": "invalid",
-            "WW_NEO4J_PASSWORD": "SecureP@ss123!x",  # 15 chars, 4 classes
+            "T4DM_ENVIRONMENT": "invalid",
+            "T4DM_NEO4J_PASSWORD": "SecureP@ss123!x",  # 15 chars, 4 classes
         }, clear=False):
             with pytest.raises(ValidationError) as exc_info:
                 Settings()
@@ -246,8 +246,8 @@ class TestEnvironmentValidation:
     def test_environment_case_insensitive(self):
         """Environment validation should be case-insensitive."""
         with patch.dict(os.environ, {
-            "WW_ENVIRONMENT": "PRODUCTION",
-            "WW_NEO4J_PASSWORD": "SecureP@ss123!x",  # 15 chars, 4 classes
+            "T4DM_ENVIRONMENT": "PRODUCTION",
+            "T4DM_NEO4J_PASSWORD": "SecureP@ss123!x",  # 15 chars, 4 classes
         }, clear=False):
             settings = Settings()
             assert settings.environment == "production"
@@ -259,7 +259,7 @@ class TestLogSafeConfig:
     def test_log_safe_config_masks_password(self):
         """log_safe_config should mask passwords."""
         with patch.dict(os.environ, {
-            "WW_NEO4J_PASSWORD": "MySecretP@ss123!x",  # 17 chars, 4 classes
+            "T4DM_NEO4J_PASSWORD": "MySecretP@ss123!x",  # 17 chars, 4 classes
         }, clear=False):
             settings = Settings()
             safe_config = settings.log_safe_config()
@@ -271,8 +271,8 @@ class TestLogSafeConfig:
     def test_log_safe_config_masks_qdrant_key(self):
         """log_safe_config should mask Qdrant API key."""
         with patch.dict(os.environ, {
-            "WW_NEO4J_PASSWORD": "MySecretP@ss123!x",  # 17 chars, 4 classes
-            "WW_QDRANT_API_KEY": "my-secret-api-key-12345",
+            "T4DM_NEO4J_PASSWORD": "MySecretP@ss123!x",  # 17 chars, 4 classes
+            "T4DM_QDRANT_API_KEY": "my-secret-api-key-12345",
         }, clear=False):
             settings = Settings()
             safe_config = settings.log_safe_config()
@@ -284,9 +284,9 @@ class TestLogSafeConfig:
     def test_log_safe_config_preserves_non_secrets(self):
         """log_safe_config should preserve non-secret fields."""
         with patch.dict(os.environ, {
-            "WW_NEO4J_PASSWORD": "MySecretP@ss123!x",  # 17 chars, 4 classes
-            "WW_NEO4J_URI": "bolt://custom-host:7687",
-            "WW_SESSION_ID": "test-session",
+            "T4DM_NEO4J_PASSWORD": "MySecretP@ss123!x",  # 17 chars, 4 classes
+            "T4DM_NEO4J_URI": "bolt://custom-host:7687",
+            "T4DM_SESSION_ID": "test-session",
         }, clear=False):
             settings = Settings()
             safe_config = settings.log_safe_config()

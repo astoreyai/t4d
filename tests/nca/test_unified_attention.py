@@ -7,7 +7,7 @@ Tests capsule-transformer hybrid attention mechanism.
 import numpy as np
 import pytest
 
-from ww.nca.unified_attention import (
+from t4dm.nca.unified_attention import (
     UnifiedAttentionConfig,
     UnifiedAttentionHead,
     UnifiedAttentionSystem,

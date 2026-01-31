@@ -4,11 +4,11 @@ import pytest
 from datetime import datetime, timedelta
 from unittest.mock import AsyncMock, MagicMock, patch
 
-from ww.integrations.google_workspace import (
+from t4dm.integrations.google_workspace import (
     GoogleWorkspaceSync,
     PersonalDataStore,
 )
-from ww.core.personal_entities import (
+from t4dm.core.personal_entities import (
     Email,
     EmailAddress,
     EmailImportance,
@@ -451,7 +451,7 @@ class TestPrivacyFiltering:
     @pytest.mark.asyncio
     async def test_blocked_email_not_returned(self):
         """Email blocked by privacy filter is not returned."""
-        from ww.core.privacy_filter import PrivacyFilter, RedactionResult, SensitivityLevel
+        from t4dm.core.privacy_filter import PrivacyFilter, RedactionResult, SensitivityLevel
 
         mock_filter = MagicMock(spec=PrivacyFilter)
         mock_filter.filter.return_value = RedactionResult(

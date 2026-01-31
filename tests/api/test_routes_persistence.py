@@ -15,7 +15,7 @@ from unittest.mock import MagicMock, AsyncMock, patch
 from fastapi.testclient import TestClient
 from httpx import ASGITransport, AsyncClient
 
-from ww.api.routes.persistence import (
+from t4dm.api.routes.persistence import (
     router,
     SystemStatus,
     CheckpointInfo,
@@ -178,11 +178,11 @@ class TestGetPersistence:
 
     def test_import_error_raises_503(self):
         """Test that import error raises 503."""
-        from ww.api.routes.persistence import get_persistence
+        from t4dm.api.routes.persistence import get_persistence
         from fastapi import HTTPException
 
-        with patch.dict("sys.modules", {"ww.mcp.persistent_server": None}):
-            with patch("ww.api.routes.persistence.get_persistence") as mock_get:
+        with patch.dict("sys.modules", {"t4dm.mcp.persistent_server": None}):
+            with patch("t4dm.api.routes.persistence.get_persistence") as mock_get:
                 mock_get.side_effect = HTTPException(
                     status_code=503,
                     detail="Persistence module not available"
@@ -193,10 +193,10 @@ class TestGetPersistence:
 
     def test_none_persistence_raises_503(self):
         """Test that None persistence raises 503."""
-        from ww.api.routes.persistence import get_persistence
+        from t4dm.api.routes.persistence import get_persistence
         from fastapi import HTTPException
 
-        with patch("ww.api.routes.persistence.get_persistence") as mock_get:
+        with patch("t4dm.api.routes.persistence.get_persistence") as mock_get:
             mock_get.side_effect = HTTPException(
                 status_code=503,
                 detail="Persistence layer not initialized"
@@ -255,7 +255,7 @@ def app_with_mock(mock_persistence):
     def override_get_persistence():
         return mock_persistence
 
-    from ww.api.routes.persistence import get_persistence
+    from t4dm.api.routes.persistence import get_persistence
     app.dependency_overrides[get_persistence] = override_get_persistence
 
     return app

@@ -9,7 +9,7 @@ import pytest
 from datetime import datetime
 from unittest.mock import MagicMock
 
-from ww.visualization.capsule_visualizer import (
+from t4dm.visualization.capsule_visualizer import (
     CapsuleSnapshot,
     RoutingEvent,
     CapsuleVisualizer,
@@ -572,7 +572,7 @@ class TestCapsulePlotFunctions:
     @pytest.fixture
     def populated_visualizer(self):
         """Create visualizer with capsule data for plotting."""
-        from ww.visualization.capsule_visualizer import (
+        from t4dm.visualization.capsule_visualizer import (
             plot_entity_probabilities,
             plot_routing_heatmap,
             plot_pose_vectors,
@@ -632,7 +632,7 @@ class TestCapsulePlotFunctions:
         except ImportError:
             pytest.skip("matplotlib not available")
 
-        from ww.visualization.capsule_visualizer import plot_entity_probabilities
+        from t4dm.visualization.capsule_visualizer import plot_entity_probabilities
 
         ax = plot_entity_probabilities(populated_visualizer, layer_idx=0)
         assert ax is not None
@@ -647,7 +647,7 @@ class TestCapsulePlotFunctions:
         except ImportError:
             pytest.skip("matplotlib not available")
 
-        from ww.visualization.capsule_visualizer import plot_entity_probabilities
+        from t4dm.visualization.capsule_visualizer import plot_entity_probabilities
 
         ax = plot_entity_probabilities(populated_visualizer, layer_idx=-1)
         assert ax is not None
@@ -662,7 +662,7 @@ class TestCapsulePlotFunctions:
         except ImportError:
             pytest.skip("matplotlib not available")
 
-        from ww.visualization.capsule_visualizer import plot_entity_probabilities
+        from t4dm.visualization.capsule_visualizer import plot_entity_probabilities
 
         empty_vis = CapsuleVisualizer()
         ax = plot_entity_probabilities(empty_vis, layer_idx=0)
@@ -678,7 +678,7 @@ class TestCapsulePlotFunctions:
         except ImportError:
             pytest.skip("matplotlib not available")
 
-        from ww.visualization.capsule_visualizer import plot_routing_heatmap
+        from t4dm.visualization.capsule_visualizer import plot_routing_heatmap
 
         ax = plot_routing_heatmap(populated_visualizer, layer_idx=0)
         assert ax is not None
@@ -693,7 +693,7 @@ class TestCapsulePlotFunctions:
         except ImportError:
             pytest.skip("matplotlib not available")
 
-        from ww.visualization.capsule_visualizer import plot_routing_heatmap
+        from t4dm.visualization.capsule_visualizer import plot_routing_heatmap
 
         vis = CapsuleVisualizer()
         vis.record_layer_state(
@@ -716,7 +716,7 @@ class TestCapsulePlotFunctions:
         except ImportError:
             pytest.skip("matplotlib not available")
 
-        from ww.visualization.capsule_visualizer import plot_pose_vectors
+        from t4dm.visualization.capsule_visualizer import plot_pose_vectors
 
         ax = plot_pose_vectors(populated_visualizer, layer_idx=0)
         assert ax is not None
@@ -731,7 +731,7 @@ class TestCapsulePlotFunctions:
         except ImportError:
             pytest.skip("matplotlib not available")
 
-        from ww.visualization.capsule_visualizer import plot_pose_vectors
+        from t4dm.visualization.capsule_visualizer import plot_pose_vectors
 
         empty_vis = CapsuleVisualizer()
         ax = plot_pose_vectors(empty_vis, layer_idx=0)
@@ -747,7 +747,7 @@ class TestCapsulePlotFunctions:
         except ImportError:
             pytest.skip("matplotlib not available")
 
-        from ww.visualization.capsule_visualizer import plot_pose_vectors
+        from t4dm.visualization.capsule_visualizer import plot_pose_vectors
 
         vis = CapsuleVisualizer()
         vis.record_layer_state(
@@ -769,7 +769,7 @@ class TestCapsulePlotFunctions:
         except ImportError:
             pytest.skip("matplotlib not available")
 
-        from ww.visualization.capsule_visualizer import plot_routing_entropy
+        from t4dm.visualization.capsule_visualizer import plot_routing_entropy
 
         ax = plot_routing_entropy(populated_visualizer)
         assert ax is not None
@@ -784,7 +784,7 @@ class TestCapsulePlotFunctions:
         except ImportError:
             pytest.skip("matplotlib not available")
 
-        from ww.visualization.capsule_visualizer import plot_routing_entropy
+        from t4dm.visualization.capsule_visualizer import plot_routing_entropy
 
         empty_vis = CapsuleVisualizer()
         ax = plot_routing_entropy(empty_vis)
@@ -800,7 +800,7 @@ class TestCapsulePlotFunctions:
         except ImportError:
             pytest.skip("matplotlib not available")
 
-        from ww.visualization.capsule_visualizer import create_capsule_dashboard
+        from t4dm.visualization.capsule_visualizer import create_capsule_dashboard
 
         fig = create_capsule_dashboard(populated_visualizer, layer_idx=0)
         assert fig is not None
@@ -815,7 +815,7 @@ class TestCapsulePlotFunctions:
         except ImportError:
             pytest.skip("matplotlib not available")
 
-        from ww.visualization.capsule_visualizer import create_capsule_dashboard
+        from t4dm.visualization.capsule_visualizer import create_capsule_dashboard
 
         fig = create_capsule_dashboard(populated_visualizer, layer_idx=-1)
         assert fig is not None
@@ -830,7 +830,7 @@ class TestCapsulePlotFunctions:
         except ImportError:
             pytest.skip("matplotlib not available")
 
-        from ww.visualization.capsule_visualizer import create_capsule_dashboard
+        from t4dm.visualization.capsule_visualizer import create_capsule_dashboard
 
         vis = CapsuleVisualizer(alert_low_agreement=0.3, alert_high_entropy=0.5)
 

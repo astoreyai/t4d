@@ -17,9 +17,9 @@ from unittest.mock import AsyncMock, patch
 from uuid import uuid4
 from fastapi.testclient import TestClient
 
-from ww.api.server import app
-from ww.api import deps
-from ww.core.types import (
+from t4dm.api.server import app
+from t4dm.api import deps
+from t4dm.core.types import (
     Episode, EpisodeContext, Outcome, Entity, EntityType, Relationship, RelationType,
     Procedure, ProcedureStep, Domain, ScoredResult
 )

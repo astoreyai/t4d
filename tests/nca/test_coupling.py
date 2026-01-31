@@ -3,12 +3,12 @@
 import numpy as np
 import pytest
 
-from ww.nca.coupling import (
+from t4dm.nca.coupling import (
     BiologicalBounds,
     CouplingConfig,
     LearnableCoupling,
 )
-from ww.nca.neural_field import NeurotransmitterState
+from t4dm.nca.neural_field import NeurotransmitterState
 
 
 class TestBiologicalBounds:

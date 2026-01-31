@@ -12,7 +12,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from ww.consolidation.service import (
+from t4dm.consolidation.service import (
     ConsolidationScheduler,
     ConsolidationTrigger,
     SchedulerState,
@@ -444,7 +444,7 @@ class TestSingletonFunctions:
 
     def test_get_scheduler_returns_singleton(self):
         """Test get_consolidation_scheduler returns singleton."""
-        with patch("ww.consolidation.service.get_settings") as mock_settings:
+        with patch("t4dm.consolidation.service.get_settings") as mock_settings:
             mock_settings.return_value = MagicMock(
                 auto_consolidation_enabled=True,
                 auto_consolidation_interval_hours=8.0,
@@ -459,7 +459,7 @@ class TestSingletonFunctions:
 
     def test_reset_clears_singleton(self):
         """Test reset_consolidation_scheduler clears singleton."""
-        with patch("ww.consolidation.service.get_settings") as mock_settings:
+        with patch("t4dm.consolidation.service.get_settings") as mock_settings:
             mock_settings.return_value = MagicMock(
                 auto_consolidation_enabled=True,
                 auto_consolidation_interval_hours=8.0,
@@ -484,7 +484,7 @@ class TestConfigIntegration:
 
     def test_scheduler_uses_config_values(self):
         """Test scheduler uses config values."""
-        with patch("ww.consolidation.service.get_settings") as mock_settings:
+        with patch("t4dm.consolidation.service.get_settings") as mock_settings:
             mock_settings.return_value = MagicMock(
                 auto_consolidation_enabled=False,
                 auto_consolidation_interval_hours=12.0,

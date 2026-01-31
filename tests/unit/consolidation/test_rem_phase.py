@@ -4,7 +4,7 @@ import numpy as np
 import pytest
 
 from tests.unit.consolidation.conftest import make_item
-from ww.consolidation.rem_phase import REMConfig, REMPhase
+from t4dm.consolidation.rem_phase import REMConfig, REMPhase
 
 
 class TestREMPhase:

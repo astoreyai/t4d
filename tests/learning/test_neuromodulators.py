@@ -5,16 +5,16 @@ import numpy as np
 from datetime import datetime
 from uuid import uuid4
 
-from ww.learning.neuromodulators import (
+from t4dm.learning.neuromodulators import (
     NeuromodulatorState,
     NeuromodulatorOrchestra,
     create_neuromodulator_orchestra,
 )
-from ww.learning.dopamine import DopamineSystem
-from ww.learning.norepinephrine import NorepinephrineSystem
-from ww.learning.acetylcholine import AcetylcholineSystem
-from ww.learning.serotonin import SerotoninSystem
-from ww.learning.inhibition import InhibitoryNetwork
+from t4dm.learning.dopamine import DopamineSystem
+from t4dm.learning.norepinephrine import NorepinephrineSystem
+from t4dm.learning.acetylcholine import AcetylcholineSystem
+from t4dm.learning.serotonin import SerotoninSystem
+from t4dm.learning.inhibition import InhibitoryNetwork
 
 
 class TestNeuromodulatorState:

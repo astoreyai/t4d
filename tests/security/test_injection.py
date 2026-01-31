@@ -15,8 +15,8 @@ import pytest
 pytestmark = pytest.mark.integration
 from uuid import uuid4
 
-from ww.storage.neo4j_store import Neo4jStore
-from ww.core.validation import ValidationError, validate_non_empty_string
+from t4dm.storage.neo4j_store import Neo4jStore
+from t4dm.core.validation import ValidationError, validate_non_empty_string
 
 
 class TestCypherInjection:
@@ -128,7 +128,7 @@ class TestSessionSpoofing:
     @pytest.mark.asyncio
     async def test_cross_session_memory_access(self):
         """Test that sessions cannot access each other's memories."""
-        from ww.memory.episodic import get_episodic_memory
+        from t4dm.memory.episodic import get_episodic_memory
 
         # Use unique session IDs to avoid collision with other tests
         unique_suffix = str(uuid4())[:8]
@@ -172,7 +172,7 @@ class TestSessionSpoofing:
     @pytest.mark.asyncio
     async def test_session_id_validation(self):
         """Test that session IDs are properly validated."""
-        from ww.core.services import get_services
+        from t4dm.core.services import get_services
 
         # Malicious session IDs that might break assumptions
         malicious_session_ids = [
@@ -265,7 +265,7 @@ class TestRateLimiting:
     @pytest.mark.asyncio
     async def test_expensive_query_limits(self):
         """Test that expensive queries are limited."""
-        from ww.storage.neo4j_store import Neo4jStore
+        from t4dm.storage.neo4j_store import Neo4jStore
 
         store = Neo4jStore()
         await store.initialize()
@@ -285,7 +285,7 @@ class TestRateLimiting:
     @pytest.mark.asyncio
     async def test_batch_operation_size_limit(self):
         """Test that batch operations have size limits."""
-        from ww.storage.neo4j_store import Neo4jStore
+        from t4dm.storage.neo4j_store import Neo4jStore
 
         store = Neo4jStore()
         await store.initialize()
@@ -306,7 +306,7 @@ class TestErrorLeakage:
     @pytest.mark.asyncio
     async def test_database_error_sanitization(self):
         """Test that database connection errors are sanitized."""
-        from ww.storage.neo4j_store import Neo4jStore
+        from t4dm.storage.neo4j_store import Neo4jStore
 
         # Configure store with invalid connection
         store = Neo4jStore(uri="bolt://invalid-host:7687")
@@ -324,7 +324,7 @@ class TestErrorLeakage:
     @pytest.mark.asyncio
     async def test_validation_error_messages(self):
         """Test that validation errors are safe to expose."""
-        from ww.core.validation import validate_uuid
+        from t4dm.core.validation import validate_uuid
 
         try:
             validate_uuid("not-a-uuid", "test_field")

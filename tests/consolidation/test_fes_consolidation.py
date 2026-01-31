@@ -9,14 +9,14 @@ from uuid import uuid4
 from datetime import datetime
 from unittest.mock import AsyncMock, MagicMock
 
-from ww.memory.fast_episodic import FastEpisodicStore
-from ww.consolidation.fes_consolidator import (
+from t4dm.memory.fast_episodic import FastEpisodicStore
+from t4dm.consolidation.fes_consolidator import (
     FESConsolidator,
     ReplayConsolidator,
     extract_entities_simple,
     MAX_CONSOLIDATION_BATCH
 )
-from ww.core.types import Episode, EpisodeContext, Outcome
+from t4dm.core.types import Episode, EpisodeContext, Outcome
 
 
 class TestEntityExtraction:

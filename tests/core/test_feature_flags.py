@@ -9,7 +9,7 @@ from unittest.mock import patch
 
 import pytest
 
-from ww.core.feature_flags import (
+from t4dm.core.feature_flags import (
     DEFAULT_FLAGS,
     FeatureFlag,
     FeatureFlags,
@@ -160,12 +160,12 @@ class TestFeatureFlags:
     def test_env_override(self):
         """Test environment variable override."""
         reset_feature_flags()
-        with patch.dict(os.environ, {"WW_FLAG_TELEMETRY": "true"}):
+        with patch.dict(os.environ, {"T4DM_FLAG_TELEMETRY": "true"}):
             flags = FeatureFlags()
             assert flags.is_enabled(FeatureFlag.TELEMETRY) is True
 
         reset_feature_flags()
-        with patch.dict(os.environ, {"WW_FLAG_FF_ENCODER": "false"}):
+        with patch.dict(os.environ, {"T4DM_FLAG_FF_ENCODER": "false"}):
             flags = FeatureFlags()
             assert flags.is_enabled(FeatureFlag.FF_ENCODER) is False
 

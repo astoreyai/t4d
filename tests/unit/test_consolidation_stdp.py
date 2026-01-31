@@ -16,7 +16,7 @@ class TestConsolidationSTDPBasics:
 
     def test_initialization_with_defaults(self):
         """ConsolidationSTDP initializes with defaults."""
-        from ww.consolidation.stdp_integration import ConsolidationSTDP
+        from t4dm.consolidation.stdp_integration import ConsolidationSTDP
 
         cstdp = ConsolidationSTDP()
 
@@ -27,7 +27,7 @@ class TestConsolidationSTDPBasics:
 
     def test_initialization_with_custom_config(self):
         """ConsolidationSTDP accepts custom config."""
-        from ww.consolidation.stdp_integration import (
+        from t4dm.consolidation.stdp_integration import (
             ConsolidationSTDP,
             ConsolidationSTDPConfig
         )
@@ -45,7 +45,7 @@ class TestConsolidationSTDPBasics:
 
     def test_initialization_without_tagging(self):
         """ConsolidationSTDP works without synaptic tagging."""
-        from ww.consolidation.stdp_integration import (
+        from t4dm.consolidation.stdp_integration import (
             ConsolidationSTDP,
             ConsolidationSTDPConfig
         )
@@ -62,7 +62,7 @@ class TestSTDPReplaySequence:
     @pytest.fixture
     def cstdp(self):
         """Create ConsolidationSTDP instance."""
-        from ww.consolidation.stdp_integration import ConsolidationSTDP
+        from t4dm.consolidation.stdp_integration import ConsolidationSTDP
         return ConsolidationSTDP()
 
     def test_empty_sequence_returns_zero_updates(self, cstdp):
@@ -143,7 +143,7 @@ class TestSTDPCoRetrieval:
     @pytest.fixture
     def cstdp(self):
         """Create ConsolidationSTDP instance."""
-        from ww.consolidation.stdp_integration import ConsolidationSTDP
+        from t4dm.consolidation.stdp_integration import ConsolidationSTDP
         return ConsolidationSTDP()
 
     def test_co_retrieval_empty_list(self, cstdp):
@@ -185,7 +185,7 @@ class TestWeightConsolidation:
     @pytest.fixture
     def cstdp(self):
         """Create ConsolidationSTDP instance."""
-        from ww.consolidation.stdp_integration import ConsolidationSTDP
+        from t4dm.consolidation.stdp_integration import ConsolidationSTDP
         return ConsolidationSTDP()
 
     def test_consolidate_weights_applies_decay(self, cstdp):
@@ -225,7 +225,7 @@ class TestSynapseQueries:
     @pytest.fixture
     def cstdp(self):
         """Create ConsolidationSTDP instance."""
-        from ww.consolidation.stdp_integration import ConsolidationSTDP
+        from t4dm.consolidation.stdp_integration import ConsolidationSTDP
         return ConsolidationSTDP()
 
     def test_get_synapse_strength_default(self, cstdp):
@@ -268,7 +268,7 @@ class TestSynapsePruning:
     @pytest.fixture
     def cstdp(self):
         """Create ConsolidationSTDP instance."""
-        from ww.consolidation.stdp_integration import ConsolidationSTDP
+        from t4dm.consolidation.stdp_integration import ConsolidationSTDP
         return ConsolidationSTDP()
 
     def test_prune_weak_synapses_removes_below_threshold(self, cstdp):
@@ -305,7 +305,7 @@ class TestTagSynchronization:
     @pytest.fixture
     def cstdp(self):
         """Create ConsolidationSTDP with tagging enabled."""
-        from ww.consolidation.stdp_integration import ConsolidationSTDP
+        from t4dm.consolidation.stdp_integration import ConsolidationSTDP
         return ConsolidationSTDP()
 
     def test_sync_weights_with_tags_adjusts_weights(self, cstdp):
@@ -324,7 +324,7 @@ class TestTagSynchronization:
 
     def test_sync_weights_without_tagger(self):
         """sync_weights_with_tags returns 0 without tagger."""
-        from ww.consolidation.stdp_integration import (
+        from t4dm.consolidation.stdp_integration import (
             ConsolidationSTDP,
             ConsolidationSTDPConfig
         )
@@ -342,7 +342,7 @@ class TestStatePersistence:
     @pytest.fixture
     def cstdp(self):
         """Create ConsolidationSTDP instance."""
-        from ww.consolidation.stdp_integration import ConsolidationSTDP
+        from t4dm.consolidation.stdp_integration import ConsolidationSTDP
         return ConsolidationSTDP()
 
     def test_save_and_load_state(self, cstdp):
@@ -356,7 +356,7 @@ class TestStatePersistence:
         state = cstdp.save_state()
 
         # Create new instance and load
-        from ww.consolidation.stdp_integration import ConsolidationSTDP
+        from t4dm.consolidation.stdp_integration import ConsolidationSTDP
         cstdp2 = ConsolidationSTDP()
         cstdp2.load_state(state)
 
@@ -393,7 +393,7 @@ class TestSingletonAccess:
 
     def test_get_consolidation_stdp_returns_singleton(self):
         """get_consolidation_stdp returns same instance."""
-        from ww.consolidation.stdp_integration import (
+        from t4dm.consolidation.stdp_integration import (
             get_consolidation_stdp,
             reset_consolidation_stdp
         )
@@ -407,7 +407,7 @@ class TestSingletonAccess:
 
     def test_reset_clears_singleton(self):
         """reset_consolidation_stdp clears singleton."""
-        from ww.consolidation.stdp_integration import (
+        from t4dm.consolidation.stdp_integration import (
             get_consolidation_stdp,
             reset_consolidation_stdp
         )
@@ -424,7 +424,7 @@ class TestIntegrationScenarios:
 
     def test_full_consolidation_cycle(self):
         """Full consolidation cycle: replay sequences, consolidate, prune."""
-        from ww.consolidation.stdp_integration import ConsolidationSTDP
+        from t4dm.consolidation.stdp_integration import ConsolidationSTDP
 
         cstdp = ConsolidationSTDP()
 
@@ -450,7 +450,7 @@ class TestIntegrationScenarios:
 
     def test_interleaved_replay_and_retrieval(self):
         """Interleaved replay and retrieval operations."""
-        from ww.consolidation.stdp_integration import ConsolidationSTDP
+        from t4dm.consolidation.stdp_integration import ConsolidationSTDP
 
         cstdp = ConsolidationSTDP()
 
@@ -474,7 +474,7 @@ class TestIntegrationScenarios:
 
     def test_multiple_consolidation_cycles(self):
         """Multiple consolidation cycles with weight evolution."""
-        from ww.consolidation.stdp_integration import ConsolidationSTDP
+        from t4dm.consolidation.stdp_integration import ConsolidationSTDP
 
         cstdp = ConsolidationSTDP()
 

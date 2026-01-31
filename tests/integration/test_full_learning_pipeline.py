@@ -17,8 +17,8 @@ from datetime import datetime, timedelta
 from unittest.mock import AsyncMock, MagicMock, patch
 from uuid import UUID, uuid4
 
-from ww.learning.three_factor import ThreeFactorLearningRule
-from ww.learning.reconsolidation import ReconsolidationEngine
+from t4dm.learning.three_factor import ThreeFactorLearningRule
+from t4dm.learning.reconsolidation import ReconsolidationEngine
 
 
 class TestEmbeddingPersistenceAfterLearning:
@@ -111,7 +111,7 @@ class TestFFCapsuleBridgeIntegration:
 
     def test_ff_capsule_bridge_import(self):
         """FFCapsuleBridge should be importable."""
-        from ww.bridges.ff_capsule_bridge import (
+        from t4dm.bridges.ff_capsule_bridge import (
             FFCapsuleBridge,
             FFCapsuleBridgeConfig,
             create_ff_capsule_bridge,
@@ -122,7 +122,7 @@ class TestFFCapsuleBridgeIntegration:
 
     def test_ff_capsule_bridge_creation(self):
         """FFCapsuleBridge should be creatable without errors."""
-        from ww.bridges.ff_capsule_bridge import FFCapsuleBridge, FFCapsuleBridgeConfig
+        from t4dm.bridges.ff_capsule_bridge import FFCapsuleBridge, FFCapsuleBridgeConfig
 
         bridge = FFCapsuleBridge(
             ff_encoder=None,  # Optional
@@ -169,7 +169,7 @@ class TestVAETrainingStats:
 
     def test_training_stats_has_timestamp(self):
         """TrainingStats should include timestamp."""
-        from ww.learning.vae_training import TrainingStats
+        from t4dm.learning.vae_training import TrainingStats
 
         stats = TrainingStats(
             epochs_completed=5,
@@ -194,10 +194,10 @@ class TestGenerativeReplayNotStub:
         handler = logging.StreamHandler(log_capture)
         handler.setLevel(logging.INFO)
 
-        logger = logging.getLogger('ww.learning.generative_replay')
+        logger = logging.getLogger('t4dm.learning.generative_replay')
         logger.addHandler(handler)
 
-        from ww.learning.generative_replay import GenerativeReplaySystem
+        from t4dm.learning.generative_replay import GenerativeReplaySystem
 
         system = GenerativeReplaySystem()
 

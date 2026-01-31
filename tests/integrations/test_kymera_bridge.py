@@ -5,13 +5,13 @@ from datetime import datetime
 from unittest.mock import AsyncMock, MagicMock, patch
 from uuid import UUID
 
-from ww.integrations.kymera.bridge import (
+from t4dm.integrations.kymera.bridge import (
     VoiceMemoryBridge,
     VoiceContext,
     MemoryContext,
     TemporalBatcher,
 )
-from ww.core.memory_gate import StorageDecision, GateResult
+from t4dm.core.memory_gate import StorageDecision, GateResult
 
 
 class TestVoiceContext:

@@ -18,7 +18,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 # Check if HDBSCAN is available for consolidation tests
 try:
-    from ww.consolidation import HDBSCAN_AVAILABLE
+    from t4dm.consolidation import HDBSCAN_AVAILABLE
 except ImportError:
     HDBSCAN_AVAILABLE = False
 
@@ -103,14 +103,14 @@ async def test_episode_lifecycle(
     5. Trigger consolidation
     6. Verify consolidated state
     """
-    from ww.memory.episodic import EpisodicMemory
-    from ww.core.types import Episode, EpisodeContext, Outcome
+    from t4dm.memory.episodic import EpisodicMemory
+    from t4dm.core.types import Episode, EpisodeContext, Outcome
     from datetime import datetime
     from uuid import UUID
 
-    with patch("ww.memory.episodic.get_embedding_provider", return_value=mock_embedding_provider):
-        with patch("ww.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
-            with patch("ww.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
+    with patch("t4dm.memory.episodic.get_embedding_provider", return_value=mock_embedding_provider):
+        with patch("t4dm.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
+            with patch("t4dm.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
                 episodic = EpisodicMemory(test_session_a)
                 await episodic.initialize()
 
@@ -185,14 +185,14 @@ async def test_cross_memory_episode_to_entity_extraction(
     3. Verify entities created in semantic memory
     4. Verify relationships between entities
     """
-    from ww.memory.episodic import EpisodicMemory
-    from ww.memory.semantic import SemanticMemory
-    from ww.consolidation.service import ConsolidationService
+    from t4dm.memory.episodic import EpisodicMemory
+    from t4dm.memory.semantic import SemanticMemory
+    from t4dm.consolidation.service import ConsolidationService
     from uuid import UUID
 
-    with patch("ww.memory.episodic.get_embedding_provider", return_value=mock_embedding_provider):
-        with patch("ww.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
-            with patch("ww.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
+    with patch("t4dm.memory.episodic.get_embedding_provider", return_value=mock_embedding_provider):
+        with patch("t4dm.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
+            with patch("t4dm.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
                 episodic = EpisodicMemory(test_session_a)
                 await episodic.initialize()
 
@@ -236,15 +236,15 @@ async def test_session_isolation_e2e(
     4. Verify session B can't see session A data
     5. Verify explicit cross-session query works with override
     """
-    from ww.memory.episodic import EpisodicMemory
+    from t4dm.memory.episodic import EpisodicMemory
     from uuid import uuid4
 
     episode_ids_a = []
     episode_ids_b = []
 
-    with patch("ww.memory.episodic.get_embedding_provider", return_value=mock_embedding_provider):
-        with patch("ww.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
-            with patch("ww.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
+    with patch("t4dm.memory.episodic.get_embedding_provider", return_value=mock_embedding_provider):
+        with patch("t4dm.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
+            with patch("t4dm.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
                 # Create episodes in session A
                 episodic_a = EpisodicMemory(test_session_a)
                 await episodic_a.initialize()
@@ -308,11 +308,11 @@ async def test_concurrent_recalls(
     3. Verify no data corruption
     4. Verify proper synchronization
     """
-    from ww.memory.episodic import EpisodicMemory
+    from t4dm.memory.episodic import EpisodicMemory
 
-    with patch("ww.memory.episodic.get_embedding_provider", return_value=mock_embedding_provider):
-        with patch("ww.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
-            with patch("ww.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
+    with patch("t4dm.memory.episodic.get_embedding_provider", return_value=mock_embedding_provider):
+        with patch("t4dm.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
+            with patch("t4dm.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
                 episodic = EpisodicMemory(test_session_a)
                 await episodic.initialize()
 
@@ -353,11 +353,11 @@ async def test_partial_failure_recovery(
     3. Verify saga rollback/compensation works
     4. Verify no orphaned data in Qdrant
     """
-    from ww.memory.episodic import EpisodicMemory
+    from t4dm.memory.episodic import EpisodicMemory
 
-    with patch("ww.memory.episodic.get_embedding_provider", return_value=mock_embedding_provider):
-        with patch("ww.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
-            with patch("ww.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
+    with patch("t4dm.memory.episodic.get_embedding_provider", return_value=mock_embedding_provider):
+        with patch("t4dm.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
+            with patch("t4dm.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
                 episodic = EpisodicMemory(test_session_a)
                 await episodic.initialize()
 
@@ -397,12 +397,12 @@ async def test_consolidation_workflow(
     4. Run deep consolidation (entity extraction)
     5. Verify semantic entities created
     """
-    from ww.memory.episodic import EpisodicMemory
-    from ww.consolidation.service import ConsolidationService
+    from t4dm.memory.episodic import EpisodicMemory
+    from t4dm.consolidation.service import ConsolidationService
 
-    with patch("ww.memory.episodic.get_embedding_provider", return_value=mock_embedding_provider):
-        with patch("ww.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
-            with patch("ww.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
+    with patch("t4dm.memory.episodic.get_embedding_provider", return_value=mock_embedding_provider):
+        with patch("t4dm.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
+            with patch("t4dm.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
                 episodic = EpisodicMemory(test_session_a)
                 await episodic.initialize()
 
@@ -442,12 +442,12 @@ async def test_memory_decay_application(
     4. Simulate failed recall
     5. Verify stability decreases
     """
-    from ww.memory.episodic import EpisodicMemory
+    from t4dm.memory.episodic import EpisodicMemory
     from datetime import datetime
 
-    with patch("ww.memory.episodic.get_embedding_provider", return_value=mock_embedding_provider):
-        with patch("ww.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
-            with patch("ww.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
+    with patch("t4dm.memory.episodic.get_embedding_provider", return_value=mock_embedding_provider):
+        with patch("t4dm.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
+            with patch("t4dm.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
                 episodic = EpisodicMemory(test_session_a)
                 await episodic.initialize()
 
@@ -484,12 +484,12 @@ async def test_multi_session_consolidation(
     5. Run consolidation for all sessions
     6. Verify both sessions consolidated
     """
-    from ww.memory.episodic import EpisodicMemory
-    from ww.consolidation.service import ConsolidationService
+    from t4dm.memory.episodic import EpisodicMemory
+    from t4dm.consolidation.service import ConsolidationService
 
-    with patch("ww.memory.episodic.get_embedding_provider", return_value=mock_embedding_provider):
-        with patch("ww.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
-            with patch("ww.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
+    with patch("t4dm.memory.episodic.get_embedding_provider", return_value=mock_embedding_provider):
+        with patch("t4dm.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
+            with patch("t4dm.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
                 # Create episodes in both sessions
                 episodic_a = EpisodicMemory(test_session_a)
                 await episodic_a.initialize()

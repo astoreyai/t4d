@@ -211,18 +211,18 @@ async def episodic_memory_with_mocks(
             await episodic.initialize()
     """
     from unittest.mock import patch
-    from ww.memory.episodic import EpisodicMemory
+    from t4dm.memory.episodic import EpisodicMemory
 
     with patch(
-        "ww.memory.episodic.get_embedding_provider",
+        "t4dm.memory.episodic.get_embedding_provider",
         return_value=integration_embedding_provider,
     ):
         with patch(
-            "ww.memory.episodic.get_qdrant_store",
+            "t4dm.memory.episodic.get_qdrant_store",
             return_value=integration_qdrant_store,
         ):
             with patch(
-                "ww.memory.episodic.get_neo4j_store",
+                "t4dm.memory.episodic.get_neo4j_store",
                 return_value=integration_neo4j_store,
             ):
                 return EpisodicMemory(integration_session_id)
@@ -244,18 +244,18 @@ async def semantic_memory_with_mocks(
             await semantic.initialize()
     """
     from unittest.mock import patch
-    from ww.memory.semantic import SemanticMemory
+    from t4dm.memory.semantic import SemanticMemory
 
     with patch(
-        "ww.memory.semantic.get_embedding_provider",
+        "t4dm.memory.semantic.get_embedding_provider",
         return_value=integration_embedding_provider,
     ):
         with patch(
-            "ww.memory.semantic.get_qdrant_store",
+            "t4dm.memory.semantic.get_qdrant_store",
             return_value=integration_qdrant_store,
         ):
             with patch(
-                "ww.memory.semantic.get_neo4j_store",
+                "t4dm.memory.semantic.get_neo4j_store",
                 return_value=integration_neo4j_store,
             ):
                 return SemanticMemory(integration_session_id)
@@ -277,18 +277,18 @@ async def procedural_memory_with_mocks(
             await procedural.initialize()
     """
     from unittest.mock import patch
-    from ww.memory.procedural import ProceduralMemory
+    from t4dm.memory.procedural import ProceduralMemory
 
     with patch(
-        "ww.memory.procedural.get_embedding_provider",
+        "t4dm.memory.procedural.get_embedding_provider",
         return_value=integration_embedding_provider,
     ):
         with patch(
-            "ww.memory.procedural.get_qdrant_store",
+            "t4dm.memory.procedural.get_qdrant_store",
             return_value=integration_qdrant_store,
         ):
             with patch(
-                "ww.memory.procedural.get_neo4j_store",
+                "t4dm.memory.procedural.get_neo4j_store",
                 return_value=integration_neo4j_store,
             ):
                 return ProceduralMemory(integration_session_id)

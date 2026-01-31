@@ -15,7 +15,7 @@ import sys
 
 sys.path.insert(0, "src")
 
-from ww.nca.locus_coeruleus import (
+from t4dm.nca.locus_coeruleus import (
     LocusCoeruleus,
     LCConfig,
     SurpriseModel,

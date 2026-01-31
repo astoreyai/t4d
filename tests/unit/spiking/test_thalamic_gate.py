@@ -3,7 +3,7 @@
 import pytest
 import torch
 
-from ww.spiking.thalamic_gate import ThalamicGate
+from t4dm.spiking.thalamic_gate import ThalamicGate
 
 
 class TestThalamicGate:

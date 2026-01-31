@@ -11,7 +11,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import numpy as np
 
-from ww.api.routes.visualization import (
+from t4dm.api.routes.visualization import (
     router,
     MemoryType,
     EdgeType,
@@ -565,7 +565,7 @@ class TestVisualizationEndpoints:
     @pytest.mark.asyncio
     async def test_get_memory_graph(self, mock_services):
         """Test graph endpoint returns correct structure."""
-        from ww.api.routes.visualization import get_memory_graph
+        from t4dm.api.routes.visualization import get_memory_graph
 
         response = await get_memory_graph(
             services=mock_services,
@@ -581,7 +581,7 @@ class TestVisualizationEndpoints:
     @pytest.mark.asyncio
     async def test_get_memory_graph_hierarchical(self, mock_services):
         """Test hierarchical layout."""
-        from ww.api.routes.visualization import get_memory_graph
+        from t4dm.api.routes.visualization import get_memory_graph
 
         response = await get_memory_graph(
             services=mock_services,
@@ -598,7 +598,7 @@ class TestVisualizationEndpoints:
     @pytest.mark.asyncio
     async def test_get_timeline(self, mock_services):
         """Test timeline endpoint."""
-        from ww.api.routes.visualization import get_timeline
+        from t4dm.api.routes.visualization import get_timeline
 
         response = await get_timeline(
             services=mock_services,
@@ -612,7 +612,7 @@ class TestVisualizationEndpoints:
     @pytest.mark.asyncio
     async def test_get_activity(self, mock_services):
         """Test activity endpoint."""
-        from ww.api.routes.visualization import get_activity
+        from t4dm.api.routes.visualization import get_activity
 
         response = await get_activity(
             services=mock_services,
@@ -626,7 +626,7 @@ class TestVisualizationEndpoints:
     @pytest.mark.asyncio
     async def test_get_embeddings(self, mock_services):
         """Test embeddings endpoint."""
-        from ww.api.routes.visualization import get_embeddings
+        from t4dm.api.routes.visualization import get_embeddings
 
         response = await get_embeddings(
             services=mock_services,
@@ -642,7 +642,7 @@ class TestVisualizationEndpoints:
     @pytest.mark.asyncio
     async def test_export_json(self, mock_services):
         """Test JSON export."""
-        from ww.api.routes.visualization import export_graph
+        from t4dm.api.routes.visualization import export_graph
 
         request = ExportRequest(format="json")
         response = await export_graph(
@@ -658,7 +658,7 @@ class TestVisualizationEndpoints:
     @pytest.mark.asyncio
     async def test_export_gexf(self, mock_services):
         """Test GEXF export."""
-        from ww.api.routes.visualization import export_graph
+        from t4dm.api.routes.visualization import export_graph
 
         request = ExportRequest(format="gexf")
         response = await export_graph(
@@ -674,7 +674,7 @@ class TestVisualizationEndpoints:
     @pytest.mark.asyncio
     async def test_export_graphml(self, mock_services):
         """Test GraphML export."""
-        from ww.api.routes.visualization import export_graph
+        from t4dm.api.routes.visualization import export_graph
 
         request = ExportRequest(format="graphml")
         response = await export_graph(
@@ -985,7 +985,7 @@ class TestBiologicalMechanismEndpoints:
     @pytest.mark.asyncio
     async def test_get_fsrs_states(self, mock_services):
         """Test FSRS states endpoint."""
-        from ww.api.routes.visualization import get_fsrs_states
+        from t4dm.api.routes.visualization import get_fsrs_states
 
         states = await get_fsrs_states(
             services=mock_services,
@@ -1003,7 +1003,7 @@ class TestBiologicalMechanismEndpoints:
     @pytest.mark.asyncio
     async def test_get_fsrs_states_no_curve(self, mock_services):
         """Test FSRS states without decay curve."""
-        from ww.api.routes.visualization import get_fsrs_states
+        from t4dm.api.routes.visualization import get_fsrs_states
 
         states = await get_fsrs_states(
             services=mock_services,
@@ -1019,7 +1019,7 @@ class TestBiologicalMechanismEndpoints:
     @pytest.mark.asyncio
     async def test_get_hebbian_weights(self, mock_services):
         """Test Hebbian weights endpoint."""
-        from ww.api.routes.visualization import get_hebbian_weights
+        from t4dm.api.routes.visualization import get_hebbian_weights
 
         weights = await get_hebbian_weights(
             services=mock_services,
@@ -1034,7 +1034,7 @@ class TestBiologicalMechanismEndpoints:
     @pytest.mark.asyncio
     async def test_get_activation_spreading(self, mock_services):
         """Test activation spreading endpoint."""
-        from ww.api.routes.visualization import get_activation_spreading
+        from t4dm.api.routes.visualization import get_activation_spreading
 
         activations = await get_activation_spreading(
             services=mock_services,
@@ -1049,7 +1049,7 @@ class TestBiologicalMechanismEndpoints:
     @pytest.mark.asyncio
     async def test_get_sleep_consolidation_state(self, mock_services):
         """Test sleep consolidation state endpoint."""
-        from ww.api.routes.visualization import get_sleep_consolidation_state
+        from t4dm.api.routes.visualization import get_sleep_consolidation_state
 
         state = await get_sleep_consolidation_state(services=mock_services)
 
@@ -1059,7 +1059,7 @@ class TestBiologicalMechanismEndpoints:
     @pytest.mark.asyncio
     async def test_get_working_memory_state(self, mock_services):
         """Test working memory state endpoint."""
-        from ww.api.routes.visualization import get_working_memory_state
+        from t4dm.api.routes.visualization import get_working_memory_state
 
         state = await get_working_memory_state(services=mock_services)
 
@@ -1069,7 +1069,7 @@ class TestBiologicalMechanismEndpoints:
     @pytest.mark.asyncio
     async def test_get_pattern_separation_metrics(self, mock_services):
         """Test pattern separation metrics endpoint."""
-        from ww.api.routes.visualization import get_pattern_separation_metrics
+        from t4dm.api.routes.visualization import get_pattern_separation_metrics
 
         # Without inputs
         metrics = await get_pattern_separation_metrics(
@@ -1093,7 +1093,7 @@ class TestBiologicalMechanismEndpoints:
     @pytest.mark.asyncio
     async def test_get_pattern_completion_metrics(self, mock_services):
         """Test pattern completion metrics endpoint."""
-        from ww.api.routes.visualization import get_pattern_completion_metrics
+        from t4dm.api.routes.visualization import get_pattern_completion_metrics
 
         # Without input
         metrics = await get_pattern_completion_metrics(
@@ -1115,7 +1115,7 @@ class TestBiologicalMechanismEndpoints:
     @pytest.mark.asyncio
     async def test_get_all_biological_mechanisms(self, mock_services):
         """Test combined biological mechanisms endpoint."""
-        from ww.api.routes.visualization import get_all_biological_mechanisms
+        from t4dm.api.routes.visualization import get_all_biological_mechanisms
 
         response = await get_all_biological_mechanisms(
             services=mock_services,

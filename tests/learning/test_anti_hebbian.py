@@ -7,7 +7,7 @@ Tests sparse coding, decorrelation, and Foldiak layer functionality.
 import numpy as np
 import pytest
 
-from ww.learning.anti_hebbian import (
+from t4dm.learning.anti_hebbian import (
     AntiHebbianConfig,
     AntiHebbianNetwork,
     FoldiakLayer,

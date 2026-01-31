@@ -10,7 +10,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 import numpy as np
 import pytest
 
-from ww.consolidation.parallel import (
+from t4dm.consolidation.parallel import (
     ParallelConfig,
     ParallelExecutor,
     ParallelStats,

@@ -3,7 +3,7 @@
 import numpy as np
 import pytest
 
-from ww.nca.forward_forward import (
+from t4dm.nca.forward_forward import (
     ForwardForwardConfig,
     ForwardForwardState,
     ForwardForwardLayer,

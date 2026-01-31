@@ -10,11 +10,11 @@ from unittest.mock import MagicMock, patch
 import numpy as np
 import pytest
 
-from ww.learning.persistence import (
+from t4dm.learning.persistence import (
     LearnedGateState,
     StatePersister,
 )
-from ww.learning.cold_start import (
+from t4dm.learning.cold_start import (
     ContextSignals,
     ContextLoader,
     PopulationPrior,

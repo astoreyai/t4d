@@ -7,9 +7,9 @@ E1: Validates token-optimized context injection.
 import pytest
 from unittest.mock import AsyncMock, MagicMock
 
-from ww.integrations.kymera.context_injector import ContextInjector, InjectionConfig
-from ww.integrations.kymera.bridge import MemoryContext
-from ww.learning.events import ToonJSON
+from t4dm.integrations.kymera.context_injector import ContextInjector, InjectionConfig
+from t4dm.integrations.kymera.bridge import MemoryContext
+from t4dm.learning.events import ToonJSON
 
 
 class TestToonJSONIntegration:

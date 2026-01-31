@@ -1,7 +1,7 @@
 """Tests for NCA invariants."""
 import numpy as np
 import pytest
-from ww.nca.invariants import InvariantViolation, check_no_nan, check_sparsity, check_bounded
+from t4dm.nca.invariants import InvariantViolation, check_no_nan, check_sparsity, check_bounded
 
 
 class TestInvariants:

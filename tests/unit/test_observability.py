@@ -16,7 +16,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 import pytest
 import pytest_asyncio
 
-from ww.observability.logging import (
+from t4dm.observability.logging import (
     LogContext,
     StructuredFormatter,
     ContextAdapter,
@@ -27,7 +27,7 @@ from ww.observability.logging import (
     OperationLogger,
     log_operation,
 )
-from ww.observability.metrics import (
+from t4dm.observability.metrics import (
     OperationMetrics,
     MetricsCollector,
     get_metrics,
@@ -36,7 +36,7 @@ from ww.observability.metrics import (
     Timer,
     AsyncTimer,
 )
-from ww.observability.health import (
+from t4dm.observability.health import (
     HealthStatus,
     ComponentHealth,
     SystemHealth,
@@ -100,7 +100,7 @@ def test_log_context_excludes_none():
 def test_structured_formatter_formats_record():
     """Test StructuredFormatter creates JSON logs."""
     record = logging.LogRecord(
-        name="ww.test",
+        name="t4dm.test",
         level=logging.INFO,
         pathname="test.py",
         lineno=42,
@@ -127,7 +127,7 @@ def test_structured_formatter_with_exception():
         exc_info = sys.exc_info()
 
         record = logging.LogRecord(
-            name="ww.test",
+            name="t4dm.test",
             level=logging.ERROR,
             pathname="test.py",
             lineno=42,
@@ -146,7 +146,7 @@ def test_structured_formatter_with_exception():
 
 def test_context_adapter_adds_context():
     """Test ContextAdapter adds context to logs."""
-    logger_instance = logging.getLogger("ww.test")
+    logger_instance = logging.getLogger("t4dm.test")
     adapter = ContextAdapter(logger_instance, {})
 
     set_context("sess-123", "op-456")
@@ -194,7 +194,7 @@ def test_configure_logging_with_file():
         configure_logging(level="INFO", log_file=log_file)
 
         # Log a message
-        logger_instance = logging.getLogger("ww")
+        logger_instance = logging.getLogger("t4dm")
         logger_instance.info("Test message")
 
         # File should exist and contain logs
@@ -206,16 +206,16 @@ def test_configure_logging_with_file():
 
 def test_get_logger():
     """Test get_logger returns configured logger."""
-    logger_instance = get_logger("ww.test.module")
+    logger_instance = get_logger("t4dm.test.module")
 
-    assert logger_instance.name == "ww.test.module"
+    assert logger_instance.name == "t4dm.test.module"
 
 
 def test_set_context():
     """Test set_context stores values in context vars."""
     set_context("session-abc", "operation-xyz")
 
-    from ww.observability.logging import _session_id, _operation_id
+    from t4dm.observability.logging import _session_id, _operation_id
 
     assert _session_id.get() == "session-abc"
     assert _operation_id.get() == "operation-xyz"
@@ -226,7 +226,7 @@ def test_clear_context():
     set_context("session-123", "operation-456")
     clear_context()
 
-    from ww.observability.logging import _session_id, _operation_id
+    from t4dm.observability.logging import _session_id, _operation_id
 
     assert _session_id.get() == "unknown"
     assert _operation_id.get() == "unknown"
@@ -704,7 +704,7 @@ async def test_health_checker_check_qdrant():
     checker = HealthChecker()
 
     # Patch at source module since import happens inside the method
-    with patch("ww.storage.qdrant_store.get_qdrant_store") as mock_get_store:
+    with patch("t4dm.storage.qdrant_store.get_qdrant_store") as mock_get_store:
         mock_store = AsyncMock()
         mock_store.episodes_collection = "episodes"
         mock_store.count = AsyncMock(return_value=100)
@@ -722,7 +722,7 @@ async def test_health_checker_check_qdrant_timeout():
     checker = HealthChecker(timeout=0.001)
 
     # Patch at source module since import happens inside the method
-    with patch("ww.storage.qdrant_store.get_qdrant_store") as mock_get_store:
+    with patch("t4dm.storage.qdrant_store.get_qdrant_store") as mock_get_store:
         mock_store = AsyncMock()
         mock_store.episodes_collection = "episodes"
         mock_store.count = AsyncMock(
@@ -742,7 +742,7 @@ async def test_health_checker_check_neo4j():
     checker = HealthChecker()
 
     # Patch at source module since import happens inside the method
-    with patch("ww.storage.neo4j_store.get_neo4j_store") as mock_get_store:
+    with patch("t4dm.storage.neo4j_store.get_neo4j_store") as mock_get_store:
         mock_store = AsyncMock()
         mock_store.query = AsyncMock(return_value=[{"n": 1}])
         mock_get_store.return_value = mock_store
@@ -759,7 +759,7 @@ async def test_health_checker_check_embedding():
     checker = HealthChecker()
 
     # Patch at source module since import happens inside the method
-    with patch("ww.embedding.bge_m3.get_embedding_provider") as mock_get_provider:
+    with patch("t4dm.embedding.bge_m3.get_embedding_provider") as mock_get_provider:
         mock_provider = AsyncMock()
         mock_provider.embed_query = AsyncMock(
             return_value=[0.1] * 1024

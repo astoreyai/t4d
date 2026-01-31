@@ -14,14 +14,14 @@ Validates:
 import numpy as np
 import pytest
 
-from ww.nca.astrocyte import (
+from t4dm.nca.astrocyte import (
     AstrocyteLayer,
     AstrocyteConfig,
     AstrocyteLayerState,
     AstrocyteState,
     compute_tripartite_synapse,
 )
-from ww.nca.neural_field import (
+from t4dm.nca.neural_field import (
     NeuralFieldSolver,
     NeuralFieldConfig,
     NeurotransmitterType,

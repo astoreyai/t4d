@@ -3,8 +3,8 @@
 import pytest
 
 from tests.unit.consolidation.conftest import make_item
-from ww.consolidation.sleep_cycle_v2 import SleepCycleV2, SleepCycleV2Config
-from ww.spiking.cortical_stack import CorticalStack
+from t4dm.consolidation.sleep_cycle_v2 import SleepCycleV2, SleepCycleV2Config
+from t4dm.spiking.cortical_stack import CorticalStack
 
 
 class TestSleepCycleV2:

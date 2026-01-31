@@ -6,10 +6,10 @@ Tests top-down prefrontal cortex control of VTA, LC, and Raphe nuclei.
 
 import pytest
 
-from ww.nca.connectome import Connectome, NTSystem
-from ww.nca.locus_coeruleus import LocusCoeruleus
-from ww.nca.raphe import RapheNucleus
-from ww.nca.vta import VTACircuit
+from t4dm.nca.connectome import Connectome, NTSystem
+from t4dm.nca.locus_coeruleus import LocusCoeruleus
+from t4dm.nca.raphe import RapheNucleus
+from t4dm.nca.vta import VTACircuit
 
 
 class TestVTAPFCModulation:

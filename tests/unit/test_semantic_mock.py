@@ -7,13 +7,13 @@ Tests semantic awareness, concept clustering, and embedding similarity.
 import pytest
 import numpy as np
 
-from ww.embedding.semantic_mock import (
+from t4dm.embedding.semantic_mock import (
     SemanticConfig,
     SemanticMockAdapter,
     create_semantic_mock,
     CONCEPT_CLUSTERS,
 )
-from ww.embedding.adapter import cosine_similarity
+from t4dm.embedding.adapter import cosine_similarity
 
 
 class TestSemanticConfig:

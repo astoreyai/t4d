@@ -12,7 +12,7 @@ from unittest.mock import AsyncMock, MagicMock
 from dataclasses import dataclass
 from typing import Optional
 
-from ww.consolidation.sleep import (
+from t4dm.consolidation.sleep import (
     SleepConsolidation,
     SleepPhase,
     SleepCycleResult,
@@ -1274,7 +1274,7 @@ class TestP7MultiNightScheduling:
 
     def test_scheduler_initial_night_is_one(self):
         """Scheduler should start at night 1."""
-        from ww.consolidation.service import ConsolidationScheduler
+        from t4dm.consolidation.service import ConsolidationScheduler
 
         scheduler = ConsolidationScheduler()
         assert scheduler.state.current_night == 1
@@ -1282,7 +1282,7 @@ class TestP7MultiNightScheduling:
 
     def test_recommended_depth_by_night(self):
         """Recommended depth should vary by night."""
-        from ww.consolidation.service import ConsolidationScheduler
+        from t4dm.consolidation.service import ConsolidationScheduler
 
         scheduler = ConsolidationScheduler()
 
@@ -1305,7 +1305,7 @@ class TestP7MultiNightScheduling:
 
     def test_advance_night_increments_correctly(self):
         """advance_night should increment night counter."""
-        from ww.consolidation.service import ConsolidationScheduler
+        from t4dm.consolidation.service import ConsolidationScheduler
 
         scheduler = ConsolidationScheduler()
         assert scheduler.state.current_night == 1
@@ -1323,7 +1323,7 @@ class TestP7MultiNightScheduling:
 
     def test_reset_night_cycle(self):
         """reset_night_cycle should reset to night 1."""
-        from ww.consolidation.service import ConsolidationScheduler
+        from t4dm.consolidation.service import ConsolidationScheduler
 
         scheduler = ConsolidationScheduler()
         scheduler.advance_night(100)
@@ -1336,7 +1336,7 @@ class TestP7MultiNightScheduling:
 
     def test_get_stats_includes_multi_night(self):
         """get_stats should include multi-night info."""
-        from ww.consolidation.service import ConsolidationScheduler
+        from t4dm.consolidation.service import ConsolidationScheduler
 
         scheduler = ConsolidationScheduler()
         scheduler.advance_night(25)

@@ -4,8 +4,8 @@ from datetime import datetime, timedelta
 from uuid import uuid4
 from unittest.mock import AsyncMock, MagicMock, patch
 
-from ww.consolidation.service import ConsolidationService
-from ww.core.types import Episode, EpisodeContext, Outcome
+from t4dm.consolidation.service import ConsolidationService
+from t4dm.core.types import Episode, EpisodeContext, Outcome
 
 
 class TestDuplicateDetection:
@@ -329,8 +329,8 @@ class TestDuplicateDetectionPerformance:
     @pytest.mark.asyncio
     async def test_search_called_per_episode(self):
         """Test that search is called once per episode (not per pair)."""
-        from ww.consolidation.service import ConsolidationService
-        from ww.core.types import Episode, EpisodeContext, Outcome
+        from t4dm.consolidation.service import ConsolidationService
+        from t4dm.core.types import Episode, EpisodeContext, Outcome
 
         service = ConsolidationService.__new__(ConsolidationService)
         service.vector_store = MagicMock()

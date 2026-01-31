@@ -21,8 +21,8 @@ from datetime import datetime, timedelta
 from typing import List, Tuple
 from uuid import uuid4
 
-from ww.core.types import Episode, EpisodeContext, Outcome
-from ww.memory.episodic import EpisodicMemory
+from t4dm.core.types import Episode, EpisodeContext, Outcome
+from t4dm.memory.episodic import EpisodicMemory
 
 
 # =============================================================================

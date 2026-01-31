@@ -9,7 +9,7 @@ import pytest
 from datetime import datetime
 from unittest.mock import MagicMock
 
-from ww.visualization.ff_visualizer import (
+from t4dm.visualization.ff_visualizer import (
     FFSnapshot,
     FFTrainingEvent,
     ForwardForwardVisualizer,
@@ -562,7 +562,7 @@ class TestFFVisualizerPlots:
         except ImportError:
             pytest.skip("matplotlib not available")
 
-        from ww.visualization.ff_visualizer import plot_goodness_bars
+        from t4dm.visualization.ff_visualizer import plot_goodness_bars
 
         result = plot_goodness_bars(populated_visualizer)
         assert result is not None
@@ -577,7 +577,7 @@ class TestFFVisualizerPlots:
         except ImportError:
             pytest.skip("matplotlib not available")
 
-        from ww.visualization.ff_visualizer import plot_goodness_bars
+        from t4dm.visualization.ff_visualizer import plot_goodness_bars
 
         visualizer = ForwardForwardVisualizer()
         result = plot_goodness_bars(visualizer)
@@ -593,7 +593,7 @@ class TestFFVisualizerPlots:
         except ImportError:
             pytest.skip("matplotlib not available")
 
-        from ww.visualization.ff_visualizer import plot_goodness_timeline
+        from t4dm.visualization.ff_visualizer import plot_goodness_timeline
 
         result = plot_goodness_timeline(populated_visualizer, layer_idx=0)
         assert result is not None
@@ -608,7 +608,7 @@ class TestFFVisualizerPlots:
         except ImportError:
             pytest.skip("matplotlib not available")
 
-        from ww.visualization.ff_visualizer import plot_goodness_timeline
+        from t4dm.visualization.ff_visualizer import plot_goodness_timeline
 
         visualizer = ForwardForwardVisualizer()
         result = plot_goodness_timeline(visualizer, layer_idx=0)
@@ -624,7 +624,7 @@ class TestFFVisualizerPlots:
         except ImportError:
             pytest.skip("matplotlib not available")
 
-        from ww.visualization.ff_visualizer import plot_margin_evolution
+        from t4dm.visualization.ff_visualizer import plot_margin_evolution
 
         result = plot_margin_evolution(populated_visualizer)
         assert result is not None
@@ -639,7 +639,7 @@ class TestFFVisualizerPlots:
         except ImportError:
             pytest.skip("matplotlib not available")
 
-        from ww.visualization.ff_visualizer import plot_margin_evolution
+        from t4dm.visualization.ff_visualizer import plot_margin_evolution
 
         visualizer = ForwardForwardVisualizer()
         result = plot_margin_evolution(visualizer)
@@ -655,7 +655,7 @@ class TestFFVisualizerPlots:
         except ImportError:
             pytest.skip("matplotlib not available")
 
-        from ww.visualization.ff_visualizer import plot_phase_comparison
+        from t4dm.visualization.ff_visualizer import plot_phase_comparison
 
         result = plot_phase_comparison(populated_visualizer)
         assert result is not None
@@ -670,7 +670,7 @@ class TestFFVisualizerPlots:
         except ImportError:
             pytest.skip("matplotlib not available")
 
-        from ww.visualization.ff_visualizer import plot_phase_comparison
+        from t4dm.visualization.ff_visualizer import plot_phase_comparison
 
         visualizer = ForwardForwardVisualizer()
         result = plot_phase_comparison(visualizer)
@@ -686,7 +686,7 @@ class TestFFVisualizerPlots:
         except ImportError:
             pytest.skip("matplotlib not available")
 
-        from ww.visualization.ff_visualizer import create_ff_dashboard
+        from t4dm.visualization.ff_visualizer import create_ff_dashboard
 
         result = create_ff_dashboard(populated_visualizer)
         assert result is not None
@@ -701,7 +701,7 @@ class TestFFVisualizerPlots:
         except ImportError:
             pytest.skip("matplotlib not available")
 
-        from ww.visualization.ff_visualizer import create_ff_dashboard
+        from t4dm.visualization.ff_visualizer import create_ff_dashboard
 
         result = create_ff_dashboard(populated_visualizer, figsize=(20, 12))
         assert result is not None

@@ -12,7 +12,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import httpx
 
-from ww.sdk import (
+from t4dm.sdk import (
     WorldWeaverClient,
     AsyncWorldWeaverClient,
     Episode,
@@ -21,14 +21,14 @@ from ww.sdk import (
     RecallResult,
     ActivationResult,
 )
-from ww.sdk.models import (
+from t4dm.sdk.models import (
     EpisodeContext,
     Relationship,
     Step,
     HealthStatus,
     MemoryStats,
 )
-from ww.sdk.client import (
+from t4dm.sdk.client import (
     WorldWeaverError,
     ConnectionError,
     NotFoundError,

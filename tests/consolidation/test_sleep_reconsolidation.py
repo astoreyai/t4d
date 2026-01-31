@@ -12,9 +12,9 @@ from unittest.mock import AsyncMock, MagicMock, patch
 from dataclasses import dataclass
 from typing import Optional
 
-from ww.consolidation.sleep import SleepConsolidation, ReplayEvent
-from ww.learning.reconsolidation import ReconsolidationEngine
-from ww.consolidation.lability import LabilityManager, LabilityConfig
+from t4dm.consolidation.sleep import SleepConsolidation, ReplayEvent
+from t4dm.learning.reconsolidation import ReconsolidationEngine
+from t4dm.consolidation.lability import LabilityManager, LabilityConfig
 
 
 @dataclass

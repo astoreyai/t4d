@@ -20,7 +20,7 @@ class TestNoPickleInCheckpoint:
 
     def test_checkpoint_roundtrip(self):
         """Verify checkpoint serialize/deserialize works without pickle."""
-        from ww.persistence.checkpoint import Checkpoint
+        from t4dm.persistence.checkpoint import Checkpoint
         cp = Checkpoint(lsn=42, timestamp=1234567890.0)
         cp.gate_state = {"weights": [1.0, 2.0, 3.0], "bias": 0.5}
         cp.custom_states = {"test": {"key": "value"}}
@@ -32,7 +32,7 @@ class TestNoPickleInCheckpoint:
 
     def test_checkpoint_roundtrip_compressed(self):
         """Verify checkpoint roundtrip with compression."""
-        from ww.persistence.checkpoint import Checkpoint
+        from t4dm.persistence.checkpoint import Checkpoint
         cp = Checkpoint(lsn=100, timestamp=9999999.0)
         cp.buffer_state = {"items": list(range(1000))}
         data = cp.serialize(compress=True)
@@ -44,7 +44,7 @@ class TestNoPickleInCheckpoint:
         """Verify checkpoint handles numpy arrays correctly."""
         pytest.importorskip("numpy")
         import numpy as np
-        from ww.persistence.checkpoint import Checkpoint
+        from t4dm.persistence.checkpoint import Checkpoint
 
         cp = Checkpoint(lsn=1, timestamp=1000.0)
         cp.gate_state = {
@@ -60,7 +60,7 @@ class TestNoPickleInCheckpoint:
 
     def test_checkpoint_with_bytes(self):
         """Verify checkpoint handles bytes correctly."""
-        from ww.persistence.checkpoint import Checkpoint
+        from t4dm.persistence.checkpoint import Checkpoint
 
         cp = Checkpoint(lsn=5, timestamp=5000.0)
         cp.custom_states = {"binary": {"data": b"hello\x00world"}}
@@ -70,7 +70,7 @@ class TestNoPickleInCheckpoint:
 
     def test_checkpoint_tamper_detection(self):
         """Modify 1 byte of checkpoint, verify load raises."""
-        from ww.persistence.checkpoint import Checkpoint
+        from t4dm.persistence.checkpoint import Checkpoint
         cp = Checkpoint(lsn=1, timestamp=1000.0)
         data = cp.serialize(compress=False)
         # Tamper with a byte near the end (in the data portion)
@@ -82,7 +82,7 @@ class TestNoPickleInCheckpoint:
 
     def test_checkpoint_tamper_detection_compressed(self):
         """Verify tamper detection works with compression."""
-        from ww.persistence.checkpoint import Checkpoint
+        from t4dm.persistence.checkpoint import Checkpoint
         cp = Checkpoint(lsn=1, timestamp=1000.0)
         cp.gate_state = {"data": list(range(100))}
         data = cp.serialize(compress=True)
@@ -113,13 +113,13 @@ class TestNoPickleInCheckpoint:
         )
         data = header + state
 
-        from ww.persistence.checkpoint import Checkpoint
+        from t4dm.persistence.checkpoint import Checkpoint
         with pytest.raises(ValueError, match="no longer supported"):
             Checkpoint.deserialize(data)
 
     def test_checkpoint_version_2(self):
         """Verify new checkpoints are version 2."""
-        from ww.persistence.checkpoint import Checkpoint, CHECKPOINT_VERSION
+        from t4dm.persistence.checkpoint import Checkpoint, CHECKPOINT_VERSION
         assert CHECKPOINT_VERSION == 2
         cp = Checkpoint(lsn=1, timestamp=1000.0)
         assert cp.version == 2
@@ -129,7 +129,7 @@ class TestNoPickleInCheckpoint:
 
     def test_hmac_key_from_env(self, monkeypatch):
         """Verify HMAC key can be set from environment."""
-        from ww.persistence.checkpoint import Checkpoint, _get_checkpoint_key
+        from t4dm.persistence.checkpoint import Checkpoint, _get_checkpoint_key
 
         # Set custom key
         monkeypatch.setenv("T4DM_CHECKPOINT_KEY", "test-key-12345")
@@ -151,7 +151,7 @@ class TestNoPickleInCheckpoint:
 
     def test_checkpoint_with_none_values(self):
         """Verify checkpoint handles None values correctly."""
-        from ww.persistence.checkpoint import Checkpoint
+        from t4dm.persistence.checkpoint import Checkpoint
         cp = Checkpoint(lsn=10, timestamp=10000.0)
         cp.gate_state = None
         cp.scorer_state = {"weights": None}
@@ -162,7 +162,7 @@ class TestNoPickleInCheckpoint:
 
     def test_checkpoint_with_nested_structures(self):
         """Verify checkpoint handles deeply nested data structures."""
-        from ww.persistence.checkpoint import Checkpoint
+        from t4dm.persistence.checkpoint import Checkpoint
         cp = Checkpoint(lsn=1, timestamp=1000.0)
         cp.custom_states = {
             "nested": {

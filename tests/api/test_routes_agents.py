@@ -12,7 +12,7 @@ from uuid import uuid4
 import pytest
 from fastapi.testclient import TestClient
 
-from ww.api.routes.agents import (
+from t4dm.api.routes.agents import (
     AgentCreateRequest,
     AgentInfo,
     ConsolidateRequest,
@@ -25,7 +25,7 @@ from ww.api.routes.agents import (
     _sessions,
     router,
 )
-from ww.sdk.agent import AgentConfig, AgentPhase, WWAgent
+from t4dm.sdk.agent import AgentConfig, AgentPhase, WWAgent
 
 
 @pytest.fixture(autouse=True)
@@ -174,7 +174,7 @@ class TestAgentManagementEndpoints:
     @pytest.mark.asyncio
     async def test_create_agent(self):
         """Test creating an agent."""
-        from ww.api.routes.agents import create_agent
+        from t4dm.api.routes.agents import create_agent
 
         request = AgentCreateRequest(
             name="new-agent",
@@ -193,7 +193,7 @@ class TestAgentManagementEndpoints:
     @pytest.mark.asyncio
     async def test_list_agents_empty(self):
         """Test listing agents when empty."""
-        from ww.api.routes.agents import list_agents
+        from t4dm.api.routes.agents import list_agents
 
         result = await list_agents()
 
@@ -202,7 +202,7 @@ class TestAgentManagementEndpoints:
     @pytest.mark.asyncio
     async def test_list_agents_with_agents(self, mock_agent):
         """Test listing agents."""
-        from ww.api.routes.agents import list_agents
+        from t4dm.api.routes.agents import list_agents
 
         _agents["agent-1"] = mock_agent
         _agents["agent-2"] = mock_agent
@@ -214,7 +214,7 @@ class TestAgentManagementEndpoints:
     @pytest.mark.asyncio
     async def test_get_agent_found(self, mock_agent):
         """Test getting existing agent."""
-        from ww.api.routes.agents import get_agent
+        from t4dm.api.routes.agents import get_agent
 
         _agents["agent-123"] = mock_agent
 
@@ -227,7 +227,7 @@ class TestAgentManagementEndpoints:
         """Test getting non-existent agent."""
         from fastapi import HTTPException
 
-        from ww.api.routes.agents import get_agent
+        from t4dm.api.routes.agents import get_agent
 
         with pytest.raises(HTTPException) as exc_info:
             await get_agent("unknown")
@@ -237,7 +237,7 @@ class TestAgentManagementEndpoints:
     @pytest.mark.asyncio
     async def test_delete_agent(self, mock_agent):
         """Test deleting agent."""
-        from ww.api.routes.agents import delete_agent
+        from t4dm.api.routes.agents import delete_agent
 
         mock_agent._context = None
         _agents["agent-del"] = mock_agent
@@ -250,7 +250,7 @@ class TestAgentManagementEndpoints:
     @pytest.mark.asyncio
     async def test_delete_agent_with_session(self, mock_agent):
         """Test deleting agent with active session."""
-        from ww.api.routes.agents import delete_agent
+        from t4dm.api.routes.agents import delete_agent
 
         mock_agent._context = MagicMock()
         mock_agent._context.session_id = "session-123"
@@ -267,7 +267,7 @@ class TestAgentManagementEndpoints:
         """Test deleting non-existent agent."""
         from fastapi import HTTPException
 
-        from ww.api.routes.agents import delete_agent
+        from t4dm.api.routes.agents import delete_agent
 
         with pytest.raises(HTTPException) as exc_info:
             await delete_agent("unknown")
@@ -281,7 +281,7 @@ class TestSessionManagementEndpoints:
     @pytest.mark.asyncio
     async def test_start_session(self, mock_agent):
         """Test starting a session."""
-        from ww.api.routes.agents import start_session
+        from t4dm.api.routes.agents import start_session
 
         context = MagicMock()
         context.session_id = "new-session"
@@ -302,7 +302,7 @@ class TestSessionManagementEndpoints:
         """Test starting session for non-existent agent."""
         from fastapi import HTTPException
 
-        from ww.api.routes.agents import start_session
+        from t4dm.api.routes.agents import start_session
 
         with pytest.raises(HTTPException) as exc_info:
             await start_session("unknown")
@@ -314,7 +314,7 @@ class TestSessionManagementEndpoints:
         """Test starting session when one is already active."""
         from fastapi import HTTPException
 
-        from ww.api.routes.agents import start_session
+        from t4dm.api.routes.agents import start_session
 
         mock_agent._context = MagicMock()
         mock_agent._context.session_id = "existing"
@@ -328,7 +328,7 @@ class TestSessionManagementEndpoints:
     @pytest.mark.asyncio
     async def test_end_session(self, mock_agent):
         """Test ending a session."""
-        from ww.api.routes.agents import end_session
+        from t4dm.api.routes.agents import end_session
 
         mock_agent._context = MagicMock()
         mock_agent._context.session_id = "session-123"
@@ -345,7 +345,7 @@ class TestSessionManagementEndpoints:
         """Test ending wrong session."""
         from fastapi import HTTPException
 
-        from ww.api.routes.agents import end_session
+        from t4dm.api.routes.agents import end_session
 
         mock_agent._context = MagicMock()
         mock_agent._context.session_id = "session-123"
@@ -359,7 +359,7 @@ class TestSessionManagementEndpoints:
     @pytest.mark.asyncio
     async def test_get_session(self, mock_agent):
         """Test getting session info."""
-        from ww.api.routes.agents import get_session
+        from t4dm.api.routes.agents import get_session
 
         mock_agent._context = MagicMock()
         mock_agent._context.session_id = "session-123"
@@ -377,7 +377,7 @@ class TestExecutionEndpoints:
     @pytest.mark.asyncio
     async def test_execute_agent(self, mock_agent):
         """Test executing agent task."""
-        from ww.api.routes.agents import execute_agent
+        from t4dm.api.routes.agents import execute_agent
 
         mock_agent._context = MagicMock()
         mock_agent._context.session_id = "session-123"
@@ -403,7 +403,7 @@ class TestExecutionEndpoints:
     @pytest.mark.asyncio
     async def test_execute_agent_auto_start_session(self, mock_agent):
         """Test execution auto-starts session."""
-        from ww.api.routes.agents import execute_agent
+        from t4dm.api.routes.agents import execute_agent
 
         context = MagicMock()
         context.session_id = "auto-session"
@@ -434,7 +434,7 @@ class TestExecutionEndpoints:
         """Test execution for non-existent agent."""
         from fastapi import HTTPException
 
-        from ww.api.routes.agents import execute_agent
+        from t4dm.api.routes.agents import execute_agent
 
         request = ExecuteRequest(messages=[])
 
@@ -446,7 +446,7 @@ class TestExecutionEndpoints:
     @pytest.mark.asyncio
     async def test_report_outcome(self, mock_agent):
         """Test reporting task outcome."""
-        from ww.api.routes.agents import report_outcome
+        from t4dm.api.routes.agents import report_outcome
 
         mock_agent._context = MagicMock()
         mock_agent.report_outcome = AsyncMock(return_value={
@@ -471,7 +471,7 @@ class TestExecutionEndpoints:
         """Test outcome reporting without session."""
         from fastapi import HTTPException
 
-        from ww.api.routes.agents import report_outcome
+        from t4dm.api.routes.agents import report_outcome
 
         mock_agent._context = None
         _agents["agent-1"] = mock_agent
@@ -490,7 +490,7 @@ class TestConsolidationEndpoints:
     @pytest.mark.asyncio
     async def test_consolidate(self, mock_agent):
         """Test triggering consolidation."""
-        from ww.api.routes.agents import consolidate
+        from t4dm.api.routes.agents import consolidate
 
         mock_agent._context = MagicMock()
         mock_agent._context.session_id = "session-123"
@@ -510,7 +510,7 @@ class TestConsolidationEndpoints:
         """Test consolidation without memory client."""
         from fastapi import HTTPException
 
-        from ww.api.routes.agents import consolidate
+        from t4dm.api.routes.agents import consolidate
 
         mock_agent._memory = None
         _agents["agent-1"] = mock_agent
@@ -529,7 +529,7 @@ class TestMemoryAccessEndpoints:
     @pytest.mark.asyncio
     async def test_store_memory(self, mock_agent):
         """Test storing memory."""
-        from ww.api.routes.agents import store_memory
+        from t4dm.api.routes.agents import store_memory
 
         episode = MagicMock()
         episode.id = uuid4()
@@ -551,7 +551,7 @@ class TestMemoryAccessEndpoints:
         """Test storing memory when disabled."""
         from fastapi import HTTPException
 
-        from ww.api.routes.agents import store_memory
+        from t4dm.api.routes.agents import store_memory
 
         mock_agent.store_memory = AsyncMock(return_value=None)
         _agents["agent-1"] = mock_agent
@@ -564,7 +564,7 @@ class TestMemoryAccessEndpoints:
     @pytest.mark.asyncio
     async def test_recall_memories(self, mock_agent):
         """Test recalling memories."""
-        from ww.api.routes.agents import recall_memories
+        from t4dm.api.routes.agents import recall_memories
 
         episode = MagicMock()
         episode.id = uuid4()
@@ -583,7 +583,7 @@ class TestMemoryAccessEndpoints:
     @pytest.mark.asyncio
     async def test_get_agent_stats(self, mock_agent):
         """Test getting agent stats."""
-        from ww.api.routes.agents import get_agent_stats
+        from t4dm.api.routes.agents import get_agent_stats
 
         mock_agent.get_stats.return_value = {
             "name": "test",

@@ -3,8 +3,8 @@
 import json
 from xml.etree import ElementTree
 
-from ww.diagrams.export import to_gexf, to_graphml, to_json
-from ww.diagrams.schema import GraphEdge, GraphNode, UnifiedGraph
+from t4dm.diagrams.export import to_gexf, to_graphml, to_json
+from t4dm.diagrams.schema import GraphEdge, GraphNode, UnifiedGraph
 
 
 def _sample_graph() -> UnifiedGraph:

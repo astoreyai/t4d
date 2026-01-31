@@ -4,8 +4,8 @@ from datetime import datetime, timedelta
 from uuid import uuid4
 
 import pytest
-from ww.core.validation import ValidationError
-from ww.nca.vta import VTAConfig, VTAState, VTACircuit
+from t4dm.core.validation import ValidationError
+from t4dm.nca.vta import VTAConfig, VTAState, VTACircuit
 
 
 class TestVTAConfigImmutable:
@@ -46,7 +46,7 @@ class TestRewardValidation:
 
     def test_reward_clamped_positive(self):
         """P0-4: Outcome=100.0 is clamped to 1.0."""
-        from ww.nca.dopamine_integration import DopamineIntegration
+        from t4dm.nca.dopamine_integration import DopamineIntegration
 
         di = DopamineIntegration()
         memory_id = uuid4()
@@ -63,7 +63,7 @@ class TestRewardValidation:
 
     def test_reward_clamped_negative(self):
         """P0-4: Outcome=-100.0 is clamped to -1.0."""
-        from ww.nca.dopamine_integration import DopamineIntegration
+        from t4dm.nca.dopamine_integration import DopamineIntegration
 
         di = DopamineIntegration()
         memory_id = uuid4()
@@ -79,7 +79,7 @@ class TestRewardValidation:
 
     def test_reward_rate_limited(self):
         """P0-4: 11th call within 60s raises ValueError."""
-        from ww.nca.dopamine_integration import DopamineIntegration
+        from t4dm.nca.dopamine_integration import DopamineIntegration
 
         di = DopamineIntegration()
         memory_id = uuid4()
@@ -100,7 +100,7 @@ class TestRewardValidation:
 
     def test_reward_rate_limit_per_memory(self):
         """P0-4: Rate limit is per memory_id, not global."""
-        from ww.nca.dopamine_integration import DopamineIntegration
+        from t4dm.nca.dopamine_integration import DopamineIntegration
 
         di = DopamineIntegration()
         memory_id_a = uuid4()
@@ -122,7 +122,7 @@ class TestRewardValidation:
 
     def test_reward_rate_limit_window_expiry(self):
         """P0-4: Rate limit window expires after 60 seconds."""
-        from ww.nca.dopamine_integration import DopamineIntegration
+        from t4dm.nca.dopamine_integration import DopamineIntegration
 
         di = DopamineIntegration()
         memory_id = uuid4()
@@ -151,8 +151,8 @@ class TestRewardValidation:
 
     def test_reward_capability_check(self):
         """P0-4: Token without 'submit_reward' capability is rejected."""
-        from ww.core.access_control import CallerToken, AccessDenied
-        from ww.nca.dopamine_integration import DopamineIntegration
+        from t4dm.core.access_control import CallerToken, AccessDenied
+        from t4dm.nca.dopamine_integration import DopamineIntegration
 
         di = DopamineIntegration()
         memory_id = uuid4()
@@ -173,8 +173,8 @@ class TestRewardValidation:
 
     def test_reward_valid_capability(self):
         """P0-4: Token with 'submit_reward' capability succeeds."""
-        from ww.core.access_control import VTA_TOKEN
-        from ww.nca.dopamine_integration import DopamineIntegration
+        from t4dm.core.access_control import VTA_TOKEN
+        from t4dm.nca.dopamine_integration import DopamineIntegration
 
         di = DopamineIntegration()
         memory_id = uuid4()
@@ -193,7 +193,7 @@ class TestSTDPValidation:
 
     def test_spike_timestamp_not_future(self):
         """P0-7: Reject timestamps in the future."""
-        from ww.learning.stdp import STDPLearner
+        from t4dm.learning.stdp import STDPLearner
 
         stdp = STDPLearner()
         future_time = datetime.now() + timedelta(seconds=10)
@@ -203,7 +203,7 @@ class TestSTDPValidation:
 
     def test_spike_timestamp_not_too_old(self):
         """P0-7: Reject timestamps more than 1 year in the past."""
-        from ww.learning.stdp import STDPLearner
+        from t4dm.learning.stdp import STDPLearner
 
         stdp = STDPLearner()
         old_time = datetime.now() - timedelta(days=400)
@@ -213,7 +213,7 @@ class TestSTDPValidation:
 
     def test_spike_interval_validation(self):
         """P0-7: Reject inter-spike intervals < 1ms (physiologically implausible)."""
-        from ww.learning.stdp import STDPLearner
+        from t4dm.learning.stdp import STDPLearner
 
         stdp = STDPLearner()
 
@@ -228,7 +228,7 @@ class TestSTDPValidation:
 
     def test_spike_interval_valid(self):
         """P0-7: Accept inter-spike intervals >= 1ms."""
-        from ww.learning.stdp import STDPLearner
+        from t4dm.learning.stdp import STDPLearner
 
         stdp = STDPLearner()
 
@@ -246,7 +246,7 @@ class TestSTDPValidation:
 
     def test_spike_interval_per_entity(self):
         """P0-7: Inter-spike validation is per entity, not global."""
-        from ww.learning.stdp import STDPLearner
+        from t4dm.learning.stdp import STDPLearner
 
         stdp = STDPLearner()
 
@@ -262,7 +262,7 @@ class TestSTDPValidation:
 
     def test_spike_default_timestamp_valid(self):
         """P0-7: Default timestamp (now) passes validation."""
-        from ww.learning.stdp import STDPLearner
+        from t4dm.learning.stdp import STDPLearner
 
         stdp = STDPLearner()
 

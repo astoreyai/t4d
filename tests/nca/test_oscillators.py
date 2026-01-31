@@ -13,7 +13,7 @@ Validates:
 import numpy as np
 import pytest
 
-from ww.nca.oscillators import (
+from t4dm.nca.oscillators import (
     FrequencyBandGenerator,
     OscillatorConfig,
     OscillatorState,
@@ -26,13 +26,13 @@ from ww.nca.oscillators import (
     DeltaOscillator,
     SleepState,
 )
-from ww.nca.sleep_spindles import (
+from t4dm.nca.sleep_spindles import (
     SleepSpindleGenerator,
     SpindleConfig,
     SpindleState,
     SpindleDeltaCoupler,
 )
-from ww.nca.neural_field import (
+from t4dm.nca.neural_field import (
     NeuralFieldSolver,
     NeuralFieldConfig,
 )

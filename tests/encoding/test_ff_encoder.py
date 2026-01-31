@@ -8,7 +8,7 @@ and storage, allowing the system to learn representations through use.
 import numpy as np
 import pytest
 
-from ww.encoding.ff_encoder import (
+from t4dm.encoding.ff_encoder import (
     FFEncoder,
     FFEncoderConfig,
     FFEncoderState,
@@ -366,7 +366,7 @@ class TestFFEncoderThreeFactorIntegration:
 
     def test_learn_with_three_factor_signal(self):
         """Learning with three-factor signal works."""
-        from ww.learning.three_factor import ThreeFactorSignal
+        from t4dm.learning.three_factor import ThreeFactorSignal
         from uuid import uuid4
 
         config = FFEncoderConfig(

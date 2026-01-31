@@ -21,7 +21,7 @@ from unittest.mock import MagicMock, AsyncMock, patch
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
-from ww.api.routes.visualization import (
+from t4dm.api.routes.visualization import (
     router,
     NeuromodulatorTuning,  # Alias for NeuromodulatorTuningRequest
     NeuromodulatorTuningRequest,
@@ -396,7 +396,7 @@ class TestBioEndpointsIntegration:
         app.include_router(router)
 
         # Override dependency
-        from ww.api.deps import get_memory_services
+        from t4dm.api.deps import get_memory_services
         app.dependency_overrides[get_memory_services] = lambda: mock_services
 
         return TestClient(app)
@@ -404,7 +404,7 @@ class TestBioEndpointsIntegration:
     @pytest.fixture(autouse=True)
     def setup_admin_key(self):
         """Set admin key for auth tests."""
-        from ww.core.config import get_settings
+        from t4dm.core.config import get_settings
         settings = get_settings()
         original_key = getattr(settings, 'admin_api_key', None)
         settings.admin_api_key = self.ADMIN_KEY
@@ -1003,8 +1003,8 @@ class TestLearningSystemPropagation:
     @pytest.fixture
     def client_with_learning(self, mock_episodic):
         """Create test client with learning system mocks."""
-        from ww.api.deps import get_memory_services
-        from ww.core.config import get_settings
+        from t4dm.api.deps import get_memory_services
+        from t4dm.core.config import get_settings
 
         services = {
             "session_id": "test",

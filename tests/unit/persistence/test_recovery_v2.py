@@ -6,11 +6,11 @@ import uuid
 
 import numpy as np
 
-from ww.persistence.checkpoint import CheckpointConfig, CheckpointManager
-from ww.persistence.checkpoint_v3 import CheckpointManagerV3, T4DXCheckpointable
-from ww.persistence.recovery_v2 import RecoveryManagerV2
-from ww.storage.t4dx.engine import T4DXEngine
-from ww.storage.t4dx.types import ItemRecord
+from t4dm.persistence.checkpoint import CheckpointConfig, CheckpointManager
+from t4dm.persistence.checkpoint_v3 import CheckpointManagerV3, T4DXCheckpointable
+from t4dm.persistence.recovery_v2 import RecoveryManagerV2
+from t4dm.storage.t4dx.engine import T4DXEngine
+from t4dm.storage.t4dx.types import ItemRecord
 
 
 def _make_item(**kwargs):

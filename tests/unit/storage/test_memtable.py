@@ -4,7 +4,7 @@ import numpy as np
 import pytest
 
 from tests.unit.storage.conftest import make_edge, make_item
-from ww.storage.t4dx.memtable import MemTable
+from t4dm.storage.t4dx.memtable import MemTable
 
 
 class TestMemTable:

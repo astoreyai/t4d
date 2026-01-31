@@ -18,8 +18,8 @@ from typing import AsyncGenerator
 from unittest.mock import AsyncMock, MagicMock, patch
 from uuid import UUID, uuid4
 
-from ww.learning.three_factor import ThreeFactorLearningRule
-from ww.learning.reconsolidation import ReconsolidationEngine
+from t4dm.learning.three_factor import ThreeFactorLearningRule
+from t4dm.learning.reconsolidation import ReconsolidationEngine
 
 
 # ============================================================================

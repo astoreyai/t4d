@@ -7,7 +7,7 @@ FF retrieval scoring uses goodness to boost confident pattern matches.
 import numpy as np
 import pytest
 
-from ww.bridges import (
+from t4dm.bridges import (
     FFRetrievalConfig,
     FFRetrievalScorer,
     FFRetrievalState,
@@ -199,7 +199,7 @@ class TestFFRetrievalScorerWithLayer:
     def ff_layer(self):
         """Create a real FF layer for testing."""
         try:
-            from ww.nca.forward_forward import ForwardForwardConfig, ForwardForwardLayer
+            from t4dm.nca.forward_forward import ForwardForwardConfig, ForwardForwardLayer
             config = ForwardForwardConfig(
                 input_dim=1024,
                 hidden_dim=512,

@@ -20,10 +20,10 @@ from unittest.mock import AsyncMock, MagicMock, patch, call
 from uuid import UUID, uuid4
 from datetime import datetime
 
-from ww.memory.episodic import EpisodicMemory
-from ww.memory.semantic import SemanticMemory
-from ww.memory.procedural import ProceduralMemory
-from ww.core.types import (
+from t4dm.memory.episodic import EpisodicMemory
+from t4dm.memory.semantic import SemanticMemory
+from t4dm.memory.procedural import ProceduralMemory
+from t4dm.core.types import (
     Episode, Entity, EntityType, Relationship, RelationType,
     Procedure, Domain, ProcedureStep, ScoredResult, Outcome, EpisodeContext,
 )
@@ -81,9 +81,9 @@ class TestEpisodicSessionIsolation:
         self, mock_embedding, mock_qdrant_store, mock_neo4j_store
     ):
         """Test that create() stores session_id in both vector and graph stores."""
-        with patch("ww.memory.episodic.get_embedding_provider", return_value=mock_embedding):
-            with patch("ww.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
-                with patch("ww.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
+        with patch("t4dm.memory.episodic.get_embedding_provider", return_value=mock_embedding):
+            with patch("t4dm.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
+                with patch("t4dm.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
                     episodic = EpisodicMemory("session-a")
                     await episodic.initialize()
 
@@ -118,9 +118,9 @@ class TestEpisodicSessionIsolation:
         self, mock_embedding, mock_qdrant_store, mock_neo4j_store
     ):
         """Test that recall() filters by current session when session_filter is None."""
-        with patch("ww.memory.episodic.get_embedding_provider", return_value=mock_embedding):
-            with patch("ww.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
-                with patch("ww.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
+        with patch("t4dm.memory.episodic.get_embedding_provider", return_value=mock_embedding):
+            with patch("t4dm.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
+                with patch("t4dm.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
                     # Setup mock search results
                     mock_qdrant_store.search.return_value = []
 
@@ -144,9 +144,9 @@ class TestEpisodicSessionIsolation:
         self, mock_embedding, mock_qdrant_store, mock_neo4j_store
     ):
         """Test that recall() respects explicit session_filter parameter."""
-        with patch("ww.memory.episodic.get_embedding_provider", return_value=mock_embedding):
-            with patch("ww.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
-                with patch("ww.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
+        with patch("t4dm.memory.episodic.get_embedding_provider", return_value=mock_embedding):
+            with patch("t4dm.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
+                with patch("t4dm.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
                     # Setup mock search results
                     mock_qdrant_store.search.return_value = []
 
@@ -172,9 +172,9 @@ class TestEpisodicSessionIsolation:
         self, mock_embedding, mock_qdrant_store, mock_neo4j_store
     ):
         """Test that recall() with 'default' session doesn't apply session filter."""
-        with patch("ww.memory.episodic.get_embedding_provider", return_value=mock_embedding):
-            with patch("ww.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
-                with patch("ww.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
+        with patch("t4dm.memory.episodic.get_embedding_provider", return_value=mock_embedding):
+            with patch("t4dm.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
+                with patch("t4dm.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
                     # Setup mock search results
                     mock_qdrant_store.search.return_value = []
 
@@ -196,9 +196,9 @@ class TestEpisodicSessionIsolation:
         self, mock_embedding, mock_qdrant_store, mock_neo4j_store
     ):
         """Test that session A and B don't see each other's data."""
-        with patch("ww.memory.episodic.get_embedding_provider", return_value=mock_embedding):
-            with patch("ww.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
-                with patch("ww.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
+        with patch("t4dm.memory.episodic.get_embedding_provider", return_value=mock_embedding):
+            with patch("t4dm.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
+                with patch("t4dm.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
                     # Create episodes in session A
                     episodic_a = EpisodicMemory("session-a")
                     await episodic_a.initialize()
@@ -228,9 +228,9 @@ class TestEpisodicSessionIsolation:
         self, mock_embedding, mock_qdrant_store, mock_neo4j_store
     ):
         """Test that recall returns ScoredResult objects with proper structure."""
-        with patch("ww.memory.episodic.get_embedding_provider", return_value=mock_embedding):
-            with patch("ww.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
-                with patch("ww.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
+        with patch("t4dm.memory.episodic.get_embedding_provider", return_value=mock_embedding):
+            with patch("t4dm.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
+                with patch("t4dm.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
                     # Setup mock search to return an episode
                     test_id = str(uuid4())
                     test_payload = {
@@ -274,9 +274,9 @@ class TestSemanticSessionIsolation:
         self, mock_embedding, mock_qdrant_store, mock_neo4j_store
     ):
         """Test that create_entity() stores session_id in payload and properties."""
-        with patch("ww.memory.semantic.get_embedding_provider", return_value=mock_embedding):
-            with patch("ww.memory.semantic.get_qdrant_store", return_value=mock_qdrant_store):
-                with patch("ww.memory.semantic.get_neo4j_store", return_value=mock_neo4j_store):
+        with patch("t4dm.memory.semantic.get_embedding_provider", return_value=mock_embedding):
+            with patch("t4dm.memory.semantic.get_qdrant_store", return_value=mock_qdrant_store):
+                with patch("t4dm.memory.semantic.get_neo4j_store", return_value=mock_neo4j_store):
                     semantic = SemanticMemory("session-a")
                     await semantic.initialize()
 
@@ -306,9 +306,9 @@ class TestSemanticSessionIsolation:
         self, mock_embedding, mock_qdrant_store, mock_neo4j_store
     ):
         """Test that recall() filters by current session by default."""
-        with patch("ww.memory.semantic.get_embedding_provider", return_value=mock_embedding):
-            with patch("ww.memory.semantic.get_qdrant_store", return_value=mock_qdrant_store):
-                with patch("ww.memory.semantic.get_neo4j_store", return_value=mock_neo4j_store):
+        with patch("t4dm.memory.semantic.get_embedding_provider", return_value=mock_embedding):
+            with patch("t4dm.memory.semantic.get_qdrant_store", return_value=mock_qdrant_store):
+                with patch("t4dm.memory.semantic.get_neo4j_store", return_value=mock_neo4j_store):
                     mock_qdrant_store.search.return_value = []
                     mock_neo4j_store.get_relationships = AsyncMock(return_value=[])
 
@@ -329,9 +329,9 @@ class TestSemanticSessionIsolation:
         self, mock_embedding, mock_qdrant_store, mock_neo4j_store
     ):
         """Test that recall() respects explicit session_filter parameter."""
-        with patch("ww.memory.semantic.get_embedding_provider", return_value=mock_embedding):
-            with patch("ww.memory.semantic.get_qdrant_store", return_value=mock_qdrant_store):
-                with patch("ww.memory.semantic.get_neo4j_store", return_value=mock_neo4j_store):
+        with patch("t4dm.memory.semantic.get_embedding_provider", return_value=mock_embedding):
+            with patch("t4dm.memory.semantic.get_qdrant_store", return_value=mock_qdrant_store):
+                with patch("t4dm.memory.semantic.get_neo4j_store", return_value=mock_neo4j_store):
                     mock_qdrant_store.search.return_value = []
                     mock_neo4j_store.get_relationships = AsyncMock(return_value=[])
 
@@ -355,9 +355,9 @@ class TestSemanticSessionIsolation:
         self, mock_embedding, mock_qdrant_store, mock_neo4j_store
     ):
         """Test that recall() with 'default' session doesn't apply session filter."""
-        with patch("ww.memory.semantic.get_embedding_provider", return_value=mock_embedding):
-            with patch("ww.memory.semantic.get_qdrant_store", return_value=mock_qdrant_store):
-                with patch("ww.memory.semantic.get_neo4j_store", return_value=mock_neo4j_store):
+        with patch("t4dm.memory.semantic.get_embedding_provider", return_value=mock_embedding):
+            with patch("t4dm.memory.semantic.get_qdrant_store", return_value=mock_qdrant_store):
+                with patch("t4dm.memory.semantic.get_neo4j_store", return_value=mock_neo4j_store):
                     mock_qdrant_store.search.return_value = []
                     mock_neo4j_store.get_relationships = AsyncMock(return_value=[])
 
@@ -377,9 +377,9 @@ class TestSemanticSessionIsolation:
         self, mock_embedding, mock_qdrant_store, mock_neo4j_store
     ):
         """Test that relationships are created with session context."""
-        with patch("ww.memory.semantic.get_embedding_provider", return_value=mock_embedding):
-            with patch("ww.memory.semantic.get_qdrant_store", return_value=mock_qdrant_store):
-                with patch("ww.memory.semantic.get_neo4j_store", return_value=mock_neo4j_store):
+        with patch("t4dm.memory.semantic.get_embedding_provider", return_value=mock_embedding):
+            with patch("t4dm.memory.semantic.get_qdrant_store", return_value=mock_qdrant_store):
+                with patch("t4dm.memory.semantic.get_neo4j_store", return_value=mock_neo4j_store):
                     semantic = SemanticMemory("session-x")
                     await semantic.initialize()
 
@@ -404,9 +404,9 @@ class TestSemanticSessionIsolation:
         self, mock_embedding, mock_qdrant_store, mock_neo4j_store
     ):
         """Test that entities from different sessions are isolated."""
-        with patch("ww.memory.semantic.get_embedding_provider", return_value=mock_embedding):
-            with patch("ww.memory.semantic.get_qdrant_store", return_value=mock_qdrant_store):
-                with patch("ww.memory.semantic.get_neo4j_store", return_value=mock_neo4j_store):
+        with patch("t4dm.memory.semantic.get_embedding_provider", return_value=mock_embedding):
+            with patch("t4dm.memory.semantic.get_qdrant_store", return_value=mock_qdrant_store):
+                with patch("t4dm.memory.semantic.get_neo4j_store", return_value=mock_neo4j_store):
                     # Create entity in session-1
                     semantic_1 = SemanticMemory("session-1")
                     await semantic_1.initialize()
@@ -448,9 +448,9 @@ class TestProceduralSessionIsolation:
         self, mock_embedding, mock_qdrant_store, mock_neo4j_store
     ):
         """Test that build() stores session_id in payload and properties."""
-        with patch("ww.memory.procedural.get_embedding_provider", return_value=mock_embedding):
-            with patch("ww.memory.procedural.get_qdrant_store", return_value=mock_qdrant_store):
-                with patch("ww.memory.procedural.get_neo4j_store", return_value=mock_neo4j_store):
+        with patch("t4dm.memory.procedural.get_embedding_provider", return_value=mock_embedding):
+            with patch("t4dm.memory.procedural.get_qdrant_store", return_value=mock_qdrant_store):
+                with patch("t4dm.memory.procedural.get_neo4j_store", return_value=mock_neo4j_store):
                     procedural = ProceduralMemory("session-dev")
                     await procedural.initialize()
 
@@ -485,9 +485,9 @@ class TestProceduralSessionIsolation:
         self, mock_embedding, mock_qdrant_store, mock_neo4j_store
     ):
         """Test that retrieve() filters by current session by default."""
-        with patch("ww.memory.procedural.get_embedding_provider", return_value=mock_embedding):
-            with patch("ww.memory.procedural.get_qdrant_store", return_value=mock_qdrant_store):
-                with patch("ww.memory.procedural.get_neo4j_store", return_value=mock_neo4j_store):
+        with patch("t4dm.memory.procedural.get_embedding_provider", return_value=mock_embedding):
+            with patch("t4dm.memory.procedural.get_qdrant_store", return_value=mock_qdrant_store):
+                with patch("t4dm.memory.procedural.get_neo4j_store", return_value=mock_neo4j_store):
                     mock_qdrant_store.search.return_value = []
 
                     procedural = ProceduralMemory("session-prod")
@@ -508,9 +508,9 @@ class TestProceduralSessionIsolation:
         self, mock_embedding, mock_qdrant_store, mock_neo4j_store
     ):
         """Test that retrieve() respects explicit session_filter parameter."""
-        with patch("ww.memory.procedural.get_embedding_provider", return_value=mock_embedding):
-            with patch("ww.memory.procedural.get_qdrant_store", return_value=mock_qdrant_store):
-                with patch("ww.memory.procedural.get_neo4j_store", return_value=mock_neo4j_store):
+        with patch("t4dm.memory.procedural.get_embedding_provider", return_value=mock_embedding):
+            with patch("t4dm.memory.procedural.get_qdrant_store", return_value=mock_qdrant_store):
+                with patch("t4dm.memory.procedural.get_neo4j_store", return_value=mock_neo4j_store):
                     mock_qdrant_store.search.return_value = []
 
                     procedural = ProceduralMemory("session-current")
@@ -532,9 +532,9 @@ class TestProceduralSessionIsolation:
         self, mock_embedding, mock_qdrant_store, mock_neo4j_store
     ):
         """Test that retrieve() with 'default' session doesn't apply session filter."""
-        with patch("ww.memory.procedural.get_embedding_provider", return_value=mock_embedding):
-            with patch("ww.memory.procedural.get_qdrant_store", return_value=mock_qdrant_store):
-                with patch("ww.memory.procedural.get_neo4j_store", return_value=mock_neo4j_store):
+        with patch("t4dm.memory.procedural.get_embedding_provider", return_value=mock_embedding):
+            with patch("t4dm.memory.procedural.get_qdrant_store", return_value=mock_qdrant_store):
+                with patch("t4dm.memory.procedural.get_neo4j_store", return_value=mock_neo4j_store):
                     mock_qdrant_store.search.return_value = []
 
                     procedural = ProceduralMemory("default")
@@ -556,9 +556,9 @@ class TestProceduralSessionIsolation:
         self, mock_embedding, mock_qdrant_store, mock_neo4j_store
     ):
         """Test that procedures from different sessions are isolated."""
-        with patch("ww.memory.procedural.get_embedding_provider", return_value=mock_embedding):
-            with patch("ww.memory.procedural.get_qdrant_store", return_value=mock_qdrant_store):
-                with patch("ww.memory.procedural.get_neo4j_store", return_value=mock_neo4j_store):
+        with patch("t4dm.memory.procedural.get_embedding_provider", return_value=mock_embedding):
+            with patch("t4dm.memory.procedural.get_qdrant_store", return_value=mock_qdrant_store):
+                with patch("t4dm.memory.procedural.get_neo4j_store", return_value=mock_neo4j_store):
                     trajectory = [{"action": "Step 1"}]
 
                     # Create in session-research
@@ -596,9 +596,9 @@ class TestProceduralSessionIsolation:
         self, mock_embedding, mock_qdrant_store, mock_neo4j_store
     ):
         """Test that domain filter is combined with session filter."""
-        with patch("ww.memory.procedural.get_embedding_provider", return_value=mock_embedding):
-            with patch("ww.memory.procedural.get_qdrant_store", return_value=mock_qdrant_store):
-                with patch("ww.memory.procedural.get_neo4j_store", return_value=mock_neo4j_store):
+        with patch("t4dm.memory.procedural.get_embedding_provider", return_value=mock_embedding):
+            with patch("t4dm.memory.procedural.get_qdrant_store", return_value=mock_qdrant_store):
+                with patch("t4dm.memory.procedural.get_neo4j_store", return_value=mock_neo4j_store):
                     mock_qdrant_store.search.return_value = []
 
                     procedural = ProceduralMemory("session-dev")
@@ -631,9 +631,9 @@ class TestCrossSessionIntegration:
         self, mock_embedding, mock_qdrant_store, mock_neo4j_store
     ):
         """Test that three concurrent sessions don't interfere."""
-        with patch("ww.memory.episodic.get_embedding_provider", return_value=mock_embedding):
-            with patch("ww.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
-                with patch("ww.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
+        with patch("t4dm.memory.episodic.get_embedding_provider", return_value=mock_embedding):
+            with patch("t4dm.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
+                with patch("t4dm.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
                     # Create three instances
                     episodic_a = EpisodicMemory("session-a")
                     episodic_b = EpisodicMemory("session-b")
@@ -668,9 +668,9 @@ class TestCrossSessionIntegration:
         self, mock_embedding, mock_qdrant_store, mock_neo4j_store
     ):
         """Test semantic memory with three concurrent sessions."""
-        with patch("ww.memory.semantic.get_embedding_provider", return_value=mock_embedding):
-            with patch("ww.memory.semantic.get_qdrant_store", return_value=mock_qdrant_store):
-                with patch("ww.memory.semantic.get_neo4j_store", return_value=mock_neo4j_store):
+        with patch("t4dm.memory.semantic.get_embedding_provider", return_value=mock_embedding):
+            with patch("t4dm.memory.semantic.get_qdrant_store", return_value=mock_qdrant_store):
+                with patch("t4dm.memory.semantic.get_neo4j_store", return_value=mock_neo4j_store):
                     semantic_a = SemanticMemory("session-1")
                     semantic_b = SemanticMemory("session-2")
                     semantic_c = SemanticMemory("session-3")
@@ -702,9 +702,9 @@ class TestCrossSessionIntegration:
         self, mock_embedding, mock_qdrant_store, mock_neo4j_store
     ):
         """Test procedural memory with three concurrent sessions."""
-        with patch("ww.memory.procedural.get_embedding_provider", return_value=mock_embedding):
-            with patch("ww.memory.procedural.get_qdrant_store", return_value=mock_qdrant_store):
-                with patch("ww.memory.procedural.get_neo4j_store", return_value=mock_neo4j_store):
+        with patch("t4dm.memory.procedural.get_embedding_provider", return_value=mock_embedding):
+            with patch("t4dm.memory.procedural.get_qdrant_store", return_value=mock_qdrant_store):
+                with patch("t4dm.memory.procedural.get_neo4j_store", return_value=mock_neo4j_store):
                     procedural_x = ProceduralMemory("session-x")
                     procedural_y = ProceduralMemory("session-y")
                     procedural_z = ProceduralMemory("session-z")
@@ -738,15 +738,15 @@ class TestCrossSessionIntegration:
         self, mock_embedding, mock_qdrant_store, mock_neo4j_store
     ):
         """Test that all three memory types respect session_filter override (mocked)."""
-        with patch("ww.memory.episodic.get_embedding_provider", return_value=mock_embedding):
-            with patch("ww.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
-                with patch("ww.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
-                    with patch("ww.memory.semantic.get_embedding_provider", return_value=mock_embedding):
-                        with patch("ww.memory.semantic.get_qdrant_store", return_value=mock_qdrant_store):
-                            with patch("ww.memory.semantic.get_neo4j_store", return_value=mock_neo4j_store):
-                                with patch("ww.memory.procedural.get_embedding_provider", return_value=mock_embedding):
-                                    with patch("ww.memory.procedural.get_qdrant_store", return_value=mock_qdrant_store):
-                                        with patch("ww.memory.procedural.get_neo4j_store", return_value=mock_neo4j_store):
+        with patch("t4dm.memory.episodic.get_embedding_provider", return_value=mock_embedding):
+            with patch("t4dm.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
+                with patch("t4dm.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
+                    with patch("t4dm.memory.semantic.get_embedding_provider", return_value=mock_embedding):
+                        with patch("t4dm.memory.semantic.get_qdrant_store", return_value=mock_qdrant_store):
+                            with patch("t4dm.memory.semantic.get_neo4j_store", return_value=mock_neo4j_store):
+                                with patch("t4dm.memory.procedural.get_embedding_provider", return_value=mock_embedding):
+                                    with patch("t4dm.memory.procedural.get_qdrant_store", return_value=mock_qdrant_store):
+                                        with patch("t4dm.memory.procedural.get_neo4j_store", return_value=mock_neo4j_store):
                                             mock_qdrant_store.search.return_value = []
                                             mock_neo4j_store.get_relationships = AsyncMock(return_value=[])
 
@@ -789,9 +789,9 @@ class TestPayloadStructure:
         self, mock_embedding, mock_qdrant_store, mock_neo4j_store
     ):
         """Verify episodic payload has all required fields."""
-        with patch("ww.memory.episodic.get_embedding_provider", return_value=mock_embedding):
-            with patch("ww.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
-                with patch("ww.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
+        with patch("t4dm.memory.episodic.get_embedding_provider", return_value=mock_embedding):
+            with patch("t4dm.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
+                with patch("t4dm.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
                     episodic = EpisodicMemory("test-session")
                     await episodic.initialize()
 
@@ -823,9 +823,9 @@ class TestPayloadStructure:
         self, mock_embedding, mock_qdrant_store, mock_neo4j_store
     ):
         """Verify semantic payload has all required fields."""
-        with patch("ww.memory.semantic.get_embedding_provider", return_value=mock_embedding):
-            with patch("ww.memory.semantic.get_qdrant_store", return_value=mock_qdrant_store):
-                with patch("ww.memory.semantic.get_neo4j_store", return_value=mock_neo4j_store):
+        with patch("t4dm.memory.semantic.get_embedding_provider", return_value=mock_embedding):
+            with patch("t4dm.memory.semantic.get_qdrant_store", return_value=mock_qdrant_store):
+                with patch("t4dm.memory.semantic.get_neo4j_store", return_value=mock_neo4j_store):
                     semantic = SemanticMemory("test-session")
                     await semantic.initialize()
 
@@ -854,9 +854,9 @@ class TestPayloadStructure:
         self, mock_embedding, mock_qdrant_store, mock_neo4j_store
     ):
         """Verify procedural payload has all required fields."""
-        with patch("ww.memory.procedural.get_embedding_provider", return_value=mock_embedding):
-            with patch("ww.memory.procedural.get_qdrant_store", return_value=mock_qdrant_store):
-                with patch("ww.memory.procedural.get_neo4j_store", return_value=mock_neo4j_store):
+        with patch("t4dm.memory.procedural.get_embedding_provider", return_value=mock_embedding):
+            with patch("t4dm.memory.procedural.get_qdrant_store", return_value=mock_qdrant_store):
+                with patch("t4dm.memory.procedural.get_neo4j_store", return_value=mock_neo4j_store):
                     procedural = ProceduralMemory("test-session")
                     await procedural.initialize()
 

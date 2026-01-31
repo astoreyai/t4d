@@ -14,7 +14,7 @@ Tests cover:
 import numpy as np
 import pytest
 
-from ww.nca.striatal_msn import (
+from t4dm.nca.striatal_msn import (
     StriatalMSN,
     MSNConfig,
     MSNPopulationState,

@@ -9,7 +9,7 @@ import numpy as np
 import pytest
 from datetime import datetime, timedelta
 
-from ww.nca.glymphatic import (
+from t4dm.nca.glymphatic import (
     GlymphaticConfig,
     GlymphaticSystem,
     WasteState,

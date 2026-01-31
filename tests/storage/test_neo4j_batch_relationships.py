@@ -2,8 +2,8 @@
 import pytest
 from unittest.mock import AsyncMock, MagicMock, patch
 
-from ww.storage.neo4j_store import Neo4jStore
-from ww.storage.resilience import CircuitBreaker, CircuitBreakerConfig
+from t4dm.storage.neo4j_store import Neo4jStore
+from t4dm.storage.resilience import CircuitBreaker, CircuitBreakerConfig
 
 
 class TestBatchCreateRelationships:

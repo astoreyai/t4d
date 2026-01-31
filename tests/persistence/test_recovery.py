@@ -10,16 +10,16 @@ import pytest
 from datetime import datetime
 from unittest.mock import AsyncMock, MagicMock, patch
 
-from ww.persistence.recovery import (
+from t4dm.persistence.recovery import (
     RecoveryMode,
     RecoveryResult,
     RecoveryManager,
     ColdStartConfig,
     ColdStartHelper,
 )
-from ww.persistence.checkpoint import Checkpoint
+from t4dm.persistence.checkpoint import Checkpoint
 from time import time
-from ww.persistence.wal import WALEntry, WALOperation
+from t4dm.persistence.wal import WALEntry, WALOperation
 
 
 # =============================================================================

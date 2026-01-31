@@ -13,7 +13,7 @@ from uuid import uuid4
 import numpy as np
 import pytest
 
-from ww.learning.vae_training import (
+from t4dm.learning.vae_training import (
     VAETrainingConfig,
     TrainingStats,
     VAEReplayTrainer,

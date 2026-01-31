@@ -15,28 +15,28 @@ class TestOTLPSecurityConfig:
 
     def test_insecure_mode_default(self):
         """Test that insecure mode is default."""
-        from ww.core.config import Settings
+        from t4dm.core.config import Settings
 
         settings = Settings(neo4j_password=TEST_PASSWORD)
         assert settings.otel_insecure is True
 
     def test_secure_mode_configurable(self):
         """Test that secure mode can be enabled."""
-        from ww.core.config import Settings
+        from t4dm.core.config import Settings
 
         settings = Settings(neo4j_password=TEST_PASSWORD, otel_insecure=False)
         assert settings.otel_insecure is False
 
     def test_cert_file_configurable(self):
         """Test that certificate file can be configured."""
-        from ww.core.config import Settings
+        from t4dm.core.config import Settings
 
         settings = Settings(neo4j_password=TEST_PASSWORD, otel_cert_file="/path/to/cert.pem")
         assert settings.otel_cert_file == "/path/to/cert.pem"
 
     def test_headers_configurable(self):
         """Test that headers can be configured."""
-        from ww.core.config import Settings
+        from t4dm.core.config import Settings
 
         settings = Settings(neo4j_password=TEST_PASSWORD, otel_headers={"Authorization": "Bearer token"})
         assert settings.otel_headers == {"Authorization": "Bearer token"}
@@ -47,17 +47,17 @@ class TestTracingConfiguration:
 
     def test_tracing_disabled_by_default(self):
         """Test that tracing is disabled by default."""
-        from ww.core.config import Settings
+        from t4dm.core.config import Settings
 
         settings = Settings(neo4j_password=TEST_PASSWORD)
         assert settings.otel_enabled is False
 
     def test_configure_tracing_disabled(self):
         """Test that configure_tracing returns None when disabled."""
-        from ww.core.config import Settings
-        from ww.observability.tracing import configure_tracing, shutdown_tracing
+        from t4dm.core.config import Settings
+        from t4dm.observability.tracing import configure_tracing, shutdown_tracing
 
-        with patch("ww.core.config.get_settings") as mock_settings:
+        with patch("t4dm.core.config.get_settings") as mock_settings:
             mock_settings.return_value = Settings(neo4j_password=TEST_PASSWORD, otel_enabled=False)
 
             try:
@@ -68,11 +68,11 @@ class TestTracingConfiguration:
 
     def test_configure_tracing_enabled_insecure(self):
         """Test tracing configuration in insecure mode."""
-        from ww.core.config import Settings
-        from ww.observability.tracing import configure_tracing, shutdown_tracing
+        from t4dm.core.config import Settings
+        from t4dm.observability.tracing import configure_tracing, shutdown_tracing
 
-        with patch("ww.core.config.get_settings") as mock_settings, \
-             patch("ww.observability.tracing.OTLPSpanExporter") as mock_exporter:
+        with patch("t4dm.core.config.get_settings") as mock_settings, \
+             patch("t4dm.observability.tracing.OTLPSpanExporter") as mock_exporter:
             mock_settings.return_value = Settings(
                 neo4j_password=TEST_PASSWORD,
                 otel_enabled=True,
@@ -92,11 +92,11 @@ class TestTracingConfiguration:
 
     def test_configure_tracing_with_headers(self):
         """Test tracing configuration with auth headers."""
-        from ww.core.config import Settings
-        from ww.observability.tracing import configure_tracing, shutdown_tracing
+        from t4dm.core.config import Settings
+        from t4dm.observability.tracing import configure_tracing, shutdown_tracing
 
-        with patch("ww.core.config.get_settings") as mock_settings, \
-             patch("ww.observability.tracing.OTLPSpanExporter") as mock_exporter:
+        with patch("t4dm.core.config.get_settings") as mock_settings, \
+             patch("t4dm.observability.tracing.OTLPSpanExporter") as mock_exporter:
             mock_settings.return_value = Settings(
                 neo4j_password=TEST_PASSWORD,
                 otel_enabled=True,
@@ -114,8 +114,8 @@ class TestTracingConfiguration:
 
     def test_configure_tracing_with_cert_file(self):
         """Test tracing configuration with custom certificate."""
-        from ww.core.config import Settings
-        from ww.observability.tracing import configure_tracing, shutdown_tracing
+        from t4dm.core.config import Settings
+        from t4dm.observability.tracing import configure_tracing, shutdown_tracing
 
         # Create a temporary certificate file
         with tempfile.NamedTemporaryFile(mode='w', suffix='.pem', delete=False) as f:
@@ -123,8 +123,8 @@ class TestTracingConfiguration:
             cert_path = f.name
 
         try:
-            with patch("ww.core.config.get_settings") as mock_settings, \
-                 patch("ww.observability.tracing.OTLPSpanExporter") as mock_exporter, \
+            with patch("t4dm.core.config.get_settings") as mock_settings, \
+                 patch("t4dm.observability.tracing.OTLPSpanExporter") as mock_exporter, \
                  patch("grpc.ssl_channel_credentials") as mock_creds:
                 mock_settings.return_value = Settings(
                     neo4j_password=TEST_PASSWORD,
@@ -145,11 +145,11 @@ class TestTracingConfiguration:
 
     def test_configure_tracing_secure_no_cert(self):
         """Test tracing configuration with system certificates."""
-        from ww.core.config import Settings
-        from ww.observability.tracing import configure_tracing, shutdown_tracing
+        from t4dm.core.config import Settings
+        from t4dm.observability.tracing import configure_tracing, shutdown_tracing
 
-        with patch("ww.core.config.get_settings") as mock_settings, \
-             patch("ww.observability.tracing.OTLPSpanExporter") as mock_exporter:
+        with patch("t4dm.core.config.get_settings") as mock_settings, \
+             patch("t4dm.observability.tracing.OTLPSpanExporter") as mock_exporter:
             mock_settings.return_value = Settings(
                 neo4j_password=TEST_PASSWORD,
                 otel_enabled=True,
@@ -172,14 +172,14 @@ class TestTracedDecorator:
 
     def test_traced_sync_function(self):
         """Test traced decorator on sync function."""
-        from ww.core.config import Settings
-        from ww.observability.tracing import shutdown_tracing, traced_sync
+        from t4dm.core.config import Settings
+        from t4dm.observability.tracing import shutdown_tracing, traced_sync
 
         @traced_sync()
         def my_function():
             return "result"
 
-        with patch("ww.core.config.get_settings") as mock_settings:
+        with patch("t4dm.core.config.get_settings") as mock_settings:
             mock_settings.return_value = Settings(neo4j_password=TEST_PASSWORD, otel_enabled=False)
 
             try:
@@ -192,14 +192,14 @@ class TestTracedDecorator:
     @pytest.mark.asyncio
     async def test_traced_async_function(self):
         """Test traced decorator on async function."""
-        from ww.core.config import Settings
-        from ww.observability.tracing import shutdown_tracing, traced
+        from t4dm.core.config import Settings
+        from t4dm.observability.tracing import shutdown_tracing, traced
 
         @traced()
         async def my_async_function():
             return "async_result"
 
-        with patch("ww.core.config.get_settings") as mock_settings:
+        with patch("t4dm.core.config.get_settings") as mock_settings:
             mock_settings.return_value = Settings(neo4j_password=TEST_PASSWORD, otel_enabled=False)
 
             try:
@@ -210,14 +210,14 @@ class TestTracedDecorator:
 
     def test_traced_with_custom_name(self):
         """Test traced decorator with custom span name."""
-        from ww.core.config import Settings
-        from ww.observability.tracing import shutdown_tracing, traced_sync
+        from t4dm.core.config import Settings
+        from t4dm.observability.tracing import shutdown_tracing, traced_sync
 
         @traced_sync(name="custom_span")
         def my_function():
             return "result"
 
-        with patch("ww.core.config.get_settings") as mock_settings:
+        with patch("t4dm.core.config.get_settings") as mock_settings:
             mock_settings.return_value = Settings(neo4j_password=TEST_PASSWORD, otel_enabled=False)
 
             try:
@@ -228,14 +228,14 @@ class TestTracedDecorator:
 
     def test_traced_with_attributes(self):
         """Test traced decorator with attributes."""
-        from ww.core.config import Settings
-        from ww.observability.tracing import shutdown_tracing, traced_sync
+        from t4dm.core.config import Settings
+        from t4dm.observability.tracing import shutdown_tracing, traced_sync
 
         @traced_sync(attributes={"key": "value"})
         def my_function():
             return "result"
 
-        with patch("ww.core.config.get_settings") as mock_settings:
+        with patch("t4dm.core.config.get_settings") as mock_settings:
             mock_settings.return_value = Settings(neo4j_password=TEST_PASSWORD, otel_enabled=False)
 
             try:
@@ -246,14 +246,14 @@ class TestTracedDecorator:
 
     def test_traced_exception_handling(self):
         """Test traced decorator records exceptions."""
-        from ww.core.config import Settings
-        from ww.observability.tracing import shutdown_tracing, traced_sync
+        from t4dm.core.config import Settings
+        from t4dm.observability.tracing import shutdown_tracing, traced_sync
 
         @traced_sync()
         def failing_function():
             raise ValueError("Test error")
 
-        with patch("ww.core.config.get_settings") as mock_settings:
+        with patch("t4dm.core.config.get_settings") as mock_settings:
             mock_settings.return_value = Settings(neo4j_password=TEST_PASSWORD, otel_enabled=False)
 
             try:
@@ -268,14 +268,14 @@ class TestBatchExportConfig:
 
     def test_batch_delay_configurable(self):
         """Test batch delay is configurable."""
-        from ww.core.config import Settings
+        from t4dm.core.config import Settings
 
         settings = Settings(neo4j_password=TEST_PASSWORD, otel_batch_delay_ms=10000)
         assert settings.otel_batch_delay_ms == 10000
 
     def test_batch_size_configurable(self):
         """Test batch size is configurable."""
-        from ww.core.config import Settings
+        from t4dm.core.config import Settings
 
         settings = Settings(neo4j_password=TEST_PASSWORD, otel_max_export_batch_size=1000)
         assert settings.otel_max_export_batch_size == 1000
@@ -284,7 +284,7 @@ class TestBatchExportConfig:
         """Test batch delay validation for too small values."""
         from pydantic import ValidationError
 
-        from ww.core.config import Settings
+        from t4dm.core.config import Settings
 
         with pytest.raises(ValidationError):
             Settings(otel_batch_delay_ms=50)  # Too small
@@ -293,7 +293,7 @@ class TestBatchExportConfig:
         """Test batch delay validation for too large values."""
         from pydantic import ValidationError
 
-        from ww.core.config import Settings
+        from t4dm.core.config import Settings
 
         with pytest.raises(ValidationError):
             Settings(otel_batch_delay_ms=100000)  # Too large
@@ -302,7 +302,7 @@ class TestBatchExportConfig:
         """Test batch size validation for zero."""
         from pydantic import ValidationError
 
-        from ww.core.config import Settings
+        from t4dm.core.config import Settings
 
         with pytest.raises(ValidationError):
             Settings(otel_max_export_batch_size=0)
@@ -311,7 +311,7 @@ class TestBatchExportConfig:
         """Test batch size validation for too large values."""
         from pydantic import ValidationError
 
-        from ww.core.config import Settings
+        from t4dm.core.config import Settings
 
         with pytest.raises(ValidationError):
             Settings(otel_max_export_batch_size=20000)
@@ -322,11 +322,11 @@ class TestTracerProviderCaching:
 
     def test_provider_cached_on_reconfig(self):
         """Test that provider is cached and not recreated."""
-        from ww.core.config import Settings
-        from ww.observability.tracing import configure_tracing, shutdown_tracing
+        from t4dm.core.config import Settings
+        from t4dm.observability.tracing import configure_tracing, shutdown_tracing
 
-        with patch("ww.core.config.get_settings") as mock_settings, \
-             patch("ww.observability.tracing.OTLPSpanExporter") as mock_exporter:
+        with patch("t4dm.core.config.get_settings") as mock_settings, \
+             patch("t4dm.observability.tracing.OTLPSpanExporter") as mock_exporter:
             mock_settings.return_value = Settings(
                 neo4j_password=TEST_PASSWORD,
                 otel_enabled=True,
@@ -348,11 +348,11 @@ class TestTracerProviderCaching:
 
     def test_provider_recreated_after_shutdown(self):
         """Test that provider can be recreated after shutdown."""
-        from ww.core.config import Settings
-        from ww.observability.tracing import configure_tracing, shutdown_tracing
+        from t4dm.core.config import Settings
+        from t4dm.observability.tracing import configure_tracing, shutdown_tracing
 
-        with patch("ww.core.config.get_settings") as mock_settings, \
-             patch("ww.observability.tracing.OTLPSpanExporter") as mock_exporter:
+        with patch("t4dm.core.config.get_settings") as mock_settings, \
+             patch("t4dm.observability.tracing.OTLPSpanExporter") as mock_exporter:
             mock_settings.return_value = Settings(
                 neo4j_password=TEST_PASSWORD,
                 otel_enabled=True,
@@ -379,12 +379,12 @@ class TestBatchProcessorConfig:
 
     def test_batch_processor_uses_config_values(self):
         """Test that batch processor uses config values."""
-        from ww.core.config import Settings
-        from ww.observability.tracing import configure_tracing, shutdown_tracing
+        from t4dm.core.config import Settings
+        from t4dm.observability.tracing import configure_tracing, shutdown_tracing
 
-        with patch("ww.core.config.get_settings") as mock_settings, \
-             patch("ww.observability.tracing.OTLPSpanExporter") as mock_exporter, \
-             patch("ww.observability.tracing.BatchSpanProcessor") as mock_processor:
+        with patch("t4dm.core.config.get_settings") as mock_settings, \
+             patch("t4dm.observability.tracing.OTLPSpanExporter") as mock_exporter, \
+             patch("t4dm.observability.tracing.BatchSpanProcessor") as mock_processor:
             mock_settings.return_value = Settings(
                 neo4j_password=TEST_PASSWORD,
                 otel_enabled=True,
@@ -410,10 +410,10 @@ class TestGetTracer:
 
     def test_get_tracer_auto_initializes(self):
         """Test that get_tracer auto-initializes if not configured."""
-        from ww.core.config import Settings
-        from ww.observability.tracing import get_tracer, shutdown_tracing
+        from t4dm.core.config import Settings
+        from t4dm.observability.tracing import get_tracer, shutdown_tracing
 
-        with patch("ww.core.config.get_settings") as mock_settings:
+        with patch("t4dm.core.config.get_settings") as mock_settings:
             mock_settings.return_value = Settings(neo4j_password=TEST_PASSWORD, otel_enabled=False)
 
             try:
@@ -424,10 +424,10 @@ class TestGetTracer:
 
     def test_get_tracer_with_name(self):
         """Test that get_tracer accepts custom name."""
-        from ww.core.config import Settings
-        from ww.observability.tracing import get_tracer, shutdown_tracing
+        from t4dm.core.config import Settings
+        from t4dm.observability.tracing import get_tracer, shutdown_tracing
 
-        with patch("ww.core.config.get_settings") as mock_settings:
+        with patch("t4dm.core.config.get_settings") as mock_settings:
             mock_settings.return_value = Settings(neo4j_password=TEST_PASSWORD, otel_enabled=False)
 
             try:
@@ -442,11 +442,11 @@ class TestInitTracingBackwardCompat:
 
     def test_init_tracing_calls_configure(self):
         """Test that init_tracing calls configure_tracing."""
-        from ww.core.config import Settings
-        from ww.observability.tracing import init_tracing, shutdown_tracing
+        from t4dm.core.config import Settings
+        from t4dm.observability.tracing import init_tracing, shutdown_tracing
 
-        with patch("ww.core.config.get_settings") as mock_settings, \
-             patch("ww.observability.tracing.OTLPSpanExporter") as mock_exporter:
+        with patch("t4dm.core.config.get_settings") as mock_settings, \
+             patch("t4dm.observability.tracing.OTLPSpanExporter") as mock_exporter:
             mock_settings.return_value = Settings(
                 neo4j_password=TEST_PASSWORD,
                 otel_enabled=True,
@@ -462,10 +462,10 @@ class TestInitTracingBackwardCompat:
 
     def test_init_tracing_disabled_returns_noop(self):
         """Test that init_tracing returns no-op tracer when disabled."""
-        from ww.core.config import Settings
-        from ww.observability.tracing import init_tracing, shutdown_tracing
+        from t4dm.core.config import Settings
+        from t4dm.observability.tracing import init_tracing, shutdown_tracing
 
-        with patch("ww.core.config.get_settings") as mock_settings:
+        with patch("t4dm.core.config.get_settings") as mock_settings:
             mock_settings.return_value = Settings(neo4j_password=TEST_PASSWORD, otel_enabled=False)
 
             try:

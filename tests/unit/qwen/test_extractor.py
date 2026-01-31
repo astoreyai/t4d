@@ -3,7 +3,7 @@
 import torch
 import pytest
 
-from ww.qwen.extractor import HiddenStateExtractor
+from t4dm.qwen.extractor import HiddenStateExtractor
 
 
 class TestExtractor:

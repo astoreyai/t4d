@@ -4,7 +4,7 @@ import pytest
 from datetime import datetime
 from uuid import uuid4
 
-from ww.api.routes.entities import (
+from t4dm.api.routes.entities import (
     EntityCreate,
     EntityResponse,
     EntityList,
@@ -14,7 +14,7 @@ from ww.api.routes.entities import (
     SpreadActivationRequest,
     ActivationResponse,
 )
-from ww.core.types import EntityType, RelationType
+from t4dm.core.types import EntityType, RelationType
 
 
 class TestEntityCreate:

@@ -10,12 +10,12 @@ from datetime import datetime
 from uuid import uuid4
 from unittest.mock import MagicMock, AsyncMock, patch
 
-from ww.memory.episodic import (
+from t4dm.memory.episodic import (
     LearnedFusionWeights,
     LearnedReranker,
     _validate_uuid,
 )
-from ww.core.types import Episode, EpisodeContext, Outcome, ScoredResult
+from t4dm.core.types import Episode, EpisodeContext, Outcome, ScoredResult
 
 
 # =============================================================================
@@ -563,7 +563,7 @@ class TestEpisodeModel:
 # =============================================================================
 
 
-from ww.consolidation.service import (
+from t4dm.consolidation.service import (
     TriggerReason,
     SchedulerState,
     ConsolidationTrigger,

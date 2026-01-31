@@ -1,4 +1,4 @@
-# World Weaver REST API Server
+# T4DM REST API Server
 # Multi-stage build for minimal production image
 
 # Build stage
@@ -30,7 +30,7 @@ FROM python:3.11-slim as production
 WORKDIR /app
 
 # Create non-root user for security
-RUN groupadd -r ww && useradd -r -g ww ww
+RUN groupadd -r t4dm && useradd -r -g t4dm t4dm
 
 # Install runtime dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -47,21 +47,21 @@ COPY --from=builder /app/pyproject.toml ./
 
 # Create directories for models and data
 RUN mkdir -p /app/models /app/data && \
-    chown -R ww:ww /app
+    chown -R t4dm:t4dm /app
 
 # Switch to non-root user
-USER ww
+USER t4dm
 
 # Environment configuration
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
-    WW_API_HOST=0.0.0.0 \
-    WW_API_PORT=8765 \
-    WW_EMBEDDING_CACHE_DIR=/app/models
+    T4DM_API_HOST=0.0.0.0 \
+    T4DM_API_PORT=8765 \
+    T4DM_EMBEDDING_CACHE_DIR=/app/models
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
-    CMD curl -f http://localhost:${WW_API_PORT}/api/v1/health || exit 1
+    CMD curl -f http://localhost:${T4DM_API_PORT}/api/v1/health || exit 1
 
 # Expose port
 EXPOSE 8765

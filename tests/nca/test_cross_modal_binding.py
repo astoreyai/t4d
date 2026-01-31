@@ -7,7 +7,7 @@ Tests gamma synchrony-based binding across episodic, semantic, and procedural me
 import numpy as np
 import pytest
 
-from ww.nca.cross_modal_binding import (
+from t4dm.nca.cross_modal_binding import (
     CrossModalBindingConfig,
     ModalityProjector,
     GammaSynchronyDetector,

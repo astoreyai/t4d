@@ -19,7 +19,7 @@ class TestSTDPLearner:
 
     def test_stdp_learner_initialization(self):
         """STDPLearner initializes with default config."""
-        from ww.learning.stdp import STDPLearner, STDPConfig
+        from t4dm.learning.stdp import STDPLearner, STDPConfig
 
         learner = STDPLearner()
         assert learner.config.a_plus == 0.01
@@ -30,7 +30,7 @@ class TestSTDPLearner:
 
     def test_stdp_custom_config(self):
         """STDPLearner accepts custom config."""
-        from ww.learning.stdp import STDPLearner, STDPConfig
+        from t4dm.learning.stdp import STDPLearner, STDPConfig
 
         config = STDPConfig(a_plus=0.02, a_minus=0.03, tau_plus=10.0)
         learner = STDPLearner(config)
@@ -41,7 +41,7 @@ class TestSTDPLearner:
 
     def test_record_spike(self):
         """record_spike stores spike events."""
-        from ww.learning.stdp import STDPLearner
+        from t4dm.learning.stdp import STDPLearner
 
         learner = STDPLearner()
         now = datetime.now()
@@ -55,7 +55,7 @@ class TestSTDPLearner:
 
     def test_record_spike_with_strength(self):
         """record_spike stores spike strength."""
-        from ww.learning.stdp import STDPLearner
+        from t4dm.learning.stdp import STDPLearner
 
         learner = STDPLearner()
         learner.record_spike("neuron_a", strength=0.5)
@@ -65,14 +65,14 @@ class TestSTDPLearner:
 
     def test_get_latest_spike_returns_none_for_unknown(self):
         """get_latest_spike returns None for unknown entity."""
-        from ww.learning.stdp import STDPLearner
+        from t4dm.learning.stdp import STDPLearner
 
         learner = STDPLearner()
         assert learner.get_latest_spike("unknown") is None
 
     def test_compute_stdp_delta_ltp(self):
         """Positive delta_t produces LTP (positive delta)."""
-        from ww.learning.stdp import STDPLearner
+        from t4dm.learning.stdp import STDPLearner
 
         learner = STDPLearner()
 
@@ -82,7 +82,7 @@ class TestSTDPLearner:
 
     def test_compute_stdp_delta_ltd(self):
         """Negative delta_t produces LTD (negative delta)."""
-        from ww.learning.stdp import STDPLearner
+        from t4dm.learning.stdp import STDPLearner
 
         learner = STDPLearner()
 
@@ -92,7 +92,7 @@ class TestSTDPLearner:
 
     def test_compute_stdp_delta_exponential_decay(self):
         """STDP delta decreases with timing difference."""
-        from ww.learning.stdp import STDPLearner
+        from t4dm.learning.stdp import STDPLearner
 
         learner = STDPLearner()
 
@@ -106,7 +106,7 @@ class TestSTDPLearner:
 
     def test_compute_stdp_delta_simultaneous(self):
         """Simultaneous spikes produce no change."""
-        from ww.learning.stdp import STDPLearner
+        from t4dm.learning.stdp import STDPLearner
 
         learner = STDPLearner()
         delta = learner.compute_stdp_delta(0.0)
@@ -114,7 +114,7 @@ class TestSTDPLearner:
 
     def test_compute_update_ltp(self):
         """compute_update produces LTP for pre-before-post."""
-        from ww.learning.stdp import STDPLearner
+        from t4dm.learning.stdp import STDPLearner
 
         learner = STDPLearner()
         now = datetime.now()
@@ -133,7 +133,7 @@ class TestSTDPLearner:
 
     def test_compute_update_ltd(self):
         """compute_update produces LTD for post-before-pre."""
-        from ww.learning.stdp import STDPLearner
+        from t4dm.learning.stdp import STDPLearner
 
         learner = STDPLearner()
         now = datetime.now()
@@ -152,7 +152,7 @@ class TestSTDPLearner:
 
     def test_compute_update_respects_weight_bounds(self):
         """compute_update respects min/max weight bounds."""
-        from ww.learning.stdp import STDPLearner, STDPConfig
+        from t4dm.learning.stdp import STDPLearner, STDPConfig
 
         config = STDPConfig(min_weight=0.1, max_weight=0.9, a_minus=0.5)
         learner = STDPLearner(config)
@@ -168,7 +168,7 @@ class TestSTDPLearner:
 
     def test_compute_update_returns_none_outside_window(self):
         """compute_update returns None for spikes outside STDP window."""
-        from ww.learning.stdp import STDPLearner, STDPConfig
+        from t4dm.learning.stdp import STDPLearner, STDPConfig
 
         config = STDPConfig(spike_window_ms=50.0)
         learner = STDPLearner(config)
@@ -182,7 +182,7 @@ class TestSTDPLearner:
 
     def test_compute_update_returns_none_missing_spikes(self):
         """compute_update returns None when spikes are missing."""
-        from ww.learning.stdp import STDPLearner
+        from t4dm.learning.stdp import STDPLearner
 
         learner = STDPLearner()
         learner.record_spike("pre")
@@ -192,7 +192,7 @@ class TestSTDPLearner:
 
     def test_compute_all_updates(self):
         """compute_all_updates processes multiple presynaptic neurons."""
-        from ww.learning.stdp import STDPLearner
+        from t4dm.learning.stdp import STDPLearner
 
         learner = STDPLearner()
         now = datetime.now()
@@ -214,7 +214,7 @@ class TestSTDPLearner:
 
     def test_get_set_weight(self):
         """get_weight and set_weight work correctly."""
-        from ww.learning.stdp import STDPLearner
+        from t4dm.learning.stdp import STDPLearner
 
         learner = STDPLearner()
 
@@ -227,7 +227,7 @@ class TestSTDPLearner:
 
     def test_weight_decay(self):
         """apply_weight_decay moves weights toward baseline."""
-        from ww.learning.stdp import STDPLearner, STDPConfig
+        from t4dm.learning.stdp import STDPLearner, STDPConfig
 
         config = STDPConfig(weight_decay=0.1)
         learner = STDPLearner(config)
@@ -244,7 +244,7 @@ class TestSTDPLearner:
 
     def test_clear_spikes(self):
         """clear_spikes removes spike history."""
-        from ww.learning.stdp import STDPLearner
+        from t4dm.learning.stdp import STDPLearner
 
         learner = STDPLearner()
         learner.record_spike("a")
@@ -259,7 +259,7 @@ class TestSTDPLearner:
 
     def test_get_stats(self):
         """get_stats returns meaningful statistics."""
-        from ww.learning.stdp import STDPLearner
+        from t4dm.learning.stdp import STDPLearner
 
         learner = STDPLearner()
         now = datetime.now()
@@ -279,7 +279,7 @@ class TestSTDPLearner:
 
     def test_save_and_load_state(self):
         """State can be saved and loaded."""
-        from ww.learning.stdp import STDPLearner
+        from t4dm.learning.stdp import STDPLearner
 
         learner = STDPLearner()
         learner.set_weight("a", "b", 0.7)
@@ -299,7 +299,7 @@ class TestPairBasedSTDP:
 
     def test_pair_based_avoids_double_updates(self):
         """PairBasedSTDP avoids updating same spike pair twice."""
-        from ww.learning.stdp import PairBasedSTDP
+        from t4dm.learning.stdp import PairBasedSTDP
 
         learner = PairBasedSTDP()
         now = datetime.now()
@@ -322,7 +322,7 @@ class TestPairBasedSTDP:
 
     def test_pair_based_new_spike_triggers_update(self):
         """PairBasedSTDP updates when new spike arrives."""
-        from ww.learning.stdp import PairBasedSTDP
+        from t4dm.learning.stdp import PairBasedSTDP
 
         learner = PairBasedSTDP()
         now = datetime.now()
@@ -344,7 +344,7 @@ class TestTripletSTDP:
 
     def test_triplet_stdp_initialization(self):
         """TripletSTDP initializes with triplet parameters."""
-        from ww.learning.stdp import TripletSTDP
+        from t4dm.learning.stdp import TripletSTDP
 
         learner = TripletSTDP(
             triplet_a_plus=0.008,
@@ -358,7 +358,7 @@ class TestTripletSTDP:
 
     def test_triplet_ltp_enhancement(self):
         """Post-Pre-Post triplet enhances LTP."""
-        from ww.learning.stdp import TripletSTDP, STDPLearner
+        from t4dm.learning.stdp import TripletSTDP, STDPLearner
 
         triplet = TripletSTDP()
         pair = STDPLearner()  # For comparison
@@ -386,7 +386,7 @@ class TestSTDPSingleton:
 
     def test_get_stdp_learner_returns_singleton(self):
         """get_stdp_learner returns same instance."""
-        from ww.learning.stdp import get_stdp_learner, reset_stdp_learner
+        from t4dm.learning.stdp import get_stdp_learner, reset_stdp_learner
 
         reset_stdp_learner()
 
@@ -397,7 +397,7 @@ class TestSTDPSingleton:
 
     def test_reset_stdp_learner_creates_new_instance(self):
         """reset_stdp_learner clears the singleton."""
-        from ww.learning.stdp import get_stdp_learner, reset_stdp_learner
+        from t4dm.learning.stdp import get_stdp_learner, reset_stdp_learner
 
         learner1 = get_stdp_learner()
         reset_stdp_learner()

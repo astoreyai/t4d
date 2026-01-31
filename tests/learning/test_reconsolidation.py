@@ -5,7 +5,7 @@ import numpy as np
 from datetime import datetime, timedelta
 from uuid import uuid4
 
-from ww.learning.reconsolidation import (
+from t4dm.learning.reconsolidation import (
     ReconsolidationUpdate,
     ReconsolidationEngine,
     reconsolidate,
@@ -828,7 +828,7 @@ class TestDopamineModulatedReconsolidation:
 
     def test_init_default(self):
         """Test default initialization."""
-        from ww.learning.reconsolidation import DopamineModulatedReconsolidation
+        from t4dm.learning.reconsolidation import DopamineModulatedReconsolidation
 
         dmr = DopamineModulatedReconsolidation()
 
@@ -838,7 +838,7 @@ class TestDopamineModulatedReconsolidation:
 
     def test_init_custom(self):
         """Test custom initialization."""
-        from ww.learning.reconsolidation import DopamineModulatedReconsolidation
+        from t4dm.learning.reconsolidation import DopamineModulatedReconsolidation
 
         dmr = DopamineModulatedReconsolidation(
             base_learning_rate=0.05,
@@ -854,7 +854,7 @@ class TestDopamineModulatedReconsolidation:
 
     def test_update_positive_outcome(self):
         """Test update with positive outcome."""
-        from ww.learning.reconsolidation import DopamineModulatedReconsolidation
+        from t4dm.learning.reconsolidation import DopamineModulatedReconsolidation
 
         dmr = DopamineModulatedReconsolidation(cooldown_hours=0.0)
         memory_id = uuid4()
@@ -875,7 +875,7 @@ class TestDopamineModulatedReconsolidation:
 
     def test_update_with_importance(self):
         """Test update with importance protection."""
-        from ww.learning.reconsolidation import DopamineModulatedReconsolidation
+        from t4dm.learning.reconsolidation import DopamineModulatedReconsolidation
 
         dmr = DopamineModulatedReconsolidation(cooldown_hours=0.0)
         memory = np.random.randn(64)
@@ -907,7 +907,7 @@ class TestDopamineModulatedReconsolidation:
 
     def test_batch_update(self):
         """Test batch update with multiple memories."""
-        from ww.learning.reconsolidation import DopamineModulatedReconsolidation
+        from t4dm.learning.reconsolidation import DopamineModulatedReconsolidation
 
         dmr = DopamineModulatedReconsolidation(cooldown_hours=0.0)
         mem1, mem2 = uuid4(), uuid4()
@@ -931,7 +931,7 @@ class TestDopamineModulatedReconsolidation:
 
     def test_batch_update_with_importance(self):
         """Test batch update with per-memory importance."""
-        from ww.learning.reconsolidation import DopamineModulatedReconsolidation
+        from t4dm.learning.reconsolidation import DopamineModulatedReconsolidation
 
         dmr = DopamineModulatedReconsolidation(cooldown_hours=0.0)
         mem1, mem2 = uuid4(), uuid4()
@@ -952,7 +952,7 @@ class TestDopamineModulatedReconsolidation:
 
     def test_get_stats(self):
         """Test get_stats returns combined statistics."""
-        from ww.learning.reconsolidation import DopamineModulatedReconsolidation
+        from t4dm.learning.reconsolidation import DopamineModulatedReconsolidation
 
         dmr = DopamineModulatedReconsolidation(cooldown_hours=0.0)
         memory = np.random.randn(64)
@@ -978,7 +978,7 @@ class TestNeuromodulatorIntegratedReconsolidation:
 
     def test_init_default(self):
         """Test default initialization creates orchestra."""
-        from ww.learning.reconsolidation import NeuromodulatorIntegratedReconsolidation
+        from t4dm.learning.reconsolidation import NeuromodulatorIntegratedReconsolidation
 
         nir = NeuromodulatorIntegratedReconsolidation()
 
@@ -987,8 +987,8 @@ class TestNeuromodulatorIntegratedReconsolidation:
 
     def test_init_with_orchestra(self):
         """Test initialization with provided orchestra."""
-        from ww.learning.reconsolidation import NeuromodulatorIntegratedReconsolidation
-        from ww.learning.neuromodulators import NeuromodulatorOrchestra
+        from t4dm.learning.reconsolidation import NeuromodulatorIntegratedReconsolidation
+        from t4dm.learning.neuromodulators import NeuromodulatorOrchestra
 
         orchestra = NeuromodulatorOrchestra()
         nir = NeuromodulatorIntegratedReconsolidation(orchestra=orchestra)
@@ -997,7 +997,7 @@ class TestNeuromodulatorIntegratedReconsolidation:
 
     def test_update_positive_outcome(self):
         """Test update with positive outcome."""
-        from ww.learning.reconsolidation import NeuromodulatorIntegratedReconsolidation
+        from t4dm.learning.reconsolidation import NeuromodulatorIntegratedReconsolidation
 
         nir = NeuromodulatorIntegratedReconsolidation(cooldown_hours=0.0)
         memory_id = uuid4()
@@ -1019,7 +1019,7 @@ class TestNeuromodulatorIntegratedReconsolidation:
 
     def test_batch_update(self):
         """Test batch update with multiple memories."""
-        from ww.learning.reconsolidation import NeuromodulatorIntegratedReconsolidation
+        from t4dm.learning.reconsolidation import NeuromodulatorIntegratedReconsolidation
 
         nir = NeuromodulatorIntegratedReconsolidation(cooldown_hours=0.0)
         mem1, mem2 = uuid4(), uuid4()
@@ -1040,7 +1040,7 @@ class TestNeuromodulatorIntegratedReconsolidation:
 
     def test_batch_update_with_importance(self):
         """Test batch update with per-memory importance."""
-        from ww.learning.reconsolidation import NeuromodulatorIntegratedReconsolidation
+        from t4dm.learning.reconsolidation import NeuromodulatorIntegratedReconsolidation
 
         nir = NeuromodulatorIntegratedReconsolidation(cooldown_hours=0.0)
         mem1, mem2 = uuid4(), uuid4()
@@ -1061,7 +1061,7 @@ class TestNeuromodulatorIntegratedReconsolidation:
 
     def test_get_stats(self):
         """Test get_stats returns combined statistics."""
-        from ww.learning.reconsolidation import NeuromodulatorIntegratedReconsolidation
+        from t4dm.learning.reconsolidation import NeuromodulatorIntegratedReconsolidation
 
         nir = NeuromodulatorIntegratedReconsolidation()
 

@@ -4,7 +4,7 @@ import pytest
 import numpy as np
 from datetime import datetime, timedelta
 
-from ww.visualization.neuromodulator_state import (
+from t4dm.visualization.neuromodulator_state import (
     NeuromodulatorSnapshot,
     NeuromodulatorDashboard,
 )

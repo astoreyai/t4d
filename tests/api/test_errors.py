@@ -3,7 +3,7 @@
 import pytest
 import re
 
-from ww.api.errors import (
+from t4dm.api.errors import (
     sanitize_error,
     create_error_response,
     SENSITIVE_PATTERNS,

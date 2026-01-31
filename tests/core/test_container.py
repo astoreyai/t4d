@@ -8,7 +8,7 @@ import asyncio
 import pytest
 import threading
 from unittest.mock import Mock, MagicMock
-from ww.core.container import (
+from t4dm.core.container import (
     Container,
     get_container,
     configure_production,

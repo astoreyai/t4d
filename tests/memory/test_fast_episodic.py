@@ -8,8 +8,8 @@ import time
 from uuid import uuid4
 from datetime import datetime
 
-from ww.memory.fast_episodic import FastEpisodicStore, FastEpisodicConfig, MAX_CAPACITY
-from ww.core.types import Episode, EpisodeContext, Outcome
+from t4dm.memory.fast_episodic import FastEpisodicStore, FastEpisodicConfig, MAX_CAPACITY
+from t4dm.core.types import Episode, EpisodeContext, Outcome
 
 
 class TestFastEpisodicStore:

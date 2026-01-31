@@ -3,7 +3,7 @@
 import pytest
 import torch
 
-from ww.spiking.cortical_block import CorticalBlock
+from t4dm.spiking.cortical_block import CorticalBlock
 
 
 class TestCorticalBlock:

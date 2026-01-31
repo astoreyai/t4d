@@ -14,13 +14,13 @@ import numpy as np
 import pytest
 import torch
 
-from ww.spiking.cortical_stack import CorticalStack
-from ww.storage.t4dx.engine import T4DXEngine
-from ww.storage.t4dx.types import EdgeRecord, ItemRecord
-from ww.consolidation.nrem_phase import NREMPhase
-from ww.consolidation.rem_phase import REMPhase
-from ww.consolidation.prune_phase import PruneConfig, PrunePhase
-from ww.consolidation.sleep_cycle_v2 import SleepCycleV2, SleepCycleV2Config
+from t4dm.spiking.cortical_stack import CorticalStack
+from t4dm.storage.t4dx.engine import T4DXEngine
+from t4dm.storage.t4dx.types import EdgeRecord, ItemRecord
+from t4dm.consolidation.nrem_phase import NREMPhase
+from t4dm.consolidation.rem_phase import REMPhase
+from t4dm.consolidation.prune_phase import PruneConfig, PrunePhase
+from t4dm.consolidation.sleep_cycle_v2 import SleepCycleV2, SleepCycleV2Config
 
 
 DIM = 32
