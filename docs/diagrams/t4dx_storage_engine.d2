@@ -1,0 +1,209 @@
+direction: down
+
+# ═══════════════════════════════════════════════════════════
+# T4DX STORAGE ENGINE ARCHITECTURE
+# LSM-style embedded spatiotemporal database
+# ═══════════════════════════════════════════════════════════
+
+style.fill: "#0d1117"
+
+# ═══════════════════════════════════════════════════
+# WRITE PATH
+# ═══════════════════════════════════════════════════
+
+ops: "9 Public Operations" {
+  shape: rectangle
+  style.fill: "#1a1a2e"
+  style.stroke: "#6c757d"
+  style.font-color: "#e8e8f0"
+  style.border-radius: 4
+
+  insert: "INSERT" {style.fill: "#27ae60"; style.font-color: "#fff"}
+  get: "GET" {style.fill: "#3498db"; style.font-color: "#fff"}
+  search: "SEARCH" {style.fill: "#3498db"; style.font-color: "#fff"}
+  update_f: "UPDATE_FIELDS" {style.fill: "#f39c12"; style.font-color: "#fff"}
+  update_e: "UPDATE_EDGE_WEIGHT" {style.fill: "#f39c12"; style.font-color: "#fff"}
+  traverse: "TRAVERSE" {style.fill: "#3498db"; style.font-color: "#fff"}
+  scan: "SCAN" {style.fill: "#3498db"; style.font-color: "#fff"}
+  delete: "DELETE" {style.fill: "#e74c3c"; style.font-color: "#fff"}
+  batch: "BATCH_SCALE" {style.fill: "#f39c12"; style.font-color: "#fff"}
+}
+
+# ═══════════════════════════════════════════════════
+# WAL (Write-Ahead Log)
+# ═══════════════════════════════════════════════════
+
+wal: "Write-Ahead Log\n(JSON-lines, fsync)" {
+  shape: cylinder
+  style.fill: "#4a0a0a"
+  style.stroke: "#e74c3c"
+  style.font-color: "#e8e8f0"
+}
+
+# ═══════════════════════════════════════════════════
+# MEMTABLE (In-Memory Buffer)
+# ═══════════════════════════════════════════════════
+
+memtable: "MemTable (mutable, in-memory)" {
+  style.fill: "#1a2e1a"
+  style.stroke: "#27ae60"
+  style.font-color: "#e8e8f0"
+  style.border-radius: 6
+
+  items: "items: dict[bytes, ItemRecord]" {
+    style.fill: "#1f3a1f"
+    style.stroke: "#2ecc71"
+    style.font-color: "#e8e8f0"
+  }
+  edges: "edges: list[EdgeRecord]" {
+    style.fill: "#1f3a1f"
+    style.stroke: "#2ecc71"
+    style.font-color: "#e8e8f0"
+  }
+  overlays: "field_overlays\n(κ mutations, access_count)" {
+    style.fill: "#1f3a1f"
+    style.stroke: "#2ecc71"
+    style.font-color: "#e8e8f0"
+  }
+  deltas: "edge_deltas\n(Hebbian Δw, STDP)" {
+    style.fill: "#1f3a1f"
+    style.stroke: "#2ecc71"
+    style.font-color: "#e8e8f0"
+  }
+  tombstones: "deleted_ids: set[bytes]" {
+    style.fill: "#3a1f1f"
+    style.stroke: "#e74c3c"
+    style.font-color: "#e8e8f0"
+  }
+}
+
+# ═══════════════════════════════════════════════════
+# SEGMENTS (Immutable on-disk)
+# ═══════════════════════════════════════════════════
+
+segments: "Immutable Segments (on-disk)" {
+  style.fill: "#1a1a2e"
+  style.stroke: "#9b59b6"
+  style.font-color: "#e8e8f0"
+  style.border-radius: 6
+
+  seg_l0: "L0 Segments\n(recent flushes)" {
+    style.fill: "#2d1f4e"
+    style.stroke: "#8e44ad"
+    style.font-color: "#e8e8f0"
+
+    vectors: "vectors.npy\n(mmap'd float32)" {style.fill: "#3d2f5e"; style.font-color: "#e8e8f0"}
+    items_json: "items.json" {style.fill: "#3d2f5e"; style.font-color: "#e8e8f0"}
+    edges_json: "edges.json" {style.fill: "#3d2f5e"; style.font-color: "#e8e8f0"}
+    manifest: "manifest.json\n(time_min/max, κ range)" {style.fill: "#3d2f5e"; style.font-color: "#e8e8f0"}
+  }
+
+  seg_l1: "L1 Segments\n(NREM compacted)" {
+    style.fill: "#2d1f4e"
+    style.stroke: "#8e44ad"
+    style.font-color: "#e8e8f0"
+  }
+
+  seg_l2: "L2 Segments\n(REM compacted)" {
+    style.fill: "#2d1f4e"
+    style.stroke: "#8e44ad"
+    style.font-color: "#e8e8f0"
+  }
+}
+
+# ═══════════════════════════════════════════════════
+# GLOBAL INDEX
+# ═══════════════════════════════════════════════════
+
+global_index: "Global Index" {
+  style.fill: "#1a1a2e"
+  style.stroke: "#3498db"
+  style.font-color: "#e8e8f0"
+  style.border-radius: 6
+
+  id_map: "id_map\n(UUID hex → segment_id)" {
+    style.fill: "#1e3a5f"
+    style.stroke: "#4a9eff"
+    style.font-color: "#e8e8f0"
+  }
+  tombstone_set: "tombstones\n(deleted UUID set)" {
+    style.fill: "#3a1e1e"
+    style.stroke: "#e74c3c"
+    style.font-color: "#e8e8f0"
+  }
+  cross_edges: "cross_edges\n(inter-segment edges)" {
+    style.fill: "#1e3a5f"
+    style.stroke: "#4a9eff"
+    style.font-color: "#e8e8f0"
+  }
+  seg_manifest: "segments\n(manifest per segment)" {
+    style.fill: "#1e3a5f"
+    style.stroke: "#4a9eff"
+    style.font-color: "#e8e8f0"
+  }
+}
+
+# ═══════════════════════════════════════════════════
+# QUERY PLANNER
+# ═══════════════════════════════════════════════════
+
+planner: "Query Planner" {
+  shape: rectangle
+  style.fill: "#2a2a0a"
+  style.stroke: "#f39c12"
+  style.font-color: "#e8e8f0"
+  style.border-radius: 4
+}
+
+# ═══════════════════════════════════════════════════
+# COMPACTOR
+# ═══════════════════════════════════════════════════
+
+compactor: "Compactor (= Consolidation)" {
+  style.fill: "#0a2a3a"
+  style.stroke: "#1abc9c"
+  style.font-color: "#e8e8f0"
+  style.border-radius: 6
+
+  flush_op: "flush()\nMemTable → L0" {
+    style.fill: "#0f3f4f"
+    style.stroke: "#1abc9c"
+    style.font-color: "#e8e8f0"
+  }
+  nrem_op: "nrem_compact()\nmerge + κ boost" {
+    style.fill: "#0f3f4f"
+    style.stroke: "#1abc9c"
+    style.font-color: "#e8e8f0"
+  }
+  rem_op: "rem_compact()\ncluster + prototype" {
+    style.fill: "#0f3f4f"
+    style.stroke: "#1abc9c"
+    style.font-color: "#e8e8f0"
+  }
+  prune_op: "prune()\nGC tombstoned + low-κ" {
+    style.fill: "#0f3f4f"
+    style.stroke: "#1abc9c"
+    style.font-color: "#e8e8f0"
+  }
+
+  flush_op -> nrem_op -> rem_op -> prune_op
+}
+
+# ═══════════════════════════════════════════════════
+# CONNECTIONS
+# ═══════════════════════════════════════════════════
+
+ops -> wal: "log before execute" {style.stroke: "#e74c3c"}
+ops -> memtable: "mutate" {style.stroke: "#27ae60"}
+ops -> planner: "reads" {style.stroke: "#f39c12"}
+
+planner -> memtable: "search/get" {style.stroke: "#f39c12"; style.stroke-dash: 3}
+planner -> segments: "search/get" {style.stroke: "#f39c12"; style.stroke-dash: 3}
+planner -> global_index: "prune/filter" {style.stroke: "#f39c12"; style.stroke-dash: 3}
+
+memtable -> compactor.flush_op: "threshold" {style.stroke: "#1abc9c"}
+compactor.flush_op -> segments.seg_l0: "write" {style.stroke: "#8e44ad"}
+compactor.nrem_op -> segments.seg_l1: "merge" {style.stroke: "#8e44ad"}
+compactor.rem_op -> segments.seg_l2: "cluster" {style.stroke: "#8e44ad"}
+
+segments -> global_index: "register" {style.stroke: "#3498db"}

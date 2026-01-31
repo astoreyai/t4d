@@ -1,0 +1,197 @@
+direction: down
+
+# ═══════════════════════════════════════════════════════════
+# T4DM MEMORY LIFECYCLE
+# INSERT → MemTable → Flush → NREM → REM → Prune/Semantic
+# κ gradient tracks consolidation level
+# ═══════════════════════════════════════════════════════════
+
+style.fill: "#0d1117"
+
+# ═══════════════════════════════════════════════════
+# ENCODING (τ gate)
+# ═══════════════════════════════════════════════════
+
+input: "New Experience\n(token stream + context)" {
+  shape: parallelogram
+  style.fill: "#1a1a2e"
+  style.stroke: "#6c757d"
+  style.font-color: "#e8e8f0"
+}
+
+tau_gate: "τ(t) Temporal Gate\nσ(λ_ε·ε + λ_Δ·novelty + λ_r·reward)" {
+  shape: diamond
+  style.fill: "#4a3800"
+  style.stroke: "#f39c12"
+  style.font-color: "#e8e8f0"
+}
+
+rejected: "Below threshold\n→ not stored" {
+  shape: rectangle
+  style.fill: "#3a1a1a"
+  style.stroke: "#e74c3c"
+  style.font-color: "#e8e8f0"
+  style.border-radius: 4
+  style.opacity: 0.6
+}
+
+# ═══════════════════════════════════════════════════
+# WORKING MEMORY (MemTable)
+# ═══════════════════════════════════════════════════
+
+memtable: "MemTable (Working Memory)\nκ = 0.0  •  Labile  •  Mutable" {
+  shape: rectangle
+  style.fill: "#27ae60"
+  style.stroke: "#2ecc71"
+  style.font-color: "#fff"
+  style.border-radius: 8
+  style.font-size: 16
+}
+
+mt_desc: "Items + edges + overlays + deltas\nBrute-force search • O(1) updates\nAuto-flush at threshold (1000 items)" {
+  shape: text
+  style.font-color: "#6c757d"
+  near: memtable
+}
+
+# ═══════════════════════════════════════════════════
+# FLUSH → L0 SEGMENT
+# ═══════════════════════════════════════════════════
+
+flush: "flush()" {
+  shape: rectangle
+  style.fill: "#1a1a2e"
+  style.stroke: "#9b59b6"
+  style.font-color: "#e8e8f0"
+  style.border-radius: 4
+}
+
+l0: "L0 Segment (Episodic)\nκ ≈ 0.0  •  Immutable  •  Recent" {
+  shape: rectangle
+  style.fill: "#3498db"
+  style.stroke: "#2980b9"
+  style.font-color: "#fff"
+  style.border-radius: 8
+  style.font-size: 16
+}
+
+l0_desc: "vectors.npy (mmap) + items.json + edges.json\nSingle flush, not yet consolidated" {
+  shape: text
+  style.font-color: "#6c757d"
+  near: l0
+}
+
+# ═══════════════════════════════════════════════════
+# NREM COMPACTION → L1
+# ═══════════════════════════════════════════════════
+
+nrem: "nrem_compact()\n• Merge L0 segments\n• STDP replay through spiking\n• κ += 0.05 per replay\n• Apply field_overlays + edge_deltas" {
+  shape: rectangle
+  style.fill: "#0a2a3a"
+  style.stroke: "#1abc9c"
+  style.font-color: "#e8e8f0"
+  style.border-radius: 6
+}
+
+l1: "L1 Segment (Consolidating)\nκ ≈ 0.15–0.40  •  Replayed  •  Strengthened" {
+  shape: rectangle
+  style.fill: "#f39c12"
+  style.stroke: "#e67e22"
+  style.font-color: "#fff"
+  style.border-radius: 8
+  style.font-size: 16
+}
+
+# ═══════════════════════════════════════════════════
+# REM COMPACTION → L2
+# ═══════════════════════════════════════════════════
+
+rem: "rem_compact()\n• Cosine clustering of L1 items\n• Create prototype centroids\n• κ = 0.85 for prototypes\n• CONSOLIDATED_INTO edges" {
+  shape: rectangle
+  style.fill: "#0a2a3a"
+  style.stroke: "#1abc9c"
+  style.font-color: "#e8e8f0"
+  style.border-radius: 6
+}
+
+l2: "L2 Segment (Semantic)\nκ ≈ 0.85  •  Abstract  •  Prototype" {
+  shape: rectangle
+  style.fill: "#9b59b6"
+  style.stroke: "#8e44ad"
+  style.font-color: "#fff"
+  style.border-radius: 8
+  style.font-size: 16
+}
+
+# ═══════════════════════════════════════════════════
+# FINAL STATES
+# ═══════════════════════════════════════════════════
+
+semantic: "Stable Knowledge\nκ → 1.0  •  Permanent  •  Concept" {
+  shape: rectangle
+  style.fill: "#1a1a4a"
+  style.stroke: "#5b6abf"
+  style.font-color: "#fff"
+  style.border-radius: 8
+  style.font-size: 16
+}
+
+pruned: "Pruned / Forgotten\nlow κ + low importance → tombstoned" {
+  shape: rectangle
+  style.fill: "#3a1a1a"
+  style.stroke: "#e74c3c"
+  style.font-color: "#e8e8f0"
+  style.border-radius: 8
+  style.opacity: 0.7
+}
+
+prune: "prune()\n• DELETE low-κ + low-importance\n• GC tombstoned items\n• Rewrite segments" {
+  shape: rectangle
+  style.fill: "#4a0a0a"
+  style.stroke: "#e74c3c"
+  style.font-color: "#e8e8f0"
+  style.border-radius: 6
+}
+
+# ═══════════════════════════════════════════════════
+# MAIN FLOW
+# ═══════════════════════════════════════════════════
+
+input -> tau_gate
+tau_gate -> memtable: "τ > threshold\n→ INSERT" {style.stroke: "#27ae60"}
+tau_gate -> rejected: "τ ≤ threshold" {style.stroke: "#e74c3c"; style.stroke-dash: 3}
+
+memtable -> flush: "auto or manual"
+flush -> l0
+
+l0 -> nrem: "sleep trigger\n(adenosine pressure)"
+nrem -> l1
+
+l1 -> rem: "next sleep phase"
+rem -> l2
+
+l2 -> semantic: "continued consolidation\nκ → 1.0" {style.stroke: "#5b6abf"}
+
+# Pruning can happen at any level
+l0 -> prune: "low κ + low importance" {style.stroke: "#e74c3c"; style.stroke-dash: 3}
+l1 -> prune: "low κ + low importance" {style.stroke: "#e74c3c"; style.stroke-dash: 3}
+prune -> pruned
+
+# ═══════════════════════════════════════════════════
+# κ GRADIENT LEGEND
+# ═══════════════════════════════════════════════════
+
+legend: "κ Gradient" {
+  style.fill: "#1a1a2e"
+  style.stroke: "#6c757d"
+  style.font-color: "#e8e8f0"
+  style.border-radius: 6
+
+  k0: "κ=0.0  Raw episodic" {style.fill: "#27ae60"; style.font-color: "#fff"}
+  k15: "κ≈0.15 Replayed" {style.fill: "#3498db"; style.font-color: "#fff"}
+  k40: "κ≈0.40 Transitional" {style.fill: "#f39c12"; style.font-color: "#fff"}
+  k85: "κ≈0.85 Semantic prototype" {style.fill: "#9b59b6"; style.font-color: "#fff"}
+  k10: "κ=1.0  Stable knowledge" {style.fill: "#1a1a4a"; style.stroke: "#5b6abf"; style.font-color: "#fff"}
+
+  k0 -> k15 -> k40 -> k85 -> k10
+}

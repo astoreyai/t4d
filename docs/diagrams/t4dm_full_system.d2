@@ -1,0 +1,253 @@
+direction: right
+
+# ═══════════════════════════════════════════════════════════
+# T4DM FULL SYSTEM ARCHITECTURE
+# Qwen 3B + QLoRA + Spiking Cortical Stack + T4DX Engine
+# ═══════════════════════════════════════════════════════════
+
+# --- Style ---
+style.fill: "#0d1117"
+
+# ═══════════════════════════════════════════════════
+# INPUT
+# ═══════════════════════════════════════════════════
+
+tokens: "Token Input\n(Tokenizer)" {
+  shape: parallelogram
+  style.fill: "#1a1a2e"
+  style.stroke: "#6c757d"
+  style.font-color: "#e8e8f0"
+}
+
+# ═══════════════════════════════════════════════════
+# QWEN LOWER HALF (Layers 0-17)
+# ═══════════════════════════════════════════════════
+
+qwen_lower: "Qwen 2.5-3B\nLayers 0–17\n(frozen, 4-bit NF4)" {
+  shape: rectangle
+  style.fill: "#1e3a5f"
+  style.stroke: "#4a9eff"
+  style.font-color: "#e8e8f0"
+  style.border-radius: 6
+
+  qlora_lower: "QLoRA\n(r=16, q_proj+v_proj)" {
+    shape: rectangle
+    style.fill: "#2a4a6f"
+    style.stroke: "#70b8ff"
+    style.font-color: "#e8e8f0"
+    style.border-radius: 4
+  }
+}
+
+# ═══════════════════════════════════════════════════
+# MEMORY PROJECTION (encode)
+# ═══════════════════════════════════════════════════
+
+encoder: "Memory Encoder\n2048 → 1024\n(2-layer MLP + LayerNorm)" {
+  shape: hexagon
+  style.fill: "#2d1f4e"
+  style.stroke: "#9b59b6"
+  style.font-color: "#e8e8f0"
+}
+
+# ═══════════════════════════════════════════════════
+# SPIKING CORTICAL STACK (6 blocks)
+# ═══════════════════════════════════════════════════
+
+spiking: "Spiking Cortical Stack\n×6 Blocks (~50-80M params)" {
+  style.fill: "#1a2e1a"
+  style.stroke: "#27ae60"
+  style.font-color: "#e8e8f0"
+  style.border-radius: 8
+
+  block: "Cortical Block (×6)" {
+    style.fill: "#1f3a1f"
+    style.stroke: "#2ecc71"
+    style.font-color: "#e8e8f0"
+    style.border-radius: 4
+
+    s1: "① Thalamic Gate\n(LIF + input gating)" {
+      style.fill: "#1e3a5f"
+      style.stroke: "#4a9eff"
+      style.font-color: "#e8e8f0"
+    }
+    s2: "② STDP Attention\n(spike-weighted QKV)" {
+      style.fill: "#4a1942"
+      style.stroke: "#e91e8c"
+      style.font-color: "#e8e8f0"
+    }
+    s3: "③ Apical Modulation\n(prediction error + FF)" {
+      style.fill: "#4a3800"
+      style.stroke: "#f39c12"
+      style.font-color: "#e8e8f0"
+    }
+    s4: "④ RWKV Recurrence\n(linear attention)" {
+      style.fill: "#0a3a3a"
+      style.stroke: "#1abc9c"
+      style.font-color: "#e8e8f0"
+    }
+
+    s1 -> s2 -> s3 -> s4
+  }
+}
+
+# ═══════════════════════════════════════════════════
+# LATERAL MODULES
+# ═══════════════════════════════════════════════════
+
+neuromod: "Neuromod Bus\n(DA, NE, ACh, 5-HT)" {
+  shape: rectangle
+  style.fill: "#4a0a0a"
+  style.stroke: "#e74c3c"
+  style.font-color: "#e8e8f0"
+  style.border-radius: 4
+}
+
+oscillator: "Oscillator Bias\n(θ/γ/δ phases)" {
+  shape: rectangle
+  style.fill: "#1a1a4a"
+  style.stroke: "#5b6abf"
+  style.font-color: "#e8e8f0"
+  style.border-radius: 4
+}
+
+tau_gate: "τ(t) Temporal Gate\nσ(λ_ε·ε + λ_Δ·novelty + λ_r·reward)" {
+  shape: diamond
+  style.fill: "#4a3800"
+  style.stroke: "#f39c12"
+  style.font-color: "#e8e8f0"
+}
+
+# ═══════════════════════════════════════════════════
+# T4DX STORAGE ENGINE
+# ═══════════════════════════════════════════════════
+
+t4dx: "T4DX Engine\n(embedded LSM storage)" {
+  style.fill: "#1a1a2e"
+  style.stroke: "#9b59b6"
+  style.font-color: "#e8e8f0"
+  style.border-radius: 8
+
+  wal: "WAL" {
+    style.fill: "#2d1f4e"
+    style.stroke: "#8e44ad"
+    style.font-color: "#e8e8f0"
+  }
+  memtable: "MemTable\n(items + edges\n+ overlays + deltas)" {
+    style.fill: "#2d1f4e"
+    style.stroke: "#8e44ad"
+    style.font-color: "#e8e8f0"
+  }
+  segments: "Segments\n(vectors.npy + items\n+ edges + manifest)" {
+    style.fill: "#2d1f4e"
+    style.stroke: "#8e44ad"
+    style.font-color: "#e8e8f0"
+  }
+  global_idx: "Global Index\n(id_map + tombstones)" {
+    style.fill: "#2d1f4e"
+    style.stroke: "#8e44ad"
+    style.font-color: "#e8e8f0"
+  }
+
+  wal -> memtable: "append"
+  memtable -> segments: "flush"
+}
+
+# ═══════════════════════════════════════════════════
+# MEMORY PROJECTION (decode)
+# ═══════════════════════════════════════════════════
+
+decoder: "Memory Decoder\n1024 → 2048\n(2-layer MLP + LayerNorm)" {
+  shape: hexagon
+  style.fill: "#2d1f4e"
+  style.stroke: "#9b59b6"
+  style.font-color: "#e8e8f0"
+}
+
+# ═══════════════════════════════════════════════════
+# QWEN UPPER HALF (Layers 18-35)
+# ═══════════════════════════════════════════════════
+
+qwen_upper: "Qwen 2.5-3B\nLayers 18–35\n(frozen, 4-bit NF4)" {
+  shape: rectangle
+  style.fill: "#1e3a5f"
+  style.stroke: "#4a9eff"
+  style.font-color: "#e8e8f0"
+  style.border-radius: 6
+
+  qlora_upper: "QLoRA\n(r=16, q_proj+v_proj)" {
+    shape: rectangle
+    style.fill: "#2a4a6f"
+    style.stroke: "#70b8ff"
+    style.font-color: "#e8e8f0"
+    style.border-radius: 4
+  }
+}
+
+# ═══════════════════════════════════════════════════
+# OUTPUT
+# ═══════════════════════════════════════════════════
+
+lm_head: "LM Head\n(logits → tokens)" {
+  shape: parallelogram
+  style.fill: "#1a1a2e"
+  style.stroke: "#6c757d"
+  style.font-color: "#e8e8f0"
+}
+
+# ═══════════════════════════════════════════════════
+# CONSOLIDATION
+# ═══════════════════════════════════════════════════
+
+consolidation: "Sleep Consolidation" {
+  style.fill: "#1a1a2e"
+  style.stroke: "#3498db"
+  style.font-color: "#e8e8f0"
+  style.border-radius: 6
+
+  nrem: "NREM\n(replay + κ boost)" {
+    style.fill: "#1e3a5f"
+    style.stroke: "#4a9eff"
+    style.font-color: "#e8e8f0"
+  }
+  rem: "REM\n(cluster + prototype)" {
+    style.fill: "#1e3a5f"
+    style.stroke: "#4a9eff"
+    style.font-color: "#e8e8f0"
+  }
+  prune: "PRUNE\n(GC low-κ)" {
+    style.fill: "#1e3a5f"
+    style.stroke: "#4a9eff"
+    style.font-color: "#e8e8f0"
+  }
+
+  nrem -> rem -> prune
+}
+
+# ═══════════════════════════════════════════════════
+# CONNECTIONS
+# ═══════════════════════════════════════════════════
+
+tokens -> qwen_lower: "embed"
+qwen_lower -> encoder: "hidden[17]"
+encoder -> spiking: "1024d"
+spiking -> decoder: "1024d"
+decoder -> qwen_upper: "gated residual"
+qwen_upper -> lm_head: "norm"
+
+# Lateral
+neuromod -> spiking: "NT levels" {style.stroke: "#e74c3c"; style.stroke-dash: 3}
+oscillator -> spiking: "phase bias" {style.stroke: "#5b6abf"; style.stroke-dash: 3}
+
+# T4DX read/write
+spiking -> tau_gate: "write candidates"
+tau_gate -> t4dx: "INSERT\n(gated)" {style.stroke: "#f39c12"}
+t4dx -> spiking: "SEARCH\n(retrieval)" {style.stroke: "#9b59b6"}
+
+# Learning signals
+spiking -> t4dx: "UPDATE_FIELDS\nUPDATE_EDGE_WEIGHT" {style.stroke: "#2ecc71"; style.stroke-dash: 3}
+
+# Consolidation
+t4dx -> consolidation: "SCAN" {style.stroke: "#3498db"; style.stroke-dash: 3}
+consolidation -> t4dx: "compact" {style.stroke: "#3498db"; style.stroke-dash: 3}
+consolidation -> spiking: "spike replay" {style.stroke: "#27ae60"; style.stroke-dash: 3}

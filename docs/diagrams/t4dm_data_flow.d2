@@ -1,0 +1,165 @@
+direction: right
+
+# ═══════════════════════════════════════════════════════════
+# T4DM DATA FLOW DIAGRAM
+# Token → Qwen → Spiking ↔ T4DX → Qwen → Output
+# ═══════════════════════════════════════════════════════════
+
+style.fill: "#0d1117"
+
+# ═══════════════════════════════════════════════════
+# INPUT
+# ═══════════════════════════════════════════════════
+
+input: "User Input" {
+  shape: parallelogram
+  style.fill: "#1a1a2e"
+  style.stroke: "#6c757d"
+  style.font-color: "#e8e8f0"
+}
+
+tokenizer: "Tokenizer\n(Qwen vocab)" {
+  shape: rectangle
+  style.fill: "#1a1a2e"
+  style.stroke: "#6c757d"
+  style.font-color: "#e8e8f0"
+  style.border-radius: 4
+}
+
+# ═══════════════════════════════════════════════════
+# FORWARD PASS
+# ═══════════════════════════════════════════════════
+
+qwen_lower: "Qwen(0–17)\n+ QLoRA" {
+  shape: rectangle
+  style.fill: "#1e3a5f"
+  style.stroke: "#4a9eff"
+  style.font-color: "#e8e8f0"
+  style.border-radius: 6
+}
+
+encode: "Encode\n2048→1024" {
+  shape: hexagon
+  style.fill: "#2d1f4e"
+  style.stroke: "#9b59b6"
+  style.font-color: "#e8e8f0"
+}
+
+spiking: "Spiking Stack\n×6 blocks" {
+  shape: rectangle
+  style.fill: "#1a2e1a"
+  style.stroke: "#27ae60"
+  style.font-color: "#e8e8f0"
+  style.border-radius: 6
+}
+
+decode: "Decode\n1024→2048" {
+  shape: hexagon
+  style.fill: "#2d1f4e"
+  style.stroke: "#9b59b6"
+  style.font-color: "#e8e8f0"
+}
+
+residual: "Gated Residual\nα·decoded + (1-α)·hidden" {
+  shape: rectangle
+  style.fill: "#1a1a2e"
+  style.stroke: "#6c757d"
+  style.font-color: "#e8e8f0"
+  style.border-radius: 4
+}
+
+qwen_upper: "Qwen(18–35)\n+ QLoRA" {
+  shape: rectangle
+  style.fill: "#1e3a5f"
+  style.stroke: "#4a9eff"
+  style.font-color: "#e8e8f0"
+  style.border-radius: 6
+}
+
+lm_head: "LM Head\n→ logits" {
+  shape: rectangle
+  style.fill: "#1a1a2e"
+  style.stroke: "#6c757d"
+  style.font-color: "#e8e8f0"
+  style.border-radius: 4
+}
+
+output: "Generated Token" {
+  shape: parallelogram
+  style.fill: "#1a1a2e"
+  style.stroke: "#6c757d"
+  style.font-color: "#e8e8f0"
+}
+
+# ═══════════════════════════════════════════════════
+# T4DX MEMORY ACCESS
+# ═══════════════════════════════════════════════════
+
+tau: "τ(t) Gate\nσ(λ_ε·ε + λ_Δ·novelty\n+ λ_r·reward)" {
+  shape: diamond
+  style.fill: "#4a3800"
+  style.stroke: "#f39c12"
+  style.font-color: "#e8e8f0"
+}
+
+t4dx: "T4DX Engine" {
+  shape: cylinder
+  style.fill: "#2d1f4e"
+  style.stroke: "#9b59b6"
+  style.font-color: "#e8e8f0"
+}
+
+# ═══════════════════════════════════════════════════
+# LEARNING SIGNALS
+# ═══════════════════════════════════════════════════
+
+learning: "Learning Signals" {
+  style.fill: "#1a1a2e"
+  style.stroke: "#e74c3c"
+  style.font-color: "#e8e8f0"
+  style.border-radius: 6
+
+  stdp: "STDP\nΔw = A·exp(-Δt/τ)" {style.fill: "#3a1a1a"; style.stroke: "#e74c3c"; style.font-color: "#e8e8f0"}
+  hebbian: "Hebbian\nΔw = η·x·y" {style.fill: "#3a1a1a"; style.stroke: "#e74c3c"; style.font-color: "#e8e8f0"}
+  kappa: "κ update\n(consolidation)" {style.fill: "#3a1a1a"; style.stroke: "#e74c3c"; style.font-color: "#e8e8f0"}
+}
+
+# ═══════════════════════════════════════════════════
+# NEUROMODULATION
+# ═══════════════════════════════════════════════════
+
+neuromod: "Neuromod Bus" {
+  shape: rectangle
+  style.fill: "#4a0a0a"
+  style.stroke: "#e74c3c"
+  style.font-color: "#e8e8f0"
+  style.border-radius: 4
+}
+
+# ═══════════════════════════════════════════════════
+# MAIN FLOW
+# ═══════════════════════════════════════════════════
+
+input -> tokenizer -> qwen_lower -> encode -> spiking -> decode -> residual -> qwen_upper -> lm_head -> output
+
+# Skip connection for residual
+qwen_lower -> residual: "skip" {style.stroke: "#6c757d"; style.stroke-dash: 3}
+
+# ═══════════════════════════════════════════════════
+# MEMORY READ/WRITE
+# ═══════════════════════════════════════════════════
+
+spiking -> tau: "write?" {style.stroke: "#f39c12"}
+tau -> t4dx: "INSERT" {style.stroke: "#f39c12"}
+t4dx -> spiking: "SEARCH\n(retrieved memories)" {style.stroke: "#9b59b6"}
+
+# ═══════════════════════════════════════════════════
+# LEARNING → T4DX
+# ═══════════════════════════════════════════════════
+
+spiking -> learning: "activations" {style.stroke: "#e74c3c"; style.stroke-dash: 3}
+learning -> t4dx: "UPDATE_FIELDS\nUPDATE_EDGE_WEIGHT" {style.stroke: "#e74c3c"; style.stroke-dash: 3}
+
+# Neuromod modulates spiking + learning
+neuromod -> spiking: "DA, NE, ACh, 5-HT" {style.stroke: "#e74c3c"; style.stroke-dash: 3}
+neuromod -> learning: "modulates LR" {style.stroke: "#e74c3c"; style.stroke-dash: 3}
