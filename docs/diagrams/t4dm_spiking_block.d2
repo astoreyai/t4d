@@ -1,0 +1,352 @@
+direction: up
+
+# ═══════════════════════════════════════════════════════════
+# T4DM SPIKING CORTICAL BLOCK (×N)
+# Internal layer structure — Vaswani figure style
+# Based on: cortical microcircuit, Hinton (GLOM/FF/Capsules),
+# RWKV linear attention, RMP-SNN residuals, predictive coding
+# ═══════════════════════════════════════════════════════════
+
+# --- Colors ---
+# L4 input:       blue
+# L2/3 lateral:   pink/magenta
+# L5/6 feedback:  amber/orange
+# RWKV output:    cyan
+# Residual:       gray
+# Modulators:     red (left rail)
+# Oscillators:    indigo (right rail)
+
+# ═══════════════════════════════════════════════════
+# INPUT (bottom)
+# ═══════════════════════════════════════════════════
+
+input_emb: "Input Embedding\n(BGE-M3 1024d + Time2Vec)" {
+  shape: rectangle
+  style.fill: "#1e3a5f"
+  style.stroke: "#4a9eff"
+  style.font-color: "#e8e8f0"
+  style.border-radius: 4
+}
+
+kwta: "k-WTA Sparse Encoding\n8× expand → top-k → VSA bind" {
+  shape: rectangle
+  style.fill: "#1e3a5f"
+  style.stroke: "#4a9eff"
+  style.font-color: "#e8e8f0"
+  style.border-radius: 4
+}
+
+input_emb -> kwta
+
+# ═══════════════════════════════════════════════════
+# SPIKING CORTICAL BLOCK (the repeating unit)
+# ═══════════════════════════════════════════════════
+
+block: "Spiking Cortical Block ×N" {
+  style.fill: "#0d0d1a"
+  style.stroke: "#6366f1"
+  style.font-color: "#e8e8f0"
+  style.stroke-width: 3
+  style.border-radius: 12
+
+  # --- Stage 1: Thalamic Gate (L4 input relay) ---
+  thal_gate: "① Thalamic Gate\ntop-down attention mask\ngates input before processing" {
+    shape: rectangle
+    style.fill: "#1e3a5f"
+    style.stroke: "#4a9eff"
+    style.font-color: "#e8e8f0"
+    style.border-radius: 4
+  }
+
+  # --- Stage 2: LIF Integration (basal dendrites) ---
+  lif: "② LIF Integration (Basal Dendrites)\nu(t+Δt) = αu + I − β·spike\nsoft reset: u -= V_thresh × spike\n(Norse GPU, membrane-preserving)" {
+    shape: rectangle
+    style.fill: "#1e3a5f"
+    style.stroke: "#60a5fa"
+    style.font-color: "#e8e8f0"
+    style.border-radius: 4
+  }
+
+  # --- Stage 3: Spike Attention + Capsule Routing (L2/3) ---
+  attn_caps: "③ Lateral Attention + Vertical Routing (L2/3)" {
+    style.fill: "#2d1230"
+    style.stroke: "#ec4899"
+    style.font-color: "#e8e8f0"
+    style.border-radius: 8
+
+    spike_attn: "Spike Attention (horizontal)\nSTDP-weighted Q·K via spike timing\nno softmax — synaptic weights encode\nfirst-spike coding: salient = early" {
+      shape: rectangle
+      style.fill: "#4a1942"
+      style.stroke: "#ec4899"
+      style.font-color: "#e8e8f0"
+      style.border-radius: 4
+    }
+
+    capsule: "Capsule Routing (vertical)\npart→whole pose agreement\nrouting-by-agreement (3 iter)\n(attention = lateral, capsules = vertical)" {
+      shape: rectangle
+      style.fill: "#4a1942"
+      style.stroke: "#ec4899"
+      style.font-color: "#e8e8f0"
+      style.border-radius: 4
+    }
+
+    spike_attn -> capsule: "compose"
+  }
+
+  # --- Stage 4: Apical Modulation (L5/6 feedback) ---
+  apical: "④ Apical Dendritic Modulation (L5/6)" {
+    style.fill: "#3d2800"
+    style.stroke: "#f59e0b"
+    style.font-color: "#e8e8f0"
+    style.border-radius: 8
+
+    pred_err: "Prediction Error\nε = bottom_up − top_down_prediction\nerror → L2/3 (up), prediction → L5/6 (down)" {
+      shape: rectangle
+      style.fill: "#4a3000"
+      style.stroke: "#f59e0b"
+      style.font-color: "#e8e8f0"
+      style.border-radius: 4
+    }
+
+    ca_gate: "Ca²⁺ Dendritic Spike Gate\noutput = basal × σ(apical)\nmultiplicative: context amplifies/suppresses" {
+      shape: rectangle
+      style.fill: "#4a3000"
+      style.stroke: "#f59e0b"
+      style.font-color: "#e8e8f0"
+      style.border-radius: 4
+    }
+
+    ff_good: "Forward-Forward Goodness\nG(h) = Σ hᵢ²\npositive data → increase G\nnegative data → decrease G\n(local learning, no backprop)" {
+      shape: rectangle
+      style.fill: "#4a3000"
+      style.stroke: "#f59e0b"
+      style.font-color: "#e8e8f0"
+      style.border-radius: 4
+    }
+
+    pred_err -> ca_gate -> ff_good
+  }
+
+  # --- Stage 5: Linear Recurrence (RWKV, L5 output) ---
+  rwkv: "⑤ Linear Recurrence (RWKV)\nO(N) streaming, constant memory\ntime-mixing: α_t = e^(-w)·α_(t-1) + e^(k)·v\nchannel-mixing: gated FFN (GeGLU)" {
+    shape: rectangle
+    style.fill: "#0c3547"
+    style.stroke: "#06b6d4"
+    style.font-color: "#e8e8f0"
+    style.border-radius: 4
+  }
+
+  # --- Stage 6: Membrane-Preserving Residual ---
+  residual: "⑥ RMP-SNN Residual\nu_out = LIF(u_stage1 + u_stage5)\nsoft reset preserves membrane potential\n(enables 100+ layer depth)" {
+    shape: rectangle
+    style.fill: "#1a1a2e"
+    style.stroke: "#9ca3af"
+    style.font-color: "#e8e8f0"
+    style.border-radius: 4
+    style.stroke-dash: 5
+  }
+
+  # --- Internal flow ---
+  thal_gate -> lif: "gated input"
+  lif -> attn_caps: "spikes"
+  attn_caps -> apical: "composed features"
+  apical -> rwkv: "modulated output"
+  rwkv -> residual: "recurrent state"
+
+  # --- Skip connection (residual) ---
+  lif -> residual: "skip (membrane potential)" {
+    style.stroke: "#9ca3af"
+    style.stroke-dash: 5
+    style.font-color: "#9ca3af"
+  }
+}
+
+# ═══════════════════════════════════════════════════
+# OUTPUT (top)
+# ═══════════════════════════════════════════════════
+
+hopfield: "Hopfield Completion\nsoftmax(β · Xᵀ · q) · X" {
+  shape: rectangle
+  style.fill: "#164e63"
+  style.stroke: "#06b6d4"
+  style.font-color: "#e8e8f0"
+  style.border-radius: 4
+}
+
+output: "Output\nFastAPI / WebSocket / SDK" {
+  shape: rectangle
+  style.fill: "#164e63"
+  style.stroke: "#06b6d4"
+  style.font-color: "#e8e8f0"
+  style.border-radius: 4
+}
+
+# ═══════════════════════════════════════════════════
+# MAIN VERTICAL FLOW
+# ═══════════════════════════════════════════════════
+
+kwta -> block: "sparse spikes"
+block -> hopfield: "decoded"
+hopfield -> output
+
+# ═══════════════════════════════════════════════════
+# LEFT RAIL: NEUROMODULATORS + LEARNING
+# (inject at specific layers per biology)
+# ═══════════════════════════════════════════════════
+
+neuromod: "Neuromodulator\nInjection Points" {
+  style.fill: "#2d0a0a"
+  style.stroke: "#ef4444"
+  style.font-color: "#e8e8f0"
+  style.border-radius: 8
+
+  ach_inj: "ACh (NBM) → L1/L4\nencoding depth\ngates thalamic relay" {
+    shape: rectangle
+    style.fill: "#7f1d1d"
+    style.stroke: "#ef4444"
+    style.font-color: "#e8e8f0"
+  }
+  da_inj: "DA (VTA) → L2/3, L5\nreward prediction error\nmodulates STDP rate" {
+    shape: rectangle
+    style.fill: "#7f1d1d"
+    style.stroke: "#ef4444"
+    style.font-color: "#e8e8f0"
+  }
+  ne_inj: "NE (LC) → L5\narousal gain\nYerkes-Dodson curve" {
+    shape: rectangle
+    style.fill: "#7f1d1d"
+    style.stroke: "#ef4444"
+    style.font-color: "#e8e8f0"
+  }
+  sht_inj: "5-HT (Raphe) → L5/6\npatience / discount\ntonic over hours" {
+    shape: rectangle
+    style.fill: "#7f1d1d"
+    style.stroke: "#ef4444"
+    style.font-color: "#e8e8f0"
+  }
+}
+
+learning: "Three-Factor Learning\n(at every synapse)" {
+  style.fill: "#2d0a0a"
+  style.stroke: "#ef4444"
+  style.font-color: "#e8e8f0"
+  style.border-radius: 8
+
+  stdp_rule: "STDP\npre-before-post → LTP\npost-before-pre → LTD\nτ± = 20ms window" {
+    shape: rectangle
+    style.fill: "#7f1d1d"
+    style.stroke: "#ef4444"
+    style.font-color: "#e8e8f0"
+  }
+  elig_rule: "Eligibility Trace\nfast τ=2s, slow τ=20s\nbridges spike→reward delay" {
+    shape: rectangle
+    style.fill: "#7f1d1d"
+    style.stroke: "#ef4444"
+    style.font-color: "#e8e8f0"
+  }
+  three_f: "Δw = η · δ(t) · eᵢⱼ(t)\nδ = neuromodulator signal\ne = eligibility trace\n(fully local, no backprop)" {
+    shape: rectangle
+    style.fill: "#7f1d1d"
+    style.stroke: "#ef4444"
+    style.font-color: "#e8e8f0"
+  }
+  stdp_rule -> elig_rule -> three_f
+}
+
+# NT injection targets
+neuromod.ach_inj -> block.thal_gate: "ACh → gate" {style.stroke: "#ef4444"; style.font-color: "#ef4444"}
+neuromod.da_inj -> block.attn_caps: "DA → STDP LR" {style.stroke: "#ef4444"; style.font-color: "#ef4444"}
+neuromod.ne_inj -> block.rwkv: "NE → gain" {style.stroke: "#ef4444"; style.font-color: "#ef4444"}
+neuromod.sht_inj -> block.apical: "5-HT → patience" {style.stroke: "#ef4444"; style.font-color: "#ef4444"}
+learning -> block: "Δw at every synapse" {style.stroke: "#ef4444"; style.font-color: "#ef4444"}
+
+# ═══════════════════════════════════════════════════
+# RIGHT RAIL: OSCILLATORS + MEMORY + HOMEOSTASIS
+# ═══════════════════════════════════════════════════
+
+oscillators: "Oscillatory Scaffold\n(phase-organizes all stages)" {
+  style.fill: "#0f0f2e"
+  style.stroke: "#6366f1"
+  style.font-color: "#e8e8f0"
+  style.border-radius: 8
+
+  theta_osc: "θ 4-8 Hz (hippocampal)\nsequential item binding\neach item at distinct phase\n≈ dynamic positional encoding" {
+    shape: rectangle
+    style.fill: "#1e1b4b"
+    style.stroke: "#6366f1"
+    style.font-color: "#e8e8f0"
+  }
+  gamma_osc: "γ 30-100 Hz (cortical PING)\nindividual item encoding\n~7 cycles per θ → WM capacity\nattention 'slots'" {
+    shape: rectangle
+    style.fill: "#1e1b4b"
+    style.stroke: "#6366f1"
+    style.font-color: "#e8e8f0"
+  }
+  delta_osc: "δ 0.5-4 Hz (sleep SWO)\ntriggers consolidation\noffline STDP replay" {
+    shape: rectangle
+    style.fill: "#1e1b4b"
+    style.stroke: "#6366f1"
+    style.font-color: "#e8e8f0"
+  }
+}
+
+memory: "T4DX · Unified 4D Memory" {
+  style.fill: "#032618"
+  style.stroke: "#10b981"
+  style.font-color: "#e8e8f0"
+  style.border-radius: 8
+
+  mem_item: "MemoryItem\nκ ∈ [0,1] consolidation\nevent_time · valid_from/until\nspike_trace · graph_delta" {
+    shape: cylinder
+    style.fill: "#064e3b"
+    style.stroke: "#10b981"
+    style.font-color: "#e8e8f0"
+  }
+  tau_gate: "τ(t) Write Gate\nτ = σ(λε·ε + λΔ·novelty + λr·reward)\nhigh PE → write\nlow PE → skip" {
+    shape: rectangle
+    style.fill: "#064e3b"
+    style.stroke: "#10b981"
+    style.font-color: "#e8e8f0"
+  }
+  tau_gate -> mem_item
+}
+
+homeo: "Homeostatic Stabilization" {
+  style.fill: "#1a1800"
+  style.stroke: "#eab308"
+  style.font-color: "#e8e8f0"
+  style.border-radius: 8
+
+  scale_h: "Synaptic Scaling\nw ← w·(r*/r̂)^γ\ntarget <5% firing rate" {
+    shape: rectangle
+    style.fill: "#3b3100"
+    style.stroke: "#eab308"
+    style.font-color: "#e8e8f0"
+  }
+  bcm_h: "BCM Metaplasticity\nsliding LTP/LTD threshold\nprevents runaway potentiation" {
+    shape: rectangle
+    style.fill: "#3b3100"
+    style.stroke: "#eab308"
+    style.font-color: "#e8e8f0"
+  }
+}
+
+# Oscillator connections
+oscillators -> block: "phase bias currents" {style.stroke: "#6366f1"; style.font-color: "#6366f1"}
+
+# Memory connections
+block.apical -> memory.tau_gate: "PE gates write" {style.stroke: "#10b981"; style.font-color: "#10b981"}
+memory.mem_item -> block.thal_gate: "C(t) = TopK retrieval" {style.stroke: "#10b981"; style.font-color: "#10b981"}
+
+# Homeostasis
+homeo -> block: "firing rate normalization" {style.stroke: "#eab308"; style.font-color: "#eab308"}
+
+# ═══════════════════════════════════════════════════
+# FEEDBACK ARROW (top-down prediction, block N+1 → block N)
+# ═══════════════════════════════════════════════════
+
+block.apical -> block.thal_gate: "top-down prediction\n(from higher block or\nprevious timestep)" {
+  style.stroke: "#f59e0b"
+  style.stroke-dash: 5
+  style.font-color: "#f59e0b"
+}
