@@ -1,0 +1,84 @@
+direction: right
+
+title: T4DV Observation Bus {
+  shape: text
+  style.font-size: 24
+}
+
+# Sources
+cortical_stack: CorticalStack {
+  shape: hexagon
+  style.fill: "#4a90d9"
+}
+t4dx_engine: T4DXEngine {
+  shape: hexagon
+  style.fill: "#50c878"
+}
+compactor: Compactor {
+  shape: hexagon
+  style.fill: "#e6a030"
+}
+neuromod_bus: NeuromodBus {
+  shape: hexagon
+  style.fill: "#d94a7a"
+}
+
+# Emitters
+spiking_emitter: spiking.py\n(forward hooks) {
+  shape: parallelogram
+}
+storage_emitter: storage.py\n(op wrappers) {
+  shape: parallelogram
+}
+consolidation_emitter: consolidation.py\n(phase wrappers) {
+  shape: parallelogram
+}
+neuromod_emitter: neuromod.py\n(sampler) {
+  shape: parallelogram
+}
+
+# Bus
+obs_bus: ObservationBus {
+  shape: queue
+  style.fill: "#2d2d2d"
+  style.stroke: "#ff6b35"
+  style.stroke-width: 3
+
+  spike_buf: deque[SpikeEvent]
+  storage_buf: deque[StorageEvent]
+  consol_buf: deque[ConsolidationEvent]
+  neuromod_buf: deque[NeuromodEvent]
+}
+
+# Subscribers
+aggregator: SnapshotAggregator\n(1s/10s/60s windows) {
+  shape: cylinder
+  style.fill: "#6b4c9a"
+}
+ws_server: WebSocket Server\n(/ws/observe) {
+  shape: cloud
+  style.fill: "#2196f3"
+}
+renderers: RendererRegistry\n(mpl / plotly) {
+  shape: package
+}
+react_app: React Dashboard\n(D3 + Recharts) {
+  shape: page
+  style.fill: "#61dafb"
+}
+
+# Edges
+cortical_stack -> spiking_emitter: register_forward_hook
+t4dx_engine -> storage_emitter: monkey-patch 9 ops
+compactor -> consolidation_emitter: wrap nrem/rem/prune
+neuromod_bus -> neuromod_emitter: periodic sample
+
+spiking_emitter -> obs_bus.spike_buf: emit_sync()
+storage_emitter -> obs_bus.storage_buf: emit_sync()
+consolidation_emitter -> obs_bus.consol_buf: emit_sync()
+neuromod_emitter -> obs_bus.neuromod_buf: emit_sync()
+
+obs_bus -> aggregator: subscribe("*")
+obs_bus -> renderers: snapshot(topic)
+aggregator -> ws_server: get_dashboard_state()
+ws_server -> react_app: JSON @ 100ms

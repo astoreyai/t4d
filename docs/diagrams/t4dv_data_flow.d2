@@ -1,0 +1,77 @@
+direction: down
+
+title: T4DV Data Flow {
+  shape: text
+  style.font-size: 24
+}
+
+inference: Token Inference {
+  shape: step
+  style.fill: "#4a90d9"
+}
+qwen: Qwen 3B (frozen) {
+  shape: hexagon
+}
+spiking: Spiking Cortical Stack {
+  shape: hexagon
+  style.fill: "#ff6b35"
+}
+t4dx: T4DX Engine {
+  shape: cylinder
+  style.fill: "#50c878"
+}
+consolidation: Sleep Consolidation {
+  shape: diamond
+  style.fill: "#e6a030"
+}
+
+obs_bus: ObservationBus {
+  shape: queue
+  style.stroke: "#ff6b35"
+  style.stroke-width: 3
+}
+
+aggregator: SnapshotAggregator {
+  shape: cylinder
+  style.fill: "#6b4c9a"
+}
+
+rest_api: REST API\n/api/v1/viz/* {
+  shape: cloud
+}
+ws_api: WebSocket\n/ws/observe {
+  shape: cloud
+  style.fill: "#2196f3"
+}
+
+mpl: Matplotlib\nRenderers {
+  shape: package
+}
+plotly: Plotly\nRenderers {
+  shape: package
+}
+react: React 2D\nDashboard {
+  shape: page
+  style.fill: "#61dafb"
+}
+threejs: Three.js 3D\n(Phase 6) {
+  shape: page
+  style.fill: "#999"
+  style.stroke-dash: 5
+}
+
+inference -> qwen -> spiking -> t4dx
+t4dx -> consolidation: nrem/rem/prune
+
+spiking -> obs_bus: SpikeEvent
+t4dx -> obs_bus: StorageEvent
+consolidation -> obs_bus: ConsolidationEvent
+
+obs_bus -> aggregator
+aggregator -> ws_api: dashboard state @ 100ms
+obs_bus -> rest_api: snapshot queries
+rest_api -> mpl: render view
+rest_api -> plotly: render view
+
+ws_api -> react: JSON stream
+ws_api -> threejs: JSON stream (future)
