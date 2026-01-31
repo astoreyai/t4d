@@ -1,0 +1,384 @@
+direction: up
+
+# ═══════════════════════════════════════════════════
+# T4DM: SPIKING TRANSFORMER WITH ADAPTIVE 4D MEMORY
+# Vaswani-style architecture diagram
+# ═══════════════════════════════════════════════════
+
+# --- INPUT ---
+input: Input {
+  style.fill: "#1e3a5f"
+  style.stroke: "#4a9eff"
+  style.font-color: "#e8e8f0"
+  style.border-radius: 8
+
+  tokens: "Token Stream\n(text / tool / sensor)" {
+    shape: rectangle
+    style.fill: "#1e3a5f"
+    style.stroke: "#4a9eff"
+    style.font-color: "#e8e8f0"
+  }
+  events: "Event Stream\n(actions / outcomes)" {
+    shape: rectangle
+    style.fill: "#1e3a5f"
+    style.stroke: "#4a9eff"
+    style.font-color: "#e8e8f0"
+  }
+}
+
+# --- EMBEDDING ---
+embed: Embedding Layer {
+  style.fill: "#2d1b4e"
+  style.stroke: "#a855f7"
+  style.font-color: "#e8e8f0"
+  style.border-radius: 8
+
+  bge: "BGE-M3\n1024d" {
+    shape: rectangle
+    style.fill: "#2d1b4e"
+    style.stroke: "#a855f7"
+    style.font-color: "#e8e8f0"
+  }
+  t2v: "Time2Vec\nt2v(τ) = sin(ωτ+φ)" {
+    shape: rectangle
+    style.fill: "#2d1b4e"
+    style.stroke: "#a855f7"
+    style.font-color: "#e8e8f0"
+  }
+  kwta: "k-WTA Sparse\n8× expand → top-k" {
+    shape: rectangle
+    style.fill: "#2d1b4e"
+    style.stroke: "#a855f7"
+    style.font-color: "#e8e8f0"
+  }
+  vsa: "VSA Binding\nbinary symbolic code" {
+    shape: rectangle
+    style.fill: "#2d1b4e"
+    style.stroke: "#a855f7"
+    style.font-color: "#e8e8f0"
+  }
+
+  bge -> kwta
+  t2v -> kwta
+  kwta -> vsa
+}
+
+# --- SPIKING CORE (Nx) ---
+core: "Spiking RWKV Block ×N" {
+  style.fill: "#4a1942"
+  style.stroke: "#ec4899"
+  style.font-color: "#e8e8f0"
+  style.border-radius: 8
+
+  lif: "LIF Neurons (Norse GPU)\nu(t+Δt) = αu + I − βa" {
+    shape: rectangle
+    style.fill: "#4a1942"
+    style.stroke: "#ec4899"
+    style.font-color: "#e8e8f0"
+  }
+  spike_attn: "Spike Attention\nSTDP-weighted\nS²TDPT-inspired" {
+    shape: rectangle
+    style.fill: "#4a1942"
+    style.stroke: "#ec4899"
+    style.font-color: "#e8e8f0"
+  }
+  rwkv: "Linear Recurrence\nO(N) streaming\nSpikeGPT-style" {
+    shape: rectangle
+    style.fill: "#4a1942"
+    style.stroke: "#ec4899"
+    style.font-color: "#e8e8f0"
+  }
+  ff_layer: "Forward-Forward\ngoodness-based\nno backprop" {
+    shape: rectangle
+    style.fill: "#4a1942"
+    style.stroke: "#ec4899"
+    style.font-color: "#e8e8f0"
+  }
+  capsule: "Capsule Routing\npose equivariance\npart→whole" {
+    shape: rectangle
+    style.fill: "#4a1942"
+    style.stroke: "#ec4899"
+    style.font-color: "#e8e8f0"
+  }
+  residual: "Add & Norm\n(spike residual)" {
+    shape: rectangle
+    style.fill: "#4a1942"
+    style.stroke: "#ec4899"
+    style.font-color: "#e8e8f0"
+  }
+
+  lif -> spike_attn
+  spike_attn -> rwkv
+  rwkv -> ff_layer
+  ff_layer -> capsule
+  capsule -> residual
+}
+
+# --- READOUT ---
+readout: Output {
+  style.fill: "#164e63"
+  style.stroke: "#06b6d4"
+  style.font-color: "#e8e8f0"
+  style.border-radius: 8
+
+  hopfield: "Hopfield Completion\nsoftmax(β·Xᵀ·q)·X" {
+    shape: rectangle
+    style.fill: "#164e63"
+    style.stroke: "#06b6d4"
+    style.font-color: "#e8e8f0"
+  }
+  api: "FastAPI / WebSocket\nPython SDK" {
+    shape: rectangle
+    style.fill: "#164e63"
+    style.stroke: "#06b6d4"
+    style.font-color: "#e8e8f0"
+  }
+  hopfield -> api
+}
+
+# --- MAIN VERTICAL FLOW ---
+input -> embed: encode
+embed -> core: sparse spikes
+core -> readout: decoded
+
+# ═══════════════════════════════════════════════════
+# SIDE MODULES (connected laterally to core)
+# ═══════════════════════════════════════════════════
+
+# --- TEMPORAL CONTROL (left) ---
+temporal: "τ(t) Temporal Control" {
+  style.fill: "#4a3000"
+  style.stroke: "#f59e0b"
+  style.font-color: "#e8e8f0"
+  style.border-radius: 8
+
+  pe: "Prediction Error\nε(t) = ‖y − ŷ‖" {
+    shape: rectangle
+    style.fill: "#4a3000"
+    style.stroke: "#f59e0b"
+    style.font-color: "#e8e8f0"
+  }
+  tau: "τ(t) = σ(λε·ε + λΔ·novelty + λr·reward)" {
+    shape: rectangle
+    style.fill: "#4a3000"
+    style.stroke: "#f59e0b"
+    style.font-color: "#e8e8f0"
+  }
+  boundary: "Event Boundary\nb(t) = 𝟙[ε > θε]" {
+    shape: rectangle
+    style.fill: "#4a3000"
+    style.stroke: "#f59e0b"
+    style.font-color: "#e8e8f0"
+  }
+  pe -> tau
+  pe -> boundary
+}
+
+# --- NEUROMODULATION (left) ---
+neuromod: "Neuromodulator Orchestra" {
+  style.fill: "#7f1d1d"
+  style.stroke: "#ef4444"
+  style.font-color: "#e8e8f0"
+  style.border-radius: 8
+
+  da: "DA (VTA/SNc)\nreward signal" {
+    shape: rectangle
+    style.fill: "#7f1d1d"
+    style.stroke: "#ef4444"
+    style.font-color: "#e8e8f0"
+  }
+  ne: "NE (LC)\narousal gain" {
+    shape: rectangle
+    style.fill: "#7f1d1d"
+    style.stroke: "#ef4444"
+    style.font-color: "#e8e8f0"
+  }
+  ach: "ACh (NBM)\nencoding depth" {
+    shape: rectangle
+    style.fill: "#7f1d1d"
+    style.stroke: "#ef4444"
+    style.font-color: "#e8e8f0"
+  }
+  sht: "5-HT (Raphe)\npatience/discount" {
+    shape: rectangle
+    style.fill: "#7f1d1d"
+    style.stroke: "#ef4444"
+    style.font-color: "#e8e8f0"
+  }
+}
+
+# --- THREE-FACTOR LEARNING (left) ---
+learning: "Three-Factor Learning" {
+  style.fill: "#7f1d1d"
+  style.stroke: "#ef4444"
+  style.font-color: "#e8e8f0"
+  style.border-radius: 8
+
+  stdp: "STDP\nA₊exp(−Δt/τ₊)" {
+    shape: rectangle
+    style.fill: "#7f1d1d"
+    style.stroke: "#ef4444"
+    style.font-color: "#e8e8f0"
+  }
+  elig: "Eligibility Traces\nfast τ=2s · slow τ=20s" {
+    shape: rectangle
+    style.fill: "#7f1d1d"
+    style.stroke: "#ef4444"
+    style.font-color: "#e8e8f0"
+  }
+  rule: "Δw = η · δ(t) · eᵢⱼ(t)" {
+    shape: rectangle
+    style.fill: "#7f1d1d"
+    style.stroke: "#ef4444"
+    style.font-color: "#e8e8f0"
+  }
+  stdp -> elig -> rule
+}
+
+# --- 4D MEMORY (right) ---
+memory: "T4DX · Unified 4D Memory" {
+  style.fill: "#064e3b"
+  style.stroke: "#10b981"
+  style.font-color: "#e8e8f0"
+  style.border-radius: 8
+
+  item: "MemoryItem\nid · embedding · κ ∈ [0,1]\nevent_time · valid_from/until\nspike_trace · graph_delta" {
+    shape: rectangle
+    style.fill: "#064e3b"
+    style.stroke: "#10b981"
+    style.font-color: "#e8e8f0"
+  }
+  idx: "4D Vector Index\nd² = α²‖Δv‖² + (1−α)²|Δt|²/τ²\ntemporal HNSW + provenance" {
+    shape: cylinder
+    style.fill: "#064e3b"
+    style.stroke: "#10b981"
+    style.font-color: "#e8e8f0"
+  }
+  policies: "Query Policies" {
+    style.fill: "#064e3b"
+    style.stroke: "#10b981"
+    style.font-color: "#e8e8f0"
+
+    ep: "Episodic κ<0.3" {
+      style.fill: "#064e3b"
+      style.stroke: "#10b981"
+      style.font-color: "#e8e8f0"
+    }
+    sem: "Semantic κ>0.7" {
+      style.fill: "#064e3b"
+      style.stroke: "#10b981"
+      style.font-color: "#e8e8f0"
+    }
+    proc: "Procedural" {
+      style.fill: "#064e3b"
+      style.stroke: "#10b981"
+      style.font-color: "#e8e8f0"
+    }
+  }
+  item -> idx
+  idx -> policies
+}
+
+# --- OSCILLATORS (right) ---
+osc: "Oscillatory Scaffold" {
+  style.fill: "#1e1b4b"
+  style.stroke: "#6366f1"
+  style.font-color: "#e8e8f0"
+  style.border-radius: 8
+
+  theta: "θ 4-8Hz\nhippocampal" {
+    shape: rectangle
+    style.fill: "#1e1b4b"
+    style.stroke: "#6366f1"
+    style.font-color: "#e8e8f0"
+  }
+  gamma: "γ 30-100Hz\ncortical PING" {
+    shape: rectangle
+    style.fill: "#1e1b4b"
+    style.stroke: "#6366f1"
+    style.font-color: "#e8e8f0"
+  }
+  delta: "δ 0.5-4Hz\nsleep SWO" {
+    shape: rectangle
+    style.fill: "#1e1b4b"
+    style.stroke: "#6366f1"
+    style.font-color: "#e8e8f0"
+  }
+}
+
+# --- SLEEP CONSOLIDATION (right) ---
+sleep: "Sleep Consolidation" {
+  style.fill: "#1e1b4b"
+  style.stroke: "#6366f1"
+  style.font-color: "#e8e8f0"
+  style.border-radius: 8
+
+  nrem: "NREM\nSWR replay\nκ += 0.05" {
+    shape: rectangle
+    style.fill: "#1e1b4b"
+    style.stroke: "#6366f1"
+    style.font-color: "#e8e8f0"
+  }
+  rem: "REM\nHDBSCAN cluster\nκ += 0.2" {
+    shape: rectangle
+    style.fill: "#1e1b4b"
+    style.stroke: "#6366f1"
+    style.font-color: "#e8e8f0"
+  }
+  prune: "Prune\nforget low-κ\nglymphatic" {
+    shape: rectangle
+    style.fill: "#1e1b4b"
+    style.stroke: "#6366f1"
+    style.font-color: "#e8e8f0"
+  }
+  nrem -> rem -> prune
+}
+
+# --- HOMEOSTASIS (bottom right) ---
+homeo: "Homeostatic Stabilization" {
+  style.fill: "#3b3100"
+  style.stroke: "#eab308"
+  style.font-color: "#e8e8f0"
+  style.border-radius: 8
+
+  scale: "Synaptic Scaling\nw ← w·(r*/r̂)^γ" {
+    shape: rectangle
+    style.fill: "#3b3100"
+    style.stroke: "#eab308"
+    style.font-color: "#e8e8f0"
+  }
+  bcm: "BCM Metaplasticity\nsliding threshold" {
+    shape: rectangle
+    style.fill: "#3b3100"
+    style.stroke: "#eab308"
+    style.font-color: "#e8e8f0"
+  }
+}
+
+# ═══════════════════════════════════════════════════
+# LATERAL CONNECTIONS
+# ═══════════════════════════════════════════════════
+
+# Temporal control feeds into everything
+core -> temporal: "prediction error"
+temporal -> memory: "τ(t) gates write" {style.stroke: "#f59e0b"; style.font-color: "#f59e0b"}
+temporal -> learning: "τ(t) gates plasticity" {style.stroke: "#f59e0b"; style.font-color: "#f59e0b"}
+temporal -> sleep: "τ(t) gates replay" {style.stroke: "#f59e0b"; style.font-color: "#f59e0b"}
+
+# Memory ↔ Core
+memory -> core: "C(t) = TopK(R(t))" {style.stroke: "#10b981"; style.font-color: "#10b981"}
+
+# Learning → Core
+neuromod -> learning: "δ(t) modulation" {style.stroke: "#ef4444"; style.font-color: "#ef4444"}
+learning -> core: "Δwᵢⱼ" {style.stroke: "#ef4444"; style.font-color: "#ef4444"}
+
+# Oscillators → Core
+osc -> core: "phase gating" {style.stroke: "#6366f1"; style.font-color: "#6366f1"}
+
+# Sleep → Memory + Core
+sleep -> memory: "κ update" {style.stroke: "#6366f1"; style.font-color: "#6366f1"}
+sleep -> core: "spike reinjection" {style.stroke: "#6366f1"; style.font-color: "#6366f1"}
+
+# Homeostasis → Core + Learning
+homeo -> core: "scaling" {style.stroke: "#eab308"; style.font-color: "#eab308"}
+homeo -> learning: "threshold" {style.stroke: "#eab308"; style.font-color: "#eab308"}
