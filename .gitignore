@@ -112,3 +112,6 @@ site/
 # Syncthing
 .stfolder/
 .stignore
+
+# T4DX data directory
+.data/
