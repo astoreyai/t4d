@@ -24,7 +24,7 @@ except ImportError:
 
 from t4dm.memory.episodic import EpisodicMemory
 from t4dm.memory.semantic import SemanticMemory
-from t4dm.storage.qdrant_store import get_qdrant_store
+from t4dm.storage import get_vector_store
 
 
 class TraceViewer:
@@ -62,7 +62,7 @@ class TraceViewer:
 
         self.episodic = EpisodicMemory(session_id=session_id)
         self.semantic = SemanticMemory(session_id=session_id)
-        self.vector_store = get_qdrant_store(session_id)
+        self.vector_store = get_vector_store(session_id)
 
         self._initialized = False
 

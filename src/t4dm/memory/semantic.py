@@ -22,9 +22,7 @@ from t4dm.core.config import get_settings
 from t4dm.core.types import Entity, EntityType, Relationship, RelationType, ScoredResult
 from t4dm.embedding.bge_m3 import get_embedding_provider
 from t4dm.observability.tracing import add_span_attribute, traced
-from t4dm.storage.neo4j_store import get_neo4j_store
-from t4dm.storage.qdrant_store import get_qdrant_store
-from t4dm.storage.saga import Saga, SagaState
+from t4dm.storage import get_graph_store, get_vector_store
 
 if TYPE_CHECKING:
     from t4dm.learning.plasticity import PlasticityManager
@@ -59,8 +57,8 @@ class SemanticMemory:
         self.session_id = session_id or settings.session_id
 
         self.embedding = get_embedding_provider()
-        self.vector_store = get_qdrant_store(self.session_id)
-        self.graph_store = get_neo4j_store(self.session_id)
+        self.vector_store = get_vector_store(self.session_id)
+        self.graph_store = get_graph_store(self.session_id)
 
         # Plasticity integration (LTD, homeostatic scaling, metaplasticity)
         self.plasticity_manager = plasticity_manager
@@ -138,51 +136,19 @@ class SemanticMemory:
             source=source,
         )
 
-        # Wrap in saga for atomicity
-        saga = Saga(f"create_entity_{entity.id}")
-
-        # Step 1: Add to vector store
-        saga.add_step(
-            name="add_vector",
-            action=lambda: self.vector_store.add(
-                collection=self.vector_store.entities_collection,
-                ids=[str(entity.id)],
-                vectors=[embedding],
-                payloads=[self._to_payload(entity)],
-            ),
-            compensate=lambda: self.vector_store.delete(
-                collection=self.vector_store.entities_collection,
-                ids=[str(entity.id)],
-            ),
+        # Store in T4DX (single engine handles both vector and graph)
+        await self.vector_store.add(
+            collection=self.vector_store.entities_collection,
+            ids=[str(entity.id)],
+            vectors=[embedding],
+            payloads=[self._to_payload(entity)],
+        )
+        await self.graph_store.create_node(
+            label="Entity",
+            properties=self._to_graph_props(entity),
         )
 
-        # Step 2: Create graph node
-        saga.add_step(
-            name="create_node",
-            action=lambda: self.graph_store.create_node(
-                label="Entity",
-                properties=self._to_graph_props(entity),
-            ),
-            compensate=lambda: self.graph_store.delete_node(
-                node_id=str(entity.id),
-                label="Entity",
-            ),
-        )
-
-        # Execute saga
-        result = await saga.execute()
-
-        # Check saga result and raise on failure
-        if result.state not in (SagaState.COMMITTED,):
-            raise RuntimeError(
-                f"Entity creation failed: {result.error} "
-                f"(saga: {result.saga_id}, state: {result.state.value})"
-            )
-
-        logger.info(
-            f"Created entity '{name}' ({entity_type}) "
-            f"(saga: {result.saga_id}, state: {result.state.value})"
-        )
+        logger.info(f"Created entity '{name}' ({entity_type})")
         return entity
 
     async def create_relationship(
@@ -804,55 +770,16 @@ class SemanticMemory:
         now = datetime.now()
         now_iso = now.isoformat()
 
-        # Wrap in saga for atomicity
-        saga = Saga(f"supersede_entity_{entity_id}")
-
-        # Step 1: Update graph node validity
-        saga.add_step(
-            name="update_graph_validity",
-            action=lambda: self.graph_store.update_node(
-                node_id=str(entity_id),
-                properties={"validTo": now_iso},
-                label="Entity",
-            ),
-            compensate=lambda: self.graph_store.update_node(
-                node_id=str(entity_id),
-                properties={"validTo": ""},
-                label="Entity",
-            ),
+        # Close validity in T4DX (single engine)
+        await self.graph_store.update_node(
+            node_id=str(entity_id),
+            properties={"validTo": now_iso},
+            label="Entity",
         )
 
-        # Step 2: Update vector payload validity
-        saga.add_step(
-            name="update_vector_validity",
-            action=lambda: self.vector_store.update_payload(
-                collection=self.vector_store.entities_collection,
-                id=str(entity_id),
-                payload={"valid_to": now_iso},
-            ),
-            compensate=lambda: self.vector_store.update_payload(
-                collection=self.vector_store.entities_collection,
-                id=str(entity_id),
-                payload={"valid_to": None},
-            ),
-        )
+        logger.debug(f"Closed validity for entity {entity_id}")
 
-        # Execute saga
-        result = await saga.execute()
-
-        # Check saga result and raise on failure
-        if result.state not in (SagaState.COMMITTED,):
-            raise RuntimeError(
-                f"Failed to close entity validity: {result.error} "
-                f"(saga: {result.saga_id}, state: {result.state.value})"
-            )
-
-        logger.debug(
-            f"Closed validity for entity {entity_id} "
-            f"(saga: {result.saga_id}, state: {result.state.value})"
-        )
-
-        # Create new version (this uses its own saga internally)
+        # Create new version
         return await self.create_entity(
             name=old.name,
             entity_type=old.entity_type.value,

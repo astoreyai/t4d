@@ -90,14 +90,8 @@ def auto_patch_settings(monkeypatch, request):
 
         # Also clear storage instance caches to prevent test pollution
         try:
-            from t4dm.storage.neo4j_store import _neo4j_instances
-            _neo4j_instances.clear()
-        except ImportError:
-            pass
-
-        try:
-            from t4dm.storage.qdrant_store import _qdrant_instances
-            _qdrant_instances.clear()
+            from t4dm.storage import reset_stores
+            reset_stores()
         except ImportError:
             pass
     else:
@@ -144,81 +138,22 @@ def test_session_id():
 
 @pytest.fixture(scope="session")
 def qdrant_available():
-    """Check if Qdrant is available and healthy (including write capability)."""
-    try:
-        from qdrant_client import QdrantClient
-        from qdrant_client.models import Distance, VectorParams, PointStruct
-        import uuid
-
-        client = QdrantClient(url="http://localhost:6333", timeout=5)
-
-        # Try to create/recreate a test collection and write to it
-        test_collection = "_ww_health_check_test"
-        try:
-            # Delete if exists
-            try:
-                client.delete_collection(test_collection)
-            except Exception:
-                pass
-
-            # Create test collection
-            client.create_collection(
-                collection_name=test_collection,
-                vectors_config=VectorParams(size=8, distance=Distance.COSINE)
-            )
-
-            # Try write operation - this will fail if RocksDB is corrupt
-            client.upsert(
-                collection_name=test_collection,
-                points=[PointStruct(
-                    id=str(uuid.uuid4()),
-                    vector=[0.1] * 8,
-                    payload={"test": True}
-                )]
-            )
-
-            # Cleanup
-            client.delete_collection(test_collection)
-            return True
-
-        except Exception:
-            # Write failed - RocksDB or storage is corrupt
-            try:
-                client.delete_collection(test_collection)
-            except Exception:
-                pass
-            return False
-
-    except Exception:
-        return False
+    """Qdrant removed — always unavailable."""
+    return False
 
 
 @pytest.fixture(scope="session")
 def neo4j_available():
-    """Check if Neo4j is available and healthy."""
-    try:
-        from neo4j import GraphDatabase
-        driver = GraphDatabase.driver(
-            "bolt://localhost:7687",
-            auth=("neo4j", os.environ.get("T4DM_NEO4J_PASSWORD", "neo4j")),
-        )
-        with driver.session() as session:
-            session.run("RETURN 1")
-        driver.close()
-        return True
-    except Exception:
-        return False
+    """Neo4j removed — always unavailable."""
+    return False
 
 
 @pytest.fixture(autouse=True)
 def skip_integration_if_unavailable(request, qdrant_available, neo4j_available):
-    """Skip integration tests when infrastructure is unavailable."""
+    """Skip integration tests — legacy stores removed."""
     markers = [m.name for m in request.node.iter_markers()]
     if "integration" in markers:
-        if not qdrant_available:
-            pytest.skip("Qdrant not available - skipping integration test")
-        if not neo4j_available:
-            pytest.skip("Neo4j not available - skipping integration test")
+        pytest.skip("Legacy stores (Neo4j/Qdrant) removed — integration tests skipped")
 
 
 # ============================================================================
@@ -226,21 +161,12 @@ def skip_integration_if_unavailable(request, qdrant_available, neo4j_available):
 # ============================================================================
 
 @pytest_asyncio.fixture(scope="function")
-async def mock_qdrant_store():
+async def mock_vector_store():
     """
-    Mock Qdrant vector store for unit tests.
+    Mock T4DX vector store for unit tests.
 
     Returns a mock that can be configured per-test with reasonable defaults
     for typical vector store operations.
-
-    Mocked methods:
-    - initialize: async
-    - add: async, returns None
-    - search: async, returns empty list by default
-    - delete: async, returns None
-    - count: async, returns 0
-    - close: async
-    - upsert: async, returns None
     """
     mock = MagicMock()
     mock.initialize = AsyncMock()
@@ -259,23 +185,12 @@ async def mock_qdrant_store():
 
 
 @pytest_asyncio.fixture(scope="function")
-async def mock_neo4j_store():
+async def mock_graph_store():
     """
-    Mock Neo4j graph store for unit tests.
+    Mock T4DX graph store for unit tests.
 
     Returns a mock that can be configured per-test with reasonable defaults
     for typical graph database operations.
-
-    Mocked methods:
-    - initialize: async
-    - query: async, returns empty list by default
-    - create_node: async, returns test-id
-    - get_node: async, returns None by default
-    - delete_node: async
-    - create_relationship: async
-    - get_relationships: async, returns empty list by default
-    - get_relationships_batch: async, returns empty dict by default
-    - close: async
     """
     mock = MagicMock()
     mock.initialize = AsyncMock()
@@ -316,17 +231,12 @@ async def mock_embedding_provider():
 # ============================================================================
 
 @pytest_asyncio.fixture(scope="function")
-async def mock_episodic_memory(mock_qdrant_store, mock_neo4j_store, mock_embedding_provider, test_session_id):
-    """
-    Provide mocked episodic memory service with all dependencies.
-
-    Useful for testing episodic memory in isolation.
-    """
+async def mock_episodic_memory(mock_vector_store, mock_graph_store, mock_embedding_provider, test_session_id):
+    """Provide mocked episodic memory service with all dependencies."""
     from t4dm.memory.episodic import EpisodicMemory
 
-    # Patch the storage getters
-    with patch('t4dm.memory.episodic.get_qdrant_store', return_value=mock_qdrant_store), \
-         patch('t4dm.memory.episodic.get_neo4j_store', return_value=mock_neo4j_store), \
+    with patch('t4dm.memory.episodic.get_vector_store', return_value=mock_vector_store), \
+         patch('t4dm.memory.episodic.get_graph_store', return_value=mock_graph_store), \
          patch('t4dm.memory.episodic.get_embedding_provider', return_value=mock_embedding_provider):
 
         memory = EpisodicMemory(session_id=test_session_id)
@@ -335,16 +245,12 @@ async def mock_episodic_memory(mock_qdrant_store, mock_neo4j_store, mock_embeddi
 
 
 @pytest_asyncio.fixture(scope="function")
-async def mock_semantic_memory(mock_qdrant_store, mock_neo4j_store, mock_embedding_provider, test_session_id):
-    """
-    Provide mocked semantic memory service with all dependencies.
-
-    Useful for testing semantic memory in isolation.
-    """
+async def mock_semantic_memory(mock_vector_store, mock_graph_store, mock_embedding_provider, test_session_id):
+    """Provide mocked semantic memory service with all dependencies."""
     from t4dm.memory.semantic import SemanticMemory
 
-    with patch('t4dm.memory.semantic.get_qdrant_store', return_value=mock_qdrant_store), \
-         patch('t4dm.memory.semantic.get_neo4j_store', return_value=mock_neo4j_store), \
+    with patch('t4dm.memory.semantic.get_vector_store', return_value=mock_vector_store), \
+         patch('t4dm.memory.semantic.get_graph_store', return_value=mock_graph_store), \
          patch('t4dm.memory.semantic.get_embedding_provider', return_value=mock_embedding_provider):
 
         memory = SemanticMemory(session_id=test_session_id)
@@ -353,16 +259,12 @@ async def mock_semantic_memory(mock_qdrant_store, mock_neo4j_store, mock_embeddi
 
 
 @pytest_asyncio.fixture(scope="function")
-async def mock_procedural_memory(mock_qdrant_store, mock_neo4j_store, mock_embedding_provider, test_session_id):
-    """
-    Provide mocked procedural memory service with all dependencies.
-
-    Useful for testing procedural memory in isolation.
-    """
+async def mock_procedural_memory(mock_vector_store, mock_graph_store, mock_embedding_provider, test_session_id):
+    """Provide mocked procedural memory service with all dependencies."""
     from t4dm.memory.procedural import ProceduralMemory
 
-    with patch('t4dm.memory.procedural.get_qdrant_store', return_value=mock_qdrant_store), \
-         patch('t4dm.memory.procedural.get_neo4j_store', return_value=mock_neo4j_store), \
+    with patch('t4dm.memory.procedural.get_vector_store', return_value=mock_vector_store), \
+         patch('t4dm.memory.procedural.get_graph_store', return_value=mock_graph_store), \
          patch('t4dm.memory.procedural.get_embedding_provider', return_value=mock_embedding_provider):
 
         memory = ProceduralMemory(session_id=test_session_id)

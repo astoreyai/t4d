@@ -23,8 +23,8 @@ except ImportError:
 from t4dm.memory.episodic import EpisodicMemory
 from t4dm.memory.procedural import ProceduralMemory
 from t4dm.memory.semantic import SemanticMemory
-from t4dm.storage.neo4j_store import get_neo4j_store
-from t4dm.storage.qdrant_store import get_qdrant_store
+from t4dm.storage import get_graph_store
+from t4dm.storage import get_vector_store
 
 
 class SystemDashboard:
@@ -64,8 +64,8 @@ class SystemDashboard:
         self.semantic = SemanticMemory(session_id=session_id)
         self.procedural = ProceduralMemory(session_id=session_id)
 
-        self.vector_store = get_qdrant_store(session_id or "default")
-        self.graph_store = get_neo4j_store(session_id or "default")
+        self.vector_store = get_vector_store(session_id or "default")
+        self.graph_store = get_graph_store(session_id or "default")
 
         self._initialized = False
         self._last_update = None

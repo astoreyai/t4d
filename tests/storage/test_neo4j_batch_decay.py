@@ -3,7 +3,9 @@ import pytest
 from datetime import datetime, timedelta
 from unittest.mock import AsyncMock, patch
 
-from t4dm.storage.neo4j_store import Neo4jStore
+from t4dm.storage import T4DXGraphStore
+
+pytestmark = pytest.mark.skip(reason="Neo4j removed — replaced by T4DX")
 
 
 class TestBatchDecayRelationships:
@@ -12,7 +14,7 @@ class TestBatchDecayRelationships:
     @pytest.fixture
     def mock_store(self):
         """Create Neo4j store with mocked query method."""
-        store = Neo4jStore.__new__(Neo4jStore)
+        store = T4DXGraphStore.__new__(T4DXGraphStore)
         store.query = AsyncMock()
         return store
 
@@ -106,7 +108,7 @@ class TestCountStaleRelationships:
 
     @pytest.fixture
     def mock_store(self):
-        store = Neo4jStore.__new__(Neo4jStore)
+        store = T4DXGraphStore.__new__(T4DXGraphStore)
         store.query = AsyncMock()
         return store
 
@@ -178,9 +180,9 @@ class TestBatchDecayIntegration:
         # Skip in unit test runs
         pytest.skip("Integration test - requires Neo4j instance")
 
-        from t4dm.storage.neo4j_store import get_neo4j_store
+        from t4dm.storage import get_graph_store
 
-        store = get_neo4j_store("test-session")
+        store = get_graph_store("test-session")
         await store.initialize()
 
         try:

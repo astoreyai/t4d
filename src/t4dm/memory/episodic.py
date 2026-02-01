@@ -28,13 +28,10 @@ from t4dm.memory.cluster_index import ClusterIndex
 from t4dm.memory.feature_aligner import FeatureAligner
 from t4dm.memory.learned_sparse_index import LearnedSparseIndex
 from t4dm.observability.tracing import add_span_attribute, traced
-from t4dm.storage.neo4j_store import get_neo4j_store
-from t4dm.storage.qdrant_store import get_qdrant_store
-from t4dm.storage.saga import Saga, SagaState
+from t4dm.storage import get_graph_store, get_vector_store
 
 # Phase 1A: Decomposed modules for focused functionality
 from t4dm.memory.episodic_fusion import LearnedFusionWeights, LearnedReranker
-from t4dm.memory.episodic_saga import EpisodicSagaCoordinator
 from t4dm.memory.episodic_storage import EpisodicStorageOps, _validate_uuid as _validate_uuid_impl
 from t4dm.memory.episodic_learning import EpisodicLearningOps
 from t4dm.memory.episodic_retrieval import EpisodicRetrievalOps
@@ -71,8 +68,8 @@ class EpisodicMemory:
         self.session_id = session_id or settings.session_id
 
         self.embedding = get_embedding_provider()
-        self.vector_store = get_qdrant_store(self.session_id)
-        self.graph_store = get_neo4j_store(self.session_id)
+        self.vector_store = get_vector_store(self.session_id)
+        self.graph_store = get_graph_store(self.session_id)
 
         # Retrieval weights
         self.semantic_weight = settings.episodic_weight_semantic
@@ -642,9 +639,6 @@ class EpisodicMemory:
             sequence_position=self._sequence_counter,
         )
 
-        # Wrap in saga for atomicity across dual stores
-        saga = Saga(f"create_episode_{episode.id}")
-
         # Build payload with Phase 6 capsule data
         episode_payload = self._to_payload(episode)
         if capsule_activations is not None:
@@ -668,48 +662,19 @@ class EpisodicMemory:
             episode_payload["ff_capsule_goodness"] = float(self._ff_capsule_bridge.state.last_ff_goodness) if self._ff_capsule_bridge else 0.0
             episode_payload["ff_capsule_agreement"] = float(self._ff_capsule_bridge.state.last_routing_agreement) if self._ff_capsule_bridge else 0.0
 
-        # Step 1: Add to vector store
-        saga.add_step(
-            name="add_vector",
-            action=lambda: self.vector_store.add(
-                collection=self.vector_store.episodes_collection,
-                ids=[str(episode.id)],
-                vectors=[embedding],
-                payloads=[episode_payload],
-            ),
-            compensate=lambda: self.vector_store.delete(
-                collection=self.vector_store.episodes_collection,
-                ids=[str(episode.id)],
-            ),
+        # Store in T4DX (single engine handles both vector and graph)
+        await self.vector_store.add(
+            collection=self.vector_store.episodes_collection,
+            ids=[str(episode.id)],
+            vectors=[embedding],
+            payloads=[episode_payload],
+        )
+        await self.graph_store.create_node(
+            label="Episode",
+            properties=self._to_graph_props(episode),
         )
 
-        # Step 2: Create graph node
-        saga.add_step(
-            name="create_node",
-            action=lambda: self.graph_store.create_node(
-                label="Episode",
-                properties=self._to_graph_props(episode),
-            ),
-            compensate=lambda: self.graph_store.delete_node(
-                node_id=str(episode.id),
-                label="Episode",
-            ),
-        )
-
-        # Execute saga
-        result = await saga.execute()
-
-        # Check saga result and raise on failure
-        if result.state not in (SagaState.COMMITTED,):
-            raise RuntimeError(
-                f"Episode creation failed: {result.error} "
-                f"(saga: {result.saga_id}, state: {result.state.value})"
-            )
-
-        logger.info(
-            f"Created episode {episode.id} in session {self.session_id} "
-            f"(saga: {result.saga_id}, state: {result.state.value})"
-        )
+        logger.info(f"Created episode {episode.id} in session {self.session_id}")
 
         # P5.2: Update temporal sequencing
         # Link previous episode to this one (bidirectional linking)
@@ -3114,46 +3079,17 @@ class EpisodicMemory:
             stability=self.default_stability,
         )
 
-        # Wrap in saga for atomicity
-        saga = Saga(f"promote_buffered_{episode.id}")
-
-        # Step 1: Add to vector store
-        saga.add_step(
-            name="add_vector",
-            action=lambda: self.vector_store.add(
-                collection=self.vector_store.episodes_collection,
-                ids=[str(episode.id)],
-                vectors=[episode.embedding],
-                payloads=[self._to_payload(episode)],
-            ),
-            compensate=lambda: self.vector_store.delete(
-                collection=self.vector_store.episodes_collection,
-                ids=[str(episode.id)],
-            ),
+        # Store in T4DX (single engine handles both vector and graph)
+        await self.vector_store.add(
+            collection=self.vector_store.episodes_collection,
+            ids=[str(episode.id)],
+            vectors=[episode.embedding],
+            payloads=[self._to_payload(episode)],
         )
-
-        # Step 2: Create graph node
-        saga.add_step(
-            name="create_node",
-            action=lambda: self.graph_store.create_node(
-                label="Episode",
-                properties=self._to_graph_props(episode),
-            ),
-            compensate=lambda: self.graph_store.delete_node(
-                node_id=str(episode.id),
-                label="Episode",
-            ),
+        await self.graph_store.create_node(
+            label="Episode",
+            properties=self._to_graph_props(episode),
         )
-
-        # Execute saga
-        result = await saga.execute()
-
-        if result.state not in (SagaState.COMMITTED,):
-            logger.warning(
-                f"Promoted episode storage failed: {result.error} "
-                f"(saga: {result.saga_id})"
-            )
-            return None
 
         logger.info(
             f"Stored promoted episode {episode.id} "

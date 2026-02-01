@@ -30,8 +30,6 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
 ]
 dependencies = [
-    "neo4j>=5.0.0",
-    "qdrant-client>=1.7.0",
     "FlagEmbedding>=1.2.7",
     "sentence-transformers>=2.2.0",
     "torch>=2.0.0",
@@ -123,7 +121,6 @@ ignore = [
 "src/t4dm/observability/prometheus.py" = ["F401", "E402"]  # Unused Info import, late asyncio
 "src/t4dm/api/server.py" = ["E402"]  # Router imports after app definition
 "src/t4dm/api/routes/visualization.py" = ["E402"]  # Late import for specific functions
-"src/t4dm/storage/qdrant_store.py" = ["E402"]  # Singleton management section
 
 [tool.mypy]
 python_version = "3.11"

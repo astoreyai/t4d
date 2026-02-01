@@ -18,9 +18,8 @@ from t4dm.core.types import Domain, Procedure, ProcedureStep, ScoredResult
 from t4dm.embedding.bge_m3 import get_embedding_provider
 from t4dm.learning.dopamine import DopamineSystem
 from t4dm.observability.tracing import traced
-from t4dm.storage.neo4j_store import get_neo4j_store
-from t4dm.storage.qdrant_store import get_qdrant_store
-from t4dm.storage.saga import Saga, SagaState
+from t4dm.storage import get_graph_store, get_vector_store
+
 
 logger = logging.getLogger(__name__)
 
@@ -64,8 +63,8 @@ class ProceduralMemory:
         self.session_id = session_id or settings.session_id
 
         self.embedding = get_embedding_provider()
-        self.vector_store = get_qdrant_store(self.session_id)
-        self.graph_store = get_neo4j_store(self.session_id)
+        self.vector_store = get_vector_store(self.session_id)
+        self.graph_store = get_graph_store(self.session_id)
 
         # Consolidation threshold
         self.skill_similarity = settings.consolidation_skill_similarity
@@ -143,51 +142,19 @@ class ProceduralMemory:
             created_from="trajectory",
         )
 
-        # Wrap in saga for atomicity
-        saga = Saga(f"create_skill_{procedure.id}")
-
-        # Step 1: Add to vector store
-        saga.add_step(
-            name="add_vector",
-            action=lambda: self.vector_store.add(
-                collection=self.vector_store.procedures_collection,
-                ids=[str(procedure.id)],
-                vectors=[embedding],
-                payloads=[self._to_payload(procedure)],
-            ),
-            compensate=lambda: self.vector_store.delete(
-                collection=self.vector_store.procedures_collection,
-                ids=[str(procedure.id)],
-            ),
+        # Store in T4DX (single engine handles both vector and graph)
+        await self.vector_store.add(
+            collection=self.vector_store.procedures_collection,
+            ids=[str(procedure.id)],
+            vectors=[embedding],
+            payloads=[self._to_payload(procedure)],
+        )
+        await self.graph_store.create_node(
+            label="Procedure",
+            properties=self._to_graph_props(procedure),
         )
 
-        # Step 2: Create graph node
-        saga.add_step(
-            name="create_node",
-            action=lambda: self.graph_store.create_node(
-                label="Procedure",
-                properties=self._to_graph_props(procedure),
-            ),
-            compensate=lambda: self.graph_store.delete_node(
-                node_id=str(procedure.id),
-                label="Procedure",
-            ),
-        )
-
-        # Execute saga
-        result = await saga.execute()
-
-        # Check saga result and raise on failure
-        if result.state not in (SagaState.COMMITTED,):
-            raise RuntimeError(
-                f"Procedure creation failed: {result.error} "
-                f"(saga: {result.saga_id}, state: {result.state.value})"
-            )
-
-        logger.info(
-            f"Created procedure '{name}' from trajectory ({len(steps)} steps) "
-            f"(saga: {result.saga_id}, state: {result.state.value})"
-        )
+        logger.info(f"Created procedure '{name}' from trajectory ({len(steps)} steps)")
         return procedure
 
     @traced("procedural.store_skill_direct", kind=SpanKind.INTERNAL)
@@ -242,50 +209,19 @@ class ProceduralMemory:
             created_from="api",
         )
 
-        # Wrap in saga for atomicity
-        saga = Saga(f"store_skill_{procedure.id}")
-
-        # Step 1: Add to vector store
-        saga.add_step(
-            name="add_vector",
-            action=lambda: self.vector_store.add(
-                collection=self.vector_store.procedures_collection,
-                ids=[str(procedure.id)],
-                vectors=[embedding],
-                payloads=[self._to_payload(procedure)],
-            ),
-            compensate=lambda: self.vector_store.delete(
-                collection=self.vector_store.procedures_collection,
-                ids=[str(procedure.id)],
-            ),
+        # Store in T4DX
+        await self.vector_store.add(
+            collection=self.vector_store.procedures_collection,
+            ids=[str(procedure.id)],
+            vectors=[embedding],
+            payloads=[self._to_payload(procedure)],
+        )
+        await self.graph_store.create_node(
+            label="Procedure",
+            properties=self._to_graph_props(procedure),
         )
 
-        # Step 2: Create graph node
-        saga.add_step(
-            name="create_node",
-            action=lambda: self.graph_store.create_node(
-                label="Procedure",
-                properties=self._to_graph_props(procedure),
-            ),
-            compensate=lambda: self.graph_store.delete_node(
-                node_id=str(procedure.id),
-                label="Procedure",
-            ),
-        )
-
-        # Execute saga
-        result = await saga.execute()
-
-        if result.state not in (SagaState.COMMITTED,):
-            raise RuntimeError(
-                f"Procedure storage failed: {result.error} "
-                f"(saga: {result.saga_id}, state: {result.state.value})"
-            )
-
-        logger.info(
-            f"Stored procedure '{name}' directly ({len(steps)} steps) "
-            f"(saga: {result.saga_id}, state: {result.state.value})"
-        )
+        logger.info(f"Stored procedure '{name}' directly ({len(steps)} steps)")
         return procedure
 
     @traced("procedural.recall_skill", kind=SpanKind.INTERNAL)
@@ -447,70 +383,15 @@ class ProceduralMemory:
         # Update success rate
         procedure.update_success_rate(success)
 
-        # Wrap in saga for atomicity
-        saga = Saga(f"update_procedure_{procedure_id}")
-
-        # Step 1: Update vector payload
-        saga.add_step(
-            name="update_vector_payload",
-            action=lambda: self.vector_store.update_payload(
-                collection=self.vector_store.procedures_collection,
-                id=str(procedure_id),
-                payload={
-                    "success_rate": procedure.success_rate,
-                    "execution_count": procedure.execution_count,
-                    "last_executed": procedure.last_executed.isoformat(),
-                },
-            ),
-            compensate=lambda: self.vector_store.update_payload(
-                collection=self.vector_store.procedures_collection,
-                id=str(procedure_id),
-                payload={
-                    "success_rate": old_success_rate,
-                    "execution_count": old_execution_count,
-                    "last_executed": old_last_executed.isoformat(),
-                },
-            ),
-        )
-
-        # Step 2: Update graph node
-        saga.add_step(
-            name="update_graph_node",
-            action=lambda: self.graph_store.update_node(
-                node_id=str(procedure_id),
-                properties={
-                    "successRate": procedure.success_rate,
-                    "executionCount": procedure.execution_count,
-                    "lastExecuted": procedure.last_executed.isoformat(),
-                },
-                label="Procedure",
-            ),
-            compensate=lambda: self.graph_store.update_node(
-                node_id=str(procedure_id),
-                properties={
-                    "successRate": old_success_rate,
-                    "executionCount": old_execution_count,
-                    "lastExecuted": old_last_executed.isoformat(),
-                },
-                label="Procedure",
-            ),
-        )
-
-        # Execute saga
-        result = await saga.execute()
-
-        # Check saga result and raise on failure
-        if result.state not in (SagaState.COMMITTED,):
-            raise RuntimeError(
-                f"Failed to update procedure: {result.error} "
-                f"(saga: {result.saga_id}, state: {result.state.value})"
-            )
-
-        logger.debug(
-            f"Updated procedure '{procedure.name}': "
-            f"success_rate={procedure.success_rate:.2f}, "
-            f"executions={procedure.execution_count} "
-            f"(saga: {result.saga_id}, state: {result.state.value})"
+        # Update in T4DX
+        await self.graph_store.update_node(
+            node_id=str(procedure_id),
+            properties={
+                "successRate": procedure.success_rate,
+                "executionCount": procedure.execution_count,
+                "lastExecuted": procedure.last_executed.isoformat(),
+            },
+            label="Procedure",
         )
 
         # Check for deprecation - RACE-006 FIX: Check if already deprecated (idempotent)
@@ -564,53 +445,14 @@ class ProceduralMemory:
             "consolidatedInto": str(consolidated_into) if consolidated_into else "",
         }
 
-        # Wrap in saga for atomicity
-        saga = Saga(f"deprecate_procedure_{procedure_id}")
-
-        # Step 1: Update vector payload
-        saga.add_step(
-            name="update_vector_payload",
-            action=lambda: self.vector_store.update_payload(
-                collection=self.vector_store.procedures_collection,
-                id=str(procedure_id),
-                payload=vector_updates,
-            ),
-            compensate=lambda: self.vector_store.update_payload(
-                collection=self.vector_store.procedures_collection,
-                id=str(procedure_id),
-                payload={"deprecated": False, "consolidated_into": None},
-            ),
+        # Update in T4DX
+        await self.graph_store.update_node(
+            node_id=str(procedure_id),
+            properties=graph_updates,
+            label="Procedure",
         )
 
-        # Step 2: Update graph node
-        saga.add_step(
-            name="update_graph_node",
-            action=lambda: self.graph_store.update_node(
-                node_id=str(procedure_id),
-                properties=graph_updates,
-                label="Procedure",
-            ),
-            compensate=lambda: self.graph_store.update_node(
-                node_id=str(procedure_id),
-                properties={"deprecated": False, "consolidatedInto": ""},
-                label="Procedure",
-            ),
-        )
-
-        # Execute saga
-        result = await saga.execute()
-
-        # Check saga result and raise on failure
-        if result.state not in (SagaState.COMMITTED,):
-            raise RuntimeError(
-                f"Failed to deprecate procedure: {result.error} "
-                f"(saga: {result.saga_id}, state: {result.state.value})"
-            )
-
-        logger.info(
-            f"Deprecated procedure {procedure_id}: {reason} "
-            f"(saga: {result.saga_id}, state: {result.state.value})"
-        )
+        logger.info(f"Deprecated procedure {procedure_id}: {reason}")
 
     async def get_procedure(self, procedure_id: UUID) -> Procedure | None:
         """Get procedure by ID."""

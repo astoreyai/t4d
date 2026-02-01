@@ -155,7 +155,7 @@ class TestMCPProtocolHandlers:
             await mcp_server.initialize()
 
             result = await mcp_server.handle_read_resource(
-                f"ww://sessions/{mcp_server.session_id}"
+                f"t4dm://sessions/{mcp_server.session_id}"
             )
 
             assert "contents" in result

@@ -15,7 +15,7 @@ import pytest
 pytestmark = pytest.mark.integration
 from uuid import uuid4
 
-from t4dm.storage.neo4j_store import Neo4jStore
+from t4dm.storage import T4DXGraphStore
 from t4dm.core.validation import ValidationError, validate_non_empty_string
 
 
@@ -25,7 +25,7 @@ class TestCypherInjection:
     @pytest.mark.asyncio
     async def test_malicious_label_in_create_node(self):
         """Test that malicious labels are rejected."""
-        store = Neo4jStore()
+        store = T4DXGraphStore()
         await store.initialize()
 
         # Attempt to inject Cypher via label
@@ -46,7 +46,7 @@ class TestCypherInjection:
     @pytest.mark.asyncio
     async def test_malicious_rel_type_in_create_relationship(self):
         """Test that malicious relationship types are rejected."""
-        store = Neo4jStore()
+        store = T4DXGraphStore()
         await store.initialize()
 
         # Create legitimate nodes first
@@ -72,7 +72,7 @@ class TestCypherInjection:
     @pytest.mark.asyncio
     async def test_injection_via_property_values(self):
         """Test that property values are safely parameterized."""
-        store = Neo4jStore()
+        store = T4DXGraphStore()
         await store.initialize()
 
         # These should be safe because properties are parameterized
@@ -98,7 +98,7 @@ class TestCypherInjection:
     @pytest.mark.asyncio
     async def test_label_whitelist_enforcement(self):
         """Test that only allowed labels are accepted."""
-        store = Neo4jStore()
+        store = T4DXGraphStore()
         await store.initialize()
 
         # Only these labels should be allowed
@@ -265,9 +265,9 @@ class TestRateLimiting:
     @pytest.mark.asyncio
     async def test_expensive_query_limits(self):
         """Test that expensive queries are limited."""
-        from t4dm.storage.neo4j_store import Neo4jStore
+        from t4dm.storage import T4DXGraphStore
 
-        store = Neo4jStore()
+        store = T4DXGraphStore()
         await store.initialize()
 
         # Create two nodes
@@ -285,9 +285,9 @@ class TestRateLimiting:
     @pytest.mark.asyncio
     async def test_batch_operation_size_limit(self):
         """Test that batch operations have size limits."""
-        from t4dm.storage.neo4j_store import Neo4jStore
+        from t4dm.storage import T4DXGraphStore
 
-        store = Neo4jStore()
+        store = T4DXGraphStore()
         await store.initialize()
 
         # Attempt to create excessive batch
@@ -306,10 +306,10 @@ class TestErrorLeakage:
     @pytest.mark.asyncio
     async def test_database_error_sanitization(self):
         """Test that database connection errors are sanitized."""
-        from t4dm.storage.neo4j_store import Neo4jStore
+        from t4dm.storage import T4DXGraphStore
 
         # Configure store with invalid connection
-        store = Neo4jStore(uri="bolt://invalid-host:7687")
+        store = T4DXGraphStore(uri="bolt://invalid-host:7687")
 
         try:
             await store.initialize()

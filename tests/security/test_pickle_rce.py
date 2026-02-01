@@ -9,7 +9,7 @@ class TestNoPickleInCheckpoint:
 
     def test_pickle_not_imported(self):
         """Verify pickle is not imported in checkpoint.py."""
-        source = Path("/mnt/projects/t4d/t4dm/src/ww/persistence/checkpoint.py").read_text()
+        source = Path("/mnt/projects/t4d/t4dm/src/t4dm/persistence/checkpoint.py").read_text()
         tree = ast.parse(source)
         for node in ast.walk(tree):
             if isinstance(node, ast.Import):

@@ -76,29 +76,14 @@ install:
 dev-install:
 	$(PYTHON) -m pip install -e ".[dev,api,interfaces,consolidation]"
 
-# Docker services (Neo4j + Qdrant)
+# Docker services (T4DX is embedded, no external services needed)
 docker-up:
-	@echo "Starting Neo4j and Qdrant..."
-	docker run -d --name t4dm-neo4j \
-		-p 7474:7474 -p 7687:7687 \
-		-e NEO4J_AUTH=neo4j/password \
-		-e NEO4J_PLUGINS='["apoc"]' \
-		neo4j:5.15.0 || true
-	docker run -d --name t4dm-qdrant \
-		-p 6333:6333 -p 6334:6334 \
-		qdrant/qdrant:latest || true
-	@echo "Waiting for services to start..."
-	@sleep 5
-	@echo "Services started. Neo4j: http://localhost:7474 | Qdrant: http://localhost:6333"
+	@echo "T4DX is an embedded engine — no external services required."
 
 docker-down:
-	docker stop t4dm-neo4j t4dm-qdrant 2>/dev/null || true
-	docker rm t4dm-neo4j t4dm-qdrant 2>/dev/null || true
+	@echo "No external services to stop."
 
-docker-logs:
-	docker logs -f t4dm-neo4j t4dm-qdrant
-
-deps: docker-up
+deps:
 
 # Frontend
 frontend-install:

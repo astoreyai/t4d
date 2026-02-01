@@ -21,11 +21,11 @@ class TestEpisodicMemoryBasics:
     """Test basic episodic memory operations."""
 
     @pytest_asyncio.fixture
-    async def episodic(self, test_session_id, mock_qdrant_store, mock_neo4j_store, mock_embedding_provider):
+    async def episodic(self, test_session_id, mock_vector_store, mock_graph_store, mock_embedding_provider):
         """Create episodic memory instance with mocked stores."""
         episodic = EpisodicMemory(session_id=test_session_id)
-        episodic.vector_store = mock_qdrant_store
-        episodic.graph_store = mock_neo4j_store
+        episodic.vector_store = mock_vector_store
+        episodic.graph_store = mock_graph_store
         episodic.embedding = mock_embedding_provider
 
         # Mock collection attributes
@@ -155,11 +155,11 @@ class TestEpisodicMemoryRecall:
     """Test episodic memory retrieval with scoring."""
 
     @pytest_asyncio.fixture
-    async def episodic(self, test_session_id, mock_qdrant_store, mock_neo4j_store, mock_embedding_provider):
+    async def episodic(self, test_session_id, mock_vector_store, mock_graph_store, mock_embedding_provider):
         """Create episodic memory instance."""
         episodic = EpisodicMemory(session_id=test_session_id)
-        episodic.vector_store = mock_qdrant_store
-        episodic.graph_store = mock_neo4j_store
+        episodic.vector_store = mock_vector_store
+        episodic.graph_store = mock_graph_store
         episodic.embedding = mock_embedding_provider
         episodic.vector_store.episodes_collection = "episodes"
         return episodic
@@ -375,11 +375,11 @@ class TestEpisodicFSRSDecay:
     """Test FSRS decay calculations and retrievability."""
 
     @pytest_asyncio.fixture
-    async def episodic(self, test_session_id, mock_qdrant_store, mock_neo4j_store, mock_embedding_provider):
+    async def episodic(self, test_session_id, mock_vector_store, mock_graph_store, mock_embedding_provider):
         """Create episodic memory instance."""
         episodic = EpisodicMemory(session_id=test_session_id)
-        episodic.vector_store = mock_qdrant_store
-        episodic.graph_store = mock_neo4j_store
+        episodic.vector_store = mock_vector_store
+        episodic.graph_store = mock_graph_store
         episodic.embedding = mock_embedding_provider
         episodic.vector_store.episodes_collection = "episodes"
         return episodic
@@ -497,11 +497,11 @@ class TestEpisodicAccessTracking:
     """Test episode access pattern updates."""
 
     @pytest_asyncio.fixture
-    async def episodic(self, test_session_id, mock_qdrant_store, mock_neo4j_store, mock_embedding_provider):
+    async def episodic(self, test_session_id, mock_vector_store, mock_graph_store, mock_embedding_provider):
         """Create episodic memory instance."""
         episodic = EpisodicMemory(session_id=test_session_id)
-        episodic.vector_store = mock_qdrant_store
-        episodic.graph_store = mock_neo4j_store
+        episodic.vector_store = mock_vector_store
+        episodic.graph_store = mock_graph_store
         episodic.embedding = mock_embedding_provider
         episodic.vector_store.episodes_collection = "episodes"
         return episodic
@@ -582,11 +582,11 @@ class TestEpisodicSessionIsolation:
     """Test session isolation for episodic memory."""
 
     @pytest_asyncio.fixture
-    async def episodic(self, test_session_id, mock_qdrant_store, mock_neo4j_store, mock_embedding_provider):
+    async def episodic(self, test_session_id, mock_vector_store, mock_graph_store, mock_embedding_provider):
         """Create episodic memory instance."""
         episodic = EpisodicMemory(session_id=test_session_id)
-        episodic.vector_store = mock_qdrant_store
-        episodic.graph_store = mock_neo4j_store
+        episodic.vector_store = mock_vector_store
+        episodic.graph_store = mock_graph_store
         episodic.embedding = mock_embedding_provider
         episodic.vector_store.episodes_collection = "episodes"
         return episodic
@@ -641,11 +641,11 @@ class TestEpisodicTemporalQueries:
     """Test temporal query capabilities."""
 
     @pytest_asyncio.fixture
-    async def episodic(self, test_session_id, mock_qdrant_store, mock_neo4j_store, mock_embedding_provider):
+    async def episodic(self, test_session_id, mock_vector_store, mock_graph_store, mock_embedding_provider):
         """Create episodic memory instance."""
         episodic = EpisodicMemory(session_id=test_session_id)
-        episodic.vector_store = mock_qdrant_store
-        episodic.graph_store = mock_neo4j_store
+        episodic.vector_store = mock_vector_store
+        episodic.graph_store = mock_graph_store
         episodic.embedding = mock_embedding_provider
         episodic.vector_store.episodes_collection = "episodes"
         return episodic
@@ -732,11 +732,11 @@ class TestEpisodicMetadataHandling:
     """Test metadata and edge cases."""
 
     @pytest_asyncio.fixture
-    async def episodic(self, test_session_id, mock_qdrant_store, mock_neo4j_store, mock_embedding_provider):
+    async def episodic(self, test_session_id, mock_vector_store, mock_graph_store, mock_embedding_provider):
         """Create episodic memory instance."""
         episodic = EpisodicMemory(session_id=test_session_id)
-        episodic.vector_store = mock_qdrant_store
-        episodic.graph_store = mock_neo4j_store
+        episodic.vector_store = mock_vector_store
+        episodic.graph_store = mock_graph_store
         episodic.embedding = mock_embedding_provider
         episodic.vector_store.episodes_collection = "episodes"
         return episodic
@@ -835,11 +835,11 @@ class TestTypeValidation:
     """DATA-006: Tests for type validation in episodic memory."""
 
     @pytest_asyncio.fixture
-    async def episodic(self, test_session_id, mock_qdrant_store, mock_neo4j_store, mock_embedding_provider):
+    async def episodic(self, test_session_id, mock_vector_store, mock_graph_store, mock_embedding_provider):
         """Create episodic memory instance with mocked stores."""
         episodic = EpisodicMemory(session_id=test_session_id)
-        episodic.vector_store = mock_qdrant_store
-        episodic.graph_store = mock_neo4j_store
+        episodic.vector_store = mock_vector_store
+        episodic.graph_store = mock_graph_store
         episodic.embedding = mock_embedding_provider
         episodic.vector_store.episodes_collection = "episodes"
         return episodic
@@ -909,11 +909,11 @@ class TestP52TemporalStructure:
     """P5.2: Tests for episode temporal structure and sequencing."""
 
     @pytest_asyncio.fixture
-    async def episodic(self, test_session_id, mock_qdrant_store, mock_neo4j_store, mock_embedding_provider):
+    async def episodic(self, test_session_id, mock_vector_store, mock_graph_store, mock_embedding_provider):
         """Create episodic memory instance with mocked stores."""
         episodic = EpisodicMemory(session_id=test_session_id)
-        episodic.vector_store = mock_qdrant_store
-        episodic.graph_store = mock_neo4j_store
+        episodic.vector_store = mock_vector_store
+        episodic.graph_store = mock_graph_store
         episodic.embedding = mock_embedding_provider
         episodic.vector_store.episodes_collection = "episodes"
         return episodic
@@ -1088,11 +1088,11 @@ class TestP54QueryMemorySeparation:
     """P5.4: Test query-memory encoder separation."""
 
     @pytest_asyncio.fixture
-    async def episodic(self, test_session_id, mock_qdrant_store, mock_neo4j_store, mock_embedding_provider):
+    async def episodic(self, test_session_id, mock_vector_store, mock_graph_store, mock_embedding_provider):
         """Create episodic memory instance."""
         episodic = EpisodicMemory(session_id=test_session_id)
-        episodic.vector_store = mock_qdrant_store
-        episodic.graph_store = mock_neo4j_store
+        episodic.vector_store = mock_vector_store
+        episodic.graph_store = mock_graph_store
         episodic.embedding = mock_embedding_provider
         episodic.vector_store.episodes_collection = "episodes"
         return episodic

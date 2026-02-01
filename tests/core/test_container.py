@@ -332,9 +332,9 @@ def test_configure_production(container):
     # Get container
     c = get_container()
 
-    # Check services are registered
-    assert c.is_registered("qdrant_store")
-    assert c.is_registered("neo4j_store")
+    # Check services are registered (updated for T4DX - now uses generic names)
+    assert c.is_registered("vector_store")
+    assert c.is_registered("graph_store")
     # Note: embedding_provider may not be registered if imports fail
 
 

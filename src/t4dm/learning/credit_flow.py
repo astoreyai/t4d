@@ -26,7 +26,7 @@ import numpy as np
 if TYPE_CHECKING:
     from t4dm.learning.neuromodulators import NeuromodulatorOrchestra
     from t4dm.learning.reconsolidation import ReconsolidationEngine
-    from t4dm.storage.qdrant_store import QdrantStore
+    from t4dm.storage import T4DXVectorStore
 
 from t4dm.learning.fsrs import FSRSMemoryTracker, Rating
 
@@ -82,7 +82,7 @@ class CreditFlowEngine:
         neuromodulator_orchestra: NeuromodulatorOrchestra,
         reconsolidation_engine: ReconsolidationEngine | None = None,
         fsrs_tracker: FSRSMemoryTracker | None = None,
-        vector_store: QdrantStore | None = None,
+        vector_store: T4DXVectorStore | None = None,
         collection_name: str = "episodes",
         episodic_lr_scale: float = 1.0,
         semantic_lr_scale: float = 1.0
@@ -94,7 +94,7 @@ class CreditFlowEngine:
             neuromodulator_orchestra: Orchestra that computes learning signals
             reconsolidation_engine: Engine for episodic memory updates
             fsrs_tracker: Optional FSRS tracker for spaced repetition scheduling
-            vector_store: Optional QdrantStore for persisting updated embeddings
+            vector_store: Optional T4DXVectorStore for persisting updated embeddings
             collection_name: Collection name for embedding persistence
             episodic_lr_scale: Scale factor for episodic learning rate
             semantic_lr_scale: Scale factor for semantic learning rate

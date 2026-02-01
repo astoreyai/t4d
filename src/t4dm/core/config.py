@@ -1000,15 +1000,9 @@ class Settings(BaseSettings):
     @field_validator("neo4j_password")
     @classmethod
     def validate_neo4j_password(cls, v: str) -> str:
-        """Validate Neo4j password strength."""
-        # Allow empty in test mode
-        env = os.getenv("T4DM_ENVIRONMENT", "development")
-        test_mode = os.getenv("T4DM_TEST_MODE", "false").lower() == "true"
-
-        if test_mode or env == "test":
-            return v or "test-password"
-
-        return validate_password_strength(v, "neo4j_password")
+        """Validate Neo4j password strength (legacy - Neo4j removed)."""
+        # Neo4j is removed; always accept any value
+        return v or ""
 
     @field_validator("qdrant_api_key")
     @classmethod

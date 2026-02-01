@@ -17,7 +17,7 @@ class TestExportUtility:
         with patch("t4dm.interfaces.export_utils.EpisodicMemory") as mock_ep, \
              patch("t4dm.interfaces.export_utils.SemanticMemory") as mock_sem, \
              patch("t4dm.interfaces.export_utils.ProceduralMemory") as mock_proc, \
-             patch("t4dm.interfaces.export_utils.get_qdrant_store") as mock_qdrant:
+             patch("t4dm.interfaces.export_utils.get_vector_store") as mock_qdrant:
 
             # Configure mocks
             mock_ep_instance = MagicMock()
@@ -224,7 +224,7 @@ class TestExportGraphML:
         with patch("t4dm.interfaces.export_utils.EpisodicMemory") as mock_ep, \
              patch("t4dm.interfaces.export_utils.SemanticMemory") as mock_sem, \
              patch("t4dm.interfaces.export_utils.ProceduralMemory") as mock_proc, \
-             patch("t4dm.interfaces.export_utils.get_qdrant_store") as mock_qdrant:
+             patch("t4dm.interfaces.export_utils.get_vector_store") as mock_qdrant:
 
             mock_ep_instance = MagicMock()
             mock_ep_instance.initialize = AsyncMock()
@@ -356,7 +356,7 @@ class TestPathTraversalProtection:
         with patch("t4dm.interfaces.export_utils.EpisodicMemory") as mock_ep, \
              patch("t4dm.interfaces.export_utils.SemanticMemory") as mock_sem, \
              patch("t4dm.interfaces.export_utils.ProceduralMemory") as mock_proc, \
-             patch("t4dm.interfaces.export_utils.get_qdrant_store") as mock_qdrant:
+             patch("t4dm.interfaces.export_utils.get_vector_store") as mock_qdrant:
 
             mock_ep_instance = MagicMock()
             mock_ep_instance.initialize = AsyncMock()

@@ -13,7 +13,7 @@ class TestTraceViewer:
         """Create mock storage backends."""
         with patch("t4dm.interfaces.trace_viewer.EpisodicMemory") as mock_ep, \
              patch("t4dm.interfaces.trace_viewer.SemanticMemory") as mock_sem, \
-             patch("t4dm.interfaces.trace_viewer.get_qdrant_store") as mock_qdrant:
+             patch("t4dm.interfaces.trace_viewer.get_vector_store") as mock_qdrant:
 
             mock_ep_instance = MagicMock()
             mock_ep_instance.initialize = AsyncMock()

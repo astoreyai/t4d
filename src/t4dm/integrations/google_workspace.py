@@ -480,11 +480,11 @@ class PersonalDataStore:
 
     def __init__(
         self,
-        neo4j_store: Any,  # Neo4jStore
-        qdrant_store: Any,  # QdrantStore
+        graph_store: Any,  # T4DXGraphStore
+        vector_store: Any,  # T4DXVectorStore
     ):
-        self.neo4j = neo4j_store
-        self.qdrant = qdrant_store
+        self.neo4j = graph_store
+        self.qdrant = vector_store
 
     async def store_contact(self, contact: Contact) -> str:
         """Store contact in knowledge graph."""

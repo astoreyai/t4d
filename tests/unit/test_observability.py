@@ -698,13 +698,14 @@ async def test_health_checker_check_readiness():
         assert result is False
 
 
+@pytest.mark.skip(reason="Legacy test for old Qdrant architecture - T4DX uses embedded engine")
 @pytest.mark.asyncio
 async def test_health_checker_check_qdrant():
     """Test check_qdrant health check."""
     checker = HealthChecker()
 
     # Patch at source module since import happens inside the method
-    with patch("t4dm.storage.qdrant_store.get_qdrant_store") as mock_get_store:
+    with patch("t4dm.storage.qdrant_store.get_vector_store") as mock_get_store:
         mock_store = AsyncMock()
         mock_store.episodes_collection = "episodes"
         mock_store.count = AsyncMock(return_value=100)
@@ -716,13 +717,14 @@ async def test_health_checker_check_qdrant():
         assert result.status == HealthStatus.HEALTHY
 
 
+@pytest.mark.skip(reason="Legacy test for old Qdrant architecture - T4DX uses embedded engine")
 @pytest.mark.asyncio
 async def test_health_checker_check_qdrant_timeout():
     """Test check_qdrant timeout handling."""
     checker = HealthChecker(timeout=0.001)
 
     # Patch at source module since import happens inside the method
-    with patch("t4dm.storage.qdrant_store.get_qdrant_store") as mock_get_store:
+    with patch("t4dm.storage.qdrant_store.get_vector_store") as mock_get_store:
         mock_store = AsyncMock()
         mock_store.episodes_collection = "episodes"
         mock_store.count = AsyncMock(
@@ -736,13 +738,14 @@ async def test_health_checker_check_qdrant_timeout():
         assert result.status == HealthStatus.UNHEALTHY
 
 
+@pytest.mark.skip(reason="Legacy test for old Neo4j architecture - T4DX uses embedded engine")
 @pytest.mark.asyncio
 async def test_health_checker_check_neo4j():
     """Test check_neo4j health check."""
     checker = HealthChecker()
 
     # Patch at source module since import happens inside the method
-    with patch("t4dm.storage.neo4j_store.get_neo4j_store") as mock_get_store:
+    with patch("t4dm.storage.neo4j_store.get_graph_store") as mock_get_store:
         mock_store = AsyncMock()
         mock_store.query = AsyncMock(return_value=[{"n": 1}])
         mock_get_store.return_value = mock_store
@@ -788,17 +791,12 @@ async def test_health_checker_check_all():
     """Test check_all runs all health checks."""
     checker = HealthChecker()
 
-    with patch.object(checker, "check_qdrant") as mock_qdrant, \
-         patch.object(checker, "check_neo4j") as mock_neo4j, \
+    with patch.object(checker, "check_t4dx") as mock_t4dx, \
          patch.object(checker, "check_embedding") as mock_embedding, \
          patch.object(checker, "check_metrics") as mock_metrics:
 
-        mock_qdrant.return_value = ComponentHealth(
-            name="qdrant",
-            status=HealthStatus.HEALTHY,
-        )
-        mock_neo4j.return_value = ComponentHealth(
-            name="neo4j",
+        mock_t4dx.return_value = ComponentHealth(
+            name="t4dx",
             status=HealthStatus.HEALTHY,
         )
         mock_embedding.return_value = ComponentHealth(
@@ -813,7 +811,7 @@ async def test_health_checker_check_all():
         result = await checker.check_all()
 
         assert result.status == HealthStatus.HEALTHY
-        assert len(result.components) == 4
+        assert len(result.components) == 3
 
 
 def test_get_health_checker_singleton():

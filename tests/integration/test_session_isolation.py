@@ -42,7 +42,7 @@ def mock_embedding():
 
 
 @pytest.fixture
-def mock_qdrant_store():
+def mock_vector_store():
     """Mock Qdrant store."""
     mock = AsyncMock()
     mock.episodes_collection = "test_episodes"
@@ -57,7 +57,7 @@ def mock_qdrant_store():
 
 
 @pytest.fixture
-def mock_neo4j_store():
+def mock_graph_store():
     """Mock Neo4j store."""
     mock = AsyncMock()
     mock.initialize = AsyncMock()
@@ -78,12 +78,12 @@ class TestEpisodicSessionIsolation:
 
     @pytest.mark.asyncio
     async def test_episodic_create_stores_session_id(
-        self, mock_embedding, mock_qdrant_store, mock_neo4j_store
+        self, mock_embedding, mock_vector_store, mock_graph_store
     ):
         """Test that create() stores session_id in both vector and graph stores."""
         with patch("t4dm.memory.episodic.get_embedding_provider", return_value=mock_embedding):
-            with patch("t4dm.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
-                with patch("t4dm.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
+            with patch("t4dm.memory.episodic.get_vector_store", return_value=mock_vector_store):
+                with patch("t4dm.memory.episodic.get_graph_store", return_value=mock_graph_store):
                     episodic = EpisodicMemory("session-a")
                     await episodic.initialize()
 
@@ -96,8 +96,8 @@ class TestEpisodicSessionIsolation:
                     )
 
                     # Verify add() was called with correct payload
-                    mock_qdrant_store.add.assert_called_once()
-                    call_args = mock_qdrant_store.add.call_args
+                    mock_vector_store.add.assert_called_once()
+                    call_args = mock_vector_store.add.call_args
                     payloads = call_args.kwargs["payloads"]
 
                     # Check session_id in Qdrant payload
@@ -106,8 +106,8 @@ class TestEpisodicSessionIsolation:
                     assert payloads[0]["content"] == "Test episode in session A"
 
                     # Verify create_node() was called with correct properties
-                    mock_neo4j_store.create_node.assert_called_once()
-                    node_call_args = mock_neo4j_store.create_node.call_args
+                    mock_graph_store.create_node.assert_called_once()
+                    node_call_args = mock_graph_store.create_node.call_args
                     props = node_call_args.kwargs["properties"]
 
                     # Check sessionId in Neo4j properties
@@ -115,14 +115,14 @@ class TestEpisodicSessionIsolation:
 
     @pytest.mark.asyncio
     async def test_episodic_recall_filters_by_current_session(
-        self, mock_embedding, mock_qdrant_store, mock_neo4j_store
+        self, mock_embedding, mock_vector_store, mock_graph_store
     ):
         """Test that recall() filters by current session when session_filter is None."""
         with patch("t4dm.memory.episodic.get_embedding_provider", return_value=mock_embedding):
-            with patch("t4dm.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
-                with patch("t4dm.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
+            with patch("t4dm.memory.episodic.get_vector_store", return_value=mock_vector_store):
+                with patch("t4dm.memory.episodic.get_graph_store", return_value=mock_graph_store):
                     # Setup mock search results
-                    mock_qdrant_store.search.return_value = []
+                    mock_vector_store.search.return_value = []
 
                     episodic = EpisodicMemory("session-a")
                     await episodic.initialize()
@@ -131,8 +131,8 @@ class TestEpisodicSessionIsolation:
                     results = await episodic.recall("test query")
 
                     # Verify search was called with session filter
-                    mock_qdrant_store.search.assert_called_once()
-                    search_call = mock_qdrant_store.search.call_args
+                    mock_vector_store.search.assert_called_once()
+                    search_call = mock_vector_store.search.call_args
                     search_filter = search_call.kwargs["filter"]
 
                     # Should filter by current session
@@ -141,14 +141,14 @@ class TestEpisodicSessionIsolation:
 
     @pytest.mark.asyncio
     async def test_episodic_recall_respects_explicit_session_filter(
-        self, mock_embedding, mock_qdrant_store, mock_neo4j_store
+        self, mock_embedding, mock_vector_store, mock_graph_store
     ):
         """Test that recall() respects explicit session_filter parameter."""
         with patch("t4dm.memory.episodic.get_embedding_provider", return_value=mock_embedding):
-            with patch("t4dm.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
-                with patch("t4dm.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
+            with patch("t4dm.memory.episodic.get_vector_store", return_value=mock_vector_store):
+                with patch("t4dm.memory.episodic.get_graph_store", return_value=mock_graph_store):
                     # Setup mock search results
-                    mock_qdrant_store.search.return_value = []
+                    mock_vector_store.search.return_value = []
 
                     episodic = EpisodicMemory("session-a")
                     await episodic.initialize()
@@ -160,7 +160,7 @@ class TestEpisodicSessionIsolation:
                     )
 
                     # Verify search was called with explicit session filter
-                    search_call = mock_qdrant_store.search.call_args
+                    search_call = mock_vector_store.search.call_args
                     search_filter = search_call.kwargs["filter"]
 
                     # Should use explicit session filter, not current session
@@ -169,14 +169,14 @@ class TestEpisodicSessionIsolation:
 
     @pytest.mark.asyncio
     async def test_episodic_recall_default_session_no_filter(
-        self, mock_embedding, mock_qdrant_store, mock_neo4j_store
+        self, mock_embedding, mock_vector_store, mock_graph_store
     ):
         """Test that recall() with 'default' session doesn't apply session filter."""
         with patch("t4dm.memory.episodic.get_embedding_provider", return_value=mock_embedding):
-            with patch("t4dm.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
-                with patch("t4dm.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
+            with patch("t4dm.memory.episodic.get_vector_store", return_value=mock_vector_store):
+                with patch("t4dm.memory.episodic.get_graph_store", return_value=mock_graph_store):
                     # Setup mock search results
-                    mock_qdrant_store.search.return_value = []
+                    mock_vector_store.search.return_value = []
 
                     episodic = EpisodicMemory("default")
                     await episodic.initialize()
@@ -185,7 +185,7 @@ class TestEpisodicSessionIsolation:
                     results = await episodic.recall("test query")
 
                     # Verify search was called without session filter
-                    search_call = mock_qdrant_store.search.call_args
+                    search_call = mock_vector_store.search.call_args
                     search_filter = search_call.kwargs["filter"]
 
                     # Should pass None (no filter) for 'default' session
@@ -193,12 +193,12 @@ class TestEpisodicSessionIsolation:
 
     @pytest.mark.asyncio
     async def test_episodic_session_isolation_cross_contamination(
-        self, mock_embedding, mock_qdrant_store, mock_neo4j_store
+        self, mock_embedding, mock_vector_store, mock_graph_store
     ):
         """Test that session A and B don't see each other's data."""
         with patch("t4dm.memory.episodic.get_embedding_provider", return_value=mock_embedding):
-            with patch("t4dm.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
-                with patch("t4dm.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
+            with patch("t4dm.memory.episodic.get_vector_store", return_value=mock_vector_store):
+                with patch("t4dm.memory.episodic.get_graph_store", return_value=mock_graph_store):
                     # Create episodes in session A
                     episodic_a = EpisodicMemory("session-a")
                     await episodic_a.initialize()
@@ -210,7 +210,7 @@ class TestEpisodicSessionIsolation:
                     episode_b = await episodic_b.create("Content from B")
 
                     # Verify payloads are different
-                    calls = mock_qdrant_store.add.call_args_list
+                    calls = mock_vector_store.add.call_args_list
                     assert len(calls) == 2
 
                     # First call (session A)
@@ -225,12 +225,12 @@ class TestEpisodicSessionIsolation:
 
     @pytest.mark.asyncio
     async def test_episodic_recall_returns_scored_results(
-        self, mock_embedding, mock_qdrant_store, mock_neo4j_store
+        self, mock_embedding, mock_vector_store, mock_graph_store
     ):
         """Test that recall returns ScoredResult objects with proper structure."""
         with patch("t4dm.memory.episodic.get_embedding_provider", return_value=mock_embedding):
-            with patch("t4dm.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
-                with patch("t4dm.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
+            with patch("t4dm.memory.episodic.get_vector_store", return_value=mock_vector_store):
+                with patch("t4dm.memory.episodic.get_graph_store", return_value=mock_graph_store):
                     # Setup mock search to return an episode
                     test_id = str(uuid4())
                     test_payload = {
@@ -245,10 +245,10 @@ class TestEpisodicSessionIsolation:
                         "last_accessed": datetime.now().isoformat(),
                         "stability": 1.0,
                     }
-                    mock_qdrant_store.search.return_value = [
+                    mock_vector_store.search.return_value = [
                         (test_id, 0.85, test_payload)
                     ]
-                    mock_qdrant_store.update_payload = AsyncMock()
+                    mock_vector_store.update_payload = AsyncMock()
 
                     episodic = EpisodicMemory("session-a")
                     await episodic.initialize()
@@ -271,12 +271,12 @@ class TestSemanticSessionIsolation:
 
     @pytest.mark.asyncio
     async def test_semantic_create_entity_stores_session_id(
-        self, mock_embedding, mock_qdrant_store, mock_neo4j_store
+        self, mock_embedding, mock_vector_store, mock_graph_store
     ):
         """Test that create_entity() stores session_id in payload and properties."""
         with patch("t4dm.memory.semantic.get_embedding_provider", return_value=mock_embedding):
-            with patch("t4dm.memory.semantic.get_qdrant_store", return_value=mock_qdrant_store):
-                with patch("t4dm.memory.semantic.get_neo4j_store", return_value=mock_neo4j_store):
+            with patch("t4dm.memory.semantic.get_vector_store", return_value=mock_vector_store):
+                with patch("t4dm.memory.semantic.get_graph_store", return_value=mock_graph_store):
                     semantic = SemanticMemory("session-a")
                     await semantic.initialize()
 
@@ -287,30 +287,30 @@ class TestSemanticSessionIsolation:
                     )
 
                     # Verify add() was called with session_id in payload
-                    mock_qdrant_store.add.assert_called_once()
-                    call_args = mock_qdrant_store.add.call_args
+                    mock_vector_store.add.assert_called_once()
+                    call_args = mock_vector_store.add.call_args
                     payloads = call_args.kwargs["payloads"]
 
                     assert len(payloads) == 1
                     assert payloads[0]["session_id"] == "session-a"
 
                     # Verify create_node() was called with sessionId in properties
-                    mock_neo4j_store.create_node.assert_called_once()
-                    node_call_args = mock_neo4j_store.create_node.call_args
+                    mock_graph_store.create_node.assert_called_once()
+                    node_call_args = mock_graph_store.create_node.call_args
                     props = node_call_args.kwargs["properties"]
 
                     assert props["sessionId"] == "session-a"
 
     @pytest.mark.asyncio
     async def test_semantic_recall_filters_by_current_session(
-        self, mock_embedding, mock_qdrant_store, mock_neo4j_store
+        self, mock_embedding, mock_vector_store, mock_graph_store
     ):
         """Test that recall() filters by current session by default."""
         with patch("t4dm.memory.semantic.get_embedding_provider", return_value=mock_embedding):
-            with patch("t4dm.memory.semantic.get_qdrant_store", return_value=mock_qdrant_store):
-                with patch("t4dm.memory.semantic.get_neo4j_store", return_value=mock_neo4j_store):
-                    mock_qdrant_store.search.return_value = []
-                    mock_neo4j_store.get_relationships = AsyncMock(return_value=[])
+            with patch("t4dm.memory.semantic.get_vector_store", return_value=mock_vector_store):
+                with patch("t4dm.memory.semantic.get_graph_store", return_value=mock_graph_store):
+                    mock_vector_store.search.return_value = []
+                    mock_graph_store.get_relationships = AsyncMock(return_value=[])
 
                     semantic = SemanticMemory("session-b")
                     await semantic.initialize()
@@ -318,7 +318,7 @@ class TestSemanticSessionIsolation:
                     results = await semantic.recall("test query")
 
                     # Verify search filters by session
-                    search_call = mock_qdrant_store.search.call_args
+                    search_call = mock_vector_store.search.call_args
                     search_filter = search_call.kwargs["filter"]
 
                     assert search_filter is not None
@@ -326,14 +326,14 @@ class TestSemanticSessionIsolation:
 
     @pytest.mark.asyncio
     async def test_semantic_recall_respects_explicit_session_filter(
-        self, mock_embedding, mock_qdrant_store, mock_neo4j_store
+        self, mock_embedding, mock_vector_store, mock_graph_store
     ):
         """Test that recall() respects explicit session_filter parameter."""
         with patch("t4dm.memory.semantic.get_embedding_provider", return_value=mock_embedding):
-            with patch("t4dm.memory.semantic.get_qdrant_store", return_value=mock_qdrant_store):
-                with patch("t4dm.memory.semantic.get_neo4j_store", return_value=mock_neo4j_store):
-                    mock_qdrant_store.search.return_value = []
-                    mock_neo4j_store.get_relationships = AsyncMock(return_value=[])
+            with patch("t4dm.memory.semantic.get_vector_store", return_value=mock_vector_store):
+                with patch("t4dm.memory.semantic.get_graph_store", return_value=mock_graph_store):
+                    mock_vector_store.search.return_value = []
+                    mock_graph_store.get_relationships = AsyncMock(return_value=[])
 
                     semantic = SemanticMemory("session-a")
                     await semantic.initialize()
@@ -344,7 +344,7 @@ class TestSemanticSessionIsolation:
                     )
 
                     # Verify search uses explicit filter
-                    search_call = mock_qdrant_store.search.call_args
+                    search_call = mock_vector_store.search.call_args
                     search_filter = search_call.kwargs["filter"]
 
                     assert search_filter is not None
@@ -352,21 +352,21 @@ class TestSemanticSessionIsolation:
 
     @pytest.mark.asyncio
     async def test_semantic_recall_default_session_no_filter(
-        self, mock_embedding, mock_qdrant_store, mock_neo4j_store
+        self, mock_embedding, mock_vector_store, mock_graph_store
     ):
         """Test that recall() with 'default' session doesn't apply session filter."""
         with patch("t4dm.memory.semantic.get_embedding_provider", return_value=mock_embedding):
-            with patch("t4dm.memory.semantic.get_qdrant_store", return_value=mock_qdrant_store):
-                with patch("t4dm.memory.semantic.get_neo4j_store", return_value=mock_neo4j_store):
-                    mock_qdrant_store.search.return_value = []
-                    mock_neo4j_store.get_relationships = AsyncMock(return_value=[])
+            with patch("t4dm.memory.semantic.get_vector_store", return_value=mock_vector_store):
+                with patch("t4dm.memory.semantic.get_graph_store", return_value=mock_graph_store):
+                    mock_vector_store.search.return_value = []
+                    mock_graph_store.get_relationships = AsyncMock(return_value=[])
 
                     semantic = SemanticMemory("default")
                     await semantic.initialize()
 
                     results = await semantic.recall("test query")
 
-                    search_call = mock_qdrant_store.search.call_args
+                    search_call = mock_vector_store.search.call_args
                     search_filter = search_call.kwargs["filter"]
 
                     # 'default' session should not filter by session_id
@@ -374,12 +374,12 @@ class TestSemanticSessionIsolation:
 
     @pytest.mark.asyncio
     async def test_semantic_create_relationship_respects_session(
-        self, mock_embedding, mock_qdrant_store, mock_neo4j_store
+        self, mock_embedding, mock_vector_store, mock_graph_store
     ):
         """Test that relationships are created with session context."""
         with patch("t4dm.memory.semantic.get_embedding_provider", return_value=mock_embedding):
-            with patch("t4dm.memory.semantic.get_qdrant_store", return_value=mock_qdrant_store):
-                with patch("t4dm.memory.semantic.get_neo4j_store", return_value=mock_neo4j_store):
+            with patch("t4dm.memory.semantic.get_vector_store", return_value=mock_vector_store):
+                with patch("t4dm.memory.semantic.get_graph_store", return_value=mock_graph_store):
                     semantic = SemanticMemory("session-x")
                     await semantic.initialize()
 
@@ -393,20 +393,20 @@ class TestSemanticSessionIsolation:
                     )
 
                     # Verify relationship was created
-                    mock_neo4j_store.create_relationship.assert_called_once()
-                    rel_call = mock_neo4j_store.create_relationship.call_args
+                    mock_graph_store.create_relationship.assert_called_once()
+                    rel_call = mock_graph_store.create_relationship.call_args
 
                     assert rel_call.kwargs["source_id"] == str(source_id)
                     assert rel_call.kwargs["target_id"] == str(target_id)
 
     @pytest.mark.asyncio
     async def test_semantic_session_isolation_entities(
-        self, mock_embedding, mock_qdrant_store, mock_neo4j_store
+        self, mock_embedding, mock_vector_store, mock_graph_store
     ):
         """Test that entities from different sessions are isolated."""
         with patch("t4dm.memory.semantic.get_embedding_provider", return_value=mock_embedding):
-            with patch("t4dm.memory.semantic.get_qdrant_store", return_value=mock_qdrant_store):
-                with patch("t4dm.memory.semantic.get_neo4j_store", return_value=mock_neo4j_store):
+            with patch("t4dm.memory.semantic.get_vector_store", return_value=mock_vector_store):
+                with patch("t4dm.memory.semantic.get_graph_store", return_value=mock_graph_store):
                     # Create entity in session-1
                     semantic_1 = SemanticMemory("session-1")
                     await semantic_1.initialize()
@@ -426,7 +426,7 @@ class TestSemanticSessionIsolation:
                     )
 
                     # Verify payloads have different session_ids
-                    calls = mock_qdrant_store.add.call_args_list
+                    calls = mock_vector_store.add.call_args_list
                     assert len(calls) == 2
 
                     payload_1 = calls[0].kwargs["payloads"][0]
@@ -445,12 +445,12 @@ class TestProceduralSessionIsolation:
 
     @pytest.mark.asyncio
     async def test_procedural_build_stores_session_id(
-        self, mock_embedding, mock_qdrant_store, mock_neo4j_store
+        self, mock_embedding, mock_vector_store, mock_graph_store
     ):
         """Test that build() stores session_id in payload and properties."""
         with patch("t4dm.memory.procedural.get_embedding_provider", return_value=mock_embedding):
-            with patch("t4dm.memory.procedural.get_qdrant_store", return_value=mock_qdrant_store):
-                with patch("t4dm.memory.procedural.get_neo4j_store", return_value=mock_neo4j_store):
+            with patch("t4dm.memory.procedural.get_vector_store", return_value=mock_vector_store):
+                with patch("t4dm.memory.procedural.get_graph_store", return_value=mock_graph_store):
                     procedural = ProceduralMemory("session-dev")
                     await procedural.initialize()
 
@@ -466,29 +466,29 @@ class TestProceduralSessionIsolation:
                     )
 
                     # Verify add() was called with session_id in payload
-                    mock_qdrant_store.add.assert_called_once()
-                    call_args = mock_qdrant_store.add.call_args
+                    mock_vector_store.add.assert_called_once()
+                    call_args = mock_vector_store.add.call_args
                     payloads = call_args.kwargs["payloads"]
 
                     assert len(payloads) == 1
                     assert payloads[0]["session_id"] == "session-dev"
 
                     # Verify create_node() was called with sessionId
-                    mock_neo4j_store.create_node.assert_called_once()
-                    node_call_args = mock_neo4j_store.create_node.call_args
+                    mock_graph_store.create_node.assert_called_once()
+                    node_call_args = mock_graph_store.create_node.call_args
                     props = node_call_args.kwargs["properties"]
 
                     assert props["sessionId"] == "session-dev"
 
     @pytest.mark.asyncio
     async def test_procedural_retrieve_filters_by_current_session(
-        self, mock_embedding, mock_qdrant_store, mock_neo4j_store
+        self, mock_embedding, mock_vector_store, mock_graph_store
     ):
         """Test that retrieve() filters by current session by default."""
         with patch("t4dm.memory.procedural.get_embedding_provider", return_value=mock_embedding):
-            with patch("t4dm.memory.procedural.get_qdrant_store", return_value=mock_qdrant_store):
-                with patch("t4dm.memory.procedural.get_neo4j_store", return_value=mock_neo4j_store):
-                    mock_qdrant_store.search.return_value = []
+            with patch("t4dm.memory.procedural.get_vector_store", return_value=mock_vector_store):
+                with patch("t4dm.memory.procedural.get_graph_store", return_value=mock_graph_store):
+                    mock_vector_store.search.return_value = []
 
                     procedural = ProceduralMemory("session-prod")
                     await procedural.initialize()
@@ -496,7 +496,7 @@ class TestProceduralSessionIsolation:
                     results = await procedural.recall_skill("Find procedures for task")
 
                     # Verify search filters by session
-                    search_call = mock_qdrant_store.search.call_args
+                    search_call = mock_vector_store.search.call_args
                     search_filter = search_call.kwargs["filter"]
 
                     assert search_filter is not None
@@ -505,13 +505,13 @@ class TestProceduralSessionIsolation:
 
     @pytest.mark.asyncio
     async def test_procedural_retrieve_respects_explicit_session_filter(
-        self, mock_embedding, mock_qdrant_store, mock_neo4j_store
+        self, mock_embedding, mock_vector_store, mock_graph_store
     ):
         """Test that retrieve() respects explicit session_filter parameter."""
         with patch("t4dm.memory.procedural.get_embedding_provider", return_value=mock_embedding):
-            with patch("t4dm.memory.procedural.get_qdrant_store", return_value=mock_qdrant_store):
-                with patch("t4dm.memory.procedural.get_neo4j_store", return_value=mock_neo4j_store):
-                    mock_qdrant_store.search.return_value = []
+            with patch("t4dm.memory.procedural.get_vector_store", return_value=mock_vector_store):
+                with patch("t4dm.memory.procedural.get_graph_store", return_value=mock_graph_store):
+                    mock_vector_store.search.return_value = []
 
                     procedural = ProceduralMemory("session-current")
                     await procedural.initialize()
@@ -521,7 +521,7 @@ class TestProceduralSessionIsolation:
                         session_filter="session-other"
                     )
 
-                    search_call = mock_qdrant_store.search.call_args
+                    search_call = mock_vector_store.search.call_args
                     search_filter = search_call.kwargs["filter"]
 
                     assert search_filter is not None
@@ -529,20 +529,20 @@ class TestProceduralSessionIsolation:
 
     @pytest.mark.asyncio
     async def test_procedural_retrieve_default_session_no_filter(
-        self, mock_embedding, mock_qdrant_store, mock_neo4j_store
+        self, mock_embedding, mock_vector_store, mock_graph_store
     ):
         """Test that retrieve() with 'default' session doesn't apply session filter."""
         with patch("t4dm.memory.procedural.get_embedding_provider", return_value=mock_embedding):
-            with patch("t4dm.memory.procedural.get_qdrant_store", return_value=mock_qdrant_store):
-                with patch("t4dm.memory.procedural.get_neo4j_store", return_value=mock_neo4j_store):
-                    mock_qdrant_store.search.return_value = []
+            with patch("t4dm.memory.procedural.get_vector_store", return_value=mock_vector_store):
+                with patch("t4dm.memory.procedural.get_graph_store", return_value=mock_graph_store):
+                    mock_vector_store.search.return_value = []
 
                     procedural = ProceduralMemory("default")
                     await procedural.initialize()
 
                     results = await procedural.recall_skill("Find procedures")
 
-                    search_call = mock_qdrant_store.search.call_args
+                    search_call = mock_vector_store.search.call_args
                     search_filter = search_call.kwargs["filter"]
 
                     # 'default' session should not filter by session_id
@@ -553,12 +553,12 @@ class TestProceduralSessionIsolation:
 
     @pytest.mark.asyncio
     async def test_procedural_session_isolation_procedures(
-        self, mock_embedding, mock_qdrant_store, mock_neo4j_store
+        self, mock_embedding, mock_vector_store, mock_graph_store
     ):
         """Test that procedures from different sessions are isolated."""
         with patch("t4dm.memory.procedural.get_embedding_provider", return_value=mock_embedding):
-            with patch("t4dm.memory.procedural.get_qdrant_store", return_value=mock_qdrant_store):
-                with patch("t4dm.memory.procedural.get_neo4j_store", return_value=mock_neo4j_store):
+            with patch("t4dm.memory.procedural.get_vector_store", return_value=mock_vector_store):
+                with patch("t4dm.memory.procedural.get_graph_store", return_value=mock_graph_store):
                     trajectory = [{"action": "Step 1"}]
 
                     # Create in session-research
@@ -580,7 +580,7 @@ class TestProceduralSessionIsolation:
                     )
 
                     # Verify payloads have different session_ids
-                    calls = mock_qdrant_store.add.call_args_list
+                    calls = mock_vector_store.add.call_args_list
                     assert len(calls) == 2
 
                     payload_research = calls[0].kwargs["payloads"][0]
@@ -593,13 +593,13 @@ class TestProceduralSessionIsolation:
 
     @pytest.mark.asyncio
     async def test_procedural_domain_filter_combined_with_session(
-        self, mock_embedding, mock_qdrant_store, mock_neo4j_store
+        self, mock_embedding, mock_vector_store, mock_graph_store
     ):
         """Test that domain filter is combined with session filter."""
         with patch("t4dm.memory.procedural.get_embedding_provider", return_value=mock_embedding):
-            with patch("t4dm.memory.procedural.get_qdrant_store", return_value=mock_qdrant_store):
-                with patch("t4dm.memory.procedural.get_neo4j_store", return_value=mock_neo4j_store):
-                    mock_qdrant_store.search.return_value = []
+            with patch("t4dm.memory.procedural.get_vector_store", return_value=mock_vector_store):
+                with patch("t4dm.memory.procedural.get_graph_store", return_value=mock_graph_store):
+                    mock_vector_store.search.return_value = []
 
                     procedural = ProceduralMemory("session-dev")
                     await procedural.initialize()
@@ -609,7 +609,7 @@ class TestProceduralSessionIsolation:
                         domain="coding"
                     )
 
-                    search_call = mock_qdrant_store.search.call_args
+                    search_call = mock_vector_store.search.call_args
                     search_filter = search_call.kwargs["filter"]
 
                     # Should have both session and domain filters
@@ -628,12 +628,12 @@ class TestCrossSessionIntegration:
 
     @pytest.mark.asyncio
     async def test_three_concurrent_sessions_episodic(
-        self, mock_embedding, mock_qdrant_store, mock_neo4j_store
+        self, mock_embedding, mock_vector_store, mock_graph_store
     ):
         """Test that three concurrent sessions don't interfere."""
         with patch("t4dm.memory.episodic.get_embedding_provider", return_value=mock_embedding):
-            with patch("t4dm.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
-                with patch("t4dm.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
+            with patch("t4dm.memory.episodic.get_vector_store", return_value=mock_vector_store):
+                with patch("t4dm.memory.episodic.get_graph_store", return_value=mock_graph_store):
                     # Create three instances
                     episodic_a = EpisodicMemory("session-a")
                     episodic_b = EpisodicMemory("session-b")
@@ -653,7 +653,7 @@ class TestCrossSessionIntegration:
                     )
 
                     # Verify correct session_ids in all calls
-                    calls = mock_qdrant_store.add.call_args_list
+                    calls = mock_vector_store.add.call_args_list
                     assert len(calls) == 3
 
                     sessions_seen = set()
@@ -665,12 +665,12 @@ class TestCrossSessionIntegration:
 
     @pytest.mark.asyncio
     async def test_three_concurrent_sessions_semantic(
-        self, mock_embedding, mock_qdrant_store, mock_neo4j_store
+        self, mock_embedding, mock_vector_store, mock_graph_store
     ):
         """Test semantic memory with three concurrent sessions."""
         with patch("t4dm.memory.semantic.get_embedding_provider", return_value=mock_embedding):
-            with patch("t4dm.memory.semantic.get_qdrant_store", return_value=mock_qdrant_store):
-                with patch("t4dm.memory.semantic.get_neo4j_store", return_value=mock_neo4j_store):
+            with patch("t4dm.memory.semantic.get_vector_store", return_value=mock_vector_store):
+                with patch("t4dm.memory.semantic.get_graph_store", return_value=mock_graph_store):
                     semantic_a = SemanticMemory("session-1")
                     semantic_b = SemanticMemory("session-2")
                     semantic_c = SemanticMemory("session-3")
@@ -687,7 +687,7 @@ class TestCrossSessionIntegration:
                         semantic_c.create_entity("Entity3", "CONCEPT", "Summary3"),
                     )
 
-                    calls = mock_qdrant_store.add.call_args_list
+                    calls = mock_vector_store.add.call_args_list
                     assert len(calls) == 3
 
                     sessions = {
@@ -699,12 +699,12 @@ class TestCrossSessionIntegration:
 
     @pytest.mark.asyncio
     async def test_three_concurrent_sessions_procedural(
-        self, mock_embedding, mock_qdrant_store, mock_neo4j_store
+        self, mock_embedding, mock_vector_store, mock_graph_store
     ):
         """Test procedural memory with three concurrent sessions."""
         with patch("t4dm.memory.procedural.get_embedding_provider", return_value=mock_embedding):
-            with patch("t4dm.memory.procedural.get_qdrant_store", return_value=mock_qdrant_store):
-                with patch("t4dm.memory.procedural.get_neo4j_store", return_value=mock_neo4j_store):
+            with patch("t4dm.memory.procedural.get_vector_store", return_value=mock_vector_store):
+                with patch("t4dm.memory.procedural.get_graph_store", return_value=mock_graph_store):
                     procedural_x = ProceduralMemory("session-x")
                     procedural_y = ProceduralMemory("session-y")
                     procedural_z = ProceduralMemory("session-z")
@@ -723,7 +723,7 @@ class TestCrossSessionIntegration:
                         procedural_z.build(trajectory, 0.8, "trading"),
                     )
 
-                    calls = mock_qdrant_store.add.call_args_list
+                    calls = mock_vector_store.add.call_args_list
                     assert len(calls) == 3
 
                     sessions = {
@@ -735,20 +735,20 @@ class TestCrossSessionIntegration:
 
     @pytest.mark.asyncio
     async def test_all_three_memory_types_respect_session_filter(
-        self, mock_embedding, mock_qdrant_store, mock_neo4j_store
+        self, mock_embedding, mock_vector_store, mock_graph_store
     ):
         """Test that all three memory types respect session_filter override (mocked)."""
         with patch("t4dm.memory.episodic.get_embedding_provider", return_value=mock_embedding):
-            with patch("t4dm.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
-                with patch("t4dm.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
+            with patch("t4dm.memory.episodic.get_vector_store", return_value=mock_vector_store):
+                with patch("t4dm.memory.episodic.get_graph_store", return_value=mock_graph_store):
                     with patch("t4dm.memory.semantic.get_embedding_provider", return_value=mock_embedding):
-                        with patch("t4dm.memory.semantic.get_qdrant_store", return_value=mock_qdrant_store):
-                            with patch("t4dm.memory.semantic.get_neo4j_store", return_value=mock_neo4j_store):
+                        with patch("t4dm.memory.semantic.get_vector_store", return_value=mock_vector_store):
+                            with patch("t4dm.memory.semantic.get_graph_store", return_value=mock_graph_store):
                                 with patch("t4dm.memory.procedural.get_embedding_provider", return_value=mock_embedding):
-                                    with patch("t4dm.memory.procedural.get_qdrant_store", return_value=mock_qdrant_store):
-                                        with patch("t4dm.memory.procedural.get_neo4j_store", return_value=mock_neo4j_store):
-                                            mock_qdrant_store.search.return_value = []
-                                            mock_neo4j_store.get_relationships = AsyncMock(return_value=[])
+                                    with patch("t4dm.memory.procedural.get_vector_store", return_value=mock_vector_store):
+                                        with patch("t4dm.memory.procedural.get_graph_store", return_value=mock_graph_store):
+                                            mock_vector_store.search.return_value = []
+                                            mock_graph_store.get_relationships = AsyncMock(return_value=[])
 
                                             episodic = EpisodicMemory("current-session")
                                             semantic = SemanticMemory("current-session")
@@ -768,7 +768,7 @@ class TestCrossSessionIntegration:
                                             )
 
                                             # Verify all search calls used the target session
-                                            calls = mock_qdrant_store.search.call_args_list
+                                            calls = mock_vector_store.search.call_args_list
                                             assert len(calls) == 3
 
                                             for call in calls:
@@ -786,12 +786,12 @@ class TestPayloadStructure:
 
     @pytest.mark.asyncio
     async def test_episodic_payload_complete_structure(
-        self, mock_embedding, mock_qdrant_store, mock_neo4j_store
+        self, mock_embedding, mock_vector_store, mock_graph_store
     ):
         """Verify episodic payload has all required fields."""
         with patch("t4dm.memory.episodic.get_embedding_provider", return_value=mock_embedding):
-            with patch("t4dm.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
-                with patch("t4dm.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
+            with patch("t4dm.memory.episodic.get_vector_store", return_value=mock_vector_store):
+                with patch("t4dm.memory.episodic.get_graph_store", return_value=mock_graph_store):
                     episodic = EpisodicMemory("test-session")
                     await episodic.initialize()
 
@@ -802,7 +802,7 @@ class TestPayloadStructure:
                         valence=0.7,
                     )
 
-                    payload = mock_qdrant_store.add.call_args.kwargs["payloads"][0]
+                    payload = mock_vector_store.add.call_args.kwargs["payloads"][0]
 
                     # Verify all required fields
                     required_fields = [
@@ -820,12 +820,12 @@ class TestPayloadStructure:
 
     @pytest.mark.asyncio
     async def test_semantic_payload_complete_structure(
-        self, mock_embedding, mock_qdrant_store, mock_neo4j_store
+        self, mock_embedding, mock_vector_store, mock_graph_store
     ):
         """Verify semantic payload has all required fields."""
         with patch("t4dm.memory.semantic.get_embedding_provider", return_value=mock_embedding):
-            with patch("t4dm.memory.semantic.get_qdrant_store", return_value=mock_qdrant_store):
-                with patch("t4dm.memory.semantic.get_neo4j_store", return_value=mock_neo4j_store):
+            with patch("t4dm.memory.semantic.get_vector_store", return_value=mock_vector_store):
+                with patch("t4dm.memory.semantic.get_graph_store", return_value=mock_graph_store):
                     semantic = SemanticMemory("test-session")
                     await semantic.initialize()
 
@@ -836,7 +836,7 @@ class TestPayloadStructure:
                         details="Test details",
                     )
 
-                    payload = mock_qdrant_store.add.call_args.kwargs["payloads"][0]
+                    payload = mock_vector_store.add.call_args.kwargs["payloads"][0]
 
                     required_fields = [
                         "session_id", "name", "entity_type", "summary",
@@ -851,12 +851,12 @@ class TestPayloadStructure:
 
     @pytest.mark.asyncio
     async def test_procedural_payload_complete_structure(
-        self, mock_embedding, mock_qdrant_store, mock_neo4j_store
+        self, mock_embedding, mock_vector_store, mock_graph_store
     ):
         """Verify procedural payload has all required fields."""
         with patch("t4dm.memory.procedural.get_embedding_provider", return_value=mock_embedding):
-            with patch("t4dm.memory.procedural.get_qdrant_store", return_value=mock_qdrant_store):
-                with patch("t4dm.memory.procedural.get_neo4j_store", return_value=mock_neo4j_store):
+            with patch("t4dm.memory.procedural.get_vector_store", return_value=mock_vector_store):
+                with patch("t4dm.memory.procedural.get_graph_store", return_value=mock_graph_store):
                     procedural = ProceduralMemory("test-session")
                     await procedural.initialize()
 
@@ -870,7 +870,7 @@ class TestPayloadStructure:
                         domain="coding",
                     )
 
-                    payload = mock_qdrant_store.add.call_args.kwargs["payloads"][0]
+                    payload = mock_vector_store.add.call_args.kwargs["payloads"][0]
 
                     required_fields = [
                         "session_id", "name", "domain", "trigger_pattern",

@@ -22,11 +22,11 @@ class TestProceduralSkillCreation:
     """Test skill building from trajectories."""
 
     @pytest_asyncio.fixture
-    async def procedural(self, test_session_id, mock_qdrant_store, mock_neo4j_store, mock_embedding_provider):
+    async def procedural(self, test_session_id, mock_vector_store, mock_graph_store, mock_embedding_provider):
         """Create procedural memory instance."""
         procedural = ProceduralMemory(session_id=test_session_id)
-        procedural.vector_store = mock_qdrant_store
-        procedural.graph_store = mock_neo4j_store
+        procedural.vector_store = mock_vector_store
+        procedural.graph_store = mock_graph_store
         procedural.embedding = mock_embedding_provider
         procedural.vector_store.procedures_collection = "procedures"
         return procedural
@@ -179,11 +179,11 @@ class TestProceduralSkillRetrieval:
     """Test skill retrieval and ranking."""
 
     @pytest_asyncio.fixture
-    async def procedural(self, test_session_id, mock_qdrant_store, mock_neo4j_store, mock_embedding_provider):
+    async def procedural(self, test_session_id, mock_vector_store, mock_graph_store, mock_embedding_provider):
         """Create procedural memory instance."""
         procedural = ProceduralMemory(session_id=test_session_id)
-        procedural.vector_store = mock_qdrant_store
-        procedural.graph_store = mock_neo4j_store
+        procedural.vector_store = mock_vector_store
+        procedural.graph_store = mock_graph_store
         procedural.embedding = mock_embedding_provider
         procedural.vector_store.procedures_collection = "procedures"
         return procedural
@@ -404,11 +404,11 @@ class TestProceduralSkillUpdate:
     """Test skill execution tracking and updates."""
 
     @pytest_asyncio.fixture
-    async def procedural(self, test_session_id, mock_qdrant_store, mock_neo4j_store, mock_embedding_provider):
+    async def procedural(self, test_session_id, mock_vector_store, mock_graph_store, mock_embedding_provider):
         """Create procedural memory instance."""
         procedural = ProceduralMemory(session_id=test_session_id)
-        procedural.vector_store = mock_qdrant_store
-        procedural.graph_store = mock_neo4j_store
+        procedural.vector_store = mock_vector_store
+        procedural.graph_store = mock_graph_store
         procedural.embedding = mock_embedding_provider
         procedural.vector_store.procedures_collection = "procedures"
         return procedural
@@ -528,11 +528,11 @@ class TestProceduralSkillDeprecation:
     """Test skill deprecation and consolidation."""
 
     @pytest_asyncio.fixture
-    async def procedural(self, test_session_id, mock_qdrant_store, mock_neo4j_store, mock_embedding_provider):
+    async def procedural(self, test_session_id, mock_vector_store, mock_graph_store, mock_embedding_provider):
         """Create procedural memory instance."""
         procedural = ProceduralMemory(session_id=test_session_id)
-        procedural.vector_store = mock_qdrant_store
-        procedural.graph_store = mock_neo4j_store
+        procedural.vector_store = mock_vector_store
+        procedural.graph_store = mock_graph_store
         procedural.embedding = mock_embedding_provider
         procedural.vector_store.procedures_collection = "procedures"
         return procedural
@@ -572,10 +572,10 @@ class TestProceduralSkillDeprecation:
             reason="Replaced by better skill",
         )
 
-        # Verify deprecation updates
-        procedural.vector_store.update_payload.assert_called_once()
-        call_args = procedural.vector_store.update_payload.call_args
-        assert call_args[1]["payload"]["deprecated"] is True
+        # Verify deprecation updates (T4DX only updates graph store)
+        procedural.graph_store.update_node.assert_called_once()
+        call_args = procedural.graph_store.update_node.call_args
+        assert call_args[1]["properties"]["deprecated"] is True
 
     @pytest.mark.asyncio
     async def test_deprecate_with_consolidation(self, procedural):
@@ -614,22 +614,22 @@ class TestProceduralSkillDeprecation:
             consolidated_into=consolidated_into,
         )
 
-        # Verify consolidation reference
-        call_args = procedural.vector_store.update_payload.call_args
-        payload = call_args[1]["payload"]
-        assert payload["deprecated"] is True
-        assert payload["consolidated_into"] == str(consolidated_into)
+        # Verify consolidation reference (T4DX only updates graph store)
+        call_args = procedural.graph_store.update_node.call_args
+        properties = call_args[1]["properties"]
+        assert properties["deprecated"] is True
+        assert properties["consolidatedInto"] == str(consolidated_into)
 
 
 class TestProceduralTriggerMatching:
     """Test skill trigger pattern matching."""
 
     @pytest_asyncio.fixture
-    async def procedural(self, test_session_id, mock_qdrant_store, mock_neo4j_store, mock_embedding_provider):
+    async def procedural(self, test_session_id, mock_vector_store, mock_graph_store, mock_embedding_provider):
         """Create procedural memory instance."""
         procedural = ProceduralMemory(session_id=test_session_id)
-        procedural.vector_store = mock_qdrant_store
-        procedural.graph_store = mock_neo4j_store
+        procedural.vector_store = mock_vector_store
+        procedural.graph_store = mock_graph_store
         procedural.embedding = mock_embedding_provider
         procedural.vector_store.procedures_collection = "procedures"
         return procedural
@@ -701,11 +701,11 @@ class TestProceduralStepExtraction:
     """Test step extraction and script generation."""
 
     @pytest_asyncio.fixture
-    async def procedural(self, test_session_id, mock_qdrant_store, mock_neo4j_store, mock_embedding_provider):
+    async def procedural(self, test_session_id, mock_vector_store, mock_graph_store, mock_embedding_provider):
         """Create procedural memory instance."""
         procedural = ProceduralMemory(session_id=test_session_id)
-        procedural.vector_store = mock_qdrant_store
-        procedural.graph_store = mock_neo4j_store
+        procedural.vector_store = mock_vector_store
+        procedural.graph_store = mock_graph_store
         procedural.embedding = mock_embedding_provider
         procedural.vector_store.procedures_collection = "procedures"
         return procedural

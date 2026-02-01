@@ -45,8 +45,8 @@ class TestEpisodicPagination:
 
         # Patch all dependencies
         with patch("t4dm.memory.episodic.get_settings", return_value=mock_settings):
-            with patch("t4dm.memory.episodic.get_qdrant_store", return_value=mock_qdrant):
-                with patch("t4dm.memory.episodic.get_neo4j_store", return_value=mock_neo4j):
+            with patch("t4dm.memory.episodic.get_vector_store", return_value=mock_qdrant):
+                with patch("t4dm.memory.episodic.get_graph_store", return_value=mock_neo4j):
                     with patch("t4dm.memory.episodic.get_embedding_provider", return_value=mock_embedding):
                         with patch("t4dm.memory.episodic.get_ff_encoder", return_value=None):
                             from t4dm.memory.episodic import EpisodicMemory
@@ -310,8 +310,8 @@ class TestConsolidationPagination:
         # Mock all the get_* functions
         with patch("t4dm.consolidation.service.get_settings") as mock_settings:
             with patch("t4dm.consolidation.service.get_embedding_provider") as mock_emb:
-                with patch("t4dm.consolidation.service.get_qdrant_store") as mock_qdrant:
-                    with patch("t4dm.consolidation.service.get_neo4j_store") as mock_neo4j:
+                with patch("t4dm.consolidation.service.get_vector_store") as mock_qdrant:
+                    with patch("t4dm.consolidation.service.get_graph_store") as mock_neo4j:
                         mock_settings.return_value.consolidation_min_similarity = 0.75
                         mock_settings.return_value.consolidation_min_occurrences = 3
                         mock_settings.return_value.consolidation_skill_similarity = 0.85

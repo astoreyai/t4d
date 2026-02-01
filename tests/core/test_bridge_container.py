@@ -31,10 +31,9 @@ def cleanup():
 @pytest.fixture
 def mock_storage():
     """Mock storage backends to avoid connection issues."""
-    with patch("t4dm.storage.qdrant_store.QdrantStore") as mock_qdrant, \
-         patch("t4dm.storage.neo4j_store.Neo4jStore") as mock_neo4j, \
-         patch("t4dm.storage.qdrant_store.close_qdrant_store", new=AsyncMock()), \
-         patch("t4dm.storage.neo4j_store.close_neo4j_store", new=AsyncMock()):
+    with patch("t4dm.storage.t4dx.T4DXVectorStore") as mock_qdrant, \
+         patch("t4dm.storage.t4dx.T4DXGraphStore") as mock_neo4j, \
+         patch("t4dm.storage.close_stores", new=AsyncMock()):
         # Mock Qdrant
         qdrant_instance = MagicMock()
         qdrant_instance.initialize = AsyncMock()

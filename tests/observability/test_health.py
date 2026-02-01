@@ -120,6 +120,7 @@ class TestHealthChecker:
         assert checker.timeout == 1.0
         assert checker._start_time is not None
 
+    @pytest.mark.skip(reason="Qdrant removed — replaced by T4DX")
     @pytest.mark.asyncio
     async def test_check_qdrant_healthy(self, checker):
         """Qdrant health check when healthy."""
@@ -127,35 +128,38 @@ class TestHealthChecker:
         mock_store.count = AsyncMock(return_value=100)
         mock_store.episodes_collection = "episodes"
 
-        with patch("t4dm.storage.qdrant_store.get_qdrant_store", return_value=mock_store):
+        with patch("t4dm.storage.qdrant_store.get_vector_store", return_value=mock_store):
             result = await checker.check_qdrant()
             assert result.status == HealthStatus.HEALTHY
             assert result.name == "qdrant"
             assert result.latency_ms is not None
 
+    @pytest.mark.skip(reason="Qdrant removed — replaced by T4DX")
     @pytest.mark.asyncio
     async def test_check_qdrant_connection_error(self, checker):
         """Qdrant health check on connection error."""
-        with patch("t4dm.storage.qdrant_store.get_qdrant_store", side_effect=ConnectionError("Refused")):
+        with patch("t4dm.storage.qdrant_store.get_vector_store", side_effect=ConnectionError("Refused")):
             result = await checker.check_qdrant()
             assert result.status == HealthStatus.UNHEALTHY
             assert "Connection failed" in result.message
 
+    @pytest.mark.skip(reason="Neo4j removed — replaced by T4DX")
     @pytest.mark.asyncio
     async def test_check_neo4j_healthy(self, checker):
         """Neo4j health check when healthy."""
         mock_store = MagicMock()
         mock_store.query = AsyncMock(return_value=[{"n": 1}])
 
-        with patch("t4dm.storage.neo4j_store.get_neo4j_store", return_value=mock_store):
+        with patch("t4dm.storage.neo4j_store.get_graph_store", return_value=mock_store):
             result = await checker.check_neo4j()
             assert result.status == HealthStatus.HEALTHY
             assert result.name == "neo4j"
 
+    @pytest.mark.skip(reason="Neo4j removed — replaced by T4DX")
     @pytest.mark.asyncio
     async def test_check_neo4j_connection_error(self, checker):
         """Neo4j health check on connection error."""
-        with patch("t4dm.storage.neo4j_store.get_neo4j_store", side_effect=ConnectionError("Refused")):
+        with patch("t4dm.storage.neo4j_store.get_graph_store", side_effect=ConnectionError("Refused")):
             result = await checker.check_neo4j()
             assert result.status == HealthStatus.UNHEALTHY
 
@@ -194,13 +198,12 @@ class TestHealthChecker:
         """Check all components all healthy."""
         healthy = ComponentHealth(name="test", status=HealthStatus.HEALTHY)
 
-        with patch.object(checker, "check_qdrant", return_value=healthy):
-            with patch.object(checker, "check_neo4j", return_value=healthy):
-                with patch.object(checker, "check_embedding", return_value=healthy):
-                    with patch.object(checker, "check_metrics", return_value=healthy):
-                        result = await checker.check_all()
-                        assert result.status == HealthStatus.HEALTHY
-                        assert len(result.components) == 4
+        with patch.object(checker, "check_t4dx", return_value=healthy):
+            with patch.object(checker, "check_embedding", return_value=healthy):
+                with patch.object(checker, "check_metrics", return_value=healthy):
+                    result = await checker.check_all()
+                    assert result.status == HealthStatus.HEALTHY
+                    assert len(result.components) == 3
 
     @pytest.mark.asyncio
     async def test_check_all_with_degraded(self, checker):
@@ -208,12 +211,11 @@ class TestHealthChecker:
         healthy = ComponentHealth(name="healthy", status=HealthStatus.HEALTHY)
         degraded = ComponentHealth(name="degraded", status=HealthStatus.DEGRADED)
 
-        with patch.object(checker, "check_qdrant", return_value=healthy):
-            with patch.object(checker, "check_neo4j", return_value=degraded):
-                with patch.object(checker, "check_embedding", return_value=healthy):
-                    with patch.object(checker, "check_metrics", return_value=healthy):
-                        result = await checker.check_all()
-                        assert result.status == HealthStatus.DEGRADED
+        with patch.object(checker, "check_t4dx", return_value=degraded):
+            with patch.object(checker, "check_embedding", return_value=healthy):
+                with patch.object(checker, "check_metrics", return_value=healthy):
+                    result = await checker.check_all()
+                    assert result.status == HealthStatus.DEGRADED
 
     @pytest.mark.asyncio
     async def test_check_all_with_unhealthy(self, checker):
@@ -221,12 +223,11 @@ class TestHealthChecker:
         healthy = ComponentHealth(name="healthy", status=HealthStatus.HEALTHY)
         unhealthy = ComponentHealth(name="unhealthy", status=HealthStatus.UNHEALTHY)
 
-        with patch.object(checker, "check_qdrant", return_value=unhealthy):
-            with patch.object(checker, "check_neo4j", return_value=healthy):
-                with patch.object(checker, "check_embedding", return_value=healthy):
-                    with patch.object(checker, "check_metrics", return_value=healthy):
-                        result = await checker.check_all()
-                        assert result.status == HealthStatus.UNHEALTHY
+        with patch.object(checker, "check_t4dx", return_value=unhealthy):
+            with patch.object(checker, "check_embedding", return_value=healthy):
+                with patch.object(checker, "check_metrics", return_value=healthy):
+                    result = await checker.check_all()
+                    assert result.status == HealthStatus.UNHEALTHY
 
     @pytest.mark.asyncio
     async def test_check_liveness(self, checker):

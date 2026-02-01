@@ -218,11 +218,11 @@ async def episodic_memory_with_mocks(
         return_value=integration_embedding_provider,
     ):
         with patch(
-            "t4dm.memory.episodic.get_qdrant_store",
+            "t4dm.memory.episodic.get_vector_store",
             return_value=integration_qdrant_store,
         ):
             with patch(
-                "t4dm.memory.episodic.get_neo4j_store",
+                "t4dm.memory.episodic.get_graph_store",
                 return_value=integration_neo4j_store,
             ):
                 return EpisodicMemory(integration_session_id)
@@ -251,11 +251,11 @@ async def semantic_memory_with_mocks(
         return_value=integration_embedding_provider,
     ):
         with patch(
-            "t4dm.memory.semantic.get_qdrant_store",
+            "t4dm.memory.semantic.get_vector_store",
             return_value=integration_qdrant_store,
         ):
             with patch(
-                "t4dm.memory.semantic.get_neo4j_store",
+                "t4dm.memory.semantic.get_graph_store",
                 return_value=integration_neo4j_store,
             ):
                 return SemanticMemory(integration_session_id)
@@ -284,11 +284,11 @@ async def procedural_memory_with_mocks(
         return_value=integration_embedding_provider,
     ):
         with patch(
-            "t4dm.memory.procedural.get_qdrant_store",
+            "t4dm.memory.procedural.get_vector_store",
             return_value=integration_qdrant_store,
         ):
             with patch(
-                "t4dm.memory.procedural.get_neo4j_store",
+                "t4dm.memory.procedural.get_graph_store",
                 return_value=integration_neo4j_store,
             ):
                 return ProceduralMemory(integration_session_id)

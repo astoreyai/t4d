@@ -9,7 +9,7 @@ This test verifies that the full Hebbian learning loop works:
 5. Verify weights decreased
 
 This was identified as a CRITICAL bug in Round 4 analysis:
-- strengthen_relationship() was missing from Neo4jStore
+- strengthen_relationship() was missing from T4DXGraphStore
 - Result: All semantic relationships decayed to zero over time
 """
 
@@ -41,7 +41,7 @@ async def neo4j_store():
     Skips test if Neo4j is not available or configured.
     """
     import os
-    from t4dm.storage.neo4j_store import Neo4jStore
+    from t4dm.storage import T4DXGraphStore
     from t4dm.core.config import get_settings
 
     settings = get_settings()
@@ -58,7 +58,7 @@ async def neo4j_store():
             pytest.skip("Neo4j not running on localhost:7687")
 
     # Create a fresh store instance (not cached) for this test
-    store = Neo4jStore(
+    store = T4DXGraphStore(
         uri=settings.neo4j_uri,
         user=settings.neo4j_user,
         password=settings.neo4j_password,
@@ -99,7 +99,7 @@ class TestHebbianStrengthening:
     async def test_strengthen_relationship_method_exists(self, neo4j_store):
         """Verify strengthen_relationship method exists (was missing before fix)."""
         assert hasattr(neo4j_store, 'strengthen_relationship'), (
-            "strengthen_relationship method missing from Neo4jStore! "
+            "strengthen_relationship method missing from T4DXGraphStore! "
             "This is a CRITICAL bug - Hebbian learning is broken."
         )
 

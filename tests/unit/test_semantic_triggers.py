@@ -19,11 +19,11 @@ class TestSemanticTriggerMatching:
     """Test semantic trigger matching with embeddings."""
 
     @pytest_asyncio.fixture
-    async def procedural(self, test_session_id, mock_qdrant_store, mock_neo4j_store, mock_embedding_provider):
+    async def procedural(self, test_session_id, mock_vector_store, mock_graph_store, mock_embedding_provider):
         """Create procedural memory instance."""
         procedural = ProceduralMemory(session_id=test_session_id)
-        procedural.vector_store = mock_qdrant_store
-        procedural.graph_store = mock_neo4j_store
+        procedural.vector_store = mock_vector_store
+        procedural.graph_store = mock_graph_store
         procedural.embedding = mock_embedding_provider
         procedural.vector_store.procedures_collection = "procedures"
         return procedural
@@ -487,11 +487,11 @@ class TestScriptAbstraction:
     """Test template-based script abstraction."""
 
     @pytest_asyncio.fixture
-    async def procedural(self, test_session_id, mock_qdrant_store, mock_neo4j_store, mock_embedding_provider):
+    async def procedural(self, test_session_id, mock_vector_store, mock_graph_store, mock_embedding_provider):
         """Create procedural memory instance."""
         procedural = ProceduralMemory(session_id=test_session_id)
-        procedural.vector_store = mock_qdrant_store
-        procedural.graph_store = mock_neo4j_store
+        procedural.vector_store = mock_vector_store
+        procedural.graph_store = mock_graph_store
         procedural.embedding = mock_embedding_provider
         procedural.vector_store.procedures_collection = "procedures"
         return procedural

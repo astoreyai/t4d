@@ -85,81 +85,38 @@ class HealthChecker:
         self.timeout = timeout
         self._start_time = datetime.utcnow()
 
-    async def check_qdrant(self) -> ComponentHealth:
-        """Check Qdrant vector store health."""
+    async def check_t4dx(self) -> ComponentHealth:
+        """Check T4DX embedded storage engine health."""
         import time
         start = time.time()
 
         try:
-            from t4dm.storage.qdrant_store import get_qdrant_store
+            from t4dm.storage import get_engine
 
-            store = get_qdrant_store()
-            count = await asyncio.wait_for(
-                store.count(store.episodes_collection),
-                timeout=self.timeout,
-            )
-
+            engine = get_engine()
+            started = engine._started
             latency = (time.time() - start) * 1000
 
-            return ComponentHealth(
-                name="qdrant",
-                status=HealthStatus.HEALTHY,
-                message=f"Connected, {count} episodes",
-                latency_ms=latency,
-                details={"episodes_count": count},
-            )
+            if started:
+                return ComponentHealth(
+                    name="t4dx",
+                    status=HealthStatus.HEALTHY,
+                    message="Engine running",
+                    latency_ms=latency,
+                )
+            else:
+                return ComponentHealth(
+                    name="t4dx",
+                    status=HealthStatus.DEGRADED,
+                    message="Engine not started",
+                    latency_ms=latency,
+                )
 
-        except TimeoutError:
-            return ComponentHealth(
-                name="qdrant",
-                status=HealthStatus.UNHEALTHY,
-                message=f"Connection timeout after {self.timeout}s",
-                latency_ms=(time.time() - start) * 1000,
-            )
         except Exception as e:
             return ComponentHealth(
-                name="qdrant",
+                name="t4dx",
                 status=HealthStatus.UNHEALTHY,
-                message=f"Connection failed: {e}",
-                latency_ms=(time.time() - start) * 1000,
-            )
-
-    async def check_neo4j(self) -> ComponentHealth:
-        """Check Neo4j graph store health."""
-        import time
-        start = time.time()
-
-        try:
-            from t4dm.storage.neo4j_store import get_neo4j_store
-
-            store = get_neo4j_store()
-            result = await asyncio.wait_for(
-                store.query("RETURN 1 as n"),
-                timeout=self.timeout,
-            )
-
-            latency = (time.time() - start) * 1000
-
-            return ComponentHealth(
-                name="neo4j",
-                status=HealthStatus.HEALTHY,
-                message="Connected",
-                latency_ms=latency,
-                details={"query_result": result[0]["n"] if result else None},
-            )
-
-        except TimeoutError:
-            return ComponentHealth(
-                name="neo4j",
-                status=HealthStatus.UNHEALTHY,
-                message=f"Connection timeout after {self.timeout}s",
-                latency_ms=(time.time() - start) * 1000,
-            )
-        except Exception as e:
-            return ComponentHealth(
-                name="neo4j",
-                status=HealthStatus.UNHEALTHY,
-                message=f"Connection failed: {e}",
+                message=f"Engine error: {e}",
                 latency_ms=(time.time() - start) * 1000,
             )
 
@@ -230,8 +187,7 @@ class HealthChecker:
         """
         # Run checks in parallel
         results = await asyncio.gather(
-            self.check_qdrant(),
-            self.check_neo4j(),
+            self.check_t4dx(),
             self.check_embedding(),
             self.check_metrics(),
             return_exceptions=True,

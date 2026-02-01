@@ -9,71 +9,19 @@ from t4dm.core.config import Settings, validate_password_strength
 
 
 class TestPasswordValidation:
-    """Test password validation logic."""
+    """Test password validation logic (Neo4j removed — validator is a no-op)."""
 
-    def test_empty_password_rejected(self):
-        """Empty password should be rejected."""
-        # Disable test mode to enable password validation
+    def test_empty_password_accepted(self):
+        """Empty password is accepted (Neo4j removed)."""
         with patch.dict(os.environ, {"T4DM_NEO4J_PASSWORD": "", "T4DM_TEST_MODE": "false"}, clear=False):
-            with pytest.raises(ValidationError) as exc_info:
-                Settings()
-            assert "required" in str(exc_info.value).lower()
-
-    def test_short_password_rejected(self):
-        """Password < 12 chars should be rejected (P2-SEC-M1)."""
-        # Disable test mode to enable password validation
-        with patch.dict(os.environ, {"T4DM_NEO4J_PASSWORD": "Short123!", "T4DM_TEST_MODE": "false"}, clear=False):
-            with pytest.raises(ValidationError) as exc_info:
-                Settings()
-            assert "12 characters" in str(exc_info.value)
-
-    def test_weak_password_rejected(self):
-        """Common weak passwords should be rejected."""
-        # Use passwords from the WEAK_PASSWORDS list (some need 12+ chars to test weak detection)
-        weak_passwords = ["passwordpassword", "admin123admin", "changemechange"]
-
-        for weak in weak_passwords:
-            # Disable test mode to enable password validation
-            with patch.dict(os.environ, {"T4DM_NEO4J_PASSWORD": weak, "T4DM_TEST_MODE": "false"}, clear=False):
-                with pytest.raises(ValidationError) as exc_info:
-                    Settings()
-                error_msg = str(exc_info.value).lower()
-                # Should be rejected for being weak OR lacking complexity OR too short
-                assert "weak" in error_msg or "complexity" in error_msg or "12 characters" in error_msg, \
-                    f"Password '{weak}' should be rejected but got: {exc_info.value}"
-
-    def test_strong_password_accepted(self):
-        """Strong passwords should be accepted (P2-SEC-M1: 12+ chars, 3/4 classes)."""
-        strong_passwords = [
-            "MyS3cur3P@ss!word",  # upper + lower + digit + special (17 chars)
-            "correct-horse-Battery1",  # lower + special + upper + digit (22 chars)
-            "Tr0ub4dor&3More!",  # upper + lower + digit + special (16 chars)
-            "xK9#mP2$vL5@nQ8Y",  # upper + lower + digit + special (16 chars)
-        ]
-
-        for strong in strong_passwords:
-            with patch.dict(os.environ, {"T4DM_NEO4J_PASSWORD": strong}, clear=False):
-                # Should not raise
-                settings = Settings()
-                assert settings.neo4j_password == strong
-
-    def test_test_mode_allows_empty(self):
-        """Test mode should allow empty/weak passwords."""
-        with patch.dict(os.environ, {
-            "T4DM_TEST_MODE": "true",
-            "T4DM_NEO4J_PASSWORD": "",
-        }, clear=False):
             settings = Settings()
-            assert settings.neo4j_password == "test-password"
+            assert settings.neo4j_password == ""
 
-    def test_test_environment_allows_empty(self):
-        """Test environment should allow empty passwords."""
-        with patch.dict(os.environ, {
-            "T4DM_ENVIRONMENT": "test",
-            "T4DM_NEO4J_PASSWORD": "",
-        }, clear=False):
+    def test_any_password_accepted(self):
+        """Any password value is accepted (legacy field)."""
+        with patch.dict(os.environ, {"T4DM_NEO4J_PASSWORD": "anything"}, clear=False):
             settings = Settings()
-            assert settings.neo4j_password == "test-password"
+            assert settings.neo4j_password == "anything"
 
 
 class TestProductionValidation:

@@ -443,7 +443,7 @@ class TestBGEM3EmbeddingSingleton:
 
             # Reset singleton
             import t4dm.embedding.bge_m3
-            ww.embedding.bge_m3._embedding_instance = None
+            t4dm.embedding.bge_m3._embedding_instance = None
 
             provider1 = get_embedding_provider()
             provider2 = get_embedding_provider()
@@ -460,7 +460,7 @@ class TestBGEM3EmbeddingSingleton:
             # Re-import
             import importlib
             import t4dm.embedding.bge_m3
-            importlib.reload(ww.embedding.bge_m3)
+            importlib.reload(t4dm.embedding.bge_m3)
             from t4dm.embedding.bge_m3 import get_embedding_provider
 
             provider2 = get_embedding_provider()

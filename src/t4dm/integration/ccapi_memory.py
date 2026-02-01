@@ -101,13 +101,13 @@ class WWMemory:
         try:
             from t4dm.embedding.bge_m3 import BGEM3Embedder
             from t4dm.memory.episodic import EpisodicMemory
-            from t4dm.storage.qdrant_store import QdrantStore
+            from t4dm.storage import T4DXVectorStore
 
             # Initialize embedder
             self._embedder = await BGEM3Embedder.create()
 
             # Initialize Qdrant store
-            vector_store = await QdrantStore.create(url=self.qdrant_url)
+            vector_store = await T4DXVectorStore.create(url=self.qdrant_url)
 
             # Initialize episodic memory
             self._episodic = EpisodicMemory(

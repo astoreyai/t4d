@@ -15,11 +15,11 @@ class TestHebbianDecayLogic:
     """Test suite for Hebbian decay logic."""
 
     @pytest_asyncio.fixture
-    async def semantic(self, test_session_id, mock_qdrant_store, mock_neo4j_store, mock_embedding_provider):
+    async def semantic(self, test_session_id, mock_vector_store, mock_graph_store, mock_embedding_provider):
         """Create semantic memory instance with mocks."""
         semantic = SemanticMemory(session_id=test_session_id)
-        semantic.vector_store = mock_qdrant_store
-        semantic.graph_store = mock_neo4j_store
+        semantic.vector_store = mock_vector_store
+        semantic.graph_store = mock_graph_store
         semantic.embedding = mock_embedding_provider
         semantic.vector_store.entities_collection = "entities"
         return semantic

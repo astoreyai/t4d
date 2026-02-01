@@ -43,8 +43,7 @@ from t4dm.embedding.bge_m3 import get_embedding_provider
 from t4dm.memory.episodic import get_episodic_memory
 from t4dm.memory.procedural import get_procedural_memory
 from t4dm.memory.semantic import get_semantic_memory
-from t4dm.storage.neo4j_store import get_neo4j_store
-from t4dm.storage.qdrant_store import get_qdrant_store
+from t4dm.storage import get_graph_store, get_vector_store
 
 logger = logging.getLogger(__name__)
 
@@ -480,8 +479,8 @@ class ConsolidationService:
         settings = get_settings()
 
         self.embedding = get_embedding_provider()
-        self.vector_store = get_qdrant_store()
-        self.graph_store = get_neo4j_store()
+        self.vector_store = get_vector_store()
+        self.graph_store = get_graph_store()
 
         # Thresholds from config
         self.min_similarity = settings.consolidation_min_similarity

@@ -9,7 +9,7 @@ import time
 from uuid import uuid4, UUID
 from datetime import datetime
 
-from t4dm.storage.neo4j_store import get_neo4j_store
+from t4dm.storage import get_graph_store
 from t4dm.memory.semantic import get_semantic_memory
 from t4dm.core.types import ScoredResult, Entity, EntityType
 
@@ -18,7 +18,7 @@ from t4dm.core.types import ScoredResult, Entity, EntityType
 @pytest.mark.asyncio
 async def test_batch_relationships_vs_individual():
     """Test that batch queries return same results as individual queries."""
-    store = get_neo4j_store("test_batch_perf")
+    store = get_graph_store("test_batch_perf")
     await store.initialize()
 
     # Create test nodes
@@ -87,7 +87,7 @@ async def test_batch_relationships_vs_individual():
 @pytest.mark.asyncio
 async def test_batch_query_performance():
     """Test that batch queries execute successfully with multiple entities."""
-    store = get_neo4j_store("test_batch_speed")
+    store = get_graph_store("test_batch_speed")
     await store.initialize()
 
     # Create test nodes
@@ -169,7 +169,7 @@ async def test_batch_query_performance():
 @pytest.mark.asyncio
 async def test_batch_empty_input():
     """Test batch query with empty input."""
-    store = get_neo4j_store("test_batch_empty")
+    store = get_graph_store("test_batch_empty")
     await store.initialize()
 
     result = await store.get_relationships_batch(node_ids=[])

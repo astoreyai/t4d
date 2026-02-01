@@ -54,7 +54,7 @@ def mock_embedding_provider():
 
 
 @pytest.fixture
-def mock_qdrant_store():
+def mock_vector_store():
     """Mock Qdrant vector store."""
     mock = AsyncMock()
     mock.episodes_collection = "episodes"
@@ -71,7 +71,7 @@ def mock_qdrant_store():
 
 
 @pytest.fixture
-def mock_neo4j_store():
+def mock_graph_store():
     """Mock Neo4j graph store."""
     mock = AsyncMock()
     mock.initialize = AsyncMock()
@@ -92,7 +92,7 @@ def mock_neo4j_store():
 @pytest.mark.integration
 @pytest.mark.asyncio
 async def test_episode_lifecycle(
-    mock_embedding_provider, mock_qdrant_store, mock_neo4j_store, test_session_a
+    mock_embedding_provider, mock_vector_store, mock_graph_store, test_session_a
 ):
     """
     Test full episode lifecycle:
@@ -109,8 +109,8 @@ async def test_episode_lifecycle(
     from uuid import UUID
 
     with patch("t4dm.memory.episodic.get_embedding_provider", return_value=mock_embedding_provider):
-        with patch("t4dm.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
-            with patch("t4dm.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
+        with patch("t4dm.memory.episodic.get_vector_store", return_value=mock_vector_store):
+            with patch("t4dm.memory.episodic.get_graph_store", return_value=mock_graph_store):
                 episodic = EpisodicMemory(test_session_a)
                 await episodic.initialize()
 
@@ -130,12 +130,12 @@ async def test_episode_lifecycle(
                 assert episode.stability > 0
 
                 # Verify stored in both stores
-                mock_qdrant_store.add.assert_called_once()
-                mock_neo4j_store.create_node.assert_called_once()
+                mock_vector_store.add.assert_called_once()
+                mock_graph_store.create_node.assert_called_once()
 
                 # Phase 2: Recall episode
-                mock_qdrant_store.search.return_value = [
-                    (str(episode.id), 0.95, mock_qdrant_store.add.call_args[1]["payloads"][0])
+                mock_vector_store.search.return_value = [
+                    (str(episode.id), 0.95, mock_vector_store.add.call_args[1]["payloads"][0])
                 ]
 
                 results = await episodic.recall(
@@ -144,8 +144,8 @@ async def test_episode_lifecycle(
                 )
 
                 # Should find the episode
-                assert mock_qdrant_store.search.called
-                search_call = mock_qdrant_store.search.call_args
+                assert mock_vector_store.search.called
+                search_call = mock_vector_store.search.call_args
                 assert search_call[1]["filter"]["session_id"] == test_session_a
 
                 # Phase 3: Simulate time passing - verify recency decay
@@ -176,7 +176,7 @@ async def test_episode_lifecycle(
 @pytest.mark.integration
 @pytest.mark.asyncio
 async def test_cross_memory_episode_to_entity_extraction(
-    mock_embedding_provider, mock_qdrant_store, mock_neo4j_store, test_session_a
+    mock_embedding_provider, mock_vector_store, mock_graph_store, test_session_a
 ):
     """
     Test episodic → semantic consolidation:
@@ -191,8 +191,8 @@ async def test_cross_memory_episode_to_entity_extraction(
     from uuid import UUID
 
     with patch("t4dm.memory.episodic.get_embedding_provider", return_value=mock_embedding_provider):
-        with patch("t4dm.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
-            with patch("t4dm.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
+        with patch("t4dm.memory.episodic.get_vector_store", return_value=mock_vector_store):
+            with patch("t4dm.memory.episodic.get_graph_store", return_value=mock_graph_store):
                 episodic = EpisodicMemory(test_session_a)
                 await episodic.initialize()
 
@@ -212,20 +212,20 @@ async def test_cross_memory_episode_to_entity_extraction(
                 assert episode is not None
 
                 # Step 2: Verify episode storage
-                mock_qdrant_store.add.assert_called_once()
-                call_kwargs = mock_qdrant_store.add.call_args[1]
+                mock_vector_store.add.assert_called_once()
+                call_kwargs = mock_vector_store.add.call_args[1]
                 assert call_kwargs["payloads"][0]["session_id"] == test_session_a
 
                 # Step 3: Verify relationship creation logic
                 # In real consolidation, entities would be extracted and linked
-                mock_neo4j_store.create_node.assert_called()
-                assert mock_neo4j_store.create_node.call_count >= 1
+                mock_graph_store.create_node.assert_called()
+                assert mock_graph_store.create_node.call_count >= 1
 
 
 @pytest.mark.integration
 @pytest.mark.asyncio
 async def test_session_isolation_e2e(
-    mock_embedding_provider, mock_qdrant_store, mock_neo4j_store,
+    mock_embedding_provider, mock_vector_store, mock_graph_store,
     test_session_a, test_session_b
 ):
     """
@@ -243,8 +243,8 @@ async def test_session_isolation_e2e(
     episode_ids_b = []
 
     with patch("t4dm.memory.episodic.get_embedding_provider", return_value=mock_embedding_provider):
-        with patch("t4dm.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
-            with patch("t4dm.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
+        with patch("t4dm.memory.episodic.get_vector_store", return_value=mock_vector_store):
+            with patch("t4dm.memory.episodic.get_graph_store", return_value=mock_graph_store):
                 # Create episodes in session A
                 episodic_a = EpisodicMemory(test_session_a)
                 await episodic_a.initialize()
@@ -258,12 +258,12 @@ async def test_session_isolation_e2e(
                     episode_ids_a.append(episode_a.id)
 
                 # Verify payloads contain session_a
-                call_kwargs = mock_qdrant_store.add.call_args[1]
+                call_kwargs = mock_vector_store.add.call_args[1]
                 for payload in call_kwargs["payloads"]:
                     assert payload["session_id"] == test_session_a
 
                 # Create episodes in session B
-                mock_qdrant_store.reset_mock()
+                mock_vector_store.reset_mock()
                 episodic_b = EpisodicMemory(test_session_b)
                 await episodic_b.initialize()
 
@@ -276,30 +276,30 @@ async def test_session_isolation_e2e(
                     episode_ids_b.append(episode_b.id)
 
                 # Verify payloads contain session_b
-                call_kwargs = mock_qdrant_store.add.call_args[1]
+                call_kwargs = mock_vector_store.add.call_args[1]
                 for payload in call_kwargs["payloads"]:
                     assert payload["session_id"] == test_session_b
 
                 # Test isolation in recall
-                mock_qdrant_store.reset_mock()
+                mock_vector_store.reset_mock()
 
                 # Session A recall should filter by session_a
                 await episodic_a.recall("test query")
-                search_filter = mock_qdrant_store.search.call_args[1]["filter"]
+                search_filter = mock_vector_store.search.call_args[1]["filter"]
                 assert search_filter["session_id"] == test_session_a
 
-                mock_qdrant_store.reset_mock()
+                mock_vector_store.reset_mock()
 
                 # Session B recall should filter by session_b
                 await episodic_b.recall("test query")
-                search_filter = mock_qdrant_store.search.call_args[1]["filter"]
+                search_filter = mock_vector_store.search.call_args[1]["filter"]
                 assert search_filter["session_id"] == test_session_b
 
 
 @pytest.mark.integration
 @pytest.mark.asyncio
 async def test_concurrent_recalls(
-    mock_embedding_provider, mock_qdrant_store, mock_neo4j_store, test_session_a
+    mock_embedding_provider, mock_vector_store, mock_graph_store, test_session_a
 ):
     """
     Test concurrent operations:
@@ -311,13 +311,13 @@ async def test_concurrent_recalls(
     from t4dm.memory.episodic import EpisodicMemory
 
     with patch("t4dm.memory.episodic.get_embedding_provider", return_value=mock_embedding_provider):
-        with patch("t4dm.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
-            with patch("t4dm.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
+        with patch("t4dm.memory.episodic.get_vector_store", return_value=mock_vector_store):
+            with patch("t4dm.memory.episodic.get_graph_store", return_value=mock_graph_store):
                 episodic = EpisodicMemory(test_session_a)
                 await episodic.initialize()
 
                 # Setup mock search to return consistent results
-                mock_qdrant_store.search.return_value = []
+                mock_vector_store.search.return_value = []
 
                 # Launch 10 concurrent recalls
                 tasks = [
@@ -333,10 +333,10 @@ async def test_concurrent_recalls(
                     assert not isinstance(result, Exception)
 
                 # Verify search was called 10 times
-                assert mock_qdrant_store.search.call_count == 10
+                assert mock_vector_store.search.call_count == 10
 
                 # Verify all calls had consistent session filter
-                for call in mock_qdrant_store.search.call_args_list:
+                for call in mock_vector_store.search.call_args_list:
                     filter_arg = call[1]["filter"]
                     assert filter_arg["session_id"] == test_session_a
 
@@ -344,7 +344,7 @@ async def test_concurrent_recalls(
 @pytest.mark.integration
 @pytest.mark.asyncio
 async def test_partial_failure_recovery(
-    mock_embedding_provider, mock_qdrant_store, mock_neo4j_store, test_session_a
+    mock_embedding_provider, mock_vector_store, mock_graph_store, test_session_a
 ):
     """
     Test error recovery and saga rollback:
@@ -356,13 +356,13 @@ async def test_partial_failure_recovery(
     from t4dm.memory.episodic import EpisodicMemory
 
     with patch("t4dm.memory.episodic.get_embedding_provider", return_value=mock_embedding_provider):
-        with patch("t4dm.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
-            with patch("t4dm.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
+        with patch("t4dm.memory.episodic.get_vector_store", return_value=mock_vector_store):
+            with patch("t4dm.memory.episodic.get_graph_store", return_value=mock_graph_store):
                 episodic = EpisodicMemory(test_session_a)
                 await episodic.initialize()
 
                 # Simulate failure in Neo4j creation
-                mock_neo4j_store.create_node.side_effect = Exception("Neo4j connection failed")
+                mock_graph_store.create_node.side_effect = Exception("Neo4j connection failed")
 
                 # Attempt create operation
                 try:
@@ -377,7 +377,7 @@ async def test_partial_failure_recovery(
                     assert "Neo4j connection failed" in str(e)
 
                 # Verify Qdrant.add was attempted
-                assert mock_qdrant_store.add.called
+                assert mock_vector_store.add.called
 
                 # In a real saga implementation, we'd verify compensation
                 # For now, verify the error propagated correctly
@@ -387,7 +387,7 @@ async def test_partial_failure_recovery(
 @pytest.mark.integration
 @pytest.mark.asyncio
 async def test_consolidation_workflow(
-    mock_embedding_provider, mock_qdrant_store, mock_neo4j_store, test_session_a
+    mock_embedding_provider, mock_vector_store, mock_graph_store, test_session_a
 ):
     """
     Test complete consolidation workflow:
@@ -401,8 +401,8 @@ async def test_consolidation_workflow(
     from t4dm.consolidation.service import ConsolidationService
 
     with patch("t4dm.memory.episodic.get_embedding_provider", return_value=mock_embedding_provider):
-        with patch("t4dm.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
-            with patch("t4dm.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
+        with patch("t4dm.memory.episodic.get_vector_store", return_value=mock_vector_store):
+            with patch("t4dm.memory.episodic.get_graph_store", return_value=mock_graph_store):
                 episodic = EpisodicMemory(test_session_a)
                 await episodic.initialize()
 
@@ -414,7 +414,7 @@ async def test_consolidation_workflow(
                         valence=0.8,
                     )
 
-                assert mock_qdrant_store.add.call_count == 5
+                assert mock_vector_store.add.call_count == 5
 
                 # Initialize consolidation service
                 consolidation = ConsolidationService()
@@ -432,7 +432,7 @@ async def test_consolidation_workflow(
 @pytest.mark.integration
 @pytest.mark.asyncio
 async def test_memory_decay_application(
-    mock_embedding_provider, mock_qdrant_store, mock_neo4j_store, test_session_a
+    mock_embedding_provider, mock_vector_store, mock_graph_store, test_session_a
 ):
     """
     Test FSRS decay mechanism:
@@ -446,8 +446,8 @@ async def test_memory_decay_application(
     from datetime import datetime
 
     with patch("t4dm.memory.episodic.get_embedding_provider", return_value=mock_embedding_provider):
-        with patch("t4dm.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
-            with patch("t4dm.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
+        with patch("t4dm.memory.episodic.get_vector_store", return_value=mock_vector_store):
+            with patch("t4dm.memory.episodic.get_graph_store", return_value=mock_graph_store):
                 episodic = EpisodicMemory(test_session_a)
                 await episodic.initialize()
 
@@ -461,7 +461,7 @@ async def test_memory_decay_application(
                 initial_stability = episode.stability
 
                 # Simulate successful recall updates
-                mock_qdrant_store.update_payload.reset_mock()
+                mock_vector_store.update_payload.reset_mock()
 
                 # The _update_access method should be called during recall
                 # We'd verify stability increases
@@ -472,7 +472,7 @@ async def test_memory_decay_application(
 @pytest.mark.integration
 @pytest.mark.asyncio
 async def test_multi_session_consolidation(
-    mock_embedding_provider, mock_qdrant_store, mock_neo4j_store,
+    mock_embedding_provider, mock_vector_store, mock_graph_store,
     test_session_a, test_session_b
 ):
     """
@@ -488,8 +488,8 @@ async def test_multi_session_consolidation(
     from t4dm.consolidation.service import ConsolidationService
 
     with patch("t4dm.memory.episodic.get_embedding_provider", return_value=mock_embedding_provider):
-        with patch("t4dm.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
-            with patch("t4dm.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
+        with patch("t4dm.memory.episodic.get_vector_store", return_value=mock_vector_store):
+            with patch("t4dm.memory.episodic.get_graph_store", return_value=mock_graph_store):
                 # Create episodes in both sessions
                 episodic_a = EpisodicMemory(test_session_a)
                 await episodic_a.initialize()
@@ -500,7 +500,7 @@ async def test_multi_session_consolidation(
                         outcome="success",
                     )
 
-                mock_qdrant_store.reset_mock()
+                mock_vector_store.reset_mock()
 
                 episodic_b = EpisodicMemory(test_session_b)
                 await episodic_b.initialize()

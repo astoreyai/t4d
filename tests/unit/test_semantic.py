@@ -23,11 +23,11 @@ class TestSemanticEntityCreation:
     """Test semantic entity creation and retrieval."""
 
     @pytest_asyncio.fixture
-    async def semantic(self, test_session_id, mock_qdrant_store, mock_neo4j_store, mock_embedding_provider):
+    async def semantic(self, test_session_id, mock_vector_store, mock_graph_store, mock_embedding_provider):
         """Create semantic memory instance."""
         semantic = SemanticMemory(session_id=test_session_id)
-        semantic.vector_store = mock_qdrant_store
-        semantic.graph_store = mock_neo4j_store
+        semantic.vector_store = mock_vector_store
+        semantic.graph_store = mock_graph_store
         semantic.embedding = mock_embedding_provider
         semantic.vector_store.entities_collection = "entities"
         return semantic
@@ -137,11 +137,11 @@ class TestSemanticRelationships:
     """Test semantic relationship creation and traversal."""
 
     @pytest_asyncio.fixture
-    async def semantic(self, test_session_id, mock_qdrant_store, mock_neo4j_store, mock_embedding_provider):
+    async def semantic(self, test_session_id, mock_vector_store, mock_graph_store, mock_embedding_provider):
         """Create semantic memory instance."""
         semantic = SemanticMemory(session_id=test_session_id)
-        semantic.vector_store = mock_qdrant_store
-        semantic.graph_store = mock_neo4j_store
+        semantic.vector_store = mock_vector_store
+        semantic.graph_store = mock_graph_store
         semantic.embedding = mock_embedding_provider
         semantic.vector_store.entities_collection = "entities"
         return semantic
@@ -202,11 +202,11 @@ class TestSemanticACTRActivation:
     """Test ACT-R activation calculations."""
 
     @pytest_asyncio.fixture
-    async def semantic(self, test_session_id, mock_qdrant_store, mock_neo4j_store, mock_embedding_provider):
+    async def semantic(self, test_session_id, mock_vector_store, mock_graph_store, mock_embedding_provider):
         """Create semantic memory instance."""
         semantic = SemanticMemory(session_id=test_session_id)
-        semantic.vector_store = mock_qdrant_store
-        semantic.graph_store = mock_neo4j_store
+        semantic.vector_store = mock_vector_store
+        semantic.graph_store = mock_graph_store
         semantic.embedding = mock_embedding_provider
         semantic.vector_store.entities_collection = "entities"
         return semantic
@@ -321,11 +321,11 @@ class TestSemanticHebbianLearning:
     """Test Hebbian weight strengthening."""
 
     @pytest_asyncio.fixture
-    async def semantic(self, test_session_id, mock_qdrant_store, mock_neo4j_store, mock_embedding_provider):
+    async def semantic(self, test_session_id, mock_vector_store, mock_graph_store, mock_embedding_provider):
         """Create semantic memory instance."""
         semantic = SemanticMemory(session_id=test_session_id)
-        semantic.vector_store = mock_qdrant_store
-        semantic.graph_store = mock_neo4j_store
+        semantic.vector_store = mock_vector_store
+        semantic.graph_store = mock_graph_store
         semantic.embedding = mock_embedding_provider
         semantic.vector_store.entities_collection = "entities"
         return semantic
@@ -409,11 +409,11 @@ class TestSemanticFactSupersession:
     """Test fact supersession with bi-temporal versioning."""
 
     @pytest_asyncio.fixture
-    async def semantic(self, test_session_id, mock_qdrant_store, mock_neo4j_store, mock_embedding_provider):
+    async def semantic(self, test_session_id, mock_vector_store, mock_graph_store, mock_embedding_provider):
         """Create semantic memory instance."""
         semantic = SemanticMemory(session_id=test_session_id)
-        semantic.vector_store = mock_qdrant_store
-        semantic.graph_store = mock_neo4j_store
+        semantic.vector_store = mock_vector_store
+        semantic.graph_store = mock_graph_store
         semantic.embedding = mock_embedding_provider
         semantic.vector_store.entities_collection = "entities"
         return semantic
@@ -495,11 +495,11 @@ class TestSemanticContextPreloading:
     """Test context preloading for performance."""
 
     @pytest_asyncio.fixture
-    async def semantic(self, test_session_id, mock_qdrant_store, mock_neo4j_store, mock_embedding_provider):
+    async def semantic(self, test_session_id, mock_vector_store, mock_graph_store, mock_embedding_provider):
         """Create semantic memory instance."""
         semantic = SemanticMemory(session_id=test_session_id)
-        semantic.vector_store = mock_qdrant_store
-        semantic.graph_store = mock_neo4j_store
+        semantic.vector_store = mock_vector_store
+        semantic.graph_store = mock_graph_store
         semantic.embedding = mock_embedding_provider
         semantic.vector_store.entities_collection = "entities"
         return semantic
@@ -568,11 +568,11 @@ class TestSemanticBatchOperations:
     """Test batch retrieval operations."""
 
     @pytest_asyncio.fixture
-    async def semantic(self, test_session_id, mock_qdrant_store, mock_neo4j_store, mock_embedding_provider):
+    async def semantic(self, test_session_id, mock_vector_store, mock_graph_store, mock_embedding_provider):
         """Create semantic memory instance."""
         semantic = SemanticMemory(session_id=test_session_id)
-        semantic.vector_store = mock_qdrant_store
-        semantic.graph_store = mock_neo4j_store
+        semantic.vector_store = mock_vector_store
+        semantic.graph_store = mock_graph_store
         semantic.embedding = mock_embedding_provider
         semantic.vector_store.entities_collection = "entities"
         return semantic
@@ -675,11 +675,11 @@ class TestSemanticSpreadingActivation:
     """Test spreading activation through knowledge graph."""
 
     @pytest_asyncio.fixture
-    async def semantic(self, test_session_id, mock_qdrant_store, mock_neo4j_store, mock_embedding_provider):
+    async def semantic(self, test_session_id, mock_vector_store, mock_graph_store, mock_embedding_provider):
         """Create semantic memory instance."""
         semantic = SemanticMemory(session_id=test_session_id)
-        semantic.vector_store = mock_qdrant_store
-        semantic.graph_store = mock_neo4j_store
+        semantic.vector_store = mock_vector_store
+        semantic.graph_store = mock_graph_store
         semantic.embedding = mock_embedding_provider
         semantic.vector_store.entities_collection = "entities"
         return semantic

@@ -45,7 +45,7 @@ def mock_embedding_provider():
 
 
 @pytest.fixture
-def mock_qdrant_store():
+def mock_vector_store():
     """Mock Qdrant with fast responses."""
     mock = AsyncMock()
     mock.episodes_collection = "episodes"
@@ -62,7 +62,7 @@ def mock_qdrant_store():
 
 
 @pytest.fixture
-def mock_neo4j_store():
+def mock_graph_store():
     """Mock Neo4j with consistent performance."""
     mock = AsyncMock()
     mock.initialize = AsyncMock()
@@ -82,7 +82,7 @@ def mock_neo4j_store():
 @pytest.mark.benchmark
 @pytest.mark.asyncio
 async def test_create_1000_episodes(
-    mock_embedding_provider, mock_qdrant_store, mock_neo4j_store, test_session_id
+    mock_embedding_provider, mock_vector_store, mock_graph_store, test_session_id
 ):
     """
     Benchmark: Create 1000 episodes should complete in < 10 seconds.
@@ -96,8 +96,8 @@ async def test_create_1000_episodes(
     from t4dm.memory.episodic import EpisodicMemory
 
     with patch("t4dm.memory.episodic.get_embedding_provider", return_value=mock_embedding_provider):
-        with patch("t4dm.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
-            with patch("t4dm.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
+        with patch("t4dm.memory.episodic.get_vector_store", return_value=mock_vector_store):
+            with patch("t4dm.memory.episodic.get_graph_store", return_value=mock_graph_store):
                 episodic = EpisodicMemory(test_session_id)
                 await episodic.initialize()
 
@@ -132,7 +132,7 @@ async def test_create_1000_episodes(
 @pytest.mark.benchmark
 @pytest.mark.asyncio
 async def test_recall_from_10000_episodes(
-    mock_embedding_provider, mock_qdrant_store, mock_neo4j_store, test_session_id
+    mock_embedding_provider, mock_vector_store, mock_graph_store, test_session_id
 ):
     """
     Benchmark: Recall from 10K episodes should complete in < 5 seconds.
@@ -147,8 +147,8 @@ async def test_recall_from_10000_episodes(
     from uuid import UUID
 
     with patch("t4dm.memory.episodic.get_embedding_provider", return_value=mock_embedding_provider):
-        with patch("t4dm.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
-            with patch("t4dm.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
+        with patch("t4dm.memory.episodic.get_vector_store", return_value=mock_vector_store):
+            with patch("t4dm.memory.episodic.get_graph_store", return_value=mock_graph_store):
                 episodic = EpisodicMemory(test_session_id)
                 await episodic.initialize()
 
@@ -170,7 +170,7 @@ async def test_recall_from_10000_episodes(
                     for i in range(10000)
                 ]
 
-                mock_qdrant_store.search.return_value = mock_results[:30]  # Return 30 candidates
+                mock_vector_store.search.return_value = mock_results[:30]  # Return 30 candidates
 
                 start = time.time()
 
@@ -201,7 +201,7 @@ async def test_recall_from_10000_episodes(
 @pytest.mark.benchmark
 @pytest.mark.asyncio
 async def test_consolidate_1000_episodes(
-    mock_embedding_provider, mock_qdrant_store, mock_neo4j_store, test_session_id
+    mock_embedding_provider, mock_vector_store, mock_graph_store, test_session_id
 ):
     """
     Benchmark: Consolidation of 1000 episodes should complete in < 30 seconds.
@@ -218,8 +218,8 @@ async def test_consolidate_1000_episodes(
     from t4dm.memory.episodic import EpisodicMemory
 
     with patch("t4dm.memory.episodic.get_embedding_provider", return_value=mock_embedding_provider):
-        with patch("t4dm.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
-            with patch("t4dm.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
+        with patch("t4dm.memory.episodic.get_vector_store", return_value=mock_vector_store):
+            with patch("t4dm.memory.episodic.get_graph_store", return_value=mock_graph_store):
                 # Setup mock to simulate 1000 episodes
                 episodic = EpisodicMemory(test_session_id)
                 await episodic.initialize()
@@ -237,7 +237,7 @@ async def test_consolidate_1000_episodes(
                     for i in range(1000)
                 ]
 
-                mock_qdrant_store.search.return_value = [(r.item.id, r.score, {}) for r in mock_results]
+                mock_vector_store.search.return_value = [(r.item.id, r.score, {}) for r in mock_results]
 
                 consolidation = ConsolidationService()
 
@@ -269,7 +269,7 @@ async def test_consolidate_1000_episodes(
 @pytest.mark.benchmark
 @pytest.mark.asyncio
 async def test_100_concurrent_operations(
-    mock_embedding_provider, mock_qdrant_store, mock_neo4j_store, test_session_id
+    mock_embedding_provider, mock_vector_store, mock_graph_store, test_session_id
 ):
     """
     Benchmark: 100 concurrent operations should complete in < 30 seconds.
@@ -288,12 +288,12 @@ async def test_100_concurrent_operations(
     from t4dm.memory.episodic import EpisodicMemory
 
     with patch("t4dm.memory.episodic.get_embedding_provider", return_value=mock_embedding_provider):
-        with patch("t4dm.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
-            with patch("t4dm.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
+        with patch("t4dm.memory.episodic.get_vector_store", return_value=mock_vector_store):
+            with patch("t4dm.memory.episodic.get_graph_store", return_value=mock_graph_store):
                 episodic = EpisodicMemory(test_session_id)
                 await episodic.initialize()
 
-                mock_qdrant_store.search.return_value = []
+                mock_vector_store.search.return_value = []
 
                 async def create_episode(i):
                     return await episodic.create(
@@ -355,7 +355,7 @@ async def test_100_concurrent_operations(
 @pytest.mark.slow
 @pytest.mark.benchmark
 def test_memory_usage_under_load(
-    mock_embedding_provider, mock_qdrant_store, mock_neo4j_store, test_session_id
+    mock_embedding_provider, mock_vector_store, mock_graph_store, test_session_id
 ):
     """
     Benchmark: Memory usage should stay under 1GB for 10K episodes.
@@ -423,7 +423,7 @@ def test_memory_usage_under_load(
 @pytest.mark.benchmark
 @pytest.mark.asyncio
 async def test_embedding_generation_performance(
-    mock_embedding_provider, mock_qdrant_store, mock_neo4j_store, test_session_id
+    mock_embedding_provider, mock_vector_store, mock_graph_store, test_session_id
 ):
     """
     Benchmark: Embedding generation for batch of 100 episodes < 2 seconds.
@@ -467,7 +467,7 @@ async def test_embedding_generation_performance(
 @pytest.mark.benchmark
 @pytest.mark.asyncio
 async def test_vector_search_performance(
-    mock_embedding_provider, mock_qdrant_store, mock_neo4j_store, test_session_id
+    mock_embedding_provider, mock_vector_store, mock_graph_store, test_session_id
 ):
     """
     Benchmark: Vector search in Qdrant over 10K vectors < 1 second.
@@ -481,8 +481,8 @@ async def test_vector_search_performance(
     from uuid import UUID
 
     with patch("t4dm.memory.episodic.get_embedding_provider", return_value=mock_embedding_provider):
-        with patch("t4dm.memory.episodic.get_qdrant_store", return_value=mock_qdrant_store):
-            with patch("t4dm.memory.episodic.get_neo4j_store", return_value=mock_neo4j_store):
+        with patch("t4dm.memory.episodic.get_vector_store", return_value=mock_vector_store):
+            with patch("t4dm.memory.episodic.get_graph_store", return_value=mock_graph_store):
                 episodic = EpisodicMemory(test_session_id)
                 await episodic.initialize()
 
@@ -491,7 +491,7 @@ async def test_vector_search_performance(
                     (str(UUID(int=i)), 0.95 - (i % 1000) * 0.0001, {})
                     for i in range(10000)
                 ]
-                mock_qdrant_store.search.return_value = mock_results[:100]
+                mock_vector_store.search.return_value = mock_results[:100]
 
                 start = time.time()
 
@@ -522,7 +522,7 @@ async def test_vector_search_performance(
 @pytest.mark.benchmark
 @pytest.mark.asyncio
 async def test_graph_operation_performance(
-    mock_embedding_provider, mock_qdrant_store, mock_neo4j_store, test_session_id
+    mock_embedding_provider, mock_vector_store, mock_graph_store, test_session_id
 ):
     """
     Benchmark: Neo4j graph operations for 1000 nodes/relationships < 5 seconds.
@@ -538,7 +538,7 @@ async def test_graph_operation_performance(
     # Time node creation
     start = time.time()
     for i in range(1000):
-        await mock_neo4j_store.create_node(
+        await mock_graph_store.create_node(
             label="Entity",
             properties={
                 "id": str(UUID(int=i)),
@@ -551,7 +551,7 @@ async def test_graph_operation_performance(
     # Time relationship creation
     start = time.time()
     for i in range(900):  # 900 relationships for 1000 nodes
-        await mock_neo4j_store.create_relationship(
+        await mock_graph_store.create_relationship(
             source_id=str(UUID(int=i)),
             target_id=str(UUID(int=i+1)),
             rel_type="RELATED_TO",

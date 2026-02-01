@@ -14,8 +14,7 @@ from t4dm.core.config import get_settings
 from t4dm.memory.episodic import get_episodic_memory
 from t4dm.memory.procedural import get_procedural_memory
 from t4dm.memory.semantic import get_semantic_memory
-from t4dm.storage.neo4j_store import close_neo4j_store
-from t4dm.storage.qdrant_store import close_qdrant_store
+from t4dm.storage import close_stores
 
 logger = logging.getLogger(__name__)
 
@@ -221,8 +220,7 @@ async def cleanup_services(session_id: str | None = None) -> None:
             logger.info("P7.1 Phase 2B: All bridge containers cleaned up")
 
         # Close storage connections
-        await close_qdrant_store(session_id)
-        await close_neo4j_store(session_id)
+        await close_stores(session_id)
 
         logger.info("Memory services cleanup complete")
 

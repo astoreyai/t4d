@@ -14,8 +14,8 @@ class TestSystemDashboard:
         with patch("t4dm.interfaces.dashboard.EpisodicMemory") as mock_ep, \
              patch("t4dm.interfaces.dashboard.SemanticMemory") as mock_sem, \
              patch("t4dm.interfaces.dashboard.ProceduralMemory") as mock_proc, \
-             patch("t4dm.interfaces.dashboard.get_qdrant_store") as mock_qdrant, \
-             patch("t4dm.interfaces.dashboard.get_neo4j_store") as mock_neo4j:
+             patch("t4dm.interfaces.dashboard.get_vector_store") as mock_qdrant, \
+             patch("t4dm.interfaces.dashboard.get_graph_store") as mock_neo4j:
 
             mock_ep_instance = MagicMock()
             mock_ep_instance.initialize = AsyncMock()

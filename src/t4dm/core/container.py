@@ -156,11 +156,10 @@ def configure_production() -> None:
     c = get_container()
 
     # Register stores
-    from t4dm.storage.neo4j_store import Neo4jStore
-    from t4dm.storage.qdrant_store import QdrantStore
+    from t4dm.storage import get_vector_store, get_graph_store
 
-    c.register_singleton("qdrant_store", QdrantStore)
-    c.register_singleton("neo4j_store", Neo4jStore)
+    c.register_singleton("vector_store", get_vector_store)
+    c.register_singleton("graph_store", get_graph_store)
 
     # Register embedding provider
     try:

@@ -2,8 +2,10 @@
 import pytest
 from unittest.mock import AsyncMock, MagicMock, patch
 
-from t4dm.storage.neo4j_store import Neo4jStore
+from t4dm.storage import T4DXGraphStore
 from t4dm.storage.resilience import CircuitBreaker, CircuitBreakerConfig
+
+pytestmark = pytest.mark.skip(reason="Neo4j removed — replaced by T4DX")
 
 
 class TestBatchCreateRelationships:
@@ -33,7 +35,7 @@ class TestBatchCreateRelationships:
     @pytest.fixture
     def store(self, mock_driver):
         """Create Neo4j store with mocked driver."""
-        store = Neo4jStore.__new__(Neo4jStore)
+        store = T4DXGraphStore.__new__(T4DXGraphStore)
         store._driver = mock_driver
         store._initialized = True
         store.database = "neo4j"
@@ -172,7 +174,7 @@ class TestBatchCreateRelationshipsPerformance:
     @pytest.fixture
     def store_with_counter(self, mock_driver):
         """Create store that counts driver calls."""
-        store = Neo4jStore.__new__(Neo4jStore)
+        store = T4DXGraphStore.__new__(T4DXGraphStore)
         store._driver = mock_driver
         store._initialized = True
         store.database = "neo4j"

@@ -19,6 +19,14 @@ class T4DXGraphStore:
     def __init__(self, engine: T4DXEngine) -> None:
         self._engine = engine
 
+    async def initialize(self) -> None:
+        """No-op: T4DX engine is already started."""
+        pass
+
+    async def close(self) -> None:
+        """No-op: engine lifecycle managed by storage module."""
+        pass
+
     # --- node operations ---
 
     async def create_node(

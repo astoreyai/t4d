@@ -297,8 +297,8 @@ class TestEpisodicMemoryReconsolidation:
 
         with patch('t4dm.memory.episodic.get_settings') as mock_settings, \
              patch('t4dm.memory.episodic.get_embedding_provider') as mock_embedding, \
-             patch('t4dm.memory.episodic.get_qdrant_store') as mock_qdrant, \
-             patch('t4dm.memory.episodic.get_neo4j_store') as mock_neo4j, \
+             patch('t4dm.memory.episodic.get_vector_store') as mock_qdrant, \
+             patch('t4dm.memory.episodic.get_graph_store') as mock_neo4j, \
              patch('t4dm.memory.episodic.get_ff_encoder', return_value=None):
 
             # Configure settings

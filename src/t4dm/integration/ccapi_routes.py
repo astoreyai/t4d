@@ -180,11 +180,11 @@ def create_ww_router(
                 from t4dm.memory.procedural import ProceduralMemory
                 from t4dm.memory.semantic import SemanticMemory
                 from t4dm.memory.unified import UnifiedMemoryService
-                from t4dm.storage.qdrant_store import QdrantStore
+                from t4dm.storage import T4DXVectorStore
 
                 # Initialize components
                 embedder = await BGEM3Embedder.create()
-                vector_store = await QdrantStore.create()
+                vector_store = await T4DXVectorStore.create()
 
                 episodic = EpisodicMemory(vector_store=vector_store, embedder=embedder)
                 semantic = SemanticMemory(vector_store=vector_store, embedder=embedder)
