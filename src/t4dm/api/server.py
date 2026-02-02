@@ -409,6 +409,14 @@ try:
 except ImportError:
     logger.debug("WebSocket module not available")
 
+# Include visualization WebSocket route
+try:
+    from t4dm.api.routes.ws_viz import router as ws_viz_router
+    app.include_router(ws_viz_router, tags=["WebSocket"])
+    logger.info("Visualization WebSocket route registered")
+except ImportError:
+    logger.debug("Visualization WebSocket module not available")
+
 # P10.2: Include Prometheus metrics endpoint
 try:
     from t4dm.observability.prometheus import prometheus_router

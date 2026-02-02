@@ -399,15 +399,8 @@ class TestPlotDurabilityDashboard:
         """Test matplotlib dashboard."""
         mock_fig = MagicMock()
         # Create properly shaped array with MagicMock axes
-        mock_ax00 = MagicMock()
-        mock_ax01 = MagicMock()
-        mock_ax10 = MagicMock()
-        mock_ax11 = MagicMock()
         mock_axes = MagicMock()
-        mock_axes.__getitem__ = MagicMock(side_effect=lambda key: {
-            (0, 0): mock_ax00, (0, 1): mock_ax01,
-            (1, 0): mock_ax10, (1, 1): mock_ax11,
-        }[key])
+        mock_axes.__getitem__ = MagicMock(return_value=MagicMock())
         mock_subplots.return_value = (mock_fig, mock_axes)
 
         result = plot_durability_dashboard(populated_visualizer, interactive=False)

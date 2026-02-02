@@ -57,6 +57,16 @@ class PersistenceMetrics:
     recovery_mode: str = "unknown"
 
 
+@dataclass
+class T4DXPersistenceInfo:
+    """T4DX embedded storage engine persistence metrics."""
+    memtable_items: int = 0
+    segment_count: int = 0
+    wal_entries: int = 0
+    last_flush_lsn: int = 0
+    kappa_index_size: int = 0
+
+
 class PersistenceVisualizer:
     """
     Visualizer for persistence layer state.
@@ -93,6 +103,7 @@ class PersistenceVisualizer:
         self.checkpoints: list[CheckpointInfo] = []
         self.metrics_history: list[tuple[datetime, PersistenceMetrics]] = []
         self.lsn_timeline: list[tuple[datetime, int]] = []
+        self.t4dx_history: list[tuple[datetime, T4DXPersistenceInfo]] = []
 
     def record_wal_segment(self, segment: WALSegmentInfo) -> None:
         """Record WAL segment information."""
@@ -144,6 +155,78 @@ class PersistenceVisualizer:
         timestamps = [cp.timestamp for cp in self.checkpoints]
         lsns = [cp.lsn for cp in self.checkpoints]
         return timestamps, lsns
+
+
+    def record_t4dx_state(self, info: T4DXPersistenceInfo) -> None:
+        """Record T4DX storage engine state."""
+        now = datetime.now()
+        self.t4dx_history.append((now, info))
+        if len(self.t4dx_history) > self.max_history:
+            self.t4dx_history.pop(0)
+
+    @property
+    def current_t4dx(self) -> T4DXPersistenceInfo | None:
+        """Get most recent T4DX info."""
+        if self.t4dx_history:
+            return self.t4dx_history[-1][1]
+        return None
+
+    def plot_t4dx_state(self, ax=None) -> Any:
+        """
+        Plot T4DX storage engine state: memtable fill, segment count, WAL size.
+
+        Shows a 3-bar summary of the current T4DX state, or time series if
+        multiple snapshots are available.
+        """
+        try:
+            import matplotlib.pyplot as plt
+        except ImportError:
+            logger.warning("matplotlib not available")
+            return None
+
+        if ax is None:
+            fig, ax = plt.subplots(figsize=(8, 5))
+
+        if not self.t4dx_history:
+            ax.text(0.5, 0.5, "No T4DX data", ha="center", va="center")
+            return ax
+
+        if len(self.t4dx_history) < 3:
+            # Bar chart of latest state
+            info = self.t4dx_history[-1][1]
+            labels = ["MemTable\nItems", "Segments", "WAL\nEntries",
+                       "Flush LSN", "Kappa\nIndex"]
+            values = [info.memtable_items, info.segment_count, info.wal_entries,
+                      info.last_flush_lsn, info.kappa_index_size]
+            colors = ["#3498db", "#e74c3c", "#2ecc71", "#f39c12", "#9b59b6"]
+            ax.bar(labels, values, color=colors, edgecolor="black", linewidth=0.5)
+            ax.set_title("T4DX Storage Engine State")
+            ax.set_ylabel("Count")
+            ax.grid(True, alpha=0.3, axis="y")
+        else:
+            # Time series
+            times = [t for t, _ in self.t4dx_history]
+            ax.plot(times, [i.memtable_items for _, i in self.t4dx_history],
+                    label="MemTable Items", color="#3498db")
+            ax.plot(times, [i.segment_count for _, i in self.t4dx_history],
+                    label="Segments", color="#e74c3c")
+            ax.plot(times, [i.wal_entries for _, i in self.t4dx_history],
+                    label="WAL Entries", color="#2ecc71")
+            ax.set_xlabel("Time")
+            ax.set_ylabel("Count")
+            ax.set_title("T4DX Storage Engine Over Time")
+            ax.legend()
+            ax.grid(True, alpha=0.3)
+
+        return ax
+
+
+def plot_t4dx_state(
+    visualizer: PersistenceVisualizer,
+    ax=None,
+) -> Any:
+    """Plot T4DX storage engine state."""
+    return visualizer.plot_t4dx_state(ax=ax)
 
 
 def plot_wal_timeline(
@@ -399,7 +482,7 @@ def _plot_dashboard_matplotlib(
     if not metrics:
         return None
 
-    fig, axes = plt.subplots(2, 2, figsize=(10, 8))
+    fig, axes = plt.subplots(3, 2, figsize=(10, 12))
 
     # Style for metric boxes
     dict(boxstyle="round,pad=0.5", facecolor="lightgray", edgecolor="black")
@@ -445,6 +528,33 @@ def _plot_dashboard_matplotlib(
     )
     axes[1, 1].set_title("WAL Size", fontsize=14)
     axes[1, 1].axis("off")
+
+    # T4DX panel (bottom row)
+    t4dx = visualizer.current_t4dx
+    if t4dx:
+        labels = ["MemTable", "Segments", "WAL Ent.", "Kappa Idx"]
+        values = [t4dx.memtable_items, t4dx.segment_count,
+                  t4dx.wal_entries, t4dx.kappa_index_size]
+        bar_colors = ["#3498db", "#e74c3c", "#2ecc71", "#9b59b6"]
+        axes[2, 0].bar(labels, values, color=bar_colors, edgecolor="black", linewidth=0.5)
+        axes[2, 0].set_title("T4DX Engine State", fontsize=14)
+        axes[2, 0].grid(True, alpha=0.3, axis="y")
+
+        axes[2, 1].text(
+            0.5, 0.5, f"Flush LSN: {t4dx.last_flush_lsn:,}",
+            ha="center", va="center", fontsize=20, weight="bold",
+            transform=axes[2, 1].transAxes,
+        )
+        axes[2, 1].set_title("T4DX Last Flush", fontsize=14)
+        axes[2, 1].axis("off")
+    else:
+        for col in range(2):
+            axes[2, col].text(
+                0.5, 0.5, "No T4DX data",
+                ha="center", va="center", fontsize=14,
+                transform=axes[2, col].transAxes,
+            )
+            axes[2, col].axis("off")
 
     fig.suptitle(f"Durability Dashboard - {metrics.recovery_mode.upper()}", fontsize=16)
     plt.tight_layout()

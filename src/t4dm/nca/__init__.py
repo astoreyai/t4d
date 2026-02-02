@@ -35,6 +35,15 @@ from t4dm.nca.attractors import (
     CognitiveState,
     StateTransitionManager,
 )
+from t4dm.nca.cerebellum import (
+    CerebellarConfig,
+    CerebellarModule,
+    CerebellarState,
+    DeepCerebellarNuclei,
+    GranuleCellLayer,
+    PurkinjeCellLayer,
+    create_cerebellar_module,
+)
 from t4dm.nca.capsules import (
     CapsuleConfig,
     CapsuleLayer,
@@ -421,6 +430,14 @@ __all__ = [
     "PoseLearningMixin",
     "create_pose_learner",
     "create_learnable_capsule_system",
+    # Cerebellum
+    "CerebellarModule",
+    "CerebellarConfig",
+    "CerebellarState",
+    "GranuleCellLayer",
+    "PurkinjeCellLayer",
+    "DeepCerebellarNuclei",
+    "create_cerebellar_module",
     # Phase 4: Glymphatic System (B8)
     "GlymphaticConfig",
     "GlymphaticSystem",

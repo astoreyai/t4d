@@ -123,13 +123,28 @@ from t4dm.visualization.pattern_separation import (
     plot_separation_comparison,
     plot_sparsity_distribution,
 )
+from t4dm.visualization.neuromod_layers import (
+    NT_COLORS as NEUROMOD_NT_COLORS,
+    NT_LAYER_MAPPING,
+    NT_NAMES as NEUROMOD_NT_NAMES,
+    NeuromodLayerSnapshot,
+    NeuromodLayerVisualizer,
+)
+from t4dm.visualization.oscillator_injection import (
+    OSC_COLORS,
+    OSC_NAMES,
+    OscillatorInjectionVisualizer,
+    OscillatorSnapshot,
+)
 from t4dm.visualization.persistence_state import (
     CheckpointInfo,
     PersistenceMetrics,
     PersistenceVisualizer,
+    T4DXPersistenceInfo,
     WALSegmentInfo,
     plot_checkpoint_history,
     plot_durability_dashboard,
+    plot_t4dx_state,
     plot_wal_timeline,
 )
 from t4dm.visualization.plasticity_traces import (
@@ -151,9 +166,29 @@ from t4dm.visualization.stability_monitor import (
     plot_oscillation_metrics,
     plot_stability_timeline,
 )
+from t4dm.visualization.kappa_gradient import (
+    KappaGradientVisualizer,
+    KappaSnapshot,
+    KAPPA_BANDS,
+    KAPPA_COLORS,
+)
+from t4dm.visualization.qwen_metrics import (
+    QwenMetricsVisualizer,
+    QwenSnapshot,
+)
+from t4dm.visualization.spiking_dynamics import (
+    SpikingDynamicsVisualizer,
+    SpikingSnapshot,
+)
 from t4dm.visualization.swr_telemetry import (
     SWRTelemetry,
     SWRTelemetryEvent,
+)
+from t4dm.visualization.t4dx_metrics import (
+    CompactionEvent,
+    CompactionType,
+    T4DXMetricsVisualizer,
+    T4DXSnapshot,
 )
 from t4dm.visualization.telemetry_hub import (
     CrossScaleEvent,
@@ -199,13 +234,26 @@ __all__ = [
     "EmbeddingProjector",
     "plot_tsne_projection",
     "plot_umap_projection",
+    # Neuromod layers visualization
+    "NeuromodLayerVisualizer",
+    "NeuromodLayerSnapshot",
+    "NEUROMOD_NT_NAMES",
+    "NEUROMOD_NT_COLORS",
+    "NT_LAYER_MAPPING",
+    # Oscillator injection visualization
+    "OscillatorInjectionVisualizer",
+    "OscillatorSnapshot",
+    "OSC_NAMES",
+    "OSC_COLORS",
     # Persistence visualization
     "PersistenceVisualizer",
     "PersistenceMetrics",
+    "T4DXPersistenceInfo",
     "WALSegmentInfo",
     "CheckpointInfo",
     "plot_wal_timeline",
     "plot_durability_dashboard",
+    "plot_t4dx_state",
     "plot_checkpoint_history",
     # Energy landscape visualization
     "EnergyLandscapeVisualizer",
@@ -310,4 +358,20 @@ __all__ = [
     "plot_clearance_by_stage",
     "plot_stage_pie",
     "create_glymphatic_dashboard",
+    # Kappa gradient visualization
+    "KappaGradientVisualizer",
+    "KappaSnapshot",
+    "KAPPA_BANDS",
+    "KAPPA_COLORS",
+    # T4DX metrics visualization
+    "T4DXMetricsVisualizer",
+    "T4DXSnapshot",
+    "CompactionEvent",
+    "CompactionType",
+    # Spiking dynamics visualization
+    "SpikingDynamicsVisualizer",
+    "SpikingSnapshot",
+    # Qwen metrics visualization
+    "QwenMetricsVisualizer",
+    "QwenSnapshot",
 ]
