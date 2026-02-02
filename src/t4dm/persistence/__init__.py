@@ -1,5 +1,5 @@
 """
-World Weaver Persistence Layer
+T4DM Persistence Layer
 
 Provides crash-safe durability for the memory system through:
 - Write-Ahead Logging (WAL) for operation durability

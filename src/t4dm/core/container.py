@@ -1,5 +1,5 @@
 """
-Dependency Injection Container for World Weaver.
+Dependency Injection Container for T4DM.
 
 Provides centralized service registration and resolution,
 enabling better testability and configuration.

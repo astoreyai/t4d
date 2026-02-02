@@ -1,5 +1,5 @@
 """
-Configuration management for World Weaver.
+Configuration management for T4DM.
 
 Uses pydantic-settings for environment variable support.
 """
@@ -313,7 +313,7 @@ class BioinspiredConfig(BaseModel):
 
 
 class Settings(BaseSettings):
-    """World Weaver configuration with environment variable support."""
+    """T4DM configuration with environment variable support."""
 
     model_config = SettingsConfigDict(
         env_prefix="T4DM_",

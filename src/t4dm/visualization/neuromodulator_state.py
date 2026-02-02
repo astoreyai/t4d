@@ -1,5 +1,5 @@
 """
-Neuromodulator state visualization for World Weaver.
+Neuromodulator state visualization for T4DM.
 
 Provides dashboard and timeline visualizations of neuromodulatory systems:
 - Dopamine (DA): Reward prediction error

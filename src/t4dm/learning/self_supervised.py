@@ -1,5 +1,5 @@
 """
-Self-Supervised Credit Estimation for World Weaver.
+Self-Supervised Credit Estimation for T4DM.
 
 P1-2: Addresses gap where credit assignment requires explicit outcomes.
 Enables learning from implicit signals when no outcome is provided.

@@ -1,5 +1,5 @@
 """
-Redis Caching Layer for World Weaver.
+Redis Caching Layer for T4DM.
 
 Phase 3A: Multi-tier caching for embeddings and search results.
 

@@ -1,5 +1,5 @@
 """
-Rate limiting middleware for World Weaver API.
+Rate limiting middleware for T4DM API.
 
 Implements token bucket algorithm for per-client rate limiting.
 

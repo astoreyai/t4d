@@ -1,5 +1,5 @@
 """
-Learnable Forward-Forward Encoder for World Weaver.
+Learnable Forward-Forward Encoder for T4DM.
 
 Phase 5: THE LEARNING GAP FIX
 
@@ -121,7 +121,7 @@ class FFEncoder:
     """
     Learnable Forward-Forward encoder for representation refinement.
 
-    This is THE key component that makes World Weaver actually LEARN
+    This is THE key component that makes T4DM actually LEARN
     representations through use, rather than just storing frozen embeddings.
 
     Architecture:

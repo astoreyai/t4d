@@ -1,5 +1,5 @@
 """
-World Weaver REST API Entity Routes.
+T4DM REST API Entity Routes.
 
 CRUD and search operations for semantic memory (entities and relationships).
 """

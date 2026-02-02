@@ -1,5 +1,5 @@
 """
-Sleep-Based Consolidation for World Weaver.
+Sleep-Based Consolidation for T4DM.
 
 Addresses Hinton critique: Consolidation is manual/scheduled, not replay-based.
 Implements biologically-inspired sleep phases for memory consolidation.

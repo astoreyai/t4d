@@ -1,5 +1,5 @@
 """
-Neural Cellular Automata (NCA) module for World Weaver.
+Neural Cellular Automata (NCA) module for T4DM.
 
 Implements KATIE-inspired neural field dynamics with learnable coupling,
 integrated with WW's existing learning mechanisms.

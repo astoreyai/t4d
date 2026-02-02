@@ -1,5 +1,5 @@
 """
-Graceful Shutdown Handler for World Weaver
+Graceful Shutdown Handler for T4DM
 
 Fixes the critical signal handling issues (MCP-CRITICAL-001/002/003):
 - No async operations in signal handlers

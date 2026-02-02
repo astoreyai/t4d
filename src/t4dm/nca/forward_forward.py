@@ -24,7 +24,7 @@ Theoretical Foundation:
    - Learning uses only pre/post synaptic activity
    - Maps to Hebbian-like plasticity with phase-dependent sign
 
-Integration with World Weaver:
+Integration with T4DM:
 ==============================
 - Connects to neuromodulator system for learning rate modulation
 - Dopamine boosts learning rate on surprise

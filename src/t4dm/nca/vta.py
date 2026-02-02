@@ -1,5 +1,5 @@
 """
-Ventral Tegmental Area (VTA) Dopamine Circuit for World Weaver.
+Ventral Tegmental Area (VTA) Dopamine Circuit for T4DM.
 
 Biological Basis:
 - VTA contains dopamine neurons projecting to limbic (NAcc) and cortical (PFC) areas

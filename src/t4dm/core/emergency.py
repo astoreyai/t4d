@@ -1,5 +1,5 @@
 """
-Emergency Management for World Weaver.
+Emergency Management for T4DM.
 
 Phase 9: Panic mode, graceful shutdown, and circuit breakers.
 
@@ -223,7 +223,7 @@ class CircuitBreaker:
 
 class EmergencyManager:
     """
-    Central emergency management for World Weaver.
+    Central emergency management for T4DM.
 
     Coordinates panic modes, graceful shutdown, and circuit breakers
     across the system.

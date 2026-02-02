@@ -1,5 +1,5 @@
 """
-Transmission Delay System for World Weaver NCA.
+Transmission Delay System for T4DM NCA.
 
 Implements biologically-plausible signal transmission delays including:
 1. Axonal conduction delays (distance and myelination dependent)

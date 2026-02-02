@@ -1,5 +1,5 @@
 """
-Feedback Signal Processing for World Weaver.
+Feedback Signal Processing for T4DM.
 
 Phase 1C: Converts retrieval feedback into learning signals compatible
 with the three-factor learning rule and neuromodulator systems.

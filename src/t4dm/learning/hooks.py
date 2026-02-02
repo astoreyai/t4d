@@ -1,5 +1,5 @@
 """
-Learning hooks for World Weaver retrieval.
+Learning hooks for T4DM retrieval.
 
 Provides decorators and functions to hook into retrieval methods
 and emit RetrievalEvents for the learning system.

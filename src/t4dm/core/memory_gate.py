@@ -1,5 +1,5 @@
 """
-Memory Gate - Decides what gets stored in World Weaver.
+Memory Gate - Decides what gets stored in T4DM.
 
 Implements signal detection to filter noise from voice/text interactions,
 ensuring only meaningful episodes reach long-term memory.

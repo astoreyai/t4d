@@ -1,5 +1,5 @@
 """
-Activity-Dependent Neurogenesis for World Weaver.
+Activity-Dependent Neurogenesis for T4DM.
 
 Phase 4A: Neural Growth
 
@@ -22,7 +22,7 @@ Key Mechanisms:
 3. Pruning: Inactive neurons removed to maintain capacity
 4. Competition: Neurons compete for synaptic integration
 
-Integration with World Weaver:
+Integration with T4DM:
 ===============================
 - ForwardForwardLayer: Each layer can grow/shrink neurons
 - Novelty detection: Based on goodness scores and prediction error

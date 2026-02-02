@@ -1,0 +1,228 @@
+%%{ init: { "theme": "dark" } }%%
+classDiagram
+    class T4DXEngine {
+        -wal: WAL
+        -memtable: MemTable
+        -global_index: GlobalIndex
+        -query_planner: QueryPlanner
+        -compactor: Compactor
+        -config: T4DXConfig
+        +insert(item: ItemRecord, edges: list~EdgeRecord~) UUID
+        +get(id: UUID) ItemRecord
+        +search(vector: ndarray, k: int, filters: SearchFilters) list~SearchResult~
+        +update_fields(id: UUID, fields: dict) None
+        +update_edge_weight(src: UUID, tgt: UUID, delta: float) None
+        +traverse(id: UUID, edge_type: EdgeType, direction: str, depth: int) list~ItemRecord~
+        +scan(filters: ScanFilters, limit: int) Iterator~ItemRecord~
+        +delete(id: UUID) None
+        +batch_scale_weights(filter: EdgeFilter, fn: Callable) int
+        +startup() None
+        +shutdown() None
+        +compact(trigger: CompactTrigger) None
+        +get_stats() EngineStats
+    }
+
+    class MemTable {
+        -items: list~ItemRecord~
+        -vectors: ndarray
+        -edges: dict
+        -id_idx: dict~bytes, int~
+        -kappa_sorted: SortedList
+        -field_overlays: dict~bytes, dict~
+        -edge_deltas: dict~tuple, float~
+        +insert(item: ItemRecord, edges: list~EdgeRecord~) None
+        +get(id: UUID) ItemRecord
+        +brute_force_search(vector: ndarray, k: int, filters: SearchFilters) list~SearchResult~
+        +update_fields(id: UUID, fields: dict) None
+        +add_edge(edge: EdgeRecord) None
+        +update_edge_weight(src: UUID, tgt: UUID, delta: float) None
+        +delete(id: UUID) None
+        +scan(filters: ScanFilters) Iterator~ItemRecord~
+        +size() int
+        +drain() tuple~list, list, dict, dict~
+    }
+
+    class SegmentBuilder {
+        +build(items: list~ItemRecord~, edges: list~EdgeRecord~, path: Path) SegmentMetadata
+        -build_hnsw(vectors: ndarray) None
+        -build_kappa_index(kappas: ndarray) None
+        -build_csr(edges: list~EdgeRecord~) None
+        -build_bloom(ids: list~bytes~) None
+        -write_vardata(items: list~ItemRecord~) None
+        -write_manifest(meta: SegmentMetadata) None
+    }
+
+    class SegmentReader {
+        -path: Path
+        -hnsw: HnswIndex
+        -vectors: ndarray
+        -items: ndarray
+        -kappa_idx: ndarray
+        -edges_csr: CSRMatrix
+        -bloom: BloomFilter
+        -metadata: SegmentMetadata
+        +open(path: Path) SegmentReader
+        +get(id: UUID) ItemRecord
+        +hnsw_search(vector: ndarray, k: int, ef: int) list~SearchResult~
+        +scan_kappa_range(kappa_min: float, kappa_max: float) Iterator~ItemRecord~
+        +traverse_edges(node_id: UUID, edge_type: EdgeType, direction: str) list~EdgeRecord~
+        +iterate_items(filter: ScanFilters) Iterator~ItemRecord~
+        +bloom_contains(id: UUID) bool
+        +close() None
+    }
+
+    class ItemRecord {
+        +id: UUID
+        +vector: ndarray~float32, 1024~
+        +event_time: float
+        +record_time: float
+        +valid_from: float
+        +valid_until: float
+        +kappa: float
+        +importance: float
+        +item_type: int
+        +flags: int
+        +access_count: int
+        +session_hash: int
+        +content: str
+        +metadata: dict
+    }
+
+    class EdgeRecord {
+        +source_id: UUID
+        +target_id: UUID
+        +edge_type: EdgeType
+        +weight: float
+        +created_at: float
+    }
+
+    class EdgeType {
+        <<enumeration>>
+        CAUSES
+        TEMPORAL_BEFORE
+        TEMPORAL_AFTER
+        PART_OF
+        SIMILAR_TO
+        MERGED_FROM
+        SUPERSEDES
+        RELATES_TO
+        CONSOLIDATED_INTO
+        IMPLEMENTS
+        HAS_CONTEXT
+        DERIVED_FROM
+        DEPENDS_ON
+    }
+
+    class SegmentMetadata {
+        +segment_id: int
+        +level: int
+        +time_min: float
+        +time_max: float
+        +kappa_min: float
+        +kappa_max: float
+        +count: int
+        +sessions: set~int~
+        +created_at: float
+        +path: Path
+    }
+
+    class WAL {
+        -path: Path
+        -current_segment: BinaryIO
+        -lsn: int
+        +append(op_type: OpType, payload: bytes) int
+        +replay(from_lsn: int) Iterator~WALEntry~
+        +truncate(up_to_lsn: int) None
+        +fsync() None
+        +current_lsn() int
+    }
+
+    class GlobalIndex {
+        -id_map: dict~bytes, int~
+        -tombstones: set~bytes~
+        -cross_edges: CSRMatrix
+        -manifest: list~SegmentMetadata~
+        +lookup(id: UUID) int
+        +register_segment(meta: SegmentMetadata) None
+        +remove_segment(segment_id: int) None
+        +add_cross_edge(edge: EdgeRecord) None
+        +is_tombstoned(id: UUID) bool
+        +get_segments_for_time(t_min: float, t_max: float) list~SegmentMetadata~
+        +save(path: Path) None
+        +load(path: Path) GlobalIndex
+    }
+
+    class QueryPlanner {
+        -memtable: MemTable
+        -segments: list~SegmentReader~
+        -global_index: GlobalIndex
+        +execute_search(vector: ndarray, k: int, filters: SearchFilters) list~SearchResult~
+        +execute_traverse(id: UUID, edge_type: EdgeType, dir: str, depth: int) list~ItemRecord~
+        +execute_scan(filters: ScanFilters, limit: int) Iterator~ItemRecord~
+        -prune_segments(filters: SearchFilters) list~SegmentReader~
+        -merge_results(results: list~list~) list~SearchResult~
+    }
+
+    class Compactor {
+        -engine: T4DXEngine
+        +flush(memtable: MemTable) SegmentMetadata
+        +nrem_compact(segments: list~SegmentReader~) SegmentMetadata
+        +rem_compact(segments: list~SegmentReader~) SegmentMetadata
+        +prune(segment: SegmentReader) SegmentMetadata
+        +split(segment: SegmentReader, boundary: float) tuple
+    }
+
+    class T4DXVectorStore {
+        -engine: T4DXEngine
+        +add(collection: str, ids: list, vectors: list, payloads: list) None
+        +search(collection: str, vector: ndarray, limit: int, filter: dict) list
+        +search_hybrid(collection: str, vector: ndarray, text: str, limit: int) list
+        +delete(collection: str, ids: list) None
+        +get(collection: str, ids: list) list
+        +scroll(collection: str, filter: dict, limit: int) list
+        +count(collection: str) int
+    }
+
+    class T4DXGraphStore {
+        -engine: T4DXEngine
+        +create_node(label: str, properties: dict) UUID
+        +get_node(node_id: UUID, label: str) dict
+        +update_node(node_id: UUID, properties: dict) None
+        +delete_node(node_id: UUID) None
+        +create_relationship(src: UUID, tgt: UUID, rel_type: str, props: dict) None
+        +get_relationships(node_id: UUID, rel_type: str, direction: str) list
+        +find_path(src: UUID, tgt: UUID, max_depth: int) list
+        +query(cypher: str, parameters: dict) list
+    }
+
+    T4DXEngine *-- WAL
+    T4DXEngine *-- MemTable
+    T4DXEngine *-- GlobalIndex
+    T4DXEngine *-- QueryPlanner
+    T4DXEngine *-- Compactor
+    T4DXEngine ..> ItemRecord : stores
+    T4DXEngine ..> EdgeRecord : stores
+
+    MemTable ..> ItemRecord : contains
+    MemTable ..> EdgeRecord : contains
+
+    SegmentBuilder ..> ItemRecord : serializes
+    SegmentBuilder ..> EdgeRecord : serializes
+    SegmentBuilder ..> SegmentMetadata : produces
+
+    SegmentReader ..> ItemRecord : deserializes
+    SegmentReader ..> SegmentMetadata : reads
+
+    GlobalIndex o-- SegmentMetadata : catalogs
+
+    QueryPlanner --> MemTable : queries
+    QueryPlanner --> SegmentReader : queries
+    QueryPlanner --> GlobalIndex : consults
+
+    Compactor --> SegmentBuilder : creates segments
+    Compactor --> SegmentReader : reads segments
+
+    EdgeRecord --> EdgeType : uses
+
+    T4DXVectorStore --> T4DXEngine : wraps
+    T4DXGraphStore --> T4DXEngine : wraps

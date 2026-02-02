@@ -1,5 +1,5 @@
 """
-Core lifecycle hooks for World Weaver modules.
+Core lifecycle hooks for T4DM modules.
 
 Provides hooks for:
 - Module initialization

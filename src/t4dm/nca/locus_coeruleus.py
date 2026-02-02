@@ -1,5 +1,5 @@
 """
-Locus Coeruleus Norepinephrine Circuit for World Weaver.
+Locus Coeruleus Norepinephrine Circuit for T4DM.
 
 Sprint 4 (P2): Implements LC phasic/tonic firing modes for arousal modulation.
 Phase 2: Adds surprise-driven NE with uncertainty signaling.

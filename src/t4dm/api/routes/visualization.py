@@ -1,5 +1,5 @@
 """
-World Weaver REST API Visualization Routes.
+T4DM REST API Visualization Routes.
 
 Endpoints for 3D memory graph visualization.
 """
@@ -2079,7 +2079,7 @@ async def trace_credit_paths(
     through symbolic graph traversal.
     """
     try:
-        # Placeholder - would query Neo4j for paths to outcome nodes
+        # Placeholder - would query T4DX for paths to outcome nodes
         paths = []
         return paths
 

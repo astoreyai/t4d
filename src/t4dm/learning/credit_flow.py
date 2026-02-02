@@ -1,5 +1,5 @@
 """
-Credit Flow Integration for World Weaver.
+Credit Flow Integration for T4DM.
 
 Connects neuromodulator learning signals to actual weight updates.
 This module solves the "dangling credits" problem where process_outcome()

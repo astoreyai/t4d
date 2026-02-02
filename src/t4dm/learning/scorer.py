@@ -1,5 +1,5 @@
 """
-Neural Retrieval Scorer for World Weaver.
+Neural Retrieval Scorer for T4DM.
 
 Implements learnable retrieval scoring using PyTorch:
 1. LearnedRetrievalScorer: Neural network for scoring memories

@@ -1,5 +1,5 @@
 """
-P5.5: Spike-Timing-Dependent Plasticity (STDP) for World Weaver.
+P5.5: Spike-Timing-Dependent Plasticity (STDP) for T4DM.
 
 Implements the classic STDP learning rule where synaptic weight changes
 depend on the relative timing of pre- and post-synaptic activity.

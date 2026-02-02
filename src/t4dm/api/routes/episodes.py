@@ -1,5 +1,5 @@
 """
-World Weaver REST API Episode Routes.
+T4DM REST API Episode Routes.
 
 CRUD and search operations for episodic memory.
 """

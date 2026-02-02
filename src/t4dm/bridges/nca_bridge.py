@@ -1,5 +1,5 @@
 """
-NCA Bridge for World Weaver (Migrated from bridge/memory_nca.py).
+NCA Bridge for T4DM (Migrated from bridge/memory_nca.py).
 
 Connects WW memory operations to NCA neural field dynamics:
 

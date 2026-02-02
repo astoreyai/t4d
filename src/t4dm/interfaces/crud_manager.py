@@ -1,5 +1,5 @@
 """
-CRUD Manager - Create, Read, Update, Delete operations for World Weaver memories.
+CRUD Manager - Create, Read, Update, Delete operations for T4DM memories.
 
 Provides batch operations, bulk imports, and safe deletion with confirmation.
 """
@@ -39,7 +39,7 @@ logger = logging.getLogger(__name__)
 
 class CRUDManager:
     """
-    CRUD operations interface for World Weaver memories.
+    CRUD operations interface for T4DM memories.
 
     Features:
     - Create episodes, entities, skills with validation

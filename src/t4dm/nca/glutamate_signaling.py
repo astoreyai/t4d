@@ -1,5 +1,5 @@
 """
-Synaptic vs Extrasynaptic Glutamate Signaling for World Weaver.
+Synaptic vs Extrasynaptic Glutamate Signaling for T4DM.
 
 Sprint 4 (P2): Separates glutamate pools with distinct receptor populations
 and differential effects on plasticity and cell survival.

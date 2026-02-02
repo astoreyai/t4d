@@ -1,5 +1,5 @@
 """
-State-Dependent Embedding Modulation for World Weaver.
+State-Dependent Embedding Modulation for T4DM.
 
 Implements context-aware embedding transformation based on neuromodulator state.
 The brain doesn't produce static representations - embeddings should be modulated

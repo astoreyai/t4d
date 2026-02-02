@@ -1,5 +1,5 @@
 """
-Semantic Mock Embedding Adapter for World Weaver.
+Semantic Mock Embedding Adapter for T4DM.
 
 Provides a mock embedding adapter that produces semantically meaningful
 embeddings for testing. Unlike the basic MockEmbeddingAdapter which uses

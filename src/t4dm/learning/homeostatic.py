@@ -1,5 +1,5 @@
 """
-Homeostatic Plasticity for World Weaver.
+Homeostatic Plasticity for T4DM.
 
 Biological Basis:
 - Synaptic scaling maintains average firing rates despite Hebbian learning

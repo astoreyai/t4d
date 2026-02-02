@@ -1,5 +1,5 @@
 """
-World Weaver Memory Interface Modules.
+T4DM Memory Interface Modules.
 
 Provides rich terminal UI for memory exploration, CRUD operations,
 system health monitoring, and neural dynamics inspection.

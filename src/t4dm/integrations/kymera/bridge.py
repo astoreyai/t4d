@@ -1,5 +1,5 @@
 """
-Voice Memory Bridge - Connects Kymera Voice to World Weaver memory.
+Voice Memory Bridge - Connects Kymera Voice to T4DM memory.
 
 Handles:
 - Deciding when to store voice interactions as episodes
@@ -80,7 +80,7 @@ class MemoryContext:
 
 class VoiceMemoryBridge:
     """
-    Bridge between Kymera Voice and World Weaver memory.
+    Bridge between Kymera Voice and T4DM memory.
 
     Responsibilities:
     1. Filter voice input through PrivacyFilter
@@ -91,7 +91,7 @@ class VoiceMemoryBridge:
 
     def __init__(
         self,
-        ww_client: Any,  # World Weaver MCP client
+        ww_client: Any,  # T4DM MCP client
         memory_gate: MemoryGate | None = None,
         privacy_filter: PrivacyFilter | None = None,
     ):
@@ -99,7 +99,7 @@ class VoiceMemoryBridge:
         Initialize voice memory bridge.
 
         Args:
-            ww_client: World Weaver MCP client for memory operations
+            ww_client: T4DM MCP client for memory operations
             memory_gate: Memory gate for storage decisions (default: create new)
             privacy_filter: Privacy filter for redaction (default: create new)
         """
@@ -409,7 +409,7 @@ class VoiceMemoryBridge:
         importance: float,
         outcome: Outcome = Outcome.NEUTRAL,
     ) -> UUID:
-        """Store an episode in World Weaver."""
+        """Store an episode in T4DM."""
         episode_context = EpisodeContext(
             project=context.project,
             cwd=context.cwd,

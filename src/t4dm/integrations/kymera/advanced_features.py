@@ -1,5 +1,5 @@
 """
-Advanced Features for Kymera Voice + World Weaver.
+Advanced Features for Kymera Voice + T4DM.
 
 Phase 5 capabilities:
 - NotificationManager: Push notifications for important events
@@ -289,7 +289,7 @@ class PreferenceLearner:
         Initialize preference learner.
 
         Args:
-            ww_client: World Weaver MCP client
+            ww_client: T4DM MCP client
             min_observations: Minimum observations before applying
             confidence_threshold: Confidence needed to apply preference
         """
@@ -304,7 +304,7 @@ class PreferenceLearner:
         self._observations: list[dict] = []
 
     async def load_preferences(self) -> None:
-        """Load preferences from World Weaver."""
+        """Load preferences from T4DM."""
         try:
             result = await self.ww.call_tool(
                 "mcp__ww-memory__semantic_recall",
@@ -434,7 +434,7 @@ class PreferenceLearner:
             await self._store_preference(pref)
 
     async def _store_preference(self, preference: UserPreference) -> None:
-        """Store preference in World Weaver."""
+        """Store preference in T4DM."""
         try:
             await self.ww.call_tool(
                 "mcp__ww-memory__create_entity",
@@ -529,7 +529,7 @@ class MultiModalContext:
         Initialize multi-modal context.
 
         Args:
-            ww_client: World Weaver MCP client
+            ww_client: T4DM MCP client
             embedding_provider: For semantic matching
             max_context_items: Max items to track
         """

@@ -1,5 +1,5 @@
 """
-World Weaver REST API Configuration Routes.
+T4DM REST API Configuration Routes.
 
 GET/PUT system configuration parameters for all learning subsystems.
 
@@ -880,7 +880,7 @@ def create_preset_routes() -> APIRouter:
 
 def create_ww_router() -> APIRouter:
     """
-    Create main World Weaver configuration router.
+    Create main T4DM configuration router.
 
     Delegates to focused sub-routers:
     - Config routes: GET/PUT/reset configuration

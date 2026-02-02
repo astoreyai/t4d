@@ -1,5 +1,5 @@
 """
-Shared serialization utilities for World Weaver.
+Shared serialization utilities for T4DM.
 
 Provides consistent conversion between domain objects and storage formats.
 Eliminates ~150 lines of duplicated serialization code across memory modules.

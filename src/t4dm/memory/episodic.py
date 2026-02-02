@@ -1,5 +1,5 @@
 """
-Episodic Memory Service for World Weaver.
+Episodic Memory Service for T4DM.
 
 Implements autobiographical memory with bi-temporal versioning and FSRS decay.
 """

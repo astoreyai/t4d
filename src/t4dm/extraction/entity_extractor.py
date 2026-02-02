@@ -1,5 +1,5 @@
 """
-Entity extraction service for World Weaver.
+Entity extraction service for T4DM.
 
 Automatically extracts named entities from episode content using:
 - Regex patterns (emails, URLs, dates, etc.)

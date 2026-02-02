@@ -1,5 +1,5 @@
 """
-Resilience patterns for World Weaver storage backends.
+Resilience patterns for T4DM storage backends.
 
 Provides circuit breaker, retry, bulkhead, and graceful degradation patterns
 for storage operations.

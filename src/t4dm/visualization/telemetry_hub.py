@@ -1,5 +1,5 @@
 """
-Multi-Scale Telemetry Hub for World Weaver NCA.
+Multi-Scale Telemetry Hub for T4DM NCA.
 
 Integrates all telemetry modules into a unified monitoring system:
 - SWR (Sharp-Wave Ripple) telemetry

@@ -1,5 +1,5 @@
 """
-Online Embedding Adapter for World Weaver.
+Online Embedding Adapter for T4DM.
 
 Phase 2C: Low-Rank Adaptation from Retrieval Feedback.
 

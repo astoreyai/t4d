@@ -1,5 +1,5 @@
 """
-Protocol definitions for World Weaver.
+Protocol definitions for T4DM.
 
 These define the interfaces that storage and embedding providers must implement,
 enabling provider-agnostic memory operations.
@@ -167,10 +167,10 @@ class GraphStore(Protocol):
     @abstractmethod
     async def query(
         self,
-        cypher: str,
+        query: str | dict[str, Any],
         parameters: dict[str, Any] | None = None,
     ) -> list[dict[str, Any]]:
-        """Execute a Cypher query."""
+        """Execute a graph query (string expression or structured dict)."""
         ...
 
     @abstractmethod

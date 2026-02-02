@@ -1,5 +1,5 @@
 """
-Pattern Separation for World Weaver.
+Pattern Separation for T4DM.
 
 Addresses Hinton critique: Similar inputs produce similar embeddings, causing
 interference during retrieval. The dentate gyrus in the hippocampus performs

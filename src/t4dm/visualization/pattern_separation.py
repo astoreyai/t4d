@@ -1,5 +1,5 @@
 """
-Pattern separation visualization for World Weaver.
+Pattern separation visualization for T4DM.
 
 Visualizes the effects of dentate gyrus pattern separation:
 - Before/after orthogonalization

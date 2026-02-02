@@ -1,5 +1,5 @@
 """
-World Weaver Latent Prediction Module.
+T4DM Latent Prediction Module.
 
 P2: JEPA-style prediction in latent/embedding space.
 P4-1: Hierarchical multi-timescale prediction.

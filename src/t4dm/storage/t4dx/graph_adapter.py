@@ -161,10 +161,10 @@ class T4DXGraphStore:
 
     async def query(
         self,
-        cypher: str,
+        query: str | dict[str, Any],
         parameters: dict[str, Any] | None = None,
     ) -> list[dict[str, Any]]:
-        raise NotImplementedError("T4DXGraphStore does not support Cypher queries")
+        raise NotImplementedError("T4DXGraphStore does not support raw graph queries")
 
     async def find_path(
         self,

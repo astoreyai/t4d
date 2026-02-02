@@ -1,8 +1,8 @@
 """
-World Weaver Memory Adapter for ccapi.
+T4DM Memory Adapter for ccapi.
 
 Implements the llm_agents Memory protocol using WW's tripartite memory system.
-Enables ccapi agents to use World Weaver's episodic, semantic, and procedural
+Enables ccapi agents to use T4DM's episodic, semantic, and procedural
 memory with neuro-symbolic learning.
 """
 
@@ -39,7 +39,7 @@ class Message:
 
 class WWMemory:
     """
-    World Weaver Memory adapter for ccapi.
+    T4DM Memory adapter for ccapi.
 
     Provides the Memory protocol interface while using WW's:
     - Episodic memory for conversation history

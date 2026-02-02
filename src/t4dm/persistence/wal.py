@@ -1,5 +1,5 @@
 """
-Write-Ahead Log (WAL) for World Weaver
+Write-Ahead Log (WAL) for T4DM
 
 Guarantees durability by logging operations BEFORE they're applied to in-memory state.
 On crash, replay uncommitted entries to restore consistency.

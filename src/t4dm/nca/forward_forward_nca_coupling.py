@@ -1,5 +1,5 @@
 """
-Forward-Forward Algorithm - NCA Neural Field Coupling for World Weaver.
+Forward-Forward Algorithm - NCA Neural Field Coupling for T4DM.
 
 Implements H10 (cross-region consistency) by aligning Forward-Forward
 local learning with the global NCA energy landscape:

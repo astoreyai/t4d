@@ -1,5 +1,5 @@
 """
-Persistence Manager - Main Orchestrator for World Weaver Durability
+Persistence Manager - Main Orchestrator for T4DM Durability
 
 Coordinates WAL, checkpointing, recovery, and shutdown into a unified system.
 
@@ -111,7 +111,7 @@ class PersistenceConfig:
 
 class PersistenceManager:
     """
-    Main orchestrator for World Weaver persistence.
+    Main orchestrator for T4DM persistence.
 
     Provides unified interface for:
     - Write-ahead logging

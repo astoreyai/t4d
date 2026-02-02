@@ -1,4 +1,4 @@
-"""Core types, configuration, and protocols for World Weaver."""
+"""Core types, configuration, and protocols for T4DM."""
 
 from t4dm.core.cache import (
     CacheStats,

@@ -1,5 +1,5 @@
 """
-Hippocampal Circuit for World Weaver.
+Hippocampal Circuit for T4DM.
 
 Sprint 1.1 (P0): Implements distinct DG/CA3/CA1 subregions with proper
 information flow as identified in the CompBio architecture audit.

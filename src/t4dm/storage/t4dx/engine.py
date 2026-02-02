@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import threading
 from pathlib import Path
 from typing import Any
 from uuid import UUID
@@ -38,6 +39,7 @@ class T4DXEngine:
         self._data_dir.mkdir(parents=True, exist_ok=True)
         self._flush_threshold = flush_threshold
 
+        self._lock = threading.RLock()
         self._memtable = MemTable()
         self._global_index = GlobalIndex()
         self._segments: dict[int, SegmentReader] = {}
@@ -84,14 +86,16 @@ class T4DXEngine:
 
     def insert(self, record: ItemRecord) -> None:
         """INSERT: add an item to the memtable."""
-        self._wal.append(OpType.INSERT, {"item": record.to_dict()})
-        self._memtable.insert(record)
-        self._maybe_flush()
+        with self._lock:
+            self._wal.append(OpType.INSERT, {"item": record.to_dict()})
+            self._memtable.insert(record)
+            self._maybe_flush()
 
     def get(self, item_id: bytes) -> ItemRecord | None:
         """GET: retrieve a single item by 16-byte UUID."""
-        planner = self._make_planner()
-        return planner.get(item_id)
+        with self._lock:
+            planner = self._make_planner()
+            return planner.get(item_id)
 
     def search(
         self,
@@ -104,20 +108,22 @@ class T4DXEngine:
         item_type: str | None = None,
     ) -> list[tuple[bytes, float]]:
         """SEARCH: vector similarity search with filters."""
-        planner = self._make_planner()
-        return planner.search(
-            query_vector, k=k,
-            time_min=time_min, time_max=time_max,
-            kappa_min=kappa_min, kappa_max=kappa_max,
-            item_type=item_type,
-        )
+        with self._lock:
+            planner = self._make_planner()
+            return planner.search(
+                query_vector, k=k,
+                time_min=time_min, time_max=time_max,
+                kappa_min=kappa_min, kappa_max=kappa_max,
+                item_type=item_type,
+            )
 
     def update_fields(self, item_id: bytes, fields: dict[str, Any]) -> None:
         """UPDATE_FIELDS: overlay field mutations."""
-        self._wal.append(OpType.UPDATE_FIELDS, {
-            "item_id": item_id.hex(), "fields": fields,
-        })
-        self._memtable.update_fields(item_id, fields)
+        with self._lock:
+            self._wal.append(OpType.UPDATE_FIELDS, {
+                "item_id": item_id.hex(), "fields": fields,
+            })
+            self._memtable.update_fields(item_id, fields)
 
     def update_edge_weight(
         self,
@@ -127,13 +133,14 @@ class T4DXEngine:
         weight_delta: float,
     ) -> None:
         """UPDATE_EDGE_WEIGHT: Hebbian weight update."""
-        self._wal.append(OpType.UPDATE_EDGE_WEIGHT, {
-            "source_id": source_id.hex(),
-            "target_id": target_id.hex(),
-            "edge_type": edge_type,
-            "weight_delta": weight_delta,
-        })
-        self._memtable.update_edge_weight(source_id, target_id, edge_type, weight_delta)
+        with self._lock:
+            self._wal.append(OpType.UPDATE_EDGE_WEIGHT, {
+                "source_id": source_id.hex(),
+                "target_id": target_id.hex(),
+                "edge_type": edge_type,
+                "weight_delta": weight_delta,
+            })
+            self._memtable.update_edge_weight(source_id, target_id, edge_type, weight_delta)
 
     def traverse(
         self,
@@ -142,19 +149,20 @@ class T4DXEngine:
         direction: str = "both",
     ) -> list[EdgeRecord]:
         """TRAVERSE: get edges for a node across memtable + segments + cross-edges."""
-        results = self._memtable.get_edges(node_id, edge_type, direction)
+        with self._lock:
+            results = self._memtable.get_edges(node_id, edge_type, direction)
 
-        # Check segments
-        hex_id = node_id.hex()
-        for sid, reader in self._segments.items():
-            results.extend(reader.traverse(node_id, edge_type, direction))
+            # Check segments
+            hex_id = node_id.hex()
+            for sid, reader in self._segments.items():
+                results.extend(reader.traverse(node_id, edge_type, direction))
 
-        # Cross-edges
-        results.extend(
-            self._global_index.get_cross_edges(node_id, edge_type, direction)
-        )
+            # Cross-edges
+            results.extend(
+                self._global_index.get_cross_edges(node_id, edge_type, direction)
+            )
 
-        return results
+            return results
 
     def scan(
         self,
@@ -165,57 +173,66 @@ class T4DXEngine:
         item_type: str | None = None,
     ) -> list[ItemRecord]:
         """SCAN: filtered iteration over all items."""
-        planner = self._make_planner()
-        return planner.scan(
-            time_min=time_min, time_max=time_max,
-            kappa_min=kappa_min, kappa_max=kappa_max,
-            item_type=item_type,
-        )
+        with self._lock:
+            planner = self._make_planner()
+            return planner.scan(
+                time_min=time_min, time_max=time_max,
+                kappa_min=kappa_min, kappa_max=kappa_max,
+                item_type=item_type,
+            )
 
     def delete(self, item_id: bytes) -> None:
         """DELETE: tombstone an item."""
-        self._wal.append(OpType.DELETE, {"item_id": item_id.hex()})
-        self._memtable.delete(item_id)
-        self._global_index.tombstone(item_id.hex())
+        with self._lock:
+            self._wal.append(OpType.DELETE, {"item_id": item_id.hex()})
+            self._memtable.delete(item_id)
+            self._global_index.tombstone(item_id.hex())
 
     def batch_scale_weights(self, factor: float) -> None:
         """BATCH_SCALE_WEIGHTS: scale all edge weights in memtable."""
-        self._wal.append(OpType.BATCH_SCALE_WEIGHTS, {"factor": factor})
-        self._memtable.batch_scale_weights(factor)
+        with self._lock:
+            self._wal.append(OpType.BATCH_SCALE_WEIGHTS, {"factor": factor})
+            self._memtable.batch_scale_weights(factor)
 
     # --- edge insert (used by graph adapter) ---
 
     def insert_edge(self, edge: EdgeRecord) -> None:
         """Insert an edge into the memtable."""
-        self._wal.append(OpType.INSERT_EDGE, {"edge": edge.to_dict()})
-        self._memtable.insert_edge(edge)
+        with self._lock:
+            self._wal.append(OpType.INSERT_EDGE, {"edge": edge.to_dict()})
+            self._memtable.insert_edge(edge)
 
     def delete_edge(self, source_id: bytes, target_id: bytes, edge_type: str) -> None:
         """Delete an edge."""
-        self._wal.append(OpType.DELETE_EDGE, {
-            "source_id": source_id.hex(),
-            "target_id": target_id.hex(),
-            "edge_type": edge_type,
-        })
-        self._memtable.delete_edge(source_id, target_id, edge_type)
+        with self._lock:
+            self._wal.append(OpType.DELETE_EDGE, {
+                "source_id": source_id.hex(),
+                "target_id": target_id.hex(),
+                "edge_type": edge_type,
+            })
+            self._memtable.delete_edge(source_id, target_id, edge_type)
 
     # --- compaction ---
 
     def flush(self) -> int | None:
         """Force flush memtable to segment."""
-        sid = self._compactor.flush()
-        if sid is not None:
-            self._wal.truncate()
-        return sid
+        with self._lock:
+            sid = self._compactor.flush()
+            if sid is not None:
+                self._wal.truncate()
+            return sid
 
     def nrem_compact(self, **kwargs: Any) -> int | None:
-        return self._compactor.nrem_compact(**kwargs)
+        with self._lock:
+            return self._compactor.nrem_compact(**kwargs)
 
     def rem_compact(self, **kwargs: Any) -> int | None:
-        return self._compactor.rem_compact(**kwargs)
+        with self._lock:
+            return self._compactor.rem_compact(**kwargs)
 
     def prune(self, **kwargs: Any) -> int:
-        return self._compactor.prune(**kwargs)
+        with self._lock:
+            return self._compactor.prune(**kwargs)
 
     # --- internals ---
 

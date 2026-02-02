@@ -1,5 +1,5 @@
 """
-BGE-M3 Embedding Provider for World Weaver.
+BGE-M3 Embedding Provider for T4DM.
 
 Uses FlagEmbedding library for efficient local inference on RTX 3090.
 Supports dense, sparse, and ColBERT embeddings (only dense used for WW).

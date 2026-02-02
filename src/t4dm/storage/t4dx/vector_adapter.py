@@ -225,17 +225,41 @@ class T4DXVectorStore:
         offset: int = 0,
         filter: dict[str, Any] | None = None,
     ) -> list[tuple[str, dict[str, Any]]]:
-        """Scroll through collection (stub - returns empty)."""
-        return []
+        """Scroll through collection using engine scan."""
+        kw: dict[str, Any] = {"item_type": collection}
+        if filter:
+            if "kappa_min" in filter:
+                kw["kappa_min"] = filter["kappa_min"]
+            if "kappa_max" in filter:
+                kw["kappa_max"] = filter["kappa_max"]
+        all_items = self._engine.scan(**kw)
+        page = all_items[offset : offset + limit]
+        results = []
+        for rec in page:
+            uid = ItemRecord.bytes_to_uuid(rec.id).__str__()
+            payload = {
+                "content": rec.content,
+                "kappa": rec.kappa,
+                "importance": rec.importance,
+                "item_type": rec.item_type,
+                "metadata": rec.metadata,
+            }
+            results.append((uid, payload))
+        return results
 
     async def count(
         self,
         collection: str,
         filter: dict[str, Any] | None = None,
     ) -> int:
-        """Count items in collection."""
-        # This is a stub - T4DX doesn't have an efficient count method
-        return 0
+        """Count items in collection using engine scan."""
+        kw: dict[str, Any] = {"item_type": collection}
+        if filter:
+            if "kappa_min" in filter:
+                kw["kappa_min"] = filter["kappa_min"]
+            if "kappa_max" in filter:
+                kw["kappa_max"] = filter["kappa_max"]
+        return len(self._engine.scan(**kw))
 
     async def get_with_vectors(
         self,

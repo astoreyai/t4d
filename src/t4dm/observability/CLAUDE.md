@@ -9,10 +9,10 @@ Structured logging, metrics collection, health checks, distributed tracing, and 
 - **Metrics** (`metrics.py`): `MetricsCollector` with `Timer`/`AsyncTimer` for latency tracking, `timed_operation` and `count_operation` decorators.
 - **Health** (`health.py`): `HealthChecker` aggregates per-component health into `SystemHealth` with status enum (healthy/degraded/unhealthy).
 - **Tracing** (`tracing.py`): OpenTelemetry-based distributed tracing with `traced`/`traced_sync` decorators, span attributes, and context propagation.
-- **Prometheus** (`prometheus.py`): Optional Prometheus export with `WWMetrics` singleton, internal counter/gauge/histogram types, `track_latency` and `count_calls` decorators.
+- **Prometheus** (`prometheus.py`): Optional Prometheus export with `T4DMMetrics` singleton, internal counter/gauge/histogram types, `track_latency` and `count_calls` decorators.
 
 ## Why
-Production memory systems need observability to diagnose latency issues, track memory operation throughput, detect backend failures (Neo4j/Qdrant), and correlate operations across distributed traces.
+Production memory systems need observability to diagnose latency issues, track memory operation throughput, detect T4DX storage engine failures, and correlate operations across distributed traces.
 
 ## Key Files
 | File | Purpose |

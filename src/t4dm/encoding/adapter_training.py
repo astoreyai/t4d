@@ -1,5 +1,5 @@
 """
-Adapter Training System for World Weaver.
+Adapter Training System for T4DM.
 
 Phase 2C: Training pipeline for OnlineEmbeddingAdapter.
 

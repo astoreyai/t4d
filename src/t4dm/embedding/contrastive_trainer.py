@@ -1,5 +1,5 @@
 """
-Contrastive Adapter for World Weaver.
+Contrastive Adapter for T4DM.
 
 Implements learnable projection on top of frozen BGE-M3 embeddings,
 enabling the memory system to adapt representations to task-specific needs.

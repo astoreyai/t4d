@@ -1,5 +1,5 @@
 """
-World Weaver Learning System.
+T4DM Learning System.
 
 Implements adaptive learning for memory retrieval based on outcomes.
 

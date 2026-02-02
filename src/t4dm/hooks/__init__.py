@@ -1,5 +1,5 @@
 """
-World Weaver Lifecycle Hooks System.
+T4DM Lifecycle Hooks System.
 
 Provides extensible hook interfaces for all modules with:
 - Registration and execution mechanisms

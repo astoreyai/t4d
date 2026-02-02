@@ -1,5 +1,5 @@
 """
-Action Framework for World Weaver AI Assistant.
+Action Framework for T4DM AI Assistant.
 
 Defines all actionable operations the assistant can perform,
 with permission levels, confirmation requirements, and audit logging.
@@ -749,7 +749,7 @@ BUILTIN_ACTIONS: dict[str, ActionDefinition] = {
     ),
 
     # -------------------------------------------------------------------------
-    # Memory Actions (World Weaver)
+    # Memory Actions (T4DM)
     # -------------------------------------------------------------------------
     "memory.store": ActionDefinition(
         name="memory.store",

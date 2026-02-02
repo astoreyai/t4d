@@ -51,7 +51,7 @@ memtable: "MemTable (Working Memory)\nκ = 0.0  •  Labile  •  Mutable" {
 mt_desc: "Items + edges + overlays + deltas\nBrute-force search • O(1) updates\nAuto-flush at threshold (1000 items)" {
   shape: text
   style.font-color: "#6c757d"
-  near: memtable
+  near: top-center
 }
 
 # ═══════════════════════════════════════════════════
@@ -78,7 +78,7 @@ l0: "L0 Segment (Episodic)\nκ ≈ 0.0  •  Immutable  •  Recent" {
 l0_desc: "vectors.npy (mmap) + items.json + edges.json\nSingle flush, not yet consolidated" {
   shape: text
   style.font-color: "#6c757d"
-  near: l0
+  near: top-center
 }
 
 # ═══════════════════════════════════════════════════

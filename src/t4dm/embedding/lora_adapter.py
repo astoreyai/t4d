@@ -1,5 +1,5 @@
 """
-LoRA Embedding Adapter for World Weaver.
+LoRA Embedding Adapter for T4DM.
 
 Implements Low-Rank Adaptation (LoRA) of frozen embeddings, enabling
 task-specific representation learning without full model fine-tuning.
@@ -251,7 +251,7 @@ if TORCH_AVAILABLE:
 
 class LoRAEmbeddingAdapter:
     """
-    High-level LoRA adapter interface for World Weaver embeddings.
+    High-level LoRA adapter interface for T4DM embeddings.
 
     Wraps LoRA modules with:
     - Training loop using retrieval outcomes

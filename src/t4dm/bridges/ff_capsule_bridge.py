@@ -1,5 +1,5 @@
 """
-Phase 6A: FF-Capsule Bridge for World Weaver.
+Phase 6A: FF-Capsule Bridge for T4DM.
 
 Unifies Forward-Forward goodness with capsule routing agreement into a
 single coherent signal for memory encoding and retrieval confidence.
@@ -32,7 +32,7 @@ Biological Mapping:
 - Routing agreement ~ binding through synchrony
 - Combined confidence ~ integrated recognition signal
 
-Integration with World Weaver:
+Integration with T4DM:
 - Used by retrieval for confidence-weighted ranking
 - Feeds back to learning systems via joint outcome signal
 - Enables end-to-end representation learning

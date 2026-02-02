@@ -1,5 +1,5 @@
 """
-World Weaver Agent for Claude Agent SDK Integration.
+T4DM Agent for Claude Agent SDK Integration.
 
 Provides a complete agent implementation that:
 1. Maintains episodic memory across conversations
@@ -79,7 +79,7 @@ class AgentContext:
 
 class WWAgent:
     """
-    Claude Agent with World Weaver episodic memory integration.
+    Claude Agent with T4DM episodic memory integration.
 
     This agent:
     1. Retrieves relevant memories before each task

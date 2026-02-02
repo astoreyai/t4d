@@ -1,5 +1,5 @@
 """
-Hierarchical Predictive Coding for World Weaver.
+Hierarchical Predictive Coding for T4DM.
 
 Implements Rao & Ballard (1999) / Friston (2005) style predictive coding
 where each level generates predictions for the level below and computes

@@ -2,7 +2,7 @@
 Jarvis Hook - Integration point for Kymera Voice's Jarvis interface.
 
 This module provides hooks that can be injected into the existing
-Kymera Voice Jarvis class to add World Weaver memory capabilities.
+Kymera Voice Jarvis class to add T4DM memory capabilities.
 
 Usage in kymera-voice/src/kymera_voice/core/jarvis.py:
 
@@ -52,7 +52,7 @@ class JarvisMemoryHook:
     """
     Memory hook for Jarvis voice interface.
 
-    Provides methods to enhance voice interactions with World Weaver memory.
+    Provides methods to enhance voice interactions with T4DM memory.
     """
 
     def __init__(
@@ -64,7 +64,7 @@ class JarvisMemoryHook:
         Initialize Jarvis memory hook.
 
         Args:
-            ww_client: World Weaver MCP client
+            ww_client: T4DM MCP client
             session_id: Optional persistent session ID
         """
         self.ww = ww_client
@@ -89,7 +89,7 @@ class JarvisMemoryHook:
         DEPRECATED: MCP client has been removed. Use create_with_memory_api() instead.
 
         Args:
-            ww_url: World Weaver MCP server URL (ignored)
+            ww_url: T4DM MCP server URL (ignored)
             session_id: Optional session ID
 
         Returns:
@@ -114,7 +114,7 @@ class JarvisMemoryHook:
         Create hook with existing MCP client.
 
         Args:
-            ww_client: Existing World Weaver MCP client
+            ww_client: Existing T4DM MCP client
             session_id: Optional session ID
 
         Returns:
@@ -416,7 +416,7 @@ class JarvisMemoryHook:
         session_id: str,
         importance: float = 0.5,
     ) -> str | None:
-        """Store an episode in World Weaver."""
+        """Store an episode in T4DM."""
         try:
             result = await self.ww.call_tool(
                 "mcp__ww-memory__store_episode",

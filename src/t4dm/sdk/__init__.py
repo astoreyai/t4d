@@ -1,5 +1,5 @@
 """
-World Weaver Python SDK.
+T4DM Python SDK.
 
 Programmatic access to the tripartite memory system via REST API.
 Includes Claude Agent SDK integration for learning agents.

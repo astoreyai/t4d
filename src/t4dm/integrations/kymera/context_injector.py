@@ -1,5 +1,5 @@
 """
-Context Injector - Injects World Weaver memory into Claude prompts.
+Context Injector - Injects T4DM memory into Claude prompts.
 
 Enhances voice assistant responses with relevant context from:
 - Past conversations
@@ -31,7 +31,7 @@ class InjectionConfig:
 
 class ContextInjector:
     """
-    Injects World Weaver memory context into Claude prompts.
+    Injects T4DM memory context into Claude prompts.
 
     Modifies the system prompt or adds context messages to include
     relevant memories, knowledge, and personal data.

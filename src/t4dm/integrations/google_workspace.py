@@ -1,7 +1,7 @@
 """
-Google Workspace Integration for World Weaver.
+Google Workspace Integration for T4DM.
 
-Syncs calendars, contacts, and emails from Google into World Weaver
+Syncs calendars, contacts, and emails from Google into T4DM
 for semantic search and contextual retrieval.
 
 Uses MCP tools:
@@ -35,7 +35,7 @@ logger = logging.getLogger(__name__)
 
 class GoogleWorkspaceSync:
     """
-    Synchronizes Google Workspace data with World Weaver.
+    Synchronizes Google Workspace data with T4DM.
 
     Handles:
     - Gmail messages → Email entities
@@ -469,7 +469,7 @@ class GoogleWorkspaceSync:
 
 class PersonalDataStore:
     """
-    Stores personal entities in World Weaver.
+    Stores personal entities in T4DM.
 
     Handles dual-store (Neo4j + Qdrant) persistence for:
     - Contacts

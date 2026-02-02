@@ -1,5 +1,5 @@
 """
-Consolidation replay visualization for World Weaver.
+Consolidation replay visualization for T4DM.
 
 Visualizes sleep-based memory consolidation:
 - Sharp-wave ripple sequences

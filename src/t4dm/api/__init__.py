@@ -1,5 +1,5 @@
 """
-World Weaver REST API.
+T4DM REST API.
 
 FastAPI-based REST API for programmatic access to the tripartite memory system.
 """

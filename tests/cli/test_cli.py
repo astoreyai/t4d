@@ -1,5 +1,5 @@
 """
-Tests for World Weaver CLI.
+Tests for T4DM CLI.
 
 Tests the typer-based CLI commands including store, recall, consolidate,
 status, serve, version, and config.
@@ -27,7 +27,7 @@ class TestVersionCommand:
         """Version command shows version number."""
         result = runner.invoke(app, ["version"])
         assert result.exit_code == 0
-        assert "World Weaver" in result.stdout
+        assert "T4DM" in result.stdout
         assert "v" in result.stdout
 
 
@@ -46,7 +46,7 @@ class TestStatusCommand:
             with patch("t4dm.core.services.get_services", new=AsyncMock()):
                 result = runner.invoke(app, ["status"])
                 assert result.exit_code == 0
-                assert "World Weaver Status" in result.stdout
+                assert "T4DM Status" in result.stdout
 
 
 class TestConfigCommand:
@@ -466,7 +466,7 @@ class TestHelpOutput:
         """Main app shows help."""
         result = runner.invoke(app, ["--help"])
         assert result.exit_code == 0
-        assert "World Weaver" in result.stdout
+        assert "T4DM" in result.stdout
         assert "store" in result.stdout
         assert "recall" in result.stdout
 

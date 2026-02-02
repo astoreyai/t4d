@@ -1,5 +1,5 @@
 """
-Storage module lifecycle hooks for World Weaver.
+Storage module lifecycle hooks for T4DM.
 
 Provides hooks for:
 - Connection lifecycle (connect, disconnect)

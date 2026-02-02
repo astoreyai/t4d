@@ -1,5 +1,5 @@
 """
-Plasticity trace visualization for World Weaver.
+Plasticity trace visualization for T4DM.
 
 Visualizes synaptic weight changes over time including:
 - BCM learning curves

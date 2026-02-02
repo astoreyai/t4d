@@ -1,5 +1,5 @@
 """
-World Weaver Integration Adapters.
+T4DM Integration Adapters.
 
 Provides integration with external agent frameworks and neural components:
 

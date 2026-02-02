@@ -1,5 +1,5 @@
 """
-Semantic Memory Service for World Weaver.
+Semantic Memory Service for T4DM.
 
 Implements Hebbian-weighted knowledge graph with ACT-R activation retrieval.
 """

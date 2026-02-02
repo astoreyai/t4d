@@ -1,5 +1,5 @@
 """
-OpenTelemetry tracing configuration for World Weaver.
+OpenTelemetry tracing configuration for T4DM.
 
 Supports:
 - Secure TLS connections for production

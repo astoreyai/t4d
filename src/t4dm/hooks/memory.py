@@ -1,5 +1,5 @@
 """
-Memory module lifecycle hooks for World Weaver.
+Memory module lifecycle hooks for T4DM.
 
 Provides hooks for:
 - Memory creation (episodic, semantic, procedural)

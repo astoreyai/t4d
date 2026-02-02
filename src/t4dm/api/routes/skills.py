@@ -1,5 +1,5 @@
 """
-World Weaver REST API Skill Routes.
+T4DM REST API Skill Routes.
 
 CRUD and search operations for procedural memory (skills/procedures).
 """

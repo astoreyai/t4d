@@ -1,5 +1,5 @@
 """
-Biological Validation Framework for World Weaver NCA Telemetry.
+Biological Validation Framework for T4DM NCA Telemetry.
 
 Provides systematic validation of telemetry against experimental literature:
 - Parameter range validation

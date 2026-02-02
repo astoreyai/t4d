@@ -70,7 +70,7 @@ class TestT4DXGraphStore:
     @pytest.mark.asyncio
     async def test_query_raises(self, store):
         with pytest.raises(NotImplementedError):
-            await store.query("MATCH (n) RETURN n")
+            await store.query({"match": "all"})
 
     @pytest.mark.asyncio
     async def test_find_path(self, store):

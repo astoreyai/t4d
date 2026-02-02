@@ -1,7 +1,7 @@
 """
-World Weaver CLI - Main Entry Point.
+T4DM CLI - Main Entry Point.
 
-Provides the `ww` command for interacting with World Weaver memory.
+Provides the `ww` command for interacting with T4DM memory.
 """
 
 import asyncio
@@ -17,7 +17,7 @@ from rich.table import Table
 # Initialize CLI app
 app = typer.Typer(
     name="t4dm",
-    help="World Weaver - Biologically-inspired memory for AI",
+    help="T4DM - Biologically-inspired memory for AI",
     no_args_is_help=True,
 )
 
@@ -227,7 +227,7 @@ def status():
 
     settings = get_settings()
 
-    table = Table(title="World Weaver Status")
+    table = Table(title="T4DM Status")
     table.add_column("Property", style="cyan")
     table.add_column("Value")
 
@@ -260,7 +260,7 @@ def serve(
     """Start the REST API server."""
     import uvicorn
 
-    console.print(f"[green]Starting World Weaver API on {host}:{port}[/green]")
+    console.print(f"[green]Starting T4DM API on {host}:{port}[/green]")
 
     uvicorn.run(
         "t4dm.api.server:app",
@@ -279,7 +279,7 @@ def version():
     except ImportError:
         __version__ = "0.5.0-dev"
 
-    console.print(f"World Weaver v{__version__}")
+    console.print(f"T4DM v{__version__}")
 
 
 # =============================================================================

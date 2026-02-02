@@ -1,5 +1,5 @@
 """
-Unified Temporal Dynamics Coordinator for World Weaver.
+Unified Temporal Dynamics Coordinator for T4DM.
 
 Integrates all temporal aspects of the memory system:
 1. Neuromodulator state management (ACh, DA, NE, 5-HT)

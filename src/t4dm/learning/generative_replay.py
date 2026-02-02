@@ -1,5 +1,5 @@
 """
-Generative Replay for World Weaver.
+Generative Replay for T4DM.
 
 Implements Hinton-style wake-sleep algorithm for memory consolidation.
 Rather than replaying exact memories, generates synthetic experiences

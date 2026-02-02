@@ -1,5 +1,5 @@
 """
-Core data types for World Weaver tripartite memory system.
+Core data types for T4DM tripartite memory system.
 
 Based on cognitive science foundations:
 - Episodic: Autobiographical events (Tulving 1972)

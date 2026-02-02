@@ -1,7 +1,7 @@
 """
-Simplified Memory API for World Weaver.
+Simplified Memory API for T4DM.
 
-Provides a clean, user-friendly interface to World Weaver memory:
+Provides a clean, user-friendly interface to T4DM memory:
 
     from t4dm import memory
 
@@ -49,7 +49,7 @@ class MemoryResult:
 
 class Memory:
     """
-    Simplified interface to World Weaver memory systems.
+    Simplified interface to T4DM memory systems.
 
     Provides async methods for storing and retrieving memories
     across episodic, semantic, and procedural memory stores.

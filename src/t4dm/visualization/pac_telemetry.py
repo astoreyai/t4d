@@ -1,5 +1,5 @@
 """
-Phase-Amplitude Coupling (PAC) Telemetry for World Weaver NCA.
+Phase-Amplitude Coupling (PAC) Telemetry for T4DM NCA.
 
 Measures theta-gamma coupling for working memory capacity estimation.
 

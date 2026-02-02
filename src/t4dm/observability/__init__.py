@@ -1,5 +1,5 @@
 """
-Observability module for World Weaver.
+Observability module for T4DM.
 
 Provides structured logging, metrics, health checks, distributed tracing, and performance monitoring.
 """

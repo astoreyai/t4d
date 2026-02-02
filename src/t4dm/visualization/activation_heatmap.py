@@ -1,5 +1,5 @@
 """
-Activation heatmap visualization for World Weaver.
+Activation heatmap visualization for T4DM.
 
 Visualizes activation patterns across different memory types
 (episodic, semantic, procedural) and neuromodulatory systems.

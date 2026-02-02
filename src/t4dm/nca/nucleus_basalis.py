@@ -1,5 +1,5 @@
 """
-Nucleus Basalis of Meynert (NBM) Acetylcholine Circuit for World Weaver.
+Nucleus Basalis of Meynert (NBM) Acetylcholine Circuit for T4DM.
 
 Biological Basis:
 - NBM is the primary source of cortical acetylcholine (ACh)

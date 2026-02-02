@@ -1,5 +1,5 @@
 """
-Consolidation Service for World Weaver.
+Consolidation Service for T4DM.
 
 Implements memory consolidation mirroring hippocampal-neocortical transfer:
 - Light: Quick deduplication and cleanup

@@ -1,0 +1,99 @@
+%%{ init: { "theme": "dark", "flowchart": { "curve": "basis" } } }%%
+graph TB
+    subgraph API["API / SDK / MCP Layer"]
+        REST["FastAPI REST"]
+        SDK["Python SDK"]
+        MCP["MCP Server"]
+    end
+
+    subgraph QWEN_LOWER["Qwen 2.5-3B Layers 0-17 (Frozen + QLoRA r=16)"]
+        TOK["Tokenizer"] --> EMB["Embedding"]
+        EMB --> QL0["Layers 0-17<br/>4-bit NF4 + LoRA(q,v)"]
+    end
+
+    subgraph SPIKING["Spiking Cortical Stack (6 Blocks, ~50-80M params)"]
+        direction TB
+        B1["Block 1"] --> B2["Block 2"] --> B3["Block 3"]
+        B3 --> B4["Block 4"] --> B5["Block 5"] --> B6["Block 6"]
+
+        subgraph BLOCK["Each Cortical Block"]
+            direction LR
+            S1["1 Thalamic<br/>Gate"] --> S2["2 LIF<br/>Neurons"]
+            S2 --> S3["3 Spike<br/>Attention"]
+            S3 --> S4["4 Apical<br/>Modulation"]
+            S4 --> S5["5 RWKV<br/>Recurrence"]
+            S5 --> S6["6 LIF<br/>Output"]
+        end
+    end
+
+    subgraph QWEN_UPPER["Qwen 2.5-3B Layers 18-35 (Frozen + QLoRA r=16)"]
+        QU["Layers 18-35<br/>4-bit NF4 + LoRA(q,v)"] --> LMH["LM Head"]
+    end
+
+    subgraph NEUROMOD["Neuromodulator Bus"]
+        DA["DA: Reward<br/>L2/3+L5 STDP LR"]
+        NE["NE: Arousal<br/>L5 Gain"]
+        ACh["ACh: Attention<br/>L1/L4 Gate"]
+        SHT["5-HT: Patience<br/>L5/6 Decay"]
+    end
+
+    subgraph T4DX["T4DX Embedded Storage Engine"]
+        WAL["WAL<br/>(fsync, HMAC)"]
+        MT["MemTable<br/>(mutable, overlays)"]
+        SEG["Segments<br/>(HNSW + CSR + mmap)"]
+        GI["Global Index<br/>(id_map, tombstones)"]
+
+        WAL --> MT
+        MT -->|"flush 10K"| SEG
+        SEG --> GI
+    end
+
+    subgraph COMPACT["Compaction = Consolidation"]
+        NREM["NREM Compact<br/>L0->L1, STDP replay<br/>kappa += 0.05"]
+        REM["REM Compact<br/>L1->L2, HDBSCAN cluster<br/>kappa += 0.2"]
+        PRUNE["PRUNE<br/>GC tombstones<br/>low-kappa items"]
+    end
+
+    subgraph KAPPA["kappa Gradient Memory Types"]
+        K0["kappa=0.0<br/>Raw Episodic"]
+        K15["kappa~0.15<br/>Replayed"]
+        K40["kappa~0.4<br/>Transitional"]
+        K85["kappa~0.85<br/>Semantic"]
+        K10["kappa=1.0<br/>Stable Knowledge"]
+        K0 -->|NREM| K15 -->|NREM| K40 -->|REM| K85 --> K10
+    end
+
+    subgraph VIZ["T4DV Visualization"]
+        THREE["Three.js 3D"]
+        TIMELINE["vis.js Timeline"]
+    end
+
+    %% Main data flow
+    API --> TOK
+    QL0 -->|"hidden[B,S,2048]"| SPIKING
+    SPIKING -->|"spikes+context"| QU
+    LMH --> API
+
+    %% Memory read/write
+    SPIKING <-->|"SEARCH / INSERT<br/>gated by tau(t)"| T4DX
+
+    %% Projections
+    QL0 -.->|"mem_encoder<br/>2048->1024"| T4DX
+    T4DX -.->|"mem_decoder<br/>1024->2048"| SPIKING
+
+    %% Neuromodulator injection
+    NEUROMOD -.->|"per-layer NT levels"| SPIKING
+
+    %% Consolidation
+    SEG --> COMPACT
+    COMPACT --> SEG
+
+    %% Visualization
+    T4DX -.-> VIZ
+    SPIKING -.->|"activations, spikes"| VIZ
+
+    %% Oscillator
+    OSC["Oscillator Bias<br/>theta/gamma/delta"] -.->|"LIF bias current"| SPIKING
+
+    %% Temporal gate
+    TAU["tau(t) Gate<br/>sigma(lambda_e*e + lambda_d*novelty + lambda_r*reward)"] -.->|"gates writes"| T4DX

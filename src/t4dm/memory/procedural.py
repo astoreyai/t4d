@@ -1,5 +1,5 @@
 """
-Procedural Memory Service for World Weaver.
+Procedural Memory Service for T4DM.
 
 Implements Memp-based skill storage with create-recall-update lifecycle.
 """

@@ -1,7 +1,7 @@
 """
-MCP Server for World Weaver Memory System.
+MCP Server for T4DM Memory System.
 
-Exposes World Weaver as an MCP server for Claude Code/Desktop integration.
+Exposes T4DM as an MCP server for Claude Code/Desktop integration.
 Provides tools for memory storage, retrieval, learning, and consolidation.
 
 Usage:
@@ -13,7 +13,7 @@ Usage:
     asyncio.run(run_mcp_server())
 
 Configuration via environment:
-    T4DM_API_URL: World Weaver API URL (default: http://localhost:8765)
+    T4DM_API_URL: T4DM API URL (default: http://localhost:8765)
     T4DM_SESSION_ID: Default session ID
     T4DM_API_KEY: Optional API key
 """
@@ -35,7 +35,7 @@ logger = logging.getLogger(__name__)
 
 class WorldWeaverMCPServer:
     """
-    MCP Server implementation for World Weaver.
+    MCP Server implementation for T4DM.
 
     Handles tool execution and resource access for Claude Code/Desktop.
     """
@@ -50,7 +50,7 @@ class WorldWeaverMCPServer:
         Initialize MCP server.
 
         Args:
-            api_url: World Weaver API URL
+            api_url: T4DM API URL
             session_id: Default session ID (generated if not provided)
             api_key: Optional API key for authentication
         """
@@ -61,7 +61,7 @@ class WorldWeaverMCPServer:
         self._initialized = False
 
     async def initialize(self):
-        """Initialize connection to World Weaver."""
+        """Initialize connection to T4DM."""
         if self._initialized:
             return
 
@@ -674,7 +674,7 @@ def create_mcp_server(
     Create an MCP server instance.
 
     Args:
-        api_url: World Weaver API URL (default from T4DM_API_URL env)
+        api_url: T4DM API URL (default from T4DM_API_URL env)
         session_id: Session ID (default from T4DM_SESSION_ID env)
         api_key: API key (default from T4DM_API_KEY env)
 
@@ -697,7 +697,7 @@ async def run_mcp_server():
     )
 
     server = create_mcp_server()
-    logger.info("Starting World Weaver MCP server...")
+    logger.info("Starting T4DM MCP server...")
 
     await run_stdio_server(server)
 

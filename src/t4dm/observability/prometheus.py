@@ -1,5 +1,5 @@
 """
-Prometheus Metrics Integration for World Weaver.
+Prometheus Metrics Integration for T4DM.
 
 Provides Prometheus-compatible metric collection and export for:
 - Memory operations (retrieval, encoding, consolidation)
@@ -127,13 +127,13 @@ class InternalHistogram:
 
 
 # ============================================================================
-# World Weaver Metrics Registry
+# T4DM Metrics Registry
 # ============================================================================
 
 
 class WWMetrics:
     """
-    World Weaver Prometheus Metrics.
+    T4DM Prometheus Metrics.
 
     Provides standardized metrics for all system components.
 

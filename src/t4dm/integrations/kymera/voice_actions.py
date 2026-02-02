@@ -1,5 +1,5 @@
 """
-Voice Action Executor - Main entry point for Kymera Voice + World Weaver integration.
+Voice Action Executor - Main entry point for Kymera Voice + T4DM integration.
 
 Provides a unified interface for processing voice commands through:
 - Intent parsing
@@ -50,9 +50,9 @@ class VoiceResponse:
 
 class VoiceActionExecutor:
     """
-    Main executor for voice commands with World Weaver integration.
+    Main executor for voice commands with T4DM integration.
 
-    This is the primary integration point between Kymera Voice and World Weaver.
+    This is the primary integration point between Kymera Voice and T4DM.
 
     Usage:
         executor = VoiceActionExecutor.create(ww_client, claude_client)
@@ -106,7 +106,7 @@ class VoiceActionExecutor:
         Factory method to create fully configured executor.
 
         Args:
-            ww_client: World Weaver MCP client
+            ww_client: T4DM MCP client
             claude_client: Claude API client
             config: Optional configuration
 
@@ -453,7 +453,7 @@ async def create_voice_executor(
     Quick setup for voice executor.
 
     Args:
-        ww_client: World Weaver MCP client
+        ww_client: T4DM MCP client
         claude_client: Claude API client
 
     Returns:

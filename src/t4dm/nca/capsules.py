@@ -1,5 +1,5 @@
 """
-Capsule Network Implementation for World Weaver.
+Capsule Network Implementation for T4DM.
 
 Implements Hinton's capsule networks (2017, 2018) with semantic pose matrices
 for part-whole representation in memory systems. Addresses H8 (part-whole)
@@ -24,7 +24,7 @@ Theoretical Foundation:
    - v = ||s||² / (1 + ||s||²) * s/||s||
    - Non-linearity for existence probability
 
-Integration with World Weaver:
+Integration with T4DM:
 ==============================
 - Capsules encode memory components (entities, relations, contexts)
 - Poses encode semantic configurations (temporal, causal, role, certainty)

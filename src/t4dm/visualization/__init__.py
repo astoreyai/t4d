@@ -1,5 +1,5 @@
 """
-Visualization modules for World Weaver neurocomputational system.
+Visualization modules for T4DM neurocomputational system.
 
 This package provides comprehensive visualization tools for analyzing
 and understanding the neural dynamics of the memory system:

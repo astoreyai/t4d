@@ -1,5 +1,5 @@
 """
-Dopamine Temporal Structure Telemetry for World Weaver NCA.
+Dopamine Temporal Structure Telemetry for T4DM NCA.
 
 Visualizes dopamine dynamics with biological temporal structure:
 - Phasic bursts (20-40 Hz) for positive RPE

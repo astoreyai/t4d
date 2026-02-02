@@ -1,5 +1,5 @@
 """
-Memory Reconsolidation for World Weaver.
+Memory Reconsolidation for T4DM.
 
 Addresses Hinton critique: Embeddings are frozen after creation, but should
 update based on retrieval outcomes. When a memory is retrieved and the

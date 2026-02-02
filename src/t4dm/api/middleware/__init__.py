@@ -1,5 +1,5 @@
 """
-API middleware for World Weaver.
+API middleware for T4DM.
 
 Middleware components for rate limiting, request tracking, and other HTTP-layer concerns.
 """

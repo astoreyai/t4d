@@ -98,7 +98,7 @@ class ConversationCapture:
         Initialize conversation capture.
 
         Args:
-            ww_client: World Weaver MCP client
+            ww_client: T4DM MCP client
             session_id: Current session ID
             auto_summarize: Generate summaries automatically
             summary_threshold_turns: Turns before generating summary
@@ -319,7 +319,7 @@ class ProactiveContext:
         Initialize proactive context.
 
         Args:
-            ww_client: World Weaver MCP client
+            ww_client: T4DM MCP client
             max_episodes: Maximum episodes to retrieve
             max_entities: Maximum entities to retrieve
             recency_weight: Weight for recency in scoring

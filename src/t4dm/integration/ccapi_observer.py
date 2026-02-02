@@ -1,8 +1,8 @@
 """
-World Weaver Observer for ccapi.
+T4DM Observer for ccapi.
 
 Implements the llm_agents Observer protocol to capture outcomes
-and trigger learning updates in World Weaver's neuro-symbolic system.
+and trigger learning updates in T4DM's neuro-symbolic system.
 """
 
 from __future__ import annotations
@@ -75,7 +75,7 @@ class Span:
 
 class WWObserver:
     """
-    World Weaver Observer for ccapi integration.
+    T4DM Observer for ccapi integration.
 
     Captures agent and tool outcomes, converts them to WW OutcomeEvents,
     and triggers credit assignment in the learning system.

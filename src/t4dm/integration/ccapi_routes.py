@@ -1,5 +1,5 @@
 """
-World Weaver API Routes for ccapi.
+T4DM API Routes for ccapi.
 
 Provides FastAPI endpoints for WW memory operations that can be
 mounted into the ccapi application.
@@ -214,7 +214,7 @@ def create_ww_router(
     @router.post("/store", response_model=MemoryStoreResponse)
     async def store_memory(request: MemoryStoreRequest):
         """
-        Store a memory in World Weaver.
+        Store a memory in T4DM.
 
         Supports episodic, semantic, and procedural memory types.
         """

@@ -1,5 +1,5 @@
 """
-Forward-Forward Algorithm Visualization for World Weaver NCA.
+Forward-Forward Algorithm Visualization for T4DM NCA.
 
 Hinton-inspired visualization of FF learning dynamics:
 - Layer-wise goodness bars (G(h) = sum(h_i^2))

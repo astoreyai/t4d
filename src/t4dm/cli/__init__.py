@@ -1,7 +1,7 @@
 """
-World Weaver CLI.
+T4DM CLI.
 
-Command-line interface for interacting with World Weaver memory.
+Command-line interface for interacting with T4DM memory.
 
 Usage:
     ww store "content" --tags tag1,tag2 --importance 0.8

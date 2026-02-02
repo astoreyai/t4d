@@ -1,5 +1,5 @@
 """
-Dopamine System Integration for World Weaver NCA.
+Dopamine System Integration for T4DM NCA.
 
 Connects all dopamine-related components:
 1. VTACircuit: Biologically realistic DA neuron dynamics

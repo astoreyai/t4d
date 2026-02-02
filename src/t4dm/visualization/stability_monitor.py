@@ -1,5 +1,5 @@
 """
-Stability Monitor Visualization for World Weaver NCA.
+Stability Monitor Visualization for T4DM NCA.
 
 Comprehensive stability analysis and monitoring:
 - Jacobian eigenvalue tracking (stability indicator)

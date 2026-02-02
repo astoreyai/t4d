@@ -1,0 +1,100 @@
+%%{ init: { "theme": "dark", "flowchart": { "curve": "basis" } } }%%
+graph TB
+    subgraph PRIMITIVES["9 Storage Primitives"]
+        direction LR
+        P1["INSERT"] ~~~ P2["GET"] ~~~ P3["SEARCH"]
+        P4["UPDATE_FIELDS"] ~~~ P5["UPDATE_EDGE_WEIGHT"] ~~~ P6["TRAVERSE"]
+        P7["SCAN"] ~~~ P8["DELETE"] ~~~ P9["BATCH_SCALE_WEIGHTS"]
+    end
+
+    subgraph ADAPTERS["Protocol Adapters"]
+        VA["T4DXVectorStore<br/>(VectorStore protocol)<br/>add, search, delete,<br/>search_hybrid, scroll"]
+        GA["T4DXGraphStore<br/>(GraphStore protocol)<br/>create_node, traverse,<br/>find_path, query"]
+    end
+
+    subgraph ENGINE["T4DXEngine"]
+        direction TB
+
+        subgraph WRITE_PATH["Write Path"]
+            WP1["item + edges"] --> WP2["WAL.append(op)"]
+            WP2 --> WP3["MemTable.insert()"]
+            WP3 -->|"count >= 10K<br/>or timer fires"| WP4["flush()"]
+        end
+
+        subgraph WAL["WAL (Write-Ahead Log)"]
+            WALF["JSON-lines format<br/>fsync on interval<br/>64MB segment files<br/>HMAC-SHA256 integrity<br/>Truncated after flush"]
+        end
+
+        subgraph MEMTABLE["MemTable (Mutable, In-Memory)"]
+            MT_ITEMS["items[] append-only"]
+            MT_VEC["vectors[] brute-force cosine"]
+            MT_EDGES["edges{} adjacency dict"]
+            MT_IDX["id_idx{} UUID->index"]
+            MT_KAPPA["kappa_sorted SortedList"]
+            MT_FOV["field_overlays{}<br/>id -> delta fields"]
+            MT_ED["edge_deltas{}<br/>(src,tgt) -> delta_w"]
+        end
+
+        subgraph SEGMENTS["Immutable Segments (Disk, mmap)"]
+            subgraph SEG_FILES["Per Segment Files"]
+                SF1["hnsw.bin<br/>hnswlib C++ ANN<br/>ef=200, M=16"]
+                SF2["vectors.npy<br/>float32 mmap"]
+                SF3["kappa.npy<br/>sorted (kappa,idx)"]
+                SF4["edges.npz<br/>CSR adjacency"]
+                SF5["items.npy<br/>structured array"]
+                SF6["vardata.bin<br/>content + JSON"]
+                SF7["vardata_idx.npy<br/>offset/length"]
+                SF8["bloom.bin<br/>ID existence"]
+                SF9["manifest.json<br/>time/kappa range, count"]
+            end
+        end
+
+        subgraph GLOBAL["GlobalIndex"]
+            GI_ID["id_map{}<br/>UUID -> segment_id"]
+            GI_TOMB["tombstones{}<br/>deleted IDs"]
+            GI_CROSS["cross_edges CSR<br/>inter-segment edges"]
+            GI_MAN["manifest[]<br/>segment catalog<br/>sorted by time"]
+        end
+
+        subgraph QP["QueryPlanner"]
+            QP1["1. Prune by time_range"]
+            QP2["2. Prune by kappa_range"]
+            QP3["3. Prune by session"]
+            QP4["4. Search surviving segments<br/>MemTable first, newest->oldest"]
+            QP5["5. Merge results by score"]
+            QP6["6. Cross-segment TRAVERSE"]
+            QP1 --> QP2 --> QP3 --> QP4 --> QP5
+        end
+
+        subgraph COMPACTOR["Compactor (= Consolidation)"]
+            C_FLUSH["flush(memtable)<br/>Write L0 segment<br/>Truncate WAL"]
+            C_NREM["nrem_compact(segs)<br/>Merge L0->L1<br/>Apply overlays + deltas<br/>kappa += 0.05 (high PE)<br/>STDP weight updates"]
+            C_REM["rem_compact(segs)<br/>Merge L1->L2<br/>HDBSCAN cluster vectors<br/>Create prototype items<br/>kappa += 0.2, type->semantic"]
+            C_PRUNE["prune(seg)<br/>Rewrite dropping<br/>tombstones + low-kappa"]
+
+            C_FLUSH --> C_NREM --> C_REM --> C_PRUNE
+        end
+    end
+
+    subgraph READ_PATH["Read Path"]
+        RP1["query"] --> RP2["MemTable check"]
+        RP2 --> RP3["Bloom filter"]
+        RP3 --> RP4["Segment lookup<br/>newest -> oldest"]
+        RP4 --> RP5["Merge overlays"]
+        RP5 --> RP6["Return results"]
+    end
+
+    %% Connections
+    PRIMITIVES --> ENGINE
+    ADAPTERS --> PRIMITIVES
+    WP4 --> SEGMENTS
+    SEGMENTS --> COMPACTOR
+    COMPACTOR --> SEGMENTS
+    MEMTABLE --> COMPACTOR
+    QP --> MEMTABLE
+    QP --> SEGMENTS
+    QP --> GLOBAL
+
+    %% Overlay reads
+    MT_FOV -.->|"merge on read"| RP5
+    MT_ED -.->|"merge on read"| RP5

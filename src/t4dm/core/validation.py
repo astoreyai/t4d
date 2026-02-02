@@ -1,5 +1,5 @@
 """
-Input validation utilities for World Weaver.
+Input validation utilities for T4DM.
 
 Provides consistent validation and error handling across all modules.
 """

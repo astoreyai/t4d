@@ -1,5 +1,5 @@
 """
-Export Utilities - Export World Weaver memories to various formats.
+Export Utilities - Export T4DM memories to various formats.
 
 Supports JSON, CSV, and GraphML exports for analysis and backup.
 """

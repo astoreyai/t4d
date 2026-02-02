@@ -1,5 +1,5 @@
 """
-SWR Telemetry for World Weaver NCA.
+SWR Telemetry for T4DM NCA.
 
 Visualizes sharp-wave ripple events for consolidation monitoring:
 - Ripple frequency (150-250 Hz)

@@ -1,5 +1,5 @@
 """
-Working Memory Buffer for World Weaver.
+Working Memory Buffer for T4DM.
 
 Addresses Hinton critique: All memories persist immediately - no transient buffer.
 Implements a capacity-limited working memory with attention-based maintenance.

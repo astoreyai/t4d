@@ -1,5 +1,5 @@
 """
-ClusterIndex - Hierarchical Episode Retrieval for World Weaver.
+ClusterIndex - Hierarchical Episode Retrieval for T4DM.
 
 Phase 1 of HSA-inspired improvements. Provides CA3-like semantic clustering
 for O(log n) retrieval instead of O(n) flat search.

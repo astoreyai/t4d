@@ -707,7 +707,7 @@ class NCAExplorer:
         Provides menu-driven interface for exploring NCA state.
         """
         self.console.print(Panel(
-            "[bold cyan]World Weaver NCA Explorer[/bold cyan]\n"
+            "[bold cyan]T4DM NCA Explorer[/bold cyan]\n"
             "Interactive neural dynamics exploration interface",
             border_style="cyan",
         ))
@@ -799,7 +799,7 @@ class NCAExplorer:
         )
 
         # Header
-        header_text = Text("World Weaver NCA Dashboard", style="bold cyan")
+        header_text = Text("T4DM NCA Dashboard", style="bold cyan")
         layout["header"].update(Panel(header_text, border_style="cyan"))
 
         # Panels

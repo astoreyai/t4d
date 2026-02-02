@@ -1,5 +1,5 @@
 """
-Unified Memory Service for World Weaver.
+Unified Memory Service for T4DM.
 
 Coordinates cross-memory search across episodic, semantic, and procedural subsystems.
 """

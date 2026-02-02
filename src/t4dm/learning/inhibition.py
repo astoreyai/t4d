@@ -1,5 +1,5 @@
 """
-GABA/Glutamate-like Inhibitory Dynamics for World Weaver.
+GABA/Glutamate-like Inhibitory Dynamics for T4DM.
 
 Biological Basis:
 - GABA neurons provide lateral inhibition in cortex/hippocampus

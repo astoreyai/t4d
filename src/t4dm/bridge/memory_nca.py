@@ -1,5 +1,5 @@
 """
-Memory-NCA Bridge for World Weaver.
+Memory-NCA Bridge for T4DM.
 
 Connects WW memory operations to NCA neural field dynamics:
 

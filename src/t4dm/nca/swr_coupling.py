@@ -1,5 +1,5 @@
 """
-Sharp-Wave Ripple (SWR) to Neural Field Coupling for World Weaver.
+Sharp-Wave Ripple (SWR) to Neural Field Coupling for T4DM.
 
 Biological Basis:
 - SWRs are 150-250Hz oscillations during NREM sleep/quiet wakefulness

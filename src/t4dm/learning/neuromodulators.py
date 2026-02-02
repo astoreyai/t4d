@@ -1,5 +1,5 @@
 """
-Integrated Neuromodulator System for World Weaver.
+Integrated Neuromodulator System for T4DM.
 
 Coordinates the four neuromodulatory systems + E/I balance:
 1. Dopamine - Reward prediction error, surprise-driven learning

@@ -1,5 +1,5 @@
 """
-Embedding Adapter for World Weaver.
+Embedding Adapter for T4DM.
 
 Provides a clean abstraction layer for embedding providers, enabling:
 - Easy swapping between providers (BGE-M3, OpenAI, sentence-transformers)

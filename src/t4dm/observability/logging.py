@@ -1,5 +1,5 @@
 """
-Structured Logging for World Weaver.
+Structured Logging for T4DM.
 
 Provides JSON-structured logging with contextual information
 for debugging and monitoring memory operations.
@@ -127,7 +127,7 @@ def configure_logging(
     log_file: str | None = None,
 ) -> None:
     """
-    Configure structured logging for World Weaver.
+    Configure structured logging for T4DM.
 
     Args:
         level: Log level (DEBUG, INFO, WARNING, ERROR)

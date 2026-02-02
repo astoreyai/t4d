@@ -1,5 +1,5 @@
 """
-Health Check for World Weaver.
+Health Check for T4DM.
 
 Provides health monitoring for all system components.
 """
@@ -66,7 +66,7 @@ class SystemHealth:
 
 class HealthChecker:
     """
-    Health checker for World Weaver components.
+    Health checker for T4DM components.
 
     Checks:
     - Qdrant vector store connectivity

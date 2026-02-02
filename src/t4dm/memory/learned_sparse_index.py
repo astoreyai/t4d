@@ -1,5 +1,5 @@
 """
-LearnedSparseIndex - Adaptive Sparse Addressing for World Weaver.
+LearnedSparseIndex - Adaptive Sparse Addressing for T4DM.
 
 Phase 2 of HSA-inspired improvements. Replaces fixed 10% sparsity
 with learned, query-dependent sparse addressing.

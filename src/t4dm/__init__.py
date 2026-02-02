@@ -1,8 +1,9 @@
 """
-World Weaver - Biologically-inspired memory for AI.
+T4DM - Biologically-inspired temporal memory for AI.
 
 A framework implementing tripartite neural memory (episodic, semantic,
-procedural) with cognitive science foundations.
+procedural) with cognitive science foundations, spiking cortical blocks,
+and T4DX embedded spatiotemporal storage.
 
 Quick Start:
     from t4dm import memory
@@ -18,7 +19,7 @@ Quick Start:
         await m.store("Project-specific knowledge")
 """
 
-__version__ = "0.5.0"
+__version__ = "2.0.0"
 __author__ = "Aaron Storey"
 
 from t4dm.core.config import Settings, get_settings

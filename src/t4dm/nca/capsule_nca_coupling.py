@@ -1,5 +1,5 @@
 """
-Capsule-NCA Neural Field Coupling for World Weaver.
+Capsule-NCA Neural Field Coupling for T4DM.
 
 Implements H10 (cross-region consistency) by integrating capsule networks
 with the NCA neural field dynamics. Enables bidirectional information flow:

@@ -1,5 +1,5 @@
 """
-Consolidation module lifecycle hooks for World Weaver.
+Consolidation module lifecycle hooks for T4DM.
 
 Provides hooks for:
 - Consolidation lifecycle (pre/post)

@@ -1,4 +1,4 @@
-"""Memory consolidation services for World Weaver."""
+"""Memory consolidation services for T4DM."""
 
 from t4dm.consolidation.lability import (
     DEFAULT_LABILITY_WINDOW_HOURS,

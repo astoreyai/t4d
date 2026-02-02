@@ -71,11 +71,11 @@ flowchart TB
 
     %% Neuromodulation
     subgraph NM["Neuromodulation"]
-        ACH["ACh<br/>(Encoding Gate)"]
+        ACH["ACh<br/>(from NBM/Medial Septum)<br/>High=Encode, Low=Retrieve"]
         DA["DA<br/>(Learning Rate)"]
         LC["Locus Coeruleus<br/>(NE Source)"]
         MS["Medial Septum<br/>(Theta Source - PARTIAL)"]:::partial
-        ACH_NOTE["ACh gating: _apply_ach_gating() active in process()<br/>High ACh suppresses CA3→CA1 path (max 80%)"]
+        ACH_NOTE["ACh gating: _apply_ach_gating() active in process()<br/>High ACh: suppresses Schaffer collaterals (CA3→CA1), favors EC→DG encoding<br/>Low ACh: permits CA3→CA1 retrieval via pattern completion (Hasselmo 1999)"]
         NE_NOTE["✓ _apply_ne_encoding_gain() wired<br/>to DG, CA3 via LC modulation"]
     end
 

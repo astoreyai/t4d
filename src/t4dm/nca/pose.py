@@ -39,7 +39,7 @@ Theoretical Foundation:
    - High agreement = consistent part-whole relationship
    - Low agreement = incompatible configurations
 
-Integration with World Weaver:
+Integration with T4DM:
 ==============================
 - Capsule poses encode memory configurations
 - Pose agreement drives routing decisions

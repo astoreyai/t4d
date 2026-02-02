@@ -1,5 +1,5 @@
 """
-Norepinephrine-like Arousal/Attention System for World Weaver.
+Norepinephrine-like Arousal/Attention System for T4DM.
 
 Biological Basis:
 - Locus coeruleus modulates cortical and hippocampal gain

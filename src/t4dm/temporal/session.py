@@ -1,5 +1,5 @@
 """
-Session Context Management for World Weaver.
+Session Context Management for T4DM.
 
 Manages session lifecycle and context for temporal dynamics.
 Sessions provide the temporal boundary for credit assignment

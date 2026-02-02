@@ -1,5 +1,5 @@
 """
-NT State Dashboard for World Weaver NCA.
+NT State Dashboard for T4DM NCA.
 
 Comprehensive visualization of 6-channel neuromodulator dynamics:
 - Real-time NT state display with biological color coding

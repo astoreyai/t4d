@@ -1,5 +1,5 @@
 """
-World Weaver REST API Routes.
+T4DM REST API Routes.
 
 Route modules for each memory subsystem, control plane, and Phase 11 demo APIs.
 """

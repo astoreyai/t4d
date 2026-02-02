@@ -1,5 +1,5 @@
 """
-Neuro-Symbolic Representation for World Weaver.
+Neuro-Symbolic Representation for T4DM.
 
 Combines neural embeddings with symbolic graph structures for:
 1. Interpretable memory retrieval (why was this retrieved?)

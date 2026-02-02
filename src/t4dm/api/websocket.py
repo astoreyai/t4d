@@ -1,5 +1,5 @@
 """
-WebSocket Support for World Weaver.
+WebSocket Support for T4DM.
 
 Provides real-time updates for:
 - System state changes (LSN, checkpoint, shutdown)

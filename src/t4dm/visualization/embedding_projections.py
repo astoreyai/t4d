@@ -1,5 +1,5 @@
 """
-Embedding projection visualization for World Weaver.
+Embedding projection visualization for T4DM.
 
 Projects high-dimensional memory embeddings to 2D/3D using:
 - t-SNE (t-distributed Stochastic Neighbor Embedding)

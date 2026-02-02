@@ -1,5 +1,5 @@
 """
-Energy Landscape Visualization for World Weaver NCA.
+Energy Landscape Visualization for T4DM NCA.
 
 Hinton-inspired visualization of energy-based dynamics:
 - 2D projection of 6D NT space (PCA/t-SNE)

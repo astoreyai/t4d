@@ -1,5 +1,5 @@
 """
-Memory Explorer - Rich terminal UI for browsing World Weaver memories.
+Memory Explorer - Rich terminal UI for browsing T4DM memories.
 
 Provides interactive browsing of episodes, entities, and skills with filtering,
 detail views, and relationship exploration.
@@ -520,7 +520,7 @@ class MemoryExplorer:
         await self.initialize()
 
         self.console.print(Panel(
-            "[bold cyan]World Weaver Memory Explorer[/bold cyan]\n"
+            "[bold cyan]T4DM Memory Explorer[/bold cyan]\n"
             "Interactive memory browsing interface",
             border_style="cyan",
         ))

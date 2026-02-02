@@ -1,7 +1,7 @@
 """
-Kymera Voice Integration for World Weaver.
+Kymera Voice Integration for T4DM.
 
-Connects World Weaver's tripartite memory system to Kymera Voice
+Connects T4DM's tripartite memory system to Kymera Voice
 for a complete AI assistant with persistent memory.
 
 Quick Start:

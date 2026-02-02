@@ -1,5 +1,5 @@
 """
-Global hook registry for World Weaver.
+Global hook registry for T4DM.
 
 Provides centralized hook management and standard registry instances.
 """
@@ -76,7 +76,7 @@ def initialize_default_registries() -> None:
     """
     Initialize all default registries.
 
-    Creates registries for each World Weaver module.
+    Creates registries for each T4DM module.
     """
     registries = [
         REGISTRY_CORE,

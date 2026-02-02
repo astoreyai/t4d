@@ -1,4 +1,4 @@
-"""Temporal dynamics for World Weaver memory system."""
+"""Temporal dynamics for T4DM memory system."""
 
 from t4dm.temporal.dynamics import (
     TemporalConfig,

@@ -1,5 +1,5 @@
 """
-Glymphatic-Consolidation Bridge for World Weaver.
+Glymphatic-Consolidation Bridge for T4DM.
 
 Implements H10 (cross-region consistency) and B8 (waste clearance) by
 coupling the glymphatic system with memory consolidation:

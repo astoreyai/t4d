@@ -1,5 +1,5 @@
 """
-Serotonin-like Long-Term Credit Assignment for World Weaver.
+Serotonin-like Long-Term Credit Assignment for T4DM.
 
 Biological Basis:
 - 5-HT modulates patience and temporal discounting

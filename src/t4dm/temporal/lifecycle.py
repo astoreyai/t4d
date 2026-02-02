@@ -1,5 +1,5 @@
 """
-P7.2: Memory Lifecycle Manager for World Weaver.
+P7.2: Memory Lifecycle Manager for T4DM.
 
 Connects temporal dynamics to memory operations, ensuring that:
 1. Encoding uses appropriate neuromodulator states

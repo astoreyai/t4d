@@ -1,5 +1,5 @@
 """
-Connectome Structure for World Weaver NCA.
+Connectome Structure for T4DM NCA.
 
 Implements anatomically-constrained connectivity based on real brain
 architecture, integrating with coupling and delay systems.

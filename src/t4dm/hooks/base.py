@@ -1,5 +1,5 @@
 """
-Base hook infrastructure for World Weaver.
+Base hook infrastructure for T4DM.
 
 Provides abstract base classes, execution engine, and error handling.
 """

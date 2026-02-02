@@ -27,7 +27,7 @@ Theoretical Foundation (Hinton Perspective):
    - Temperature controls exploration vs. exploitation
    - Samples from exp(-E(x)/T) at equilibrium
 
-Integration with World Weaver:
+Integration with T4DM:
 ==============================
 - NT state U = [DA, 5HT, ACh, NE, GABA, Glu] as network activation
 - Coupling matrix K from coupling.py as learned weights

@@ -1,5 +1,5 @@
 """
-World Weaver Bridges Module.
+T4DM Bridges Module.
 
 P5.x: Integration bridges connecting neural subsystems.
 P6.x: Enhanced capability bridges.

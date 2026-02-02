@@ -1,5 +1,5 @@
 """
-Learning Inspector - Rich terminal UI for inspecting World Weaver learning dynamics.
+Learning Inspector - Rich terminal UI for inspecting T4DM learning dynamics.
 
 Provides interactive exploration of:
 - Dopamine reward prediction errors (RPE)
@@ -739,7 +739,7 @@ class LearningInspector:
         )
 
         # Header
-        header_text = Text("World Weaver Learning Inspector", style="bold cyan")
+        header_text = Text("T4DM Learning Inspector", style="bold cyan")
         layout["header"].update(Panel(header_text, border_style="cyan"))
 
         # Panels
@@ -767,7 +767,7 @@ class LearningInspector:
         Provides menu-driven interface for inspecting learning dynamics.
         """
         self.console.print(Panel(
-            "[bold cyan]World Weaver Learning Inspector[/bold cyan]\n"
+            "[bold cyan]T4DM Learning Inspector[/bold cyan]\n"
             "Interactive learning dynamics exploration interface",
             border_style="cyan",
         ))

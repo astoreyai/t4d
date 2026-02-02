@@ -1,5 +1,5 @@
 """
-Dopamine-like Reward Prediction Error for World Weaver.
+Dopamine-like Reward Prediction Error for T4DM.
 
 Biological Basis:
 - Dopamine neurons encode surprise: firing increases when reward > expected

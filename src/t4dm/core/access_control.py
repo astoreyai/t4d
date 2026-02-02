@@ -1,5 +1,5 @@
 """
-Internal caller authentication for World Weaver.
+Internal caller authentication for T4DM.
 
 Distinguishes trusted internal callers from untrusted external ones
 using a simple capability-based token system. Not full RBAC -- just

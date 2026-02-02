@@ -1,5 +1,5 @@
 """
-Substantia Nigra pars compacta (SNc) Dopamine Circuit for World Weaver.
+Substantia Nigra pars compacta (SNc) Dopamine Circuit for T4DM.
 
 Biological Basis:
 - SNc contains dopamine neurons projecting to striatum (nigrostriatal pathway)

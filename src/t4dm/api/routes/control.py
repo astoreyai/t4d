@@ -1,5 +1,5 @@
 """
-World Weaver REST API Control Plane Routes.
+T4DM REST API Control Plane Routes.
 
 Phase 9: Production infrastructure control endpoints.
 

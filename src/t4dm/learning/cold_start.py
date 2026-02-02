@@ -1,5 +1,5 @@
 """
-Cold Start Priming System for World Weaver.
+Cold Start Priming System for T4DM.
 
 This module addresses the chicken-and-egg problem of learned memory systems:
 - The gate needs examples to learn what to store

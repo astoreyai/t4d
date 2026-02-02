@@ -2,36 +2,33 @@
 **Path**: `/mnt/projects/t4d/t4dm/src/t4dm/storage/`
 
 ## What
-Dual-store backend providing Neo4j (graph relationships) and Qdrant (vector similarity) with saga-pattern cross-store transactions and circuit breaker resilience.
+Storage backend providing T4DX embedded spatiotemporal engine with LSM-based compaction, HNSW vector indexing, and CSR graph structure. Memory consolidation maps directly to LSM compaction phases.
 
 ## How
-- **Neo4j Store** (`neo4j_store.py`): Graph store for entities, relationships, and episode metadata. Cypher queries for traversal and semantic graph operations.
-- **Qdrant Store** (`qdrant_store.py`): Vector store for embedding similarity search. Stores episode/entity/skill vectors with metadata payloads.
-- **Saga** (`saga.py`): Compensation-based atomicity across Neo4j and Qdrant. Each saga step has a forward action and compensating rollback. `CompensationError` signals manual reconciliation needed.
-- **Resilience** (`resilience.py`): `CircuitBreaker` per store with states (closed/open/half-open). Prevents cascading failures when a backend is down. Configurable thresholds via `CircuitBreakerConfig`.
+- **T4DX Engine** (`t4dx/`): Embedded storage engine combining vector similarity search, graph traversal, and temporal indexing in a single process. LSM segments provide the physical storage layer.
+- **Resilience** (`resilience.py`): `CircuitBreaker` with states (closed/open/half-open). Prevents cascading failures. Configurable thresholds via `CircuitBreakerConfig`.
 - **Archive** (`archive.py`): Cold storage for aged-out memories.
 
 ## Why
-Graph + vector is the natural dual for memory: Neo4j captures relational structure (entity-to-entity, episode sequences), Qdrant enables fast semantic similarity. The saga pattern provides eventual consistency without distributed transactions.
+Co-locating vectors, edges, metadata, and temporal indices in a single embedded engine eliminates network hops and enables LSM compaction to serve as biological memory consolidation (NREM merge, REM clustering, PRUNE garbage collection).
 
 ## Key Files
 | File | Purpose |
 |------|---------|
-| `neo4j_store.py` | Graph storage for relationships and metadata |
-| `qdrant_store.py` | Vector storage for embedding search |
-| `saga.py` | Cross-store transaction coordination |
-| `resilience.py` | Circuit breaker for backend fault tolerance |
+| `t4dx/` | Embedded spatiotemporal storage engine |
+| `resilience.py` | Circuit breaker for fault tolerance |
 | `archive.py` | Cold storage for aged memories |
 
 ## Data Flow
 ```
-Memory Store Request --> Saga --> Step 1: Qdrant.upsert(vector)
-                              --> Step 2: Neo4j.create(node + edges)
-                              --> On failure: compensate (rollback step 1)
-Memory Recall --> Qdrant.search(vector) --> Neo4j.enrich(relationships)
+Memory Store Request --> T4DX Engine --> MemTable (working memory)
+                                    --> WAL (durability)
+                                    --> Flush to segments (consolidation)
+Memory Recall --> T4DX HNSW search --> CSR graph enrichment --> results
 ```
 
 ## Integration Points
 - **Persistence**: WAL logs all storage mutations for crash recovery
-- **Bridges**: `ww.bridges` wraps storage with higher-level memory semantics
+- **Bridges**: `t4dm.bridges` wraps storage with higher-level memory semantics
 - **Observability**: Circuit breaker state feeds health checks
+- **Consolidation**: LSM compaction phases = sleep-phase consolidation

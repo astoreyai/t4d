@@ -1,5 +1,5 @@
 """
-World Weaver SDK Client.
+T4DM SDK Client.
 
 Provides synchronous and asynchronous clients for the REST API.
 """
@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
 
 
 class WorldWeaverError(Exception):
-    """Base exception for World Weaver SDK errors."""
+    """Base exception for T4DM SDK errors."""
 
     def __init__(self, message: str, status_code: int = None, response: dict = None):
         super().__init__(message)
@@ -36,7 +36,7 @@ class WorldWeaverError(Exception):
 
 
 class ConnectionError(WorldWeaverError):
-    """Connection to World Weaver API failed."""
+    """Connection to T4DM API failed."""
 
 
 
@@ -55,7 +55,7 @@ class RateLimitError(WorldWeaverError):
 
 class AsyncWorldWeaverClient:
     """
-    Async client for World Weaver REST API.
+    Async client for T4DM REST API.
 
     Example:
         async with AsyncWorldWeaverClient() as ww:
@@ -73,7 +73,7 @@ class AsyncWorldWeaverClient:
         Initialize the async client.
 
         Args:
-            base_url: Base URL of the World Weaver API
+            base_url: Base URL of the T4DM API
             session_id: Session ID for memory isolation
             timeout: Request timeout in seconds
         """
@@ -514,7 +514,7 @@ class AsyncWorldWeaverClient:
 
 class WorldWeaverClient:
     """
-    Synchronous client for World Weaver REST API.
+    Synchronous client for T4DM REST API.
 
     Example:
         with WorldWeaverClient() as ww:
@@ -535,7 +535,7 @@ class WorldWeaverClient:
         Initialize the sync client.
 
         Args:
-            base_url: Base URL of the World Weaver API
+            base_url: Base URL of the T4DM API
             session_id: Session ID for memory isolation
             timeout: Request timeout in seconds
         """

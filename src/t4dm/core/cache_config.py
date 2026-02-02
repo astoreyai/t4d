@@ -1,5 +1,5 @@
 """
-Cache Configuration for World Weaver.
+Cache Configuration for T4DM.
 
 Defines cache settings for different tiers and environments.
 """

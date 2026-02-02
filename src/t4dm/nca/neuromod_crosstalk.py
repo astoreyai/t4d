@@ -1,5 +1,5 @@
 """
-C3: Cross-Neuromodulator Crosstalk for World Weaver.
+C3: Cross-Neuromodulator Crosstalk for T4DM.
 
 Implements bidirectional modulation between neurotransmitter systems:
 1. DA inhibits 5-HT (dopamine-serotonin antagonism)

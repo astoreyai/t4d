@@ -1,0 +1,80 @@
+%%{ init: { "theme": "dark", "flowchart": { "curve": "basis" } } }%%
+graph TB
+    subgraph HIGHLEVEL["High-Level Memory API"]
+        MI["MemoryItem<br/>(Pydantic model)<br/>id, content, embedding,<br/>kappa, importance,<br/>event_time, record_time,<br/>spike_trace, metadata"]
+    end
+
+    subgraph CONVERSION["MemoryItem <-> ItemRecord Conversion"]
+        ADAPT["MemoryAdapter<br/>to_item_record()<br/>from_item_record()"]
+    end
+
+    subgraph T4DX_ENGINE["T4DXEngine (Center)"]
+        ENG["T4DXEngine<br/>insert() get() search()<br/>update_fields() traverse()<br/>update_edge_weight()<br/>scan() delete()<br/>batch_scale_weights()<br/>startup() shutdown()<br/>compact() get_stats()"]
+    end
+
+    subgraph COMPONENTS["Internal Components"]
+        direction TB
+
+        MT["MemTable<br/>items[], vectors[],<br/>edges{}, id_idx{},<br/>kappa_sorted,<br/>field_overlays{},<br/>edge_deltas{}"]
+
+        WAL_C["WAL<br/>append(), replay(),<br/>truncate(), fsync()<br/>64MB segments,<br/>HMAC integrity"]
+
+        subgraph SEG_GROUP["Segments"]
+            SB["SegmentBuilder<br/>build_from_items()<br/>write_hnsw()<br/>write_vectors()<br/>write_edges_csr()<br/>write_bloom()"]
+            SR["SegmentReader<br/>get() hnsw_search()<br/>scan_kappa_range()<br/>traverse_edges()<br/>bloom_contains()<br/>mmap vectors"]
+        end
+
+        GI["GlobalIndex<br/>id_map{}, tombstones{},<br/>cross_edges CSR,<br/>manifest[]<br/>lookup() register()<br/>add_cross_edge()"]
+
+        QP["QueryPlanner<br/>prune_segments()<br/>merge_results()<br/>execute_search()<br/>execute_traverse()"]
+
+        COMP["Compactor<br/>flush() nrem_compact()<br/>rem_compact() prune()<br/>split()"]
+    end
+
+    subgraph TYPES["Data Types"]
+        IR["ItemRecord<br/>id: UUID, vector: f32[1024],<br/>event_time, record_time,<br/>valid_from, valid_until,<br/>kappa: f32, importance: f32,<br/>item_type: u8, flags: u8,<br/>access_count: u32,<br/>session_hash: u32,<br/>content, metadata"]
+
+        ER["EdgeRecord<br/>source_id: UUID,<br/>target_id: UUID,<br/>edge_type: EdgeType,<br/>weight: f32,<br/>created_at: f64"]
+
+        ET["EdgeType (enum)<br/>CAUSES, TEMPORAL_BEFORE,<br/>TEMPORAL_AFTER, PART_OF,<br/>SIMILAR_TO, MERGED_FROM,<br/>SUPERSEDES, RELATES_TO,<br/>CONSOLIDATED_INTO,<br/>IMPLEMENTS, HAS_CONTEXT,<br/>DERIVED_FROM, DEPENDS_ON"]
+
+        SM["SegmentMetadata<br/>segment_id, level,<br/>time_min, time_max,<br/>kappa_min, kappa_max,<br/>count, sessions,<br/>created_at, path"]
+    end
+
+    subgraph PROTOCOL_ADAPTERS["Protocol Adapters"]
+        VA["VectorAdapter<br/>(VectorStore protocol)<br/>add() search() delete()<br/>search_hybrid() scroll()"]
+        GA["GraphAdapter<br/>(GraphStore protocol)<br/>create_node() get_node()<br/>create_relationship()<br/>get_relationships()<br/>traverse() find_path()"]
+    end
+
+    %% Main connections
+    MI --> ADAPT
+    ADAPT --> ENG
+    ENG --> MT
+    ENG --> WAL_C
+    ENG --> SB
+    ENG --> SR
+    ENG --> GI
+    ENG --> QP
+    ENG --> COMP
+
+    %% Type usage
+    IR -.-> MT
+    IR -.-> SB
+    IR -.-> SR
+    ER -.-> MT
+    ER -.-> SB
+    ET -.-> ER
+    SM -.-> GI
+
+    %% Protocol adapters wrap engine
+    VA --> ENG
+    GA --> ENG
+
+    %% Internal relationships
+    QP --> MT
+    QP --> SR
+    QP --> GI
+    COMP --> SB
+    COMP --> SR
+    MT -->|flush| SB
+    SB -->|creates| SR

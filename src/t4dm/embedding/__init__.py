@@ -1,4 +1,4 @@
-"""Embedding providers for World Weaver."""
+"""Embedding providers for T4DM."""
 
 from t4dm.embedding.adapter import (
     BGEM3Adapter,

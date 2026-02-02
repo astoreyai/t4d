@@ -1,5 +1,5 @@
 """
-Entity extraction package for World Weaver.
+Entity extraction package for T4DM.
 
 Provides automatic entity extraction from episodic content.
 """

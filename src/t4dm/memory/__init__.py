@@ -1,4 +1,4 @@
-"""Memory services for World Weaver tripartite memory system."""
+"""Memory services for T4DM tripartite memory system."""
 
 from t4dm.memory.episodic import EpisodicMemory
 from t4dm.memory.forgetting import (

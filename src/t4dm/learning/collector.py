@@ -1,5 +1,5 @@
 """
-Event Collector for World Weaver Learning System.
+Event Collector for T4DM Learning System.
 
 Collects retrieval and outcome events, stores them in SQLite,
 and provides matching logic for credit assignment.

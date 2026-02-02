@@ -1,5 +1,5 @@
 """
-Retrieval Feedback Loop System for World Weaver.
+Retrieval Feedback Loop System for T4DM.
 
 Phase 1C: Implements implicit feedback collection from retrieval outcomes
 to enable continuous learning from user interactions.

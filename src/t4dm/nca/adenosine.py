@@ -1,5 +1,5 @@
 """
-Adenosine Sleep-Wake Dynamics for World Weaver NCA.
+Adenosine Sleep-Wake Dynamics for T4DM NCA.
 
 Implements biologically-inspired adenosine accumulation and sleep pressure
 as per Borbély's two-process model of sleep regulation.

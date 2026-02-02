@@ -1,5 +1,5 @@
 """
-World Weaver REST API Dependencies.
+T4DM REST API Dependencies.
 
 Shared dependencies for FastAPI routes including session management
 and memory service initialization.

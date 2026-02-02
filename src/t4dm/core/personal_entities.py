@@ -1,5 +1,5 @@
 """
-Personal Data Entities for World Weaver.
+Personal Data Entities for T4DM.
 
 Extends the tripartite memory system with personal assistant data:
 - Contacts (people, organizations)
@@ -9,7 +9,7 @@ Extends the tripartite memory system with personal assistant data:
 - Locations (places, addresses)
 
 These entities integrate with external services (Google Workspace, etc.)
-while maintaining a unified knowledge graph in World Weaver.
+while maintaining a unified knowledge graph in T4DM.
 """
 
 from __future__ import annotations
@@ -150,7 +150,7 @@ class Contact(BaseModel):
     notes: str | None = None
     tags: list[str] = Field(default_factory=list)
 
-    # World Weaver integration
+    # T4DM integration
     embedding: list[float] | None = None
     entity_id: UUID | None = None  # Link to WW Entity
 
@@ -255,7 +255,7 @@ class CalendarEvent(BaseModel):
     tags: list[str] = Field(default_factory=list)
     project: str | None = None  # Link to project
 
-    # World Weaver integration
+    # T4DM integration
     embedding: list[float] | None = None
     entity_id: UUID | None = None
 
@@ -363,7 +363,7 @@ class Email(BaseModel):
     in_reply_to: str | None = None  # Message-ID header
     references: list[str] = Field(default_factory=list)
 
-    # World Weaver integration
+    # T4DM integration
     embedding: list[float] | None = None
     entity_id: UUID | None = None
 
@@ -434,7 +434,7 @@ class Task(BaseModel):
     recurring: bool = False
     recurrence_rule: str | None = None
 
-    # World Weaver integration
+    # T4DM integration
     embedding: list[float] | None = None
     entity_id: UUID | None = None
 
@@ -507,7 +507,7 @@ class Location(BaseModel):
     visit_count: int = 0
     last_visited: datetime | None = None
 
-    # World Weaver integration
+    # T4DM integration
     embedding: list[float] | None = None
     entity_id: UUID | None = None
 

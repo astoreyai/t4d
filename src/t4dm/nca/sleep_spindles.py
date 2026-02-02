@@ -1,5 +1,5 @@
 """
-Sleep Spindle Generator for World Weaver.
+Sleep Spindle Generator for T4DM.
 
 Implements thalamocortical sleep spindles (11-16 Hz) for memory consolidation.
 

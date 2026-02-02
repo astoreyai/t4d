@@ -1,5 +1,5 @@
 """
-Recovery Manager for World Weaver
+Recovery Manager for T4DM
 
 Handles startup recovery with two modes:
 

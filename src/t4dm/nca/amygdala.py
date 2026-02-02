@@ -1,5 +1,5 @@
 """
-Amygdala Emotional Valence and Salience Circuit for World Weaver.
+Amygdala Emotional Valence and Salience Circuit for T4DM.
 
 Biological Basis:
 - Amygdala processes emotional significance and salience

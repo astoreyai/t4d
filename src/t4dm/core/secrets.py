@@ -1,5 +1,5 @@
 """
-Pluggable Secrets Backend for World Weaver.
+Pluggable Secrets Backend for T4DM.
 
 Phase 9: Production infrastructure with secure secret management.
 

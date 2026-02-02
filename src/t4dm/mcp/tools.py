@@ -1,5 +1,5 @@
 """
-MCP Tool Definitions for World Weaver.
+MCP Tool Definitions for T4DM.
 
 Provides memory tools for Claude Code/Desktop integration:
 - ww_store: Store experiences in episodic memory
@@ -18,7 +18,7 @@ MEMORY_TOOLS = [
     {
         "name": "ww_store",
         "description": (
-            "Store information in World Weaver episodic memory. "
+            "Store information in T4DM episodic memory. "
             "Use this to remember important learnings, patterns, solutions, "
             "or any information that might be useful in future sessions."
         ),
@@ -286,9 +286,9 @@ MEMORY_TOOLS = [
 MEMORY_PROMPTS = [
     {
         "name": "session_start",
-        "description": "Initialize a new World Weaver session with context loading",
+        "description": "Initialize a new T4DM session with context loading",
         "template": """
-You are starting a new session with World Weaver memory enabled.
+You are starting a new session with T4DM memory enabled.
 
 Session ID: {{session_id}}
 Project: {{project}}

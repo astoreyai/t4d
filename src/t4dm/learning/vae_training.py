@@ -1,5 +1,5 @@
 """
-VAE Training System for World Weaver.
+VAE Training System for T4DM.
 
 Phase 5A: Training pipeline for VAE-based generative replay.
 

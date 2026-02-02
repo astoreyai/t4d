@@ -16,7 +16,7 @@ import gzip
 import json
 import logging
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any, Protocol
 
@@ -393,7 +393,7 @@ class ColdStorageManager:
         backend = self._get_backend()
         archived = await backend.list_archived(limit=self.config.cleanup_batch_size)
 
-        cutoff = datetime.now() - datetime.timedelta(
+        cutoff = datetime.now() - timedelta(
             days=self.config.archive_retention_days
         )
 

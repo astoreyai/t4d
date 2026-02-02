@@ -114,7 +114,7 @@ class AgentMemoryClient:
         Initialize agent memory client.
 
         Args:
-            base_url: World Weaver API URL
+            base_url: T4DM API URL
             session_id: Session ID for memory isolation
             api_key: Optional API key for authentication
             timeout: Request timeout in seconds
@@ -166,7 +166,7 @@ class AgentMemoryClient:
         await self.close()
 
     async def connect(self):
-        """Initialize connection to World Weaver API."""
+        """Initialize connection to T4DM API."""
         headers = {"X-Session-ID": self.session_id}
         if self.api_key:
             headers["X-API-Key"] = self.api_key

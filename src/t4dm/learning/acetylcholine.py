@@ -1,5 +1,5 @@
 """
-Acetylcholine-like Encoding/Retrieval Mode Switch for World Weaver.
+Acetylcholine-like Encoding/Retrieval Mode Switch for T4DM.
 
 Biological Basis:
 - High ACh in hippocampus promotes encoding, suppresses retrieval

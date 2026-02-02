@@ -1,5 +1,5 @@
 """
-Learning Events for World Weaver.
+Learning Events for T4DM.
 
 Defines data structures for capturing retrieval and outcome events
 that feed into the learning system. Includes multiple representation

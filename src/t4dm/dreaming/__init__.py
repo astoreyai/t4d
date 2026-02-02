@@ -1,5 +1,5 @@
 """
-World Weaver Dreaming System.
+T4DM Dreaming System.
 
 P3: Imagination-based learning during consolidation.
 

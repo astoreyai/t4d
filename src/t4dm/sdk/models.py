@@ -1,5 +1,5 @@
 """
-World Weaver SDK Data Models.
+T4DM SDK Data Models.
 
 Simplified models for SDK responses.
 """

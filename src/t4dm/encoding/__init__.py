@@ -1,5 +1,5 @@
 """
-Bioinspired encoding components for World Weaver.
+Bioinspired encoding components for T4DM.
 
 This module provides neural encoding inspired by biological systems:
 - Dendritic neurons: Two-compartment model with context gating

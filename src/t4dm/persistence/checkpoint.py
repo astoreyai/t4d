@@ -1,5 +1,5 @@
 """
-Checkpoint Manager for World Weaver
+Checkpoint Manager for T4DM
 
 Handles periodic snapshots of all in-memory state for fast recovery.
 

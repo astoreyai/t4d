@@ -1,5 +1,5 @@
 """
-Capsule Network Visualization for World Weaver NCA.
+Capsule Network Visualization for T4DM NCA.
 
 Hinton-inspired visualization of capsule dynamics:
 - Routing coefficient matrix (c_ij)

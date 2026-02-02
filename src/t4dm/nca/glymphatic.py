@@ -1,5 +1,5 @@
 """
-Glymphatic System for World Weaver (B8).
+Glymphatic System for T4DM (B8).
 
 Implements brain waste clearance during sleep following biological mechanisms:
 - Xie et al. 2013: "Sleep Drives Metabolite Clearance from the Adult Brain"

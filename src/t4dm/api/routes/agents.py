@@ -1,7 +1,7 @@
 """
 Agent Management API Routes.
 
-Provides REST API endpoints for managing World Weaver agents:
+Provides REST API endpoints for managing T4DM agents:
 - Create/configure agents
 - Execute with memory context
 - Report task outcomes

@@ -1,5 +1,5 @@
 """
-Unified Learning Signals for World Weaver.
+Unified Learning Signals for T4DM.
 
 Phase 6B: Deep Integration of All Learning Systems
 
@@ -333,7 +333,7 @@ class UnifiedLearningSignal:
     """
     Combine all learning signals into coherent update.
 
-    This is THE central integration point for World Weaver's learning systems.
+    This is THE central integration point for T4DM's learning systems.
     It takes signals from:
     1. Three-factor rule (eligibility, neuromod, dopamine)
     2. Forward-Forward encoder (goodness gradients)

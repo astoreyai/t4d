@@ -1,5 +1,5 @@
 """
-World Weaver Memory Services Management.
+T4DM Memory Services Management.
 
 Thread-safe initialization and cleanup of memory services.
 """

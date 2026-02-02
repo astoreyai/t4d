@@ -1,5 +1,5 @@
 """
-Three-Factor Learning Rule for World Weaver.
+Three-Factor Learning Rule for T4DM.
 
 Biological Basis:
 In biological neural networks, synaptic plasticity requires three factors:

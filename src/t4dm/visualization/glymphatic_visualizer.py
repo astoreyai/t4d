@@ -1,5 +1,5 @@
 """
-Glymphatic Clearance Visualization for World Weaver NCA.
+Glymphatic Clearance Visualization for T4DM NCA.
 
 CompBio-inspired visualization of sleep-gated waste clearance:
 - Sleep stage timeline (NREM/REM/Wake)

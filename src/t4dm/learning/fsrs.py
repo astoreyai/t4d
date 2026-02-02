@@ -1,5 +1,5 @@
 """
-Free Spaced Repetition Scheduler (FSRS) for World Weaver.
+Free Spaced Repetition Scheduler (FSRS) for T4DM.
 
 FSRS is a modern spaced repetition algorithm that models memory
 using two key variables:
@@ -396,7 +396,7 @@ class FSRSMemoryTracker:
     """
     Track FSRS states for multiple memory items.
 
-    Integrates with World Weaver's memory system to provide
+    Integrates with T4DM's memory system to provide
     spaced repetition scheduling for episodic memories.
     """
 

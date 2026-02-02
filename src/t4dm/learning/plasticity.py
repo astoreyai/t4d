@@ -1,5 +1,5 @@
 """
-Biological Plasticity Mechanisms for World Weaver.
+Biological Plasticity Mechanisms for T4DM.
 
 Implements biologically-inspired synaptic plasticity rules that complement
 the Hebbian learning already present in the system.

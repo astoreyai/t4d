@@ -1,5 +1,5 @@
 """
-Ensemble Embedding Adapter for World Weaver.
+Ensemble Embedding Adapter for T4DM.
 
 Implements multi-scale redundancy through ensemble voting across multiple
 embedding providers. This mirrors biological neural redundancy where

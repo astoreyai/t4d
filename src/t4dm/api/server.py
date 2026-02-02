@@ -1,5 +1,5 @@
 """
-World Weaver REST API Server.
+T4DM REST API Server.
 
 FastAPI application with lifespan management for the tripartite memory system.
 
@@ -50,7 +50,7 @@ async def lifespan(app: FastAPI):
     settings = get_settings()
 
     # Startup
-    logger.info("Starting World Weaver REST API Server")
+    logger.info("Starting T4DM REST API Server")
 
     # Initialize tracing
     if settings.otel_enabled:
@@ -113,7 +113,7 @@ async def lifespan(app: FastAPI):
     yield
 
     # Shutdown
-    logger.info("Shutting down World Weaver REST API Server")
+    logger.info("Shutting down T4DM REST API Server")
 
     # P10.3: Wait for in-flight requests to complete (with timeout)
     drain_timeout = 30.0  # seconds
@@ -149,9 +149,9 @@ async def lifespan(app: FastAPI):
 
 # Create FastAPI application
 app = FastAPI(
-    title="World Weaver Memory API",
+    title="T4DM Memory API",
     description="""
-REST API for World Weaver's tripartite neural memory system.
+REST API for T4DM's tripartite neural memory system.
 
 ## Memory Subsystems
 
@@ -418,7 +418,7 @@ except ImportError:
 @app.get("/", include_in_schema=False)
 async def root():
     """Redirect to API documentation."""
-    return {"message": "World Weaver API", "docs": "/docs", "health": "/api/v1/health"}
+    return {"message": "T4DM API", "docs": "/docs", "health": "/api/v1/health"}
 
 
 def main():

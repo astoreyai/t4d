@@ -1,5 +1,5 @@
 """
-Coupling Matrix Dynamics Visualization for World Weaver NCA.
+Coupling Matrix Dynamics Visualization for T4DM NCA.
 
 Hinton-inspired visualization of learnable coupling evolution:
 - 6x6 heatmap of current K values with biological bounds overlay

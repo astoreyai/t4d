@@ -1,5 +1,5 @@
 """
-Metrics Collection for World Weaver.
+Metrics Collection for T4DM.
 
 Provides counters, timers, and gauges for monitoring memory operations.
 Thread-safe and async-compatible.
@@ -68,7 +68,7 @@ class OperationMetrics:
 
 class MetricsCollector:
     """
-    Collects and aggregates metrics for World Weaver operations.
+    Collects and aggregates metrics for T4DM operations.
 
     Thread-safe singleton that tracks:
     - Operation counts and timing

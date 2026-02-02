@@ -1,5 +1,5 @@
 """
-System Dashboard - Real-time monitoring of World Weaver health and metrics.
+System Dashboard - Real-time monitoring of T4DM health and metrics.
 
 Displays memory counts, storage health, circuit breaker states, and cache statistics.
 """
@@ -244,7 +244,7 @@ class SystemDashboard:
 
         # Header
         session_label = self.session_id or "ALL SESSIONS"
-        header_text = Text(f"World Weaver System Dashboard - {session_label}", style="bold cyan")
+        header_text = Text(f"T4DM System Dashboard - {session_label}", style="bold cyan")
         layout["header"].update(Panel(header_text, border_style="cyan"))
 
         # Get data

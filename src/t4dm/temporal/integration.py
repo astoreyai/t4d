@@ -1,5 +1,5 @@
 """
-Consolidation-Plasticity Integration for World Weaver.
+Consolidation-Plasticity Integration for T4DM.
 
 Bridges the temporal dynamics, embedding modulation, and memory systems.
 Implements the recommendations from neurocomputational analysis:

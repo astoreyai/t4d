@@ -1,5 +1,5 @@
 """
-P7.1: Bridge Container for World Weaver.
+P7.1: Bridge Container for T4DM.
 
 Centralized factory for all bridge instances. Provides dependency injection
 for NCA subsystems into memory operations.

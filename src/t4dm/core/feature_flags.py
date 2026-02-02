@@ -1,5 +1,5 @@
 """
-Feature Flags for World Weaver.
+Feature Flags for T4DM.
 
 Phase 9: Centralized subsystem control for gradual rollout and emergency shutoff.
 
@@ -210,7 +210,7 @@ class FeatureFlags:
     """
     Centralized feature flag manager.
 
-    Provides runtime control over World Weaver subsystems with:
+    Provides runtime control over T4DM subsystems with:
     - Environment variable overrides
     - Percentage-based rollout
     - Runtime updates without restart
