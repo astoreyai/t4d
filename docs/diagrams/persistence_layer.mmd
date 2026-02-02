@@ -7,67 +7,100 @@ flowchart TB
         SDK[Python SDK]
     end
 
-    subgraph Persistence["Persistence Layer"]
-        PM[PersistenceManager<br/>manager.py]
+    subgraph T4DX["T4DX Embedded Storage Engine"]
+        ENGINE[T4DX Engine<br/>storage/t4dx/index.py]
 
         subgraph WAL["Write-Ahead Log"]
-            WAL_W[WAL Writer<br/>wal.py]
-            WAL_SEG[(WAL Segments<br/>64MB each)]
+            WAL_W[WAL Writer<br/>persistence.py]
+            WAL_SEG[(WAL Segments<br/>JSON-lines + fsync)]
             WAL_CRC[CRC32 Checksums]
         end
 
+        subgraph LSM["LSM-Tree Storage"]
+            MT[MemTable<br/>In-memory sorted buffer]
+            SEG[(Immutable Segments<br/>sorted runs on disk)]
+            HNSW[HNSW Index<br/>4D vector search]
+            CSR[CSR Graph<br/>Edge storage]
+        end
+
         subgraph Checkpoint["Checkpoint System"]
-            CP_MGR[CheckpointManager<br/>checkpoint.py]
-            CP_FILE[(Checkpoint Files<br/>gzip + SHA-256)]
+            CP_MGR[CheckpointManager<br/>checkpoint_v3.py]
+            CP_FILE[(Checkpoint Files<br/>T4DX memtable +<br/>spiking state +<br/>gzip + SHA-256)]
             CP_SCHED[Scheduler<br/>300s / 1000 ops]
         end
 
         subgraph Recovery["Recovery System"]
-            REC[RecoveryManager<br/>recovery.py]
-            COLD[Cold Start<br/>No checkpoint]
-            WARM[Warm Start<br/>Checkpoint + WAL]
+            REC[RecoveryManager<br/>recovery_v2.py]
+            COLD[Cold Start<br/>Scan segments only]
+            WARM[Warm Start<br/>Checkpoint + WAL replay]
+        end
+
+        subgraph Compaction["Compaction Engine"]
+            NREM[NREM Compaction<br/>Merge + kappa + STDP]
+            REM_C[REM Compaction<br/>Cluster + prototype]
+            PRUNE_C[PRUNE Compaction<br/>GC tombstoned]
         end
 
         subgraph Shutdown["Shutdown Handler"]
-            SH[ShutdownManager<br/>shutdown.py]
-            DRAIN[Drain Operations<br/>30s timeout]
+            SH[ShutdownManager]
+            FLUSH[Flush MemTable<br/>to segment]
+            TRUNC[Truncate WAL]
             FINAL[Final Checkpoint]
         end
     end
 
     subgraph Storage["Data Storage"]
-        DATA_DIR[/var/lib/world-weaver/]
+        DATA_DIR[/var/lib/t4dm/]
         WAL_DIR[wal/]
+        SEG_DIR[segments/]
         CP_DIR[checkpoints/]
     end
 
-    MCP --> PM
-    REST --> PM
-    SDK --> PM
+    MCP --> ENGINE
+    REST --> ENGINE
+    SDK --> ENGINE
 
-    PM --> WAL_W
+    ENGINE --> WAL_W
     WAL_W --> WAL_SEG
     WAL_W --> WAL_CRC
 
-    PM --> CP_MGR
+    ENGINE --> MT
+    MT -->|flush| SEG
+    SEG --> HNSW
+    SEG --> CSR
+
+    ENGINE --> CP_MGR
     CP_MGR --> CP_FILE
     CP_SCHED --> CP_MGR
 
-    PM --> REC
+    ENGINE --> REC
     REC --> COLD
     REC --> WARM
 
-    PM --> SH
-    SH --> DRAIN
+    SEG --> NREM
+    NREM --> SEG
+    SEG --> REM_C
+    REM_C --> SEG
+    SEG --> PRUNE_C
+
+    ENGINE --> SH
+    SH --> FLUSH
+    SH --> TRUNC
     SH --> FINAL
 
     WAL_SEG --> WAL_DIR
+    SEG --> SEG_DIR
     CP_FILE --> CP_DIR
     WAL_DIR --> DATA_DIR
+    SEG_DIR --> DATA_DIR
     CP_DIR --> DATA_DIR
 
-    style PM fill:#4a90d9,color:#fff
+    style ENGINE fill:#4a90d9,color:#fff
     style WAL_W fill:#e74c3c,color:#fff
+    style MT fill:#9b59b6,color:#fff
     style CP_MGR fill:#27ae60,color:#fff
     style REC fill:#9b59b6,color:#fff
     style SH fill:#f39c12,color:#fff
+    style NREM fill:#e8eaf6
+    style REM_C fill:#f3e5f5
+    style PRUNE_C fill:#ffebee

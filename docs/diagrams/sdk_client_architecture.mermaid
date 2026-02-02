@@ -1,0 +1,94 @@
+%% sdk_client_architecture.mermaid
+%% Shows the 3-tier SDK architecture
+%% Source: src/t4dm/sdk/client.py, agent_client.py, agent.py, src/t4dm/mcp/server.py
+
+graph TB
+    subgraph TIER3 ["Tier 3: WWAgent (Full Lifecycle)"]
+        direction TB
+        AGENT["WWAgent<br/>AgentConfig + AgentContext"]
+        PHASES["AgentPhase lifecycle:<br/>IDLE -> RETRIEVAL -> ENCODING -> EXECUTING -> CONSOLIDATING"]
+        HOOKS["Lifecycle hooks: session_start, session_end,<br/>task_start, task_end, memory_retrieved, outcome_reported"]
+        IDLE_MON["Idle consolidation monitor<br/>(background asyncio.Task, 5min default)"]
+        EXEC["execute(messages, task_id)<br/>1. Retrieve context memories<br/>2. Build augmented system prompt<br/>3. Execute with Claude<br/>4. Periodic consolidation check"]
+        OUTCOME["report_outcome(task_id, success)<br/>-> credit assignment -> store experience"]
+        AGENT --> PHASES
+        AGENT --> HOOKS
+        AGENT --> IDLE_MON
+        AGENT --> EXEC
+        AGENT --> OUTCOME
+    end
+
+    subgraph TIER2 ["Tier 2: AgentMemoryClient (Agent-Oriented)"]
+        direction TB
+        AMC["AgentMemoryClient<br/>session_id, learning_rate, ff_scorer"]
+        RETRIEVE["retrieve_for_task(task_id, query)<br/>-> recall + eligibility trace update<br/>-> ScoredMemory (similarity + FF relevance)"]
+        REPORT["report_task_outcome(task_id, success)<br/>-> RPE computation (outcome - 0.5)<br/>-> three-factor learning signal<br/>-> reconsolidation API call"]
+        STORE_EXP["store_experience(content, outcome, importance)<br/>-> encoding-mode neuromodulator state"]
+        CONSOLIDATE["trigger_consolidation(mode)<br/>light / deep / full"]
+        LEARNING["Learning systems:<br/>EligibilityTrace (decay=0.95)<br/>DopamineSystem (RPE)<br/>ThreeFactorLearningRule"]
+        AMC --> RETRIEVE
+        AMC --> REPORT
+        AMC --> STORE_EXP
+        AMC --> CONSOLIDATE
+        AMC --> LEARNING
+    end
+
+    subgraph TIER1 ["Tier 1: WorldWeaverClient / AsyncWorldWeaverClient (Raw REST)"]
+        direction TB
+        SYNC["WorldWeaverClient (sync)<br/>httpx.Client context manager"]
+        ASYNC["AsyncWorldWeaverClient (async)<br/>httpx.AsyncClient context manager"]
+        EP_OPS["Episodes: create, get, list, recall, delete, mark_important"]
+        ENT_OPS["Entities: create, get, list, recall, spread_activation, supersede"]
+        SK_OPS["Skills: create, get, list, recall, record_execution, deprecate, how_to"]
+        SYS_OPS["System: health, stats, consolidate"]
+        SYNC --> EP_OPS & ENT_OPS & SK_OPS & SYS_OPS
+        ASYNC --> EP_OPS & ENT_OPS & SK_OPS & SYS_OPS
+    end
+
+    subgraph HTTP ["HTTP Layer"]
+        direction LR
+        REQ["httpx request<br/>base_url + /api/v1/...<br/>X-Session-ID header"]
+        ERR["Error handling:<br/>WorldWeaverError<br/>ConnectionError<br/>NotFoundError (404)<br/>RateLimitError (429)"]
+    end
+
+    subgraph SERVER ["FastAPI Server (localhost:8765)"]
+        direction TB
+        API["REST API<br/>/api/v1/episodes<br/>/api/v1/entities<br/>/api/v1/skills<br/>/api/v1/health<br/>/api/v1/consolidate"]
+    end
+
+    subgraph MCP ["MCP Server (Alternative Integration)"]
+        direction TB
+        MCP_SRV["WorldWeaverMCPServer<br/>stdio transport (JSON-RPC)"]
+        MCP_TOOLS["7 Tools:<br/>ww_store, ww_recall,<br/>ww_learn_outcome, ww_consolidate,<br/>ww_get_context, ww_entity, ww_skill"]
+        MCP_RES["Resources: t4dm://sessions/{id}"]
+        MCP_PROMPT["Prompts: memory templates"]
+        MCP_SRV --> MCP_TOOLS
+        MCP_SRV --> MCP_RES
+        MCP_SRV --> MCP_PROMPT
+    end
+
+    AGENT -->|"wraps"| AMC
+    AMC -->|"wraps"| ASYNC
+    SYNC & ASYNC --> HTTP
+    HTTP --> SERVER
+    MCP_SRV -->|"uses AgentMemoryClient"| AMC
+
+    subgraph CLIENTS ["Consumer Examples"]
+        direction LR
+        CL1["Claude Code<br/>(via MCP)"]
+        CL2["Claude Desktop<br/>(via MCP)"]
+        CL3["Kymera Agents<br/>(via SDK Tier 2/3)"]
+        CL4["Custom Scripts<br/>(via SDK Tier 1)"]
+    end
+
+    CL1 & CL2 --> MCP_SRV
+    CL3 --> AGENT
+    CL4 --> SYNC
+
+    style TIER3 fill:#e1f5ff,stroke:#333
+    style TIER2 fill:#fff4e1,stroke:#333
+    style TIER1 fill:#e8f5e9,stroke:#333
+    style HTTP fill:#f5f5f5,stroke:#999
+    style SERVER fill:#f3e5f5,stroke:#333
+    style MCP fill:#ffe0b2,stroke:#333
+    style CLIENTS fill:#e0f2f1,stroke:#333

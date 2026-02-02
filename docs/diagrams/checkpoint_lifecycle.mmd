@@ -5,16 +5,21 @@ stateDiagram-v2
 
     Idle --> Triggered: Timer (300s) OR<br/>Ops threshold (1000)
 
-    Triggered --> Collecting: Begin checkpoint
+    Triggered --> Collecting: Begin checkpoint_v3
 
     Collecting --> Serializing: Collect component states
     note right of Collecting
-        Components:
-        - LearnedGate weights
-        - Scorer weights
-        - Buffer contents
-        - Neuromod state
-        - Eligibility traces
+        Components (checkpoint_v3):
+        - T4DX MemTable snapshot
+        - T4DX segment manifest
+        - T4DX WAL flush LSN
+        - Spiking cortical state
+          (LIF membrane potentials,
+           RWKV hidden states,
+           thalamic gate params)
+        - Neuromod bus levels
+        - Kappa index snapshot
+        - QLoRA adapter weights
     end note
 
     Serializing --> Compressing: JSON serialize

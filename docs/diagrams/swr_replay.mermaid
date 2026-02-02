@@ -5,6 +5,7 @@ flowchart TB
         SPINDLE["Sleep Spindles<br/>(12-15 Hz)"]
         SO["Slow Oscillation<br/>(0.5-1 Hz)"]
         ACH_REM["ACh Peak (REM)<br/>Suppresses SWRs"]
+        ACH_NREM["Low ACh (NREM)<br/>Enables SWR replay<br/>(Hasselmo 1999)"]
     end
 
     subgraph HPC_SWR["Hippocampal SWR"]
@@ -21,7 +22,7 @@ flowchart TB
         REMOTE["Remote Memories<br/>(interleaved)"]
         FILTER["Memory Filter<br/>(exclude procedural)"]
         SEQUENCE["Sequential<br/>Replay"]
-        DIRECTION["Replay Direction<br/>90% reverse, 10% forward<br/>(Foster &amp; Wilson 2006)"]
+        DIRECTION["Replay Direction<br/>90% reverse during rest<br/>forward during active navigation<br/>(Foster &amp; Wilson 2006)"]
     end
 
     subgraph ProceduralRoute["Procedural Memory Routing"]
@@ -61,6 +62,7 @@ flowchart TB
     ACH_REM -.->|"suppresses"| CA3_BURST
 
     %% Note: High ACh during REM suppresses SWRs; replay is NREM-specific (Hasselmo 1999)
+    ACH_NREM -.->|"disinhibits"| CA3_BURST
 
     %% SWR generation
     SO -->|"triggers"| CA3_BURST

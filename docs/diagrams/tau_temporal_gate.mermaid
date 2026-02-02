@@ -1,0 +1,91 @@
+%% tau_temporal_gate.mermaid
+%% Shows tau(t) write gating: inputs, computation, and decision routing
+%% Source: src/t4dm/core/temporal_gate.py, memory_gate.py, learned_gate.py
+
+graph TB
+    subgraph INPUTS ["Input Signals"]
+        direction TB
+        EPS["epsilon (prediction error)<br/>Scalar or batch tensor"]
+        NOV["novelty (embedding distance)<br/>Scalar or batch tensor"]
+        REW["reward signal<br/>Scalar or batch tensor"]
+    end
+
+    subgraph PARAMS ["Learnable Parameters (nn.Parameter)"]
+        direction LR
+        LE["lambda_epsilon<br/>default=1.0"]
+        LD["lambda_delta<br/>default=1.0"]
+        LR_["lambda_r<br/>default=1.0"]
+    end
+
+    subgraph COMPUTE ["TemporalGate.forward()"]
+        direction TB
+        STACK["torch.stack([eps, novelty, reward], dim=-1)"]
+        MULT["signals * lambdas<br/>(element-wise)"]
+        SUM["sum(dim=-1)<br/>= lambda_eps*eps + lambda_delta*novelty + lambda_r*reward"]
+        SIGMOID["torch.sigmoid()"]
+        TAU["tau(t) in (0, 1)"]
+        STACK --> MULT --> SUM --> SIGMOID --> TAU
+    end
+
+    subgraph DECISION ["Gate Decision"]
+        direction TB
+        HIGH["tau > store_threshold (0.4)<br/>STORE"]
+        MID["buffer_threshold (0.2) < tau <= 0.4<br/>BUFFER"]
+        LOW["tau <= 0.2<br/>DISCARD"]
+    end
+
+    EPS -->|"lambda_eps * eps"| COMPUTE
+    NOV -->|"lambda_delta * novelty"| COMPUTE
+    REW -->|"lambda_r * reward"| COMPUTE
+    LE & LD & LR_ -.-> MULT
+
+    TAU --> HIGH
+    TAU --> MID
+    TAU --> LOW
+
+    subgraph STORE_PATH ["Store Path"]
+        direction TB
+        S1["Insert into MemTable"]
+        S2["WAL append"]
+        S3["kappa = 0.0 (raw episodic)"]
+        S1 --> S2 --> S3
+    end
+
+    subgraph BUFFER_PATH ["Buffer Path"]
+        direction TB
+        B1["TemporalBatcher.add()"]
+        B2["Batch by project + task + time window"]
+        B3["Flush when batch_window (2min)<br/>or max_batch_size (10) reached"]
+        B1 --> B2 --> B3
+    end
+
+    subgraph DISCARD_PATH ["Discard Path"]
+        D1["Skip storage<br/>No WAL entry<br/>No memory formed"]
+    end
+
+    HIGH --> STORE_PATH
+    MID --> BUFFER_PATH
+    LOW --> DISCARD_PATH
+
+    subgraph GATE_VARIANTS ["Gate Implementation Variants"]
+        direction TB
+        MG["MemoryGate (heuristic)<br/>Weighted scoring:<br/>novelty(0.25) + outcome(0.25) +<br/>entity(0.20) + action(0.15) + time(0.15)<br/>Pattern matching: always_store / never_store"]
+        LG["LearnedMemoryGate (Bayesian)<br/>Online Bayesian logistic regression<br/>Thompson sampling for exploration<br/>247-dim feature vector<br/>Cold start: blends with heuristic gate<br/>Updates on task outcome feedback"]
+        TG["TemporalGate (differentiable)<br/>nn.Module with learnable lambdas<br/>Trained via surrogate gradient<br/>Used in spiking cortical stack"]
+    end
+
+    MG -.->|"score maps to<br/>StorageDecision"| DECISION
+    LG -.->|"predict() returns<br/>StorageDecision"| DECISION
+    TG -.->|"forward() returns<br/>gate value"| TAU
+
+    style INPUTS fill:#e1f5ff,stroke:#333
+    style PARAMS fill:#fff4e1,stroke:#333
+    style COMPUTE fill:#f3e5f5,stroke:#333
+    style DECISION fill:#ffe0b2,stroke:#333
+    style STORE_PATH fill:#e8f5e9,stroke:#333
+    style BUFFER_PATH fill:#fff4e1,stroke:#333
+    style DISCARD_PATH fill:#ffebee,stroke:#333
+    style GATE_VARIANTS fill:#f5f5f5,stroke:#999
+    style HIGH fill:#c8e6c9,stroke:#333
+    style MID fill:#fff9c4,stroke:#333
+    style LOW fill:#ffcdd2,stroke:#333

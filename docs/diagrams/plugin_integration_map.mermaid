@@ -1,0 +1,99 @@
+%% plugin_integration_map.mermaid
+%% Shows all integration surfaces for T4DM
+%% Source: src/t4dm/core/protocols.py, hooks/base.py, sdk/, mcp/, api/
+
+graph TB
+    subgraph CORE_PROTOCOLS ["Core Protocols (src/t4dm/core/protocols.py)"]
+        direction TB
+        VP["VectorStore Protocol<br/>create_collection, add, search, delete, get"]
+        GP["GraphStore Protocol<br/>create_node, get_node, update_node, delete_node<br/>create_relationship, get_relationships, query, find_path"]
+        EP["EmbeddingProvider Protocol<br/>dimension, embed(texts), embed_query(query)"]
+        ES["EpisodicStore Protocol<br/>create_episode, get_episode, search_episodes, update_access"]
+        SS["SemanticStore Protocol<br/>create_entity, search_entities, strengthen_relationship, supersede"]
+        PS["ProceduralStore Protocol<br/>create_procedure, search_procedures, update_feedback, deprecate"]
+    end
+
+    subgraph REST_API ["REST API (FastAPI)"]
+        direction TB
+        A1["/api/v1/episodes -- CRUD + recall"]
+        A2["/api/v1/entities -- CRUD + recall + spread-activation"]
+        A3["/api/v1/skills -- CRUD + recall + how-to"]
+        A4["/api/v1/health, /stats, /consolidate"]
+        A5["/api/v1/episodes/{id}/reconsolidate"]
+        A6["/api/v1/memory/train-vae"]
+    end
+
+    subgraph MCP_SERVER ["MCP Server (7 tools)"]
+        direction TB
+        M1["ww_store -- episodic storage"]
+        M2["ww_recall -- semantic search"]
+        M3["ww_learn_outcome -- credit assignment"]
+        M4["ww_consolidate -- trigger consolidation"]
+        M5["ww_get_context -- session/project context"]
+        M6["ww_entity -- create/get/search/relate entities"]
+        M7["ww_skill -- create/get/search/record_execution"]
+    end
+
+    subgraph HOOKS ["Hooks System (src/t4dm/hooks/)"]
+        direction TB
+        HB["HookRegistry -- PRE/POST/ON/ERROR phases<br/>HookPriority: CRITICAL(0), HIGH(100), NORMAL(500), LOW(1000)<br/>@with_hooks decorator"]
+        H_CORE["core.py: Init, Shutdown, HealthCheck, ConfigChange"]
+        H_MEM["memory.py: Create, Recall, Update, Access, Decay"]
+        H_STOR["storage.py: Connection, Query, Error, Retry"]
+        H_CONS["consolidation.py: Consolidation, ClusterForm, DuplicateFound, EntityExtracted"]
+        H_SESS["session_lifecycle.py: SessionStart, SessionEnd, TaskOutcome, IdleConsolidation"]
+        HB --> H_CORE & H_MEM & H_STOR & H_CONS & H_SESS
+    end
+
+    subgraph SDK_CLIENTS ["SDK Clients (src/t4dm/sdk/)"]
+        direction TB
+        S1["WorldWeaverClient (sync)"]
+        S2["AsyncWorldWeaverClient (async)"]
+        S3["AgentMemoryClient (learning)"]
+        S4["WWAgent (full lifecycle)"]
+    end
+
+    subgraph FRAMEWORK_ADAPTERS ["Framework Adapters (planned)"]
+        direction LR
+        F1["LangChain<br/>Memory + Retriever"]
+        F2["LlamaIndex<br/>Storage Context"]
+        F3["AutoGen<br/>Agent Memory"]
+        F4["CrewAI<br/>Shared Memory"]
+    end
+
+    subgraph EXTERNAL ["External Integrations"]
+        direction TB
+        EX1["Kymera Voice<br/>Voice commands -> MemoryGate<br/>Voice-mode adjustments"]
+        EX2["Google Workspace<br/>(planned)"]
+        EX3["T4DV Visualization<br/>Renders memory structures<br/>+ spiking activations in 3D/4D"]
+    end
+
+    subgraph WEBSOCKET ["WebSocket Channels"]
+        direction LR
+        WS1["Real-time consolidation events"]
+        WS2["Memory creation notifications"]
+        WS3["Health/metrics streaming"]
+    end
+
+    %% Connections showing how each surface connects
+    VP & GP & EP -.->|"implemented by"| T4DX["T4DX Embedded Engine<br/>(vector_adapter.py, graph_adapter.py)"]
+    ES & SS & PS -.->|"implemented by"| BRIDGES["bridges/ (high-level memory)"]
+
+    REST_API -->|"uses"| BRIDGES
+    MCP_SERVER -->|"via AgentMemoryClient"| REST_API
+    SDK_CLIENTS -->|"HTTP to"| REST_API
+    HOOKS -->|"wraps all operations"| BRIDGES
+
+    F1 & F2 & F3 & F4 -.->|"would use"| SDK_CLIENTS
+    EX1 -->|"via SDK"| SDK_CLIENTS
+    EX3 -->|"reads"| REST_API
+    WEBSOCKET -->|"streams from"| REST_API
+
+    style CORE_PROTOCOLS fill:#e1f5ff,stroke:#333
+    style REST_API fill:#f3e5f5,stroke:#333
+    style MCP_SERVER fill:#ffe0b2,stroke:#333
+    style HOOKS fill:#fff4e1,stroke:#333
+    style SDK_CLIENTS fill:#e8f5e9,stroke:#333
+    style FRAMEWORK_ADAPTERS fill:#f5f5f5,stroke:#999,stroke-dasharray: 5 5
+    style EXTERNAL fill:#e0f2f1,stroke:#333
+    style WEBSOCKET fill:#ffebee,stroke:#333

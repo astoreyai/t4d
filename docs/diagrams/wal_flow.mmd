@@ -2,42 +2,43 @@
 
 sequenceDiagram
     participant Client
-    participant PM as PersistenceManager
-    participant WAL as WriteAheadLog
-    participant Seg as WAL Segment
-    participant State as In-Memory State
+    participant ENGINE as T4DX Engine
+    participant WAL as Write-Ahead Log
+    participant Seg as WAL File
+    participant MT as MemTable
 
-    Note over Client,State: Write Operation Flow
+    Note over Client,MT: T4DX Write Operation Flow
 
-    Client->>PM: log(operation, data)
-    activate PM
+    Client->>ENGINE: insert(memory_item)
+    activate ENGINE
 
-    PM->>WAL: append(operation, data)
+    ENGINE->>WAL: append(INSERT, item)
     activate WAL
 
-    WAL->>WAL: Serialize entry
-    Note right of WAL: entry = header + payload<br/>header: magic, lsn, op, ts, len, crc
+    WAL->>WAL: Serialize JSON-line entry
+    Note right of WAL: entry = JSON object per line<br/>{op, lsn, ts, key, data, crc32}
 
-    WAL->>Seg: Write to current segment
+    WAL->>Seg: Write to WAL file
     activate Seg
-
-    alt Segment full (>64MB)
-        WAL->>Seg: Close current segment
-        WAL->>Seg: Create new segment
-        Note right of Seg: segment_NNNNNNNN.wal
-    end
 
     Seg->>Seg: fsync()
     Seg-->>WAL: LSN assigned
     deactivate Seg
 
-    WAL-->>PM: Return LSN
+    WAL-->>ENGINE: Return LSN
     deactivate WAL
 
-    PM->>State: Apply state change
-    Note right of State: Now safe to modify<br/>in-memory state
+    ENGINE->>MT: Apply to MemTable
+    Note right of MT: Sorted insert by key.<br/>Now safe: WAL has<br/>durable record.
 
-    PM-->>Client: Success (LSN)
-    deactivate PM
+    alt MemTable full (64MB or 10k items)
+        ENGINE->>MT: Flush to new segment
+        MT->>MT: Write sorted run + HNSW + CSR
+        ENGINE->>WAL: Record FLUSH marker
+        ENGINE->>WAL: Truncate entries before flush LSN
+    end
 
-    Note over Client,State: Recovery uses LSN ordering
+    ENGINE-->>Client: Success (LSN)
+    deactivate ENGINE
+
+    Note over Client,MT: Recovery replays WAL from last flush LSN

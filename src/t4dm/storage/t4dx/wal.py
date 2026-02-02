@@ -85,6 +85,43 @@ class WAL:
     def path(self) -> Path:
         return self._path
 
+    def batch_append(self, entries: list[dict[str, Any]]) -> None:
+        """Append multiple entries with a single fsync."""
+        if self._fd is None:
+            self.open()
+        buf = "".join(
+            json.dumps(e, separators=(",", ":")) + "\n" for e in entries
+        )
+        os.write(self._fd, buf.encode())  # type: ignore[arg-type]
+        os.fsync(self._fd)  # type: ignore[arg-type]
+
     @property
     def size(self) -> int:
         return self._path.stat().st_size if self._path.exists() else 0
+
+
+class WALWriter:
+    """Context manager that collects WAL entries and fsyncs once on exit.
+
+    Usage::
+
+        with WALWriter(wal) as w:
+            w.append(OpType.INSERT, {"item": ...})
+            w.append(OpType.INSERT, {"item": ...})
+        # single fsync here
+    """
+
+    def __init__(self, wal: WAL) -> None:
+        self._wal = wal
+        self._entries: list[dict[str, Any]] = []
+
+    def __enter__(self) -> WALWriter:
+        return self
+
+    def append(self, op: OpType, payload: dict[str, Any]) -> None:
+        self._entries.append({"op": op.value, **payload})
+
+    def __exit__(self, exc_type: Any, exc_val: Any, exc_tb: Any) -> None:
+        if self._entries and exc_type is None:
+            self._wal.batch_append(self._entries)
+        self._entries.clear()

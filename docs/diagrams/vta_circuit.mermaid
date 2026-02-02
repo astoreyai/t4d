@@ -16,7 +16,8 @@ flowchart TB
 
         subgraph Firing["Firing Modes"]
             TONIC["Tonic<br/>(3-5 Hz)"]
-            PHASIC["Phasic Burst<br/>(15-30 Hz)"]
+            PHASIC["Phasic Burst<br/>(20-40 Hz)"]
+            PHASIC_PAUSE["Phasic Pause<br/>(DA dip below baseline)<br/>Worse-than-expected"]
         end
     end
 
@@ -55,7 +56,7 @@ flowchart TB
     REWARD --> RPE
     PREDICT --> RPE
     RPE -->|"+δ→burst"| PHASIC
-    RPE -->|"-δ→pause"| TONIC
+    RPE -->|"-δ→pause"| PHASIC_PAUSE
 
     %% Outputs
     DA_NEURON --> NAC
@@ -64,7 +65,8 @@ flowchart TB
     DA_NEURON --> AMY
 
     %% Mesolimbic feedback loop (Watabe-Uchida 2012)
-    NAC -.->|"GABA feedback (planned)"| GABA_NEURON
+    NAC -->|"GABA feedback<br/>(inhibitory)"| GABA_NEURON
+    NAC -->|"D1/D2 MSN feedback"| DA_NEURON
 
     %% Effects
     NAC --> VIGOR
@@ -78,4 +80,5 @@ flowchart TB
     style RPE fill:#ffecb3,stroke:#ff8f00
     style DA_NEURON fill:#ffe0b2,stroke:#fb8c00
     style PHASIC fill:#c8e6c9,stroke:#388e3c
+    style PHASIC_PAUSE fill:#ffcdd2,stroke:#c62828
     style LR_MOD fill:#e3f2fd,stroke:#1976d2

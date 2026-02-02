@@ -15,6 +15,9 @@ from typing import Any
 
 import numpy as np
 
+from t4dm.storage.t4dx.bloom import BloomFilter
+from t4dm.storage.t4dx.csr_graph import CSRGraph
+from t4dm.storage.t4dx.hnsw import HNSWIndex
 from t4dm.storage.t4dx.types import EdgeRecord, ItemRecord, SegmentMetadata
 
 
@@ -78,6 +81,24 @@ class SegmentBuilder:
         with open(self._dir / "manifest.json", "w") as f:
             json.dump(manifest, f, separators=(",", ":"))
 
+        # Build HNSW index
+        if dim > 0:
+            hnsw = HNSWIndex(dim=dim, max_elements=max(len(items), 16))
+            byte_ids = [bytes.fromhex(h) for h in id_list]
+            hnsw.add(byte_ids, vectors)
+            hnsw.save(self._dir / "hnsw.bin")
+
+        # Build bloom filter
+        bloom = BloomFilter(capacity=max(len(items), 16))
+        for h in id_list:
+            bloom.add(bytes.fromhex(h))
+        bloom.save(self._dir / "bloom.bin")
+
+        # Build CSR graph for edge traversal
+        if edges:
+            csr = CSRGraph.from_edges(edges)
+            csr.save(self._dir / "csr_graph.npz")
+
         return meta
 
 
@@ -91,6 +112,14 @@ class SegmentReader:
         self._edges: list[dict[str, Any]] | None = None
         self._manifest: dict[str, Any] | None = None
         self._id_index: dict[str, int] | None = None
+        self._hnsw: HNSWIndex | None = None
+        self._bloom: BloomFilter | None = None
+        self._csr: CSRGraph | None = None
+
+        # Load bloom filter eagerly (small)
+        bloom_path = segment_dir / "bloom.bin"
+        if bloom_path.exists():
+            self._bloom = BloomFilter.load(bloom_path)
 
     # --- lazy loading ---
 
@@ -136,9 +165,31 @@ class SegmentReader:
             }
         return self._id_index
 
+    @property
+    def hnsw(self) -> HNSWIndex | None:
+        """Lazy-load HNSW index from disk."""
+        if self._hnsw is None:
+            hnsw_path = self._dir / "hnsw.bin"
+            dim = self.manifest.get("dim", 0)
+            if dim > 0 and (hnsw_path.exists() or hnsw_path.with_suffix(".bin.npz").exists()):
+                self._hnsw = HNSWIndex.load(hnsw_path, dim=dim)
+        return self._hnsw
+
+    @property
+    def csr(self) -> CSRGraph | None:
+        """Lazy-load CSR graph from disk."""
+        if self._csr is None:
+            csr_path = self._dir / "csr_graph.npz"
+            if csr_path.exists():
+                self._csr = CSRGraph.load(csr_path)
+        return self._csr
+
     # --- reads ---
 
     def get(self, item_id: bytes) -> ItemRecord | None:
+        # Bloom filter fast negative check
+        if self._bloom is not None and not self._bloom.might_contain(item_id):
+            return None
         hex_id = item_id.hex()
         idx = self.id_index.get(hex_id)
         if idx is None:
@@ -158,12 +209,20 @@ class SegmentReader:
         kappa_max: float | None = None,
         item_type: str | None = None,
     ) -> list[tuple[bytes, float]]:
-        """Brute-force cosine search over segment vectors."""
+        """Search segment vectors. Uses HNSW when available and no filters, else brute-force."""
         vecs = self.vectors
         if len(vecs) == 0:
             return []
 
-        # Build filter mask
+        has_filters = any(v is not None for v in (time_min, time_max, kappa_min, kappa_max, item_type))
+
+        # Use HNSW for unfiltered searches
+        if not has_filters and self.hnsw is not None and len(self.hnsw) > 0:
+            ids, dists = self.hnsw.search(query, k=k)
+            # Convert distances (1 - cosine_sim) back to similarities
+            return [(bid, 1.0 - d) for bid, d in zip(ids, dists)]
+
+        # Brute-force with filtering
         mask = np.ones(len(vecs), dtype=bool)
         items_list = self.items
 
@@ -241,6 +300,19 @@ class SegmentReader:
         edge_type: str | None = None,
         direction: str = "both",
     ) -> list[EdgeRecord]:
+        # Use CSR graph for O(degree) traversal when available
+        csr = self.csr
+        if csr is not None:
+            csr_dir = {"out": "outgoing", "in": "incoming", "both": "both"}.get(direction, "both")
+            neighbors = csr.neighbors(node_id, direction=csr_dir)
+            results = []
+            for _neighbor_id, edge in neighbors:
+                if edge_type and edge.edge_type != edge_type:
+                    continue
+                results.append(edge)
+            return results
+
+        # Fallback to linear scan over edges.json
         hex_id = node_id.hex()
         results = []
         for d in self.edges:

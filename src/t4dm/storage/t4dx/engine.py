@@ -12,11 +12,12 @@ import numpy as np
 
 from t4dm.storage.t4dx.compactor import Compactor
 from t4dm.storage.t4dx.global_index import GlobalIndex
+from t4dm.storage.t4dx.kappa_index import KappaIndex
 from t4dm.storage.t4dx.memtable import MemTable
 from t4dm.storage.t4dx.query_planner import QueryPlanner
 from t4dm.storage.t4dx.segment import SegmentReader
 from t4dm.storage.t4dx.types import EdgeRecord, ItemRecord
-from t4dm.storage.t4dx.wal import OpType, WAL
+from t4dm.storage.t4dx.wal import OpType, WAL, WALWriter
 
 logger = logging.getLogger(__name__)
 
@@ -47,7 +48,9 @@ class T4DXEngine:
         self._compactor = Compactor(
             self._data_dir, self._memtable, self._segments, self._global_index,
         )
+        self._kappa_index = KappaIndex()
         self._started = False
+        self._batch_writer: WALWriter | None = None
 
     # --- lifecycle ---
 
@@ -70,6 +73,10 @@ class T4DXEngine:
         for entry in entries:
             self._apply_wal_entry(entry)
 
+        # Load kappa index
+        ki_path = self._data_dir / "kappa_index.json"
+        self._kappa_index.load(ki_path)
+
         self._started = True
         logger.info("T4DXEngine started with %d segments", len(self._segments))
 
@@ -78,6 +85,7 @@ class T4DXEngine:
         if not self._memtable.is_empty:
             self._compactor.flush()
         self._global_index.save(self._data_dir / "global_index.json")
+        self._kappa_index.save(self._data_dir / "kappa_index.json")
         self._wal.close()
         self._started = False
         logger.info("T4DXEngine shutdown complete")
@@ -89,6 +97,7 @@ class T4DXEngine:
         with self._lock:
             self._wal.append(OpType.INSERT, {"item": record.to_dict()})
             self._memtable.insert(record)
+            self._kappa_index.add(record.id, record.kappa)
             self._maybe_flush()
 
     def get(self, item_id: bytes) -> ItemRecord | None:
@@ -124,6 +133,8 @@ class T4DXEngine:
                 "item_id": item_id.hex(), "fields": fields,
             })
             self._memtable.update_fields(item_id, fields)
+            if "kappa" in fields:
+                self._kappa_index.update(item_id, fields["kappa"])
 
     def update_edge_weight(
         self,
@@ -187,11 +198,12 @@ class T4DXEngine:
             self._wal.append(OpType.DELETE, {"item_id": item_id.hex()})
             self._memtable.delete(item_id)
             self._global_index.tombstone(item_id.hex())
+            self._kappa_index.remove(item_id)
 
     def batch_scale_weights(self, factor: float) -> None:
-        """BATCH_SCALE_WEIGHTS: scale all edge weights in memtable."""
+        """BATCH_SCALE_WEIGHTS: scale all edge weights in memtable (uses batch WAL)."""
         with self._lock:
-            self._wal.append(OpType.BATCH_SCALE_WEIGHTS, {"factor": factor})
+            self._wal_append(OpType.BATCH_SCALE_WEIGHTS, {"factor": factor})
             self._memtable.batch_scale_weights(factor)
 
     # --- edge insert (used by graph adapter) ---
@@ -211,6 +223,13 @@ class T4DXEngine:
                 "edge_type": edge_type,
             })
             self._memtable.delete_edge(source_id, target_id, edge_type)
+
+    # --- kappa queries ---
+
+    def query_by_kappa(self, kappa_min: float, kappa_max: float) -> list[bytes]:
+        """Return item IDs with kappa in [kappa_min, kappa_max] via secondary index."""
+        with self._lock:
+            return self._kappa_index.query_range(kappa_min, kappa_max)
 
     # --- compaction ---
 
@@ -233,6 +252,26 @@ class T4DXEngine:
     def prune(self, **kwargs: Any) -> int:
         with self._lock:
             return self._compactor.prune(**kwargs)
+
+    # --- batch WAL mode ---
+
+    def begin_batch(self) -> None:
+        """Start batch mode: WAL entries accumulate, fsync once at end_batch()."""
+        self._batch_writer = WALWriter(self._wal)
+        self._batch_writer.__enter__()
+
+    def end_batch(self) -> None:
+        """End batch mode and fsync all accumulated WAL entries."""
+        if self._batch_writer is not None:
+            self._batch_writer.__exit__(None, None, None)
+            self._batch_writer = None
+
+    def _wal_append(self, op: OpType, payload: dict[str, Any]) -> None:
+        """Append to WAL, respecting batch mode."""
+        if self._batch_writer is not None:
+            self._batch_writer.append(op, payload)
+        else:
+            self._wal.append(op, payload)
 
     # --- internals ---
 
