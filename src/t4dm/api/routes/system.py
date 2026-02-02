@@ -159,15 +159,13 @@ async def get_session_info(session_id: SessionId):
     """
     Get current session information.
 
-    Returns configured session ID and sanitized settings (no credentials exposed).
+    Returns configured session ID and storage backend.
     """
     settings = get_settings()
     return {
         "session_id": session_id,
         "configured_session": settings.session_id,
-        # SEC-001: Sanitize URIs to prevent credential leakage
-        "neo4j_host": _sanitize_uri(settings.neo4j_uri),
-        "qdrant_host": _sanitize_uri(settings.qdrant_url),
+        "storage_backend": "t4dx_embedded",
     }
 
 

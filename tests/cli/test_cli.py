@@ -61,15 +61,15 @@ class TestConfigCommand:
             assert config_path.exists()
             content = config_path.read_text()
             assert "session_id" in content
-            assert "qdrant_host" in content
+            assert "embedding_model" in content
 
     def test_config_show_displays_settings(self):
         """Config show displays current settings."""
         with patch("t4dm.core.config.get_settings") as mock_settings:
             mock_obj = MagicMock()
-            mock_obj.__fields__ = {"environment": None, "qdrant_host": None}
+            mock_obj.__fields__ = {"environment": None, "embedding_model": None}
             mock_obj.environment = "test"
-            mock_obj.qdrant_host = "localhost"
+            mock_obj.embedding_model = "bge-m3"
             mock_settings.return_value = mock_obj
 
             result = runner.invoke(app, ["config", "--show"])

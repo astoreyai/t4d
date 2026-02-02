@@ -1,6 +1,8 @@
 #!/bin/bash
-# World Weaver Migration Script
+# T4DM Migration Script
 # Usage: ./migrate.sh [version]
+# Note: T4DX uses embedded storage with automatic schema evolution
+# This script is a placeholder for future migration needs
 
 set -euo pipefail
 
@@ -11,33 +13,20 @@ log() {
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1"
 }
 
-if [ ! -d "$MIGRATIONS_DIR" ]; then
-    log "No migrations directory found at $MIGRATIONS_DIR"
-    exit 0
+log "T4DM Migration Script"
+log "T4DX uses embedded storage with automatic schema evolution"
+log "No manual migrations required at this time"
+
+if [ -d "$MIGRATIONS_DIR" ]; then
+    log "Checking for custom migrations in $MIGRATIONS_DIR..."
+    MIGRATION_COUNT=$(find "$MIGRATIONS_DIR" -name "*.sql" 2>/dev/null | wc -l)
+    if [ "$MIGRATION_COUNT" -gt 0 ]; then
+        log "Found $MIGRATION_COUNT custom migration(s)"
+        log "Custom migrations not yet implemented for T4DX"
+        log "Please contact the development team for assistance"
+    else
+        log "No custom migrations found"
+    fi
 fi
 
-# Get current version from Neo4j
-CURRENT=$(docker exec ww-neo4j cypher-shell -u neo4j -p "$NEO4J_PASSWORD" \
-    "MATCH (v:SchemaVersion) RETURN v.version ORDER BY v.applied DESC LIMIT 1" 2>/dev/null | tail -1 || echo "0")
-
-log "Current schema version: $CURRENT"
-
-# Apply migrations
-for migration in "$MIGRATIONS_DIR"/*.cypher; do
-    [ -f "$migration" ] || continue
-
-    MIGRATION_VERSION=$(basename "$migration" .cypher | cut -d_ -f1)
-
-    if [ "$MIGRATION_VERSION" -gt "$CURRENT" ]; then
-        log "Applying migration: $migration"
-        docker exec -i ww-neo4j cypher-shell -u neo4j -p "$NEO4J_PASSWORD" < "$migration"
-
-        # Record migration
-        docker exec ww-neo4j cypher-shell -u neo4j -p "$NEO4J_PASSWORD" \
-            "CREATE (v:SchemaVersion {version: '$MIGRATION_VERSION', applied: datetime()})"
-
-        log "Migration $MIGRATION_VERSION applied"
-    fi
-done
-
-log "Migrations complete"
+log "Migration check complete"

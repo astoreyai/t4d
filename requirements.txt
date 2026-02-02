@@ -1,4 +1,4 @@
-# World Weaver - Core Dependencies
+# T4DM - Core Dependencies
 # Install with: pip install -r requirements.txt
 
 # AI/ML
@@ -9,9 +9,8 @@ FlagEmbedding>=1.2.7
 sentence-transformers>=2.2.0
 torch>=2.0.0
 
-# Database
-neo4j>=5.0.0
-qdrant-client>=1.7.0
+# Storage (embedded T4DX engine — no external services)
+sortedcontainers>=2.4.0
 
 # Core
 pydantic>=2.0.0

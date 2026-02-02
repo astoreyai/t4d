@@ -121,10 +121,10 @@ class TestSystemDashboard:
 
             health = await dashboard.get_storage_health()
 
-            assert "qdrant_circuit_breaker" in health
-            assert "neo4j_circuit_breaker" in health
-            assert health["qdrant_circuit_breaker"]["state"] == "CLOSED"
-            assert health["neo4j_circuit_breaker"]["state"] == "CLOSED"
+            assert "t4dx_circuit_breaker" in health
+            # neo4j circuit breaker removed
+            assert health["t4dx_circuit_breaker"]["state"] == "CLOSED"
+            # removed
 
     @pytest.mark.asyncio
     async def test_get_recent_activity(self, mock_stores):

@@ -35,7 +35,7 @@ class EmbeddingProvider(Protocol):
 
 @runtime_checkable
 class VectorStore(Protocol):
-    """Protocol for vector storage providers (Qdrant, FAISS, etc.)."""
+    """Protocol for vector storage providers. Implemented by T4DX adapter."""
 
     @abstractmethod
     async def create_collection(
@@ -90,7 +90,7 @@ class VectorStore(Protocol):
 
 @runtime_checkable
 class GraphStore(Protocol):
-    """Protocol for graph storage providers (Neo4j, etc.)."""
+    """Protocol for graph storage providers. Implemented by T4DX adapter."""
 
     # Node operations
     @abstractmethod

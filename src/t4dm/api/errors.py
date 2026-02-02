@@ -11,8 +11,6 @@ logger = logging.getLogger(__name__)
 
 # Patterns to redact from error messages
 SENSITIVE_PATTERNS = [
-    # Connection strings with credentials
-    r"(bolt|neo4j)://[^@]+:[^@]+@",
     # API keys and tokens
     r"(api[_-]?key|token|secret|password|auth)\s*[:=]\s*['\"]?[a-zA-Z0-9_-]+",
     # File paths with usernames

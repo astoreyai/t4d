@@ -34,7 +34,7 @@ class StorageHook(Hook):
             name: Hook identifier
             priority: Execution priority
             enabled: Whether hook is active
-            storage_type: Filter by storage type (neo4j, qdrant, etc.)
+            storage_type: Filter by storage type (t4dx, etc.)
         """
         super().__init__(name, priority, enabled)
         self.storage_type = storage_type
@@ -65,13 +65,13 @@ class ConnectionHook(StorageHook):
         Execute connection hook.
 
         Context data (connect):
-        - input_data["storage_type"]: neo4j/qdrant
+        - input_data["storage_type"]: t4dx
         - input_data["connection_string"]: Connection URI
         - input_data["pool_size"]: Connection pool size
         - input_data["event"]: "connect" or "disconnect"
 
         Context data (disconnect):
-        - input_data["storage_type"]: neo4j/qdrant
+        - input_data["storage_type"]: t4dx
         - input_data["event"]: "disconnect"
         - input_data["reason"]: Disconnect reason
 
@@ -99,7 +99,7 @@ class QueryHook(StorageHook):
         Execute query hook.
 
         Context data (PRE):
-        - input_data["storage_type"]: neo4j/qdrant
+        - input_data["storage_type"]: t4dx
         - input_data["query"]: Query string/object
         - input_data["parameters"]: Query parameters
         - input_data["query_type"]: read/write/delete
@@ -149,7 +149,7 @@ class ErrorHook(StorageHook):
         Execute error handling hook.
 
         Context data:
-        - input_data["storage_type"]: neo4j/qdrant
+        - input_data["storage_type"]: t4dx
         - input_data["error_type"]: connection/timeout/query/unknown
         - input_data["error"]: Exception object
         - input_data["operation"]: Failed operation name
@@ -189,7 +189,7 @@ class RetryHook(StorageHook):
         Execute retry hook.
 
         Context data:
-        - input_data["storage_type"]: neo4j/qdrant
+        - input_data["storage_type"]: t4dx
         - input_data["operation"]: Operation being retried
         - input_data["attempt"]: Current attempt number
         - input_data["max_attempts"]: Maximum retry attempts

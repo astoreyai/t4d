@@ -67,4 +67,4 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
 EXPOSE 8765
 
 # Run the API server
-CMD ["python", "-m", "ww.api.server"]
+CMD ["python", "-m", "t4dm.api.server"]

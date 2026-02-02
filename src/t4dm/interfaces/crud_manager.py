@@ -232,7 +232,7 @@ class CRUDManager:
             created_from="manual",
         )
 
-        # Store via procedural memory (using internal saga logic)
+        # Store via procedural memory (using T4DX storage)
         with self.console.status("[bold green]Storing skill..."):
             # We need to store manually since create_skill expects trajectory
             # Use the vector store directly
@@ -660,7 +660,7 @@ async def main():
         domain="coding",
         steps=[
             {"order": 1, "action": "Initialize memory service", "tool": "t4dm"},
-            {"order": 2, "action": "Store memory with embedding", "tool": "qdrant"},
+            {"order": 2, "action": "Store memory with embedding", "tool": "t4dx"},
         ],
         trigger_pattern="When user wants to create a memory",
     )

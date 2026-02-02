@@ -236,20 +236,16 @@ class TestSessionEndpoint:
 
     @pytest.mark.asyncio
     async def test_session_info(self):
-        """Session info is returned with sanitized URIs (SEC-001 fix)."""
+        """Session info is returned with storage backend."""
         from t4dm.api.routes.system import get_session_info
 
         with patch("t4dm.api.routes.system.get_settings") as mock_settings:
             settings = MagicMock()
             settings.session_id = "configured-session"
-            settings.neo4j_uri = "bolt://user:password@localhost:7687"
-            settings.qdrant_url = "http://admin:secret@localhost:6333"
             mock_settings.return_value = settings
 
             result = await get_session_info(session_id="custom-session")
 
             assert result["session_id"] == "custom-session"
             assert result["configured_session"] == "configured-session"
-            # SEC-001: URIs are now sanitized - only host returned, credentials stripped
-            assert "localhost" in result["neo4j_host"]
-            assert "password" not in result["neo4j_host"]  # Credentials stripped
+            assert result["storage_backend"] == "t4dx_embedded"

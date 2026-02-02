@@ -1,5 +1,5 @@
 #!/bin/bash
-# World Weaver Restore Script
+# T4DM Restore Script
 # Usage: ./restore.sh <backup_date> [backup_dir]
 
 set -euo pipefail
@@ -11,7 +11,8 @@ if [ $# -lt 1 ]; then
 fi
 
 BACKUP_DATE="$1"
-BACKUP_DIR="${2:-/var/backups/ww}"
+BACKUP_DIR="${2:-/var/backups/t4dm}"
+T4DX_DATA_DIR="${T4DX_DATA_DIR:-/app/data/t4dx}"
 
 log() {
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1"
@@ -20,36 +21,30 @@ log() {
 log "Starting restore from $BACKUP_DATE"
 
 # Stop services
-log "Stopping World Weaver services..."
+log "Stopping T4DM services..."
 docker compose -f docker-compose.yml stop || true
 
-# Restore Neo4j
-NEO4J_BACKUP="$BACKUP_DIR/neo4j_$BACKUP_DATE.dump"
-if [ -f "$NEO4J_BACKUP" ] || [ -f "$NEO4J_BACKUP.gz" ]; then
-    [ -f "$NEO4J_BACKUP.gz" ] && gunzip -k "$NEO4J_BACKUP.gz"
-    log "Restoring Neo4j from $NEO4J_BACKUP..."
-    docker cp "$NEO4J_BACKUP" ww-neo4j:/backups/restore.dump
-    docker exec ww-neo4j neo4j-admin database load neo4j --from-path=/backups/restore.dump --overwrite-destination
-    log "Neo4j restored"
-else
-    log "WARNING: Neo4j backup not found"
-fi
+# Restore T4DX
+T4DX_BACKUP="$BACKUP_DIR/t4dx_$BACKUP_DATE.tar.gz"
+if [ -f "$T4DX_BACKUP" ] || [ -f "$T4DX_BACKUP.gz" ]; then
+    [ -f "$T4DX_BACKUP.gz" ] && gunzip -k "$T4DX_BACKUP.gz"
+    log "Restoring T4DX from $T4DX_BACKUP..."
 
-# Restore Qdrant
-QDRANT_HOST="${QDRANT_HOST:-localhost}"
-QDRANT_PORT="${QDRANT_PORT:-6333}"
-
-for collection in episodes entities procedures; do
-    SNAPSHOT="$BACKUP_DIR/qdrant_${collection}_$BACKUP_DATE.snapshot"
-    if [ -f "$SNAPSHOT" ] || [ -f "$SNAPSHOT.gz" ]; then
-        [ -f "$SNAPSHOT.gz" ] && gunzip -k "$SNAPSHOT.gz"
-        log "Restoring Qdrant $collection..."
-        curl -X POST "http://$QDRANT_HOST:$QDRANT_PORT/collections/$collection/snapshots/upload" \
-            -H "Content-Type: multipart/form-data" \
-            -F "snapshot=@$SNAPSHOT"
-        log "Qdrant $collection restored"
+    # Restore to container if running
+    if docker exec t4dm-api test -d "$T4DX_DATA_DIR" 2>/dev/null; then
+        docker cp "$T4DX_BACKUP" t4dm-api:/tmp/t4dx_restore.tar.gz
+        docker exec t4dm-api sh -c "rm -rf $T4DX_DATA_DIR/* && tar xzf /tmp/t4dx_restore.tar.gz -C $T4DX_DATA_DIR"
+        docker exec t4dm-api rm -f /tmp/t4dx_restore.tar.gz
+        log "T4DX restored to container"
+    else
+        # Restore to local directory
+        mkdir -p "$PROJECT_DIR/data/t4dx"
+        tar xzf "$T4DX_BACKUP" -C "$PROJECT_DIR/data/t4dx"
+        log "T4DX restored to local directory"
     fi
-done
+else
+    log "WARNING: T4DX backup not found"
+fi
 
 # Restart services
 log "Starting services..."

@@ -1,5 +1,5 @@
 #!/bin/bash
-# Validate environment configuration before starting World Weaver
+# Validate environment configuration before starting T4DM
 # Checks required variables, password strength, and security settings
 set -e
 
@@ -15,7 +15,7 @@ PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
 errors=0
 warnings=0
 
-echo -e "${BLUE}World Weaver Environment Validation${NC}"
+echo -e "${BLUE}T4DM Environment Validation${NC}"
 echo "===================================="
 echo
 
@@ -96,41 +96,26 @@ check_permissions() {
     return 0
 }
 
-echo "Docker Service Configuration:"
-echo "------------------------------"
-
-# Neo4j password checks
-check_required "NEO4J_PASSWORD" && check_password "NEO4J_PASSWORD"
-
-echo
 echo "Application Configuration:"
 echo "--------------------------"
 
-# Application password checks
-check_required "WW_NEO4J_PASSWORD" && check_password "WW_NEO4J_PASSWORD"
-
-# Check passwords match
-if [[ -n "$NEO4J_PASSWORD" && -n "$WW_NEO4J_PASSWORD" ]]; then
-    if [[ "$NEO4J_PASSWORD" != "$WW_NEO4J_PASSWORD" ]]; then
-        echo -e "${RED}✗ ERROR: NEO4J_PASSWORD and WW_NEO4J_PASSWORD must match${NC}"
-        ((errors++))
-    else
-        echo -e "${GREEN}✓ Neo4j passwords match${NC}"
-    fi
+# Database password check
+if check_required "T4DM_DATABASE_PASSWORD"; then
+    check_password "T4DM_DATABASE_PASSWORD"
 fi
 
 # Check required app variables
 echo
-if check_required "WW_SESSION_ID"; then
-    echo -e "${GREEN}✓ WW_SESSION_ID: $WW_SESSION_ID${NC}"
+if check_required "T4DM_SESSION_ID"; then
+    echo -e "${GREEN}✓ T4DM_SESSION_ID: $T4DM_SESSION_ID${NC}"
 fi
 
-if check_required "WW_NEO4J_URI"; then
-    echo -e "${GREEN}✓ WW_NEO4J_URI: $WW_NEO4J_URI${NC}"
-fi
-
-if check_required "WW_QDRANT_URL"; then
-    echo -e "${GREEN}✓ WW_QDRANT_URL: $WW_QDRANT_URL${NC}"
+# Check T4DX data directory setting
+if [[ -n "${T4DX_DATA_DIR:-}" ]]; then
+    echo -e "${GREEN}✓ T4DX_DATA_DIR: $T4DX_DATA_DIR${NC}"
+else
+    echo -e "${YELLOW}⚠ WARNING: T4DX_DATA_DIR not set, using default${NC}"
+    ((warnings++))
 fi
 
 echo
@@ -141,30 +126,22 @@ echo "------------------"
 check_permissions "$PROJECT_DIR/.env" "600"
 
 # Production environment checks
-if [[ "$WW_ENVIRONMENT" == "production" ]]; then
+if [[ "$T4DM_ENVIRONMENT" == "production" ]]; then
     echo
     echo -e "${YELLOW}Production Environment Detected${NC}"
     echo "-------------------------------"
 
-    if [[ -z "$QDRANT_API_KEY" ]]; then
-        echo -e "${YELLOW}⚠ WARNING: QDRANT_API_KEY not set in production${NC}"
-        echo "  Recommended: Set QDRANT_API_KEY for production deployments"
-        ((warnings++))
-    else
-        echo -e "${GREEN}✓ Qdrant API key configured${NC}"
-    fi
-
-    if [[ "$WW_OTEL_INSECURE" == "true" ]]; then
+    if [[ "$T4DM_OTEL_INSECURE" == "true" ]]; then
         echo -e "${YELLOW}⚠ WARNING: OTEL insecure mode enabled in production${NC}"
-        echo "  Recommended: Set WW_OTEL_INSECURE=false"
+        echo "  Recommended: Set T4DM_OTEL_INSECURE=false"
         ((warnings++))
     fi
 
     # Check if ports are bound to localhost in docker-compose
-    if grep -q '"7474:7474"' "$PROJECT_DIR/docker-compose.yml" 2>/dev/null; then
+    if grep -q '"8765:8765"' "$PROJECT_DIR/docker-compose.yml" 2>/dev/null; then
         echo -e "${YELLOW}⚠ WARNING: Docker ports not bound to localhost${NC}"
         echo "  Security risk: Services exposed to network"
-        echo "  Recommended: Use '127.0.0.1:7474:7474' in docker-compose.yml"
+        echo "  Recommended: Use '127.0.0.1:8765:8765' in docker-compose.yml"
         ((warnings++))
     fi
 fi
@@ -173,15 +150,6 @@ fi
 echo
 if [[ -f "$PROJECT_DIR/docker-compose.yml" ]]; then
     echo -e "${GREEN}✓ docker-compose.yml found${NC}"
-
-    # Verify no hardcoded passwords
-    if grep -q "NEO4J_AUTH=neo4j/[^$]" "$PROJECT_DIR/docker-compose.yml" 2>/dev/null; then
-        echo -e "${RED}✗ ERROR: Hardcoded password found in docker-compose.yml${NC}"
-        echo "  Security risk: Password should use environment variables"
-        ((errors++))
-    else
-        echo -e "${GREEN}✓ No hardcoded passwords in docker-compose.yml${NC}"
-    fi
 else
     echo -e "${YELLOW}⚠ WARNING: docker-compose.yml not found${NC}"
     ((warnings++))

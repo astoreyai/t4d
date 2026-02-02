@@ -1,7 +1,7 @@
 version: '3.8'
 
-# World Weaver Full Stack Deployment
-# Includes: Neo4j, Qdrant, WW API Server
+# T4DM Full Stack Deployment
+# All storage is handled by the embedded T4DX engine (no external databases required)
 #
 # Quick Start:
 #   1. cp .env.example .env && ./scripts/setup-env.sh
@@ -9,110 +9,48 @@ version: '3.8'
 #   3. Access API at http://localhost:8765/docs
 #
 # For production, set:
-#   - Strong passwords in .env
-#   - WW_ENVIRONMENT=production
+#   - T4DM_ENVIRONMENT=production
 #   - Configure TLS certificates
 
 services:
   # ==========================================================================
-  # Storage Layer
+  # T4DM API Server
   # ==========================================================================
 
-  neo4j:
-    image: neo4j:5-community
-    container_name: ww-neo4j
-    ports:
-      - "127.0.0.1:7474:7474"
-      - "127.0.0.1:7687:7687"
-    environment:
-      - NEO4J_AUTH=${NEO4J_USER:-neo4j}/${NEO4J_PASSWORD:?NEO4J_PASSWORD required}
-      - NEO4J_PLUGINS=["apoc"]
-      - NEO4J_dbms_security_procedures_unrestricted=apoc.*
-      - NEO4J_dbms_memory_heap_initial__size=512m
-      - NEO4J_dbms_memory_heap_max__size=2G
-      - NEO4J_dbms_memory_pagecache_size=1G
-      - NEO4J_dbms_security_auth__enabled=true
-    volumes:
-      - ww_neo4j_data:/data
-      - ww_neo4j_logs:/logs
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:7474"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 30s
-    restart: unless-stopped
-    networks:
-      - ww-internal
-
-  qdrant:
-    image: qdrant/qdrant:v1.12.1
-    container_name: ww-qdrant
-    ports:
-      - "127.0.0.1:6333:6333"
-      - "127.0.0.1:6334:6334"
-    volumes:
-      - ww_qdrant_storage:/qdrant/storage
-    environment:
-      - QDRANT__SERVICE__GRPC_PORT=6334
-      - QDRANT__STORAGE__STORAGE_PATH=/qdrant/storage
-      - QDRANT__LOG_LEVEL=${QDRANT_LOG_LEVEL:-INFO}
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:6333/readyz"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 10s
-    restart: unless-stopped
-    networks:
-      - ww-internal
-
-  # ==========================================================================
-  # World Weaver API Server
-  # ==========================================================================
-
-  ww-api:
+  t4dm-api:
     build:
       context: .
       dockerfile: Dockerfile
-    image: world-weaver:latest
-    container_name: ww-api
+    image: t4dm:latest
+    container_name: t4dm-api
     ports:
-      - "${WW_API_PORT:-8765}:8765"
+      - "${T4DM_API_PORT:-8765}:8765"
     environment:
       # Session
-      - WW_SESSION_ID=${WW_SESSION_ID:-default}
-      # Neo4j connection (internal network)
-      - WW_NEO4J_URI=bolt://neo4j:7687
-      - WW_NEO4J_USER=${NEO4J_USER:-neo4j}
-      - WW_NEO4J_PASSWORD=${NEO4J_PASSWORD}
-      - WW_NEO4J_DATABASE=${WW_NEO4J_DATABASE:-neo4j}
-      # Qdrant connection (internal network)
-      - WW_QDRANT_URL=http://qdrant:6333
+      - T4DM_SESSION_ID=${T4DM_SESSION_ID:-default}
       # Embedding model
-      - WW_EMBEDDING_MODEL=${WW_EMBEDDING_MODEL:-BAAI/bge-m3}
-      - WW_EMBEDDING_DIMENSION=${WW_EMBEDDING_DIMENSION:-1024}
-      - WW_EMBEDDING_DEVICE=${WW_EMBEDDING_DEVICE:-cpu}
-      - WW_EMBEDDING_CACHE_DIR=/app/models
+      - T4DM_EMBEDDING_MODEL=${T4DM_EMBEDDING_MODEL:-BAAI/bge-m3}
+      - T4DM_EMBEDDING_DIMENSION=${T4DM_EMBEDDING_DIMENSION:-1024}
+      - T4DM_EMBEDDING_DEVICE=${T4DM_EMBEDDING_DEVICE:-cpu}
+      - T4DM_EMBEDDING_CACHE_DIR=/app/models
       # API settings
-      - WW_API_HOST=0.0.0.0
-      - WW_API_PORT=8765
-      - WW_API_WORKERS=${WW_API_WORKERS:-1}
+      - T4DM_API_HOST=0.0.0.0
+      - T4DM_API_PORT=8765
+      - T4DM_API_WORKERS=${T4DM_API_WORKERS:-1}
       # Memory parameters
-      - WW_FSRS_DEFAULT_STABILITY=${WW_FSRS_DEFAULT_STABILITY:-1.0}
-      - WW_FSRS_RETENTION_TARGET=${WW_FSRS_RETENTION_TARGET:-0.9}
-      - WW_HEBBIAN_LEARNING_RATE=${WW_HEBBIAN_LEARNING_RATE:-0.1}
+      - T4DM_FSRS_DEFAULT_STABILITY=${T4DM_FSRS_DEFAULT_STABILITY:-1.0}
+      - T4DM_FSRS_RETENTION_TARGET=${T4DM_FSRS_RETENTION_TARGET:-0.9}
+      - T4DM_HEBBIAN_LEARNING_RATE=${T4DM_HEBBIAN_LEARNING_RATE:-0.1}
+      # T4DX storage (embedded)
+      - T4DX_DATA_DIR=/app/data/t4dx
       # Observability
-      - WW_OTEL_ENABLED=${WW_OTEL_ENABLED:-false}
-      - WW_OTEL_ENDPOINT=${WW_OTEL_ENDPOINT:-}
+      - T4DM_OTEL_ENABLED=${T4DM_OTEL_ENABLED:-false}
+      - T4DM_OTEL_ENDPOINT=${T4DM_OTEL_ENDPOINT:-}
     volumes:
       # Persist downloaded models
-      - ww_models:/app/models
-    depends_on:
-      neo4j:
-        condition: service_healthy
-      qdrant:
-        condition: service_healthy
+      - t4dm_models:/app/models
+      # Persist T4DX data
+      - t4dx_data:/app/data
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8765/api/v1/health"]
       interval: 30s
@@ -121,21 +59,16 @@ services:
       start_period: 120s  # Model loading can take time
     restart: unless-stopped
     networks:
-      - ww-internal
-      - ww-external
+      - t4dm-network
 
 # ==========================================================================
 # Volumes
 # ==========================================================================
 
 volumes:
-  ww_neo4j_data:
+  t4dm_models:
     driver: local
-  ww_neo4j_logs:
-    driver: local
-  ww_qdrant_storage:
-    driver: local
-  ww_models:
+  t4dx_data:
     driver: local
 
 # ==========================================================================
@@ -143,9 +76,5 @@ volumes:
 # ==========================================================================
 
 networks:
-  ww-internal:
-    # Internal network for service communication
-    internal: true
-  ww-external:
-    # External network for API access
-    name: ww-network
+  t4dm-network:
+    name: t4dm-network

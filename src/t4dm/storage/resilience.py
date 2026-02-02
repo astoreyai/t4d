@@ -92,11 +92,11 @@ class CircuitBreaker:
     - HALF_OPEN: Testing recovery with limited requests
 
     Example:
-        cb = CircuitBreaker("qdrant", config=CircuitBreakerConfig(failure_threshold=5))
+        cb = CircuitBreaker("t4dx", config=CircuitBreakerConfig(failure_threshold=5))
 
         @cb.protect
-        async def query_qdrant():
-            return await client.search(...)
+        async def query_t4dx():
+            return await storage.search(...)
     """
 
     def __init__(
@@ -108,7 +108,7 @@ class CircuitBreaker:
         Initialize circuit breaker.
 
         Args:
-            name: Identifier for this circuit (e.g., "qdrant", "neo4j")
+            name: Identifier for this circuit (e.g., "t4dx")
             config: Circuit breaker configuration
         """
         self.name = name
@@ -516,11 +516,11 @@ class GracefulDegradation:
     queue to provide resilient storage access.
 
     Usage:
-        gd = GracefulDegradation("qdrant")
+        gd = GracefulDegradation("t4dx")
 
         # Attempt operation with fallback
         result = await gd.execute_with_fallback(
-            primary_func=lambda: qdrant.search(...),
+            primary_func=lambda: storage.search(...),
             fallback_func=lambda: fallback.get("searches", query_hash),
             write_through=True
         )

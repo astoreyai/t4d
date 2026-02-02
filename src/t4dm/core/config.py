@@ -353,57 +353,8 @@ class Settings(BaseSettings):
                     "Required for production. Generate with: openssl rand -hex 32",
     )
 
-    # Neo4j Configuration
-    neo4j_uri: str = Field(
-        default="bolt://localhost:7687",
-        description="Neo4j bolt connection URI",
-    )
-    neo4j_user: str = Field(
-        default="neo4j",
-        description="Neo4j username",
-    )
-    neo4j_password: str = Field(
-        default="",
-        description="Neo4j password (required, min 8 chars, must be strong)",
-    )
-    neo4j_database: str = Field(
-        default="neo4j",
-        description="Neo4j database name",
-    )
-    neo4j_pool_size: int = Field(
-        default=50,
-        description="Maximum size of Neo4j connection pool",
-    )
-    neo4j_connection_timeout: float = Field(
-        default=30.0,
-        description="Connection timeout in seconds",
-    )
-    neo4j_connection_lifetime: float = Field(
-        default=3600.0,
-        description="Maximum connection lifetime in seconds",
-    )
-
-    # Qdrant Configuration
-    qdrant_url: str = Field(
-        default="http://localhost:6333",
-        description="Qdrant REST API URL",
-    )
-    qdrant_api_key: str | None = Field(
-        default=None,
-        description="Qdrant API key (recommended for production)",
-    )
-    qdrant_collection_episodes: str = Field(
-        default="ww_episodes",
-        description="Collection name for episodic memory",
-    )
-    qdrant_collection_entities: str = Field(
-        default="ww_entities",
-        description="Collection name for semantic entities",
-    )
-    qdrant_collection_procedures: str = Field(
-        default="ww_procedures",
-        description="Collection name for procedural memory",
-    )
+    # Legacy configuration fields (removed - T4DX embedded storage used)
+    # These fields are kept for backwards compatibility but are no longer used
 
     # Embedding Configuration
     embedding_model: str = Field(
@@ -997,26 +948,6 @@ class Settings(BaseSettings):
             raise ValueError(f"environment must be one of: {valid}")
         return v.lower()
 
-    @field_validator("neo4j_password")
-    @classmethod
-    def validate_neo4j_password(cls, v: str) -> str:
-        """Validate Neo4j password strength (legacy - Neo4j removed)."""
-        # Neo4j is removed; always accept any value
-        return v or ""
-
-    @field_validator("qdrant_api_key")
-    @classmethod
-    def warn_missing_qdrant_key(cls, v: str | None) -> str | None:
-        """Warn if Qdrant API key not set in production."""
-        env = os.getenv("T4DM_ENVIRONMENT", "development")
-
-        if env == "production" and not v:
-            logger.warning(
-                "QDRANT_API_KEY not set in production environment. "
-                "Consider enabling Qdrant authentication."
-            )
-
-        return v
 
     @model_validator(mode="after")
     def validate_all_weights_sum(self) -> "Settings":
@@ -1067,9 +998,6 @@ class Settings(BaseSettings):
 
             if self.otel_insecure:
                 issues.append("OTEL insecure mode enabled in production")
-
-            if not self.qdrant_api_key:
-                issues.append("Qdrant API key not configured")
 
             if issues:
                 logger.warning(
@@ -1129,8 +1057,8 @@ class Settings(BaseSettings):
 
         # Mask all password/secret fields
         secret_fields = [
-            "neo4j_password",
-            "qdrant_api_key",
+            "api_key",
+            "admin_api_key",
         ]
 
         for field in secret_fields:
@@ -1141,18 +1069,9 @@ class Settings(BaseSettings):
 
     def log_config_info(self) -> None:
         """Log configuration with secrets masked."""
-        logger.info("World Weaver Configuration:")
+        logger.info("T4DM Configuration:")
         logger.info(f"  Environment: {self.environment}")
         logger.info(f"  Session ID: {self.session_id}")
-        logger.info(f"  Neo4j URI: {self.neo4j_uri}")
-        logger.info(f"  Neo4j User: {self.neo4j_user}")
-        logger.info(f"  Neo4j Password: {mask_secret(self.neo4j_password)}")
-        logger.info(f"  Neo4j Database: {self.neo4j_database}")
-        logger.info(f"  Qdrant URL: {self.qdrant_url}")
-        if self.qdrant_api_key:
-            logger.info(f"  Qdrant API Key: {mask_secret(self.qdrant_api_key)}")
-        else:
-            logger.info("  Qdrant API Key: (not set)")
         logger.info(f"  Embedding Model: {self.embedding_model}")
         logger.info(f"  Embedding Device: {self.embedding_device}")
         logger.info("  Retrieval Weights:")
@@ -1278,12 +1197,6 @@ def load_settings_from_yaml(config_path: Path | str | None = None) -> Settings:
         # ~/.ww/config.yaml
         session_id: my-session
         environment: development
-
-        # Database
-        qdrant_url: http://localhost:6333
-        neo4j_uri: bolt://localhost:7687
-        neo4j_user: neo4j
-        neo4j_password: my-secure-password123!
 
         # Embedding
         embedding_model: bge-m3

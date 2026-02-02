@@ -114,20 +114,12 @@ class SystemDashboard:
         """Check storage backend health."""
         health = {}
 
-        # Qdrant circuit breaker state
+        # T4DX circuit breaker state
         cb = self.vector_store.circuit_breaker
-        health["qdrant_circuit_breaker"] = {
+        health["t4dx_circuit_breaker"] = {
             "state": cb.state.name,
             "failures": cb.failure_count,
             "successes": cb.success_count,
-        }
-
-        # Neo4j circuit breaker state
-        neo_cb = self.graph_store.circuit_breaker
-        health["neo4j_circuit_breaker"] = {
-            "state": neo_cb.state.name,
-            "failures": neo_cb.failure_count,
-            "successes": neo_cb.success_count,
         }
 
         return health
@@ -272,13 +264,9 @@ class SystemDashboard:
         left_table.add_row("Skills", f"{counts['skills']:,}")
 
         left_table.add_section()
-        qdrant_state = health["qdrant_circuit_breaker"]["state"]
-        qdrant_color = "green" if qdrant_state == "CLOSED" else "red"
-        left_table.add_row("Qdrant Circuit", f"[{qdrant_color}]{qdrant_state}[/{qdrant_color}]")
-
-        neo_state = health["neo4j_circuit_breaker"]["state"]
-        neo_color = "green" if neo_state == "CLOSED" else "red"
-        left_table.add_row("Neo4j Circuit", f"[{neo_color}]{neo_state}[/{neo_color}]")
+        t4dx_state = health["t4dx_circuit_breaker"]["state"]
+        t4dx_color = "green" if t4dx_state == "CLOSED" else "red"
+        left_table.add_row("T4DX Circuit", f"[{t4dx_color}]{t4dx_state}[/{t4dx_color}]")
 
         left_table.add_section()
         left_table.add_row("Avg Retrievability", f"{stats['avg_retrievability']:.2%}")
@@ -361,20 +349,12 @@ class SystemDashboard:
         health_table.add_column("Failures", justify="right", style="red")
         health_table.add_column("Successes", justify="right", style="green")
 
-        qdrant = health["qdrant_circuit_breaker"]
+        t4dx = health["t4dx_circuit_breaker"]
         health_table.add_row(
-            "Qdrant",
-            qdrant["state"],
-            str(qdrant["failures"]),
-            str(qdrant["successes"]),
-        )
-
-        neo = health["neo4j_circuit_breaker"]
-        health_table.add_row(
-            "Neo4j",
-            neo["state"],
-            str(neo["failures"]),
-            str(neo["successes"]),
+            "T4DX",
+            t4dx["state"],
+            str(t4dx["failures"]),
+            str(t4dx["successes"]),
         )
 
         self.console.print(health_table)

@@ -233,8 +233,7 @@ def status():
 
     table.add_row("Session ID", get_session_id())
     table.add_row("Environment", settings.environment)
-    table.add_row("Qdrant Host", settings.qdrant_host)
-    table.add_row("Neo4j URI", settings.neo4j_uri or "Not configured")
+    table.add_row("Storage Backend", "T4DX (embedded)")
     table.add_row("Embedding Model", settings.embedding_model)
 
     console.print(table)
@@ -408,17 +407,11 @@ def config(
         config_path = path or Path.home() / ".ww" / "config.yaml"
         config_path.parent.mkdir(parents=True, exist_ok=True)
 
-        default_config = """# World Weaver Configuration
+        default_config = """# T4DM Configuration
 session_id: default
 environment: development
 
-# Storage
-qdrant_host: localhost
-qdrant_port: 6333
-
-# neo4j_uri: bolt://localhost:7687
-# neo4j_user: neo4j
-# neo4j_password: password
+# Storage: T4DX embedded engine (no external services needed)
 
 # Embedding
 embedding_model: bge-m3

@@ -266,7 +266,6 @@ class TestSettingsValidation:
     def test_custom_valid_weights(self):
         """Test custom valid weights."""
         settings = Settings(
-            neo4j_password="ValidP@ss123!x",  # 14 chars, 4 classes
             retrieval_semantic_weight=0.5,
             retrieval_recency_weight=0.3,
             retrieval_outcome_weight=0.1,
@@ -278,7 +277,6 @@ class TestSettingsValidation:
         """Test that invalid weight sum raises error."""
         with pytest.raises(ValueError, match="must sum to 1.0"):
             Settings(
-                neo4j_password="ValidP@ss123!x",  # 14 chars, 4 classes
                 episodic_weight_semantic=0.5,
                 episodic_weight_recency=0.3,
                 episodic_weight_outcome=0.1,
@@ -289,7 +287,6 @@ class TestSettingsValidation:
         """Test that negative weight raises error."""
         with pytest.raises(ValidationError):
             Settings(
-                neo4j_password="ValidP@ss123!x",  # 14 chars, 4 classes
                 episodic_weight_semantic=-0.1,
                 episodic_weight_recency=0.5,
                 episodic_weight_outcome=0.3,
@@ -300,7 +297,6 @@ class TestSettingsValidation:
         """Test that weight above 1 raises error."""
         with pytest.raises(ValidationError):
             Settings(
-                neo4j_password="ValidP@ss123!x",  # 14 chars, 4 classes
                 episodic_weight_semantic=1.5,
                 episodic_weight_recency=0.0,
                 episodic_weight_outcome=0.0,
@@ -339,23 +335,23 @@ class TestSettingsSecurityMethods:
 
     def test_load_with_masking(self, caplog):
         """Test loading field with masking."""
-        settings = Settings(neo4j_password="S3cret@123!x")  # 12 chars, 4 classes
+        settings = Settings(api_key="S3cret@123!x")
 
         with caplog.at_level(logging.DEBUG):
-            result = settings._load_with_masking("neo4j_password")
+            result = settings._load_with_masking("api_key")
 
         assert result == "S3cret@123!x"
         assert len(caplog.records) == 1
-        assert "neo4j_password" in caplog.records[0].message
+        assert "api_key" in caplog.records[0].message
         # S3cret@123!x is 12 chars, first 4 shown = 8 asterisks
         assert "S3cr********" in caplog.records[0].message
 
     def test_log_safe_config(self):
         """Test safe configuration dict with masked secrets."""
         settings = Settings(
-            session_id="default",  # Explicit value to test
-            neo4j_password="MyS3cur3P@ss!x",  # 14 chars, 4 classes
-            qdrant_api_key="sk-12345678",
+            session_id="default",
+            api_key="MyS3cur3P@ss!x",
+            admin_api_key="sk-12345678",
         )
 
         safe_config = settings.log_safe_config()
@@ -364,52 +360,37 @@ class TestSettingsSecurityMethods:
         assert "MyS3cur3P@ss!x" not in str(safe_config)
         assert "sk-12345678" not in str(safe_config)
         # MyS3cur3P@ss!x is 14 chars, first 4 shown = 10 asterisks
-        assert safe_config["neo4j_password"] == "MyS3**********"
+        assert safe_config["api_key"] == "MyS3**********"
         # sk-12345678 is 11 chars, first 4 shown = 7 asterisks
-        assert safe_config["qdrant_api_key"] == "sk-1*******"
+        assert safe_config["admin_api_key"] == "sk-1*******"
 
         # Check that non-secrets are present
         assert safe_config["session_id"] == "default"
-        assert safe_config["neo4j_uri"] == "bolt://localhost:7687"
-        assert safe_config["neo4j_user"] == "neo4j"
-        assert safe_config["neo4j_database"] == "neo4j"
-        assert safe_config["qdrant_url"] == "http://localhost:6333"
 
     def test_log_safe_config_no_api_key(self):
         """Test safe logging when API key not set."""
         settings = Settings(
-            neo4j_password="MyS3cur3P@ss!x",  # 14 chars, 4 classes
-            qdrant_api_key=None,
+            api_key=None,
         )
 
         safe_config = settings.log_safe_config()
 
         # API key should be None in output
-        assert safe_config["qdrant_api_key"] is None
+        assert safe_config["api_key"] is None
 
     def test_log_config_info(self, caplog):
         """Test log_config_info method for logging."""
         settings = Settings(
-            session_id="default",  # Explicit value to test
-            neo4j_password="MyS3cur3P@ss!x",  # 14 chars, 4 classes
-            qdrant_api_key="sk-12345678",
+            session_id="default",
         )
 
         with caplog.at_level(logging.INFO):
             settings.log_config_info()
 
-        # Convert all log messages to single string for easier checking
         log_output = "\n".join([r.message for r in caplog.records])
-
-        # Check that secrets are masked
-        assert "MyS3cur3P@ss!x" not in log_output
-        assert "sk-12345678" not in log_output
 
         # Check that non-secrets are present
         assert "default" in log_output  # session_id
-        assert "bolt://localhost:7687" in log_output
-        assert "neo4j" in log_output  # username and database
-        assert "http://localhost:6333" in log_output
 
         # Check weights are logged
         assert "0.4" in log_output  # semantic weight
@@ -442,20 +423,17 @@ class TestSettingsSecurityMethods:
 class TestEnvironmentOverrides:
     """Test environment variable overrides with masking."""
 
-    def test_neo4j_password_override(self):
-        """Test Neo4j password override from environment."""
-        with patch.dict(os.environ, {"T4DM_NEO4J_PASSWORD": "Env@P4ssw0rd!x"}):  # 14 chars
+    def test_api_key_override(self):
+        """Test API key override from environment."""
+        with patch.dict(os.environ, {"T4DM_API_KEY": "env_api_key"}):
             settings = Settings()
-            assert settings.neo4j_password == "Env@P4ssw0rd!x"
+            assert settings.api_key == "env_api_key"
 
-    def test_qdrant_api_key_override(self):
-        """Test Qdrant API key override from environment."""
-        with patch.dict(os.environ, {
-            "T4DM_NEO4J_PASSWORD": "ValidP@ss123!x",  # 14 chars, 4 classes
-            "T4DM_QDRANT_API_KEY": "env_api_key",
-        }):
+    def test_admin_api_key_override(self):
+        """Test admin API key override from environment."""
+        with patch.dict(os.environ, {"T4DM_ADMIN_API_KEY": "env_admin_key"}):
             settings = Settings()
-            assert settings.qdrant_api_key == "env_api_key"
+            assert settings.admin_api_key == "env_admin_key"
 
     def test_weights_override_validation(self):
         """Test that weight overrides are validated."""

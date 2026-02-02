@@ -1,5 +1,5 @@
 #!/bin/bash
-# Setup script for World Weaver environment
+# Setup script for T4DM environment
 # Generates secure passwords and creates .env from template
 set -e
 
@@ -8,7 +8,7 @@ PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
 ENV_FILE="$PROJECT_DIR/.env"
 ENV_EXAMPLE="$PROJECT_DIR/.env.example"
 
-echo "World Weaver Environment Setup"
+echo "T4DM Environment Setup"
 echo "=============================="
 echo
 
@@ -44,21 +44,11 @@ generate_password() {
 }
 
 echo
-echo "Generating secure Neo4j password..."
-NEO4J_PASS=$(generate_password)
+echo "Generating secure database password..."
+DB_PASS=$(generate_password)
 
-# Update .env with generated password (both locations)
-sed -i "s/^NEO4J_PASSWORD=.*/NEO4J_PASSWORD=$NEO4J_PASS/" "$ENV_FILE"
-sed -i "s/^WW_NEO4J_PASSWORD=.*/WW_NEO4J_PASSWORD=$NEO4J_PASS/" "$ENV_FILE"
-
-# Optional: Generate Qdrant API key for production
-read -p "Generate Qdrant API key for production? (y/N): " gen_qdrant
-if [[ "$gen_qdrant" =~ ^[Yy]$ ]]; then
-    QDRANT_KEY=$(generate_password)
-    sed -i "s/^# QDRANT_API_KEY=.*/QDRANT_API_KEY=$QDRANT_KEY/" "$ENV_FILE"
-    sed -i "s/^# WW_QDRANT_API_KEY=.*/WW_QDRANT_API_KEY=$QDRANT_KEY/" "$ENV_FILE"
-    echo "Qdrant API key: $QDRANT_KEY"
-fi
+# Update .env with generated password
+sed -i "s/^T4DM_DATABASE_PASSWORD=.*/T4DM_DATABASE_PASSWORD=$DB_PASS/" "$ENV_FILE" 2>/dev/null || true
 
 # Set secure permissions (owner read/write only)
 chmod 600 "$ENV_FILE"
@@ -68,9 +58,9 @@ echo "=================================="
 echo "Environment configured successfully!"
 echo "=================================="
 echo
-echo "Neo4j Credentials:"
-echo "  User:     neo4j"
-echo "  Password: $NEO4J_PASS"
+echo "Database Credentials:"
+echo "  User:     t4dm"
+echo "  Password: $DB_PASS"
 echo
 echo "IMPORTANT: Save these credentials securely!"
 echo "File permissions set to 600 (owner-only read/write)"

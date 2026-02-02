@@ -386,7 +386,7 @@ class TestNTStateManagerDynamics:
 
         # Run multiple times to check variance
         values = []
-        for _ in range(5):
+        for _ in range(15):
             manager = NTStateManager()
             manager._state.levels.dopamine = 0.5
             manager._last_update = datetime.now() - timedelta(seconds=1)
@@ -872,7 +872,7 @@ class TestNTStateManagerIntegration:
         initial_da = manager._state.levels.dopamine
 
         # Simulate decay over time
-        for _ in range(5):
+        for _ in range(15):
             manager._last_update = datetime.now() - timedelta(seconds=0.3)
             manager._update_dynamics()
 

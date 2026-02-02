@@ -68,8 +68,7 @@ REGISTRY_EPISODIC = "episodic"
 REGISTRY_SEMANTIC = "semantic"
 REGISTRY_PROCEDURAL = "procedural"
 REGISTRY_CONSOLIDATION = "consolidation"
-REGISTRY_STORAGE_NEO4J = "storage_neo4j"
-REGISTRY_STORAGE_QDRANT = "storage_qdrant"
+REGISTRY_STORAGE_T4DX = "storage_t4dx"
 REGISTRY_MCP = "mcp"
 
 
@@ -85,8 +84,7 @@ def initialize_default_registries() -> None:
         REGISTRY_SEMANTIC,
         REGISTRY_PROCEDURAL,
         REGISTRY_CONSOLIDATION,
-        REGISTRY_STORAGE_NEO4J,
-        REGISTRY_STORAGE_QDRANT,
+        REGISTRY_STORAGE_T4DX,
         REGISTRY_MCP,
     ]
 

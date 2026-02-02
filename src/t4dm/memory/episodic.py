@@ -55,6 +55,7 @@ class EpisodicMemory:
     Stores autobiographical events with temporal-spatial context.
     Implements FSRS-based decay and recency-weighted retrieval.
     Supports hybrid search (dense + sparse vectors) for improved recall.
+    Uses T4DX embedded storage engine for vector and graph operations.
     """
 
     def __init__(self, session_id: str | None = None):

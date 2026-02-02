@@ -1,4 +1,4 @@
-# World Weaver Consolidation Worker
+# T4DM Consolidation Worker
 # Multi-stage build for minimal production image
 
 # Build stage
@@ -30,7 +30,7 @@ FROM python:3.11-slim as production
 WORKDIR /app
 
 # Create non-root user for security
-RUN groupadd -r ww && useradd -r -g ww ww
+RUN groupadd -r t4dm && useradd -r -g t4dm t4dm
 
 # Install runtime dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -46,21 +46,21 @@ COPY --from=builder /app/src ./src
 COPY --from=builder /app/pyproject.toml ./
 
 # Create directories for models and data
-RUN mkdir -p /app/models /app/data /var/ww/archive && \
-    chown -R ww:ww /app /var/ww
+RUN mkdir -p /app/models /app/data /var/t4dm/archive && \
+    chown -R t4dm:t4dm /app /var/t4dm
 
 # Switch to non-root user
-USER ww
+USER t4dm
 
 # Environment configuration
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
-    WW_WORKER_MODE=consolidation \
-    WW_EMBEDDING_CACHE_DIR=/app/models
+    T4DM_WORKER_MODE=consolidation \
+    T4DM_EMBEDDING_CACHE_DIR=/app/models
 
 # Health check (worker has different health endpoint)
 HEALTHCHECK --interval=60s --timeout=10s --start-period=120s --retries=3 \
-    CMD python -c "from ww.consolidation import get_consolidation_service; s = get_consolidation_service(); print('healthy' if s else 'unhealthy')" || exit 1
+    CMD python -c "from t4dm.consolidation import get_consolidation_service; s = get_consolidation_service(); print('healthy' if s else 'unhealthy')" || exit 1
 
 # Run the consolidation worker
-CMD ["python", "-m", "ww.consolidation.worker"]
+CMD ["python", "-m", "t4dm.consolidation.worker"]
