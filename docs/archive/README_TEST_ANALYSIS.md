@@ -1,4 +1,4 @@
-# World Weaver: Complete Test Coverage Analysis
+# T4DM: Complete Test Coverage Analysis
 
 **Analysis Date**: 2025-11-27  
 **Status**: Complete and Ready for Review  
@@ -162,7 +162,7 @@ Estimated Effort:          40-50 hours
 ### Coverage Gaps (Fix This Week)
 
 **CRITICAL (0-50% coverage)**:
-- `neo4j_store.py` - 39% (Add 25-30 tests)
+- `t4dx_graph_adapter.py` - 39% (Add 25-30 tests)
 - `unified.py` - 18% (Add 35-40 tests)
 - `mcp/tools/system.py` - 33% (Add 15-20 tests)
 
@@ -170,7 +170,7 @@ Estimated Effort:          40-50 hours
 - `mcp/tools/semantic.py` - 46% (Add 12-15 tests)
 - `mcp/tools/episodic.py` - 49% (Add 15-20 tests)
 - `mcp/tools/procedural.py` - 53% (Add 10-15 tests)
-- `qdrant_store.py` - 62% (Add 15-20 tests)
+- `t4dx_vector_adapter.py` - 62% (Add 15-20 tests)
 - `consolidation/service.py` - 69% (Add 10-15 tests)
 
 **Total New Tests Needed**: 120+ tests across 8 modules

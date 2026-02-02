@@ -1,10 +1,10 @@
 # Brain Region Mapping
 
-This document maps World Weaver components to their biological counterparts in the brain.
+This document maps T4DM components to their biological counterparts in the brain.
 
 ## Overview
 
-World Weaver's architecture is informed by cognitive neuroscience research on memory systems, learning, and neural dynamics.
+T4DM's architecture is informed by cognitive neuroscience research on memory systems, learning, and neural dynamics.
 
 ```mermaid
 graph TB
@@ -101,7 +101,7 @@ graph TB
     style PAUSE fill:#ffebee
 ```
 
-**WW Implementation**: `ww.nca.VTACircuit`
+**WW Implementation**: `t4dm.nca.VTACircuit`
 
 | Biological Feature | WW Component | Validation |
 |--------------------|--------------|------------|
@@ -111,7 +111,7 @@ graph TB
 | D1/D2 affinity ratio | `d1_affinity=1e-7, d2_affinity=1e-6` | Creese 1983 |
 
 ```python
-from ww.nca import create_vta_circuit
+from t4dm.nca import create_vta_circuit
 
 vta = create_vta_circuit()
 
@@ -152,7 +152,7 @@ graph TB
     style CREDIT fill:#e8f5e9
 ```
 
-**WW Implementation**: `ww.nca.RapheNucleus`
+**WW Implementation**: `t4dm.nca.RapheNucleus`
 
 | Biological Feature | WW Component | Validation |
 |--------------------|--------------|------------|
@@ -162,7 +162,7 @@ graph TB
 | Autoreceptor feedback | `5ht1a_feedback` | Sprouse & Aghajanian 1987 |
 
 ```python
-from ww.nca import create_raphe_nucleus
+from t4dm.nca import create_raphe_nucleus
 
 raphe = create_raphe_nucleus(setpoint=0.5)
 
@@ -205,7 +205,7 @@ graph TB
     style PHASIC_LC fill:#fff3e0
 ```
 
-**WW Implementation**: `ww.nca.LocusCoeruleus`
+**WW Implementation**: `t4dm.nca.LocusCoeruleus`
 
 | Biological Feature | WW Component | Validation |
 |--------------------|--------------|------------|
@@ -215,7 +215,7 @@ graph TB
 | CRH stress response | `crh_modulation` | Valentino 2008 |
 
 ```python
-from ww.nca import create_locus_coeruleus
+from t4dm.nca import create_locus_coeruleus
 
 lc = create_locus_coeruleus()
 
@@ -262,7 +262,7 @@ graph TB
     style RETRIEVE fill:#e3f2fd
 ```
 
-**WW Implementation**: `ww.learning.AcetylcholineSystem`
+**WW Implementation**: `t4dm.learning.AcetylcholineSystem`
 
 | Biological Feature | WW Component | Validation |
 |--------------------|--------------|------------|
@@ -308,7 +308,7 @@ graph TB
     style TAN fill:#fff3e0
 ```
 
-**WW Implementation**: `ww.nca.StriatalMSN`
+**WW Implementation**: `t4dm.nca.StriatalMSN`
 
 | Biological Feature | WW Component | Validation |
 |--------------------|--------------|------------|
@@ -318,7 +318,7 @@ graph TB
 | Dopamine modulation | `apply_dopamine_modulation()` | - |
 
 ```python
-from ww.nca import create_striatal_population
+from t4dm.nca import create_striatal_population
 
 striatum = create_striatal_population(
     n_d1=500,

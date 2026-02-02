@@ -1,4 +1,4 @@
-# World Weaver Test Failure Analysis Report
+# T4DM Test Failure Analysis Report
 
 **Report Date**: 2025-11-27
 **Total Tests**: 1,237
@@ -23,7 +23,7 @@ The password issue is the **critical blocker** preventing the majority of tests 
 ## CATEGORY 1: PASSWORD/CONFIG ISSUES (38 FAILURES)
 
 ### Root Cause
-The `.env` file contains `WW_NEO4J_PASSWORD=wwpassword`, which violates the new password strength requirements:
+The `.env` file contains `T4DM_NEO4J_PASSWORD=wwpassword`, which violates the new password strength requirements:
 - **Missing uppercase letters**
 - **Missing special characters**
 - Configuration requires: "at least 2 of: uppercase, lowercase, digits, special characters"
@@ -88,7 +88,7 @@ neo4j.exceptions.ClientError:
 - **Solution Category**: Missing Service (Docker/Neo4j not running)
 
 ### Why Tests Should Pass Without Real Services
-These tests should use the `mock_neo4j_store` and `mock_qdrant_store` fixtures defined in `/mnt/projects/t4d/t4dm/tests/conftest.py`. Instead, they're attempting real connections.
+These tests should use the `mock_t4dx_graph_adapter` and `mock_t4dx_vector_adapter` fixtures defined in `/mnt/projects/t4d/t4dm/tests/conftest.py`. Instead, they're attempting real connections.
 
 ---
 
@@ -277,14 +277,14 @@ def test_null_byte_injection():
 
 ### 1. Fix Password in `.env` (CRITICAL - 38 tests)
 **File**: `/mnt/projects/t4d/t4dm/.env`
-**Current**: `WW_NEO4J_PASSWORD=wwpassword`
-**Fix**: Change to: `WW_NEO4J_PASSWORD=Ww@Secure123`
+**Current**: `T4DM_NEO4J_PASSWORD=wwpassword`
+**Fix**: Change to: `T4DM_NEO4J_PASSWORD=Ww@Secure123`
 **Impact**: Unlocks 38+ cascading test failures
 **Effort**: 30 seconds
 
 ```bash
 # Edit .env and update password:
-WW_NEO4J_PASSWORD=Ww@Secure123  # Has uppercase, lowercase, digits, special char
+T4DM_NEO4J_PASSWORD=Ww@Secure123  # Has uppercase, lowercase, digits, special char
 ```
 
 ### 2. Update Test Fixtures (MEDIUM - 12 tests)
@@ -330,11 +330,11 @@ def create_test_episode(
 Most tests should use:
 ```python
 @pytest.fixture(autouse=True)
-def patch_storage(mock_neo4j_store, mock_qdrant_store, mock_embedding_provider):
+def patch_storage(mock_t4dx_graph_adapter, mock_t4dx_vector_adapter, mock_embedding_provider):
     """Auto-patch all storage backends."""
-    with patch('ww.storage.get_neo4j_store', return_value=mock_neo4j_store), \
-         patch('ww.storage.get_qdrant_store', return_value=mock_qdrant_store), \
-         patch('ww.embedding.get_embedding_provider', return_value=mock_embedding_provider):
+    with patch('t4dm.storage.get_t4dx_graph_adapter', return_value=mock_t4dx_graph_adapter), \
+         patch('t4dm.storage.get_t4dx_vector_adapter', return_value=mock_t4dx_vector_adapter), \
+         patch('t4dm.embedding.get_embedding_provider', return_value=mock_embedding_provider):
         yield
 ```
 
@@ -374,8 +374,8 @@ assert result['count'] > 0
 **Action Required**: Review FSRS parameters in config against test expectations:
 ```python
 # From .env:
-WW_FSRS_DEFAULT_STABILITY=1.0
-WW_FSRS_RETENTION_TARGET=0.9
+T4DM_FSRS_DEFAULT_STABILITY=1.0
+T4DM_FSRS_RETENTION_TARGET=0.9
 
 # These may need adjustment based on test requirements
 ```
@@ -386,7 +386,7 @@ WW_FSRS_RETENTION_TARGET=0.9
 
 **Files**:
 - `/mnt/projects/t4d/t4dm/src/t4dm/mcp/validation.py` - Add sanitization
-- `/mnt/projects/t4d/t4dm/src/t4dm/storage/neo4j_store.py` - Add rate limiting
+- `/mnt/projects/t4d/t4dm/src/t4dm/storage/t4dx_graph_adapter.py` - Add rate limiting
 - `/mnt/projects/t4d/t4dm/src/t4dm/mcp/gateway.py` - Enforce validation
 
 **Missing Features**:
@@ -420,7 +420,7 @@ def validate_content(content: str) -> str:
 **Fix**: Update mock return values to match actual implementation
 ```python
 @pytest_asyncio.fixture(scope="function")
-async def mock_neo4j_store():
+async def mock_t4dx_graph_adapter():
     """Mock Neo4j with correct response format."""
     mock = MagicMock()
     # ... existing setup ...
@@ -568,7 +568,7 @@ DID NOT RAISE ValueError  (null bytes not blocked)
 
 ## CONCLUSION
 
-The World Weaver test suite has **excellent fundamentals** with 90.6% pass rate. The failures are almost entirely due to:
+The T4DM test suite has **excellent fundamentals** with 90.6% pass rate. The failures are almost entirely due to:
 
 1. **Configuration issue** (password) - 30-second fix
 2. **Missing database mocking** - 5-minute fixture

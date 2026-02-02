@@ -1,4 +1,4 @@
-# World Weaver - Mathematical Foundations
+# T4DM - Mathematical Foundations
 
 **Version**: 0.2.0
 **Last Updated**: 2025-12-06

@@ -26,7 +26,7 @@ Supports multiple deployment targets from single-node Docker Compose to producti
 | `kubernetes/storage.yaml` | Persistent volume claims |
 | `kubernetes/kustomization.yaml` | Kustomize base config |
 | `kubernetes/overlays/` | Environment-specific overrides |
-| `helm/world-weaver/` | Helm chart |
+| `helm/t4dm/` | Helm chart |
 
 ## Data Flow
 ```

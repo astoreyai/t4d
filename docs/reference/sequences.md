@@ -1,6 +1,6 @@
 # Sequence & State Diagrams
 
-Detailed behavioral diagrams for World Weaver operations.
+Detailed behavioral diagrams for T4DM operations.
 
 ## State Machines
 

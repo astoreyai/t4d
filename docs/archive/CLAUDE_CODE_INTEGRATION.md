@@ -1,4 +1,4 @@
-# World Weaver + Claude Code CLI Integration
+# T4DM + Claude Code CLI Integration
 
 ## Architecture Overview
 
@@ -90,7 +90,7 @@ Location: `~/.claude/settings.json`
 
 ```bash
 # Direct start
-python -m ww.mcp.server
+python -m t4dm.mcp.server
 
 # Via docker
 docker-compose -f docker-compose.full.yml up -d
@@ -103,9 +103,9 @@ docker-compose -f docker-compose.full.yml up -d
 ```json
 {
   "mcpServers": {
-    "world-weaver": {
+    "t4dm": {
       "command": "python",
-      "args": ["-m", "ww.mcp.server"],
+      "args": ["-m", "t4dm.mcp.server"],
       "cwd": "/mnt/projects/ww"
     }
   }

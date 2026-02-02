@@ -5,8 +5,7 @@ sequenceDiagram
     participant MCP as MCP Gateway
     participant O as Orchestra
     participant E as Embedder
-    participant Q as Qdrant
-    participant N as Neo4j
+    participant T4X as T4DX
     participant R as Retrieval Scorer
     participant H as Hebbian Learner
     participant G as Memory Gate
@@ -25,13 +24,10 @@ sequenceDiagram
     Note over MCP: Modern Hopfield: softmax(beta * X^T * query) * X
     MCP->>MCP: expand_via_autoassociation()
 
-    MCP->>+Q: search(query_vector, limit=50)
-    Q->>Q: HNSW_search()
-    Q-->>-MCP: candidates[50]
+    MCP->>+T4X: search(query_vector, limit=50)
+    T4X->>T4X: HNSW_search() + graph_context()
+    T4X-->>-MCP: candidates[50] + relationships[]
 
-    MCP->>+N: get_graph_context(candidate_ids)
-    N->>N: MATCH paths
-    N-->>-MCP: relationships[]
 
     rect rgb(40, 50, 60)
         Note over MCP,R: Stage 1: Relevance Scoring (LearnedRelevanceScorer)

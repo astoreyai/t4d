@@ -1,6 +1,6 @@
 # Memory Types
 
-World Weaver implements three distinct memory subsystems inspired by cognitive neuroscience.
+T4DM implements three distinct memory subsystems inspired by cognitive neuroscience.
 
 ## Overview
 
@@ -135,7 +135,7 @@ Where:
 |------|-------------|---------|
 | `CONCEPT` | Abstract ideas | "Machine Learning" |
 | `PERSON` | People | "Geoffrey Hinton" |
-| `PROJECT` | Projects | "World Weaver" |
+| `PROJECT` | Projects | "T4DM" |
 | `TOOL` | Tools/Software | "PyTorch" |
 | `TECHNIQUE` | Methods | "Backpropagation" |
 | `FACT` | Factual statements | "Python 3.10 released 2021" |

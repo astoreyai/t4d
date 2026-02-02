@@ -4,7 +4,7 @@ The NCA layer implements biologically-inspired neural dynamics for cognitive sta
 
 ## Overview
 
-World Weaver's NCA is inspired by the KATIE architecture and implements:
+T4DM's NCA is inspired by the KATIE architecture and implements:
 
 - **6-Neurotransmitter PDE System**: Continuous neural field dynamics
 - **Cognitive State Attractors**: Stable cognitive modes
@@ -149,7 +149,7 @@ graph TB
 - Sleep threshold: 0.3 (requires sleep_depth >= 0.3)
 
 ```python
-from ww.nca import DeltaOscillator, OscillatorConfig
+from t4dm.nca import DeltaOscillator, OscillatorConfig
 
 config = OscillatorConfig()
 delta = DeltaOscillator(config)
@@ -198,7 +198,7 @@ sequenceDiagram
 
 **Spindle-Delta Coupling**:
 ```python
-from ww.nca import SleepSpindleGenerator, SpindleConfig, SpindleDeltaCoupler
+from t4dm.nca import SleepSpindleGenerator, SpindleConfig, SpindleDeltaCoupler
 
 config = SpindleConfig(
     freq_range=(11.0, 16.0),
@@ -300,7 +300,7 @@ Gamma cycles create discrete working memory slots:
 - **Binding**: Items bound to theta phase
 
 ```python
-from ww.nca import ThetaGammaIntegration
+from t4dm.nca import ThetaGammaIntegration
 
 tg = ThetaGammaIntegration()
 
@@ -316,7 +316,7 @@ slots = tg.get_wm_slots()  # Returns 5-9 slots
 
 ### Spatial Cognition in Embedding Space
 
-World Weaver implements Nobel Prize 2014 mechanisms (O'Keefe, Moser) for navigation in embedding space.
+T4DM implements Nobel Prize 2014 mechanisms (O'Keefe, Moser) for navigation in embedding space.
 
 ### Place Cells
 
@@ -358,7 +358,7 @@ graph TB
 ### Operations
 
 ```python
-from ww.nca import SpatialCellSystem
+from t4dm.nca import SpatialCellSystem
 
 spatial = SpatialCellSystem(embed_dim=1024)
 
@@ -390,7 +390,7 @@ Gridness = min(corr at 60°,120°) - max(corr at 30°,90°,150°)
 A positive gridness score indicates hexagonal firing patterns with 6-fold rotational symmetry.
 
 ```python
-from ww.nca import SpatialCellSystem, SpatialConfig
+from t4dm.nca import SpatialCellSystem, SpatialConfig
 
 spatial = SpatialCellSystem(SpatialConfig(n_grid_modules=3))
 
@@ -452,7 +452,7 @@ sequenceDiagram
 
 ## Visualization
 
-World Weaver provides dashboards for NCA monitoring:
+T4DM provides dashboards for NCA monitoring:
 
 - **Energy Landscape**: Lyapunov function visualization
 - **NT State Dashboard**: Real-time 6-channel monitoring
@@ -493,7 +493,7 @@ stateDiagram-v2
 ### Usage
 
 ```python
-from ww.nca import (
+from t4dm.nca import (
     SWRNeuralFieldCoupling, WakeSleepMode,
     RIPPLE_FREQ_MIN, RIPPLE_FREQ_MAX, RIPPLE_FREQ_OPTIMAL
 )
@@ -521,7 +521,7 @@ Serotonin modulates temporal discounting (Doya 2002):
 | High (0.8) | ~0.97 | 45 steps | Patient |
 
 ```python
-from ww.nca import RapheNucleus, create_raphe_nucleus
+from t4dm.nca import RapheNucleus, create_raphe_nucleus
 
 raphe = create_raphe_nucleus(setpoint=0.5)
 
@@ -561,7 +561,7 @@ graph LR
 | High (>0.7) | Yes | 0.3 | Update model |
 
 ```python
-from ww.nca import LocusCoeruleus, create_locus_coeruleus
+from t4dm.nca import LocusCoeruleus, create_locus_coeruleus
 
 lc = create_locus_coeruleus()
 
@@ -618,7 +618,7 @@ graph TB
 ### Usage
 
 ```python
-from ww.nca import create_ff_layer, create_ff_network, ForwardForwardConfig
+from t4dm.nca import create_ff_layer, create_ff_network, ForwardForwardConfig
 
 # Single layer
 layer = create_ff_layer(

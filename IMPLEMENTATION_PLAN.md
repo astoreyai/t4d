@@ -8,7 +8,7 @@
 
 ## Existing Codebase
 
-T4DM inherits from World Weaver:
+T4DM inherits from T4DM:
 - 8,905 tests passing
 - 81% coverage
 - Core memory operations functional

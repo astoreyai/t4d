@@ -59,7 +59,7 @@ The embedding module provides a sophisticated, composable system for generating,
 ### BGE-M3 Provider
 
 ```python
-from ww.embedding import BGEM3Embedding
+from t4dm.embedding import BGEM3Embedding
 
 provider = BGEM3Embedding()
 
@@ -94,7 +94,7 @@ ttl_seconds: int = 3600  # 1 hour
 ### Adapter Interface
 
 ```python
-from ww.embedding import EmbeddingAdapter, create_adapter, EmbeddingBackend
+from t4dm.embedding import EmbeddingAdapter, create_adapter, EmbeddingBackend
 
 class EmbeddingAdapter(ABC):
     async def embed_query(query: str) -> list[float]
@@ -117,7 +117,7 @@ adapter = create_adapter(backend=EmbeddingBackend.BGE_M3)
 Fine-tune embeddings without modifying base model:
 
 ```python
-from ww.embedding import LoRAEmbeddingAdapter, LoRAConfig, RetrievalOutcome
+from t4dm.embedding import LoRAEmbeddingAdapter, LoRAConfig, RetrievalOutcome
 
 config = LoRAConfig(
     rank=16,              # Low-rank dimension
@@ -152,7 +152,7 @@ adapted = x + (α/r) × B(dropout(A(x)))
 Learn projection with InfoNCE loss:
 
 ```python
-from ww.embedding import ContrastiveAdapter
+from t4dm.embedding import ContrastiveAdapter
 
 adapter = ContrastiveAdapter(input_dim=1024, output_dim=256)
 
@@ -178,7 +178,7 @@ L = -log(exp(sim(a,p)/τ) / Σ exp(sim(a,n)/τ))
 Health-aware multi-adapter combination:
 
 ```python
-from ww.embedding import EnsembleEmbeddingAdapter, EnsembleStrategy
+from t4dm.embedding import EnsembleEmbeddingAdapter, EnsembleStrategy
 
 ensemble = EnsembleEmbeddingAdapter(
     adapters=[adapter1, adapter2, adapter3],
@@ -205,7 +205,7 @@ stats = ensemble.get_ensemble_stats()
 Transform embeddings based on neuromodulator state:
 
 ```python
-from ww.embedding import ModulatedEmbeddingAdapter, NeuromodulatorState
+from t4dm.embedding import ModulatedEmbeddingAdapter, NeuromodulatorState
 
 modulated = ModulatedEmbeddingAdapter(base_adapter)
 
@@ -236,7 +236,7 @@ retrieval_emb = await modulated.embed_query("same query")
 Asymmetric projections inspired by hippocampal CA1/CA3:
 
 ```python
-from ww.embedding import QueryMemorySeparator
+from t4dm.embedding import QueryMemorySeparator
 
 separator = QueryMemorySeparator(embedding_dim=1024, hidden_dim=256)
 
@@ -267,7 +267,7 @@ embedding_cache_ttl: int = 3600
 ### Basic Retrieval Pipeline
 
 ```python
-from ww.embedding import create_adapter, register_adapter, get_adapter
+from t4dm.embedding import create_adapter, register_adapter, get_adapter
 
 # Initialize and register
 adapter = create_adapter()
@@ -279,14 +279,14 @@ query_emb = await adapter.embed_query("search query")
 doc_embs = await adapter.embed(documents)
 
 # Compute similarity
-from ww.embedding import cosine_similarity
+from t4dm.embedding import cosine_similarity
 scores = [cosine_similarity(query_emb, doc) for doc in doc_embs]
 ```
 
 ### Adaptive Retrieval with Learning
 
 ```python
-from ww.embedding import create_lora_adapter, RetrievalOutcome
+from t4dm.embedding import create_lora_adapter, RetrievalOutcome
 
 # Create LoRA-adapted provider
 adapted = create_lora_adapter(rank=32, use_asymmetric=True)
@@ -316,7 +316,7 @@ adapted.save("checkpoints/lora_latest.pt")
 ### Mock Adapters
 
 ```python
-from ww.embedding import MockEmbeddingAdapter, SemanticMockAdapter
+from t4dm.embedding import MockEmbeddingAdapter, SemanticMockAdapter
 
 # Deterministic mock (hash-seeded)
 mock = MockEmbeddingAdapter(dimension=1024)
@@ -333,7 +333,7 @@ semantic_mock = SemanticMockAdapter(dimension=128, seed=42)
 pytest tests/embedding/ -v
 
 # With coverage
-pytest tests/embedding/ --cov=ww.embedding --cov-report=term-missing
+pytest tests/embedding/ --cov=t4dm.embedding --cov-report=term-missing
 
 # Performance benchmarks
 pytest tests/embedding/ -v -m benchmark

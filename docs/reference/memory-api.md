@@ -4,7 +4,7 @@ Direct Python API for memory operations.
 
 ## Overview
 
-The Memory API provides the simplest way to use World Weaver in Python applications.
+The Memory API provides the simplest way to use T4DM in Python applications.
 
 ```python
 from ww import memory
@@ -341,7 +341,7 @@ result = loop.run_until_complete(memory.store("content"))
 The Memory API uses the global configuration:
 
 ```python
-from ww.core.config import get_settings
+from t4dm.core.config import get_settings
 
 settings = get_settings()
 print(f"Session: {settings.session_id}")
@@ -350,8 +350,8 @@ print(f"Session: {settings.session_id}")
 Override with environment variables:
 
 ```bash
-export WW_SESSION_ID=my-session
-export WW_QDRANT_HOST=localhost
+export T4DM_SESSION_ID=my-session
+export T4DM_QDRANT_HOST=localhost
 ```
 
 ## Error Handling

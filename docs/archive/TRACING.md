@@ -1,6 +1,6 @@
 # OpenTelemetry Distributed Tracing
 
-World Weaver now includes OpenTelemetry distributed tracing for request flow visibility across MCP gateway → memory services → storage layers.
+T4DM now includes OpenTelemetry distributed tracing for request flow visibility across MCP gateway → memory services → storage layers.
 
 ## Features
 
@@ -16,16 +16,16 @@ Tracing is configured via environment variables in `.env` or configuration setti
 
 ```bash
 # Enable tracing
-WW_OTEL_ENABLED=true
+T4DM_OTEL_ENABLED=true
 
 # OTLP endpoint (Jaeger, Tempo, etc.)
-WW_OTEL_ENDPOINT=http://localhost:4317
+T4DM_OTEL_ENDPOINT=http://localhost:4317
 
 # Service name
-WW_OTEL_SERVICE_NAME=world-weaver
+T4DM_OTEL_SERVICE_NAME=t4dm
 
 # Console export for debugging
-WW_OTEL_CONSOLE=true
+T4DM_OTEL_CONSOLE=true
 ```
 
 ## Architecture
@@ -55,14 +55,14 @@ MCP Gateway (SERVER span)
 
 ### Initialization
 
-Tracing is automatically initialized at server startup if `WW_OTEL_ENABLED=true`:
+Tracing is automatically initialized at server startup if `T4DM_OTEL_ENABLED=true`:
 
 ```python
-from ww.observability.tracing import init_tracing, shutdown_tracing
+from t4dm.observability.tracing import init_tracing, shutdown_tracing
 
 # Initialize
 init_tracing(
-    service_name="world-weaver",
+    service_name="t4dm",
     otlp_endpoint="http://localhost:4317",
     console_export=True  # For debugging
 )
@@ -75,7 +75,7 @@ shutdown_tracing()
 
 ```python
 from opentelemetry.trace import SpanKind
-from ww.observability.tracing import traced
+from t4dm.observability.tracing import traced
 
 @traced("my_service.operation", kind=SpanKind.INTERNAL)
 async def my_operation(param: str):
@@ -86,7 +86,7 @@ async def my_operation(param: str):
 ### Manual Span Creation
 
 ```python
-from ww.observability.tracing import trace_span
+from t4dm.observability.tracing import trace_span
 
 async def process_batch():
     async with trace_span("batch_processing", batch_size=100):
@@ -97,7 +97,7 @@ async def process_batch():
 ### Adding Span Metadata
 
 ```python
-from ww.observability.tracing import add_span_attribute, add_span_event
+from t4dm.observability.tracing import add_span_attribute, add_span_event
 
 async def search_vectors():
     add_span_attribute("collection", "episodes")
@@ -131,8 +131,8 @@ Core memory operations:
 
 Vector and graph operations:
 
-- `QdrantStore.search()`, `QdrantStore.add()`, `QdrantStore.delete()`
-- `Neo4jStore.query()`, `Neo4jStore.create_node()`
+- `T4DXVectorAdapter.search()`, `T4DXVectorAdapter.add()`, `T4DXVectorAdapter.delete()`
+- `T4DXGraphAdapter.query()`, `T4DXGraphAdapter.create_node()`
 
 ## Visualization
 
@@ -145,9 +145,9 @@ docker run -d \
   -p 4317:4317 \
   jaegertracing/all-in-one:latest
 
-# Configure World Weaver
-export WW_OTEL_ENABLED=true
-export WW_OTEL_ENDPOINT=http://localhost:4317
+# Configure T4DM
+export T4DM_OTEL_ENABLED=true
+export T4DM_OTEL_ENDPOINT=http://localhost:4317
 
 # Run server
 ww-memory
@@ -165,9 +165,9 @@ docker run -d \
   grafana/tempo:latest \
   -config.file=/etc/tempo.yaml
 
-# Configure World Weaver
-export WW_OTEL_ENABLED=true
-export WW_OTEL_ENDPOINT=http://localhost:4317
+# Configure T4DM
+export T4DM_OTEL_ENABLED=true
+export T4DM_OTEL_ENDPOINT=http://localhost:4317
 ```
 
 ## Example Trace
@@ -191,8 +191,8 @@ mcp.recall_episodes (235ms)
 Enable console output for local debugging:
 
 ```bash
-export WW_OTEL_ENABLED=true
-export WW_OTEL_CONSOLE=true
+export T4DM_OTEL_ENABLED=true
+export T4DM_OTEL_CONSOLE=true
 ```
 
 Spans will be printed to console with full details.
@@ -202,7 +202,7 @@ Spans will be printed to console with full details.
 Get current trace context for manual propagation:
 
 ```python
-from ww.observability.tracing import get_trace_context
+from t4dm.observability.tracing import get_trace_context
 
 ctx = get_trace_context()
 # {'traceparent': '00-...', 'tracestate': '...'}
@@ -242,9 +242,9 @@ Coverage includes:
 
 ### Traces not appearing
 
-1. Check `WW_OTEL_ENABLED=true` is set
+1. Check `T4DM_OTEL_ENABLED=true` is set
 2. Verify OTLP endpoint is reachable
-3. Enable console export: `WW_OTEL_CONSOLE=true`
+3. Enable console export: `T4DM_OTEL_CONSOLE=true`
 4. Check server logs for initialization messages
 
 ### Performance impact

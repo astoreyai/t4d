@@ -183,7 +183,7 @@
 **E1: Attack Success Rate Experiments**
 ```
 Required:
-- Implement semantic injection attack on real memory system (MemGPT, Letta, WorldWeaver)
+- Implement semantic injection attack on real memory system (MemGPT, Letta, T4DM)
 - Vary: number of injected episodes, clustering threshold, embedding similarity
 - Measure: % of injected entities that consolidate to semantic memory
 - Baseline: natural consolidation rate for legitimate entities

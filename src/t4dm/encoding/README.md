@@ -42,7 +42,7 @@ The encoding module implements biologically-inspired neural encoding mechanisms 
 ### k-Winner-Take-All
 
 ```python
-from ww.encoding import kwta
+from t4dm.encoding import kwta
 
 # Keep exactly top-k activations
 sparse = kwta(activations, k=164)  # 2% of 8192
@@ -54,7 +54,7 @@ sparse = kwta(activations, k=164)  # 2% of 8192
 Hippocampal dentate gyrus-inspired expansion:
 
 ```python
-from ww.encoding import SparseEncoder, SparseEncoderConfig
+from t4dm.encoding import SparseEncoder, SparseEncoderConfig
 
 config = SparseEncoderConfig(
     input_dim=1024,          # BGE-M3 embedding
@@ -90,7 +90,7 @@ actual = encoder.actual_sparsity  # k/hidden_dim
 Dynamic sparsity adjustment:
 
 ```python
-from ww.encoding import AdaptiveSparseEncoder
+from t4dm.encoding import AdaptiveSparseEncoder
 
 encoder = AdaptiveSparseEncoder(
     min_sparsity=0.01,    # 1% minimum
@@ -109,7 +109,7 @@ sparse_code = encoder(embedding)
 Two-compartment pyramidal neuron model:
 
 ```python
-from ww.encoding import DendriticNeuron, DendriticConfig
+from t4dm.encoding import DendriticNeuron, DendriticConfig
 
 config = DendriticConfig(
     input_dim=1024,
@@ -145,7 +145,7 @@ Apical (top-down)  ───┘                    ├─→ Coupling ──→ 
 Stacked dendritic layers:
 
 ```python
-from ww.encoding import DendriticProcessor
+from t4dm.encoding import DendriticProcessor
 
 processor = DendriticProcessor(
     input_dim=1024,
@@ -171,7 +171,7 @@ output, mismatches = processor(input, context)
 Classical Hopfield-style associative memory:
 
 ```python
-from ww.encoding import AttractorNetwork, AttractorConfig
+from t4dm.encoding import AttractorNetwork, AttractorConfig
 
 config = AttractorConfig(
     dim=8192,                # Pattern dimension
@@ -220,7 +220,7 @@ Lower energy = more stable state
 Enhanced with exponential energy (Ramsauer et al. 2020):
 
 ```python
-from ww.encoding import ModernHopfieldNetwork
+from t4dm.encoding import ModernHopfieldNetwork
 
 network = ModernHopfieldNetwork(
     dim=8192,
@@ -241,7 +241,7 @@ result = network.retrieve(cue)
 ## Utility Functions
 
 ```python
-from ww.encoding.utils import (
+from t4dm.encoding.utils import (
     compute_sparsity,
     validate_sparsity,
     cosine_similarity_matrix,
@@ -309,7 +309,7 @@ MAX_BASIN_SAMPLES = 1000
 pytest tests/encoding/ -v
 
 # With coverage
-pytest tests/encoding/ --cov=ww.encoding
+pytest tests/encoding/ --cov=t4dm.encoding
 
 # Test categories
 pytest tests/encoding/test_sparse.py -v      # 246 lines

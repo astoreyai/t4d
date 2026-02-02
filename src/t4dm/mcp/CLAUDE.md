@@ -5,7 +5,7 @@
 Model Context Protocol (MCP) server exposing T4DM memory as tools for Claude Code and Claude Desktop. Provides store, recall, learn, consolidate, context, and entity operations.
 
 ## How
-- **WorldWeaverMCPServer** (`server.py`): MCP server implementation using stdio transport. Connects to T4DM API via `AgentMemoryClient`. Handles tool execution requests from Claude, dispatching to appropriate memory operations. Configurable via environment variables (`T4DM_API_URL`, `T4DM_SESSION_ID`, `T4DM_API_KEY`).
+- **T4DMMCPServer** (`server.py`): MCP server implementation using stdio transport. Connects to T4DM API via `AgentMemoryClient`. Handles tool execution requests from Claude, dispatching to appropriate memory operations. Configurable via environment variables (`T4DM_API_URL`, `T4DM_SESSION_ID`, `T4DM_API_KEY`).
 - **MEMORY_TOOLS** (`tools.py`): Tool definitions in MCP JSON schema format:
   - `t4dm_store`: Store content in episodic memory with outcome/importance/tags
   - `t4dm_search`: Semantic search for relevant memories with project/time filtering
@@ -21,12 +21,12 @@ MCP is the standard protocol for extending Claude with external tools. This serv
 ## Key Files
 | File | Purpose |
 |------|---------|
-| `server.py` | `WorldWeaverMCPServer`, `create_mcp_server()`, `run_mcp_server()` |
+| `server.py` | `T4DMMCPServer`, `create_mcp_server()`, `run_mcp_server()` |
 | `tools.py` | `MEMORY_TOOLS` definitions, `MEMORY_PROMPTS`, `ToolResult` |
 
 ## Data Flow
 ```
-Claude Code/Desktop -> MCP stdio -> WorldWeaverMCPServer
+Claude Code/Desktop -> MCP stdio -> T4DMMCPServer
     -> AgentMemoryClient -> T4DM API (FastAPI)
     -> Memory operations (store/search/consolidate)
     -> Response -> MCP -> Claude

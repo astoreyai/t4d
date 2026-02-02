@@ -60,7 +60,7 @@ SDK/API --> core/memory --> bridges --> storage (T4DX embedded engine)
 - `t4dm.memory_api`: Simplified `store()` / `recall()` functions
 - `t4dm.api.routes`: FastAPI REST endpoints
 - `t4dm.cli`: `t4dm` command-line tool
-- `t4dm.sdk.client`: `WorldWeaverClient` / `AsyncWorldWeaverClient`
+- `t4dm.sdk.client`: `T4DMClient` / `AsyncT4DMClient`
 
 ## Submodule Documentation
 | Module | CLAUDE.md |

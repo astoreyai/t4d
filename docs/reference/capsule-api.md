@@ -1,6 +1,6 @@
 # Capsule Networks API Reference
 
-**Module**: `ww.nca.capsules`, `ww.nca.capsule_nca_coupling`, `ww.nca.pose`
+**Module**: `t4dm.nca.capsules`, `t4dm.nca.capsule_nca_coupling`, `t4dm.nca.pose`
 **Version**: Phase 4
 **Hinton Score**: 0.7/1.0
 
@@ -24,7 +24,7 @@ Capsule networks implement hierarchical part-whole relationships through pose ve
 ### Capsule
 
 ```python
-from ww.nca.capsules import Capsule
+from t4dm.nca.capsules import Capsule
 
 capsule = Capsule(
     pose_dim=16,
@@ -71,7 +71,7 @@ pose = capsule.get_pose_vector()
 ### CapsuleLayer
 
 ```python
-from ww.nca.capsules import CapsuleLayer
+from t4dm.nca.capsules import CapsuleLayer
 
 layer = CapsuleLayer(
     in_capsules=32,
@@ -126,7 +126,7 @@ agreement = layer.get_routing_agreement()
 ### PoseTransform
 
 ```python
-from ww.nca.pose import PoseTransform
+from t4dm.nca.pose import PoseTransform
 
 transform = PoseTransform(
     pose_dim=16,
@@ -165,7 +165,7 @@ composed = transform.compose([0, 2, 5])
 Couples capsule networks with NCA neural field dynamics.
 
 ```python
-from ww.nca.capsule_nca_coupling import (
+from t4dm.nca.capsule_nca_coupling import (
     CapsuleNCACoupling,
     CapsuleNCACouplingConfig,
     CapsuleMode,
@@ -235,7 +235,7 @@ feedback = coupling.compute_field_feedback(layer)
 ### CapsuleMode
 
 ```python
-from ww.nca.capsule_nca_coupling import CapsuleMode
+from t4dm.nca.capsule_nca_coupling import CapsuleMode
 
 CapsuleMode.ENCODING   # High ACh: sharp routing, store patterns
 CapsuleMode.RETRIEVAL  # Low ACh: soft routing, pattern completion
@@ -245,7 +245,7 @@ CapsuleMode.NEUTRAL    # Mid ACh: balanced operation
 ### CouplingStrength
 
 ```python
-from ww.nca.capsule_nca_coupling import CouplingStrength
+from t4dm.nca.capsule_nca_coupling import CouplingStrength
 
 CouplingStrength.WEAK     # 0.3
 CouplingStrength.MODERATE # 0.5
@@ -260,7 +260,7 @@ CouplingStrength.FULL     # 1.0
 ### Basic Capsule Network
 
 ```python
-from ww.nca.capsules import CapsuleLayer, PrimaryCapsules
+from t4dm.nca.capsules import CapsuleLayer, PrimaryCapsules
 
 # Primary capsules from conv features
 primary = PrimaryCapsules(
@@ -286,8 +286,8 @@ v = digit_caps(u)
 ### NT-Modulated Routing
 
 ```python
-from ww.nca.capsule_nca_coupling import CapsuleNCACoupling
-from ww.nca.neural_field import NeurotransmitterState
+from t4dm.nca.capsule_nca_coupling import CapsuleNCACoupling
+from t4dm.nca.neural_field import NeurotransmitterState
 
 coupling = CapsuleNCACoupling()
 
@@ -307,7 +307,7 @@ digit_caps.routing_temperature = temp
 ### Part-Whole Hierarchy
 
 ```python
-from ww.nca.pose import PoseTransform
+from t4dm.nca.pose import PoseTransform
 
 # Define part-whole transformations
 transform = PoseTransform(pose_dim=16, num_transforms=4)
@@ -324,7 +324,7 @@ whole_pose = aggregate_poses(part_poses, transform)
 ### With Forward-Forward
 
 ```python
-from ww.nca.forward_forward_nca_coupling import FFNCACoupling
+from t4dm.nca.forward_forward_nca_coupling import FFNCACoupling
 
 # Capsule activations can provide goodness signal
 capsule_goodness = capsule.get_activation_probability().sum()
@@ -336,7 +336,7 @@ ff_coupling.align_with_energy(capsule_goodness, energy)
 ### With NCA Neural Field
 
 ```python
-from ww.nca.neural_field import NeuralField
+from t4dm.nca.neural_field import NeuralField
 
 field = NeuralField()
 coupling = CapsuleNCACoupling()
@@ -349,8 +349,8 @@ field.apply_stability_signal(feedback["stability"])
 ### With Telemetry Hub
 
 ```python
-from ww.visualization.telemetry_hub import TelemetryHub
-from ww.visualization.capsule_visualizer import CapsuleVisualizer
+from t4dm.visualization.telemetry_hub import TelemetryHub
+from t4dm.visualization.capsule_visualizer import CapsuleVisualizer
 
 hub = TelemetryHub()
 capsule_viz = CapsuleVisualizer()

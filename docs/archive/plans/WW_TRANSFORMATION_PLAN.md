@@ -1,4 +1,4 @@
-# World Weaver: Adaptive Learning System Transformation Plan
+# T4DM: Adaptive Learning System Transformation Plan
 
 **Vision**: Transform WW from "a system that gets fuller" to "a system that gets smarter"
 **Architect**: Geoffrey Hinton design principles
@@ -504,14 +504,14 @@ class RetrievalScorerTrainer:
 
 import sys
 import json
-from ww.sdk import WorldWeaverClient
-from ww.learning import LearningSession
+from t4dm.sdk import T4DMClient
+from t4dm.learning import LearningSession
 
 def main():
     session_id = os.environ.get("CLAUDE_SESSION_ID", str(uuid4()))
     project = os.path.basename(os.getcwd())
 
-    with WorldWeaverClient() as ww:
+    with T4DMClient() as ww:
         # Initialize learning session
         learning = LearningSession(ww, session_id)
         learning.start()
@@ -554,13 +554,13 @@ if __name__ == "__main__":
 
 import sys
 import json
-from ww.sdk import WorldWeaverClient
-from ww.learning import LearningSession, OfflineTrainer
+from t4dm.sdk import T4DMClient
+from t4dm.learning import LearningSession, OfflineTrainer
 
 def main():
     session_id = os.environ.get("CLAUDE_SESSION_ID")
 
-    with WorldWeaverClient() as ww:
+    with T4DMClient() as ww:
         learning = LearningSession.load(session_id)
 
         # Compute final rewards for session

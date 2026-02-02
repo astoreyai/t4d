@@ -9,7 +9,7 @@ The Neo4j driver has been configured with connection pooling for optimal perform
 Connection pool settings are managed through environment variables or the Settings class:
 
 ```python
-from ww.core.config import Settings
+from t4dm.core.config import Settings
 
 settings = Settings(
     neo4j_pool_size=50,              # Max connections in pool (default: 50)
@@ -23,9 +23,9 @@ settings = Settings(
 You can also configure via environment variables:
 
 ```bash
-export WW_NEO4J_POOL_SIZE=100
-export WW_NEO4J_CONNECTION_TIMEOUT=60.0
-export WW_NEO4J_CONNECTION_LIFETIME=7200.0
+export T4DM_NEO4J_POOL_SIZE=100
+export T4DM_NEO4J_CONNECTION_TIMEOUT=60.0
+export T4DM_NEO4J_CONNECTION_LIFETIME=7200.0
 ```
 
 ## Driver Configuration
@@ -43,9 +43,9 @@ The driver is initialized with the following parameters:
 Monitor the connection pool health:
 
 ```python
-from ww.storage.neo4j_store import Neo4jStore
+from t4dm.storage.t4dx_graph_adapter import T4DXGraphAdapter
 
-store = Neo4jStore()
+store = T4DXGraphAdapter()
 await store.initialize()
 
 # Check database connectivity and pool health
@@ -134,7 +134,7 @@ Regularly check pool metrics in production:
 import asyncio
 
 async def monitor_pool():
-    store = Neo4jStore()
+    store = T4DXGraphAdapter()
     while True:
         metrics = await store.get_pool_metrics()
 
@@ -156,11 +156,11 @@ Connection pooling provides significant performance improvements:
 
 ```python
 import asyncio
-from ww.storage.neo4j_store import Neo4jStore
+from t4dm.storage.t4dx_graph_adapter import T4DXGraphAdapter
 
 async def high_load_example():
     # Configure for high load
-    store = Neo4jStore()
+    store = T4DXGraphAdapter()
     await store.initialize()
 
     # Simulate concurrent operations

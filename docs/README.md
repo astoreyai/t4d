@@ -1,8 +1,8 @@
-# World Weaver Documentation
+# T4DM Documentation
 
 **Version**: 3.1.0 | **Last Updated**: 2025-12-09 | **Tests**: 4043 passed, 79% coverage
 
-Welcome to the World Weaver documentation. This directory contains comprehensive guides for using, deploying, and developing with the World Weaver tripartite memory system.
+Welcome to the T4DM documentation. This directory contains comprehensive guides for using, deploying, and developing with the T4DM tripartite memory system.
 
 ## Quick Navigation
 
@@ -57,8 +57,8 @@ Welcome to the World Weaver documentation. This directory contains comprehensive
 
 ```bash
 # Clone repository
-git clone https://github.com/astoreyai/world-weaver.git
-cd world-weaver
+git clone https://github.com/astoreyai/t4dm.git
+cd t4dm
 
 # Start infrastructure
 docker-compose up -d
@@ -77,25 +77,25 @@ pytest tests/ -v
 Edit `.env` with your settings:
 
 ```bash
-WW_SESSION_ID=my-session
-WW_NEO4J_PASSWORD=your-secure-password
-WW_QDRANT_URL=http://localhost:6333
+T4DM_SESSION_ID=my-session
+T4DM_NEO4J_PASSWORD=your-secure-password
+T4DM_QDRANT_URL=http://localhost:6333
 ```
 
 ### Usage
 
-Configure Claude Code to use World Weaver MCP server:
+Configure Claude Code to use T4DM MCP server:
 
 **`~/.config/claude-code/mcp_servers.json`**:
 ```json
 {
   "mcpServers": {
-    "world-weaver": {
+    "t4dm": {
       "command": "python",
-      "args": ["-m", "ww.mcp.memory_gateway"],
-      "cwd": "/path/to/world-weaver",
+      "args": ["-m", "t4dm.mcp.memory_gateway"],
+      "cwd": "/path/to/t4dm",
       "env": {
-        "WW_SESSION_ID": "my-session"
+        "T4DM_SESSION_ID": "my-session"
       }
     }
   }
@@ -186,7 +186,7 @@ Configure Claude Code to use World Weaver MCP server:
 
 ## Cognitive Science Foundations
 
-World Weaver implements multiple cognitive architecture theories:
+T4DM implements multiple cognitive architecture theories:
 
 1. **Tripartite Memory** (Tulving 1972)
    - Episodic: Personal experiences
@@ -307,7 +307,7 @@ skills = recall_skill(task="deploy Docker container")
 
 ## API Versioning
 
-World Weaver follows semantic versioning:
+T4DM follows semantic versioning:
 
 - **Major**: Breaking API changes
 - **Minor**: New features, backward compatible
@@ -322,8 +322,8 @@ World Weaver follows semantic versioning:
 
 ## Support
 
-- **GitHub Issues**: https://github.com/astoreyai/world-weaver/issues
-- **Documentation**: https://github.com/astoreyai/world-weaver/tree/main/docs
+- **GitHub Issues**: https://github.com/astoreyai/t4dm/issues
+- **Documentation**: https://github.com/astoreyai/t4dm/tree/main/docs
 - **Email**: support@worldweaver.ai (if configured)
 
 ## Contributing
@@ -332,7 +332,7 @@ See `CONTRIBUTING.md` in the repository root.
 
 ## License
 
-World Weaver is released under the MIT License. See `LICENSE` file in repository root.
+T4DM is released under the MIT License. See `LICENSE` file in repository root.
 
 ---
 

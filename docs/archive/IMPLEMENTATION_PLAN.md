@@ -1,8 +1,8 @@
 # Bioinspired Neural Memory System - Implementation Plan
-**World Weaver v0.1.0 → v0.2.0**
+**T4DM v0.1.0 → v0.2.0**
 
 **Created**: 2025-12-06
-**Author**: World Weaver Planning Agent
+**Author**: T4DM Planning Agent
 **Status**: Planning Phase
 **Target Completion**: 6-8 weeks
 
@@ -10,7 +10,7 @@
 
 ## Executive Summary
 
-This plan details the phased implementation of biologically-inspired neural memory components into World Weaver's existing tripartite memory system. The integration combines WW's strengths (Neo4j symbolic reasoning, MCP integration, FSRS/ACT-R, NeuromodulatorOrchestra) with CompBio innovations (dendritic computation, sparse coding, attractor dynamics, eligibility traces).
+This plan details the phased implementation of biologically-inspired neural memory components into T4DM's existing tripartite memory system. The integration combines WW's strengths (Neo4j symbolic reasoning, MCP integration, FSRS/ACT-R, NeuromodulatorOrchestra) with CompBio innovations (dendritic computation, sparse coding, attractor dynamics, eligibility traces).
 
 **Key Integration Goals**:
 - Maintain 90%+ test coverage
@@ -1499,7 +1499,7 @@ graph TD
 5. Amaral, D. G., Scharfman, H. E., & Lavenex, P. (2007). The dentate gyrus: fundamental neuroanatomical organization. *Progress in Brain Research*, 163, 3-790.
 
 ### Technical Documentation
-1. World Weaver Architecture: `/mnt/projects/t4d/t4dm/docs/architecture.md`
+1. T4DM Architecture: `/mnt/projects/t4d/t4dm/docs/architecture.md`
 2. Learning Architecture: `/mnt/projects/t4d/t4dm/docs/LEARNING_ARCHITECTURE.md`
 3. CompBio Architecture: `~/mem/bio_memory_architecture.md`
 4. CompBio Implementation Starter: `~/mem/implementation_starter.py`
@@ -1508,7 +1508,7 @@ graph TD
 
 ## Sign-Off
 
-**Planning Agent**: World Weaver Planner
+**Planning Agent**: T4DM Planner
 **Date**: 2025-12-06
 **Status**: Ready for Review
 

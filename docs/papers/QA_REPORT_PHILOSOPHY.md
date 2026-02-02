@@ -673,7 +673,7 @@ Excellent throughout. Maintains scholarly tone without being inaccessible. Examp
 **Recommendations if targeting P&T**:
 1. **Expand ethics section significantly** (currently weak point)
 2. Add subsection on design recommendations
-3. Consider adding case study box analyzing specific system (MemGPT or WorldWeaver)
+3. Consider adding case study box analyzing specific system (MemGPT or T4DM)
 4. Emphasize practical implications throughout
 5. Add paragraph on policy implications
 
@@ -947,7 +947,7 @@ Packer, C., Wooders, S., Lin, K., Fang, V., Patil, S. G., Stoica, I., & Gonzalez
 ### LOW PRIORITY (Optional)
 
 16. **Add Case Study Box**
-    - Analyze specific system (MemGPT or WorldWeaver)
+    - Analyze specific system (MemGPT or T4DM)
     - Target: 1 page boxed text
     - Impact: Concrete illustration
 

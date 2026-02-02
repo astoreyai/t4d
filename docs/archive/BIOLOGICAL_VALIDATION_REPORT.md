@@ -1,4 +1,4 @@
-# World Weaver Biological Validation Report
+# T4DM Biological Validation Report
 
 **Date**: 2026-01-04
 **Version**: 0.1.0
@@ -10,7 +10,7 @@
 
 **Overall Biological Fidelity**: 87/100
 
-The World Weaver NCA system demonstrates strong biological grounding across all eight validation domains (B1-B8). Parameter ranges are well-aligned with neuroscience literature, and key biological mechanisms are appropriately modeled. Areas for improvement include refinement of time constants in some subsystems and expansion of parameter validation tests.
+The T4DM NCA system demonstrates strong biological grounding across all eight validation domains (B1-B8). Parameter ranges are well-aligned with neuroscience literature, and key biological mechanisms are appropriately modeled. Areas for improvement include refinement of time constants in some subsystems and expansion of parameter validation tests.
 
 ---
 
@@ -725,7 +725,7 @@ def test_glutamate_synaptic_vs_extrasynaptic():
 
 ## Conclusion
 
-The World Weaver NCA system demonstrates **strong biological grounding** with an overall fidelity score of **87/100**. All major subsystems (B1-B8) implement key biological mechanisms with appropriate parameter ranges validated against neuroscience literature.
+The T4DM NCA system demonstrates **strong biological grounding** with an overall fidelity score of **87/100**. All major subsystems (B1-B8) implement key biological mechanisms with appropriate parameter ranges validated against neuroscience literature.
 
 ### Strengths
 

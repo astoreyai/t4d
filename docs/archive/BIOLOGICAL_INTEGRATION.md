@@ -1,4 +1,4 @@
-# World Weaver Biological Integration Architecture
+# T4DM Biological Integration Architecture
 
 **Version**: 0.5.0
 **Last Updated**: 2026-01-08
@@ -8,7 +8,7 @@
 
 ## Executive Summary
 
-World Weaver implements a comprehensive biologically-inspired memory system with sophisticated neural integration. This document details the key biological mechanisms and their integration architecture, providing both technical specifications and neuroscience citations.
+T4DM implements a comprehensive biologically-inspired memory system with sophisticated neural integration. This document details the key biological mechanisms and their integration architecture, providing both technical specifications and neuroscience citations.
 
 **Key Integrations Implemented**:
 1. Sleep Consolidation ↔ Reconsolidation Engine (Phase 1A)

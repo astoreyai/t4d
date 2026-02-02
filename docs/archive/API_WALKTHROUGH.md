@@ -1,8 +1,8 @@
-# World Weaver API Walkthrough
+# T4DM API Walkthrough
 
 **Version**: 0.1.0 | **Last Updated**: 2025-12-09
 
-A comprehensive guide to the World Weaver REST API and MCP interface, covering all memory operations, persistence management, and real-time event streaming.
+A comprehensive guide to the T4DM REST API and MCP interface, covering all memory operations, persistence management, and real-time event streaming.
 
 ---
 
@@ -35,7 +35,7 @@ http://localhost:8765/api/v1
 
 ### Authentication
 
-World Weaver uses session-based isolation via the `X-Session-ID` header. Each session maintains its own memory namespace.
+T4DM uses session-based isolation via the `X-Session-ID` header. Each session maintains its own memory namespace.
 
 ```bash
 curl -H "X-Session-ID: my-session" http://localhost:8765/api/v1/health
@@ -110,7 +110,7 @@ Store a new episodic memory with temporal context.
 ```json
 {
   "content": "Implemented FSRS decay algorithm for memory retrieval",
-  "project": "world-weaver",
+  "project": "t4dm",
   "file": "src/memory/episodic.py",
   "tool": "python",
   "outcome": "success",
@@ -138,7 +138,7 @@ Store a new episodic memory with temporal context.
   "outcome": "success",
   "emotional_valence": 0.8,
   "context": {
-    "project": "world-weaver",
+    "project": "t4dm",
     "file": "src/memory/episodic.py",
     "tool": "python"
   },
@@ -179,7 +179,7 @@ Retrieve a specific episode by ID. Updates access count and retrievability.
   "outcome": "success",
   "emotional_valence": 0.8,
   "context": {
-    "project": "world-weaver",
+    "project": "t4dm",
     "file": "src/memory/episodic.py"
   },
   "access_count": 3,
@@ -218,7 +218,7 @@ List episodes with pagination and filtering.
       "timestamp": "2025-12-09T10:30:00Z",
       "outcome": "success",
       "emotional_valence": 0.8,
-      "context": {"project": "world-weaver"},
+      "context": {"project": "t4dm"},
       "access_count": 1,
       "stability": 1.0,
       "retrievability": 1.0
@@ -250,7 +250,7 @@ Search episodes using BGE-M3 embeddings for similarity matching.
   "query": "memory decay algorithms",
   "limit": 10,
   "min_similarity": 0.5,
-  "project": "world-weaver",
+  "project": "t4dm",
   "outcome": "success"
 }
 ```
@@ -273,7 +273,7 @@ Search episodes using BGE-M3 embeddings for similarity matching.
       "timestamp": "2025-12-09T10:30:00Z",
       "outcome": "success",
       "emotional_valence": 0.8,
-      "context": {"project": "world-weaver"},
+      "context": {"project": "t4dm"},
       "access_count": 2,
       "stability": 1.2,
       "retrievability": 0.98
@@ -1442,7 +1442,7 @@ Get WebSocket connection counts per channel:
 
 ## MCP Tools Reference
 
-World Weaver provides 26 MCP (Model Context Protocol) tools for integration with Claude Code and other MCP-compatible clients.
+T4DM provides 26 MCP (Model Context Protocol) tools for integration with Claude Code and other MCP-compatible clients.
 
 ### Episodic Memory Tools
 

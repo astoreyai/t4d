@@ -1,4 +1,4 @@
-# World Weaver Test Commands Reference
+# T4DM Test Commands Reference
 
 Quick command reference for test execution, coverage analysis, and debugging.
 
@@ -184,7 +184,7 @@ mkdir -p tests/visualization
 cat > tests/visualization/test_telemetry_hub.py << 'TESTEOF'
 import pytest
 import numpy as np
-from ww.visualization.telemetry_hub import TelemetryHub
+from t4dm.visualization.telemetry_hub import TelemetryHub
 
 class TestTelemetryHub:
     def test_initialization(self):

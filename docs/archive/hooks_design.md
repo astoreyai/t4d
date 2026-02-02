@@ -1,8 +1,8 @@
-# World Weaver Hooks System Design
+# T4DM Hooks System Design
 
 ## Overview
 
-The World Weaver hooks system provides extensible lifecycle hooks for all modules with guaranteed execution order, error isolation, and comprehensive observability.
+The T4DM hooks system provides extensible lifecycle hooks for all modules with guaranteed execution order, error isolation, and comprehensive observability.
 
 ## Architecture
 
@@ -429,8 +429,8 @@ class RecoveryHook(Hook):
 ### Example 1: Observability Hooks
 
 ```python
-from ww.hooks import get_global_registry, HookPriority
-from ww.hooks.memory import CreateHook, RecallHook
+from t4dm.hooks import get_global_registry, HookPriority
+from t4dm.hooks.memory import CreateHook, RecallHook
 
 # Get registry
 registry = get_global_registry("episodic")
@@ -441,7 +441,7 @@ class TracingCreateHook(CreateHook):
         super().__init__(name="tracing", priority=HookPriority.HIGH)
 
     async def execute(self, context: HookContext) -> HookContext:
-        from ww.observability.tracing import traced, add_span_attribute
+        from t4dm.observability.tracing import traced, add_span_attribute
 
         if context.phase == HookPhase.PRE:
             add_span_attribute("memory.type", context.input_data.get("memory_type"))
@@ -458,7 +458,7 @@ registry.register(TracingCreateHook(), HookPhase.POST)
 ### Example 2: Caching Hook
 
 ```python
-from ww.hooks.memory import RecallHook
+from t4dm.hooks.memory import RecallHook
 
 class CachingRecallHook(RecallHook):
     def __init__(self):
@@ -485,7 +485,7 @@ class CachingRecallHook(RecallHook):
 ### Example 3: Audit Trail Hook
 
 ```python
-from ww.hooks.memory import MemoryHook
+from t4dm.hooks.memory import MemoryHook
 
 class AuditHook(MemoryHook):
     def __init__(self):
@@ -512,7 +512,7 @@ registry.register(AuditHook(), HookPhase.POST)
 ### Example 4: Decorator Usage
 
 ```python
-from ww.hooks.base import with_hooks
+from t4dm.hooks.base import with_hooks
 
 registry = get_global_registry("episodic")
 
@@ -613,7 +613,7 @@ stats = registry.get_stats()
 
 ## Migration Path
 
-For existing World Weaver code:
+For existing T4DM code:
 
 1. **Identify lifecycle points:** Find initialization, shutdown, operation boundaries
 2. **Create hook instances:** Implement relevant hook classes

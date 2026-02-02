@@ -1,15 +1,15 @@
-# World Weaver Hooks - Quick Reference
+# T4DM Hooks - Quick Reference
 
 ## Installation
 
 ```python
-from ww.hooks import get_global_registry, HookPriority, HookPhase
+from t4dm.hooks import get_global_registry, HookPriority, HookPhase
 ```
 
 ## Creating a Hook
 
 ```python
-from ww.hooks.memory import CreateHook
+from t4dm.hooks.memory import CreateHook
 
 class MyCustomHook(CreateHook):
     def __init__(self):
@@ -41,7 +41,7 @@ registry.register(MyCustomHook(), HookPhase.POST)
 ## Using Hook Decorator
 
 ```python
-from ww.hooks.base import with_hooks
+from t4dm.hooks.base import with_hooks
 
 @with_hooks(registry, operation="create_episode", module="episodic")
 async def create_episode(content: str, **kwargs) -> Episode:
@@ -203,7 +203,7 @@ class RetryHook(ErrorHook):
 ### Create Registry
 
 ```python
-from ww.hooks import HookRegistry
+from t4dm.hooks import HookRegistry
 
 registry = HookRegistry(
     name="my_registry",
@@ -253,7 +253,7 @@ registry.clear()
 ## Standard Registries
 
 ```python
-from ww.hooks.registry import (
+from t4dm.hooks.registry import (
     get_global_registry,
     REGISTRY_EPISODIC,
     REGISTRY_SEMANTIC,
@@ -401,7 +401,7 @@ async def test_my_hook():
 
 ```python
 import logging
-logging.getLogger("ww.hooks").setLevel(logging.DEBUG)
+logging.getLogger("t4dm.hooks").setLevel(logging.DEBUG)
 ```
 
 ### Inspect Context

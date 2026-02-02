@@ -1,4 +1,4 @@
-# World Weaver NCA Telemetry: Neuroscience Evaluation
+# T4DM NCA Telemetry: Neuroscience Evaluation
 **Evaluator**: Claude Sonnet 4.5 (CompBio Agent)
 **Date**: 2026-01-01
 **Focus**: Visualization systems from computational neuroscience perspective
@@ -8,7 +8,7 @@
 
 ## Executive Summary
 
-The World Weaver NCA visualization system provides three phases of telemetry:
+The T4DM NCA visualization system provides three phases of telemetry:
 1. **Energy Landscape & Coupling** (Hopfield dynamics, NT coupling matrix)
 2. **NT State Dashboard** (6-channel neuromodulator monitoring)
 3. **Stability Monitor** (Jacobian eigenvalues, Lyapunov exponents, bifurcation detection)
@@ -1208,7 +1208,7 @@ def test_causal_inference():
 
 ### Current State Assessment
 
-The World Weaver NCA visualization system provides **strong abstract telemetry** (energy landscapes, NT dynamics, stability analysis) but **lacks experimentally grounded observables** that neuroscientists measure (SWRs, PAC, DA temporal structure).
+The T4DM NCA visualization system provides **strong abstract telemetry** (energy landscapes, NT dynamics, stability analysis) but **lacks experimentally grounded observables** that neuroscientists measure (SWRs, PAC, DA temporal structure).
 
 **Strengths**:
 - Excellent NT homeostasis tracking (88/100)

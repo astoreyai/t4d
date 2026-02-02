@@ -2,7 +2,7 @@
 
 **Document Version**: 1.0
 **Date**: 2025-12-06
-**Author**: World Weaver Algorithm Design Agent
+**Author**: T4DM Algorithm Design Agent
 
 ---
 
@@ -831,7 +831,7 @@ async def nightly_gate_training():
 
     # 1. Generate negative samples
     stats = learned_gate.batch_train(
-        memory_store=neo4j_store,
+        memory_store=t4dx_graph_adapter,
         n_epochs=3
     )
 

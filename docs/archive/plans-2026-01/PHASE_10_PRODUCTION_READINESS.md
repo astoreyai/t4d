@@ -6,7 +6,7 @@
 
 ## Executive Summary
 
-Phase 10 hardens World Weaver for production deployment across 5 dimensions:
+Phase 10 hardens T4DM for production deployment across 5 dimensions:
 
 1. **Module Cleanup** - Consolidate `/bridge` and `/bridges`, remove dead code
 2. **API Documentation** - Complete OpenAPI spec, SDK streaming, WebSocket schemas
@@ -34,7 +34,7 @@ Phase 10 hardens World Weaver for production deployment across 5 dimensions:
 
 **Import Updates** (13 locations):
 - `examples/nca_demo.py`
-- Any files importing from `ww.bridge`
+- Any files importing from `t4dm.bridge`
 
 ### 1.2 Dead Code Archive
 
@@ -110,7 +110,7 @@ signal.signal(signal.SIGTERM, handle_sigterm)
 
 **Add to `server.py`**:
 ```python
-from ww.observability.prometheus import prometheus_router
+from t4dm.observability.prometheus import prometheus_router
 app.include_router(prometheus_router)
 ```
 

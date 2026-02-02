@@ -111,20 +111,20 @@ Session-scoped event loop for async tests. Uses session scope to maintain Neo4j 
 
 ### Mock Fixtures
 
-#### `mock_qdrant_store`
+#### `mock_t4dx_vector_adapter`
 Mocked Qdrant vector store for unit tests.
 
 ```python
 @pytest.mark.asyncio
-async def test_with_qdrant(mock_qdrant_store):
+async def test_with_qdrant(mock_t4dx_vector_adapter):
     # Configure mock for test
-    mock_qdrant_store.search.return_value = [{"id": "1", "score": 0.95}]
+    mock_t4dx_vector_adapter.search.return_value = [{"id": "1", "score": 0.95}]
 
     # Use mock
-    results = await mock_qdrant_store.search(...)
+    results = await mock_t4dx_vector_adapter.search(...)
 
     # Verify calls
-    mock_qdrant_store.search.assert_called()
+    mock_t4dx_vector_adapter.search.assert_called()
 ```
 
 Available methods:
@@ -136,18 +136,18 @@ Available methods:
 - `close()`: async
 - `upsert()`: async
 
-#### `mock_neo4j_store`
+#### `mock_t4dx_graph_adapter`
 Mocked Neo4j graph store for unit tests.
 
 ```python
 @pytest.mark.asyncio
-async def test_with_neo4j(mock_neo4j_store):
-    mock_neo4j_store.get_node.return_value = {
+async def test_with_neo4j(mock_t4dx_graph_adapter):
+    mock_t4dx_graph_adapter.get_node.return_value = {
         "id": "node-1",
         "name": "Test Entity"
     }
 
-    result = await mock_neo4j_store.get_node("node-1")
+    result = await mock_t4dx_graph_adapter.get_node("node-1")
     assert result["name"] == "Test Entity"
 ```
 
@@ -287,7 +287,7 @@ Patches `get_settings()` globally during test.
 ```python
 def test_patched(patch_settings):
     # All code using get_settings() gets mock_settings
-    from ww.core.config import get_settings
+    from t4dm.core.config import get_settings
     settings = get_settings()
     assert settings.session_id == "test-session"
 ```
@@ -300,9 +300,9 @@ Use `@pytest.mark.asyncio` decorator for async functions:
 
 ```python
 @pytest.mark.asyncio
-async def test_async_operation(mock_qdrant_store):
-    await mock_qdrant_store.initialize()
-    result = await mock_qdrant_store.search([0.1] * 1024)
+async def test_async_operation(mock_t4dx_vector_adapter):
+    await mock_t4dx_vector_adapter.initialize()
+    result = await mock_t4dx_vector_adapter.search([0.1] * 1024)
     assert result == []
 ```
 
@@ -335,29 +335,29 @@ Configure mocks per-test:
 
 ```python
 @pytest.mark.asyncio
-async def test_with_custom_mock(mock_neo4j_store):
+async def test_with_custom_mock(mock_t4dx_graph_adapter):
     # Setup
-    mock_neo4j_store.get_node.return_value = {"id": "test", "name": "Test"}
-    mock_neo4j_store.create_relationship.side_effect = ValueError("Already exists")
+    mock_t4dx_graph_adapter.get_node.return_value = {"id": "test", "name": "Test"}
+    mock_t4dx_graph_adapter.create_relationship.side_effect = ValueError("Already exists")
 
     # Test
-    node = await mock_neo4j_store.get_node("test")
+    node = await mock_t4dx_graph_adapter.get_node("test")
     assert node["name"] == "Test"
 
     # Verify
-    mock_neo4j_store.get_node.assert_called_with("test")
-    assert mock_neo4j_store.get_node.call_count == 1
+    mock_t4dx_graph_adapter.get_node.assert_called_with("test")
+    assert mock_t4dx_graph_adapter.get_node.call_count == 1
 ```
 
 ### Testing Error Paths
 
 ```python
 @pytest.mark.asyncio
-async def test_handles_errors(mock_qdrant_store):
-    mock_qdrant_store.search.side_effect = ConnectionError("Network error")
+async def test_handles_errors(mock_t4dx_vector_adapter):
+    mock_t4dx_vector_adapter.search.side_effect = ConnectionError("Network error")
 
     with pytest.raises(ConnectionError):
-        await mock_qdrant_store.search([0.1] * 1024)
+        await mock_t4dx_vector_adapter.search([0.1] * 1024)
 ```
 
 ## Algorithm Testing
@@ -474,16 +474,16 @@ async def test_create_entity_with_valid_inputs(mock_semantic_memory):
 
 ```python
 @pytest.mark.asyncio
-async def test_handles_network_error(mock_qdrant_store):
+async def test_handles_network_error(mock_t4dx_vector_adapter):
     # Setup mock to raise error
-    mock_qdrant_store.search.side_effect = ConnectionError("Network down")
+    mock_t4dx_vector_adapter.search.side_effect = ConnectionError("Network down")
 
     # Test error handling
     with pytest.raises(ConnectionError):
         await some_function_using_qdrant()
 
     # Verify recovery (if applicable)
-    mock_qdrant_store.search.assert_called_once()
+    mock_t4dx_vector_adapter.search.assert_called_once()
 ```
 
 ### Property Testing Best Practices
@@ -557,11 +557,11 @@ open htmlcov/index.html
 
 ```python
 # Correct
-with patch('ww.memory.semantic.get_qdrant_store'):
+with patch('t4dm.memory.semantic.get_t4dx_vector_adapter'):
     ...
 
 # Incorrect (would patch the wrong module)
-with patch('qdrant_store.get_qdrant_store'):
+with patch('t4dx_vector_adapter.get_t4dx_vector_adapter'):
     ...
 ```
 

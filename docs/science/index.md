@@ -1,10 +1,10 @@
 # Science
 
-Scientific foundations and analysis of World Weaver's biologically-inspired design.
+Scientific foundations and analysis of T4DM's biologically-inspired design.
 
 ## Overview
 
-World Weaver's architecture is grounded in cognitive neuroscience research. This section documents the scientific basis and analysis of the system.
+T4DM's architecture is grounded in cognitive neuroscience research. This section documents the scientific basis and analysis of the system.
 
 ```mermaid
 graph TB

@@ -1,4 +1,4 @@
-# World Weaver Test Suite - Comprehensive Analysis Report
+# T4DM Test Suite - Comprehensive Analysis Report
 
 ## Executive Summary
 
@@ -117,8 +117,8 @@ Session and lifecycle management completely untested:
 
 | Module | Coverage | Statements | Issue |
 |--------|----------|-----------|-------|
-| `storage/neo4j_store.py` | 13% | 434 | Graph ops untested |
-| `storage/qdrant_store.py` | 14% | 332 | Vector ops untested |
+| `storage/t4dx_graph_adapter.py` | 13% | 434 | Graph ops untested |
+| `storage/t4dx_vector_adapter.py` | 14% | 332 | Vector ops untested |
 | `sdk/client.py` | 26% | 225 | SDK client incomplete |
 | `persistence/wal.py` | 33% | 280 | WAL rotation untested |
 | `sdk/agent_client.py` | 31% | 176 | Agent client incomplete |
@@ -278,7 +278,7 @@ pytest tests/ -q --tb=no | tail -5
 
 ## Conclusion
 
-World Weaver has a **solid test suite with 99.97% pass rate**. Core systems are well-tested (API 85%, consolidation 72%, learning 68%). However, three critical modules need immediate attention:
+T4DM has a **solid test suite with 99.97% pass rate**. Core systems are well-tested (API 85%, consolidation 72%, learning 68%). However, three critical modules need immediate attention:
 
 1. **Visualization** (0% / 5,725 statements) - UI validation
 2. **Prediction** (0% / 1,119 statements) - Core cognitive function

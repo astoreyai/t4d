@@ -1,10 +1,10 @@
 # Configuration
 
-World Weaver supports YAML configuration files with environment variable overrides.
+T4DM supports YAML configuration files with environment variable overrides.
 
 ## Configuration Files
 
-World Weaver searches for configuration in this order:
+T4DM searches for configuration in this order:
 
 1. `./t4dm.yaml` (current directory)
 2. `~/.t4dm/config.yaml` (user home)
@@ -35,12 +35,12 @@ api_port: 8765
 
 ## Environment Variables
 
-Environment variables override YAML settings. Use the `WW_` prefix:
+Environment variables override YAML settings. Use the `T4DM_` prefix:
 
 ```bash
-export WW_SESSION_ID=my-session
-export WW_QDRANT_HOST=localhost
-export WW_NEO4J_PASSWORD=secret
+export T4DM_SESSION_ID=my-session
+export T4DM_QDRANT_HOST=localhost
+export T4DM_NEO4J_PASSWORD=secret
 ```
 
 ## Configuration Reference
@@ -166,7 +166,7 @@ serotonin_enabled: false
 ## Programmatic Configuration
 
 ```python
-from ww.core.config import get_settings, reset_settings
+from t4dm.core.config import get_settings, reset_settings
 
 # Get current settings
 settings = get_settings()

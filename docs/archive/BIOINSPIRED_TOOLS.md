@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document identifies tool gaps in World Weaver for bioinspired neural memory functionality and proposes new tools to fill those gaps across MCP operations, development, debugging, and analysis.
+This document identifies tool gaps in T4DM for bioinspired neural memory functionality and proposes new tools to fill those gaps across MCP operations, development, debugging, and analysis.
 
 ---
 
@@ -673,7 +673,7 @@ class BioinspiredDebugger:
 ```python
 # notebooks/bioinspired_debug.ipynb support
 
-from ww.bioinspired.jupyter import (
+from t4dm.bioinspired.jupyter import (
     SparseEncodingWidget,
     AttractorVisualizerWidget,
     NeuromodulatorDashboard,

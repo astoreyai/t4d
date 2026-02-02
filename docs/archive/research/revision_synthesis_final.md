@@ -1,14 +1,14 @@
-# World Weaver IEEE Paper: Comprehensive Revision Synthesis
+# T4DM IEEE Paper: Comprehensive Revision Synthesis
 
 **Date**: 2025-12-04
 **Author**: Aaron W. Storey
-**Document**: `/mnt/projects/t4d/t4dm/docs/world_weaver_ieee.tex`
+**Document**: `/mnt/projects/t4d/t4dm/docs/t4dm_ieee.tex`
 
 ---
 
 ## Executive Summary
 
-Six specialized reviews have been completed on the World Weaver IEEE paper. This document synthesizes all findings into prioritized action items for revision.
+Six specialized reviews have been completed on the T4DM IEEE paper. This document synthesizes all findings into prioritized action items for revision.
 
 ### Overall Scores by Reviewer
 
@@ -202,7 +202,7 @@ Revised:
 ```latex
 \subsubsection{Reconsolidation Implications}
 Memory reconsolidation (Nader \& Hardt, 2009) reveals that retrieved memories
-enter a labile state requiring re-stabilization. Currently, World Weaver's
+enter a labile state requiring re-stabilization. Currently, T4DM's
 retrieval is read-only---memories are fetched but not modified. A
 reconsolidation-inspired mechanism would allow retrieved memories to be
 updated when accessed in new contexts, implementing a computational analog
@@ -232,7 +232,7 @@ Standard Consolidation Theory (Squire \& Alvarez, 1995) proposes
 hippocampus-to-cortex transfer over time. However, Multiple Trace
 Theory (Nadel \& Moscovitch, 1997) argues episodic details remain
 hippocampus-dependent indefinitely, with only semantic extraction
-becoming cortex-based. World Weaver's consolidation---extracting
+becoming cortex-based. T4DM's consolidation---extracting
 semantic entities while preserving episodic sources---aligns more
 closely with MTT's framework.
 ```
@@ -285,7 +285,7 @@ vol. 7, no. 2, pp. 217--227, 1997.
 ```latex
 We acknowledge that Tulving's episodic memory involves autonoetic
 consciousness---the self-knowing awareness of mentally traveling through
-subjective time. Without this phenomenal quality, World Weaver implements
+subjective time. Without this phenomenal quality, T4DM implements
 what Wheeler (2000) termed ``personal semantic memory''---factual knowledge
 about one's past rather than re-experiencing it. This is a clarification
 of what kind of memory system we have built, not a deficiency.
@@ -382,7 +382,7 @@ correlated activity.
 ```latex
 We acknowledge a philosophical tension with the deep learning paradigm
 Hinton pioneered. Where neural approaches seek emergent representations,
-World Weaver designs explicit structures inspired by cognitive science.
+T4DM designs explicit structures inspired by cognitive science.
 We prioritize interpretability over learned structure---a valid
 engineering choice for applications requiring auditability, though not
 what end-to-end neural approaches would recommend.
@@ -440,7 +440,7 @@ After addressing Priority 2 issues:
 
 ## Conclusion
 
-The World Weaver IEEE paper has strong foundations but requires substantial revision for acceptance. The core contributions are sound; the issues are primarily:
+The T4DM IEEE paper has strong foundations but requires substantial revision for acceptance. The core contributions are sound; the issues are primarily:
 
 1. **Presentation**: Missing figures, insufficient experimental detail
 2. **Rigor**: No statistical significance, reproducibility gaps

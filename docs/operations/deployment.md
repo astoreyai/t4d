@@ -1,6 +1,6 @@
 # Deployment Guide
 
-Production deployment options for World Weaver.
+Production deployment options for T4DM.
 
 ## Docker Compose (Recommended)
 
@@ -50,10 +50,10 @@ services:
     ports:
       - "8765:8765"
     environment:
-      WW_NEO4J_URI: bolt://neo4j:7687
-      WW_NEO4J_PASSWORD: ${NEO4J_PASSWORD}
-      WW_QDRANT_HOST: qdrant
-      WW_API_KEY: ${API_KEY}
+      T4DM_NEO4J_URI: bolt://neo4j:7687
+      T4DM_NEO4J_PASSWORD: ${NEO4J_PASSWORD}
+      T4DM_QDRANT_HOST: qdrant
+      T4DM_API_KEY: ${API_KEY}
     depends_on:
       - neo4j
       - qdrant
@@ -91,8 +91,8 @@ volumes:
 NEO4J_PASSWORD=your-secure-password
 API_KEY=your-api-key
 ADMIN_KEY=your-admin-key
-WW_SESSION_ID=production
-WW_ENVIRONMENT=production
+T4DM_SESSION_ID=production
+T4DM_ENVIRONMENT=production
 ```
 
 ## Kubernetes
@@ -101,7 +101,7 @@ WW_ENVIRONMENT=production
 
 ```bash
 helm repo add ww https://charts.astoreyai.com
-helm install t4dm t4dm/world-weaver
+helm install t4dm t4dm/t4dm
 ```
 
 ### Manual Deployment
@@ -112,7 +112,7 @@ helm install t4dm t4dm/world-weaver
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: world-weaver
+  name: t4dm
 ```
 
 #### ConfigMap
@@ -122,11 +122,11 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: ww-config
-  namespace: world-weaver
+  namespace: t4dm
 data:
-  WW_NEO4J_URI: "bolt://neo4j:7687"
-  WW_QDRANT_HOST: "qdrant"
-  WW_ENVIRONMENT: "production"
+  T4DM_NEO4J_URI: "bolt://neo4j:7687"
+  T4DM_QDRANT_HOST: "qdrant"
+  T4DM_ENVIRONMENT: "production"
 ```
 
 #### Secrets
@@ -136,7 +136,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: ww-secrets
-  namespace: world-weaver
+  namespace: t4dm
 type: Opaque
 stringData:
   neo4j-password: "your-password"
@@ -150,7 +150,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ww-api
-  namespace: world-weaver
+  namespace: t4dm
 spec:
   replicas: 3
   selector:
@@ -170,7 +170,7 @@ spec:
         - configMapRef:
             name: ww-config
         env:
-        - name: WW_NEO4J_PASSWORD
+        - name: T4DM_NEO4J_PASSWORD
           valueFrom:
             secretKeyRef:
               name: ww-secrets
@@ -203,7 +203,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: ww-api
-  namespace: world-weaver
+  namespace: t4dm
 spec:
   selector:
     app: ww-api
@@ -266,10 +266,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - api.yourww.com
+    - api.t4dm.local
     secretName: ww-tls
   rules:
-  - host: api.yourww.com
+  - host: api.t4dm.local
     http:
       paths:
       - path: /
@@ -288,7 +288,7 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: ww-network-policy
-  namespace: world-weaver
+  namespace: t4dm
 spec:
   podSelector:
     matchLabels:

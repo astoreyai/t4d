@@ -1,4 +1,4 @@
-# World Weaver API Endpoint Testing Report
+# T4DM API Endpoint Testing Report
 
 **Date**: December 9, 2025
 **Test File**: `/mnt/projects/t4d/t4dm/tests/api/test_endpoints_comprehensive.py`
@@ -9,7 +9,7 @@
 
 ## Executive Summary
 
-Comprehensive backend API endpoint testing has been completed for World Weaver. The test suite covers all 5 endpoint categories with 71 test cases focusing on:
+Comprehensive backend API endpoint testing has been completed for T4DM. The test suite covers all 5 endpoint categories with 71 test cases focusing on:
 
 - **Auth requirements** (X-Admin-Key header)
 - **Input validation** (field validation, boundary conditions)
@@ -366,7 +366,7 @@ python -m pytest tests/api/ -v --tb=short
 
 ## Conclusion
 
-The comprehensive endpoint test suite provides solid coverage of World Weaver's REST API with 71 passing tests across all major endpoint categories. The tests validate:
+The comprehensive endpoint test suite provides solid coverage of T4DM's REST API with 71 passing tests across all major endpoint categories. The tests validate:
 
 - Core CRUD operations for episodes, entities, and skills
 - Input validation and error handling

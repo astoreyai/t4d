@@ -2,7 +2,7 @@
 
 **2 files | ~450 lines | Centrality: 2**
 
-The bridge module connects World Weaver's memory operations to the Neural Cognitive Architecture (NCA), enabling state-dependent encoding and retrieval, neuromodulated learning, and consolidation triggering.
+The bridge module connects T4DM's memory operations to the Neural Cognitive Architecture (NCA), enabling state-dependent encoding and retrieval, neuromodulated learning, and consolidation triggering.
 
 ## Architecture Overview
 
@@ -47,7 +47,7 @@ The bridge module connects World Weaver's memory operations to the Neural Cognit
 Configuration for bridge behavior:
 
 ```python
-from ww.bridge import BridgeConfig
+from t4dm.bridge import BridgeConfig
 
 config = BridgeConfig(
     # Encoding
@@ -74,7 +74,7 @@ config = BridgeConfig(
 Main bridge class:
 
 ```python
-from ww.bridge import MemoryNCABridge, BridgeConfig
+from t4dm.bridge import MemoryNCABridge, BridgeConfig
 
 bridge = MemoryNCABridge(
     config=BridgeConfig(),
@@ -214,7 +214,7 @@ bridge.step(dt=0.01)
 ### With NCA Module
 
 ```python
-from ww.nca import (
+from t4dm.nca import (
     NeuralFieldSolver,
     LearnableCoupling,
     StateTransitionManager,
@@ -235,7 +235,7 @@ energy = energy_landscape.compute_energy(nt_state)
 ### With Learning Module
 
 ```python
-from ww.learning import DopamineSystem
+from t4dm.learning import DopamineSystem
 
 # Dopamine provides RPE
 rpe = dopamine.compute_rpe(actual_reward, expected_reward)
@@ -304,7 +304,7 @@ stats = bridge.get_stats()
 pytest tests/bridge/ -v
 
 # With coverage
-pytest tests/bridge/ --cov=ww.bridge
+pytest tests/bridge/ --cov=t4dm.bridge
 ```
 
 **Test Coverage**: 21 tests (315 lines)

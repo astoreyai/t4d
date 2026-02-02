@@ -1,8 +1,8 @@
-# World Weaver Frontend
+# T4DM Frontend
 
 **Version**: 0.1.0 | **Last Updated**: 2025-12-09
 
-React TypeScript dashboard for visualizing and monitoring the World Weaver memory system.
+React TypeScript dashboard for visualizing and monitoring the T4DM memory system.
 
 ---
 

@@ -1,15 +1,15 @@
-# World Weaver Python SDK
+# T4DM Python SDK
 
 ## Installation
 
 ```bash
-pip install world-weaver[api]
+pip install t4dm[api]
 ```
 
 Or install from source:
 ```bash
-git clone https://github.com/astoreyai/world-weaver
-cd world-weaver
+git clone https://github.com/astoreyai/t4dm
+cd t4dm
 pip install -e ".[api]"
 ```
 
@@ -18,12 +18,12 @@ pip install -e ".[api]"
 ### Synchronous Client
 
 ```python
-from ww.sdk import WorldWeaverClient
+from t4dm.sdk import T4DMClient
 
 # Using context manager (recommended)
-with WorldWeaverClient(base_url="http://localhost:8765", session_id="my-session") as ww:
+with T4DMClient(base_url="http://localhost:8765", session_id="my-session") as ww:
     # Create an episode
-    episode = ww.create_episode(
+    episode = t4dm.create_episode(
         content="Learned about Python async/await patterns",
         project="learning",
         outcome="success",
@@ -32,7 +32,7 @@ with WorldWeaverClient(base_url="http://localhost:8765", session_id="my-session"
     print(f"Created episode: {episode.id}")
 
     # Search memories
-    results = ww.recall_episodes("async patterns")
+    results = t4dm.recall_episodes("async patterns")
     for ep in results.episodes:
         print(f"  - {ep.content[:50]}...")
 ```
@@ -41,19 +41,19 @@ with WorldWeaverClient(base_url="http://localhost:8765", session_id="my-session"
 
 ```python
 import asyncio
-from ww.sdk import AsyncWorldWeaverClient
+from t4dm.sdk import AsyncT4DMClient
 
 async def main():
-    async with AsyncWorldWeaverClient(session_id="my-session") as ww:
+    async with AsyncT4DMClient(session_id="my-session") as ww:
         # Create entity
-        entity = await ww.create_entity(
+        entity = await t4dm.create_entity(
             name="AsyncIO",
             entity_type="CONCEPT",
             summary="Python's asynchronous I/O framework",
         )
 
         # Spread activation from entity
-        result = await ww.spread_activation(
+        result = await t4dm.spread_activation(
             entity_id=entity.id,
             depth=2,
             threshold=0.1,
@@ -66,12 +66,12 @@ asyncio.run(main())
 
 ## API Reference
 
-### WorldWeaverClient / AsyncWorldWeaverClient
+### T4DMClient / AsyncT4DMClient
 
 #### Constructor
 
 ```python
-client = WorldWeaverClient(
+client = T4DMClient(
     base_url="http://localhost:8765",  # API server URL
     session_id="default",               # Session for memory isolation
     timeout=30.0,                        # Request timeout in seconds
@@ -84,7 +84,7 @@ client = WorldWeaverClient(
 Check API health status.
 
 ```python
-status = ww.health()
+status = t4dm.health()
 print(f"Status: {status.status}, Version: {status.version}")
 ```
 
@@ -92,7 +92,7 @@ print(f"Status: {status.status}, Version: {status.version}")
 Get memory statistics.
 
 ```python
-stats = await ww.stats()
+stats = await t4dm.stats()
 print(f"Episodes: {stats.episodic['total_episodes']}")
 ```
 
@@ -100,7 +100,7 @@ print(f"Episodes: {stats.episodic['total_episodes']}")
 Trigger memory consolidation.
 
 ```python
-result = await ww.consolidate(deep=True)
+result = await t4dm.consolidate(deep=True)
 ```
 
 ### Episodic Memory
@@ -109,7 +109,7 @@ result = await ww.consolidate(deep=True)
 Create a new episodic memory.
 
 ```python
-episode = await ww.create_episode(
+episode = await t4dm.create_episode(
     content="What I learned or did",
     project="project-name",
     file="path/to/file.py",
@@ -127,14 +127,14 @@ Get episode by ID.
 List episodes with pagination.
 
 ```python
-episodes, total = await ww.list_episodes(page=1, page_size=20, project="ww")
+episodes, total = await t4dm.list_episodes(page=1, page_size=20, project="ww")
 ```
 
 #### recall_episodes(query, limit, min_similarity, project, outcome) -> RecallResult
 Semantic search for episodes.
 
 ```python
-results = await ww.recall_episodes(
+results = await t4dm.recall_episodes(
     query="memory algorithms",
     limit=10,
     min_similarity=0.5,
@@ -155,7 +155,7 @@ Mark episode as important (reduces decay).
 Create a knowledge entity.
 
 ```python
-entity = await ww.create_entity(
+entity = await t4dm.create_entity(
     name="FSRS",
     entity_type="TECHNIQUE",  # CONCEPT, PERSON, PROJECT, TOOL, TECHNIQUE, FACT
     summary="Free Spaced Repetition Scheduler",
@@ -173,7 +173,7 @@ List entities with filtering.
 Create relationship between entities.
 
 ```python
-relation = await ww.create_relation(
+relation = await t4dm.create_relation(
     source_id=entity1.id,
     target_id=entity2.id,
     relation_type="IMPLEMENTS",  # USES, PRODUCES, REQUIRES, CAUSES, etc.
@@ -188,7 +188,7 @@ Semantic search for entities.
 Perform spreading activation from an entity.
 
 ```python
-result = await ww.spread_activation(
+result = await t4dm.spread_activation(
     entity_id=start_entity.id,
     depth=3,
     threshold=0.1,
@@ -204,7 +204,7 @@ Update entity with bi-temporal versioning.
 Create a procedural skill.
 
 ```python
-skill = await ww.create_skill(
+skill = await t4dm.create_skill(
     name="git-commit",
     domain="coding",  # coding, research, trading, devops, writing
     task="Create a git commit with proper message",
@@ -230,7 +230,7 @@ Semantic search for skills.
 Record skill execution result.
 
 ```python
-skill = await ww.record_execution(
+skill = await t4dm.record_execution(
     skill_id=skill.id,
     success=True,
     duration_ms=5000,
@@ -245,7 +245,7 @@ Deprecate a skill with optional replacement.
 Natural language query for procedural knowledge.
 
 ```python
-skill, steps, confidence = await ww.how_to("write pytest tests")
+skill, steps, confidence = await t4dm.how_to("write pytest tests")
 if skill:
     print(f"Found: {skill.name} (confidence: {confidence:.0%})")
     for step in steps:
@@ -305,22 +305,22 @@ class Skill:
 ## Error Handling
 
 ```python
-from ww.sdk.client import (
-    WorldWeaverError,
+from t4dm.sdk.client import (
+    T4DMError,
     ConnectionError,
     NotFoundError,
     RateLimitError,
 )
 
 try:
-    episode = await ww.get_episode(some_id)
+    episode = await t4dm.get_episode(some_id)
 except NotFoundError:
     print("Episode not found")
 except RateLimitError as e:
     print(f"Rate limited. Retry after {e.retry_after}s")
 except ConnectionError:
-    print("Cannot connect to World Weaver API")
-except WorldWeaverError as e:
+    print("Cannot connect to T4DM API")
+except T4DMError as e:
     print(f"API error: {e.status_code} - {e.response}")
 ```
 

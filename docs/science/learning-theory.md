@@ -1,10 +1,10 @@
 # Learning Theory Guide
 
-Hinton-inspired analysis of World Weaver's neural learning mechanisms.
+Hinton-inspired analysis of T4DM's neural learning mechanisms.
 
 ## Overview
 
-This document analyzes World Weaver's learning systems through the lens of neural learning theory, particularly drawing on Geoffrey Hinton's contributions to understanding how neural systems learn.
+This document analyzes T4DM's learning systems through the lens of neural learning theory, particularly drawing on Geoffrey Hinton's contributions to understanding how neural systems learn.
 
 **Hinton Plausibility Score**: 7.9/10 (updated Phase 4, 2026-01-04)
 
@@ -28,7 +28,7 @@ This document analyzes World Weaver's learning systems through the lens of neura
 Implemented Hinton's 2022 Forward-Forward Algorithm for layer-local learning without backpropagation:
 
 ```python
-from ww.nca import create_ff_layer, create_ff_network
+from t4dm.nca import create_ff_layer, create_ff_network
 
 # Create a single FF layer
 layer = create_ff_layer(
@@ -76,7 +76,7 @@ is_positive, confidence = network.infer(test_input)
 Grid cells now include hexagonal pattern validation based on Nobel Prize-winning neuroscience:
 
 ```python
-from ww.nca import SpatialCellSystem, SpatialConfig
+from t4dm.nca import SpatialCellSystem, SpatialConfig
 
 spatial = SpatialCellSystem(SpatialConfig(n_grid_modules=3))
 
@@ -97,7 +97,7 @@ print(f"Passes threshold: {results['passes_threshold']}")
 Norepinephrine now encodes unexpected uncertainty, driving adaptive learning rates:
 
 ```python
-from ww.nca import create_locus_coeruleus
+from t4dm.nca import create_locus_coeruleus
 
 lc = create_locus_coeruleus()
 
@@ -122,7 +122,7 @@ if lc.should_update_model():
 Serotonin modulates temporal discounting for long-term credit assignment:
 
 ```python
-from ww.nca import create_raphe_nucleus
+from t4dm.nca import create_raphe_nucleus
 
 raphe = create_raphe_nucleus(setpoint=0.5)
 
@@ -144,7 +144,7 @@ should_wait, value_diff = raphe.evaluate_wait_decision(
 
 ### Three-Factor Learning Rule
 
-World Weaver implements the biologically-plausible three-factor learning rule:
+T4DM implements the biologically-plausible three-factor learning rule:
 
 ```
 Δw = eligibility_trace × neuromodulator × dopamine_signal
@@ -263,7 +263,7 @@ RPE = actual_reward + γ * V(next_state) - V(current_state)
 
 #### 1. Distributed Representations
 
-World Weaver uses high-dimensional embeddings (1024D) that support:
+T4DM uses high-dimensional embeddings (1024D) that support:
 - Pattern completion
 - Graceful degradation
 - Generalization
@@ -309,7 +309,7 @@ All learning rules are local:
 **Solution**: ContrastiveAdapter now provides learnable projection on frozen embeddings.
 
 ```python
-from ww.embedding import create_contrastive_adapter
+from t4dm.embedding import create_contrastive_adapter
 
 adapter = create_contrastive_adapter(
     input_dim=1024,  # BGE-M3 dimension
@@ -349,7 +349,7 @@ graph TB
 
 **Usage**:
 ```python
-from ww.nca import create_ff_network
+from t4dm.nca import create_ff_network
 
 network = create_ff_network([1024, 512, 256])
 stats = network.train_step(positive_data, negative_data)
@@ -398,7 +398,7 @@ graph LR
 
 **Usage**:
 ```python
-from ww.embedding import ContrastiveAdapter, ContrastiveConfig
+from t4dm.embedding import ContrastiveAdapter, ContrastiveConfig
 
 config = ContrastiveConfig(
     input_dim=1024,
@@ -481,13 +481,13 @@ flowchart TD
    - ~~Implement Hinton (2022) algorithm~~
    - ~~Use for learned gates and rerankers~~
    - ~~Local goodness optimization~~
-   - See: `ww.nca.ForwardForwardLayer`, `ww.nca.ForwardForwardNetwork`
+   - See: `t4dm.nca.ForwardForwardLayer`, `t4dm.nca.ForwardForwardNetwork`
 
 2. ~~**Contrastive Embedding Adaptation**~~ ✅ **DONE (Phase 1)**
    - ~~Fine-tune embeddings on domain data~~
    - ~~SimCLR or MoCo-style objective~~
    - ~~Preserve base model knowledge~~
-   - See: `ww.embedding.ContrastiveAdapter`
+   - See: `t4dm.embedding.ContrastiveAdapter`
 
 ### Medium Priority
 
@@ -508,7 +508,7 @@ flowchart TD
    - ~~Part-whole hierarchies~~
    - ~~Equivariant representations~~
    - ~~Better compositionality~~
-   - See: `ww.nca.CapsuleNetwork`, `ww.nca.CapsuleNCACoupling`
+   - See: `t4dm.nca.CapsuleNetwork`, `t4dm.nca.CapsuleNCACoupling`
 
 ## Phase 4 Enhancements (2026-01-04)
 
@@ -517,7 +517,7 @@ flowchart TD
 Implemented Hinton's 2017 Capsule Networks for part-whole hierarchical representations:
 
 ```python
-from ww.nca import create_capsule_network, RoutingType
+from t4dm.nca import create_capsule_network, RoutingType
 
 caps = create_capsule_network(
     input_dim=64,
@@ -547,7 +547,7 @@ caps.set_routing_temperature(da_level * 2.0)
 Sleep-gated waste clearance now integrated with memory consolidation:
 
 ```python
-from ww.nca import create_glymphatic_system, SleepStage
+from t4dm.nca import create_glymphatic_system, SleepStage
 
 glymph = create_glymphatic_system()
 glymph.set_sleep_stage(SleepStage.NREM_DEEP)
@@ -585,7 +585,7 @@ graph LR
 
 **Implementation**:
 ```python
-from ww.nca import FFNCACoupling, CapsuleNCACoupling
+from t4dm.nca import FFNCACoupling, CapsuleNCACoupling
 
 ff_nca = FFNCACoupling(ff_network=ff, energy_landscape=energy)
 caps_nca = CapsuleNCACoupling(capsule_net=caps, neural_field=field)

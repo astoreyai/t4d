@@ -1,4 +1,4 @@
-# World Weaver: Computational Neuroscience Analysis
+# T4DM: Computational Neuroscience Analysis
 
 **Analysis Date**: 2025-12-06
 **System Version**: 0.1.0
@@ -8,7 +8,7 @@
 
 ## Executive Summary
 
-World Weaver implements an impressive array of biologically-inspired memory mechanisms. However, there are critical gaps in neural computation models, plasticity timescales, and consolidation mechanisms. The system is approximately **65% biologically plausible** but requires key enhancements to approach AGI-capable memory.
+T4DM implements an impressive array of biologically-inspired memory mechanisms. However, there are critical gaps in neural computation models, plasticity timescales, and consolidation mechanisms. The system is approximately **65% biologically plausible** but requires key enhancements to approach AGI-capable memory.
 
 **Critical Strengths**:
 - Pattern separation (DG-like orthogonalization)
@@ -933,9 +933,9 @@ class ContextualBinding:
 
 ## 6. Comparative Analysis
 
-### World Weaver vs. Other Systems
+### T4DM vs. Other Systems
 
-| Feature | World Weaver | DeepMind DNC | OpenAI GPT Memory | Human Brain |
+| Feature | T4DM | DeepMind DNC | OpenAI GPT Memory | Human Brain |
 |---------|--------------|--------------|-------------------|-------------|
 | Episodic memory | ✓ (FSRS) | ✓ (Temporal) | ✗ | ✓ |
 | Semantic memory | ✓ (Hebbian) | ✗ | ✓ (Implicit) | ✓ |
@@ -949,12 +949,12 @@ class ContextualBinding:
 | Neuromodulation | ✗ | ✗ | ✗ | ✓ |
 | **Plausibility** | 65% | 40% | 30% | 100% |
 
-**World Weaver Strengths**:
+**T4DM Strengths**:
 - Most comprehensive memory architecture
 - Strong consolidation mechanisms
 - Biologically-grounded plasticity
 
-**World Weaver Weaknesses**:
+**T4DM Weaknesses**:
 - Missing attention
 - No predictive processing
 - Incomplete neuromodulation
@@ -963,7 +963,7 @@ class ContextualBinding:
 
 ## 7. Conclusion
 
-World Weaver is the most biologically sophisticated AI memory system I've analyzed, implementing mechanisms that even cutting-edge systems like DNC and GPT ignore. The **reconsolidation**, **sleep consolidation**, and **synaptic plasticity** implementations are particularly impressive.
+T4DM is the most biologically sophisticated AI memory system I've analyzed, implementing mechanisms that even cutting-edge systems like DNC and GPT ignore. The **reconsolidation**, **sleep consolidation**, and **synaptic plasticity** implementations are particularly impressive.
 
 However, reaching AGI-capable memory requires:
 
@@ -973,7 +973,7 @@ However, reaching AGI-capable memory requires:
 4. **Systems consolidation** (P1) - Temporal dynamics of memory transfer
 5. **Neuromodulation** (P1) - State-dependent encoding/retrieval
 
-With these additions (estimated 3-4 months), World Weaver would achieve **~85% biological plausibility** and possess the memory capabilities approaching human-level AGI for knowledge domains.
+With these additions (estimated 3-4 months), T4DM would achieve **~85% biological plausibility** and possess the memory capabilities approaching human-level AGI for knowledge domains.
 
 The current 79% test coverage is excellent. Priority should be:
 1. Add the P0 features (attention, prediction, RPE)

@@ -1,4 +1,4 @@
-# World Weaver: Phase 11+ Production Completion Plan
+# T4DM: Phase 11+ Production Completion Plan
 
 **Created**: 2026-01-05 | **Status**: DETAILED PLANNING COMPLETE
 **Based on**: Expert Agent Analysis (Hinton, CompBio, Architecture, Cleanup)
@@ -8,7 +8,7 @@
 
 ## Executive Summary
 
-This plan synthesizes findings from 4 expert agent analyses to complete World Weaver for production deployment.
+This plan synthesizes findings from 4 expert agent analyses to complete T4DM for production deployment.
 
 ### Expert Assessment Scores
 
@@ -602,9 +602,9 @@ class EncodingContext:
 ```
 
 **Update Imports**:
-- `sdk/agent_client.py` → `from ww.core.contexts import RetrievalContext`
-- `bridges/nca_bridge.py` → `from ww.core.contexts import RetrievalContext`
-- `learning/collector.py` → `from ww.core.contexts import RetrievalContext`
+- `sdk/agent_client.py` → `from t4dm.core.contexts import RetrievalContext`
+- `bridges/nca_bridge.py` → `from t4dm.core.contexts import RetrievalContext`
+- `learning/collector.py` → `from t4dm.core.contexts import RetrievalContext`
 
 **Effort**: 4 hours
 
@@ -618,7 +618,7 @@ class EncodingContext:
 
 **Actions**:
 1. `mv src/t4dm/integration src/t4dm/cc_api`
-2. Update all imports (grep for `from ww.integration`)
+2. Update all imports (grep for `from t4dm.integration`)
 3. Update `__init__.py` exports
 
 **Effort**: 2 hours
@@ -696,24 +696,24 @@ rm docs/API.md  # Superseded by API_WALKTHROUGH.md
 
 ## Integration & Usage Guide
 
-### How to Integrate World Weaver (3 Patterns)
+### How to Integrate T4DM (3 Patterns)
 
 #### Pattern 1: MCP Server (Claude Code/Desktop)
 
 **Setup** (5 minutes):
 ```bash
-export WW_API_URL=http://localhost:8765
-python -m ww.mcp.server
+export T4DM_API_URL=http://localhost:8765
+python -m t4dm.mcp.server
 ```
 
 **Add to Claude Code** (`settings.json`):
 ```json
 {
   "mcpServers": {
-    "world-weaver": {
+    "t4dm": {
       "command": "python",
-      "args": ["-m", "ww.mcp.server"],
-      "env": {"WW_API_URL": "http://localhost:8765"}
+      "args": ["-m", "t4dm.mcp.server"],
+      "env": {"T4DM_API_URL": "http://localhost:8765"}
     }
   }
 }
@@ -730,12 +730,12 @@ python -m ww.mcp.server
 
 **Install**:
 ```bash
-pip install world-weaver[api]
+pip install t4dm[api]
 ```
 
 **Usage**:
 ```python
-from ww.sdk import AgentMemoryClient
+from t4dm.sdk import AgentMemoryClient
 
 async with AgentMemoryClient(api_url="http://localhost:8765") as memory:
     # Store experience
@@ -761,7 +761,7 @@ async with AgentMemoryClient(api_url="http://localhost:8765") as memory:
 #### Pattern 3: WWAgent (Full Agent Wrapper)
 
 ```python
-from ww.sdk import WWAgent, AgentConfig
+from t4dm.sdk import WWAgent, AgentConfig
 
 agent = WWAgent(
     config=AgentConfig(
@@ -800,8 +800,8 @@ async with agent.session():
 
 ```bash
 # Build images
-docker build -f deploy/docker/Dockerfile -t world-weaver:0.5.0 .
-docker build -f deploy/docker/Dockerfile.worker -t world-weaver-worker:0.5.0 .
+docker build -f deploy/docker/Dockerfile -t t4dm:0.5.0 .
+docker build -f deploy/docker/Dockerfile.worker -t t4dm-worker:0.5.0 .
 
 # Deploy with compose
 docker compose -f deploy/docker/docker-compose.prod.yml up -d
@@ -813,8 +813,8 @@ curl http://localhost:8765/api/v1/health
 ### Kubernetes Deployment
 
 ```bash
-helm install ww deploy/helm/world-weaver/ \
-  --namespace world-weaver \
+helm install ww deploy/helm/t4dm/ \
+  --namespace t4dm \
   --create-namespace \
   --values custom-values.yaml
 ```
@@ -843,7 +843,7 @@ twine upload dist/*
 **Total**: ~3 weeks
 
 **After Completion**:
-- `pip install world-weaver` works
+- `pip install t4dm` works
 - MCP server provides 6+ tools
 - Learning actually updates representations
 - Biological fidelity validated
@@ -868,7 +868,7 @@ twine upload dist/*
 ### Production Readiness (Architecture Target: 98%)
 - [ ] Main Dockerfile exists
 - [ ] Versions synchronized
-- [ ] `pip install world-weaver` works
+- [ ] `pip install t4dm` works
 - [ ] `helm install` works
 - [ ] All tests passing
 

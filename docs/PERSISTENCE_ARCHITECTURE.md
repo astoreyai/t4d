@@ -1,8 +1,8 @@
-# World Weaver Persistence Architecture
+# T4DM Persistence Architecture
 
 ## Overview
 
-The persistence layer ensures World Weaver survives crashes and restarts without data loss. It implements the Write-Ahead Logging (WAL) pattern used by production databases.
+The persistence layer ensures T4DM survives crashes and restarts without data loss. It implements the Write-Ahead Logging (WAL) pattern used by production databases.
 
 ## Components
 
@@ -91,7 +91,7 @@ SIGTERM received
 Unified interface that coordinates all components:
 
 ```python
-from ww.persistence import PersistenceManager, PersistenceConfig
+from t4dm.persistence import PersistenceManager, PersistenceConfig
 
 persistence = PersistenceManager(PersistenceConfig(
     data_directory=Path("/var/lib/ww"),
@@ -114,7 +114,7 @@ await persistence.shutdown()
 ## Data Layout
 
 ```
-/var/lib/world-weaver/
+/var/lib/t4dm/
 ├── wal/
 │   ├── segment_00000001.wal
 │   ├── segment_00000002.wal
@@ -195,7 +195,7 @@ PersistenceConfig(
 ### Systemd
 ```ini
 [Service]
-ExecStart=/opt/t4dm/venv/bin/python -m ww.mcp.persistent_server
+ExecStart=/opt/t4dm/venv/bin/python -m t4dm.mcp.persistent_server
 TimeoutStopSec=60
 Restart=always
 ```
@@ -203,11 +203,11 @@ Restart=always
 ### Docker
 ```yaml
 services:
-  world-weaver:
+  t4dm:
     restart: always
     stop_grace_period: 60s
     volumes:
-      - ww-data:/var/lib/world-weaver
+      - ww-data:/var/lib/t4dm
 ```
 
 ## Testing

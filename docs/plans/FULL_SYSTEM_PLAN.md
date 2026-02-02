@@ -645,7 +645,7 @@ No external services. No Docker for storage. Embedded, runs in-process.
   - `read_source`: `legacy` | `t4dx` | `both` (compare)
   - In `dual` mode: write to both stores, read from `read_source`
   - Consistency spot-check: 1% of reads compare both stores, log mismatches
-  - Feature flag: `WW_STORAGE_BACKEND=legacy|dual|t4dx`
+  - Feature flag: `T4DM_STORAGE_BACKEND=legacy|dual|t4dx`
 - **Test**: `tests/unit/storage/test_migration.py`
 - **Deps**: T4D-P2-10, T4D-P2-11
 - **Accept**: Configurable mode, consistency monitoring, gradual migration
@@ -930,7 +930,7 @@ Step 2: Protocol Adapters (P2-10, P2-11)
 Step 3: Dual-Write (P2-12)
   Write to both stores, read from legacy
   Monitor consistency rate (target: >99%)
-  Feature flag: WW_STORAGE_BACKEND=dual
+  Feature flag: T4DM_STORAGE_BACKEND=dual
 
 Step 4: Validation (P2-13)
   Bulk load existing data into T4DX
@@ -938,7 +938,7 @@ Step 4: Validation (P2-13)
   Gradually shift reads: 10% → 50% → 100% T4DX
 
 Step 5: Cutover (P2-14)
-  WW_STORAGE_BACKEND=t4dx
+  T4DM_STORAGE_BACKEND=t4dx
   Remove Saga imports from 6 files
   Remove Qdrant/Neo4j imports from 16 files
   Remove Neo4j + Qdrant from docker-compose

@@ -1,6 +1,6 @@
 # Glymphatic System API Reference
 
-**Module**: `ww.nca.glymphatic`, `ww.nca.glymphatic_consolidation_bridge`
+**Module**: `t4dm.nca.glymphatic`, `t4dm.nca.glymphatic_consolidation_bridge`
 **Version**: Phase 4
 **Biology Score**: 89/100
 
@@ -31,7 +31,7 @@ The glymphatic system implements sleep-gated waste clearance following the biolo
 Configuration for waste clearance system.
 
 ```python
-from ww.nca.glymphatic import GlymphaticConfig
+from t4dm.nca.glymphatic import GlymphaticConfig
 
 config = GlymphaticConfig(
     # Sleep-state clearance rates (biological values)
@@ -82,7 +82,7 @@ config = GlymphaticConfig(
 Sleep state enumeration.
 
 ```python
-from ww.nca.glymphatic import WakeSleepMode
+from t4dm.nca.glymphatic import WakeSleepMode
 
 WakeSleepMode.ACTIVE_WAKE  # Engaged in tasks
 WakeSleepMode.QUIET_WAKE   # Relaxed, drowsy
@@ -98,7 +98,7 @@ WakeSleepMode.REM          # REM sleep - lowest clearance
 Categories of neural waste.
 
 ```python
-from ww.nca.glymphatic import WasteCategory
+from t4dm.nca.glymphatic import WasteCategory
 
 WasteCategory.UNUSED_EMBEDDING   # Not retrieved in N days
 WasteCategory.WEAK_CONNECTION    # Low Hebbian weight
@@ -114,7 +114,7 @@ WasteCategory.EXPIRED_EPISODE    # Old episodic memory
 Current state of identified waste.
 
 ```python
-from ww.nca.glymphatic import WasteState
+from t4dm.nca.glymphatic import WasteState
 
 state = WasteState()
 
@@ -140,7 +140,7 @@ print(state.total_cleared_by_category)
 Main waste clearance system.
 
 ```python
-from ww.nca.glymphatic import GlymphaticSystem, GlymphaticConfig
+from t4dm.nca.glymphatic import GlymphaticSystem, GlymphaticConfig
 
 config = GlymphaticConfig()
 glymphatic = GlymphaticSystem(config=config)
@@ -210,7 +210,7 @@ stats = glymphatic.get_statistics()
 Tracks waste items for clearance.
 
 ```python
-from ww.nca.glymphatic import WasteTracker, GlymphaticConfig
+from t4dm.nca.glymphatic import WasteTracker, GlymphaticConfig
 
 tracker = WasteTracker(GlymphaticConfig())
 
@@ -244,7 +244,7 @@ history = tracker.get_clearance_history(
 Record of a clearance operation.
 
 ```python
-from ww.nca.glymphatic import ClearanceEvent
+from t4dm.nca.glymphatic import ClearanceEvent
 
 event = ClearanceEvent(
     timestamp=datetime.now(),
@@ -261,7 +261,7 @@ event = ClearanceEvent(
 ## Factory Function
 
 ```python
-from ww.nca.glymphatic import create_glymphatic_system
+from t4dm.nca.glymphatic import create_glymphatic_system
 
 glymphatic = create_glymphatic_system(
     clearance_nrem_deep=0.7,
@@ -282,7 +282,7 @@ glymphatic = create_glymphatic_system(
 Couples glymphatic clearance with sleep consolidation.
 
 ```python
-from ww.nca.glymphatic_consolidation_bridge import (
+from t4dm.nca.glymphatic_consolidation_bridge import (
     GlymphaticConsolidationBridge,
     GlymphaticBridgeConfig,
     ClearanceMode,
@@ -343,7 +343,7 @@ bridge.on_replay_complete(["mem_1", "mem_2"])
 Clearance mode enumeration.
 
 ```python
-from ww.nca.glymphatic_consolidation_bridge import ClearanceMode
+from t4dm.nca.glymphatic_consolidation_bridge import ClearanceMode
 
 ClearanceMode.MINIMAL     # Active wake - minimal clearance
 ClearanceMode.SELECTIVE   # Quiet wake/REM - selective
@@ -355,10 +355,10 @@ ClearanceMode.BULK        # NREM deep - bulk clearance
 ## Integration Example
 
 ```python
-from ww.nca.glymphatic import GlymphaticSystem, WakeSleepMode
-from ww.nca.glymphatic_consolidation_bridge import GlymphaticConsolidationBridge
-from ww.nca.oscillators import DeltaOscillator
-from ww.nca.neural_field import NeurotransmitterState
+from t4dm.nca.glymphatic import GlymphaticSystem, WakeSleepMode
+from t4dm.nca.glymphatic_consolidation_bridge import GlymphaticConsolidationBridge
+from t4dm.nca.oscillators import DeltaOscillator
+from t4dm.nca.neural_field import NeurotransmitterState
 
 # Create systems
 glymphatic = GlymphaticSystem()

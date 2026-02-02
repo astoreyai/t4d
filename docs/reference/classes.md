@@ -1,6 +1,6 @@
 # Class Diagrams
 
-UML class diagrams for World Weaver subsystems.
+UML class diagrams for T4DM subsystems.
 
 ## Memory Subsystem Classes
 

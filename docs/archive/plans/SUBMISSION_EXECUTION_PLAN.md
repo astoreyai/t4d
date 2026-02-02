@@ -1,4 +1,4 @@
-# World Weaver Publication Execution Plan
+# T4DM Publication Execution Plan
 **Created**: 2024-12-05 | **Target**: PhD-Level Journal Submission
 
 ## Executive Summary
@@ -27,7 +27,7 @@
 |----------|------|-------|
 | Source | `src/t4dm/` | 29,020 lines core implementation |
 | Tests | `tests/` | 1,259 tests |
-| Papers | `docs/world_weaver_final.tex`, `docs/papers/philosophy_of_ai_memory.tex` | PRIMARY |
+| Papers | `docs/t4dm_final.tex`, `docs/papers/philosophy_of_ai_memory.tex` | PRIMARY |
 | Config | `pyproject.toml`, `requirements.txt`, `.env.example` | Build files |
 | Docker | `Dockerfile`, `docker-compose.yml` | Deployment |
 | Docs | `README.md`, `ARCHITECTURE.md` | Essential only |
@@ -114,7 +114,7 @@ Same verification protocol.
 ### After Each Phase:
 ```bash
 # Compile papers
-cd /mnt/projects/t4d/t4dm/docs && pdflatex -interaction=nonstopmode world_weaver_final.tex
+cd /mnt/projects/t4d/t4dm/docs && pdflatex -interaction=nonstopmode t4dm_final.tex
 cd /mnt/projects/t4d/t4dm/docs/papers && pdflatex philosophy_of_ai_memory.tex
 
 # Run tests

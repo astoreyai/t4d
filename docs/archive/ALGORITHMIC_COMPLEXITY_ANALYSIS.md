@@ -1,14 +1,14 @@
-# World Weaver Algorithmic Complexity Analysis
+# T4DM Algorithmic Complexity Analysis
 
 **Date**: 2026-01-03
-**Analyst**: World Weaver Algorithm Design Agent
+**Analyst**: T4DM Algorithm Design Agent
 **Codebase Version**: Latest (commit ea7094d)
 
 ---
 
 ## Executive Summary
 
-This document provides comprehensive algorithmic complexity analysis of World Weaver's core components, including memory operations, embedding computations, consolidation algorithms, and prediction systems. Key findings:
+This document provides comprehensive algorithmic complexity analysis of T4DM's core components, including memory operations, embedding computations, consolidation algorithms, and prediction systems. Key findings:
 
 1. **Critical Path Operations**: Most operations are O(n) or O(log n), with HDBSCAN clustering as the main O(n log n) operation
 2. **Identified Bottlenecks**: Two O(n^2) patterns found in pairwise similarity computations (now mitigated)
@@ -238,7 +238,7 @@ Space: O(300 * prediction_size)
 ### 2.2 Graph Structures
 
 #### Causal Graph (Neo4j)
-**File**: `/mnt/projects/t4d/t4dm/src/t4dm/storage/neo4j_store.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/storage/t4dx_graph_adapter.py`
 
 ```
 Structure: Property graph with Episode, Entity, Procedure nodes
@@ -279,7 +279,7 @@ Space: O(K * (d + m)) where K = clusters, m = avg members per cluster
 ### 2.3 Index Structures
 
 #### Vector Index (Qdrant HNSW)
-**File**: `/mnt/projects/t4d/t4dm/src/t4dm/storage/qdrant_store.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/storage/t4dx_vector_adapter.py`
 
 ```
 Structure: HNSW (Hierarchical Navigable Small World)
@@ -332,7 +332,7 @@ Space: O(K * h + d * h) ~= 390KB per index
 |-----------|-----------|------------|------------|
 | ~~Pairwise duplicate detection~~ | service.py:952 | ~~O(n^2)~~ | **FIXED**: Now O(n*k) via ANN |
 | HDBSCAN worst case | service.py:1114 | O(n^2) | Sampling cap at 2000 |
-| Path finding | neo4j_store.py:1218 | O(d^k) | Depth limit of 10 |
+| Path finding | t4dx_graph_adapter.py:1218 | O(d^k) | Depth limit of 10 |
 | Full buffer probe | buffer_manager.py:226 | O(n*d) | Buffer capped at 50 |
 
 ### 3.2 Memory-Intensive Operations
@@ -349,10 +349,10 @@ Space: O(K * h + d * h) ~= 390KB per index
 
 | Operation | File:Line | Bottleneck | Mitigation |
 |-----------|-----------|------------|------------|
-| Qdrant search | qdrant_store.py:444 | Network RTT | Batch operations |
-| Neo4j queries | neo4j_store.py:460 | Connection pool | Pool size configurable |
+| Qdrant search | t4dx_vector_adapter.py:444 | Network RTT | Batch operations |
+| Neo4j queries | t4dx_graph_adapter.py:460 | Connection pool | Pool size configurable |
 | Embedding model | bge_m3.py:258 | GPU memory | FP16 mode, caching |
-| Hybrid collection | qdrant_store.py:551 | Double storage | Optional feature |
+| Hybrid collection | t4dx_vector_adapter.py:551 | Double storage | Optional feature |
 
 ---
 
@@ -363,15 +363,15 @@ Space: O(K * h + d * h) ~= 390KB per index
 | Operation | File:Line | Current Status | Recommendation |
 |-----------|-----------|----------------|----------------|
 | Batch embedding | bge_m3.py:484 | Sequential batches | Already batched, GPU parallelism |
-| Batch vector upsert | qdrant_store.py:298 | Parallel with semaphore | Good (max_concurrency=10) |
-| Batch payload update | qdrant_store.py:979 | Parallel with semaphore | Good (max_concurrency=10) |
+| Batch vector upsert | t4dx_vector_adapter.py:298 | Parallel with semaphore | Good (max_concurrency=10) |
+| Batch payload update | t4dx_vector_adapter.py:979 | Parallel with semaphore | Good (max_concurrency=10) |
 | Cluster assignment | service.py:896 | Sequential | Could parallelize centroid comparison |
 
 ### 4.2 Batch Processing Opportunities
 
 | Operation | File:Line | Current | Opportunity |
 |-----------|-----------|---------|-------------|
-| Relationship creation | neo4j_store.py:642 | **OPTIMIZED** | batch_create_relationships with UNWIND |
+| Relationship creation | t4dx_graph_adapter.py:642 | **OPTIMIZED** | batch_create_relationships with UNWIND |
 | Provenance linking | service.py:721 | **OPTIMIZED** | Batch collection before create |
 | Payload updates | service.py:579 | Per-duplicate | Could batch after loop |
 
@@ -379,20 +379,20 @@ Space: O(K * h + d * h) ~= 390KB per index
 
 ```python
 # Pattern 1: Semaphore-limited concurrency
-# File: qdrant_store.py:341-353
+# File: t4dx_vector_adapter.py:341-353
 semaphore = asyncio.Semaphore(max_concurrency)
 async def add_with_limit(chunk_ids, chunk_vecs, chunk_payloads):
     async with semaphore:
         await self._add_batch(...)
 
 # Pattern 2: asyncio.gather for parallel operations
-# File: qdrant_store.py:356-363
+# File: t4dx_vector_adapter.py:356-363
 tasks = [add_with_limit(chunk_ids, chunk_vecs, chunk_payloads)
          for chunk_ids, chunk_vecs, chunk_payloads in chunks]
 await asyncio.gather(*tasks)
 
 # Pattern 3: Circuit breaker for resilience
-# File: qdrant_store.py:96-106
+# File: t4dx_vector_adapter.py:96-106
 async def _with_timeout(self, coro, operation: str):
     async def _execute():
         async with asyncio.timeout(self.timeout):
@@ -400,7 +400,7 @@ async def _with_timeout(self, coro, operation: str):
     return await self._circuit_breaker.execute(_execute)
 
 # Pattern 4: Lock-protected singleton initialization
-# File: qdrant_store.py:127-146
+# File: t4dx_vector_adapter.py:127-146
 async with self._get_init_lock():
     if self._client is None:
         self._client = AsyncQdrantClient(...)
@@ -529,10 +529,10 @@ async with self._get_init_lock():
 | Consolidation | `/mnt/projects/t4d/t4dm/src/t4dm/consolidation/service.py` |
 | Embeddings | `/mnt/projects/t4d/t4dm/src/t4dm/embedding/bge_m3.py` |
 | Prediction | `/mnt/projects/t4d/t4dm/src/t4dm/prediction/hierarchical_predictor.py` |
-| Vector Store | `/mnt/projects/t4d/t4dm/src/t4dm/storage/qdrant_store.py` |
-| Graph Store | `/mnt/projects/t4d/t4dm/src/t4dm/storage/neo4j_store.py` |
+| Vector Store | `/mnt/projects/t4d/t4dm/src/t4dm/storage/t4dx_vector_adapter.py` |
+| Graph Store | `/mnt/projects/t4d/t4dm/src/t4dm/storage/t4dx_graph_adapter.py` |
 | STDP Learning | `/mnt/projects/t4d/t4dm/src/t4dm/learning/stdp.py` |
 
 ---
 
-*Generated by World Weaver Algorithm Design Agent*
+*Generated by T4DM Algorithm Design Agent*

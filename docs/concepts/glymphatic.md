@@ -1,6 +1,6 @@
 # Glymphatic System
 
-Sleep-gated waste clearance for World Weaver memory maintenance.
+Sleep-gated waste clearance for T4DM memory maintenance.
 
 **Phase 4 Implementation**: Biology B8 (glymphatic clearance)
 **Phase 7 Update**: VAE generative replay integration, multi-night scheduling
@@ -56,7 +56,7 @@ class WasteCategory(Enum):
 ### Basic Glymphatic System
 
 ```python
-from ww.nca import GlymphaticSystem, GlymphaticConfig, create_glymphatic_system
+from t4dm.nca import GlymphaticSystem, GlymphaticConfig, create_glymphatic_system
 
 config = GlymphaticConfig(
     clearance_nrem_deep=0.9,    # 90% during SWS
@@ -78,7 +78,7 @@ print(f"Stale memories: {waste_state.stale_memories}")
 ### With Delta Oscillator Coupling
 
 ```python
-from ww.nca import DeltaOscillator, GlymphaticSystem
+from t4dm.nca import DeltaOscillator, GlymphaticSystem
 
 delta = DeltaOscillator(frequency=1.5)  # 1.5 Hz delta waves
 glymphatic = GlymphaticSystem(config)
@@ -93,7 +93,7 @@ def on_delta_upstate(phase: float):
 ### Integration with Sleep Cycle
 
 ```python
-from ww.nca import AdenosineDynamics, GlymphaticSystem, SWRCoupling
+from t4dm.nca import AdenosineDynamics, GlymphaticSystem, SWRCoupling
 
 adenosine = AdenosineDynamics()
 glymphatic = GlymphaticSystem(config)
@@ -131,7 +131,7 @@ SWR Replay → Consolidate important memories → Clear waste
 ```
 
 ```python
-from ww.nca import GlymphaticConsolidationBridge
+from t4dm.nca import GlymphaticConsolidationBridge
 
 bridge = GlymphaticConsolidationBridge(
     glymphatic=glymphatic,
@@ -203,7 +203,7 @@ class GlymphaticConfig:
 During sleep consolidation, the glymphatic clearance coordinates with generative replay:
 
 ```python
-from ww.consolidation import SleepConsolidation
+from t4dm.consolidation import SleepConsolidation
 
 consolidation = SleepConsolidation(
     vae_enabled=True,       # Enable VAE-based replay

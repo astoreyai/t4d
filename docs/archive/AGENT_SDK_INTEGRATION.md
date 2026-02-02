@@ -1,8 +1,8 @@
-# World Weaver: Claude Agent SDK Integration
+# T4DM: Claude Agent SDK Integration
 
 **Phase 10 Complete** | **Version**: 0.5.0
 
-This document covers the integration between World Weaver's memory system and the Claude Agent SDK, enabling agents to learn from experience through biologically-inspired mechanisms.
+This document covers the integration between T4DM's memory system and the Claude Agent SDK, enabling agents to learn from experience through biologically-inspired mechanisms.
 
 ---
 
@@ -11,7 +11,7 @@ This document covers the integration between World Weaver's memory system and th
 ### 1. Using WWAgent (Recommended)
 
 ```python
-from ww.sdk import WWAgent, AgentConfig
+from t4dm.sdk import WWAgent, AgentConfig
 
 # Create agent with memory
 agent = WWAgent(
@@ -40,7 +40,7 @@ async with agent.session():
 ### 2. Using AgentMemoryClient Directly
 
 ```python
-from ww.sdk import AgentMemoryClient
+from t4dm.sdk import AgentMemoryClient
 
 async with AgentMemoryClient(api_url="http://localhost:8765") as memory:
     # Store experience
@@ -69,16 +69,16 @@ async with AgentMemoryClient(api_url="http://localhost:8765") as memory:
 
 ```bash
 # Start MCP server
-python -m ww.mcp.server
+python -m t4dm.mcp.server
 
 # Or configure in Claude Code settings
 {
   "mcpServers": {
-    "world-weaver": {
+    "t4dm": {
       "command": "python",
-      "args": ["-m", "ww.mcp.server"],
+      "args": ["-m", "t4dm.mcp.server"],
       "env": {
-        "WW_API_URL": "http://localhost:8765"
+        "T4DM_API_URL": "http://localhost:8765"
       }
     }
   }
@@ -91,7 +91,7 @@ python -m ww.mcp.server
 
 ```
 +------------------+     +------------------+     +------------------+
-|  Claude Agent    |     |   WWAgent        |     |  World Weaver    |
+|  Claude Agent    |     |   WWAgent        |     |  T4DM    |
 |  SDK             |<--->|   (Wrapper)      |<--->|  Memory API      |
 +------------------+     +------------------+     +------------------+
                                |                         |
@@ -114,7 +114,7 @@ python -m ww.mcp.server
 |-----------|---------|----------|
 | `WWAgent` | Full agent wrapper with memory | `t4dm/sdk/agent.py` |
 | `AgentMemoryClient` | Direct memory access with learning | `t4dm/sdk/agent_client.py` |
-| `WorldWeaverMCPServer` | MCP server for Claude Code | `t4dm/mcp/server.py` |
+| `T4DMMCPServer` | MCP server for Claude Code | `t4dm/mcp/server.py` |
 | `SessionStartHook` | Load context at session start | `t4dm/hooks/session_lifecycle.py` |
 | `SessionEndHook` | Persist and consolidate at end | `t4dm/hooks/session_lifecycle.py` |
 | `TaskOutcomeHook` | Learn from task outcomes | `t4dm/hooks/session_lifecycle.py` |
@@ -128,7 +128,7 @@ The `WWAgent` class wraps the Claude Agent SDK with automatic memory integration
 ### Configuration
 
 ```python
-from ww.sdk.agent import WWAgent, AgentConfig
+from t4dm.sdk.agent import WWAgent, AgentConfig
 
 config = AgentConfig(
     name="research-assistant",
@@ -212,7 +212,7 @@ Direct memory access with three-factor learning support.
 ### Initialization
 
 ```python
-from ww.sdk.agent_client import AgentMemoryClient
+from t4dm.sdk.agent_client import AgentMemoryClient
 
 # Default settings
 client = AgentMemoryClient()
@@ -291,7 +291,7 @@ await client.trigger_consolidation(mode="full")
 
 ## MCP Server
 
-The MCP server provides World Weaver tools to Claude Code.
+The MCP server provides T4DM tools to Claude Code.
 
 ### Available Tools
 
@@ -355,7 +355,7 @@ Integrate memory operations with Claude Code hooks.
 ### Creating Hooks
 
 ```python
-from ww.hooks.session_lifecycle import create_session_hooks
+from t4dm.hooks.session_lifecycle import create_session_hooks
 
 hooks = create_session_hooks(
     api_url="http://localhost:8765",
@@ -374,7 +374,7 @@ idle_hook = hooks["idle"]
 ### SessionStartHook
 
 ```python
-from ww.hooks.session_lifecycle import SessionStartHook
+from t4dm.hooks.session_lifecycle import SessionStartHook
 
 hook = SessionStartHook(
     memory_client=client,
@@ -394,7 +394,7 @@ print(f"Loaded {len(context.memories)} context memories")
 ### SessionEndHook
 
 ```python
-from ww.hooks.session_lifecycle import SessionEndHook
+from t4dm.hooks.session_lifecycle import SessionEndHook
 
 hook = SessionEndHook(
     memory_client=client,
@@ -412,7 +412,7 @@ print(f"Memories stored: {result['memories_stored']}")
 ### TaskOutcomeHook
 
 ```python
-from ww.hooks.session_lifecycle import TaskOutcomeHook
+from t4dm.hooks.session_lifecycle import TaskOutcomeHook
 
 hook = TaskOutcomeHook(
     memory_client=client,
@@ -434,7 +434,7 @@ print(f"Credited: {result['credited']} memories")
 Triggers consolidation during idle periods:
 
 ```python
-from ww.hooks.session_lifecycle import IdleConsolidationHook
+from t4dm.hooks.session_lifecycle import IdleConsolidationHook
 
 hook = IdleConsolidationHook(
     memory_client=client,
@@ -586,12 +586,12 @@ result = await client.report_task_outcome("task-1", success=True)
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `WW_API_URL` | `http://localhost:8765` | World Weaver API URL |
-| `WW_SESSION_ID` | Auto-generated | Session identifier |
-| `WW_API_KEY` | None | Optional API key |
-| `WW_ELIGIBILITY_DECAY` | `0.95` | Eligibility trace decay |
-| `WW_BASE_LR` | `0.01` | Base learning rate |
-| `WW_MAX_CONTEXT` | `20` | Max context memories |
+| `T4DM_API_URL` | `http://localhost:8765` | T4DM API URL |
+| `T4DM_SESSION_ID` | Auto-generated | Session identifier |
+| `T4DM_API_KEY` | None | Optional API key |
+| `T4DM_ELIGIBILITY_DECAY` | `0.95` | Eligibility trace decay |
+| `T4DM_BASE_LR` | `0.01` | Base learning rate |
+| `T4DM_MAX_CONTEXT` | `20` | Max context memories |
 
 ### AgentConfig Options
 
@@ -669,13 +669,13 @@ print(f"Mode: {client._current_nt_state.acetylcholine_mode}")
 
 ```bash
 # Check server is running
-ps aux | grep "ww.mcp.server"
+ps aux | grep "t4dm.mcp.server"
 
 # Check port
 netstat -tlnp | grep 8765
 
 # Run with debug logging
-WW_LOG_LEVEL=DEBUG python -m ww.mcp.server
+T4DM_LOG_LEVEL=DEBUG python -m t4dm.mcp.server
 ```
 
 ---
@@ -685,4 +685,4 @@ WW_LOG_LEVEL=DEBUG python -m ww.mcp.server
 - **Phase 11**: Documentation site and production launch
 - **Helm Chart**: Kubernetes deployment
 - **Monitoring**: Grafana dashboards for learning metrics
-- **PyPI**: `pip install world-weaver`
+- **PyPI**: `pip install t4dm`

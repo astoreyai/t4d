@@ -1,7 +1,7 @@
-# Quality Assurance Report: World Weaver IEEE Paper
+# Quality Assurance Report: T4DM IEEE Paper
 **IEEE Transactions on Artificial Intelligence Submission**
 
-**Document:** `/mnt/projects/t4d/t4dm/docs/world_weaver_final.tex`
+**Document:** `/mnt/projects/t4d/t4dm/docs/t4dm_final.tex`
 **Review Date:** 2025-12-05
 **Reviewer Role:** Research Quality Assurance Specialist
 **Review Level:** PhD-level comprehensive analysis
@@ -206,7 +206,7 @@ Opening hook (lines 46-48)
 **Issues - MINOR:**
 
 - Table 1 (lines 365-378): Query types are well-chosen, but how were query sets constructed? Line 498 acknowledges "curated rather than randomly sampled" - good honesty.
-- Table 2 (lines 386-399): "No Memory" baseline - is this same LLM with no World Weaver, or truly no memory at all (each turn independent)?
+- Table 2 (lines 386-399): "No Memory" baseline - is this same LLM with no T4DM, or truly no memory at all (each turn independent)?
 - Table 3 (lines 407-420): What is "Satisfaction" measured on? 5-point Likert scale?
 - Line 422: "removing decay hurts performance (p<0.05)" - this is interesting but deserves more discussion. Why does forgetting help?
 
@@ -231,8 +231,8 @@ Opening hook (lines 46-48)
 
 **Strengths:**
 - Exceptional self-awareness of limitations
-- "What World Weaver Does Well" (457-464): Honest assessment
-- "What World Weaver Does Poorly" (466-476): Rare candor
+- "What T4DM Does Well" (457-464): Honest assessment
+- "What T4DM Does Poorly" (466-476): Rare candor
 - "Fundamental Questions" (479-484): Deep engagement with conceptual issues
 - "Philosophical Tensions" (486-488): Acknowledges paradigm conflicts
 - "Limitations" (491-502): Comprehensive disclosure
@@ -261,7 +261,7 @@ Opening hook (lines 46-48)
 **Issues:**
 - Brief (only 9 lines before Ethical Considerations)
 - Some overlap with Critical Analysis section - could these be consolidated?
-- "The central question this work raises is not whether World Weaver is optimal, but whether explicit memory architecture is the right approach at all" - this is profound but underdeveloped
+- "The central question this work raises is not whether T4DM is optimal, but whether explicit memory architecture is the right approach at all" - this is profound but underdeveloped
 
 **Recommendation:**
 - Expand discussion to 15-20 lines
@@ -280,7 +280,7 @@ Opening hook (lines 46-48)
 - Acknowledges consolidation amplifies attacks (line 530)
 
 **Issues:**
-- Line 518: "GDPR's right to erasure" - this is stated but not fully developed. What are the technical requirements? Is World Weaver compliant?
+- Line 518: "GDPR's right to erasure" - this is stated but not fully developed. What are the technical requirements? Is T4DM compliant?
 - Line 536: "Differential Memory" - one sentence, underdeveloped. This is an important issue deserving more attention.
 - Missing: Privacy concerns beyond GDPR (surveillance, tracking)
 - Missing: Alignment implications of persistent memory
@@ -546,8 +546,8 @@ Line-by-line verification:
 
 **Strong Transitions:**
 - Line 78: "We survey 52 papers..." - clear transition to related work
-- Line 163: "World Weaver emerges from..." - links problem statement to architecture
-- Line 353: "We evaluate World Weaver across..." - clear transition to evaluation
+- Line 163: "T4DM emerges from..." - links problem statement to architecture
+- Line 353: "We evaluate T4DM across..." - clear transition to evaluation
 - Line 455: "To illustrate..." - good transition to case study
 
 **No issues identified.**
@@ -663,7 +663,7 @@ Line-by-line verification:
 ### 5.3 Data Availability
 
 **Statement (line 648):**
-"Code and data will be released upon acceptance at: https://github.com/astoreyai/world-weaver"
+"Code and data will be released upon acceptance at: https://github.com/astoreyai/t4dm"
 
 **Issues:**
 - "Upon acceptance" - some journals require availability at submission
@@ -871,7 +871,7 @@ Line-by-line verification:
 - Fundamentals of AI
 - Machine learning
 - Reasoning and decision-making
-- **AI applications and systems** ← World Weaver fits here
+- **AI applications and systems** ← T4DM fits here
 - Trustworthy AI
 
 **Assessment:** ✓ EXCELLENT FIT - Memory systems for AI agents is directly relevant
@@ -898,7 +898,7 @@ Line-by-line verification:
 - Short papers (4-6 pages)
 - Survey papers (20+ pages)
 
-**World Weaver:** Regular paper with survey component (52-paper survey)
+**T4DM:** Regular paper with survey component (52-paper survey)
 
 **Assessment:** ✓ APPROPRIATE for regular paper
 
@@ -1023,12 +1023,12 @@ Based on this QA analysis, here are predicted reviewer concerns:
      Direct comparison with MemGPT was not conducted due to
      architectural differences that make controlled comparison
      difficult. MemGPT uses LLM-driven memory management within
-     a hierarchical tier system, while World Weaver uses explicit
+     a hierarchical tier system, while T4DM uses explicit
      cognitive structures with algorithmic consolidation. Meaningful
      comparison would require implementing both systems in identical
      environments with identical tasks - a substantial undertaking
      beyond this initial work. We acknowledge this as a limitation
-     and focus on demonstrating World Weaver's capabilities rather
+     and focus on demonstrating T4DM's capabilities rather
      than claiming superiority over alternatives.
      ```
 
@@ -1060,7 +1060,7 @@ Based on this QA analysis, here are predicted reviewer concerns:
 
 1. **Honest Critical Analysis (Section 6)**
    - Rare to see such candid self-assessment
-   - "What World Weaver Does Poorly" section is exemplary
+   - "What T4DM Does Poorly" section is exemplary
    - Limitations clearly stated
 
 2. **Strong Cognitive Science Foundation**
@@ -1265,7 +1265,7 @@ Based on this QA analysis, here are predicted reviewer concerns:
 ## SIGNATURE
 
 **Quality Assurance Specialist:** Research QA Agent
-**Institution:** World Weaver Project
+**Institution:** T4DM Project
 **Date:** 2025-12-05
 
 **Certification:** This review was conducted according to PhD-level academic standards for IEEE Transactions on Artificial Intelligence. All issues identified are based on careful line-by-line analysis of the manuscript. Recommendations are prioritized by impact on publication success.

@@ -6,18 +6,18 @@ Concrete code changes to address findings from security audit.
 
 ### Fix M-1: Cypher Injection Prevention
 
-**File**: `src/t4dm/storage/neo4j_store.py`
+**File**: `src/t4dm/storage/t4dx_graph_adapter.py`
 
 Add label/type validation at the beginning of the file:
 
 ```python
-# Add after imports, before Neo4jStore class
+# Add after imports, before T4DXGraphAdapter class
 
 # Whitelist of allowed node labels
 ALLOWED_LABELS = {"Episode", "Entity", "Procedure"}
 
 # Whitelist of allowed relationship types (import from types.py)
-from ww.core.types import RelationType
+from t4dm.core.types import RelationType
 ALLOWED_REL_TYPES = {rt.value for rt in RelationType}
 
 def validate_label(label: str) -> str:
@@ -103,7 +103,7 @@ Create session management system:
 
 ```python
 """
-Session authentication and authorization for World Weaver.
+Session authentication and authorization for T4DM.
 """
 
 import secrets
@@ -220,7 +220,7 @@ Add authentication to MCP tools:
 
 ```python
 # Add import
-from ww.mcp.session_manager import get_session_manager
+from t4dm.mcp.session_manager import get_session_manager
 
 # Add authentication decorator
 def require_auth(func):
@@ -288,7 +288,7 @@ neo4j_password: str = Field(
 # AFTER:
 neo4j_password: str = Field(
     ...,  # Required, no default
-    description="Neo4j password (set via WW_NEO4J_PASSWORD env var)",
+    description="Neo4j password (set via T4DM_NEO4J_PASSWORD env var)",
 )
 
 # OR with runtime validation:
@@ -303,7 +303,7 @@ def model_post_init(self, __context):
     if self.neo4j_password in ("", "password", "neo4j"):
         raise ValueError(
             "Insecure Neo4j password detected. "
-            "Set WW_NEO4J_PASSWORD environment variable to a strong password."
+            "Set T4DM_NEO4J_PASSWORD environment variable to a strong password."
         )
 
     # Check for production deployment with defaults
@@ -322,7 +322,7 @@ def model_post_init(self, __context):
 
 ```python
 """
-Rate limiting for World Weaver MCP tools.
+Rate limiting for T4DM MCP tools.
 """
 
 from collections import defaultdict
@@ -407,7 +407,7 @@ def get_rate_limiter(operation: str = "default") -> RateLimiter:
 Add rate limiting to tools:
 
 ```python
-from ww.mcp.rate_limiter import get_rate_limiter
+from t4dm.mcp.rate_limiter import get_rate_limiter
 
 # Add decorator
 def rate_limit(operation: str = "create"):
@@ -607,7 +607,7 @@ class Settings(BaseSettings):
 
     embedding_cache_dir: str = Field(
         default_factory=lambda: str(
-            Path.home() / ".cache" / "world_weaver" / "models"
+            Path.home() / ".cache" / "t4dm" / "models"
         ),
         description="Directory for model caching",
     )

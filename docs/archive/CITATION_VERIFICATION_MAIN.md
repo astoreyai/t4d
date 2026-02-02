@@ -1,7 +1,7 @@
-# Citation Verification Report: World Weaver IEEE Paper
+# Citation Verification Report: T4DM IEEE Paper
 
 **Date**: 2025-12-05
-**Document**: `/mnt/projects/t4d/t4dm/docs/world_weaver_final.tex`
+**Document**: `/mnt/projects/t4d/t4dm/docs/t4dm_final.tex`
 **Total Citations**: 59
 **Prepared For**: PhD Dissertation Submission - IEEE Transactions on Artificial Intelligence
 
@@ -26,7 +26,7 @@
 ### MUST FIX Before Submission
 
 **Citation**: anderson2004integrated
-**Location**: Line 671 in `world_weaver_final.tex`
+**Location**: Line 671 in `t4dm_final.tex`
 **Issue**: Incorrect publication year
 
 **Current**:
@@ -346,7 +346,7 @@ arXiv preprint arXiv:2310.08560, 2023.
 
 ## Conclusion
 
-The World Weaver IEEE paper contains 59 citations that have been comprehensively verified. The citation quality is **PhD dissertation-level** and meets IEEE Transactions standards.
+The T4DM IEEE paper contains 59 citations that have been comprehensively verified. The citation quality is **PhD dissertation-level** and meets IEEE Transactions standards.
 
 **Key Findings**:
 - 59.3% automatically verified via CrossRef and arXiv APIs

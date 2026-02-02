@@ -2,7 +2,7 @@
 
 **7 files | ~2,200 lines | Centrality: 0**
 
-The hooks module provides a flexible event system for extending World Weaver's memory lifecycle with custom processing, logging, caching, and validation.
+The hooks module provides a flexible event system for extending T4DM's memory lifecycle with custom processing, logging, caching, and validation.
 
 ## Architecture Overview
 
@@ -56,7 +56,7 @@ The hooks module provides a flexible event system for extending World Weaver's m
 ## Priority Levels
 
 ```python
-from ww.hooks import HookPriority
+from t4dm.hooks import HookPriority
 
 CRITICAL = 0      # Security, validation, auth
 HIGH = 100        # Observability, auditing
@@ -72,7 +72,7 @@ LOW = 1000        # Caching, cleanup
 ### Creating a Hook
 
 ```python
-from ww.hooks import Hook, HookContext, HookPhase, HookPriority
+from t4dm.hooks import Hook, HookContext, HookPhase, HookPriority
 
 class LoggingHook(Hook):
     """Log all memory operations."""
@@ -93,7 +93,7 @@ class LoggingHook(Hook):
 ### Registering Hooks
 
 ```python
-from ww.hooks import HookRegistry
+from t4dm.hooks import HookRegistry
 
 registry = HookRegistry(name="episodic_memory")
 
@@ -107,7 +107,7 @@ await registry.execute_phase(HookPhase.POST, context)
 ### Using the Decorator
 
 ```python
-from ww.hooks import with_hooks
+from t4dm.hooks import with_hooks
 
 @with_hooks(registry_name="episodic")
 async def store_episode(content: str, **kwargs) -> Episode:
@@ -135,7 +135,7 @@ async def store_episode(content: str, **kwargs) -> Episode:
 ### Core Hooks (core.py)
 
 ```python
-from ww.hooks import InitHook, ShutdownHook, HealthCheckHook, ConfigChangeHook
+from t4dm.hooks import InitHook, ShutdownHook, HealthCheckHook, ConfigChangeHook
 
 # Initialization
 class DatabaseInitHook(InitHook):
@@ -160,7 +160,7 @@ class DBHealthHook(HealthCheckHook):
 ### Memory Hooks (memory.py)
 
 ```python
-from ww.hooks import CreateHook, RecallHook, UpdateHook, AccessHook, DecayHook
+from t4dm.hooks import CreateHook, RecallHook, UpdateHook, AccessHook, DecayHook
 
 # Create hook with type filtering
 class ValidationHook(CreateHook):
@@ -194,7 +194,7 @@ class HebbianUpdateHook(AccessHook):
 ### Storage Hooks (storage.py)
 
 ```python
-from ww.hooks import QueryHook, ConnectionHook, ErrorHook, RetryHook
+from t4dm.hooks import QueryHook, ConnectionHook, ErrorHook, RetryHook
 
 # Query timing
 class QueryTimingHook(QueryHook):
@@ -223,7 +223,7 @@ class CircuitBreakerHook(ErrorHook):
 ### Consolidation Hooks (consolidation.py)
 
 ```python
-from ww.hooks import (
+from t4dm.hooks import (
     PreConsolidateHook, PostConsolidateHook,
     DuplicateFoundHook, ClusterFormHook, EntityExtractedHook
 )
@@ -377,7 +377,7 @@ class ExponentialBackoffHook(RetryHook):
 
 ```python
 import pytest
-from ww.hooks import HookRegistry, HookContext, HookPhase
+from t4dm.hooks import HookRegistry, HookContext, HookPhase
 
 @pytest.fixture
 def registry():

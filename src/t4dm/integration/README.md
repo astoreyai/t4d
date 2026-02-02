@@ -2,7 +2,7 @@
 
 **4 files | ~1,700 lines | Centrality: 5**
 
-The integration module provides adapters connecting external agent frameworks (llm_agents/ccapi) to World Weaver's tripartite memory system and learning feedback loops.
+The integration module provides adapters connecting external agent frameworks (llm_agents/ccapi) to T4DM's tripartite memory system and learning feedback loops.
 
 ## Architecture Overview
 
@@ -46,7 +46,7 @@ The integration module provides adapters connecting external agent frameworks (l
 Implements llm_agents Memory interface:
 
 ```python
-from ww.integration import WWMemory, create_ww_memory
+from t4dm.integration import WWMemory, create_ww_memory
 
 memory = await create_ww_memory(
     session_id="agent-session",
@@ -84,7 +84,7 @@ memory.clear()
 - Stores as `Episode` objects
 - Session-isolated
 - Emits retrieval events to learning system
-- Lazy-loads: BGEM3Embedder, EpisodicMemory, QdrantStore
+- Lazy-loads: BGEM3Embedder, EpisodicMemory, T4DXVectorAdapter
 
 ## Observer Protocol Adapter
 
@@ -93,7 +93,7 @@ memory.clear()
 Converts ccapi events to WW learning outcomes:
 
 ```python
-from ww.integration import WWObserver, create_ww_observer
+from t4dm.integration import WWObserver, create_ww_observer
 
 observer = await create_ww_observer(
     session_id="agent-session",
@@ -162,7 +162,7 @@ collector.record_outcome(
 ### Router Factory
 
 ```python
-from ww.integration import create_ww_router
+from t4dm.integration import create_ww_router
 
 router = create_ww_router(
     session_id="default",
@@ -377,8 +377,8 @@ results = await episodic.recall(
 ### With WW Memory
 
 ```python
-from ww.memory import EpisodicMemory, SemanticMemory, ProceduralMemory
-from ww.memory.unified import UnifiedMemoryService
+from t4dm.memory import EpisodicMemory, SemanticMemory, ProceduralMemory
+from t4dm.memory.unified import UnifiedMemoryService
 
 # Store episode
 await episodic.store(episode)
@@ -390,9 +390,9 @@ await unified.search(query, k=10, memory_types=["episodic", "semantic"])
 ### With Learning
 
 ```python
-from ww.learning.collector import get_collector
-from ww.learning.events import MemoryType, OutcomeType
-from ww.learning.hooks import emit_retrieval_event
+from t4dm.learning.collector import get_collector
+from t4dm.learning.events import MemoryType, OutcomeType
+from t4dm.learning.hooks import emit_retrieval_event
 
 # Emit retrieval signal
 emit_retrieval_event(
@@ -413,7 +413,7 @@ collector.record_outcome(
 ### With Embeddings
 
 ```python
-from ww.embedding.bge_m3 import BGEM3Embedder
+from t4dm.embedding.bge_m3 import BGEM3Embedder
 
 embedder = await BGEM3Embedder.create()
 ```
@@ -453,7 +453,7 @@ class Span:
 pytest tests/unit/test_ccapi_integration.py -v
 
 # With coverage
-pytest tests/unit/test_ccapi_integration.py --cov=ww.integration
+pytest tests/unit/test_ccapi_integration.py --cov=t4dm.integration
 ```
 
 **Test Coverage**: 695+ lines, comprehensive unit tests

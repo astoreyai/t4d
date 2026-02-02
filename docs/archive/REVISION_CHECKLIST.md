@@ -1,4 +1,4 @@
-# World Weaver Paper - Revision Checklist
+# T4DM Paper - Revision Checklist
 
 **Target Journal**: IEEE Transactions on Artificial Intelligence
 **Current Status**: MINOR REVISION REQUIRED
@@ -117,7 +117,7 @@ Add new subsection under Section 5 (Evaluation):
 
 - [ ] Update paper line 648:
   ```latex
-  Code and data are available at: \url{https://github.com/astoreyai/world-weaver}
+  Code and data are available at: \url{https://github.com/astoreyai/t4dm}
   ```
 
 **Estimated Time**: 1-2 days (code exists, needs cleanup + documentation)
@@ -403,4 +403,4 @@ Issues? Uncertainties? Consider:
 
 **Document Version**: 1.0
 **Created**: 2025-12-04
-**Based on**: Comprehensive quality assessment of world_weaver_final.tex
+**Based on**: Comprehensive quality assessment of t4dm_final.tex

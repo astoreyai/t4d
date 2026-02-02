@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document defines the monitoring, feedback, and observability systems for World Weaver's bioinspired neural memory components. Real-time visibility into biological dynamics enables debugging, tuning, and validation.
+This document defines the monitoring, feedback, and observability systems for T4DM's bioinspired neural memory components. Real-time visibility into biological dynamics enables debugging, tuning, and validation.
 
 ---
 
@@ -686,7 +686,7 @@ async def bio_metrics_endpoint(websocket: WebSocket):
 
 ```json
 {
-  "title": "World Weaver - Bioinspired Metrics",
+  "title": "T4DM - Bioinspired Metrics",
   "panels": [
     {
       "title": "Sparsity Over Time",

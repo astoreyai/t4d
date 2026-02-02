@@ -1,4 +1,4 @@
-# World Weaver Test Templates - Quick Start
+# T4DM Test Templates - Quick Start
 
 Use these templates to quickly add tests for the critical gaps identified in the analysis.
 
@@ -10,8 +10,8 @@ File: `tests/visualization/test_telemetry_hub.py`
 import pytest
 import numpy as np
 from unittest.mock import Mock, patch
-from ww.visualization.telemetry_hub import TelemetryHub
-from ww.visualization.neuromodulator_state import NeuromodulatorState
+from t4dm.visualization.telemetry_hub import TelemetryHub
+from t4dm.visualization.neuromodulator_state import NeuromodulatorState
 
 
 class TestTelemetryHubBasics:
@@ -225,8 +225,8 @@ File: `tests/prediction/test_active_inference.py`
 import pytest
 import numpy as np
 from unittest.mock import Mock, patch
-from ww.prediction.active_inference import ActiveInference
-from ww.prediction.context_encoder import ContextEncoder
+from t4dm.prediction.active_inference import ActiveInference
+from t4dm.prediction.context_encoder import ContextEncoder
 
 
 class TestActiveInferenceBasics:
@@ -445,15 +445,15 @@ File: `tests/storage/test_neo4j_advanced.py`
 import pytest
 import time
 import numpy as np
-from ww.storage.neo4j_store import Neo4jStore
+from t4dm.storage.t4dx_graph_adapter import T4DXGraphAdapter
 
 
-class TestNeo4jStoreAdvanced:
+class TestT4DXGraphAdapterAdvanced:
     """Advanced integration tests for Neo4j storage."""
 
     def test_batch_write_performance(self):
         """Test batch insertion performance."""
-        store = Neo4jStore()
+        store = T4DXGraphAdapter()
 
         start = time.perf_counter()
         for i in range(100):  # Start small, scale up
@@ -469,7 +469,7 @@ class TestNeo4jStoreAdvanced:
 
     def test_complex_query(self):
         """Test complex graph query."""
-        store = Neo4jStore()
+        store = T4DXGraphAdapter()
 
         # Add test data
         for i in range(10):
@@ -490,7 +490,7 @@ class TestNeo4jStoreAdvanced:
 
     def test_transactional_consistency(self):
         """Test transactional consistency."""
-        store = Neo4jStore()
+        store = T4DXGraphAdapter()
 
         try:
             store.begin_transaction()
@@ -508,7 +508,7 @@ class TestNeo4jStoreAdvanced:
 
     def test_large_property_storage(self):
         """Test storing large properties."""
-        store = Neo4jStore()
+        store = T4DXGraphAdapter()
 
         large_data = {
             "vector": np.random.randn(256).tolist(),
@@ -532,8 +532,8 @@ File: `tests/persistence/test_recovery_advanced.py`
 import pytest
 import tempfile
 import os
-from ww.persistence.manager import PersistenceManager
-from ww.persistence.recovery import RecoveryManager
+from t4dm.persistence.manager import PersistenceManager
+from t4dm.persistence.recovery import RecoveryManager
 
 
 class TestCrashRecovery:

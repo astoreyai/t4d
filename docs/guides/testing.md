@@ -1,10 +1,10 @@
 # Testing Guide
 
-Write reliable tests for World Weaver integrations.
+Write reliable tests for T4DM integrations.
 
 ## Test Structure
 
-World Weaver's test suite is organized as:
+T4DM's test suite is organized as:
 
 ```
 tests/
@@ -44,7 +44,7 @@ pytest tests/ --cov=src/ww --cov-report=html
 
 ```python
 import pytest
-from ww.memory.episodic import EpisodicMemory
+from t4dm.memory.episodic import EpisodicMemory
 
 @pytest.mark.asyncio
 async def test_episode_creation():
@@ -153,7 +153,7 @@ docker-compose -f docker-compose.test.yml down
 
 ```python
 import pytest
-from ww.hooks.base import HookContext, HookPhase
+from t4dm.hooks.base import HookContext, HookPhase
 from uuid import uuid4
 
 @pytest.fixture
@@ -189,7 +189,7 @@ import pytest
 import numpy as np
 
 def test_dopamine_rpe():
-    from ww.learning.dopamine import DopamineSystem
+    from t4dm.learning.dopamine import DopamineSystem
 
     da = DopamineSystem()
 
@@ -213,7 +213,7 @@ import pytest
 import numpy as np
 
 def test_neural_field_stability():
-    from ww.nca import NeuralField
+    from t4dm.nca import NeuralField
 
     field = NeuralField()
 
@@ -239,8 +239,8 @@ def test_neural_field_stability():
 |---------|-------------|
 | `event_loop` | Session-scoped event loop |
 | `mock_embedding_service` | Mocked embedding service |
-| `mock_qdrant_store` | Mocked Qdrant store |
-| `mock_neo4j_store` | Mocked Neo4j store |
+| `mock_t4dx_vector_adapter` | Mocked Qdrant store |
+| `mock_t4dx_graph_adapter` | Mocked Neo4j store |
 | `test_session_id` | Unique session ID per test |
 | `sample_episode` | Sample episode object |
 | `sample_entity` | Sample entity object |
@@ -250,8 +250,8 @@ def test_neural_field_stability():
 ```python
 @pytest.mark.asyncio
 async def test_with_fixtures(
-    mock_qdrant_store,
-    mock_neo4j_store,
+    mock_t4dx_vector_adapter,
+    mock_t4dx_graph_adapter,
     test_session_id,
     sample_episode
 ):

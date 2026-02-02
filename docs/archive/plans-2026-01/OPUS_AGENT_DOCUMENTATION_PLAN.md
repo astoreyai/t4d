@@ -1,4 +1,4 @@
-# World Weaver Comprehensive Documentation Analysis Plan
+# T4DM Comprehensive Documentation Analysis Plan
 
 **Version**: 2.0
 **Created**: 2026-01-04
@@ -9,7 +9,7 @@
 
 ## Executive Summary
 
-This plan orchestrates two specialized Opus agents to comprehensively analyze and document the World Weaver codebase:
+This plan orchestrates two specialized Opus agents to comprehensively analyze and document the T4DM codebase:
 
 1. **ww-hinton**: Neural architecture analysis, learning algorithms, representation theory, Hinton-inspired design validation
 2. **ww-compbio**: Biological validation, neuroscience accuracy, parameter auditing, literature verification

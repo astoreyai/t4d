@@ -1,4 +1,4 @@
-# World Weaver: Computational Biology Validation Report
+# T4DM: Computational Biology Validation Report
 **Date:** 2026-01-07
 **Evaluator:** Claude (Sonnet 4.5) - Computational Biology Agent
 **Version:** 0.4.0
@@ -8,7 +8,7 @@
 
 ## Executive Summary
 
-World Weaver demonstrates **exceptional biological fidelity** in its implementation of computational neuroscience principles. The system scores **82/100** on overall biological plausibility, with particularly strong implementations of memory consolidation, neuromodulator dynamics, and synaptic plasticity mechanisms.
+T4DM demonstrates **exceptional biological fidelity** in its implementation of computational neuroscience principles. The system scores **82/100** on overall biological plausibility, with particularly strong implementations of memory consolidation, neuromodulator dynamics, and synaptic plasticity mechanisms.
 
 ### Overall Scores
 - **Memory Consolidation:** 9/10
@@ -762,7 +762,7 @@ class SharpWaveRipple:
 
 **CompBio Score: 82/100 (Excellent)**
 
-World Weaver demonstrates **exceptional biological fidelity** for a computational system. The implementation shows:
+T4DM demonstrates **exceptional biological fidelity** for a computational system. The implementation shows:
 
 **Strengths:**
 - Accurate time constants from literature ✓
@@ -833,7 +833,7 @@ This system is **publication-ready** in computational neuroscience venues. Sugge
 
 ## Conclusion
 
-World Weaver achieves **82/100** on biological plausibility, placing it in the **top tier** of computational neuroscience implementations. The system successfully bridges:
+T4DM achieves **82/100** on biological plausibility, placing it in the **top tier** of computational neuroscience implementations. The system successfully bridges:
 
 - **AI objectives** (efficient learning, generalization)
 - **Neuroscience accuracy** (correct mechanisms, timescales)
@@ -853,4 +853,4 @@ The identified issues are **enhancements**, not critical flaws. The core biologi
 **3-4/10:** Inspired by biology, significant deviations
 **1-2/10:** Minimal biological correspondence
 
-World Weaver components consistently score **7-9/10**, demonstrating exceptional biological fidelity.
+T4DM components consistently score **7-9/10**, demonstrating exceptional biological fidelity.

@@ -1,8 +1,8 @@
 # IEEE Transactions on Artificial Intelligence
-## Desk Review: World Weaver
+## Desk Review: T4DM
 
 **Manuscript ID**: TBD
-**Title**: World Weaver: Cognitive Memory Architecture for Persistent World Models in Agentic AI Systems
+**Title**: T4DM: Cognitive Memory Architecture for Persistent World Models in Agentic AI Systems
 **Author**: Aaron W. Storey (Clarkson University)
 **Review Date**: December 4, 2025
 **Reviewer Role**: Senior Editor
@@ -627,7 +627,7 @@ Your paper addresses an important problem in AI agent architecture and presents 
 - **Figure 3: Performance Analysis**
   - Performance vs. memory size
   - Performance vs. time/sessions
-  - Comparative performance plot (World Weaver vs. baselines)
+  - Comparative performance plot (T4DM vs. baselines)
 
 #### 4. Baselines and Comparisons (IMPORTANT)
 **Current State**: Only "dense-only" baseline; no comparison with existing memory systems.

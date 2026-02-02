@@ -1,4 +1,4 @@
-# World Weaver Paper - Quick Reference Card
+# T4DM Paper - Quick Reference Card
 
 **Overall Score**: 7.8/10 | **Verdict**: MINOR REVISION REQUIRED | **Timeline**: 1-2 weeks to fix
 

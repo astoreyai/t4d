@@ -56,7 +56,7 @@ Where `p = sigmoid(goodness - threshold)` is the classification probability.
 ### Basic Layer
 
 ```python
-from ww.nca import create_ff_layer, ForwardForwardConfig
+from t4dm.nca import create_ff_layer, ForwardForwardConfig
 
 # Create a layer
 layer = create_ff_layer(
@@ -85,7 +85,7 @@ layer.learn_negative(x, h)
 ### Multi-Layer Network
 
 ```python
-from ww.nca import create_ff_network
+from t4dm.nca import create_ff_network
 
 # Create a 3-layer network
 network = create_ff_network(
@@ -167,7 +167,7 @@ The FF algorithm is more biologically plausible than backpropagation:
 ## Configuration
 
 ```python
-from ww.nca import ForwardForwardConfig
+from t4dm.nca import ForwardForwardConfig
 
 config = ForwardForwardConfig(
     # Layer dimensions
@@ -204,14 +204,14 @@ config = ForwardForwardConfig(
 )
 ```
 
-## Integration with World Weaver
+## Integration with T4DM
 
 ### With NCA Energy System
 
 The FF algorithm integrates with the existing energy-based learning in `energy.py`:
 
 ```python
-from ww.nca import EnergyLandscape, ForwardForwardNetwork
+from t4dm.nca import EnergyLandscape, ForwardForwardNetwork
 
 # FF can be used for learned gates and rerankers
 ff_network = create_ff_network([1024, 256, 64])
@@ -259,7 +259,7 @@ Threshold θ = Energy barrier height
 ### Bidirectional Information Flow
 
 ```python
-from ww.nca import FFNCACoupling, FFNCACouplingConfig
+from t4dm.nca import FFNCACoupling, FFNCACouplingConfig
 
 coupling = FFNCACoupling(FFNCACouplingConfig(
     goodness_to_energy_scale=1.0,
@@ -287,7 +287,7 @@ ff_feedback = coupling.nca_to_ff(energy_state)
 The Forward-Forward algorithm integrates with retrieval through the `FFRetrievalScorer` bridge:
 
 ```python
-from ww.bridges import FFRetrievalScorer, FFRetrievalConfig
+from t4dm.bridges import FFRetrievalScorer, FFRetrievalConfig
 
 # Create scorer
 scorer = FFRetrievalScorer(

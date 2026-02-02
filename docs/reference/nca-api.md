@@ -50,7 +50,7 @@ t4dm/nca/
 3D spatiotemporal PDE solver for neurotransmitter dynamics.
 
 ```python
-from ww.nca import NeuralFieldSolver, NeuralFieldConfig, NeurotransmitterState
+from t4dm.nca import NeuralFieldSolver, NeuralFieldConfig, NeurotransmitterState
 
 config = NeuralFieldConfig(
     grid_size=(32, 32, 32),
@@ -75,7 +75,7 @@ new_state = solver.step(nt_state, external_input=stimulus)
 Hopfield-inspired energy function with contrastive learning.
 
 ```python
-from ww.nca import EnergyLandscape, EnergyConfig, HopfieldIntegration
+from t4dm.nca import EnergyLandscape, EnergyConfig, HopfieldIntegration
 
 config = EnergyConfig(
     beta=8.0,           # Inverse temperature
@@ -100,7 +100,7 @@ retrieved = energy.relax_to_equilibrium(query, max_steps=10)
 Cognitive state attractor management.
 
 ```python
-from ww.nca import AttractorBasin, CognitiveState, StateTransitionManager
+from t4dm.nca import AttractorBasin, CognitiveState, StateTransitionManager
 
 # Define cognitive states
 states = [
@@ -123,7 +123,7 @@ current = manager.get_current_state()
 Dopamine production from reward prediction error.
 
 ```python
-from ww.nca import VTACircuit, VTAConfig, create_vta_circuit
+from t4dm.nca import VTACircuit, VTAConfig, create_vta_circuit
 
 config = VTAConfig(
     tonic_rate=4.5,       # Hz (baseline)
@@ -145,7 +145,7 @@ da_output = vta.compute_da_release(
 Serotonin production with patience model.
 
 ```python
-from ww.nca import RapheNucleus, PatienceModel, create_raphe_nucleus
+from t4dm.nca import RapheNucleus, PatienceModel, create_raphe_nucleus
 
 raphe = create_raphe_nucleus(RapheConfig(
     baseline_rate=2.0,  # Hz
@@ -166,7 +166,7 @@ discount_factor = patience.compute_discount(delay=5.0, sht_level=0.6)
 Norepinephrine with surprise model.
 
 ```python
-from ww.nca import LocusCoeruleus, SurpriseModel, create_locus_coeruleus
+from t4dm.nca import LocusCoeruleus, SurpriseModel, create_locus_coeruleus
 
 lc = create_locus_coeruleus(LCConfig(
     tonic_rate=2.0,    # Hz
@@ -191,7 +191,7 @@ ne_level = surprise.compute_surprise_signal(
 DG→CA3→CA1 circuit for memory encoding/retrieval.
 
 ```python
-from ww.nca import (
+from t4dm.nca import (
     HippocampalCircuit, HippocampalConfig, HippocampalMode,
     create_hippocampal_circuit
 )
@@ -222,7 +222,7 @@ print(f"Mode: {'encoding' if state.novelty_score > 0.5 else 'retrieval'}")
 Place cells and grid modules.
 
 ```python
-from ww.nca import SpatialCellSystem, SpatialConfig, Position2D
+from t4dm.nca import SpatialCellSystem, SpatialConfig, Position2D
 
 config = SpatialConfig(
     n_place_cells=256,
@@ -244,7 +244,7 @@ spatial_code = spatial.encode(position)
 Hinton (2022) Forward-Forward algorithm.
 
 ```python
-from ww.nca import (
+from t4dm.nca import (
     ForwardForwardNetwork, ForwardForwardConfig,
     create_ff_network, FFPhase
 )
@@ -273,7 +273,7 @@ goodness = ff.forward(test_input, phase=FFPhase.INFERENCE)
 Dynamic routing for part-whole relationships.
 
 ```python
-from ww.nca import (
+from t4dm.nca import (
     CapsuleNetwork, CapsuleConfig, RoutingType,
     create_capsule_network
 )
@@ -307,7 +307,7 @@ poses = caps.get_poses()
 Sleep pressure accumulation and clearance.
 
 ```python
-from ww.nca import AdenosineDynamics, AdenosineConfig, SleepWakeState
+from t4dm.nca import AdenosineDynamics, AdenosineConfig, SleepWakeState
 
 adenosine = AdenosineDynamics(AdenosineConfig(
     accumulation_rate=0.1,
@@ -330,7 +330,7 @@ print(f"Recommended: {state.sleep_recommendation}")
 Sharp-wave ripple generation and replay.
 
 ```python
-from ww.nca import SWRNeuralFieldCoupling, SWRConfig, create_swr_coupling
+from t4dm.nca import SWRNeuralFieldCoupling, SWRConfig, create_swr_coupling
 
 swr = create_swr_coupling(SWRConfig(
     ripple_freq_min=80.0,   # Hz
@@ -353,7 +353,7 @@ for event in events:
 Sleep-gated waste clearance.
 
 ```python
-from ww.nca import GlymphaticSystem, GlymphaticConfig, create_glymphatic_system
+from t4dm.nca import GlymphaticSystem, GlymphaticConfig, create_glymphatic_system
 
 glymphatic = create_glymphatic_system(GlymphaticConfig(
     clearance_nrem_deep=0.7,  # Xie et al. 2013
@@ -375,7 +375,7 @@ cleared = glymphatic.process_clearance_batch(
 Forward-Forward ↔ Energy landscape coupling.
 
 ```python
-from ww.nca import FFNCACoupling, FFNCACouplingConfig
+from t4dm.nca import FFNCACoupling, FFNCACouplingConfig
 
 coupling = FFNCACoupling(FFNCACouplingConfig(
     goodness_to_energy_scale=1.0,
@@ -392,7 +392,7 @@ ff_feedback = coupling.nca_to_ff(energy_state)
 Capsule ↔ NCA coupling with NT modulation.
 
 ```python
-from ww.nca import CapsuleNCACoupling, CapsuleNCACouplingConfig
+from t4dm.nca import CapsuleNCACoupling, CapsuleNCACouplingConfig
 
 coupling = CapsuleNCACoupling(CapsuleNCACouplingConfig(
     da_routing_gain=0.5,
@@ -411,7 +411,7 @@ params = coupling.modulate_routing(capsules, nt_state)
 Tripartite synapse modeling.
 
 ```python
-from ww.nca import AstrocyteLayer, AstrocyteConfig, compute_tripartite_synapse
+from t4dm.nca import AstrocyteLayer, AstrocyteConfig, compute_tripartite_synapse
 
 astrocyte = AstrocyteLayer(AstrocyteConfig(
     n_astrocytes=100,
@@ -432,7 +432,7 @@ synaptic_output = compute_tripartite_synapse(
 All major components have `create_*` factory functions:
 
 ```python
-from ww.nca import (
+from t4dm.nca import (
     create_vta_circuit,
     create_raphe_nucleus,
     create_locus_coeruleus,
@@ -453,10 +453,10 @@ from ww.nca import (
 
 ## Type Exports
 
-All public types are exported from `ww.nca`:
+All public types are exported from `t4dm.nca`:
 
 ```python
-from ww.nca import (
+from t4dm.nca import (
     # Configs
     NeuralFieldConfig, CouplingConfig, EnergyConfig,
     VTAConfig, RapheConfig, LCConfig, MSNConfig,

@@ -1,4 +1,4 @@
-# World Weaver: Computational Biology Review
+# T4DM: Computational Biology Review
 **Reviewer**: ww-compbio agent (Computational Neuroscience & Bioinformatics)
 **Date**: 2026-01-02
 **System Version**: v3.1.0 (6059 tests, 77% coverage)
@@ -10,7 +10,7 @@
 
 **Overall Assessment**: 72/100 → **92/100** (post-Sprint 4 refinements)
 
-World Weaver implements a **sophisticated computational neuroscience model** that goes far beyond marketing claims. While some simplifications exist, the architecture demonstrates deep engagement with hippocampal memory systems, neuromodulation, and synaptic plasticity literature. This is **NOT** superficial bio-branding - it's a serious attempt at biological realism with clear references to published models.
+T4DM implements a **sophisticated computational neuroscience model** that goes far beyond marketing claims. While some simplifications exist, the architecture demonstrates deep engagement with hippocampal memory systems, neuromodulation, and synaptic plasticity literature. This is **NOT** superficial bio-branding - it's a serious attempt at biological realism with clear references to published models.
 
 ### Key Findings
 - **Three-factor learning**: Scientifically valid (Frémaux & Gerstner 2016)
@@ -410,7 +410,7 @@ Spaced repetition scheduler with forgetting curves (Ebbinghaus 1885).
 
 ### Is This "Just Marketing"?
 
-**NO.** World Weaver demonstrates:
+**NO.** T4DM demonstrates:
 - Deep engagement with computational neuroscience literature
 - Correct implementation of published models (three-factor rule)
 - Sophisticated neuromodulator dynamics (6-NT PDE system)
@@ -495,7 +495,7 @@ Spaced repetition scheduler with forgetting curves (Ebbinghaus 1885).
 
 ## 12. Final Verdict
 
-**World Weaver is a SERIOUS computational neuroscience system**, not superficial bio-branding.
+**T4DM is a SERIOUS computational neuroscience system**, not superficial bio-branding.
 
 **Key Evidence**:
 1. Implements **Frémaux & Gerstner 2016** three-factor rule (exact formula)

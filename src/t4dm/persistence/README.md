@@ -9,7 +9,7 @@ Crash-safe durability with Write-Ahead Logging, checkpointing, recovery, and gra
 ## Quick Start
 
 ```python
-from ww.persistence import (
+from t4dm.persistence import (
     PersistenceManager, PersistenceConfig,
     WALOperation, get_persistence,
 )
@@ -147,7 +147,7 @@ class WALOperation(IntEnum):
 ### Usage
 
 ```python
-from ww.persistence import WriteAheadLog, WALConfig
+from t4dm.persistence import WriteAheadLog, WALConfig
 
 wal = WriteAheadLog(WALConfig(
     directory=Path("/var/lib/t4dm/wal"),
@@ -323,7 +323,7 @@ Flush & close WAL
 ### Usage
 
 ```python
-from ww.persistence import ShutdownManager, OperationContext
+from t4dm.persistence import ShutdownManager, OperationContext
 
 shutdown = ShutdownManager(config)
 shutdown.set_checkpoint_function(create_checkpoint)
@@ -347,7 +347,7 @@ async def handle_request():
 Unified interface combining all components:
 
 ```python
-from ww.persistence import PersistenceManager, PersistenceConfig
+from t4dm.persistence import PersistenceManager, PersistenceConfig
 
 config = PersistenceConfig(
     data_directory=Path("/var/lib/t4dm/data"),

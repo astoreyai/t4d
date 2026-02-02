@@ -1,4 +1,4 @@
-# World Weaver Comprehensive Optimization Analysis
+# T4DM Comprehensive Optimization Analysis
 
 **Generated**: 2025-12-06
 **Codebase Version**: 0.1.0
@@ -9,7 +9,7 @@
 
 ## Executive Summary
 
-World Weaver implements a sophisticated tripartite neural memory system with strong theoretical foundations (FSRS, ACT-R, Hebbian learning). Analysis reveals **significant optimization opportunities** across all layers, with potential for **2-10x performance improvements** in critical paths without architectural changes.
+T4DM implements a sophisticated tripartite neural memory system with strong theoretical foundations (FSRS, ACT-R, Hebbian learning). Analysis reveals **significant optimization opportunities** across all layers, with potential for **2-10x performance improvements** in critical paths without architectural changes.
 
 **Priority Areas**:
 1. **Embedding cache optimization** (High impact, low effort)
@@ -148,7 +148,7 @@ def _compute_optimal_batch_size(self, texts: list[str]) -> int:
 
 ## 2. Vector Search Optimization (Qdrant)
 
-### Current Implementation (`src/t4dm/storage/qdrant_store.py`)
+### Current Implementation (`src/t4dm/storage/t4dx_vector_adapter.py`)
 
 **Backend**: Qdrant 1.7.0+
 **HNSW Configuration**: Default (M=16, ef_construct=100)
@@ -170,7 +170,7 @@ def _compute_optimal_batch_size(self, texts: list[str]) -> int:
 - **Current**: Session filter applied as Qdrant filter (line 326-335)
 - **Issue**: Without index on `session_id`, this triggers full collection scan
 - **Impact**: O(n) instead of O(log n) for multi-session deployments
-- **Location**: `qdrant_store.py:289-350`
+- **Location**: `t4dx_vector_adapter.py:289-350`
 
 **Evidence**:
 ```python
@@ -198,7 +198,7 @@ async def _ensure_collection(self, client, name, hybrid=False):
 - **Current**: Two prefetch queries (dense + sparse) with limit * 2 each (line 398-413)
 - **Issue**: Over-fetches candidates (2 * limit * 2 = 4x limit results)
 - **Impact**: 4x network transfer and scoring overhead
-- **Location**: `qdrant_store.py:352-432`
+- **Location**: `t4dx_vector_adapter.py:352-432`
 
 **Current Code**:
 ```python
@@ -245,7 +245,7 @@ async def _adaptive_hybrid_search(self, ...):
 - **Current**: `add()` splits large batches into parallel chunks (line 246-253)
 - **Issue**: Uses `asyncio.gather()` which can overwhelm Qdrant with concurrent writes
 - **Impact**: Rate limiting / connection pool exhaustion on large batches
-- **Location**: `qdrant_store.py:215-286`
+- **Location**: `t4dx_vector_adapter.py:215-286`
 
 **Recommendation**: Add semaphore for controlled concurrency
 ```python
@@ -287,7 +287,7 @@ vectors_config=models.VectorParams(
 
 ## 3. Graph Query Optimization (Neo4j)
 
-### Current Implementation (`src/t4dm/storage/neo4j_store.py`)
+### Current Implementation (`src/t4dm/storage/t4dx_graph_adapter.py`)
 
 **Backend**: Neo4j 5.0+
 **Connection Pool**: 50 connections, 30s timeout, 3600s lifetime
@@ -329,7 +329,7 @@ for node_id, rels in relationships_map.items():
 **B3.2: Cypher Query String Composition** (Medium Priority)
 - **Current**: F-string composition for dynamic queries (line 327-329, 456-459)
 - **Issue**: Potential for Cypher injection despite validation
-- **Location**: `neo4j_store.py` (multiple locations)
+- **Location**: `t4dx_graph_adapter.py` (multiple locations)
 
 **Example**:
 ```python
@@ -357,7 +357,7 @@ async def create_node(self, label, properties):
 **B3.3: Connection Pool Utilization** (Medium Priority)
 - **Current**: Pool size=50, no metrics exposed
 - **Issue**: Unknown if pool is saturated or oversized
-- **Location**: `neo4j_store.py:199-216`
+- **Location**: `t4dx_graph_adapter.py:199-216`
 
 **Recommendation**: Add pool metrics logging
 ```python
@@ -380,7 +380,7 @@ async def _log_pool_stats(self):
 **B3.4: Batch Decay Optimization** (Low Priority)
 - **Current**: Two-pass decay (decay weights, then prune) (line 715-773)
 - **Issue**: Sequential execution, second query scans all relationships again
-- **Location**: `neo4j_store.py:715-773`
+- **Location**: `t4dx_graph_adapter.py:715-773`
 
 **Current Approach**:
 ```python
@@ -413,7 +413,7 @@ RETURN collect(id(r)) as to_delete
 **B3.5: Missing Index on Relationship Properties** (High Priority)
 - **Current**: Indexes only on node properties (sessionId, timestamp)
 - **Issue**: Decay query scans all relationships to check `lastAccessed`
-- **Location**: `neo4j_store.py:234-279` (schema creation)
+- **Location**: `t4dx_graph_adapter.py:234-279` (schema creation)
 
 **Recommendation**: Add relationship property index
 ```python
@@ -667,9 +667,9 @@ async def create_episodes_batch(episodes: list[EpisodeRequest]):
 
 | ID | Optimization | File | Lines | Expected Speedup | Effort |
 |----|-------------|------|-------|------------------|--------|
-| **B2.1** | Session ID payload index | qdrant_store.py | 136-180 | 5-10x (filtered search) | 2h |
+| **B2.1** | Session ID payload index | t4dx_vector_adapter.py | 136-180 | 5-10x (filtered search) | 2h |
 | **B1.1** | Heap-based cache eviction | bge_m3.py | 83-91 | 50% (cache ops) | 1h |
-| **B3.5** | Relationship property index | neo4j_store.py | 234-279 | 3-5x (decay queries) | 1h |
+| **B3.5** | Relationship property index | t4dx_graph_adapter.py | 234-279 | 3-5x (decay queries) | 1h |
 | **B5.1** | Cached service dependencies | api/routes/*.py | TBD | 30-50% (API) | 3h |
 
 **Total Effort**: ~7 hours
@@ -679,9 +679,9 @@ async def create_episodes_batch(episodes: list[EpisodeRequest]):
 
 | ID | Optimization | File | Lines | Expected Speedup | Effort |
 |----|-------------|------|-------|------------------|--------|
-| **B2.2** | Adaptive hybrid search | qdrant_store.py | 352-432 | 20-40% | 6h |
+| **B2.2** | Adaptive hybrid search | t4dx_vector_adapter.py | 352-432 | 20-40% | 6h |
 | **B4.3.2** | Batch graph traversal | semantic.py | 680-688 | O(n) → O(1) queries | 4h |
-| **B3.4** | Single-pass decay | neo4j_store.py | 715-773 | 25% | 3h |
+| **B3.4** | Single-pass decay | t4dx_graph_adapter.py | 715-773 | 25% | 3h |
 | **B1.2** | GPU batch parallelism | bge_m3.py | 489-517 | 2x (large batches) | 5h |
 
 **Total Effort**: ~18 hours
@@ -693,7 +693,7 @@ async def create_episodes_batch(episodes: list[EpisodeRequest]):
 |----|-------------|------|-------|------------------|--------|
 | **B4.2.1** | LRU cache for entity lookups | semantic.py | 411-426 | 15-20% | 2h |
 | **B4.3.1** | Heap-based top-k selection | semantic.py | 665-669 | 10-15% | 1h |
-| **B2.3** | Semaphore-controlled batching | qdrant_store.py | 246-253 | Stability+10% | 2h |
+| **B2.3** | Semaphore-controlled batching | t4dx_vector_adapter.py | 246-253 | Stability+10% | 2h |
 | **B4.1** | FSRS log-space calculation | semantic.py | 281-282 | 10-20% | 2h |
 
 **Total Effort**: ~7 hours
@@ -747,7 +747,7 @@ async def create_episodes_batch(episodes: list[EpisodeRequest]):
 
 import pytest
 import time
-from ww.memory import EpisodicMemory, SemanticMemory
+from t4dm.memory import EpisodicMemory, SemanticMemory
 
 @pytest.mark.benchmark
 async def test_episodic_recall_baseline(benchmark_db):
@@ -871,7 +871,7 @@ class BGEM3Embedding:
 
 ### Summary of Findings
 
-World Weaver implements sophisticated memory algorithms with strong theoretical foundations. The primary optimization opportunities are in **database access patterns** and **batch processing**, not in algorithmic design. The codebase already includes several best practices:
+T4DM implements sophisticated memory algorithms with strong theoretical foundations. The primary optimization opportunities are in **database access patterns** and **batch processing**, not in algorithmic design. The codebase already includes several best practices:
 
 **Strengths**:
 ✓ Batch relationship queries (semantic.py:448-456)
@@ -943,8 +943,8 @@ World Weaver implements sophisticated memory algorithms with strong theoretical 
 | File | LOC | Key Functions | Optimization IDs |
 |------|-----|---------------|------------------|
 | `embedding/bge_m3.py` | 582 | `embed_query`, `TTLCache` | B1.1, B1.2, B1.3 |
-| `storage/qdrant_store.py` | 1083 | `search`, `search_hybrid`, `add` | B2.1, B2.2, B2.3, B2.4 |
-| `storage/neo4j_store.py` | 1036 | `query`, `batch_decay_relationships` | B3.1, B3.2, B3.3, B3.4, B3.5 |
+| `storage/t4dx_vector_adapter.py` | 1083 | `search`, `search_hybrid`, `add` | B2.1, B2.2, B2.3, B2.4 |
+| `storage/t4dx_graph_adapter.py` | 1036 | `query`, `batch_decay_relationships` | B3.1, B3.2, B3.3, B3.4, B3.5 |
 | `memory/semantic.py` | 907 | `_calculate_activation`, `spread_activation` | B4.2.1, B4.3.1, B4.3.2 |
 | `memory/episodic.py` | ~800 | `recall`, FSRS calculations | B4.1 |
 | `memory/pattern_separation.py` | 589 | `encode`, `_orthogonalize` | B4.4 |
@@ -963,32 +963,32 @@ World Weaver implements sophisticated memory algorithms with strong theoretical 
 
 ```bash
 # Embedding
-WW_EMBEDDING_CACHE_SIZE=10000      # Up from 1000
-WW_EMBEDDING_CACHE_TTL=7200        # 2 hours
-WW_EMBEDDING_BATCH_SIZE=64         # Up from 32 for RTX 3090
+T4DM_EMBEDDING_CACHE_SIZE=10000      # Up from 1000
+T4DM_EMBEDDING_CACHE_TTL=7200        # 2 hours
+T4DM_EMBEDDING_BATCH_SIZE=64         # Up from 32 for RTX 3090
 
 # Qdrant
-WW_QDRANT_API_KEY=<strong-key>     # Enable in production
+T4DM_QDRANT_API_KEY=<strong-key>     # Enable in production
 
 # Neo4j
-WW_NEO4J_POOL_SIZE=100             # Up from 50 for multi-worker API
-WW_NEO4J_CONNECTION_TIMEOUT=60     # Increase for complex queries
+T4DM_NEO4J_POOL_SIZE=100             # Up from 50 for multi-worker API
+T4DM_NEO4J_CONNECTION_TIMEOUT=60     # Increase for complex queries
 
 # API
-WW_API_WORKERS=4                   # Set to cpu_count for multi-core
-WW_API_HOST=0.0.0.0
-WW_API_PORT=8765
+T4DM_API_WORKERS=4                   # Set to cpu_count for multi-core
+T4DM_API_HOST=0.0.0.0
+T4DM_API_PORT=8765
 
 # Retrieval (after A/B testing)
-WW_EPISODIC_WEIGHT_SEMANTIC=0.45   # Tune based on workload
-WW_EPISODIC_WEIGHT_RECENCY=0.30
-WW_EPISODIC_WEIGHT_OUTCOME=0.15
-WW_EPISODIC_WEIGHT_IMPORTANCE=0.10
+T4DM_EPISODIC_WEIGHT_SEMANTIC=0.45   # Tune based on workload
+T4DM_EPISODIC_WEIGHT_RECENCY=0.30
+T4DM_EPISODIC_WEIGHT_OUTCOME=0.15
+T4DM_EPISODIC_WEIGHT_IMPORTANCE=0.10
 
 # Observability
-WW_OTEL_ENABLED=true
-WW_OTEL_ENDPOINT=http://tempo:4317
-WW_OTEL_SERVICE_NAME=world-weaver-prod
+T4DM_OTEL_ENABLED=true
+T4DM_OTEL_ENDPOINT=http://tempo:4317
+T4DM_OTEL_SERVICE_NAME=t4dm-prod
 ```
 
 ---

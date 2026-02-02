@@ -1,4 +1,4 @@
-# World Weaver Code Quality Review
+# T4DM Code Quality Review
 
 **Date:** 2025-11-27
 **Reviewer:** Claude Code - Research Code Review Specialist
@@ -25,7 +25,7 @@ The codebase demonstrates solid architecture with well-implemented memory patter
 ## Critical Issues (Must Fix)
 
 ### CRITICAL-1: SQL Injection Risk in Neo4j Cypher Queries
-**File:** `/mnt/projects/t4d/t4dm/src/t4dm/storage/neo4j_store.py`
+**File:** `/mnt/projects/t4d/t4dm/src/t4dm/storage/t4dx_graph_adapter.py`
 **Lines:** 237-240, 318-324, 395-404
 **Severity:** CRITICAL
 **Category:** Security - Injection Vulnerability
@@ -64,7 +64,7 @@ cypher = "CREATE (n $props) SET n :label"
 ---
 
 ### CRITICAL-2: Race Condition in Singleton Initialization
-**File:** `/mnt/projects/t4d/t4dm/src/t4dm/storage/neo4j_store.py`, `/mnt/projects/t4d/t4dm/src/t4dm/storage/qdrant_store.py`
+**File:** `/mnt/projects/t4d/t4dm/src/t4dm/storage/t4dx_graph_adapter.py`, `/mnt/projects/t4d/t4dm/src/t4dm/storage/t4dx_vector_adapter.py`
 **Lines:** neo4j:1258-1274, qdrant:573-589
 **Severity:** CRITICAL
 **Category:** Concurrency - Race Condition
@@ -73,12 +73,12 @@ cypher = "CREATE (n $props) SET n :label"
 Double-checked locking pattern is broken in asyncio context:
 
 ```python
-# neo4j_store.py:1258-1274
-def get_neo4j_store(session_id: str = "default") -> Neo4jStore:
+# t4dx_graph_adapter.py:1258-1274
+def get_t4dx_graph_adapter(session_id: str = "default") -> T4DXGraphAdapter:
     if session_id not in _neo4j_instances:
         with _neo4j_lock:  # ❌ Threading lock in async context
             if session_id not in _neo4j_instances:
-                _neo4j_instances[session_id] = Neo4jStore()
+                _neo4j_instances[session_id] = T4DXGraphAdapter()
     return _neo4j_instances[session_id]
 ```
 
@@ -96,11 +96,11 @@ def get_neo4j_store(session_id: str = "default") -> Neo4jStore:
 ```python
 _neo4j_lock = asyncio.Lock()  # Use async lock
 
-async def get_neo4j_store(session_id: str = "default") -> Neo4jStore:
+async def get_t4dx_graph_adapter(session_id: str = "default") -> T4DXGraphAdapter:
     if session_id not in _neo4j_instances:
         async with _neo4j_lock:
             if session_id not in _neo4j_instances:
-                store = Neo4jStore()
+                store = T4DXGraphAdapter()
                 await store.initialize()  # Initialize immediately
                 _neo4j_instances[session_id] = store
     return _neo4j_instances[session_id]
@@ -274,7 +274,7 @@ Or implement TTL-based cache clearing.
 ---
 
 ### HIGH-6: Blocking Sync Client in Async Context
-**File:** `/mnt/projects/t4d/t4dm/src/t4dm/storage/qdrant_store.py`
+**File:** `/mnt/projects/t4d/t4dm/src/t4dm/storage/t4dx_vector_adapter.py`
 **Lines:** 87-94
 **Severity:** HIGH
 **Category:** Async/Concurrency
@@ -513,12 +513,12 @@ return _make_error_response("internal_error", str(e))
 Mixing `_make_error_response()` (deprecated) with `make_error()` creates inconsistency.
 
 **Fix:**
-Replace all `_make_error_response()` calls with `ww.mcp.errors.make_error()`.
+Replace all `_make_error_response()` calls with `t4dm.mcp.errors.make_error()`.
 
 ---
 
 ### MEDIUM-6: Missing Batch Size Limits
-**File:** `/mnt/projects/t4d/t4dm/src/t4dm/storage/qdrant_store.py`
+**File:** `/mnt/projects/t4d/t4dm/src/t4dm/storage/t4dx_vector_adapter.py`
 **Lines:** 162-233
 **Severity:** MEDIUM
 **Category:** Performance/Security
@@ -573,14 +573,14 @@ Remove after 1-2 release cycles with deprecation warnings.
 ---
 
 ### MEDIUM-8: Import Side Effects
-**File:** `/mnt/projects/t4d/t4dm/storage/neo4j_store.py`, `/mnt/projects/t4d/t4dm/storage/qdrant_store.py`
+**File:** `/mnt/projects/t4d/t4dm/storage/t4dx_graph_adapter.py`, `/mnt/projects/t4d/t4dm/storage/t4dx_vector_adapter.py`
 **Lines:** neo4j:1242-1243, qdrant:557-558
 **Severity:** MEDIUM
 **Category:** Code Organization
 
 **Issue:**
 ```python
-# Lines 1242-1243 (neo4j_store.py)
+# Lines 1242-1243 (t4dx_graph_adapter.py)
 import asyncio
 import threading
 ```
@@ -666,7 +666,7 @@ results = await episodic.recall(query=query, limit=limit, offset=offset)
 ---
 
 ### MEDIUM-12: Missing Timeout on Batch Operations
-**File:** `/mnt/projects/t4d/t4dm/src/t4dm/storage/qdrant_store.py`
+**File:** `/mnt/projects/t4d/t4dm/src/t4dm/storage/t4dx_vector_adapter.py`
 **Lines:** 442-483
 **Severity:** MEDIUM
 **Category:** Reliability
@@ -775,7 +775,7 @@ ids=[str(episode_id)],  # episode_id is already str from caller
 ---
 
 ### LOW-3: Inconsistent Naming Convention
-**File:** `/mnt/projects/t4d/t4dm/storage/neo4j_store.py`
+**File:** `/mnt/projects/t4d/t4dm/storage/t4dx_graph_adapter.py`
 **Lines:** 73-79
 **Severity:** LOW
 **Category:** Style
@@ -791,7 +791,7 @@ Mix of PascalCase (class) and snake_case (variables) is standard, but error mess
 ---
 
 ### LOW-4: Magic String for Collection Names
-**File:** `/mnt/projects/t4d/t4dm/src/t4dm/storage/qdrant_store.py`
+**File:** `/mnt/projects/t4d/t4dm/src/t4dm/storage/t4dx_vector_adapter.py`
 **Lines:** 62-64
 **Severity:** LOW
 **Category:** Code Smell
@@ -823,7 +823,7 @@ Should be `attention_weight` for clarity.
 ---
 
 ### LOW-6: Excessive Nesting
-**File:** `/mnt/projects/t4d/t4dm/storage/neo4j_store.py`
+**File:** `/mnt/projects/t4d/t4dm/storage/t4dx_graph_adapter.py`
 **Lines:** 814-883
 **Severity:** LOW
 **Category:** Complexity
@@ -892,7 +892,7 @@ Returns `None` for invalid input instead of raising exception. Inconsistent with
 ---
 
 ### LOW-10: Hardcoded Retry Logic Missing
-**File:** `/mnt/projects/t4d/t4dm/storage/neo4j_store.py`, `/mnt/projects/t4d/t4dm/storage/qdrant_store.py`
+**File:** `/mnt/projects/t4d/t4dm/storage/t4dx_graph_adapter.py`, `/mnt/projects/t4d/t4dm/storage/t4dx_vector_adapter.py`
 **Lines:** N/A
 **Severity:** LOW
 **Category:** Reliability
@@ -1019,8 +1019,8 @@ Expose health status for monitoring:
 @mcp_app.tool()
 async def health_check() -> dict:
     """System health check."""
-    neo4j_ok = await neo4j_store.health_check()
-    qdrant_ok = await qdrant_store.health_check()
+    neo4j_ok = await t4dx_graph_adapter.health_check()
+    qdrant_ok = await t4dx_vector_adapter.health_check()
     return {"neo4j": neo4j_ok, "qdrant": qdrant_ok}
 ```
 
@@ -1049,7 +1049,7 @@ async def health_check() -> dict:
 - **Average Method Length:** 28 lines (target: <50)
 - **Longest Method:** `recall()` - 107 lines (episodic.py:108-214)
 - **Cyclomatic Complexity:** Average 4.2 (good, <10 target)
-- **Max Nesting Depth:** 6 levels (neo4j_store.py:merge_entities)
+- **Max Nesting Depth:** 6 levels (t4dx_graph_adapter.py:merge_entities)
 
 ### Test Coverage Estimate
 - **Estimated Coverage:** ~60% (no test files in scope)
@@ -1122,7 +1122,7 @@ async def health_check() -> dict:
 
 ## Conclusion
 
-The World Weaver codebase demonstrates solid architectural design with thoughtful implementation of cognitive science principles. The primary concerns are:
+The T4DM codebase demonstrates solid architectural design with thoughtful implementation of cognitive science principles. The primary concerns are:
 
 1. **Security:** Cypher injection risk and race conditions must be fixed before production
 2. **Performance:** Several N+1 query patterns and inefficient algorithms need optimization

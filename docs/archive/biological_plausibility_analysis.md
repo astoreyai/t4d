@@ -1,6 +1,6 @@
-# Biological Plausibility Analysis: World Weaver Memory System
+# Biological Plausibility Analysis: T4DM Memory System
 
-**Analyst**: World Weaver Computational Biology Agent
+**Analyst**: T4DM Computational Biology Agent
 **Date**: 2026-01-02
 **Scope**: Neurotransmitter dynamics, memory systems, plasticity, sleep, attractor dynamics
 
@@ -8,7 +8,7 @@
 
 ## Executive Summary
 
-World Weaver demonstrates **strong biological plausibility** across most core systems, with timescales, interaction mechanisms, and architectural mappings that align well with neuroscience literature. The system successfully balances computational tractability with biological realism.
+T4DM demonstrates **strong biological plausibility** across most core systems, with timescales, interaction mechanisms, and architectural mappings that align well with neuroscience literature. The system successfully balances computational tractability with biological realism.
 
 **Strengths**:
 - Realistic neurotransmitter timescales and firing modes
@@ -148,7 +148,7 @@ phasic_peak_rate: float = 15.0   # Hz salient event
 
 ### 2.1 Tripartite Architecture
 
-World Weaver maps memory systems to brain structures:
+T4DM maps memory systems to brain structures:
 
 | Memory Type | Brain Structure | Implementation | Biological Accuracy |
 |-------------|-----------------|----------------|---------------------|
@@ -646,7 +646,7 @@ Does the model capture biological timescale separation?
 
 **BRAIN-Score**: Benchmark for brain-like neural networks (Schrimpf et al. 2020)
 
-World Weaver vs typical BRAIN-Score models:
+T4DM vs typical BRAIN-Score models:
 
 | Feature | WW | DNN (ResNet) | Spiking NN | BCM/Oja |
 |---------|----|--------------| -----------|---------|
@@ -753,7 +753,7 @@ World Weaver vs typical BRAIN-Score models:
 
 ### 10.4 Final Assessment
 
-World Weaver achieves **strong biological plausibility** across neurotransmitter dynamics, memory systems, and learning mechanisms. The model successfully balances computational efficiency with biological realism, making scientifically justified simplifications (e.g., DG sparsity 4% vs 0.5%) while preserving key dynamics.
+T4DM achieves **strong biological plausibility** across neurotransmitter dynamics, memory systems, and learning mechanisms. The model successfully balances computational efficiency with biological realism, making scientifically justified simplifications (e.g., DG sparsity 4% vs 0.5%) while preserving key dynamics.
 
 **For a computational memory system**, this is **exceptional fidelity** to neuroscience. Most ML systems ignore neurotransmitters entirely; WW models 6 NTs with realistic kinetics. The hippocampal circuit rivals dedicated cognitive neuroscience models (Nengo, Brian2 implementations).
 
@@ -789,7 +789,7 @@ World Weaver achieves **strong biological plausibility** across neurotransmitter
 
 ---
 
-**Report prepared by**: World Weaver CompBio Agent
+**Report prepared by**: T4DM CompBio Agent
 **Files analyzed**:
 - `/mnt/projects/t4d/t4dm/src/t4dm/nca/vta.py`
 - `/mnt/projects/t4d/t4dm/src/t4dm/nca/locus_coeruleus.py`

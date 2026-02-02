@@ -9,7 +9,7 @@
 
 ## Executive Summary
 
-Phase 11 delivers four biologically-grounded interactive demonstrations that showcase World Weaver's neural memory architecture. These demos serve as:
+Phase 11 delivers four biologically-grounded interactive demonstrations that showcase T4DM's neural memory architecture. These demos serve as:
 
 1. **Educational tools** - Understanding brain-inspired memory mechanisms
 2. **Debugging interfaces** - Real-time system observability

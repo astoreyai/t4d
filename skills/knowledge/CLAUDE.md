@@ -13,8 +13,8 @@ T4DM is a large codebase with dense scientific references. These skills help loc
 ## Key Files
 | Skill | Directory | Purpose |
 |-------|-----------|---------|
-| **ww-knowledge** | `ww-knowledge/SKILL.md` | Codebase knowledge indexing and navigation |
-| **ww-retriever** | `ww-retriever/SKILL.md` | Targeted information retrieval from docs and code |
+| **t4dm-knowledge** | `t4dm-knowledge/SKILL.md` | Codebase knowledge indexing and navigation |
+| **t4dm-retriever** | `t4dm-retriever/SKILL.md` | Targeted information retrieval from docs and code |
 
 ## Data Flow
 ```

@@ -53,9 +53,9 @@ Vite + React + TypeScript + Tailwind + Recharts + D3 + Three.js
 ## Usage
 
 ```python
-from ww.t4dv import get_bus
-from ww.t4dv.emitters.spiking import attach_spiking_hooks
-from ww.t4dv.emitters.storage import attach_storage_hooks
+from t4dm.t4dv import get_bus
+from t4dm.t4dv.emitters.spiking import attach_spiking_hooks
+from t4dm.t4dv.emitters.storage import attach_storage_hooks
 
 # Attach to components
 bus = get_bus()
@@ -63,7 +63,7 @@ handles = attach_spiking_hooks(cortical_stack, bus)
 attach_storage_hooks(t4dx_engine, bus)
 
 # Start visualization server
-from ww.t4dv.server import run_server
+from t4dm.t4dv.server import run_server
 run_server(port=8420)
 ```
 

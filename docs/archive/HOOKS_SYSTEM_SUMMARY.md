@@ -1,8 +1,8 @@
-# World Weaver Hooks System - Implementation Summary
+# T4DM Hooks System - Implementation Summary
 
 ## Overview
 
-A comprehensive lifecycle hooks system has been designed and implemented for World Weaver modules, providing extensible, observable, and maintainable hook points throughout the codebase.
+A comprehensive lifecycle hooks system has been designed and implemented for T4DM modules, providing extensible, observable, and maintainable hook points throughout the codebase.
 
 ## Deliverables
 
@@ -314,8 +314,8 @@ A comprehensive lifecycle hooks system has been designed and implemented for Wor
 ### Example 1: Add Tracing to Memory Operations
 
 ```python
-from ww.hooks import get_global_registry, HookPhase
-from ww.hooks.memory import CreateHook
+from t4dm.hooks import get_global_registry, HookPhase
+from t4dm.hooks.memory import CreateHook
 
 class TracingHook(CreateHook):
     async def execute(self, context):
@@ -333,7 +333,7 @@ registry.register(TracingHook(), HookPhase.POST)
 ### Example 2: Add Caching to Recall
 
 ```python
-from ww.hooks.memory import RecallHook
+from t4dm.hooks.memory import RecallHook
 
 class CacheHook(RecallHook):
     def __init__(self):
@@ -361,7 +361,7 @@ registry.register(CacheHook(), HookPhase.POST)
 ### Example 3: Use Decorator for Automatic Hooks
 
 ```python
-from ww.hooks.base import with_hooks
+from t4dm.hooks.base import with_hooks
 
 registry = get_global_registry("episodic")
 
@@ -377,7 +377,7 @@ async def create_episode(content: str, **kwargs) -> Episode:
 
 ### Existing Code Integration
 
-The hooks system integrates with existing World Weaver patterns:
+The hooks system integrates with existing T4DM patterns:
 
 1. **Tracing Integration**
    - Hooks can call `add_span_attribute()` and `add_span_event()`
@@ -426,8 +426,8 @@ Total: ~5,653 lines of code, documentation, and tests
 1. **Add to Episodic Memory**
    ```python
    # In src/t4dm/memory/episodic.py
-   from ww.hooks import get_global_registry, with_hooks
-   from ww.hooks.registry import REGISTRY_EPISODIC
+   from t4dm.hooks import get_global_registry, with_hooks
+   from t4dm.hooks.registry import REGISTRY_EPISODIC
 
    registry = get_global_registry(REGISTRY_EPISODIC)
 
@@ -438,9 +438,9 @@ Total: ~5,653 lines of code, documentation, and tests
 
 2. **Add to Storage Layers**
    ```python
-   # In src/t4dm/storage/neo4j_store.py
-   from ww.hooks import get_global_registry
-   from ww.hooks.registry import REGISTRY_STORAGE_NEO4J
+   # In src/t4dm/storage/t4dx_graph_adapter.py
+   from t4dm.hooks import get_global_registry
+   from t4dm.hooks.registry import REGISTRY_STORAGE_NEO4J
 
    registry = get_global_registry(REGISTRY_STORAGE_NEO4J)
    # Register connection and query hooks
@@ -449,8 +449,8 @@ Total: ~5,653 lines of code, documentation, and tests
 3. **Add to MCP Gateway**
    ```python
    # In src/t4dm/mcp/gateway.py
-   from ww.hooks import get_global_registry
-   from ww.hooks.registry import REGISTRY_MCP
+   from t4dm.hooks import get_global_registry
+   from t4dm.hooks.registry import REGISTRY_MCP
 
    registry = get_global_registry(REGISTRY_MCP)
    # Register tool call and rate limit hooks
@@ -494,7 +494,7 @@ pytest tests/test_hooks.py -v
 
 ## Summary
 
-The World Weaver hooks system provides a production-ready, comprehensive lifecycle hooks architecture with:
+The T4DM hooks system provides a production-ready, comprehensive lifecycle hooks architecture with:
 
 ✅ **Complete Implementation**: 7 modules, 2,815 lines of code
 ✅ **Extensive Documentation**: 1,617 lines covering design and usage
@@ -505,4 +505,4 @@ The World Weaver hooks system provides a production-ready, comprehensive lifecyc
 ✅ **Observable**: Tracing, metrics, logging integration
 ✅ **Extensible**: Easy to add new hooks and registries
 
-The system is ready for integration into World Weaver modules and provides the foundation for enhanced observability, caching, auditing, and performance optimization across the entire codebase.
+The system is ready for integration into T4DM modules and provides the foundation for enhanced observability, caching, auditing, and performance optimization across the entire codebase.

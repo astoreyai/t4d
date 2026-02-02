@@ -1,4 +1,4 @@
-# World Weaver P2 and P3 Issues Inventory
+# T4DM P2 and P3 Issues Inventory
 
 **Generated**: 2025-12-09
 **Status**: ✅ ALL ISSUES RESOLVED
@@ -9,7 +9,7 @@
 
 ## Executive Summary
 
-This document tracked all Medium (P2) and Low (P3) priority issues in the World Weaver project. **ALL ISSUES HAVE BEEN RESOLVED** through Sessions 1-10.
+This document tracked all Medium (P2) and Low (P3) priority issues in the T4DM project. **ALL ISSUES HAVE BEEN RESOLVED** through Sessions 1-10.
 
 Sources:
 1. **BUG_REMEDIATION_PLAN.md** - Systematic bug tracking (Phases 3-5)
@@ -267,7 +267,7 @@ Add `SecurityHeadersMiddleware`:
 ---
 
 #### P2-OPT-B2.1: Session ID filtering without index
-**File**: `/mnt/projects/t4d/t4dm/src/t4dm/storage/qdrant_store.py:289-350`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/storage/t4dx_vector_adapter.py:289-350`
 **Status**: FIXED (Session 5)
 **Priority**: P2 High (listed as P2 for consistency)
 **Impact**: O(n) full collection scan instead of O(log n) for multi-session deployments
@@ -276,20 +276,20 @@ Add `SecurityHeadersMiddleware`:
 ---
 
 #### P2-OPT-B2.2: Hybrid search over-fetching candidates
-**File**: `/mnt/projects/t4d/t4dm/src/t4dm/storage/qdrant_store.py:352-432`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/storage/t4dx_vector_adapter.py:352-432`
 **Status**: FIXED (Session 6)
 **Priority**: P2 Medium
 **Impact**: 4x network transfer and scoring overhead (limit * 2 for dense + sparse)
 **Fix Applied**:
 - Added `hybrid_prefetch_multiplier` constructor parameter (default 1.5, was 2.0)
 - Reduced default from 4x to 3x total results (1.5x per branch)
-- Configurable per QdrantStore instance for tuning
+- Configurable per T4DXVectorAdapter instance for tuning
 - Documented trade-off: higher values improve recall, lower values reduce transfer
 
 ---
 
 #### P2-OPT-B2.3: Batch operation parallelism not controlled
-**File**: `/mnt/projects/t4d/t4dm/src/t4dm/storage/qdrant_store.py:215-286`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/storage/t4dx_vector_adapter.py:215-286`
 **Status**: FIXED (QDRANT-001 in Session 1)
 **Priority**: P2 Medium
 **Impact**: Rate limiting / connection pool exhaustion on large batches
@@ -302,7 +302,7 @@ Add `SecurityHeadersMiddleware`:
 ---
 
 #### P2-OPT-B3.2: Cypher query string composition
-**File**: `/mnt/projects/t4d/t4dm/src/t4dm/storage/neo4j_store.py` (multiple locations)
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/storage/t4dx_graph_adapter.py` (multiple locations)
 **Status**: NEEDS REVIEW (Defense-in-depth)
 **Priority**: P2 Medium
 **Impact**: Potential for Cypher injection despite validation
@@ -319,7 +319,7 @@ Add `SecurityHeadersMiddleware`:
 ---
 
 #### P2-OPT-B3.3: Connection pool utilization unknown
-**File**: `/mnt/projects/t4d/t4dm/src/t4dm/storage/neo4j_store.py:199-216`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/storage/t4dx_graph_adapter.py:199-216`
 **Status**: FIXED (Session 6)
 **Priority**: P2 Medium
 **Impact**: Unknown if pool is saturated or oversized
@@ -398,7 +398,7 @@ Add `SecurityHeadersMiddleware`:
 ---
 
 #### P3-SEC-L2: No SQL injection protection in direct Cypher queries
-**File**: `/mnt/projects/t4d/t4dm/src/t4dm/storage/neo4j_store.py:281-302`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/storage/t4dx_graph_adapter.py:281-302`
 **Status**: FIXED (Session 6)
 **Priority**: P3 Low
 **Impact**: Cypher injection if validation bypassed (mitigated by validation)

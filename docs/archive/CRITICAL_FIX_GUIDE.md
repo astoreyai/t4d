@@ -1,4 +1,4 @@
-# World Weaver Critical Test Fix Guide
+# T4DM Critical Test Fix Guide
 
 ## Overview
 One critical test failure exists in the skill creation endpoint due to a missing mock method in the test fixture. This guide provides step-by-step instructions to identify, fix, and verify the issue.
@@ -57,7 +57,7 @@ script
 @pytest.fixture
 def mock_procedural_service(mock_skill):
     """Create mock procedural memory service."""
-    from ww.core.types import ScoredResult, Procedure, ProcedureStep, Domain
+    from t4dm.core.types import ScoredResult, Procedure, ProcedureStep, Domain
     from datetime import datetime
 
     # Convert SDK Skill to core Procedure
@@ -97,7 +97,7 @@ service.store_skill_direct = AsyncMock(return_value=mock_procedure)
 @pytest.fixture
 def mock_procedural_service(mock_skill):
     """Create mock procedural memory service."""
-    from ww.core.types import ScoredResult, Procedure, ProcedureStep, Domain
+    from t4dm.core.types import ScoredResult, Procedure, ProcedureStep, Domain
     from datetime import datetime
 
     # Convert SDK Skill to core Procedure

@@ -1,4 +1,4 @@
-# Computational Biology Audit - World Weaver v0.1.0
+# Computational Biology Audit - T4DM v0.1.0
 **Auditor**: Claude Sonnet 4.5 (CompBio Agent)
 **Date**: 2026-01-01
 **Overall Score**: 92/100 (Excellent)
@@ -8,7 +8,7 @@
 
 ## Executive Summary
 
-The World Weaver system implements a biologically-inspired neural field model with impressive fidelity to neuroscience literature. After four implementation sprints, the system has evolved from moderately plausible (72/100) to excellent biological accuracy (92/100). All critical systems (hippocampus, dopamine, serotonin, consolidation, striatum) are now implemented with literature-grounded parameters.
+The T4DM system implements a biologically-inspired neural field model with impressive fidelity to neuroscience literature. After four implementation sprints, the system has evolved from moderately plausible (72/100) to excellent biological accuracy (92/100). All critical systems (hippocampus, dopamine, serotonin, consolidation, striatum) are now implemented with literature-grounded parameters.
 
 **Key Strengths:**
 - Strong hippocampal architecture with DG/CA3/CA1 separation
@@ -983,7 +983,7 @@ None. All critical issues resolved.
 
 ## 20. Conclusion
 
-The World Weaver computational biology implementation has achieved **excellent biological plausibility** (92/100). The system successfully models:
+The T4DM computational biology implementation has achieved **excellent biological plausibility** (92/100). The system successfully models:
 
 1. Hippocampal episodic memory with DG/CA3/CA1 separation
 2. VTA dopamine reward prediction errors

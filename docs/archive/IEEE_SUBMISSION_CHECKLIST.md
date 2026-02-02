@@ -1,6 +1,6 @@
 # IEEE Transactions on AI - Submission Checklist
 
-**Manuscript**: World Weaver: Cognitive Memory Architecture for Persistent World Models in Agentic AI Systems
+**Manuscript**: T4DM: Cognitive Memory Architecture for Persistent World Models in Agentic AI Systems
 
 **Target Venue**: IEEE Transactions on Artificial Intelligence
 
@@ -55,15 +55,15 @@
 
 | File | Status | Notes |
 |------|--------|-------|
-| `world_weaver_final.pdf` | Ready | 10 pages, 308 KB |
-| `world_weaver_final.tex` | Ready | LaTeX source |
+| `t4dm_final.pdf` | Ready | 10 pages, 308 KB |
+| `t4dm_final.tex` | Ready | LaTeX source |
 | `IEEE_COVER_LETTER.pdf` | Ready | Cover letter |
 
 ---
 
 ## Post-Submission Tasks
 
-1. Create GitHub repository: `astoreyai/world-weaver`
+1. Create GitHub repository: `astoreyai/t4dm`
 2. Upload source code
 3. Create DOI via Zenodo
 4. Update paper with DOI before camera-ready

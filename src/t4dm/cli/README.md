@@ -2,7 +2,7 @@
 
 **2 files | ~400 lines | Centrality: 2**
 
-The CLI module provides a command-line interface for World Weaver's tripartite memory system using Typer and Rich.
+The CLI module provides a command-line interface for T4DM's tripartite memory system using Typer and Rich.
 
 ## Overview
 
@@ -49,7 +49,7 @@ ww --help
 
 ## Core Commands
 
-### `ww store` - Store Content
+### `t4dm store` - Store Content
 
 ```bash
 # Episodic (default)
@@ -71,7 +71,7 @@ ww store "API deployment" --metadata '{"env": "production"}'
 - `--tags`: Comma-separated tags
 - `--metadata`: JSON object
 
-### `ww recall` - Search Memories
+### `t4dm recall` - Search Memories
 
 ```bash
 # Search all memory types
@@ -102,7 +102,7 @@ t4dm consolidate --full
 t4dm consolidate --dry-run
 ```
 
-### `ww status` - System Health
+### `t4dm status` - System Health
 
 ```bash
 ww status
@@ -110,7 +110,7 @@ ww status
 
 **Output**:
 ```
-World Weaver Status
+T4DM Status
 ┌──────────────────────┬─────────────────────────┐
 │ Property             │ Value                   │
 ├──────────────────────┼─────────────────────────┤
@@ -187,11 +187,11 @@ Set session ID via environment variable:
 
 ```bash
 # Project-specific session
-export WW_SESSION_ID="project-alpha"
+export T4DM_SESSION_ID="project-alpha"
 ww store "Project-specific knowledge"
 
 # Switch projects
-export WW_SESSION_ID="project-beta"
+export T4DM_SESSION_ID="project-beta"
 ww recall "database queries"
 ```
 
@@ -253,7 +253,7 @@ run_async(_store_operation())
 All operations scoped to session ID:
 
 ```python
-session_id = os.environ.get("WW_SESSION_ID", "cli-session")
+session_id = os.environ.get("T4DM_SESSION_ID", "cli-session")
 services = await get_services(session_id)
 ```
 
@@ -274,7 +274,7 @@ From `pyproject.toml`:
 
 ```ini
 [project.scripts]
-ww = "ww.cli.main:main"
+ww = "t4dm.cli.main:main"
 ```
 
 ## Testing
@@ -293,4 +293,4 @@ pytest tests/cli/test_cli.py::TestStoreCommand -v
 - **Core Types**: Episode, Entity, Procedure
 - **Configuration**: `get_settings()`
 - **Consolidation**: `get_consolidation_service()`
-- **API Server**: `ww.api.server:app`
+- **API Server**: `t4dm.api.server:app`

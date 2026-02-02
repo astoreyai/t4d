@@ -1,4 +1,4 @@
-# World Weaver Fix Plan v2.0
+# T4DM Fix Plan v2.0
 
 **Created**: 2025-11-27 | **Updated**: 2025-11-27 | **Total Tasks**: 48 | **Priority**: Production-Critical
 
@@ -89,7 +89,7 @@ Documentation complete:
 
 ---
 
-## 🎉 ALL PHASES COMPLETE - World Weaver Production Ready
+## 🎉 ALL PHASES COMPLETE - T4DM Production Ready
 
 **Total Tasks**: 48/48 completed
 **Duration**: 2025-11-27 (single day)
@@ -111,10 +111,10 @@ Documentation complete:
 # Line 7: Add import
 import asyncio
 ```
-**Validation**: `python -c "from ww.memory.semantic import SemanticMemory"`
+**Validation**: `python -c "from t4dm.memory.semantic import SemanticMemory"`
 
 ### TASK-P1-002: Cypher injection via dynamic labels
-**File**: `src/t4dm/storage/neo4j_store.py:158+`
+**File**: `src/t4dm/storage/t4dx_graph_adapter.py:158+`
 **Severity**: CRITICAL (Security)
 **Description**: User input passed directly to Cypher labels
 ```python
@@ -131,28 +131,28 @@ def validate_label(label: str) -> str:
 **Validation**: Test with label `"Entity) MATCH (n) DELETE n //"`
 
 ### TASK-P1-003: Session isolation broken in store singletons
-**File**: `src/t4dm/storage/qdrant_store.py`, `src/t4dm/storage/neo4j_store.py`
+**File**: `src/t4dm/storage/t4dx_vector_adapter.py`, `src/t4dm/storage/t4dx_graph_adapter.py`
 **Severity**: HIGH (Data leak)
 **Description**: Stores share single instance across all sessions
 ```python
 # Current: Returns same instance for all sessions
-_store: Optional[QdrantStore] = None
+_store: Optional[T4DXVectorAdapter] = None
 
-def get_qdrant_store(session_id: str = "default") -> QdrantStore:
+def get_t4dx_vector_adapter(session_id: str = "default") -> T4DXVectorAdapter:
     global _store
     if _store is None:
-        _store = QdrantStore()  # Same instance!
+        _store = T4DXVectorAdapter()  # Same instance!
     return _store
 
 # Fixed: Instance per session
-_stores: dict[str, QdrantStore] = {}
+_stores: dict[str, T4DXVectorAdapter] = {}
 _lock = threading.Lock()
 
-def get_qdrant_store(session_id: str = "default") -> QdrantStore:
+def get_t4dx_vector_adapter(session_id: str = "default") -> T4DXVectorAdapter:
     if session_id not in _stores:
         with _lock:
             if session_id not in _stores:
-                _stores[session_id] = QdrantStore(session_id)
+                _stores[session_id] = T4DXVectorAdapter(session_id)
     return _stores[session_id]
 ```
 **Validation**: Test 2 sessions can't see each other's data
@@ -214,7 +214,7 @@ def event_loop():
 **Validation**: `pytest tests/ -v` all pass
 
 ### TASK-P1-007: Add missing Neo4j indexes
-**File**: `src/t4dm/storage/neo4j_store.py`
+**File**: `src/t4dm/storage/t4dx_graph_adapter.py`
 **Severity**: MEDIUM (Performance)
 **Description**: Missing indexes on Entity.sessionId, Episode.sessionId
 ```python
@@ -285,7 +285,7 @@ class BGE_M3_Provider:
 **Validation**: Repeated embed calls return cached
 
 ### TASK-P2-004: Add Qdrant search prefiltering
-**File**: `src/t4dm/storage/qdrant_store.py`
+**File**: `src/t4dm/storage/t4dx_vector_adapter.py`
 **Severity**: MEDIUM (Query efficiency)
 **Description**: Filter before vector similarity for session isolation
 ```python
@@ -335,7 +335,7 @@ class BGE_M3_Provider:
 **Validation**: Import without GPU allocation
 
 ### TASK-P2-007: Connection pooling for Neo4j
-**File**: `src/t4dm/storage/neo4j_store.py`
+**File**: `src/t4dm/storage/t4dx_graph_adapter.py`
 **Severity**: LOW (Connection overhead)
 **Description**: Configure connection pool settings
 ```python
@@ -349,7 +349,7 @@ self._driver = AsyncGraphDatabase.driver(
 **Validation**: Concurrent queries reuse connections
 
 ### TASK-P2-008: Qdrant batch upsert optimization
-**File**: `src/t4dm/storage/qdrant_store.py`
+**File**: `src/t4dm/storage/t4dx_vector_adapter.py`
 **Severity**: LOW (Bulk insert)
 **Description**: Use parallel upsert for batches > 100
 ```python
@@ -592,13 +592,13 @@ def validate_weights(config: dict):
 ```python
 @pytest.fixture
 def mock_qdrant():
-    with patch('ww.storage.qdrant_store.QdrantStore') as mock:
+    with patch('t4dm.storage.t4dx_vector_adapter.T4DXVectorAdapter') as mock:
         mock.return_value.search.return_value = []
         yield mock
 
 @pytest.fixture
 def mock_neo4j():
-    with patch('ww.storage.neo4j_store.Neo4jStore') as mock:
+    with patch('t4dm.storage.t4dx_graph_adapter.T4DXGraphAdapter') as mock:
         mock.return_value.query.return_value = []
         yield mock
 ```
@@ -688,7 +688,7 @@ return {
 ### TASK-P5-006: Move Cypher to storage layer
 **Description**: Memory layer shouldn't construct Cypher
 **Files**:
-- `src/t4dm/storage/neo4j_store.py`: Add high-level methods
+- `src/t4dm/storage/t4dx_graph_adapter.py`: Add high-level methods
 - `src/t4dm/memory/*.py`: Use store methods instead of raw Cypher
 
 ### TASK-P5-007: Add OpenAPI schema
@@ -782,12 +782,12 @@ Phase 6 (Docs) - Final phase
 | Task | File | Severity | Est. Hours |
 |------|------|----------|------------|
 | P1-001 | semantic.py | CRITICAL | 0.5 |
-| P1-002 | neo4j_store.py | CRITICAL | 2 |
+| P1-002 | t4dx_graph_adapter.py | CRITICAL | 2 |
 | P1-003 | *_store.py | HIGH | 3 |
 | P1-004 | saga.py | HIGH | 2 |
 | P1-005 | memory_gateway.py | MEDIUM | 1 |
 | P1-006 | conftest.py | MEDIUM | 1 |
-| P1-007 | neo4j_store.py | MEDIUM | 1 |
+| P1-007 | t4dx_graph_adapter.py | MEDIUM | 1 |
 
 **Total Estimated**: 40-60 hours across all phases
 

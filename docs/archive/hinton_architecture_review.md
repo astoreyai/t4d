@@ -1,10 +1,10 @@
-# World Weaver Architecture Review: Hinton Perspective
+# T4DM Architecture Review: Hinton Perspective
 
 *Analysis from Geoffrey Hinton's perspective on neural-symbolic memory systems*
 
 ## Executive Summary
 
-World Weaver is **ambitious and conceptually sophisticated**, implementing ideas from complementary learning systems theory, temporal difference learning, and neuro-symbolic integration. The architecture shows clear understanding of the challenges: temporal credit assignment, neural-symbolic integration, and forgetting dynamics.
+T4DM is **ambitious and conceptually sophisticated**, implementing ideas from complementary learning systems theory, temporal difference learning, and neuro-symbolic integration. The architecture shows clear understanding of the challenges: temporal credit assignment, neural-symbolic integration, and forgetting dynamics.
 
 ## What Works
 
@@ -54,22 +54,22 @@ World Weaver is **ambitious and conceptually sophisticated**, implementing ideas
 ### Implemented (Phase 1 - v0.5.0)
 
 1. ✅ **Sleep Consolidation** - Delta oscillations (0.5-4 Hz) + sleep spindles (11-16 Hz)
-   - See: `ww.nca.oscillators.DeltaOscillator`, `ww.nca.sleep_spindles`
-2. ✅ **Pattern Separation** - Implemented in `ww.memory.pattern_separation`
-3. ✅ **Reconsolidation** - Implemented in `ww.learning.reconsolidation`
+   - See: `t4dm.nca.oscillators.DeltaOscillator`, `t4dm.nca.sleep_spindles`
+2. ✅ **Pattern Separation** - Implemented in `t4dm.memory.pattern_separation`
+3. ✅ **Reconsolidation** - Implemented in `t4dm.learning.reconsolidation`
 4. ✅ **Contrastive Learning** - InfoNCE adapter for frozen embeddings
-   - See: `ww.embedding.ContrastiveAdapter`
+   - See: `t4dm.embedding.ContrastiveAdapter`
 
 ### Implemented (Phase 2 - v0.5.0)
 
 5. ✅ **SWR Timing Validation** - Biological 150-250 Hz ripple range
-   - See: `ww.nca.swr_coupling.RIPPLE_FREQ_MIN/MAX/OPTIMAL`
+   - See: `t4dm.nca.swr_coupling.RIPPLE_FREQ_MIN/MAX/OPTIMAL`
 6. ✅ **Wake/Sleep State Separation** - 5-state model with ACh/NE inference
-   - See: `ww.nca.swr_coupling.WakeSleepMode`
+   - See: `t4dm.nca.swr_coupling.WakeSleepMode`
 7. ✅ **Serotonin Patience Model** - Temporal discounting (Doya 2002)
-   - See: `ww.nca.raphe.PatienceModel`
+   - See: `t4dm.nca.raphe.PatienceModel`
 8. ✅ **Surprise-Driven NE** - Uncertainty signaling (Dayan & Yu 2006)
-   - See: `ww.nca.locus_coeruleus.SurpriseModel`
+   - See: `t4dm.nca.locus_coeruleus.SurpriseModel`
 
 ### Implemented (Phase 3 - v0.5.0)
 
@@ -78,14 +78,14 @@ World Weaver is **ambitious and conceptually sophisticated**, implementing ideas
    - **H7**: Positive/negative phase separation
    - Hebbian-like weight updates correlating pre/post activity
    - Neuromodulator integration: DA→learning rate, ACh→phase, NE→threshold
-   - See: `ww.nca.forward_forward.ForwardForwardLayer`, `ForwardForwardNetwork`
+   - See: `t4dm.nca.forward_forward.ForwardForwardLayer`, `ForwardForwardNetwork`
 
 10. ✅ **Grid Cell Hexagonal Validation** (Moser 2008, Nobel Prize 2014)
     - **B7**: Gridness score computation (Sargolini et al. 2006)
     - 6-fold rotational symmetry detection
     - 2D spatial autocorrelation via FFT
     - Multiple grid modules at different scales
-    - See: `ww.nca.spatial_cells.validate_hexagonal_pattern()`, `compute_gridness_score()`
+    - See: `t4dm.nca.spatial_cells.validate_hexagonal_pattern()`, `compute_gridness_score()`
 
 **Current Scores (Phase 3 Complete)**:
 - Hinton Plausibility: 9.0/10

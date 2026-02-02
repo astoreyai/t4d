@@ -1,13 +1,13 @@
 # CLI Reference
 
-Command-line interface for World Weaver.
+Command-line interface for T4DM.
 
 ## Installation
 
-The CLI is included with World Weaver:
+The CLI is included with T4DM:
 
 ```bash
-pip install world-weaver
+pip install t4dm
 ```
 
 ## Global Options
@@ -93,7 +93,7 @@ ww status
 **Output:**
 
 ```
-World Weaver Status
+T4DM Status
 ==================
 Version: 0.4.0
 Session: default
@@ -295,10 +295,10 @@ ww procedural execute <skill_id> --success --duration 1500
 
 | Variable | Description |
 |----------|-------------|
-| `WW_SESSION_ID` | Default session ID |
-| `WW_QDRANT_HOST` | Qdrant host |
-| `WW_NEO4J_URI` | Neo4j URI |
-| `WW_API_KEY` | API key |
+| `T4DM_SESSION_ID` | Default session ID |
+| `T4DM_QDRANT_HOST` | Qdrant host |
+| `T4DM_NEO4J_URI` | Neo4j URI |
+| `T4DM_API_KEY` | API key |
 
 ## Output Formats
 
@@ -359,19 +359,19 @@ ww recall "query" -f simple
 
 ```bash
 # Add to ~/.bashrc
-eval "$(_WW_COMPLETE=bash_source ww)"
+eval "$(_T4DM_COMPLETE=bash_source ww)"
 ```
 
 ### Zsh
 
 ```bash
 # Add to ~/.zshrc
-eval "$(_WW_COMPLETE=zsh_source ww)"
+eval "$(_T4DM_COMPLETE=zsh_source ww)"
 ```
 
 ### Fish
 
 ```fish
-# Add to ~/.config/fish/completions/ww.fish
-_WW_COMPLETE=fish_source ww | source
+# Add to ~/.config/fish/completions/t4dm.fish
+_T4DM_COMPLETE=fish_source ww | source
 ```

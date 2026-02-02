@@ -1,6 +1,6 @@
 # Module Dependency Graph
 
-Complete dependency map of World Weaver's 23 modules.
+Complete dependency map of T4DM's 23 modules.
 
 ## Full Dependency Graph
 

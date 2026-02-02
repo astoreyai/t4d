@@ -1,8 +1,8 @@
-# World Weaver - Integration Points
+# T4DM - Integration Points
 
 **Version**: 0.2.0
 **Last Updated**: 2025-12-06
-**Purpose**: Complete guide to integrating World Weaver into your applications
+**Purpose**: Complete guide to integrating T4DM into your applications
 
 ---
 
@@ -22,7 +22,7 @@
 
 ### Overview
 
-World Weaver implements the Model Context Protocol (MCP) for seamless integration with Claude applications. The MCP server exposes memory operations as JSON-RPC tools.
+T4DM implements the Model Context Protocol (MCP) for seamless integration with Claude applications. The MCP server exposes memory operations as JSON-RPC tools.
 
 **Protocol Version**: MCP 2024-11-05
 **Transport**: stdio (JSON-RPC 2.0)
@@ -38,15 +38,15 @@ Edit `~/.claude/claude_desktop_config.json`:
   "mcpServers": {
     "ww-memory": {
       "command": "python",
-      "args": ["-m", "ww.mcp.server"],
+      "args": ["-m", "t4dm.mcp.server"],
       "env": {
         "NEO4J_URI": "bolt://localhost:7687",
         "NEO4J_USER": "neo4j",
         "NEO4J_PASSWORD": "${NEO4J_PASSWORD}",
         "QDRANT_URL": "http://localhost:6333",
-        "WW_SESSION_ID": "claude-desktop",
-        "WW_EMBEDDING_DEVICE": "cuda:0",
-        "PYTHONPATH": "/path/to/world-weaver"
+        "T4DM_SESSION_ID": "claude-desktop",
+        "T4DM_EMBEDDING_DEVICE": "cuda:0",
+        "PYTHONPATH": "/path/to/t4dm"
       }
     }
   }
@@ -59,10 +59,10 @@ Edit `~/.claude/claude_desktop_config.json`:
 # Add to ~/.claude/mcp_servers.json
 {
   "ww-memory": {
-    "command": "/path/to/world-weaver/.venv/bin/python",
-    "args": ["-m", "ww.mcp.server"],
+    "command": "/path/to/t4dm/.venv/bin/python",
+    "args": ["-m", "t4dm.mcp.server"],
     "env": {
-      "WW_SESSION_ID": "${INSTANCE_ID}"
+      "T4DM_SESSION_ID": "${INSTANCE_ID}"
     }
   }
 }
@@ -78,7 +78,7 @@ Edit `~/.claude/claude_desktop_config.json`:
   "tool": "create_episode",
   "arguments": {
     "content": "Implemented FSRS decay algorithm",
-    "project": "world-weaver",
+    "project": "t4dm",
     "file": "src/memory/episodic.py",
     "outcome": "success",
     "emotional_valence": 0.8
@@ -146,7 +146,7 @@ Edit `~/.claude/claude_desktop_config.json`:
 {
   "tool": "spread_activation",
   "arguments": {
-    "seed_entities": ["world-weaver-uuid"],
+    "seed_entities": ["t4dm-uuid"],
     "steps": 3,
     "retention": 0.5,
     "decay": 0.1
@@ -201,17 +201,17 @@ Edit `~/.claude/claude_desktop_config.json`:
 
 ### Session Isolation
 
-Each MCP client gets isolated episodic memory via `WW_SESSION_ID`:
+Each MCP client gets isolated episodic memory via `T4DM_SESSION_ID`:
 
 ```bash
 # Client 1
-WW_SESSION_ID=claude-desktop
+T4DM_SESSION_ID=claude-desktop
 
 # Client 2
-WW_SESSION_ID=claude-code-instance-1
+T4DM_SESSION_ID=claude-code-instance-1
 
 # Client 3
-WW_SESSION_ID=automation-bot
+T4DM_SESSION_ID=automation-bot
 ```
 
 **Shared**: Semantic and procedural memory (knowledge is universal)
@@ -461,21 +461,21 @@ curl "http://localhost:8765/api/v1/entities/search?query=python%20framework" \
 ### Installation
 
 ```bash
-pip install world-weaver[api]
+pip install t4dm[api]
 ```
 
 ### Synchronous Client
 
 ```python
-from ww.sdk import WorldWeaverClient
+from t4dm.sdk import T4DMClient
 
 # Create client
-with WorldWeaverClient(
+with T4DMClient(
     base_url="http://localhost:8765",
     session_id="my-app"
 ) as ww:
     # Store episode
-    episode = ww.create_episode(
+    episode = t4dm.create_episode(
         content="Implemented user authentication",
         project="my-app",
         outcome="success"
@@ -483,31 +483,31 @@ with WorldWeaverClient(
     print(f"Created: {episode.id}")
 
     # Recall episodes
-    results = ww.recall_episodes("authentication", limit=5)
+    results = t4dm.recall_episodes("authentication", limit=5)
     for ep in results.episodes:
         print(f"- {ep.content} (score: {ep.score:.2f})")
 
     # Create entity
-    entity = ww.create_entity(
+    entity = t4dm.create_entity(
         name="JWT",
         entity_type="TECHNIQUE",
         summary="JSON Web Token for stateless auth"
     )
 
     # Create relationship
-    ww.create_relation(
+    t4dm.create_relation(
         source_id=entity.id,
         target_id=oauth_entity.id,
         relation_type="PART_OF"
     )
 
     # Semantic search
-    entities = ww.semantic_recall("token authentication")
+    entities = t4dm.semantic_recall("token authentication")
     for ent in entities:
         print(f"- {ent.name}: {ent.summary}")
 
     # Build skill
-    skill = ww.create_skill(
+    skill = t4dm.create_skill(
         trajectory=[
             {"action": "Read config", "tool": "read"},
             {"action": "Update config", "tool": "write"}
@@ -517,7 +517,7 @@ with WorldWeaverClient(
     )
 
     # Search skills
-    skills = ww.how_to("deploy application", domain="devops")
+    skills = t4dm.how_to("deploy application", domain="devops")
     if skills:
         best = skills[0]
         print(f"Best skill: {best.name} ({best.success_rate:.0%})")
@@ -527,21 +527,21 @@ with WorldWeaverClient(
 
 ```python
 import asyncio
-from ww.sdk import AsyncWorldWeaverClient
+from t4dm.sdk import AsyncT4DMClient
 
 async def main():
-    async with AsyncWorldWeaverClient(
+    async with AsyncT4DMClient(
         base_url="http://localhost:8765",
         session_id="my-app"
     ) as ww:
         # Concurrent operations
-        episode_task = ww.create_episode("Event A")
-        entity_task = ww.create_entity("Concept X", "CONCEPT", "Description")
+        episode_task = t4dm.create_episode("Event A")
+        entity_task = t4dm.create_entity("Concept X", "CONCEPT", "Description")
 
         episode, entity = await asyncio.gather(episode_task, entity_task)
 
         # Batch recall
-        results = await ww.recall_episodes("query", limit=100)
+        results = await t4dm.recall_episodes("query", limit=100)
 
 asyncio.run(main())
 ```
@@ -550,9 +550,9 @@ asyncio.run(main())
 
 ```python
 import asyncio
-from ww.memory.episodic import EpisodicMemory
-from ww.memory.semantic import SemanticMemory
-from ww.memory.procedural import ProceduralMemory
+from t4dm.memory.episodic import EpisodicMemory
+from t4dm.memory.semantic import SemanticMemory
+from t4dm.memory.procedural import ProceduralMemory
 
 async def main():
     # Initialize subsystems
@@ -587,7 +587,7 @@ Hooks allow you to inject custom logic at key points in memory operations.
 ### Available Hooks
 
 ```python
-from ww.core.hooks import HookRegistry, HookType
+from t4dm.core.hooks import HookRegistry, HookType
 
 registry = HookRegistry()
 
@@ -644,8 +644,8 @@ async def export_consolidated(results: dict) -> None:
 
 ```python
 # hooks/custom_embeddings.py
-from ww.core.hooks import HookRegistry, HookType
-from ww.embedding.protocol import EmbeddingProvider
+from t4dm.core.hooks import HookRegistry, HookType
+from t4dm.embedding.protocol import EmbeddingProvider
 
 class CustomEmbeddingHook:
     """Use custom embedding model for specific content types."""
@@ -676,13 +676,13 @@ registry.register(
 
 ### Extending Memory Subsystems
 
-World Weaver's memory types are extensible. Add custom memory types by subclassing base classes.
+T4DM's memory types are extensible. Add custom memory types by subclassing base classes.
 
 #### Example: Spatial Memory
 
 ```python
-from ww.core.types import BaseModel
-from ww.memory.base import MemorySubsystem
+from t4dm.core.types import BaseModel
+from t4dm.memory.base import MemorySubsystem
 from uuid import uuid4
 from pydantic import Field
 
@@ -753,7 +753,7 @@ class SpatialMemory(MemorySubsystem):
 #### Register Custom Memory
 
 ```python
-from ww.memory.registry import MemoryRegistry
+from t4dm.memory.registry import MemoryRegistry
 
 # Register custom type
 registry = MemoryRegistry()
@@ -779,7 +779,7 @@ location = await spatial.create_location(
 Implement the `EmbeddingProvider` protocol:
 
 ```python
-from ww.embedding.protocol import EmbeddingProvider
+from t4dm.embedding.protocol import EmbeddingProvider
 import openai
 
 class OpenAIEmbedding(EmbeddingProvider):
@@ -818,14 +818,14 @@ class OpenAIEmbedding(EmbeddingProvider):
 ### Register Custom Provider
 
 ```python
-from ww.embedding.factory import EmbeddingFactory
+from t4dm.embedding.factory import EmbeddingFactory
 
 # Register
 EmbeddingFactory.register("openai", OpenAIEmbedding)
 
 # Use in config
-WW_EMBEDDING_PROVIDER=openai
-WW_EMBEDDING_API_KEY=sk-...
+T4DM_EMBEDDING_PROVIDER=openai
+T4DM_EMBEDDING_API_KEY=sk-...
 ```
 
 ---
@@ -837,7 +837,7 @@ WW_EMBEDDING_API_KEY=sk-...
 Implement `VectorStore` protocol:
 
 ```python
-from ww.storage.protocol import VectorStore
+from t4dm.storage.protocol import VectorStore
 import pinecone
 
 class PineconeStore(VectorStore):
@@ -889,14 +889,14 @@ class PineconeStore(VectorStore):
 ### Register Custom Backend
 
 ```python
-from ww.storage.factory import StorageFactory
+from t4dm.storage.factory import StorageFactory
 
 StorageFactory.register("pinecone", PineconeStore)
 
 # Use in config
-WW_VECTOR_STORE=pinecone
-WW_PINECONE_API_KEY=...
-WW_PINECONE_ENVIRONMENT=us-west1-gcp
+T4DM_VECTOR_STORE=pinecone
+T4DM_PINECONE_API_KEY=...
+T4DM_PINECONE_ENVIRONMENT=us-west1-gcp
 ```
 
 ---
@@ -907,22 +907,22 @@ WW_PINECONE_ENVIRONMENT=us-west1-gcp
 
 ```python
 from fastapi import FastAPI, Depends
-from ww.sdk import WorldWeaverClient
+from t4dm.sdk import T4DMClient
 
 app = FastAPI()
 
 def get_ww_client():
     """Dependency injection for WW client."""
-    with WorldWeaverClient(session_id="web-app") as client:
+    with T4DMClient(session_id="web-app") as client:
         yield client
 
 @app.post("/api/events")
 async def log_event(
     event: dict,
-    ww: WorldWeaverClient = Depends(get_ww_client)
+    ww: T4DMClient = Depends(get_ww_client)
 ):
     """Log user event to memory."""
-    episode = ww.create_episode(
+    episode = t4dm.create_episode(
         content=event["description"],
         outcome=event.get("outcome", "neutral")
     )
@@ -931,10 +931,10 @@ async def log_event(
 @app.get("/api/context")
 async def get_context(
     query: str,
-    ww: WorldWeaverClient = Depends(get_ww_client)
+    ww: T4DMClient = Depends(get_ww_client)
 ):
     """Retrieve relevant context for query."""
-    results = ww.recall_episodes(query, limit=5)
+    results = t4dm.recall_episodes(query, limit=5)
     return {"context": [ep.content for ep in results.episodes]}
 ```
 
@@ -942,7 +942,7 @@ async def get_context(
 
 ```python
 import click
-from ww.sdk import WorldWeaverClient
+from t4dm.sdk import T4DMClient
 
 @click.group()
 def cli():
@@ -952,16 +952,16 @@ def cli():
 @click.argument('content')
 def remember(content: str):
     """Store a memory."""
-    with WorldWeaverClient(session_id="cli") as ww:
-        episode = ww.create_episode(content)
+    with T4DMClient(session_id="cli") as ww:
+        episode = t4dm.create_episode(content)
         click.echo(f"Remembered: {episode.id}")
 
 @cli.command()
 @click.argument('query')
 def recall(query: str):
     """Search memories."""
-    with WorldWeaverClient(session_id="cli") as ww:
-        results = ww.recall_episodes(query)
+    with T4DMClient(session_id="cli") as ww:
+        results = t4dm.recall_episodes(query)
         for ep in results.episodes:
             click.echo(f"- {ep.content} ({ep.score:.2f})")
 
@@ -977,7 +977,7 @@ if __name__ == '__main__':
 2. **Batch Operations**: Use batch methods for bulk inserts (faster)
 3. **Error Handling**: Always wrap WW calls in try/except
 4. **Connection Pooling**: Reuse SDK client instances (context managers)
-5. **Async When Possible**: Use `AsyncWorldWeaverClient` for concurrent operations
+5. **Async When Possible**: Use `AsyncT4DMClient` for concurrent operations
 6. **Hooks for Cross-Cutting Concerns**: Use hooks for logging, monitoring, filtering
 7. **Custom Types for Domain Logic**: Extend memory types for domain-specific needs
 

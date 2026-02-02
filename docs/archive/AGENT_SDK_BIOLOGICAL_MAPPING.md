@@ -1,14 +1,14 @@
 # Agent SDK Biological Memory Mapping
 
 **Date**: 2026-01-05
-**Purpose**: Map Claude Agent SDK lifecycle events to biologically plausible memory processes in World Weaver
+**Purpose**: Map Claude Agent SDK lifecycle events to biologically plausible memory processes in T4DM
 **Target Biological Fidelity**: 95+/100
 
 ---
 
 ## Executive Summary
 
-This document provides recommendations for integrating World Weaver's neurally-inspired memory architecture with the Claude Agent SDK while maintaining biological plausibility. The mapping preserves the biological accuracy already validated (96% fidelity score) while enabling practical agent interactions.
+This document provides recommendations for integrating T4DM's neurally-inspired memory architecture with the Claude Agent SDK while maintaining biological plausibility. The mapping preserves the biological accuracy already validated (96% fidelity score) while enabling practical agent interactions.
 
 **Key Insight**: Agent lifecycle events (task start/end, tool calls, success/failure) map directly to biological encoding/consolidation/retrieval triggers, allowing the memory system to operate automatically without breaking biological constraints.
 
@@ -594,7 +594,7 @@ class WorkingMemoryBuffer:
       "matcher": "*",
       "hooks": [{
         "type": "command",
-        "command": "python -m ww.cli.hooks.session_start",
+        "command": "python -m t4dm.cli.hooks.session_start",
         "timeout": 15
       }]
     }],
@@ -602,7 +602,7 @@ class WorkingMemoryBuffer:
       "matcher": "*",
       "hooks": [{
         "type": "command",
-        "command": "python -m ww.cli.hooks.session_end",
+        "command": "python -m t4dm.cli.hooks.session_end",
         "timeout": 180
       }]
     }],
@@ -610,7 +610,7 @@ class WorkingMemoryBuffer:
       "matcher": "*",
       "hooks": [{
         "type": "command",
-        "command": "python -m ww.cli.hooks.tool_use",
+        "command": "python -m t4dm.cli.hooks.tool_use",
         "timeout": 5
       }]
     }]
@@ -624,9 +624,9 @@ class WorkingMemoryBuffer:
 # src/t4dm/sdk/agent_bridge.py
 from claude_agent_sdk import Agent, Task, ToolResult
 
-class WorldWeaverAgent(Agent):
+class T4DMAgent(Agent):
     """
-    Agent with integrated World Weaver memory.
+    Agent with integrated T4DM memory.
 
     Automatically maps agent lifecycle to biological memory processes.
     """
@@ -864,7 +864,7 @@ async def test_working_memory_limit():
 async def test_agent_lifecycle_integration():
     """End-to-end agent task with memory integration."""
 
-    agent = WorldWeaverAgent(task_type="data_analysis")
+    agent = T4DMAgent(task_type="data_analysis")
 
     # 1. Task start → context load
     context = await agent.on_task_start(
@@ -1020,5 +1020,5 @@ async def batch_tool_tracking(tool_calls: list[ToolCall]) -> None:
 
 **Document Version**: 1.0
 **Last Updated**: 2026-01-05
-**Maintained By**: World Weaver Development Team
+**Maintained By**: T4DM Development Team
 **Status**: PRODUCTION READY

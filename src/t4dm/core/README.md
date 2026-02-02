@@ -2,7 +2,7 @@
 
 **13 files | ~4,500 lines | Centrality: 16 (Hub)**
 
-The core module is the central hub of World Weaver, providing types, configuration, validation, protocols, and services that all other modules depend upon.
+The core module is the central hub of T4DM, providing types, configuration, validation, protocols, and services that all other modules depend upon.
 
 ## Architecture Overview
 
@@ -140,7 +140,7 @@ class Relationship:
 80+ configurable parameters with strong validation:
 
 ```python
-from ww.core import get_settings
+from t4dm.core import get_settings
 
 settings = get_settings()  # Cached singleton
 
@@ -174,9 +174,9 @@ settings.episodic_weight_importance  # 0.15
 
 ### Configuration Load Order
 
-1. **Environment Variables** (`WW_*` prefix)
+1. **Environment Variables** (`T4DM_*` prefix)
 2. **YAML Config File** (searched in order):
-   - `WW_CONFIG_FILE` env var
+   - `T4DM_CONFIG_FILE` env var
    - `./t4dm.yaml`
    - `~/.t4dm/config.yaml`
    - `/etc/t4dm/config.yaml`
@@ -187,7 +187,7 @@ settings.episodic_weight_importance  # 0.15
 Security-focused input validation:
 
 ```python
-from ww.core import (
+from t4dm.core import (
     validate_session_id,
     sanitize_string,
     validate_uuid,
@@ -220,7 +220,7 @@ score = validate_range(value, 0.0, 1.0, "score")
 Provider-agnostic interfaces:
 
 ```python
-from ww.core import EmbeddingProvider, VectorStore, GraphStore
+from t4dm.core import EmbeddingProvider, VectorStore, GraphStore
 
 @runtime_checkable
 class EmbeddingProvider(Protocol):
@@ -247,7 +247,7 @@ class GraphStore(Protocol):
 Thread-safe service lifecycle:
 
 ```python
-from ww.core import get_services, cleanup_services, RateLimiter
+from t4dm.core import get_services, cleanup_services, RateLimiter
 
 # Get memory services (lazy initialization)
 episodic, semantic, procedural = await get_services(session_id)
@@ -267,13 +267,13 @@ if limiter.allow(session_id):
 ### Heuristic Gate
 
 ```python
-from ww.core import MemoryGate, GateContext
+from t4dm.core import MemoryGate, GateContext
 
 gate = MemoryGate(store_threshold=0.4, buffer_threshold=0.2)
 
 context = GateContext(
     session_id="session-1",
-    project="world-weaver",
+    project="t4dm",
     is_voice=False
 )
 
@@ -288,7 +288,7 @@ if result.decision == StorageDecision.STORE:
 ### Learned Gate (Online Bayesian)
 
 ```python
-from ww.core import LearnedMemoryGate
+from t4dm.core import LearnedMemoryGate
 
 gate = LearnedMemoryGate(
     store_threshold=0.6,
@@ -321,7 +321,7 @@ stats = gate.get_stats()  # n_obs, ECE, accuracy
 50+ built-in actions with permission model:
 
 ```python
-from ww.core import ActionRegistry, ActionExecutor, ActionRequest
+from t4dm.core import ActionRegistry, ActionExecutor, ActionRequest
 
 registry = ActionRegistry()
 executor = ActionExecutor(registry)
@@ -346,7 +346,7 @@ if result.requires_confirmation:
 PII redaction and credential detection:
 
 ```python
-from ww.core import PrivacyFilter, ContentClassifier
+from t4dm.core import PrivacyFilter, ContentClassifier
 
 filter = PrivacyFilter()
 redacted = filter.redact("My SSN is 123-45-6789")
@@ -411,7 +411,7 @@ Core ← Embedding
 pytest tests/core/ -v
 
 # With coverage
-pytest tests/core/ --cov=ww.core --cov-report=term-missing
+pytest tests/core/ --cov=t4dm.core --cov-report=term-missing
 ```
 
 ## Security Checklist

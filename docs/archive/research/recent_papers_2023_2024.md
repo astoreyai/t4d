@@ -507,7 +507,7 @@ A comprehensive literature review of influential papers on memory architectures,
 
 ## References for Further Reading
 
-For the World Weaver memory system, the most directly relevant papers are:
+For the T4DM memory system, the most directly relevant papers are:
 
 1. **MemGPT** - For hierarchical memory management patterns
 2. **Generative Agents** - For memory stream and reflection mechanisms

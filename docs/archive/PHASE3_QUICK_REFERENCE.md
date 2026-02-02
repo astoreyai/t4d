@@ -4,7 +4,7 @@
 
 ### sanitize_string(value, max_length=10000, field="content")
 ```python
-from ww.mcp.validation import sanitize_string
+from t4dm.mcp.validation import sanitize_string
 
 # Clean user input
 content = sanitize_string(user_input, max_length=100000)
@@ -18,7 +18,7 @@ content = sanitize_string(user_input, max_length=100000)
 
 ### sanitize_identifier(value, field="identifier")
 ```python
-from ww.mcp.validation import sanitize_identifier
+from t4dm.mcp.validation import sanitize_identifier
 
 # Validate session IDs, names, labels
 session_id = sanitize_identifier(raw_session_id)
@@ -29,7 +29,7 @@ session_id = sanitize_identifier(raw_session_id)
 
 ### validate_limit(value, max_limit=100, field="limit")
 ```python
-from ww.mcp.validation import validate_limit
+from t4dm.mcp.validation import validate_limit
 
 # Cap pagination/query limits
 limit = validate_limit(user_limit, max_limit=100)
@@ -40,7 +40,7 @@ limit = validate_limit(user_limit, max_limit=100)
 
 ### validate_metadata(metadata, field="metadata", max_depth=5)
 ```python
-from ww.mcp.validation import validate_metadata
+from t4dm.mcp.validation import validate_metadata
 
 # Sanitize nested dicts
 clean_meta = validate_metadata(user_metadata)
@@ -56,7 +56,7 @@ clean_meta = validate_metadata(user_metadata)
 
 ### Setting Authentication
 ```python
-from ww.mcp.memory_gateway import set_auth_context
+from t4dm.mcp.memory_gateway import set_auth_context
 
 # At request start (e.g., in middleware)
 set_auth_context(
@@ -68,7 +68,7 @@ set_auth_context(
 
 ### Protecting Tools
 ```python
-from ww.mcp.memory_gateway import require_auth, require_role
+from t4dm.mcp.memory_gateway import require_auth, require_role
 
 @mcp_app.tool()
 @require_auth
@@ -87,7 +87,7 @@ async def admin_tool(config: dict):
 
 ### Checking Context
 ```python
-from ww.mcp.memory_gateway import get_auth_context
+from t4dm.mcp.memory_gateway import get_auth_context
 
 ctx = get_auth_context()
 
@@ -104,7 +104,7 @@ if ctx.get("authenticated"):
 
 All validation functions raise `ValidationError`:
 ```python
-from ww.mcp.validation import ValidationError, sanitize_identifier
+from t4dm.mcp.validation import ValidationError, sanitize_identifier
 
 try:
     clean_id = sanitize_identifier(user_input)
@@ -120,13 +120,13 @@ except ValidationError as e:
 
 ### MCP Tool with Full Validation
 ```python
-from ww.mcp.validation import (
+from t4dm.mcp.validation import (
     sanitize_string,
     validate_limit,
     validate_metadata,
     ValidationError,
 )
-from ww.mcp.memory_gateway import require_auth
+from t4dm.mcp.memory_gateway import require_auth
 
 @mcp_app.tool()
 @require_auth
@@ -163,7 +163,7 @@ async def create_item(
 
 ### Role-Based Access with Context
 ```python
-from ww.mcp.memory_gateway import get_auth_context, require_auth
+from t4dm.mcp.memory_gateway import get_auth_context, require_auth
 
 @mcp_app.tool()
 @require_auth
@@ -205,5 +205,5 @@ pytest tests/unit/test_validation.py -v
 pytest tests/unit/test_validation.py::TestSanitizeString -v
 
 # Test with coverage
-pytest tests/unit/test_validation.py --cov=ww.mcp.validation
+pytest tests/unit/test_validation.py --cov=t4dm.mcp.validation
 ```

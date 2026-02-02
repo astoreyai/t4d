@@ -14,13 +14,13 @@ Each memory type has distinct data models, storage patterns, and retrieval algor
 ## Key Files
 | Skill | Directory | Purpose |
 |-------|-----------|---------|
-| **ww-memory** | `ww-memory/SKILL.md` | Core memory interface and shared operations |
-| **ww-episodic** | `ww-episodic/SKILL.md` | Episodic memory (events, timestamps, context) |
-| **ww-semantic** | `ww-semantic/SKILL.md` | Semantic memory (entities, relationships, facts) |
-| **ww-semantic-mem** | `ww-semantic-mem/SKILL.md` | Semantic memory implementation details |
-| **ww-procedural** | `ww-procedural/SKILL.md` | Procedural memory (skills, workflows, sequences) |
-| **ww-consolidate** | `ww-consolidate/SKILL.md` | Memory consolidation (HDBSCAN clustering, decay) |
-| **ww-graph** | `ww-graph/SKILL.md` | Neo4j graph operations and Cypher queries |
+| **t4dm-memory** | `t4dm-memory/SKILL.md` | Core memory interface and shared operations |
+| **t4dm-episodic** | `t4dm-episodic/SKILL.md` | Episodic memory (events, timestamps, context) |
+| **t4dm-semantic** | `t4dm-semantic/SKILL.md` | Semantic memory (entities, relationships, facts) |
+| **t4dm-semantic-mem** | `t4dm-semantic-mem/SKILL.md` | Semantic memory implementation details |
+| **t4dm-procedural** | `t4dm-procedural/SKILL.md` | Procedural memory (skills, workflows, sequences) |
+| **t4dm-consolidate** | `t4dm-consolidate/SKILL.md` | Memory consolidation (HDBSCAN clustering, decay) |
+| **t4dm-graph** | `t4dm-graph/SKILL.md` | Neo4j graph operations and Cypher queries |
 
 ## Data Flow
 ```

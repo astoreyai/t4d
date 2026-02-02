@@ -41,7 +41,7 @@ The extraction module provides named entity recognition (NER) services for autom
 ## Entity Data Structure
 
 ```python
-from ww.extraction import ExtractedEntity
+from t4dm.extraction import ExtractedEntity
 
 entity = ExtractedEntity(
     name="John Smith",
@@ -61,7 +61,7 @@ entity1 == entity2  # Normalized name + type comparison
 Fast, deterministic extraction for structured patterns:
 
 ```python
-from ww.extraction import RegexEntityExtractor
+from t4dm.extraction import RegexEntityExtractor
 
 extractor = RegexEntityExtractor(context_window=50)
 
@@ -100,7 +100,7 @@ entities = await extractor.extract(
 Semantic extraction using OpenAI API:
 
 ```python
-from ww.extraction import LLMEntityExtractor
+from t4dm.extraction import LLMEntityExtractor
 
 extractor = LLMEntityExtractor(
     api_key="sk-...",           # Or from OPENAI_API_KEY env
@@ -146,7 +146,7 @@ entities = await extractor.extract(
 Hybrid approach combining multiple extractors:
 
 ```python
-from ww.extraction import CompositeEntityExtractor, RegexEntityExtractor, LLMEntityExtractor
+from t4dm.extraction import CompositeEntityExtractor, RegexEntityExtractor, LLMEntityExtractor
 
 composite = CompositeEntityExtractor([
     RegexEntityExtractor(),
@@ -162,7 +162,7 @@ entities = await composite.extract(text)
 ## Factory Function
 
 ```python
-from ww.extraction import create_default_extractor
+from t4dm.extraction import create_default_extractor
 
 # Regex only (default)
 extractor = create_default_extractor()
@@ -242,7 +242,7 @@ entity = {"name": "Smith"}  # No type, no confidence
 pytest tests/extraction/ -v
 
 # With coverage
-pytest tests/extraction/ --cov=ww.extraction
+pytest tests/extraction/ --cov=t4dm.extraction
 ```
 
 **Test Coverage**: 51 test methods (693 lines)

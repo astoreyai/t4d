@@ -1,4 +1,4 @@
-# World Weaver Learning System - Quick Reference
+# T4DM Learning System - Quick Reference
 
 ## Core Formulas
 

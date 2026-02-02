@@ -1,10 +1,10 @@
-# World Weaver Deployment Guide
+# T4DM Deployment Guide
 
 **Version**: 1.0.0 | **Last Updated**: 2025-11-27
 
 ## Overview
 
-World Weaver is a tripartite memory system for Claude Code instances, providing episodic, semantic, and procedural memory via MCP (Model Context Protocol).
+T4DM is a tripartite memory system for Claude Code instances, providing episodic, semantic, and procedural memory via MCP (Model Context Protocol).
 
 **Architecture**:
 - **Qdrant**: Vector embeddings for semantic search (BGE-M3)
@@ -45,8 +45,8 @@ World Weaver is a tripartite memory system for Claude Code instances, providing 
 ### 1. Clone Repository
 
 ```bash
-git clone https://github.com/astoreyai/world-weaver.git
-cd world-weaver
+git clone https://github.com/astoreyai/t4dm.git
+cd t4dm
 ```
 
 ### 2. Configure Environment
@@ -63,30 +63,30 @@ nano .env
 
 | Variable | Description | Example |
 |----------|-------------|---------|
-| `WW_SESSION_ID` | Session identifier | `default` |
-| `WW_NEO4J_URI` | Neo4j connection string | `bolt://localhost:7687` |
-| `WW_NEO4J_USER` | Neo4j username | `neo4j` |
-| `WW_NEO4J_PASSWORD` | Neo4j password | `your-secure-password` |
-| `WW_QDRANT_URL` | Qdrant REST API URL | `http://localhost:6333` |
+| `T4DM_SESSION_ID` | Session identifier | `default` |
+| `T4DM_NEO4J_URI` | Neo4j connection string | `bolt://localhost:7687` |
+| `T4DM_NEO4J_USER` | Neo4j username | `neo4j` |
+| `T4DM_NEO4J_PASSWORD` | Neo4j password | `your-secure-password` |
+| `T4DM_QDRANT_URL` | Qdrant REST API URL | `http://localhost:6333` |
 
 **Optional Variables** (see `.env` for defaults):
 
 ```bash
 # Embedding Configuration
-WW_EMBEDDING_MODEL=BAAI/bge-m3
-WW_EMBEDDING_DIMENSION=1024
-WW_EMBEDDING_DEVICE=cuda:0  # or cpu
-WW_EMBEDDING_USE_FP16=true
-WW_EMBEDDING_BATCH_SIZE=32
+T4DM_EMBEDDING_MODEL=BAAI/bge-m3
+T4DM_EMBEDDING_DIMENSION=1024
+T4DM_EMBEDDING_DEVICE=cuda:0  # or cpu
+T4DM_EMBEDDING_USE_FP16=true
+T4DM_EMBEDDING_BATCH_SIZE=32
 
 # Memory Parameters
-WW_FSRS_DEFAULT_STABILITY=1.0
-WW_FSRS_RETENTION_TARGET=0.9
-WW_HEBBIAN_LEARNING_RATE=0.1
+T4DM_FSRS_DEFAULT_STABILITY=1.0
+T4DM_FSRS_RETENTION_TARGET=0.9
+T4DM_HEBBIAN_LEARNING_RATE=0.1
 
 # Consolidation Thresholds
-WW_CONSOLIDATION_MIN_SIMILARITY=0.75
-WW_CONSOLIDATION_MIN_OCCURRENCES=3
+T4DM_CONSOLIDATION_MIN_SIMILARITY=0.75
+T4DM_CONSOLIDATION_MIN_OCCURRENCES=3
 ```
 
 ### 3. Start Infrastructure
@@ -128,7 +128,7 @@ curl http://localhost:7474         # Neo4j browser
 pytest tests/ -v
 
 # Start MCP server (test mode)
-python -m ww.mcp.memory_gateway
+python -m t4dm.mcp.memory_gateway
 ```
 
 ---
@@ -270,7 +270,7 @@ log_level: INFO
 openssl rand -base64 32
 
 # Update .env
-WW_NEO4J_PASSWORD=<generated-password>
+T4DM_NEO4J_PASSWORD=<generated-password>
 ```
 
 #### 2. TLS/SSL for Neo4j
@@ -297,7 +297,7 @@ dbms.ssl.policy.bolt.public_certificate=public.crt
 
 **Update connection**:
 ```bash
-WW_NEO4J_URI=bolt+s://localhost:7687
+T4DM_NEO4J_URI=bolt+s://localhost:7687
 ```
 
 #### 3. File Permissions
@@ -331,8 +331,8 @@ services:
 
 Configure in `.env`:
 ```bash
-WW_RATE_LIMIT_MAX_REQUESTS=100
-WW_RATE_LIMIT_WINDOW_SECONDS=60
+T4DM_RATE_LIMIT_MAX_REQUESTS=100
+T4DM_RATE_LIMIT_WINDOW_SECONDS=60
 ```
 
 ### Resource Optimization
@@ -347,9 +347,9 @@ dbms.memory.pagecache.size=4G
 dbms.jvm.additional=-XX:+UseG1GC
 ```
 
-**Connection pooling** (already configured in World Weaver):
+**Connection pooling** (already configured in T4DM):
 ```python
-# src/t4dm/storage/neo4j_store.py
+# src/t4dm/storage/t4dx_graph_adapter.py
 max_connection_pool_size=100
 connection_acquisition_timeout=60.0
 connection_timeout=30.0
@@ -376,9 +376,9 @@ storage:
 
 ```bash
 # In .env
-WW_LOG_LEVEL=INFO
-WW_LOG_FORMAT=json
-WW_LOG_FILE=/var/log/t4dm/memory_gateway.log
+T4DM_LOG_LEVEL=INFO
+T4DM_LOG_FORMAT=json
+T4DM_LOG_FILE=/var/log/t4dm/memory_gateway.log
 ```
 
 #### 2. Health Checks
@@ -395,7 +395,7 @@ curl -f http://localhost:6333/health || exit 1
 curl -f http://localhost:7474 || exit 1
 
 # Check MCP server
-python -c "from ww.observability.health import check_health; check_health()" || exit 1
+python -c "from t4dm.observability.health import check_health; check_health()" || exit 1
 
 echo "All services healthy"
 ```
@@ -408,19 +408,19 @@ echo "All services healthy"
 
 #### 3. Metrics Export
 
-World Weaver exposes Prometheus-compatible metrics via the `ww.observability.metrics` module.
+T4DM exposes Prometheus-compatible metrics via the `t4dm.observability.metrics` module.
 
 **Configuration**:
 ```bash
 # In .env
-WW_METRICS_ENABLED=true
-WW_METRICS_PORT=9090
+T4DM_METRICS_ENABLED=true
+T4DM_METRICS_PORT=9090
 ```
 
 **Prometheus scrape config**:
 ```yaml
 scrape_configs:
-  - job_name: 'world-weaver'
+  - job_name: 't4dm'
     static_configs:
       - targets: ['localhost:9090']
 ```
@@ -484,16 +484,16 @@ docker-compose up -d
 ```json
 {
   "mcpServers": {
-    "world-weaver": {
+    "t4dm": {
       "command": "python",
-      "args": ["-m", "ww.mcp.memory_gateway"],
+      "args": ["-m", "t4dm.mcp.memory_gateway"],
       "cwd": "/mnt/projects/ww",
       "env": {
-        "WW_SESSION_ID": "my-session",
-        "WW_NEO4J_URI": "bolt://localhost:7687",
-        "WW_NEO4J_USER": "neo4j",
-        "WW_NEO4J_PASSWORD": "your-password",
-        "WW_QDRANT_URL": "http://localhost:6333"
+        "T4DM_SESSION_ID": "my-session",
+        "T4DM_NEO4J_URI": "bolt://localhost:7687",
+        "T4DM_NEO4J_USER": "neo4j",
+        "T4DM_NEO4J_PASSWORD": "your-password",
+        "T4DM_QDRANT_URL": "http://localhost:6333"
       }
     }
   }
@@ -503,11 +503,11 @@ docker-compose up -d
 **Verify**:
 ```bash
 # Test MCP server manually
-python -m ww.mcp.memory_gateway
+python -m t4dm.mcp.memory_gateway
 # Should start and listen for stdio MCP messages
 ```
 
-### Using World Weaver in Claude Code
+### Using T4DM in Claude Code
 
 Once configured, Claude Code can access 17 memory tools:
 
@@ -559,7 +559,7 @@ qdrant_client.http.exceptions.UnexpectedResponse: Collection ww_episodes not fou
 ```bash
 # Initialize collections
 python -c "
-from ww.memory.episodic import get_episodic_memory
+from t4dm.memory.episodic import get_episodic_memory
 import asyncio
 async def init():
     mem = get_episodic_memory('default')
@@ -578,9 +578,9 @@ RuntimeError: CUDA out of memory
 **Solution** (use CPU for embeddings):
 ```bash
 # In .env
-WW_EMBEDDING_DEVICE=cpu
-WW_EMBEDDING_USE_FP16=false
-WW_EMBEDDING_BATCH_SIZE=8  # Reduce batch size
+T4DM_EMBEDDING_DEVICE=cpu
+T4DM_EMBEDDING_USE_FP16=false
+T4DM_EMBEDDING_BATCH_SIZE=8  # Reduce batch size
 ```
 
 #### 4. Rate Limit Issues
@@ -593,12 +593,12 @@ WW_EMBEDDING_BATCH_SIZE=8  # Reduce batch size
 **Solution**:
 ```bash
 # Increase rate limit in .env
-WW_RATE_LIMIT_MAX_REQUESTS=500
-WW_RATE_LIMIT_WINDOW_SECONDS=60
+T4DM_RATE_LIMIT_MAX_REQUESTS=500
+T4DM_RATE_LIMIT_WINDOW_SECONDS=60
 
 # Or reset rate limiter
 python -c "
-from ww.mcp.memory_gateway import _rate_limiter
+from t4dm.mcp.memory_gateway import _rate_limiter
 _rate_limiter.reset()
 "
 ```
@@ -608,20 +608,20 @@ _rate_limiter.reset()
 **Enable verbose logging**:
 ```bash
 # In .env
-WW_LOG_LEVEL=DEBUG
+T4DM_LOG_LEVEL=DEBUG
 
 # Run server with debug output
-python -m ww.mcp.memory_gateway 2>&1 | tee debug.log
+python -m t4dm.mcp.memory_gateway 2>&1 | tee debug.log
 ```
 
 ### Performance Profiling
 
 ```bash
 # Profile memory usage
-python -m memory_profiler -m ww.mcp.memory_gateway
+python -m memory_profiler -m t4dm.mcp.memory_gateway
 
 # Profile CPU usage
-python -m cProfile -o profile.stats -m ww.mcp.memory_gateway
+python -m cProfile -o profile.stats -m t4dm.mcp.memory_gateway
 
 # Analyze profile
 python -m pstats profile.stats
@@ -633,7 +633,7 @@ python -m pstats profile.stats
 
 Before deploying to production:
 
-- [ ] Set strong `WW_NEO4J_PASSWORD` (32+ characters)
+- [ ] Set strong `T4DM_NEO4J_PASSWORD` (32+ characters)
 - [ ] Enable TLS/SSL for Neo4j
 - [ ] Configure rate limiting (default: 100/min)
 - [ ] Restrict network access (bind to 127.0.0.1)
@@ -657,7 +657,7 @@ Before deploying to production:
 
 | Component | CPU | RAM | Disk |
 |-----------|-----|-----|------|
-| World Weaver | 2 cores | 2GB | 1GB |
+| T4DM | 2 cores | 2GB | 1GB |
 | Qdrant | 2 cores | 4GB | 10GB |
 | Neo4j | 2 cores | 4GB | 10GB |
 | **Total** | 6 cores | 10GB | 21GB |
@@ -666,7 +666,7 @@ Before deploying to production:
 
 | Component | CPU | RAM | Disk |
 |-----------|-----|-----|------|
-| World Weaver | 4 cores | 8GB | 5GB |
+| T4DM | 4 cores | 8GB | 5GB |
 | Qdrant | 4 cores | 16GB | 50GB |
 | Neo4j | 4 cores | 16GB | 50GB |
 | **Total** | 12 cores | 40GB | 105GB |
@@ -675,7 +675,7 @@ Before deploying to production:
 
 | Component | CPU | RAM | Disk |
 |-----------|-----|-----|------|
-| World Weaver | 8 cores | 16GB | 20GB |
+| T4DM | 8 cores | 16GB | 20GB |
 | Qdrant | 8 cores | 32GB | 200GB SSD |
 | Neo4j | 8 cores | 32GB | 200GB SSD |
 | **Total** | 24 cores | 80GB | 420GB |
@@ -690,7 +690,7 @@ Before deploying to production:
 
 ## Migration & Upgrades
 
-### Upgrading World Weaver
+### Upgrading T4DM
 
 ```bash
 # Backup data first
@@ -721,7 +721,7 @@ docker-compose restart
 ## Support & Resources
 
 - **Documentation**: `/mnt/projects/t4d/t4dm/docs/`
-- **Issues**: https://github.com/astoreyai/world-weaver/issues
+- **Issues**: https://github.com/astoreyai/t4dm/issues
 - **API Reference**: `/mnt/projects/t4d/t4dm/docs/api.md`
 - **Architecture**: `/mnt/projects/t4d/t4dm/ARCHITECTURE.md`
 - **Memory System**: `/mnt/projects/t4d/t4dm/MEMORY_ARCHITECTURE.md`
@@ -730,4 +730,4 @@ docker-compose restart
 
 ## License
 
-World Weaver is released under the MIT License. See `LICENSE` file for details.
+T4DM is released under the MIT License. See `LICENSE` file for details.

@@ -1,4 +1,4 @@
-# World Weaver Retrieval Optimization Plan
+# T4DM Retrieval Optimization Plan
 
 **Version**: 2.0 | **Status**: Complete | **Target**: Best-in-class self-contained retrieval + adaptive learning
 
@@ -261,7 +261,7 @@ Source: [github.com/MinishLab/semhash](https://github.com/MinishLab/semhash)
 
 **Files Modified**:
 - `src/t4dm/embedding/bge_m3.py` - Enable sparse vectors
-- `src/t4dm/storage/qdrant_store.py` - Sparse vector storage + search
+- `src/t4dm/storage/t4dx_vector_adapter.py` - Sparse vector storage + search
 - `src/t4dm/memory/episodic.py` - Hybrid recall integration
 
 **Key Changes**:
@@ -288,7 +288,7 @@ def _convert_sparse(self, lexical_weights: list) -> list[dict[int, float]]:
 ```
 
 ```python
-# qdrant_store.py - Collection with sparse vectors
+# t4dx_vector_adapter.py - Collection with sparse vectors
 async def create_hybrid_collection(self, name: str, dimension: int = 1024):
     """Create collection supporting both dense and sparse vectors."""
     await self._client.create_collection(
@@ -349,7 +349,7 @@ async def search_hybrid(
 **Key Implementation**:
 
 ```python
-"""Semantic chunking for World Weaver."""
+"""Semantic chunking for T4DM."""
 
 import re
 from dataclasses import dataclass, field
@@ -548,7 +548,7 @@ class EpisodeChunk(BaseModel):
 **Key Implementation**:
 
 ```python
-"""GLiNER-based local entity extraction for World Weaver."""
+"""GLiNER-based local entity extraction for T4DM."""
 
 import logging
 from typing import Optional
@@ -629,7 +629,7 @@ class GLiNERExtractor:
         labels: Optional[list[str]] = None,
     ) -> list['ExtractedEntity']:
         """Extract entities from text."""
-        from ww.extraction.entity_extractor import ExtractedEntity
+        from t4dm.extraction.entity_extractor import ExtractedEntity
 
         self._ensure_initialized()
 
@@ -700,7 +700,7 @@ class GLiNERExtractor:
         for text, entities in zip(texts, all_entities):
             results = []
             for entity in entities:
-                from ww.extraction.entity_extractor import ExtractedEntity
+                from t4dm.extraction.entity_extractor import ExtractedEntity
                 start = max(0, entity["start"] - 50)
                 end = min(len(text), entity["end"] + 50)
 
@@ -729,7 +729,7 @@ class GLiNERExtractor:
 **Key Implementation**:
 
 ```python
-"""Cross-encoder reranking for World Weaver."""
+"""Cross-encoder reranking for T4DM."""
 
 import logging
 from typing import Optional, TypeVar

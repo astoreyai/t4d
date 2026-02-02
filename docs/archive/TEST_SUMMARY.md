@@ -1,4 +1,4 @@
-# World Weaver Test Coverage Summary
+# T4DM Test Coverage Summary
 
 **Test Run Date**: 2025-11-27
 **Overall Coverage**: 47% (2427 statements, 1287 missing)
@@ -62,8 +62,8 @@ FAILED tests/test_memory.py::test_procedural_retrieve
 - embedding/bge_m3.py - **59%** (87 LOC)
 - memory/semantic.py - **53%** (177 LOC)
 - memory/procedural.py - **64%** (124 LOC)
-- storage/qdrant_store.py - **56%** (181 LOC)
-- storage/neo4j_store.py - **41%** (232 LOC)
+- storage/t4dx_vector_adapter.py - **56%** (181 LOC)
+- storage/t4dx_graph_adapter.py - **41%** (232 LOC)
 
 ### Green Zone (80%+)
 - storage/saga.py - **96%** (136 LOC)
@@ -254,8 +254,8 @@ pytest -vv --tb=short
 - `/mnt/projects/t4d/t4dm/src/t4dm/consolidation/service.py` - 18% coverage (PRIORITY)
 - `/mnt/projects/t4d/t4dm/src/t4dm/mcp/memory_gateway.py` - 18% coverage (PRIORITY)
 - `/mnt/projects/t4d/t4dm/src/t4dm/observability/` - 0% coverage (PRIORITY)
-- `/mnt/projects/t4d/t4dm/src/t4dm/storage/neo4j_store.py` - 41% coverage
-- `/mnt/projects/t4d/t4dm/src/t4dm/storage/qdrant_store.py` - 56% coverage
+- `/mnt/projects/t4d/t4dm/src/t4dm/storage/t4dx_graph_adapter.py` - 41% coverage
+- `/mnt/projects/t4d/t4dm/src/t4dm/storage/t4dx_vector_adapter.py` - 56% coverage
 
 **Test Code**:
 - `/mnt/projects/t4d/t4dm/tests/unit/test_validation.py` - 100% coverage (use as template)
@@ -266,7 +266,7 @@ pytest -vv --tb=short
 
 ## Summary
 
-World Weaver has a **foundation of good testing practices** but **critical coverage gaps** in:
+T4DM has a **foundation of good testing practices** but **critical coverage gaps** in:
 1. Memory consolidation (core feature)
 2. MCP gateway (primary interface)
 3. Observability (production monitoring)

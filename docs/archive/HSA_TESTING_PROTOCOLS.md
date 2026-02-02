@@ -1,4 +1,4 @@
-# HSA-Inspired Testing Protocols for World Weaver
+# HSA-Inspired Testing Protocols for T4DM
 
 **Version**: 1.0.0
 **Date**: 2025-12-06
@@ -8,7 +8,7 @@
 
 ## Executive Summary
 
-This document defines testing protocols for validating Hierarchical Sparse Addressing (HSA) improvements to World Weaver's episodic memory system. All tests are grounded in hippocampal neuroscience and provide quantitative benchmarks derived from physiological observations.
+This document defines testing protocols for validating Hierarchical Sparse Addressing (HSA) improvements to T4DM's episodic memory system. All tests are grounded in hippocampal neuroscience and provide quantitative benchmarks derived from physiological observations.
 
 **Test Coverage**:
 - 4 test modules with 40+ test cases
@@ -704,7 +704,7 @@ pytest tests/unit/test_biological_validation.py -v
 pytest tests/unit/test_biological_validation.py::TestDGPatternSeparation::test_dg_separation_benchmark -v
 
 # With coverage
-pytest tests/unit/test_*.py --cov=ww.memory --cov-report=html
+pytest tests/unit/test_*.py --cov=t4dm.memory --cov-report=html
 ```
 
 ### 8.2 Expected Output
@@ -752,7 +752,7 @@ jobs:
                  tests/unit/test_sparse_addressing.py \
                  tests/unit/test_joint_optimization.py \
                  tests/unit/test_biological_validation.py \
-                 --cov=ww.memory \
+                 --cov=t4dm.memory \
                  --cov-report=xml
       - name: Upload coverage
         uses: codecov/codecov-action@v2

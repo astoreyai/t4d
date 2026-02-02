@@ -1,4 +1,4 @@
-# World Weaver Security Remediation Plan
+# T4DM Security Remediation Plan
 
 **Generated**: 2025-12-06
 **Target Completion**: Before production deployment
@@ -17,9 +17,9 @@ api_key: Optional[str] = Field(default=None, description="API key for auth")
 @field_validator("api_key")
 @classmethod
 def validate_api_key_production(cls, v: Optional[str]) -> Optional[str]:
-    env = os.getenv("WW_ENVIRONMENT", "development")
+    env = os.getenv("T4DM_ENVIRONMENT", "development")
     if env == "production" and not v:
-        raise ValueError("API key required in production (set WW_API_KEY)")
+        raise ValueError("API key required in production (set T4DM_API_KEY)")
     if v and len(v) < 32:
         raise ValueError("API key must be at least 32 characters")
     return v
@@ -38,7 +38,7 @@ async def verify_api_key(x_api_key: Annotated[Optional[str], Header()] = None):
 - `src/t4dm/core/config.py` (add field + validator)
 - `src/t4dm/api/deps.py` (add verify_api_key dependency)
 - `src/t4dm/api/server.py` (add to router dependencies)
-- `.env.example` (add WW_API_KEY with generation instructions)
+- `.env.example` (add T4DM_API_KEY with generation instructions)
 
 **Testing**:
 ```bash
@@ -57,7 +57,7 @@ curl -H "X-API-Key: <valid>" http://localhost:8765/api/v1/health  # Should 200
 
 **Create error utilities** (`src/t4dm/api/errors.py`):
 ```python
-from ww.mcp.gateway import get_request_id
+from t4dm.mcp.gateway import get_request_id
 import logging
 
 logger = logging.getLogger(__name__)
@@ -105,7 +105,7 @@ except Exception as e:
 @model_validator(mode="after")
 def validate_production_tls(self) -> "Settings":
     """Enforce TLS in production."""
-    env = os.getenv("WW_ENVIRONMENT", "development")
+    env = os.getenv("T4DM_ENVIRONMENT", "development")
 
     if env == "production":
         issues = []
@@ -155,7 +155,7 @@ services:
 @field_validator("cors_allowed_origins")
 @classmethod
 def validate_cors_origins(cls, v: list[str]) -> list[str]:
-    env = os.getenv("WW_ENVIRONMENT", "development")
+    env = os.getenv("T4DM_ENVIRONMENT", "development")
 
     if env == "production":
         if "*" in v:
@@ -176,10 +176,10 @@ def validate_cors_origins(cls, v: list[str]) -> list[str]:
 ```bash
 # CORS Configuration (API Server)
 # Development: localhost origins
-WW_API_CORS_ORIGINS=http://localhost:3000,http://localhost:8080
+T4DM_API_CORS_ORIGINS=http://localhost:3000,http://localhost:8080
 
 # Production: ONLY HTTPS origins, comma-separated
-# WW_API_CORS_ORIGINS=https://app.example.com,https://dashboard.example.com
+# T4DM_API_CORS_ORIGINS=https://app.example.com,https://dashboard.example.com
 ```
 
 **Files to modify**:
@@ -277,7 +277,7 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
 
 ```python
 # In src/t4dm/api/server.py
-from ww.api.middleware import SecurityHeadersMiddleware
+from t4dm.api.middleware import SecurityHeadersMiddleware
 app.add_middleware(SecurityHeadersMiddleware)
 ```
 
@@ -296,7 +296,7 @@ app.add_middleware(SecurityHeadersMiddleware)
 # WARNING: Rate limiting (100 req/min) is per-worker
 # With 4 workers, effective limit is 400 req/min
 # For production with multiple workers, use external rate limiter (nginx, Redis)
-WW_API_WORKERS=1
+T4DM_API_WORKERS=1
 ```
 
 **Files to modify**:
@@ -335,7 +335,7 @@ WORKDIR /home/t4dm/app
 # Copy application
 COPY --chown=ww:ww . .
 
-CMD ["python", "-m", "ww.api.server"]
+CMD ["python", "-m", "t4dm.api.server"]
 ```
 
 **Files to modify**:
@@ -396,7 +396,7 @@ def log_api_event(event: str, request: Request, **extra):
 **Apply to sensitive operations**:
 ```python
 # In create_episode
-from ww.observability.audit import log_api_event
+from t4dm.observability.audit import log_api_event
 log_api_event("episode_created", request, episode_id=str(episode.id))
 
 # In delete operations
@@ -421,7 +421,7 @@ def check_file_permissions(path: Path) -> None:
 
     mode = path.stat().st_mode
     if mode & 0o077:
-        env = os.getenv("WW_ENVIRONMENT", "development")
+        env = os.getenv("T4DM_ENVIRONMENT", "development")
         if env == "production":
             raise ValueError(
                 f"Config file '{path}' has insecure permissions: {oct(mode)}. "

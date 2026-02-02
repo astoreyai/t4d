@@ -190,7 +190,7 @@ E_total = E_hopfield + E_boundary + E_attractor
 ### Basic Neural Field
 
 ```python
-from ww.nca import NeuralFieldConfig, NeuralFieldSolver, NeurotransmitterState
+from t4dm.nca import NeuralFieldConfig, NeuralFieldSolver, NeurotransmitterState
 
 config = NeuralFieldConfig()
 solver = NeuralFieldSolver(config)
@@ -212,7 +212,7 @@ new_state = solver.step(state, dt=0.01)
 ### Neuromodulator Integration
 
 ```python
-from ww.nca import VTACircuit, RapheNucleus, LocusCoeruleus, DopamineIntegration
+from t4dm.nca import VTACircuit, RapheNucleus, LocusCoeruleus, DopamineIntegration
 
 vta = VTACircuit()
 raphe = RapheNucleus()
@@ -229,7 +229,7 @@ integrated_state = integration.integrate(vta_state, field_state, memory_rpe)
 ### Forward-Forward Learning
 
 ```python
-from ww.nca import ForwardForwardNetwork, FFPhase
+from t4dm.nca import ForwardForwardNetwork, FFPhase
 
 ff_net = ForwardForwardNetwork(layer_dims=[1024, 512, 256])
 
@@ -246,7 +246,7 @@ ff_net.update_weights()
 ### Hippocampal Processing
 
 ```python
-from ww.nca import HippocampalCircuit
+from t4dm.nca import HippocampalCircuit
 
 hc = HippocampalCircuit()
 
@@ -293,7 +293,7 @@ pytest tests/nca/ -v
 pytest tests/nca/ -v -m biology
 
 # Coverage report
-pytest tests/nca/ --cov=ww.nca --cov-report=term-missing
+pytest tests/nca/ --cov=t4dm.nca --cov-report=term-missing
 ```
 
 **Test Coverage**: 664 tests, 79% coverage

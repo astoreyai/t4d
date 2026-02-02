@@ -28,10 +28,10 @@ from uuid import UUID, uuid4
 
 import numpy as np
 
-from ww.core.types import Episode, EpisodeContext
-from ww.storage.neo4j_store import Neo4jStore
-from ww.storage.qdrant_store import QdrantStore
-from ww.storage.saga import Saga, SagaState
+from t4dm.core.types import Episode, EpisodeContext
+from t4dm.storage.t4dx_graph_adapter import T4DXGraphAdapter
+from t4dm.storage.t4dx_vector_adapter import T4DXVectorAdapter
+from t4dm.storage.saga import Saga, SagaState
 
 logger = logging.getLogger(__name__)
 
@@ -41,8 +41,8 @@ class EpisodicStorageService:
 
     def __init__(
         self,
-        vector_store: QdrantStore,
-        graph_store: Neo4jStore,
+        vector_store: T4DXVectorAdapter,
+        graph_store: T4DXGraphAdapter,
         session_id: str,
     ):
         """
@@ -295,7 +295,7 @@ class EpisodicStorageService:
 
 ```python
 """
-Redis caching layer for World Weaver.
+Redis caching layer for T4DM.
 
 Caches embeddings, search results, and graph relationships with TTL-based expiration.
 
@@ -315,7 +315,7 @@ from typing import Any
 import numpy as np
 import redis.asyncio as redis
 
-from ww.core.config import get_settings
+from t4dm.core.config import get_settings
 
 logger = logging.getLogger(__name__)
 
@@ -738,7 +738,7 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
 
 ```python
 # Add at top of file:
-from ww.storage.redis_cache import get_redis_cache
+from t4dm.storage.redis_cache import get_redis_cache
 
 # Modify __init__:
 class BGEM3EmbeddingProvider(EmbeddingProvider):
@@ -847,9 +847,9 @@ import pytest
 from datetime import datetime, timedelta
 from uuid import uuid4
 
-from ww.consolidation.sleep import SleepCycleManager
-from ww.nca.glymphatic import GlymphaticSystem
-from ww.memory.episodic import EpisodicMemory
+from t4dm.consolidation.sleep import SleepCycleManager
+from t4dm.nca.glymphatic import GlymphaticSystem
+from t4dm.memory.episodic import EpisodicMemory
 
 
 @pytest.fixture
@@ -974,7 +974,7 @@ class Settings(BaseSettings):
 
     model_config = SettingsConfigDict(
         env_file=".env",
-        env_prefix="WW_",
+        env_prefix="T4DM_",
     )
 ```
 
@@ -1039,8 +1039,8 @@ import pytest
 import numpy as np
 from uuid import uuid4
 
-from ww.memory.episodic import EpisodicMemory
-from ww.core.types import Episode, EpisodeContext
+from t4dm.memory.episodic import EpisodicMemory
+from t4dm.core.types import Episode, EpisodeContext
 
 
 @pytest.fixture
@@ -1090,14 +1090,14 @@ def test_recall_with_cache(benchmark, episodic_memory):
 
 
 @pytest.mark.benchmark(group="graph-traversal")
-def test_batch_graph_query(benchmark, neo4j_store):
+def test_batch_graph_query(benchmark, t4dx_graph_adapter):
     """Benchmark batch graph queries (should be 10-100x faster)."""
 
     # Create test nodes
     node_ids = [str(uuid4()) for _ in range(100)]
 
     async def batch_query():
-        return await neo4j_store.get_relationships_batch(node_ids)
+        return await t4dx_graph_adapter.get_relationships_batch(node_ids)
 
     result = benchmark.pedantic(
         lambda: asyncio.run(batch_query()),

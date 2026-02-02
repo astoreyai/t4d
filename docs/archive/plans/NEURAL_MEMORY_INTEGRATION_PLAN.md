@@ -3,13 +3,13 @@
 **Date**: 2025-12-06
 **Status**: Planning Complete - Ready for Implementation
 **WW Version**: 0.2.0 (1,259 tests, 79% coverage)
-**Source**: `/home/aaron/mem/NEURAL_MEMORY_VS_WW_COMPARISON.md`
+**Source**: `/home/aaron/mem/NEURAL_MEMORY_VS_T4DM_COMPARISON.md`
 
 ---
 
 ## Executive Summary
 
-This document provides a detailed, actionable implementation plan for integrating CompBio neural memory components into World Weaver. The integration is structured in phases, prioritizing high-impact, low-risk enhancements that preserve WW's existing strengths (symbolic reasoning, production readiness, tripartite memory) while adding critical scaling and learning capabilities.
+This document provides a detailed, actionable implementation plan for integrating CompBio neural memory components into T4DM. The integration is structured in phases, prioritizing high-impact, low-risk enhancements that preserve WW's existing strengths (symbolic reasoning, production readiness, tripartite memory) while adding critical scaling and learning capabilities.
 
 **Timeline**: 8-12 weeks
 **Priority**: Critical for scaling to millions of memories
@@ -53,8 +53,8 @@ This document provides a detailed, actionable implementation plan for integratin
 
 **Dependencies**:
 - `numpy`, `scikit-learn` (already in project)
-- `ww.storage.qdrant_store` (existing)
-- `ww.embedding.bge_m3` (existing)
+- `t4dm.storage.t4dx_vector_adapter` (existing)
+- `t4dm.embedding.bge_m3` (existing)
 
 **Implementation Details**:
 
@@ -80,7 +80,7 @@ Key Parameters:
 class ClusterIndex:
     def __init__(
         self,
-        qdrant_store,
+        t4dx_vector_adapter,
         n_clusters: int = 100,
         rebuild_threshold: float = 0.1,
         min_memories_for_clustering: int = 500,
@@ -152,7 +152,7 @@ class ClusterIndex:
 
 **Dependencies**:
 - `ClusterIndex` (Task 0.1)
-- `ww.learning.neuromodulators` (existing)
+- `t4dm.learning.neuromodulators` (existing)
 
 **Implementation Details**:
 
@@ -259,7 +259,7 @@ class LearnedSparseIndex:
 **Purpose**: Ensure gate and retrieval scorer use same feature space
 
 **Dependencies**:
-- `ww.learning.learned_gate` (if exists, else create stub)
+- `t4dm.learning.learned_gate` (if exists, else create stub)
 - `LearnedFusionWeights` (existing in episodic.py)
 
 **Implementation Details**:
@@ -387,7 +387,7 @@ class EpisodicMemory:
 
         # NEW: Hierarchical retrieval components
         self.cluster_index = ClusterIndex(
-            qdrant_store=self.qdrant_store,
+            t4dx_vector_adapter=self.t4dx_vector_adapter,
             n_clusters=get_settings().cluster_index_clusters,
         )
         self.learned_sparse_index = LearnedSparseIndex(
@@ -425,7 +425,7 @@ class EpisodicMemory:
             )
         else:
             # Fall back to flat k-NN (existing)
-            candidates = await self.qdrant_store.search(...)
+            candidates = await self.t4dx_vector_adapter.search(...)
 
         # ... existing re-ranking, scoring, return ...
 ```
@@ -773,7 +773,7 @@ def generate_negative_sample(
 **Implementation Details**:
 
 ```python
-from ww.learning.forward_forward import GoodnessMixin, generate_negative_sample
+from t4dm.learning.forward_forward import GoodnessMixin, generate_negative_sample
 
 class LearnedMemoryGate(GoodnessMixin):
     """
@@ -1098,8 +1098,8 @@ Metrics:
 import asyncio
 import numpy as np
 from typing import List, Dict
-from ww.memory.episodic import EpisodicMemory
-from ww.core.config import get_settings
+from t4dm.memory.episodic import EpisodicMemory
+from t4dm.core.config import get_settings
 
 async def run_ablation(
     n_episodes: int = 1000,
@@ -1973,7 +1973,7 @@ If interrupted, read:
 
 ## References
 
-1. **Gap Analysis**: `/home/aaron/mem/NEURAL_MEMORY_VS_WW_COMPARISON.md`
+1. **Gap Analysis**: `/home/aaron/mem/NEURAL_MEMORY_VS_T4DM_COMPARISON.md`
 2. **WW Architecture**: `/mnt/projects/t4d/t4dm/ARCHITECTURE.md`
 3. **Forward-Forward**: Hinton (2022) "The Forward-Forward Algorithm"
 4. **Hopfield Networks**: Ramsauer et al. (2020) "Hopfield Networks is All You Need"
@@ -1983,7 +1983,7 @@ If interrupted, read:
 
 ## Conclusion
 
-This plan provides a structured, phased approach to integrating CompBio neural memory components into World Weaver. The implementation prioritizes:
+This plan provides a structured, phased approach to integrating CompBio neural memory components into T4DM. The implementation prioritizes:
 
 1. **Must Have** (Phase 0-1): Hierarchical addressing + FF learning
 2. **Should Have** (Phase 2-3): HFY memory + Pattern separation (evaluate first)

@@ -1,12 +1,12 @@
-# World Weaver Test Infrastructure Implementation Report
+# T4DM Test Infrastructure Implementation Report
 
 **Date**: 2025-11-27
-**Project**: World Weaver (Tripartite Memory System)
+**Project**: T4DM (Tripartite Memory System)
 **Scope**: Property-based tests, comprehensive mocking, CI coverage gates, and documentation
 
 ## Executive Summary
 
-Successfully implemented robust test infrastructure for World Weaver with:
+Successfully implemented robust test infrastructure for T4DM with:
 - 113 property-based tests for core algorithms (FSRS, Hebbian, ACT-R)
 - 35 reusable fixtures for comprehensive mocking
 - Multi-stage GitHub Actions CI pipeline with coverage gates
@@ -66,8 +66,8 @@ Successfully implemented robust test infrastructure for World Weaver with:
 **Added Fixtures** (35 total):
 
 #### Storage Backend Mocks (3)
-- `mock_qdrant_store`: Vector store with 7 async methods
-- `mock_neo4j_store`: Graph store with 9 async methods
+- `mock_t4dx_vector_adapter`: Vector store with 7 async methods
+- `mock_t4dx_graph_adapter`: Graph store with 9 async methods
 - `mock_embedding_provider`: Embedding provider (1024-dim vectors)
 
 #### Memory Service Mocks (4)
@@ -342,7 +342,7 @@ act push --list
 
 ## Summary
 
-Implemented comprehensive test infrastructure for World Weaver with:
+Implemented comprehensive test infrastructure for T4DM with:
 
 - **113 property-based tests** validating core algorithm invariants
 - **35 reusable fixtures** providing complete mock ecosystem

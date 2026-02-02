@@ -1,10 +1,10 @@
-# World Weaver API Reference
+# T4DM API Reference
 
 **Version**: 1.0.0 | **Last Updated**: 2025-11-27
 
 ## Overview
 
-World Weaver exposes 17 MCP tools for tripartite memory operations across episodic (autobiographical events), semantic (knowledge graph), and procedural (learned skills) memory systems.
+T4DM exposes 17 MCP tools for tripartite memory operations across episodic (autobiographical events), semantic (knowledge graph), and procedural (learned skills) memory systems.
 
 **Base URL**: MCP stdio interface (no HTTP endpoint)
 
@@ -18,7 +18,7 @@ All requests require session context. The session ID is automatically derived fr
 
 **Session Configuration**:
 ```bash
-export WW_SESSION_ID=your-session-id
+export T4DM_SESSION_ID=your-session-id
 ```
 
 **Rate Limits**:
@@ -678,7 +678,7 @@ The following tools are deprecated and will be removed in a future version. Use 
 
 ## MCP Resources
 
-World Weaver provides read-only resources accessible via MCP resource URIs:
+T4DM provides read-only resources accessible via MCP resource URIs:
 
 - `memory://stats` - System statistics and health
 - `memory://episodes/{session_id}` - Episodes for a session
@@ -739,5 +739,5 @@ A full OpenAPI 3.0 specification is available at:
 Generate latest schema:
 ```bash
 cd /mnt/projects/ww
-python -m ww.mcp.schema
+python -m t4dm.mcp.schema
 ```

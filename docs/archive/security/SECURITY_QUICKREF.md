@@ -8,7 +8,7 @@
 
 ### ✓ SAFE: Basic Usage
 ```python
-from ww.learning.eligibility import EligibilityTrace
+from t4dm.learning.eligibility import EligibilityTrace
 
 # Create with defaults (safe)
 trace = EligibilityTrace()
@@ -74,7 +74,7 @@ Before calling EligibilityTrace methods, validate:
 
 ```python
 import numpy as np
-from ww.learning.eligibility import EligibilityTrace
+from t4dm.learning.eligibility import EligibilityTrace
 
 class SafeEligibilityWrapper:
     """Wrapper that adds input validation."""
@@ -215,7 +215,7 @@ python security_poc_eligibility.py
 ```python
 import pytest
 import numpy as np
-from ww.learning.eligibility import EligibilityTrace
+from t4dm.learning.eligibility import EligibilityTrace
 
 def test_reject_nan_activity():
     """System must reject NaN activity."""

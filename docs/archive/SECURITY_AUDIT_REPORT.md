@@ -1,8 +1,8 @@
-# World Weaver Security Audit Report
+# T4DM Security Audit Report
 
 **Date**: 2025-11-27
 **Auditor**: Claude Code (Research Code Review Specialist)
-**Codebase**: World Weaver v0.1.0
+**Codebase**: T4DM v0.1.0
 **Location**: `/mnt/projects/t4d/t4dm/src/t4dm/`
 
 ---
@@ -11,7 +11,7 @@
 
 **Overall Security Assessment**: **PASS WITH MINOR REVISIONS**
 
-The World Weaver codebase demonstrates good security practices overall, with comprehensive input validation and proper parameterization of database queries. However, several medium-severity issues and potential improvements were identified.
+The T4DM codebase demonstrates good security practices overall, with comprehensive input validation and proper parameterization of database queries. However, several medium-severity issues and potential improvements were identified.
 
 **Critical Issues**: 0
 **High Issues**: 0
@@ -27,7 +27,7 @@ The World Weaver codebase demonstrates good security practices overall, with com
 
 #### M-1: Cypher Injection via Dynamic Label/Type Construction
 
-**Location**: `/mnt/projects/t4d/t4dm/src/t4dm/storage/neo4j_store.py:158-162, 187-196, 224-232, 289-298`
+**Location**: `/mnt/projects/t4d/t4dm/src/t4dm/storage/t4dx_graph_adapter.py:158-162, 187-196, 224-232, 289-298`
 
 **Description**: Multiple Cypher queries use f-strings to construct node labels and relationship types from user-controllable input, creating potential injection vectors.
 
@@ -73,7 +73,7 @@ malicious_label = "Entity} DETACH DELETE n //"
 - Labels primarily come from hardcoded strings ("Episode", "Entity", "Procedure")
 
 **Gaps**:
-- `neo4j_store.py` methods accept raw strings without validation
+- `t4dx_graph_adapter.py` methods accept raw strings without validation
 - If called directly (not via MCP), injection is possible
 - Internal code paths could pass unsanitized values
 
@@ -126,7 +126,7 @@ recall_episodes(query="secrets", session_filter="aaron_phd_session")
 - Privacy violation
 
 **Current State**:
-- Session ID defaults to `get_settings().session_id` (from `WW_SESSION_ID` env var or "default")
+- Session ID defaults to `get_settings().session_id` (from `T4DM_SESSION_ID` env var or "default")
 - MCP tools accept `session_filter` parameter for queries
 - No session ownership validation
 - No authentication layer
@@ -180,7 +180,7 @@ neo4j_password: str = Field(
 - Easier for attackers to gain database access
 
 **Current Mitigations**:
-- Pydantic Settings loads from environment variables (`WW_NEO4J_PASSWORD`)
+- Pydantic Settings loads from environment variables (`T4DM_NEO4J_PASSWORD`)
 - `.env` file support (not tracked in git per `.gitignore`)
 
 **Recommended Fix**:
@@ -188,7 +188,7 @@ neo4j_password: str = Field(
 # Option 1: Require explicit configuration
 neo4j_password: str = Field(
     ...,  # Required field - no default
-    description="Neo4j password (set via WW_NEO4J_PASSWORD env var)",
+    description="Neo4j password (set via T4DM_NEO4J_PASSWORD env var)",
 )
 
 # Option 2: Generate secure random default on first run
@@ -203,7 +203,7 @@ neo4j_password: str = Field(
 def __post_init__(self):
     if self.neo4j_password == "password":
         raise ValueError(
-            "Default password detected. Set WW_NEO4J_PASSWORD environment variable."
+            "Default password detected. Set T4DM_NEO4J_PASSWORD environment variable."
         )
 ```
 
@@ -403,7 +403,7 @@ import os
 from pathlib import Path
 
 embedding_cache_dir: str = Field(
-    default_factory=lambda: str(Path.home() / ".cache" / "world_weaver" / "models"),
+    default_factory=lambda: str(Path.home() / ".cache" / "t4dm" / "models"),
     description="Directory for model caching",
 )
 
@@ -427,7 +427,7 @@ def validate_cache_dir(self):
 
 #### I-1: No Query Complexity Limits
 
-**Location**: `/mnt/projects/t4d/t4dm/src/t4dm/storage/neo4j_store.py:460-495`
+**Location**: `/mnt/projects/t4d/t4dm/src/t4dm/storage/t4dx_graph_adapter.py:460-495`
 
 **Description**: `find_path()` allows arbitrary `max_depth` values, enabling expensive graph traversals.
 
@@ -486,7 +486,7 @@ async def delete_node(self, node_id: str, label: Optional[str] = None):
 
 #### I-4: Timeout Configuration Not Validated
 
-**Location**: `/mnt/projects/t4d/t4dm/src/t4dm/storage/neo4j_store.py:62`, `qdrant_store.py:59`
+**Location**: `/mnt/projects/t4d/t4dm/src/t4dm/storage/t4dx_graph_adapter.py:62`, `t4dx_vector_adapter.py:59`
 
 **Recommendation**: Validate timeout ranges:
 ```python
@@ -499,7 +499,7 @@ if not (1 <= self.timeout <= 600):
 
 #### I-5: JSON Deserialization Without Schema Validation
 
-**Location**: `/mnt/projects/t4d/t4dm/src/t4dm/storage/neo4j_store.py:633-648`
+**Location**: `/mnt/projects/t4d/t4dm/src/t4dm/storage/t4dx_graph_adapter.py:633-648`
 
 **Description**: `_deserialize_props()` uses heuristic JSON parsing without schema validation.
 
@@ -558,7 +558,7 @@ dependencies = [
 
 ### Short-term (1-2 weeks)
 
-5. **M-1**: Add label/type whitelist validation in `neo4j_store.py`
+5. **M-1**: Add label/type whitelist validation in `t4dx_graph_adapter.py`
 6. **L-1**: Sanitize error messages
 7. **I-1**: Add query complexity limits
 8. **I-3**: Implement audit logging
@@ -635,7 +635,7 @@ def test_error_message_no_internal_details():
 
 ## Conclusion
 
-World Weaver demonstrates solid security fundamentals with comprehensive input validation and proper query parameterization. The identified issues are primarily architectural (lack of authentication) or configuration-related (default passwords) rather than code-level vulnerabilities.
+T4DM demonstrates solid security fundamentals with comprehensive input validation and proper query parameterization. The identified issues are primarily architectural (lack of authentication) or configuration-related (default passwords) rather than code-level vulnerabilities.
 
 **Recommended Action**: Address Medium-severity issues (M-1 through M-4) before deploying in a multi-user or production environment. For single-user local development, current security posture is acceptable.
 

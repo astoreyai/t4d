@@ -1,4 +1,4 @@
-# World Weaver: 5-Phase Integration Plan
+# T4DM: 5-Phase Integration Plan
 
 **Created**: 2026-01-07
 **Based On**: Comprehensive Codebase Analysis (CompBio, Hinton, Architecture)
@@ -193,7 +193,7 @@ tests:
 agent_type: ww-hinton
 description: Store capsule pose matrices in vector database
 files:
-  - src/t4dm/storage/qdrant_store.py
+  - src/t4dm/storage/t4dx_vector_adapter.py
   - src/t4dm/memory/episodic.py
   - src/t4dm/nca/capsules.py
 tasks:

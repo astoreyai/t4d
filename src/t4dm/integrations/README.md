@@ -2,7 +2,7 @@
 
 **11 files | ~6,000 lines | Centrality: 2**
 
-The integrations module provides adapters connecting World Weaver to external services including Kymera Voice and Google Workspace.
+The integrations module provides adapters connecting T4DM to external services including Kymera Voice and Google Workspace.
 
 ## Architecture Overview
 
@@ -54,10 +54,10 @@ The integrations module provides adapters connecting World Weaver to external se
 
 ### VoiceMemoryBridge
 
-Central adapter connecting Kymera Voice to World Weaver memory:
+Central adapter connecting Kymera Voice to T4DM memory:
 
 ```python
-from ww.integrations.kymera import VoiceMemoryBridge, VoiceContext
+from t4dm.integrations.kymera import VoiceMemoryBridge, VoiceContext
 
 bridge = VoiceMemoryBridge(
     session_id="voice-session",
@@ -102,7 +102,7 @@ await bridge.on_conversation_end()
 Two-stage intent parsing:
 
 ```python
-from ww.integrations.kymera import VoiceIntentParser
+from t4dm.integrations.kymera import VoiceIntentParser
 
 parser = VoiceIntentParser()
 
@@ -129,7 +129,7 @@ intent = await parser.parse("Send an email to John about the project")
 Route intents to handlers with permission checking:
 
 ```python
-from ww.integrations.kymera import VoiceActionRouter, ActionRequest
+from t4dm.integrations.kymera import VoiceActionRouter, ActionRequest
 
 router = VoiceActionRouter(memory_bridge=bridge)
 
@@ -160,7 +160,7 @@ result = await router.route(
 Integration point for Kymera Voice's Jarvis:
 
 ```python
-from ww.integrations.kymera import JarvisMemoryHook
+from t4dm.integrations.kymera import JarvisMemoryHook
 
 hook = JarvisMemoryHook(session_id="jarvis-session")
 
@@ -189,7 +189,7 @@ await hook.end_conversation(store_summary=True)
 Enhance Claude prompts with memory context:
 
 ```python
-from ww.integrations.kymera import ContextInjector
+from t4dm.integrations.kymera import ContextInjector
 
 injector = ContextInjector(
     max_episodes=5,
@@ -220,7 +220,7 @@ enhanced_prompt = await injector.inject(
 Bidirectional sync with Google services:
 
 ```python
-from ww.integrations import GoogleWorkspaceSync
+from t4dm.integrations import GoogleWorkspaceSync
 
 sync = GoogleWorkspaceSync(
     session_id="user-session",
@@ -259,7 +259,7 @@ context = await sync.build_personal_context()
 Unified personal data operations:
 
 ```python
-from ww.integrations.kymera import PersonalDataManager, PersonalDataConfig
+from t4dm.integrations.kymera import PersonalDataManager, PersonalDataConfig
 
 config = PersonalDataConfig(
     email_sync_hours=24,
@@ -288,7 +288,7 @@ upcoming = await manager.get_proactive_context()
 ### NotificationManager
 
 ```python
-from ww.integrations.kymera import NotificationManager
+from t4dm.integrations.kymera import NotificationManager
 
 notifier = NotificationManager(
     quiet_hours_start=22,
@@ -309,7 +309,7 @@ announcement = notifier.format_for_voice(notification)
 ### PreferenceLearner
 
 ```python
-from ww.integrations.kymera import PreferenceLearner
+from t4dm.integrations.kymera import PreferenceLearner
 
 learner = PreferenceLearner()
 
@@ -326,7 +326,7 @@ should_confirm = await learner.should_confirm(action_type)
 ### VoiceTriggerManager
 
 ```python
-from ww.integrations.kymera import VoiceTriggerManager
+from t4dm.integrations.kymera import VoiceTriggerManager
 
 triggers = VoiceTriggerManager()
 
@@ -344,7 +344,7 @@ triggers.register(
 - `mcp__google-workspace__calendar_*` - Calendar operations
 - `mcp__google-workspace__drive_*` - File operations
 
-**World Weaver MCP Tools**:
+**T4DM MCP Tools**:
 - `mcp__ww-memory__store_episode` - Store episodes
 - `mcp__ww-memory__recall_episodes` - Retrieve memories
 - `mcp__ww-memory__semantic_recall` - Entity search
@@ -427,7 +427,7 @@ MultiModalContext, VoiceTriggerManager
 ├─ GoogleWorkspaceSync (personal data)                     │
 │  └─ PersonalDataManager (search/resolution)              │
 │                                                           │
-└─ World Weaver Memory APIs                                │
+└─ T4DM Memory APIs                                │
    ├─ Episode storage/recall                               │
    ├─ Semantic search                                      │
    └─ Skill precondition checking                          │

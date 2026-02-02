@@ -3,7 +3,7 @@
 **Version**: 0.1.0
 **Last Updated**: 2025-12-09
 
-This document covers World Weaver's learning and plasticity mechanisms.
+This document covers T4DM's learning and plasticity mechanisms.
 
 ---
 
@@ -21,7 +21,7 @@ This document covers World Weaver's learning and plasticity mechanisms.
 
 ## Learning Philosophy
 
-World Weaver follows these biological principles:
+T4DM follows these biological principles:
 
 ### 1. Memories Update on Retrieval
 
@@ -219,7 +219,7 @@ class ReconsolidationEngine:
         current_embedding: np.ndarray,
         context_embedding: np.ndarray,
         learning_signal: float,
-        vector_store: QdrantStore
+        vector_store: T4DXVectorAdapter
     ) -> Optional[np.ndarray]:
         """Update memory embedding based on retrieval context."""
         # Check cooldown

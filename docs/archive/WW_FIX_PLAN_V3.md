@@ -1,4 +1,4 @@
-# World Weaver Fix Plan v3.0
+# T4DM Fix Plan v3.0
 
 **Created**: 2025-11-27 | **Based On**: Gap Analysis | **Priority**: Production-Critical
 
@@ -14,7 +14,7 @@
 | Phase 9: Features | COMPLETE | P2 | 3 | Batch ops, cross-memory search, auto-extraction |
 
 ### 🎉 ALL PHASES COMPLETE (2025-11-27)
-World Weaver is now **PRODUCTION READY** with 58/58 tasks completed.
+T4DM is now **PRODUCTION READY** with 58/58 tasks completed.
 
 ### Phase 9 Completion Summary (2025-11-27)
 Feature gaps filled:
@@ -88,7 +88,7 @@ async def create(self, content: str, ...) -> Episode:
 from opentelemetry import trace
 from opentelemetry.trace import SpanKind
 
-tracer = trace.get_tracer("world-weaver")
+tracer = trace.get_tracer("t4dm")
 
 def traced(name: str):
     def decorator(func):
@@ -357,4 +357,4 @@ Phase 9 (Features) ─────┬── P9-001: Batch ops (depends on P7-003
 | MCP Tools | 23 |
 | Config Parameters | 50+ |
 
-**Status**: ALL PHASES COMPLETE - World Weaver is PRODUCTION READY
+**Status**: ALL PHASES COMPLETE - T4DM is PRODUCTION READY

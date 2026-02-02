@@ -1,4 +1,4 @@
-# World Weaver Test Implementation Roadmap
+# T4DM Test Implementation Roadmap
 
 **Status**: Action Plan | **Priority**: P1 | **Estimated Effort**: 60 hours
 
@@ -14,14 +14,14 @@
 Create `/mnt/projects/t4d/t4dm/tests/conftest.py`:
 
 ```python
-"""Pytest configuration and shared fixtures for World Weaver tests."""
+"""Pytest configuration and shared fixtures for T4DM tests."""
 
 import asyncio
 import pytest
 from unittest.mock import AsyncMock
-from ww.storage.qdrant_store import close_qdrant_store
-from ww.storage.neo4j_store import close_neo4j_store
-from ww.mcp.memory_gateway import _service_instances, _initialized_sessions
+from t4dm.storage.t4dx_vector_adapter import close_t4dx_vector_adapter
+from t4dm.storage.t4dx_graph_adapter import close_t4dx_graph_adapter
+from t4dm.mcp.memory_gateway import _service_instances, _initialized_sessions
 
 
 # ============================================================================
@@ -68,12 +68,12 @@ async def cleanup_memory_services():
 
     # Close database connections
     try:
-        await close_qdrant_store()
+        await close_t4dx_vector_adapter()
     except Exception:
         pass
 
     try:
-        await close_neo4j_store()
+        await close_t4dx_graph_adapter()
     except Exception:
         pass
 
@@ -93,7 +93,7 @@ def mock_embedding():
 
 
 @pytest.fixture
-def mock_qdrant_store():
+def mock_t4dx_vector_adapter():
     """Mock Qdrant vector store."""
     mock = AsyncMock()
     mock.initialize = AsyncMock()
@@ -107,7 +107,7 @@ def mock_qdrant_store():
 
 
 @pytest.fixture
-def mock_neo4j_store():
+def mock_t4dx_graph_adapter():
     """Mock Neo4j graph store."""
     mock = AsyncMock()
     mock.initialize = AsyncMock()
@@ -186,8 +186,8 @@ from unittest.mock import AsyncMock, MagicMock, patch
 from uuid import uuid4
 from datetime import datetime, timedelta
 
-from ww.consolidation.service import ConsolidationService
-from ww.core.types import Episode, Entity, Procedure, ConsolidationType, Outcome
+from t4dm.consolidation.service import ConsolidationService
+from t4dm.core.types import Episode, Entity, Procedure, ConsolidationType, Outcome
 
 
 # ============================================================================
@@ -195,14 +195,14 @@ from ww.core.types import Episode, Entity, Procedure, ConsolidationType, Outcome
 # ============================================================================
 
 @pytest.fixture
-def consolidation_service(mock_embedding, mock_qdrant_store, mock_neo4j_store):
+def consolidation_service(mock_embedding, mock_t4dx_vector_adapter, mock_t4dx_graph_adapter):
     """Create consolidation service with mocked stores."""
-    with patch('ww.consolidation.service.get_embedding_provider', return_value=mock_embedding), \
-         patch('ww.consolidation.service.get_qdrant_store', return_value=mock_qdrant_store), \
-         patch('ww.consolidation.service.get_neo4j_store', return_value=mock_neo4j_store), \
-         patch('ww.consolidation.service.get_episodic_memory') as mock_episodic, \
-         patch('ww.consolidation.service.get_semantic_memory') as mock_semantic, \
-         patch('ww.consolidation.service.get_procedural_memory') as mock_procedural:
+    with patch('t4dm.consolidation.service.get_embedding_provider', return_value=mock_embedding), \
+         patch('t4dm.consolidation.service.get_t4dx_vector_adapter', return_value=mock_t4dx_vector_adapter), \
+         patch('t4dm.consolidation.service.get_t4dx_graph_adapter', return_value=mock_t4dx_graph_adapter), \
+         patch('t4dm.consolidation.service.get_episodic_memory') as mock_episodic, \
+         patch('t4dm.consolidation.service.get_semantic_memory') as mock_semantic, \
+         patch('t4dm.consolidation.service.get_procedural_memory') as mock_procedural:
 
         # Setup mock memory services
         mock_episodic.return_value.recall = AsyncMock(return_value=[])
@@ -224,7 +224,7 @@ def sample_episode():
         id=uuid4(),
         session_id="test-session",
         content="Implemented memory consolidation algorithm",
-        context={"project": "world-weaver", "file": "consolidation/service.py"},
+        context={"project": "t4dm", "file": "consolidation/service.py"},
         outcome=Outcome.SUCCESS,
         emotional_valence=0.8,
         created_at=datetime.utcnow(),
@@ -278,7 +278,7 @@ class TestLightConsolidation:
             id=uuid4(),
             session_id="test-session",
             content="Implemented memory consolidation algorithm",  # Same as sample
-            context={"project": "world-weaver", "file": "consolidation/service.py"},
+            context={"project": "t4dm", "file": "consolidation/service.py"},
             outcome=Outcome.SUCCESS,
             emotional_valence=0.75,
             created_at=datetime.utcnow(),
@@ -616,13 +616,13 @@ from unittest.mock import AsyncMock, MagicMock, patch
 from uuid import uuid4
 from typing import Any
 
-from ww.mcp.memory_gateway import (
+from t4dm.mcp.memory_gateway import (
     mcp_app,
     get_services,
     _service_instances,
     _initialized_sessions,
 )
-from ww.core.types import Outcome, Domain, EntityType, RelationType
+from t4dm.core.types import Outcome, Domain, EntityType, RelationType
 
 
 # ============================================================================
@@ -630,11 +630,11 @@ from ww.core.types import Outcome, Domain, EntityType, RelationType
 # ============================================================================
 
 @pytest.fixture
-async def memory_services(mock_embedding, mock_qdrant_store, mock_neo4j_store):
+async def memory_services(mock_embedding, mock_t4dx_vector_adapter, mock_t4dx_graph_adapter):
     """Setup mock memory services."""
-    with patch('ww.mcp.memory_gateway.get_episodic_memory') as mock_episodic_factory, \
-         patch('ww.mcp.memory_gateway.get_semantic_memory') as mock_semantic_factory, \
-         patch('ww.mcp.memory_gateway.get_procedural_memory') as mock_procedural_factory:
+    with patch('t4dm.mcp.memory_gateway.get_episodic_memory') as mock_episodic_factory, \
+         patch('t4dm.mcp.memory_gateway.get_semantic_memory') as mock_semantic_factory, \
+         patch('t4dm.mcp.memory_gateway.get_procedural_memory') as mock_procedural_factory:
 
         # Create mock service instances
         mock_episodic = AsyncMock()
@@ -1073,7 +1073,7 @@ import logging
 from unittest.mock import MagicMock, patch, call
 from datetime import datetime
 
-from ww.observability.logging import (
+from t4dm.observability.logging import (
     configure_logging,
     get_logger,
     log_operation,
@@ -1081,7 +1081,7 @@ from ww.observability.logging import (
     set_context,
     clear_context,
 )
-from ww.observability.metrics import (
+from t4dm.observability.metrics import (
     MetricsCollector,
     get_metrics,
     timed_operation,
@@ -1089,7 +1089,7 @@ from ww.observability.metrics import (
     Timer,
     AsyncTimer,
 )
-from ww.observability.health import (
+from t4dm.observability.health import (
     HealthChecker,
     HealthStatus,
     ComponentHealth,
@@ -1131,7 +1131,7 @@ class TestLogging:
     @pytest.mark.asyncio
     async def test_log_operation(self):
         """Test operation logging."""
-        with patch('ww.observability.logging.get_logger') as mock_logger:
+        with patch('t4dm.observability.logging.get_logger') as mock_logger:
             logger = MagicMock()
             mock_logger.return_value = logger
 
@@ -1148,7 +1148,7 @@ class TestOperationLogger:
 
     def test_operation_logger_success(self):
         """Test OperationLogger logs successful operation."""
-        with patch('ww.observability.logging.get_logger') as mock:
+        with patch('t4dm.observability.logging.get_logger') as mock:
             logger = MagicMock()
             mock.return_value = logger
 
@@ -1316,7 +1316,7 @@ markers = [
 ### Update `tests/__init__.py`
 
 ```python
-"""World Weaver test suite."""
+"""T4DM test suite."""
 
 # Test configuration and markers defined in conftest.py
 ```

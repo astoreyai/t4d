@@ -2,7 +2,7 @@
 
 **3 files | ~850 lines | Centrality: 0**
 
-The SDK module provides Python client libraries for World Weaver's REST API with both synchronous and asynchronous implementations.
+The SDK module provides Python client libraries for T4DM's REST API with both synchronous and asynchronous implementations.
 
 ## Overview
 
@@ -11,14 +11,14 @@ The SDK module provides Python client libraries for World Weaver's REST API with
 │                           SDK ARCHITECTURE                               │
 ├─────────────────────────────────────────────────────────────────────────┤
 │  ┌─────────────────────────────────────────────────────────────────────┐│
-│  │                    AsyncWorldWeaverClient                            ││
+│  │                    AsyncT4DMClient                            ││
 │  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────────────────┐  ││
 │  │  │  Episodic    │  │   Semantic   │  │      Procedural          │  ││
 │  │  │  7 methods   │  │  7 methods   │  │      7 methods           │  ││
 │  │  └──────────────┘  └──────────────┘  └──────────────────────────┘  ││
 │  └─────────────────────────────────────────────────────────────────────┘│
 │  ┌─────────────────────────────────────────────────────────────────────┐│
-│  │                    WorldWeaverClient (Sync)                          ││
+│  │                    T4DMClient (Sync)                          ││
 │  │  Simplified sync wrapper for common operations                       ││
 │  └─────────────────────────────────────────────────────────────────────┘│
 │  ┌─────────────────────────────────────────────────────────────────────┐│
@@ -49,9 +49,9 @@ pip install -e ".[sdk]"
 ### Async Client (Recommended)
 
 ```python
-from ww.sdk import AsyncWorldWeaverClient
+from t4dm.sdk import AsyncT4DMClient
 
-async with AsyncWorldWeaverClient(
+async with AsyncT4DMClient(
     base_url="http://localhost:8765",
     session_id="my-session"
 ) as client:
@@ -75,9 +75,9 @@ async with AsyncWorldWeaverClient(
 ### Sync Client
 
 ```python
-from ww.sdk import WorldWeaverClient
+from t4dm.sdk import T4DMClient
 
-with WorldWeaverClient() as client:
+with T4DMClient() as client:
     status = client.health()
     episode = client.create_episode(
         content="Python async patterns",
@@ -90,14 +90,14 @@ with WorldWeaverClient() as client:
 ### Initialization
 
 ```python
-client = AsyncWorldWeaverClient(
+client = AsyncT4DMClient(
     base_url="http://localhost:8765",  # API endpoint
     session_id="my-session",           # Memory isolation
     timeout=30.0                       # Request timeout
 )
 
 # Context manager (recommended)
-async with AsyncWorldWeaverClient() as client:
+async with AsyncT4DMClient() as client:
     pass
 
 # Manual connection
@@ -329,15 +329,15 @@ class ActivationResult(BaseModel):
 ## Error Handling
 
 ```python
-from ww.sdk.client import (
-    WorldWeaverError,
+from t4dm.sdk.client import (
+    T4DMError,
     ConnectionError,
     NotFoundError,
     RateLimitError
 )
 
 try:
-    async with AsyncWorldWeaverClient() as client:
+    async with AsyncT4DMClient() as client:
         result = await client.recall_episodes("query")
 except NotFoundError as e:
     print(f"Not found: {e.status_code}")
@@ -345,7 +345,7 @@ except RateLimitError as e:
     print(f"Rate limited, retry after {e.retry_after}s")
 except ConnectionError as e:
     print(f"Connection failed: {e}")
-except WorldWeaverError as e:
+except T4DMError as e:
     print(f"API error: {e.status_code}")
 ```
 
@@ -362,7 +362,7 @@ WORLD_WEAVER_TIMEOUT=30.0
 ### Client Configuration
 
 ```python
-client = AsyncWorldWeaverClient(
+client = AsyncT4DMClient(
     base_url="http://localhost:8765",
     session_id="my-session",
     timeout=30.0
@@ -375,11 +375,11 @@ client = AsyncWorldWeaverClient(
 
 ```python
 # User 1 session
-async with AsyncWorldWeaverClient(session_id="user_1") as client1:
+async with AsyncT4DMClient(session_id="user_1") as client1:
     ep1 = await client1.create_episode(content="User 1 data")
 
 # User 2 session
-async with AsyncWorldWeaverClient(session_id="user_2") as client2:
+async with AsyncT4DMClient(session_id="user_2") as client2:
     ep2 = await client2.create_episode(content="User 2 data")
 
 # Memories are isolated by session_id
@@ -388,7 +388,7 @@ async with AsyncWorldWeaverClient(session_id="user_2") as client2:
 ### Entity Graph
 
 ```python
-async with AsyncWorldWeaverClient() as client:
+async with AsyncT4DMClient() as client:
     # Create entities
     python = await client.create_entity(
         name="Python",
@@ -419,7 +419,7 @@ async with AsyncWorldWeaverClient() as client:
 ### Skill Execution Tracking
 
 ```python
-async with AsyncWorldWeaverClient() as client:
+async with AsyncT4DMClient() as client:
     # Get skill
     skill, steps, confidence = await client.how_to("run tests")
 
@@ -440,15 +440,15 @@ async with AsyncWorldWeaverClient() as client:
 pytest tests/unit/test_sdk.py -v
 
 # With coverage
-pytest tests/unit/test_sdk.py --cov=ww.sdk
+pytest tests/unit/test_sdk.py --cov=t4dm.sdk
 ```
 
 ## Public API
 
 ```python
 # Clients
-AsyncWorldWeaverClient
-WorldWeaverClient
+AsyncT4DMClient
+T4DMClient
 
 # Models
 Episode, Entity, Skill
@@ -457,7 +457,7 @@ HealthStatus, MemoryStats
 EpisodeContext, Relationship, Step
 
 # Exceptions
-WorldWeaverError
+T4DMError
 ConnectionError
 NotFoundError
 RateLimitError

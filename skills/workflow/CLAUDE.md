@@ -13,19 +13,19 @@ Provides repeatable processes for planning features, validating implementations,
 ## Key Files
 | Skill | Directory | Purpose |
 |-------|-----------|---------|
-| **ww-planner** | `ww-planner/SKILL.md` | Feature planning and task decomposition |
-| **ww-validator** | `ww-validator/SKILL.md` | Implementation validation against specs |
-| **ww-synthesizer** | `ww-synthesizer/SKILL.md` | Result synthesis and documentation generation |
-| **ww-finetune** | `ww-finetune/SKILL.md` | Parameter tuning and optimization workflows |
+| **t4dm-planner** | `t4dm-planner/SKILL.md` | Feature planning and task decomposition |
+| **t4dm-validator** | `t4dm-validator/SKILL.md` | Implementation validation against specs |
+| **t4dm-synthesizer** | `t4dm-synthesizer/SKILL.md` | Result synthesis and documentation generation |
+| **t4dm-finetune** | `t4dm-finetune/SKILL.md` | Parameter tuning and optimization workflows |
 
 ## Data Flow
 ```
-Feature request → ww-planner (decompose) → Implementation
-                → ww-validator (verify)  → ww-synthesizer (document)
-                → ww-finetune (optimize) → Updated parameters
+Feature request → t4dm-planner (decompose) → Implementation
+                → t4dm-validator (verify)  → t4dm-synthesizer (document)
+                → t4dm-finetune (optimize) → Updated parameters
 ```
 
 ## Integration Points
-- **Config**: `ww-features.json` drives planning and validation
-- **Tests**: `ww-validator` references test suites for verification
-- **Docs**: `ww-synthesizer` generates documentation updates
+- **Config**: `t4dm-features.json` drives planning and validation
+- **Tests**: `t4dm-validator` references test suites for verification
+- **Docs**: `t4dm-synthesizer` generates documentation updates

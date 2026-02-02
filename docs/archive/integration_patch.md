@@ -1,4 +1,4 @@
-# World Weaver Integration Patch
+# T4DM Integration Patch
 ## Remediation: Connect Encoding Layer and Procedural→Dopamine
 
 ### Task 1: Integrate DendriticNeuron into Episodic Recall
@@ -12,7 +12,7 @@ import torch
 
 **Change 1b: Add import (after line 27)**
 ```python
-from ww.encoding.dendritic import DendriticNeuron
+from t4dm.encoding.dendritic import DendriticNeuron
 ```
 
 **Change 1c: Add to __init__ (after line 541, before async def initialize)**
@@ -114,7 +114,7 @@ Replace with:
 
 **Change 2a: Add import (after line 22)**
 ```python
-from ww.learning.dopamine import DopamineSystem
+from t4dm.learning.dopamine import DopamineSystem
 ```
 
 **Change 2b: Modify __init__ (after line 75, before async def initialize)**
@@ -202,7 +202,7 @@ Add after the `if not procedure:` check:
 
 **Change 3a: Add import (after line 27)**
 ```python
-from ww.encoding.sparse import SparseEncoder
+from t4dm.encoding.sparse import SparseEncoder
 ```
 
 **Change 3b: Add to __init__ (after dendritic neuron init from Task 1)**

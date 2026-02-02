@@ -5,7 +5,7 @@
 
 ## Summary
 
-Successfully implemented Phase 5 API cleanup for World Weaver, adding pagination support, high-level Neo4j query methods, and comprehensive OpenAPI schema documentation.
+Successfully implemented Phase 5 API cleanup for T4DM, adding pagination support, high-level Neo4j query methods, and comprehensive OpenAPI schema documentation.
 
 ---
 
@@ -72,7 +72,7 @@ Validated pagination logic:
 
 ### Implementation
 
-Added 6 high-level query methods to `/mnt/projects/t4d/t4dm/src/t4dm/storage/neo4j_store.py` (Line 696-999):
+Added 6 high-level query methods to `/mnt/projects/t4d/t4dm/src/t4dm/storage/t4dx_graph_adapter.py` (Line 696-999):
 
 1. **find_entities_by_type** (Line 698-736)
    - Find entities by entity_type and session_id
@@ -207,7 +207,7 @@ Verified schema includes:
 2. `/mnt/projects/t4d/t4dm/src/t4dm/mcp/validation.py`
    - Added `validate_non_negative_int()` function
 
-3. `/mnt/projects/t4d/t4dm/src/t4dm/storage/neo4j_store.py`
+3. `/mnt/projects/t4d/t4dm/src/t4dm/storage/t4dx_graph_adapter.py`
    - Added 6 high-level query methods
    - Added internal `_execute_read()` helper
 
@@ -279,14 +279,14 @@ result = await recall_episodes(query="bug fix", limit=10, offset=90)
 
 ```python
 # Find all PROJECT entities in current session
-projects = await neo4j_store.find_entities_by_type(
+projects = await t4dx_graph_adapter.find_entities_by_type(
     entity_type="PROJECT",
     session_id=session_id,
     limit=50
 )
 
 # Get related entities with 2-hop traversal
-related = await neo4j_store.find_related_entities(
+related = await t4dx_graph_adapter.find_related_entities(
     entity_id="uuid-123",
     rel_type="USES",  # Optional filter
     max_depth=2,
@@ -294,14 +294,14 @@ related = await neo4j_store.find_related_entities(
 )
 
 # Merge duplicate entities
-result = await neo4j_store.merge_entities(
+result = await t4dx_graph_adapter.merge_entities(
     source_id="uuid-456",
     target_id="uuid-789"
 )
 # Returns: {source_id, target_id, relationships_moved: 5}
 
 # Get neighbors sorted by weight
-neighbors = await neo4j_store.get_entity_neighbors(
+neighbors = await t4dx_graph_adapter.get_entity_neighbors(
     entity_id="uuid-123",
     min_weight=0.5,
     limit=20

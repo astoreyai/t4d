@@ -1,4 +1,4 @@
-# World Weaver Learning Architecture
+# T4DM Learning Architecture
 ## A Complete Design for Memory That Improves With Experience
 
 **Author**: Geoffrey Hinton (design perspective)
@@ -1557,9 +1557,9 @@ class EWCRegularizer:
 ### 6.1 Core Learning Loop
 
 ```python
-class WorldWeaverLearner:
+class T4DMLearner:
     """
-    Main learning system for World Weaver.
+    Main learning system for T4DM.
 
     Coordinates:
     1. Data collection from sessions
@@ -1928,7 +1928,7 @@ class LearningHook(Hook):
     Automatically collects data and triggers learning.
     """
 
-    def __init__(self, learner: WorldWeaverLearner):
+    def __init__(self, learner: T4DMLearner):
         super().__init__(name="learning_hook", priority=HookPriority.LOW)
         self.learner = learner
 
@@ -2040,6 +2040,6 @@ Q(entity) = 0.3 * usage_frequency + 0.4 * outcome_weighted_utility +
 
 ---
 
-This architecture transforms World Weaver from a storage system into a learning system. The key insight is that **learning requires contrastive signals** - we must know not just what happened, but what *would have* happened differently. The reward functions, credit assignment mechanisms, and learning objectives I've specified provide exactly these contrastive signals.
+This architecture transforms T4DM from a storage system into a learning system. The key insight is that **learning requires contrastive signals** - we must know not just what happened, but what *would have* happened differently. The reward functions, credit assignment mechanisms, and learning objectives I've specified provide exactly these contrastive signals.
 
 Start with the immediate changes. They require minimal infrastructure and will immediately make your system smarter, not just fuller.

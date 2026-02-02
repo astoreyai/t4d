@@ -1,10 +1,10 @@
-# World Weaver Hooks System - Architecture Diagrams
+# T4DM Hooks System - Architecture Diagrams
 
 ## System Overview
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                      World Weaver Application                            │
+│                      T4DM Application                            │
 └───────────────────────────┬─────────────────────────────────────────────┘
                             │
                             │ uses
@@ -485,7 +485,7 @@ Concurrency Control (Semaphore):
 
 ```
 ┌──────────────────────────────────────────────────────────────────────┐
-│                  World Weaver System Integration                      │
+│                  T4DM System Integration                      │
 └──────────────────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────────────────┐

@@ -1,4 +1,4 @@
-# World Weaver Biological Systems Health Report
+# T4DM Biological Systems Health Report
 
 **Generated**: 2025-12-09 23:13 UTC
 **Service**: http://localhost:8765
@@ -167,7 +167,7 @@ Comprehensive testing of 26 biological and neural endpoints reveals a **HEALTHY*
 
 **Security Analysis**: PASS
 - Admin endpoints properly protected
-- Requires WW_ADMIN_API_KEY environment variable
+- Requires T4DM_ADMIN_API_KEY environment variable
 - Prevents unauthorized system state modifications
 - Follows configuration security model (12+ char passwords, complexity requirements)
 
@@ -560,12 +560,12 @@ Comprehensive testing of 26 biological and neural endpoints reveals a **HEALTHY*
 
 **Key Security Features**:
 1. **API Key Authentication**:
-   - Optional API key for all endpoints (`WW_API_KEY`)
+   - Optional API key for all endpoints (`T4DM_API_KEY`)
    - Auto-enabled in production if configured
    - Header-based: `X-API-Key`
 
 2. **Admin API Key**:
-   - Separate admin key for privileged endpoints (`WW_ADMIN_API_KEY`)
+   - Separate admin key for privileged endpoints (`T4DM_ADMIN_API_KEY`)
    - Required for:
      - `POST /api/v1/viz/bio/neuromodulators/reset`
      - `POST /api/v1/viz/bio/acetylcholine/switch-mode`
@@ -791,7 +791,7 @@ Comprehensive testing of 26 biological and neural endpoints reveals a **HEALTHY*
 
 **To Enable**:
 ```bash
-export WW_BIOINSPIRED__ENABLED=true
+export T4DM_BIOINSPIRED__ENABLED=true
 ```
 
 ---
@@ -873,7 +873,7 @@ export WW_BIOINSPIRED__ENABLED=true
 2. Implement rate limiting for expensive endpoints
 3. Add pagination for FSRS and FES endpoints
 4. Enable OpenTelemetry tracing for observability
-5. Configure admin API key (WW_ADMIN_API_KEY)
+5. Configure admin API key (T4DM_ADMIN_API_KEY)
 6. Set up monitoring/alerting for neuromodulator drift
 7. Regular FSRS state backups (1900+ memories)
 
@@ -985,7 +985,7 @@ curl -s http://localhost:8765/api/v1/viz/bio/fes/stats | jq .
 # Aggregate view (comprehensive)
 curl -s http://localhost:8765/api/v1/viz/bio/all | jq . | head -200
 
-# Admin operations (requires WW_ADMIN_API_KEY)
+# Admin operations (requires T4DM_ADMIN_API_KEY)
 curl -s -X POST http://localhost:8765/api/v1/viz/bio/neuromodulators/reset \
   -H "X-Admin-Key: YOUR_KEY" | jq .
 ```

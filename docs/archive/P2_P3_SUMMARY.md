@@ -1,4 +1,4 @@
-# World Weaver P2/P3 Issues Summary
+# T4DM P2/P3 Issues Summary
 
 **Generated**: 2025-12-09
 **Full Details**: See `/mnt/projects/t4d/t4dm/P2_P3_ISSUES_INVENTORY.md`
@@ -197,8 +197,8 @@ If preparing for production deployment, focus on these HIGH PRIORITY items (19 h
 
 ### Performance Issues
 - `/mnt/projects/t4d/t4dm/src/t4dm/embedding/bge_m3.py` - Cache eviction
-- `/mnt/projects/t4d/t4dm/src/t4dm/storage/qdrant_store.py` - Session index, hybrid search, batch ops
-- `/mnt/projects/t4d/t4dm/src/t4dm/storage/neo4j_store.py` - Connection pool metrics
+- `/mnt/projects/t4d/t4dm/src/t4dm/storage/t4dx_vector_adapter.py` - Session index, hybrid search, batch ops
+- `/mnt/projects/t4d/t4dm/src/t4dm/storage/t4dx_graph_adapter.py` - Connection pool metrics
 - `/mnt/projects/t4d/t4dm/src/t4dm/memory/semantic.py` - Context cache, sorted processing
 
 ### Code Quality Issues

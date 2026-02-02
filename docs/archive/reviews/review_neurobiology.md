@@ -1,9 +1,9 @@
-# Neurobiological Accuracy Review: World Weaver Papers
+# Neurobiological Accuracy Review: T4DM Papers
 
 **Reviewer**: Neuroscience Specialist (Memory Systems & Synaptic Plasticity)
 **Documents Reviewed**:
-- `/mnt/projects/t4d/t4dm/docs/world_weaver_ieee.tex`
-- `/mnt/projects/t4d/t4dm/docs/world_weaver_journal_article.tex`
+- `/mnt/projects/t4d/t4dm/docs/t4dm_ieee.tex`
+- `/mnt/projects/t4d/t4dm/docs/t4dm_journal_article.tex`
 
 **Date**: 2025-12-04
 
@@ -13,7 +13,7 @@
 
 **Overall Neurobiological Accuracy: 7.5/10**
 
-The World Weaver papers demonstrate good conceptual understanding of high-level memory organization (episodic/semantic/procedural distinction) and appropriately cite foundational cognitive neuroscience work. However, the papers make several claims about biological memory mechanisms that range from oversimplified to potentially misleading. The computational analogies are generally well-caveated in the journal article but less so in the IEEE version. Most critically, the papers underspecify or mischaracterize consolidation biology, omit key aspects of synaptic mechanisms, and anthropomorphize computational processes using biological terminology.
+The T4DM papers demonstrate good conceptual understanding of high-level memory organization (episodic/semantic/procedural distinction) and appropriately cite foundational cognitive neuroscience work. However, the papers make several claims about biological memory mechanisms that range from oversimplified to potentially misleading. The computational analogies are generally well-caveated in the journal article but less so in the IEEE version. Most critically, the papers underspecify or mischaracterize consolidation biology, omit key aspects of synaptic mechanisms, and anthropomorphize computational processes using biological terminology.
 
 ---
 
@@ -440,7 +440,7 @@ The term "biologically-inspired dynamics" suggests the **temporal evolution** of
 - Non-linear interactions (threshold effects, saturation, metaplasticity)
 - Energy constraints (metabolically expensive to maintain synapses)
 
-**World Weaver dynamics**:
+**T4DM dynamics**:
 - Deterministic (no stochasticity)
 - Instantaneous consolidation (triggered manually)
 - Linear decay curves (FSRS is curve-fitted to spaced repetition data, not neural dynamics)
@@ -500,7 +500,7 @@ After thorough review, I found **no outright false claims** about neuroscience. 
 
 **Biological consolidation**: Synaptic changes (seconds to hours) + systems reorganization (days to years)
 
-**World Weaver consolidation**: Offline batch processing that clusters episodes and extracts entities
+**T4DM consolidation**: Offline batch processing that clusters episodes and extracts entities
 
 These are **not the same process**, though they serve analogous functions (transforming experiences into knowledge).
 
@@ -524,7 +524,7 @@ days; our process is a heuristic clustering algorithm triggered manually."
 
 The journal article's critical analysis sections are exemplary:
 - "The Cognitive Metaphor: Limits and Risks" (lines 724-746)
-- "What World Weaver Does Poorly" (lines 552-568)
+- "What T4DM Does Poorly" (lines 552-568)
 - Honest about grounding problem, lack of embodiment, missing phenomenology
 
 ### 8.2 Sophisticated Understanding
@@ -626,7 +626,7 @@ The journal article is already quite good! Minor suggestions:
 
 ## Conclusion
 
-The World Weaver papers demonstrate **solid understanding of cognitive neuroscience** at the systems/behavioral level, with appropriate caveats (especially in the journal article) about the limits of biological analogies. The papers would be strengthened by:
+The T4DM papers demonstrate **solid understanding of cognitive neuroscience** at the systems/behavioral level, with appropriate caveats (especially in the journal article) about the limits of biological analogies. The papers would be strengthened by:
 
 1. Clearer distinction between cognitive taxonomy (episodic/semantic/procedural) and neural architecture
 2. More explicit acknowledgment that "consolidation" means different things biologically vs. computationally

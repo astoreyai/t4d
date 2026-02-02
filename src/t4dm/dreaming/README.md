@@ -44,7 +44,7 @@ The dreaming module implements REM-sleep-inspired imagination for memory consoli
 Generate imagined trajectories from seed episodes:
 
 ```python
-from ww.dreaming import DreamingSystem, DreamingConfig
+from t4dm.dreaming import DreamingSystem, DreamingConfig
 
 config = DreamingConfig(
     max_dream_length=15,           # DreamerV3 benchmark
@@ -99,7 +99,7 @@ stats = dreamer.get_statistics()
 Represents a complete imagined sequence:
 
 ```python
-from ww.dreaming import DreamTrajectory, DreamStep
+from t4dm.dreaming import DreamTrajectory, DreamStep
 
 # Single step in dream
 step = DreamStep(
@@ -149,7 +149,7 @@ Input: seed_embedding, context_embeddings
 Multi-dimensional assessment:
 
 ```python
-from ww.dreaming import DreamQualityEvaluator, DreamQualityConfig
+from t4dm.dreaming import DreamQualityEvaluator, DreamQualityConfig
 
 config = DreamQualityConfig(
     coherence_weight=0.3,
@@ -206,7 +206,7 @@ high_quality = evaluator.filter_high_quality(dreams)
 Orchestrates dream-based learning during REM:
 
 ```python
-from ww.dreaming import DreamConsolidation, DreamConsolidationConfig
+from t4dm.dreaming import DreamConsolidation, DreamConsolidationConfig
 
 config = DreamConsolidationConfig(
     dreams_per_cycle=5,
@@ -372,7 +372,7 @@ dream_learning_rate: float = 0.0005
 pytest tests/dreaming/ -v
 
 # With coverage
-pytest tests/dreaming/ --cov=ww.dreaming
+pytest tests/dreaming/ --cov=t4dm.dreaming
 ```
 
 **Test Coverage**: 495 lines, comprehensive tests for all components

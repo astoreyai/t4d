@@ -1,4 +1,4 @@
-# World Weaver System Diagrams
+# T4DM System Diagrams
 
 **Generated**: 2025-12-06
 **Purpose**: Visual reference for system architecture and data flows
@@ -297,7 +297,7 @@
 │  │  │  - Allow localhost origins                                       │   ││
 │  │  │  - Wildcards permitted                                           │   ││
 │  │  │                                                                  │   ││
-│  │  │  PRODUCTION (WW_ENVIRONMENT=production):                         │   ││
+│  │  │  PRODUCTION (T4DM_ENVIRONMENT=production):                         │   ││
 │  │  │  - REJECT wildcards (*)                                          │   ││
 │  │  │  - Only explicit origins allowed                                 │   ││
 │  │  │  - Restricted headers: Authorization, Content-Type,             │   ││

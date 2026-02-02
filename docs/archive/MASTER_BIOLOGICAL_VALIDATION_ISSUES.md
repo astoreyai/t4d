@@ -1,7 +1,7 @@
 # MASTER ISSUE LIST - COMPBIO VALIDATION
 
 **Generated**: 2026-01-04
-**Scope**: Complete biological validation audit of World Weaver biologically-inspired modules
+**Scope**: Complete biological validation audit of T4DM biologically-inspired modules
 **Directories**: `src/t4dm/nca/`, `src/t4dm/learning/`, `src/t4dm/consolidation/`
 
 ---

@@ -1,4 +1,4 @@
-# World Weaver Phase 6+ Implementation Plan
+# T4DM Phase 6+ Implementation Plan
 
 ## NEXUS: Neuro-symbolic Experience Xtraction with Unified Scoring
 

@@ -1,4 +1,4 @@
-# World Weaver Comprehensive Analysis Report
+# T4DM Comprehensive Analysis Report
 ## Ralph Loop Iteration 1 - Full Project Assessment
 
 **Date**: 2026-01-17
@@ -9,7 +9,7 @@
 
 ## Executive Summary
 
-World Weaver is an ambitious **biologically-inspired neural memory system** implementing Hinton's Forward-Forward algorithm, capsule networks, and tripartite memory architecture (episodic/semantic/procedural). The project is **architecturally sophisticated but has a critical wiring gap** - components are well-implemented individually but the integration between them is incomplete.
+T4DM is an ambitious **biologically-inspired neural memory system** implementing Hinton's Forward-Forward algorithm, capsule networks, and tripartite memory architecture (episodic/semantic/procedural). The project is **architecturally sophisticated but has a critical wiring gap** - components are well-implemented individually but the integration between them is incomplete.
 
 ### Overall Assessment
 
@@ -159,7 +159,7 @@ Many of these describe **what to do** but the actual wiring work hasn't been com
 
 From web research on neural memory systems:
 
-| Practice | Industry Standard | World Weaver | Gap |
+| Practice | Industry Standard | T4DM | Gap |
 |----------|------------------|--------------|-----|
 | Tripartite Memory | Episodic + Semantic + Procedural | ✓ Implemented | None |
 | Hybrid Memory | Vector + Graph storage | ✓ Neo4j + Qdrant | None |
@@ -170,7 +170,7 @@ From web research on neural memory systems:
 
 ### Biological Accuracy vs. State of Art
 
-World Weaver achieves **96/100 biological accuracy** - this is **exceptional** and exceeds most academic implementations:
+T4DM achieves **96/100 biological accuracy** - this is **exceptional** and exceeds most academic implementations:
 
 - ✓ STDP with proper time constants (Bi & Poo 1998)
 - ✓ VTA exponential decay (Grace & Bunney 1984)
@@ -253,9 +253,9 @@ World Weaver achieves **96/100 biological accuracy** - this is **exceptional** a
 
 ## Part 7: Comparison to Research Standards
 
-### World Weaver vs. MemGPT (2025)
+### T4DM vs. MemGPT (2025)
 
-| Aspect | MemGPT | World Weaver | Winner |
+| Aspect | MemGPT | T4DM | Winner |
 |--------|--------|--------------|--------|
 | Episodic-to-Semantic | ✓ Summarization | ✓ Sleep consolidation | WW (bio-accurate) |
 | Context Management | ✓ Paging | ✓ Session isolation | Tie |
@@ -263,16 +263,16 @@ World Weaver achieves **96/100 biological accuracy** - this is **exceptional** a
 | Production Ready | Higher | Lower (85%) | MemGPT |
 | Learning | Static | Dynamic (when wired) | WW (potential) |
 
-### World Weaver vs. LangChain Memory
+### T4DM vs. LangChain Memory
 
-| Aspect | LangChain | World Weaver | Winner |
+| Aspect | LangChain | T4DM | Winner |
 |--------|-----------|--------------|--------|
 | Integration | ✓ Easy | Complex | LangChain |
 | Biological Plausibility | None | Exceptional | WW |
 | Tripartite Memory | Partial | Full | WW |
 | Production Scale | ✓ Proven | Unproven | LangChain |
 
-**Conclusion**: World Weaver has **superior biological modeling** but LangChain has **superior integration simplicity**. The opportunity is to achieve both.
+**Conclusion**: T4DM has **superior biological modeling** but LangChain has **superior integration simplicity**. The opportunity is to achieve both.
 
 ---
 

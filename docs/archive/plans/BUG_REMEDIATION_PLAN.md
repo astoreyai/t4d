@@ -1,4 +1,4 @@
-# World Weaver Bug Remediation Plan
+# T4DM Bug Remediation Plan
 
 **Generated**: 2025-12-08 | **Total Bugs**: 670 | **Fixed**: 50 | **Remaining**: ~620
 
@@ -20,7 +20,7 @@
 ## Phase 0: COMPLETED (14 bugs fixed)
 
 - [x] DATA-001: strengthen_relationship() MISSING
-- [x] SEC-001: Cypher injection in neo4j_store
+- [x] SEC-001: Cypher injection in t4dx_graph_adapter
 - [x] SEC-002: Path traversal + info leakage
 - [x] DATA-008: Neuromodulator returns 0.0
 - [x] LOGIC-001: ACh direction reversed
@@ -74,7 +74,7 @@
 | ID | File | Bug | TDD Approach |
 |----|------|-----|--------------|
 | DATA-003 | saga.py | Wrong rollback | Test: failed saga cleans up all steps |
-| DATA-004 | qdrant_store.py | Wrong rollback | Test: partial failure rolls back |
+| DATA-004 | t4dx_vector_adapter.py | Wrong rollback | Test: partial failure rolls back |
 | DATA-005 | learning/*.py | Silent NaN | Test: NaN detected and raised |
 | DATA-006 | episodic.py | Type mismatch | Test: wrong types raise TypeError |
 | TRES-001 | three_factor.py | Formula violated | Test: three factors multiply |
@@ -84,8 +84,8 @@
 | ID | File | Bug | TDD Approach |
 |----|------|-----|--------------|
 | RACE-002 | consolidation/*.py | Background task race | Test: concurrent consolidation safe |
-| RACE-003 | neo4j_store.py | Singleton race | Test: parallel inits return same instance |
-| RACE-004 | qdrant_store.py | Singleton race | Test: parallel inits return same instance |
+| RACE-003 | t4dx_graph_adapter.py | Singleton race | Test: parallel inits return same instance |
+| RACE-004 | t4dx_vector_adapter.py | Singleton race | Test: parallel inits return same instance |
 | RACE-005 | metrics.py | Counter race | Test: parallel increments accurate |
 | RACE-006 | procedural.py:419 | Double deprecation | Test: concurrent deprecate idempotent |
 | RACE-007 | working_memory.py:182 | Concurrent load | Test: parallel loads respect capacity |
@@ -263,8 +263,8 @@ Updated: 2025-12-08
 - MEM-009: working_memory.py - Added eviction history limit (10K)
 
 ### Session 4 Fixes (7 bugs):
-- RACE-003: neo4j_store.py singleton race - Already has double-check locking
-- RACE-004: qdrant_store.py singleton race - Already has double-check locking
+- RACE-003: t4dx_graph_adapter.py singleton race - Already has double-check locking
+- RACE-004: t4dx_vector_adapter.py singleton race - Already has double-check locking
 - RACE-005: metrics.py counter race - Already uses thread lock
 - RACE-006: procedural.py double deprecation - Made deprecate() idempotent
 - RACE-007: working_memory.py concurrent load - Added async lock to load()
@@ -276,7 +276,7 @@ Updated: 2025-12-08
 - DATA-005: learning/*.py silent NaN - Added NaN/Inf validation to reconsolidation.py and three_factor.py
 - DATA-006: episodic.py type mismatch - Added UUID type validation to get() and mark_important()
 - DATA-003: saga.py wrong rollback - VERIFIED CORRECT (LIFO order, only compensates completed steps)
-- DATA-004: qdrant_store.py wrong rollback - VERIFIED CORRECT (intentional aggressive rollback for consistency)
+- DATA-004: t4dx_vector_adapter.py wrong rollback - VERIFIED CORRECT (intentional aggressive rollback for consistency)
 - TRES-001: three_factor.py formula violated - VERIFIED CORRECT (multiplicative at line 301)
 
 ### Session 6 Fixes (2 bugs + 10 verified already protected/not applicable):

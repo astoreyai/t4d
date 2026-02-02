@@ -2,7 +2,7 @@
 
 **8 files | ~3,000 lines | Centrality: 6**
 
-The interfaces module provides terminal UI components for exploring, managing, and monitoring World Weaver memories and neural dynamics using the Rich library.
+The interfaces module provides terminal UI components for exploring, managing, and monitoring T4DM memories and neural dynamics using the Rich library.
 
 ## Architecture Overview
 
@@ -53,7 +53,7 @@ The interfaces module provides terminal UI components for exploring, managing, a
 Full CRUD operations for all memory types:
 
 ```python
-from ww.interfaces import CRUDManager
+from t4dm.interfaces import CRUDManager
 
 crud = CRUDManager(session_id="my-session")
 await crud.initialize()
@@ -102,7 +102,7 @@ count = await crud.batch_delete_episodes(ids, confirm=True)
 Interactive terminal UI for memory browsing:
 
 ```python
-from ww.interfaces import MemoryExplorer
+from t4dm.interfaces import MemoryExplorer
 
 explorer = MemoryExplorer(session_id="my-session")
 await explorer.initialize()
@@ -128,7 +128,7 @@ await explorer.interactive()
 Memory access patterns and decay visualization:
 
 ```python
-from ww.interfaces import TraceViewer
+from t4dm.interfaces import TraceViewer
 
 viewer = TraceViewer(session_id="my-session")
 await viewer.initialize()
@@ -158,7 +158,7 @@ await viewer.show_access_heatmap(hours=24, bucket_minutes=60)
 Real-time system health monitoring:
 
 ```python
-from ww.interfaces import SystemDashboard
+from t4dm.interfaces import SystemDashboard
 
 dashboard = SystemDashboard(session_id="my-session")
 await dashboard.initialize()
@@ -185,7 +185,7 @@ await dashboard.show_detailed_health()
 Multi-format memory export with security:
 
 ```python
-from ww.interfaces import ExportUtility
+from t4dm.interfaces import ExportUtility
 
 export = ExportUtility(session_id="my-session")
 await export.initialize()
@@ -224,7 +224,7 @@ stats = await export.backup_session(output_dir="~/ww_exports/backup/")
 Neural Cognitive Architecture visualization:
 
 ```python
-from ww.interfaces import NCAExplorer
+from t4dm.interfaces import NCAExplorer
 
 nca = NCAExplorer()
 
@@ -267,7 +267,7 @@ nca.interactive()
 Learning dynamics and FSRS monitoring:
 
 ```python
-from ww.interfaces import LearningInspector
+from t4dm.interfaces import LearningInspector
 
 inspector = LearningInspector()
 
@@ -312,8 +312,8 @@ inspector.interactive()
 | `trace_viewer.py` | `ww-trace` | Memory access timeline |
 | `dashboard.py` | `ww-dashboard` | System health monitoring |
 | `export_utils.py` | `ww-export` | Session backup |
-| `nca_explorer.py` | `python -m ww.interfaces.nca_explorer` | NCA exploration |
-| `learning_inspector.py` | `python -m ww.interfaces.learning_inspector` | Learning dynamics |
+| `nca_explorer.py` | `python -m t4dm.interfaces.nca_explorer` | NCA exploration |
+| `learning_inspector.py` | `python -m t4dm.interfaces.learning_inspector` | Learning dynamics |
 
 ## Design Patterns
 
@@ -379,7 +379,7 @@ pip install rich
 pytest tests/interfaces/ -v
 
 # With coverage
-pytest tests/interfaces/ --cov=ww.interfaces
+pytest tests/interfaces/ --cov=t4dm.interfaces
 ```
 
 ## Public API

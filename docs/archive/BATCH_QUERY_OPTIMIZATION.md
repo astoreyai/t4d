@@ -6,7 +6,7 @@ Fixed the N+1 query problem in semantic memory's Hebbian strengthening and added
 
 ## Changes Made
 
-### 1. Neo4j Store - Batch Relationship Query (`src/t4dm/storage/neo4j_store.py`)
+### 1. Neo4j Store - Batch Relationship Query (`src/t4dm/storage/t4dx_graph_adapter.py`)
 
 Added new method `get_relationships_batch()` at line 469-541:
 
@@ -161,7 +161,7 @@ Created comprehensive test suite (`test_batch_query.py`):
 
 ### Files Modified
 
-1. **`src/t4dm/storage/neo4j_store.py`**
+1. **`src/t4dm/storage/t4dx_graph_adapter.py`**
    - Added: `get_relationships_batch()` method (73 lines)
 
 2. **`src/t4dm/memory/semantic.py`**
@@ -177,9 +177,9 @@ Created comprehensive test suite (`test_batch_query.py`):
 ## Usage Example
 
 ```python
-from ww.storage.neo4j_store import get_neo4j_store
+from t4dm.storage.t4dx_graph_adapter import get_t4dx_graph_adapter
 
-store = get_neo4j_store()
+store = get_t4dx_graph_adapter()
 
 # Old way (N+1 pattern)
 for node_id in node_ids:

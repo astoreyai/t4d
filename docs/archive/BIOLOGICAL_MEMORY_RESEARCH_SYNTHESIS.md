@@ -1,6 +1,6 @@
 # Biological Memory Systems: Research Synthesis for AI Architecture
 **Date**: 2025-12-06
-**Purpose**: Neuroscience-informed design principles for World Weaver memory system
+**Purpose**: Neuroscience-informed design principles for T4DM memory system
 
 ---
 
@@ -786,4 +786,4 @@ Biological memory systems employ a sophisticated suite of mechanisms that jointl
 
 Implementing these principles in artificial systems requires moving beyond single-store, uniform-timescale, backpropagation-based architectures toward heterogeneous, multi-store, locally-computed learning systems that mirror the brain's sophisticated memory organization.
 
-The World Weaver system is well-positioned to implement these principles through its tripartite memory architecture, neuromodulatory orchestration, and consolidation engine. The next phase should focus on dendritic computation, multi-timescale dynamics, and replay-based consolidation to fully realize biologically-inspired continual learning.
+The T4DM system is well-positioned to implement these principles through its tripartite memory architecture, neuromodulatory orchestration, and consolidation engine. The next phase should focus on dendritic computation, multi-timescale dynamics, and replay-based consolidation to fully realize biologically-inspired continual learning.

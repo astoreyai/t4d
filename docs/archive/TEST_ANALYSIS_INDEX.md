@@ -1,4 +1,4 @@
-# World Weaver Test Analysis - Complete Index
+# T4DM Test Analysis - Complete Index
 
 **Date**: November 27, 2025
 **Analyzer**: Test Execution & Analysis Specialist
@@ -8,7 +8,7 @@
 
 ## Document Overview
 
-This analysis package contains 2,719 lines across 4 comprehensive documents covering World Weaver's test coverage and quality.
+This analysis package contains 2,719 lines across 4 comprehensive documents covering T4DM's test coverage and quality.
 
 ### Quick Navigation
 
@@ -189,12 +189,12 @@ mcp/memory_gateway.py           18%  ├─────────┤  MUST FIX
 observability/health.py          0%  └─────────┘  MUST FIX
 observability/metrics.py         0%  └─────────┘  MUST FIX
 observability/logging.py         0%  └─────────┘  MUST FIX
-storage/neo4j_store.py          41%  ├──────────────────┤  IMPROVE
+storage/t4dx_graph_adapter.py          41%  ├──────────────────┤  IMPROVE
 ```
 
 ### IMPORTANT (YELLOW ZONE)
 ```
-storage/qdrant_store.py         56%  ├───────────────┤  EXPAND
+storage/t4dx_vector_adapter.py         56%  ├───────────────┤  EXPAND
 embedding/bge_m3.py             59%  ├────────────────┤  EXPAND
 memory/semantic.py              53%  ├─────────────┤  IMPROVE
 memory/procedural.py            64%  ├────────────────┤  IMPROVE

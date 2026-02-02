@@ -1,4 +1,4 @@
-# World Weaver Biological Architecture
+# T4DM Biological Architecture
 
 **Version**: 0.5.0
 **Last Updated**: 2026-01-08
@@ -8,7 +8,7 @@
 
 ## Overview
 
-World Weaver implements a biologically-inspired memory system with comprehensive neural integration. This architecture document focuses on the biological components and their interconnections.
+T4DM implements a biologically-inspired memory system with comprehensive neural integration. This architecture document focuses on the biological components and their interconnections.
 
 ---
 

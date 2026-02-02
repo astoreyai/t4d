@@ -1,4 +1,4 @@
-# World Weaver Biological Systems - Quick Reference
+# T4DM Biological Systems - Quick Reference
 
 **Fast lookup for parameter validation and biological ranges**
 

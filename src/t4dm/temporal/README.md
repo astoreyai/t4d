@@ -2,7 +2,7 @@
 
 **4 files | ~1,300 lines | Centrality: 2**
 
-The temporal module provides unified temporal dynamics coordination for World Weaver, managing session lifecycle, phase transitions, neuromodulator state, and consolidation-plasticity integration.
+The temporal module provides unified temporal dynamics coordination for T4DM, managing session lifecycle, phase transitions, neuromodulator state, and consolidation-plasticity integration.
 
 ## Architecture Overview
 
@@ -49,7 +49,7 @@ The temporal module provides unified temporal dynamics coordination for World We
 Single session state container:
 
 ```python
-from ww.temporal import SessionContext
+from t4dm.temporal import SessionContext
 
 context = SessionContext(
     id="session-uuid",
@@ -80,7 +80,7 @@ context.is_active         # Not yet closed
 Lifecycle and history management:
 
 ```python
-from ww.temporal import SessionManager, get_session_manager
+from t4dm.temporal import SessionManager, get_session_manager
 
 manager = get_session_manager()  # Singleton
 
@@ -115,7 +115,7 @@ stats = manager.get_stats()
 System-wide operational phases:
 
 ```python
-from ww.temporal import TemporalPhase
+from t4dm.temporal import TemporalPhase
 
 ACTIVE         # Active encoding/retrieval
 IDLE           # Low activity, maintenance
@@ -128,7 +128,7 @@ SLEEPING       # Full sleep cycle
 Complete temporal context snapshot:
 
 ```python
-from ww.temporal import TemporalState
+from t4dm.temporal import TemporalState
 
 state = dynamics.get_state()
 
@@ -157,7 +157,7 @@ state.neuromodulator     # NeuromodulatorState
 Unified coordinator:
 
 ```python
-from ww.temporal import TemporalDynamics, TemporalConfig, create_temporal_dynamics
+from t4dm.temporal import TemporalDynamics, TemporalConfig, create_temporal_dynamics
 
 config = TemporalConfig(
     # Phase transitions (seconds)
@@ -221,7 +221,7 @@ await dynamics.stop_background_updates()
 Convert between neuromodulator representations:
 
 ```python
-from ww.temporal import adapt_orchestra_state
+from t4dm.temporal import adapt_orchestra_state
 
 # Convert NeuromodulatorOrchestra → ModulatedEmbeddingAdapter
 adapter_state = adapt_orchestra_state(orchestra_state)
@@ -236,7 +236,7 @@ adapter_state = adapt_orchestra_state(orchestra_state)
 Factory functions for specific operations:
 
 ```python
-from ww.temporal import (
+from t4dm.temporal import (
     get_consolidation_state,
     get_sleep_replay_state,
     get_pattern_separation_state
@@ -260,7 +260,7 @@ state = get_pattern_separation_state()
 Extract learned importance from gate weights:
 
 ```python
-from ww.temporal import LearnedSalienceProvider
+from t4dm.temporal import LearnedSalienceProvider
 
 provider = LearnedSalienceProvider()
 
@@ -277,7 +277,7 @@ weights = provider.get_salience_weights(dimension=1024)
 Orchestrate plasticity with embedding modulation:
 
 ```python
-from ww.temporal import PlasticityCoordinator, PlasticityConfig, create_plasticity_coordinator
+from t4dm.temporal import PlasticityCoordinator, PlasticityConfig, create_plasticity_coordinator
 
 config = PlasticityConfig(
     max_update_per_outcome=10,

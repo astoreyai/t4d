@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document defines the testing strategy for World Weaver's bioinspired neural memory components. Testing spans from unit-level component validation to system-wide biological plausibility checks.
+This document defines the testing strategy for T4DM's bioinspired neural memory components. Testing spans from unit-level component validation to system-wide biological plausibility checks.
 
 ## Testing Pyramid
 

@@ -1,4 +1,4 @@
-# World Weaver Operational Scripts - Implementation Report
+# T4DM Operational Scripts - Implementation Report
 
 **Date**: 2025-11-27
 **Status**: COMPLETE
@@ -6,7 +6,7 @@
 
 ## Overview
 
-Created production-ready operational scripts for World Weaver deployment, addressing missing scripts referenced in `docs/deployment.md`.
+Created production-ready operational scripts for T4DM deployment, addressing missing scripts referenced in `docs/deployment.md`.
 
 ## Files Created
 
@@ -67,7 +67,7 @@ ls -lh /var/backups/t4dm/
 
 ### 3. scripts/health_check.sh (1.8K, 63 lines)
 
-**Purpose**: Monitor health of all World Weaver services
+**Purpose**: Monitor health of all T4DM services
 
 **Features**:
 - Qdrant health endpoint check
@@ -91,7 +91,7 @@ HEALTHCHECK CMD /scripts/health_check.sh || exit 1
 
 **Validation Output** (tested on production system):
 ```
-World Weaver Health Check
+T4DM Health Check
 =========================
 ✓ Neo4j
 ✓ Neo4j Bolt
@@ -286,7 +286,7 @@ ls -lh /tmp/test-backup/
 ```bash
 # If health check shows Qdrant collections missing
 python -c "
-from ww.memory.episodic import get_episodic_memory
+from t4dm.memory.episodic import get_episodic_memory
 import asyncio
 async def init():
     mem = get_episodic_memory('default')

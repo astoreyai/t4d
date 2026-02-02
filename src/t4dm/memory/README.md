@@ -9,7 +9,7 @@ Tripartite memory system implementing episodic, semantic, and procedural memory 
 ## Quick Start
 
 ```python
-from ww.memory import EpisodicMemory, SemanticMemory, ProceduralMemory, UnifiedMemoryService
+from t4dm.memory import EpisodicMemory, SemanticMemory, ProceduralMemory, UnifiedMemoryService
 
 # Individual memory systems
 episodic = EpisodicMemory(session_id="my-session")
@@ -167,7 +167,7 @@ result = await procedural.how_to("deploy my app")
 Prevents interference between similar memories.
 
 ```python
-from ww.memory import DentateGyrus
+from t4dm.memory import DentateGyrus
 
 dg = DentateGyrus(target_sparsity=0.01)  # 1% active (biologically accurate)
 orthogonalized = dg.orthogonalize(new_embedding, recent_embeddings)
@@ -184,7 +184,7 @@ orthogonalized = dg.orthogonalize(new_embedding, recent_embeddings)
 Exponential capacity pattern completion.
 
 ```python
-from ww.memory.pattern_separation import modern_hopfield_update
+from t4dm.memory.pattern_separation import modern_hopfield_update
 
 # Continuous Hopfield (Ramsauer 2020)
 completed = modern_hopfield_update(
@@ -201,7 +201,7 @@ completed = modern_hopfield_update(
 Two-stage O(log n) retrieval.
 
 ```python
-from ww.memory import ClusterIndex
+from t4dm.memory import ClusterIndex
 
 index = ClusterIndex()
 clusters = index.select_clusters(query_embedding, k=5)
@@ -230,7 +230,7 @@ Query [1024-dim]
 Capacity-limited buffer (~4 items, Cowan's number).
 
 ```python
-from ww.memory import WorkingMemory
+from t4dm.memory import WorkingMemory
 
 wm = WorkingMemory[str](capacity=4)
 wm.load("important-item", priority=0.9)
@@ -251,7 +251,7 @@ await wm.consolidate_to(episodic)
 Bounded memory growth with multi-strategy forgetting.
 
 ```python
-from ww.memory import ActiveForgettingSystem, RetentionPolicy
+from t4dm.memory import ActiveForgettingSystem, RetentionPolicy
 
 policy = RetentionPolicy(
     max_episodes=100_000,
@@ -287,7 +287,7 @@ await forgetting.run_forgetting_cycle()
 
 ## Configuration
 
-Via `ww.core.config`:
+Via `t4dm.core.config`:
 
 ```python
 # Episodic
@@ -312,10 +312,10 @@ hebbian_stale_days=90
 ## Dependencies
 
 **Internal**:
-- `ww.storage` - Qdrant + Neo4j backends
-- `ww.embedding` - BGE-M3 provider
-- `ww.learning` - Neuromodulators, reconsolidation
-- `ww.consolidation` - Sleep consolidation
+- `t4dm.storage` - Qdrant + Neo4j backends
+- `t4dm.embedding` - BGE-M3 provider
+- `t4dm.learning` - Neuromodulators, reconsolidation
+- `t4dm.consolidation` - Sleep consolidation
 
 **External**:
 - numpy, PyTorch (learning components)

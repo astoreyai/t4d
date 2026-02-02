@@ -1,10 +1,10 @@
-# Kymera Voice + World Weaver Integration Plan
+# Kymera Voice + T4DM Integration Plan
 
 **Full AI Assistant Architecture**
 
 ## Executive Summary
 
-Integrate World Weaver's tripartite memory system with Kymera Voice to create a complete AI assistant with:
+Integrate T4DM's tripartite memory system with Kymera Voice to create a complete AI assistant with:
 - Persistent memory across conversations
 - Smart action execution with confirmations
 - Personal data (calendar, email, contacts) integration
@@ -27,7 +27,7 @@ Integrate World Weaver's tripartite memory system with Kymera Voice to create a 
 | MCP Server | Complete | voice_speak, voice_listen |
 | Conversation Manager | Complete | State machine |
 
-### World Weaver (~/ww)
+### T4DM (~/ww)
 | Component | Status | Technology |
 |-----------|--------|------------|
 | Episodic Memory | Complete | Qdrant vectors |
@@ -84,7 +84,7 @@ Integrate World Weaver's tripartite memory system with Kymera Voice to create a 
               │            └────────┬────────┘
               │                     │
     ┌─────────▼─────────┐  ┌────────▼────────────────────────────────┐
-    │  World Weaver     │  │            Action Handlers              │
+    │  T4DM     │  │            Action Handlers              │
     │  ┌─────────────┐  │  │  ┌──────────┐ ┌──────────┐ ┌──────────┐│
     │  │ Episodes    │  │  │  │ Email    │ │ Calendar │ │ System   ││
     │  │ Entities    │  │  │  │ Handler  │ │ Handler  │ │ Handler  ││
@@ -130,7 +130,7 @@ kymera/
 
 ```python
 class VoiceMemoryBridge:
-    """Connect Kymera Voice to World Weaver memory."""
+    """Connect Kymera Voice to T4DM memory."""
 
     def __init__(self, ww_client, memory_gate, privacy_filter):
         self.ww = ww_client
@@ -300,7 +300,7 @@ class VoiceActionRouter:
         self.handlers["calendar.create"] = self._handle_calendar_create
         self.handlers["calendar.list"] = self._handle_calendar_list
 
-        # Memory handlers (World Weaver)
+        # Memory handlers (T4DM)
         self.handlers["memory.store"] = self._handle_memory_store
         self.handlers["memory.recall"] = self._handle_memory_recall
 

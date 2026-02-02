@@ -1,4 +1,4 @@
-# Neurotransmitter-Inspired Systems for World Weaver
+# Neurotransmitter-Inspired Systems for T4DM
 
 **Author**: Geoffrey Hinton AI Architect Agent
 **Date**: 2025-12-06 (Updated: 2026-01-03)
@@ -8,7 +8,7 @@
 
 ## Executive Summary
 
-World Weaver already implements a dopamine-like reward prediction error (RPE) system that modulates learning based on surprise. This document extends the neuromodulatory framework with four additional systems: **Norepinephrine**, **Acetylcholine**, **Serotonin**, and **GABA/Glutamate balance**. Each provides computationally distinct functions that the brain uses to orchestrate memory encoding, retrieval, and consolidation.
+T4DM already implements a dopamine-like reward prediction error (RPE) system that modulates learning based on surprise. This document extends the neuromodulatory framework with four additional systems: **Norepinephrine**, **Acetylcholine**, **Serotonin**, and **GABA/Glutamate balance**. Each provides computationally distinct functions that the brain uses to orchestrate memory encoding, retrieval, and consolidation.
 
 The key insight from neuroscience is that these systems don't operate in isolation - they form an *interacting neuromodulatory orchestra* where each transmitter influences the others. We must design with this integration in mind.
 
@@ -101,7 +101,7 @@ High NE should:
 # /mnt/projects/t4d/t4dm/src/t4dm/learning/norepinephrine.py
 
 """
-Norepinephrine-like Arousal/Attention System for World Weaver.
+Norepinephrine-like Arousal/Attention System for T4DM.
 
 Biological Basis:
 - Locus coeruleus modulates cortical and hippocampal gain
@@ -456,7 +456,7 @@ __all__ = [
 
 ```python
 # Integration in EpisodicMemory.__init__():
-from ww.learning.norepinephrine import NorepinephrineSystem
+from t4dm.learning.norepinephrine import NorepinephrineSystem
 self.norepinephrine = NorepinephrineSystem()
 
 # Integration in EpisodicMemory.recall():
@@ -519,7 +519,7 @@ The system should detect when to encode (novel, important) vs retrieve (familiar
 # /mnt/projects/t4d/t4dm/src/t4dm/learning/acetylcholine.py
 
 """
-Acetylcholine-like Encoding/Retrieval Mode Switch for World Weaver.
+Acetylcholine-like Encoding/Retrieval Mode Switch for T4DM.
 
 Biological Basis:
 - High ACh in hippocampus promotes encoding, suppresses retrieval
@@ -923,7 +923,7 @@ Dopamine handles immediate RPE; serotonin handles "was this useful for the long-
 # /mnt/projects/t4d/t4dm/src/t4dm/learning/serotonin.py
 
 """
-Serotonin-like Long-Term Credit Assignment for World Weaver.
+Serotonin-like Long-Term Credit Assignment for T4DM.
 
 Biological Basis:
 - 5-HT modulates patience and temporal discounting
@@ -1347,7 +1347,7 @@ This sharpens the retrieval output and reduces interference between similar memo
 # /mnt/projects/t4d/t4dm/src/t4dm/learning/inhibition.py
 
 """
-GABA/Glutamate-like Inhibitory Dynamics for World Weaver.
+GABA/Glutamate-like Inhibitory Dynamics for T4DM.
 
 Biological Basis:
 - GABA neurons provide lateral inhibition in cortex/hippocampus
@@ -1750,7 +1750,7 @@ The four systems should interact in a coordinated manner:
 # /mnt/projects/t4d/t4dm/src/t4dm/learning/neuromodulators.py
 
 """
-Integrated Neuromodulator System for World Weaver.
+Integrated Neuromodulator System for T4DM.
 
 Coordinates the four neuromodulatory systems:
 1. Dopamine - Reward prediction error, surprise-driven learning
@@ -1776,11 +1776,11 @@ from uuid import UUID
 
 import numpy as np
 
-from ww.learning.dopamine import DopamineSystem
-from ww.learning.norepinephrine import NorepinephrineSystem
-from ww.learning.acetylcholine import AcetylcholineSystem
-from ww.learning.serotonin import SerotoninSystem
-from ww.learning.inhibition import InhibitoryNetwork
+from t4dm.learning.dopamine import DopamineSystem
+from t4dm.learning.norepinephrine import NorepinephrineSystem
+from t4dm.learning.acetylcholine import AcetylcholineSystem
+from t4dm.learning.serotonin import SerotoninSystem
+from t4dm.learning.inhibition import InhibitoryNetwork
 
 logger = logging.getLogger(__name__)
 
@@ -2109,16 +2109,16 @@ __all__ = [
 
 ### Implemented (Phase 1 - v0.5.0)
 
-1. ✅ **Sleep-like consolidation**: Now implemented via `ww.nca.oscillators.DeltaOscillator` and `ww.nca.sleep_spindles`
+1. ✅ **Sleep-like consolidation**: Now implemented via `t4dm.nca.oscillators.DeltaOscillator` and `t4dm.nca.sleep_spindles`
    - Delta oscillations (0.5-4 Hz) with up/down state dynamics
    - Sleep spindles (11-16 Hz) coupled to delta up-states
    - Adenosine-sensitive sleep pressure integration
    - See: `DeltaOscillator`, `SleepSpindleGenerator`, `SpindleDeltaCoupler`
 
 2. ✅ **Oscillatory dynamics**: Theta/gamma/delta/alpha all implemented
-   - Theta-gamma PAC for encoding/retrieval (`ww.nca.theta_gamma_integration`)
-   - Delta for slow-wave sleep consolidation (`ww.nca.oscillators.DeltaOscillator`)
-   - Alpha for inhibition (`ww.nca.oscillators.AlphaOscillator`)
+   - Theta-gamma PAC for encoding/retrieval (`t4dm.nca.theta_gamma_integration`)
+   - Delta for slow-wave sleep consolidation (`t4dm.nca.oscillators.DeltaOscillator`)
+   - Alpha for inhibition (`t4dm.nca.oscillators.AlphaOscillator`)
    - See: `FrequencyBandGenerator`, `ThetaGammaIntegration`
 
 ### Remaining Ideas

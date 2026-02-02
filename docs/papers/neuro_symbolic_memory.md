@@ -842,7 +842,7 @@ The compact format reports point estimates everywhere. "Neural networks should k
 | Neuro-Symbolic | `learning/neuro_symbolic.py` | ✓ Complete |
 | Hooks | `learning/hooks.py` | ✓ Complete |
 | Neural Scorer | `learning/scorer.py` | ✓ Complete |
-| Neo4j Integration | `storage/neo4j_store.py` | ⚠ Partial |
+| Neo4j Integration | `storage/t4dx_graph_adapter.py` | ⚠ Partial |
 | End-to-End Pipeline | - | ✗ Missing |
 
 ## Appendix B: Test Coverage

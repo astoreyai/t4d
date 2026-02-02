@@ -1,10 +1,10 @@
 # API Reference
 
-Complete API documentation for World Weaver.
+Complete API documentation for T4DM.
 
 ## API Layers
 
-World Weaver provides four access layers:
+T4DM provides four access layers:
 
 ```mermaid
 graph TB
@@ -179,7 +179,7 @@ while results.has_more:
 ### Error Handling
 
 ```python
-from ww.sdk import WorldWeaverClient, NotFoundError, RateLimitError
+from t4dm.sdk import T4DMClient, NotFoundError, RateLimitError
 
 try:
     episode = await client.get_episode(episode_id)

@@ -77,7 +77,7 @@ Based on deep analysis using ww-hinton and ww-compbio agents:
 - `DOCUMENTATION_PLAN_v0.4.md` - Superseded
 - `V0.2.0_RELEASE_PLAN.md` - Historical
 - `MASTER_IMPROVEMENT_PLAN.md` - Has TODOs, review needed
-- 15+ WW_FIX_PLAN variants in archive/
+- 15+ T4DM_FIX_PLAN variants in archive/
 
 ### 1.6 Diagrams (8 new mermaid files) ✓ COMPLETE
 

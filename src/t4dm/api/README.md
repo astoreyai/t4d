@@ -2,14 +2,14 @@
 
 **Path**: `t4dm/api/` | **Files**: 13 | **Framework**: FastAPI
 
-Production-grade REST API for the World Weaver tripartite memory system.
+Production-grade REST API for the T4DM tripartite memory system.
 
 ---
 
 ## Quick Start
 
 ```python
-from ww.api import app, main
+from t4dm.api import app, main
 
 # Run server
 main()  # Starts uvicorn on configured host:port
@@ -179,11 +179,11 @@ Sanitized patterns:
 ## Dependencies
 
 **Internal**:
-- `ww.core.config` - Settings
-- `ww.core.services` - Memory services
-- `ww.observability.tracing` - OpenTelemetry
-- `ww.persistence` - WAL + checkpoints
-- `ww.consolidation.service` - Consolidation
+- `t4dm.core.config` - Settings
+- `t4dm.core.services` - Memory services
+- `t4dm.observability.tracing` - OpenTelemetry
+- `t4dm.persistence` - WAL + checkpoints
+- `t4dm.consolidation.service` - Consolidation
 
 **External**:
 - FastAPI, Pydantic, Uvicorn

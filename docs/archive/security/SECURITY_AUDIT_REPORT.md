@@ -1,9 +1,9 @@
-# World Weaver Security Audit Report
+# T4DM Security Audit Report
 
 **Date**: 2025-12-06
 **Auditor**: Research Code Review Specialist Agent
 **Version**: 0.1.0
-**Scope**: Comprehensive security review of World Weaver memory system
+**Scope**: Comprehensive security review of T4DM memory system
 
 ---
 
@@ -17,7 +17,7 @@
 **Low Severity**: 8
 **Informational**: 5
 
-World Weaver demonstrates **strong security foundations** with comprehensive input validation, parameterized queries, and defense-in-depth measures. However, several areas require attention before production deployment, particularly around CORS configuration, error message sanitization, and TLS enforcement.
+T4DM demonstrates **strong security foundations** with comprehensive input validation, parameterized queries, and defense-in-depth measures. However, several areas require attention before production deployment, particularly around CORS configuration, error message sanitization, and TLS enforcement.
 
 ---
 
@@ -45,10 +45,10 @@ cors_allowed_origins: list[str] = Field(
 
 While the default is localhost-only, the `.env.example` (line 98) suggests:
 ```bash
-# WW_API_CORS_ORIGINS=*  # Restrict in production
+# T4DM_API_CORS_ORIGINS=*  # Restrict in production
 ```
 
-**Impact**: If `WW_API_CORS_ORIGINS=*` is set, any origin can make authenticated requests to the API, enabling CSRF and data exfiltration attacks.
+**Impact**: If `T4DM_API_CORS_ORIGINS=*` is set, any origin can make authenticated requests to the API, enabling CSRF and data exfiltration attacks.
 
 **Remediation**:
 1. **Remove wildcard option** from documentation
@@ -57,7 +57,7 @@ While the default is localhost-only, the `.env.example` (line 98) suggests:
 @field_validator("cors_allowed_origins")
 @classmethod
 def validate_cors_origins(cls, v: list[str]) -> list[str]:
-    env = os.getenv("WW_ENVIRONMENT", "development")
+    env = os.getenv("T4DM_ENVIRONMENT", "development")
     if env == "production":
         if "*" in v:
             raise ValueError(
@@ -73,7 +73,7 @@ def validate_cors_origins(cls, v: list[str]) -> list[str]:
 3. **Update `.env.example`** with explicit guidance:
 ```bash
 # Production: ONLY list exact HTTPS origins
-# WW_API_CORS_ORIGINS=https://app.example.com,https://dashboard.example.com
+# T4DM_API_CORS_ORIGINS=https://app.example.com,https://dashboard.example.com
 ```
 
 ---
@@ -118,12 +118,12 @@ except Exception as e:
     )
 ```
 
-2. **Leverage existing sanitization** in `storage/neo4j_store.py:100-133`:
+2. **Leverage existing sanitization** in `storage/t4dx_graph_adapter.py:100-133`:
 The `_sanitize_error_message()` function exists but is only used in `DatabaseConnectionError`. Apply it to all database errors exposed via API.
 
 3. **Add error correlation IDs**:
 ```python
-from ww.mcp.gateway import get_request_id
+from t4dm.mcp.gateway import get_request_id
 
 error_id = get_request_id()
 logger.error(f"[{error_id}] Failed to create episode: {e}", exc_info=True)
@@ -175,7 +175,7 @@ otel_insecure: bool = Field(
 @model_validator(mode="after")
 def validate_production_tls(self) -> "Settings":
     """Enforce TLS requirements in production."""
-    env = os.getenv("WW_ENVIRONMENT", "development")
+    env = os.getenv("T4DM_ENVIRONMENT", "development")
 
     if env == "production":
         issues = []
@@ -188,7 +188,7 @@ def validate_production_tls(self) -> "Settings":
 
         # Check OTLP uses TLS
         if self.otel_enabled and self.otel_insecure:
-            issues.append("OTLP must use TLS in production (set WW_OTEL_INSECURE=false)")
+            issues.append("OTLP must use TLS in production (set T4DM_OTEL_INSECURE=false)")
 
         if issues:
             raise ValueError(
@@ -389,7 +389,7 @@ Update `.env.example` and documentation:
 ```bash
 # API server runs with 1 worker by default for accurate rate limiting
 # For production with multiple workers, use external rate limiter (e.g., nginx limit_req)
-WW_API_WORKERS=1
+T4DM_API_WORKERS=1
 ```
 
 ---
@@ -431,10 +431,10 @@ api_key_header: str = Field(
 @classmethod
 def validate_api_key_production(cls, v: Optional[str]) -> Optional[str]:
     """Require API key in production."""
-    env = os.getenv("WW_ENVIRONMENT", "development")
+    env = os.getenv("T4DM_ENVIRONMENT", "development")
     if env == "production" and not v:
         raise ValueError(
-            "API key required in production (set WW_API_KEY). "
+            "API key required in production (set T4DM_API_KEY). "
             "Generate with: openssl rand -hex 32"
         )
     if v and len(v) < 32:
@@ -564,7 +564,7 @@ Current `.env` has correct permissions (`-rw-------`, mode 600), but this isn't 
 1. **Option A: Fail on permissive perms in production**:
 ```python
 if mode & 0o077:
-    env = os.getenv("WW_ENVIRONMENT", "development")
+    env = os.getenv("T4DM_ENVIRONMENT", "development")
     if env == "production":
         raise ValueError(
             f"Config file '{path}' has insecure permissions: {oct(mode)}. "
@@ -585,7 +585,7 @@ if mode & 0o077:
 
 ### L-2: No SQL Injection Protection in Direct Cypher Queries
 
-**File**: `src/t4dm/storage/neo4j_store.py:281-302`
+**File**: `src/t4dm/storage/t4dx_graph_adapter.py:281-302`
 **Severity**: LOW (mitigated by validation)
 **Risk**: Cypher injection if label/type validation bypassed
 
@@ -640,7 +640,7 @@ If memory content contains `<b>Hello</b>`, it's stored as-is. If later rendered 
 
 **Mitigation in place**:
 - Validation warns: "This is a defense-in-depth measure. Content should also be escaped when rendered in HTML contexts."
-- World Weaver is primarily an API, not HTML renderer
+- T4DM is primarily an API, not HTML renderer
 
 **Remediation**:
 Document in API responses that **clients must HTML-escape** content:
@@ -751,7 +751,7 @@ USER ww
 COPY --chown=ww:ww . /app
 WORKDIR /app
 
-CMD ["python", "-m", "ww.api.server"]
+CMD ["python", "-m", "t4dm.api.server"]
 ```
 
 ---
@@ -818,12 +818,12 @@ client = AsyncOpenAI(timeout=settings.extraction_llm_timeout)
 
 **Observation**:
 ```python
-test_mode = os.getenv("WW_TEST_MODE", "false").lower() == "true"
+test_mode = os.getenv("T4DM_TEST_MODE", "false").lower() == "true"
 if test_mode or env == "test":
     return v or "test-password"
 ```
 
-Test mode allows weak passwords. Ensure `WW_TEST_MODE` is:
+Test mode allows weak passwords. Ensure `T4DM_TEST_MODE` is:
 1. Documented as **development/testing only**
 2. Logged with WARNING if enabled
 3. Never set in production configs
@@ -922,12 +922,12 @@ If `/metrics` endpoint exists, it may leak:
    - Enum validation
    - Session ID whitelist (alphanumeric + underscore + hyphen)
 
-2. **Parameterized Queries** (`neo4j_store.py`):
+2. **Parameterized Queries** (`t4dx_graph_adapter.py`):
    - All user data passed as **parameters**, not f-strings
    - Label/type **whitelisting** prevents Cypher injection
    - Property serialization with type checking
 
-3. **Error Sanitization** (`neo4j_store.py:100-133`):
+3. **Error Sanitization** (`t4dx_graph_adapter.py:100-133`):
    - `_sanitize_error_message()` removes URIs, passwords, paths
 
 4. **Rate Limiting** (`gateway.py:36-114`):
@@ -1060,7 +1060,7 @@ assert response.headers.get("Access-Control-Allow-Origin") != "https://evil.com"
 
 ## Conclusion
 
-World Weaver demonstrates **strong security fundamentals** with excellent input validation, parameterized queries, and defense-in-depth measures. The codebase shows clear security awareness and best practices.
+T4DM demonstrates **strong security fundamentals** with excellent input validation, parameterized queries, and defense-in-depth measures. The codebase shows clear security awareness and best practices.
 
 **Before production deployment**, address:
 1. CORS wildcard removal
@@ -1069,7 +1069,7 @@ World Weaver demonstrates **strong security fundamentals** with excellent input 
 4. API authentication
 5. Distributed rate limiting
 
-With these fixes, World Weaver will achieve a **security rating of A** (excellent).
+With these fixes, T4DM will achieve a **security rating of A** (excellent).
 
 ---
 

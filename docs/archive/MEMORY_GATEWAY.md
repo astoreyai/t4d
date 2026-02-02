@@ -1,4 +1,4 @@
-# World Weaver Memory Gateway MCP Server
+# T4DM Memory Gateway MCP Server
 
 Version: 0.1.0 | Protocol: MCP 2024-11-05
 
@@ -52,14 +52,14 @@ The Memory Gateway is an MCP server that provides Claude Code instances with acc
   "mcpServers": {
     "ww-memory": {
       "command": "python",
-      "args": ["-m", "ww.mcp.memory_gateway"],
+      "args": ["-m", "t4dm.mcp.memory_gateway"],
       "env": {
         "NEO4J_URI": "bolt://localhost:7687",
         "NEO4J_USER": "neo4j",
         "NEO4J_PASSWORD": "${NEO4J_PASSWORD}",
         "QDRANT_URL": "http://localhost:6333",
         "BGE_MODEL_PATH": "/models/bge-m3",
-        "WW_SESSION_ID": "${INSTANCE_ID}"
+        "T4DM_SESSION_ID": "${INSTANCE_ID}"
       }
     }
   }
@@ -522,7 +522,7 @@ Memory system statistics and health.
   "content": "Implemented Hebbian strengthening...",
   "timestamp": "2025-11-27T10:00:00Z",
   "context": {
-    "project": "world-weaver",
+    "project": "t4dm",
     "file": "semantic.py"
   },
   "outcome": "success",
@@ -590,7 +590,7 @@ Error Codes:
 result = await mcp.call_tool("create_episode", {
     "content": "Added Hebbian strengthening to semantic memory module",
     "context": {
-        "project": "world-weaver",
+        "project": "t4dm",
         "file": "src/memory/semantic.py",
         "tool": "Edit"
     },
@@ -605,7 +605,7 @@ result = await mcp.call_tool("create_episode", {
 # During task planning
 result = await mcp.call_tool("semantic_recall", {
     "query": "memory decay algorithms",
-    "context_entities": ["world-weaver", "cognitive-science"],
+    "context_entities": ["t4dm", "cognitive-science"],
     "limit": 5
 })
 
@@ -635,7 +635,7 @@ if result["procedures"]:
 
 ### Session Namespacing
 
-Each Claude Code instance gets a unique session ID from the `WW_SESSION_ID` environment variable. Episodes are tagged with this ID, allowing:
+Each Claude Code instance gets a unique session ID from the `T4DM_SESSION_ID` environment variable. Episodes are tagged with this ID, allowing:
 - Instance-isolated episodic memory
 - Cross-instance queries when explicitly requested
 - Consolidation merges insights to shared semantic memory
@@ -720,9 +720,9 @@ Add to `~/.claude/settings.json`:
   "mcpServers": {
     "ww-memory": {
       "command": "docker",
-      "args": ["exec", "-i", "ww-memory", "python", "-m", "ww.mcp.serve"],
+      "args": ["exec", "-i", "ww-memory", "python", "-m", "t4dm.mcp.serve"],
       "env": {
-        "WW_SESSION_ID": "${CLAUDE_INSTANCE_ID}"
+        "T4DM_SESSION_ID": "${CLAUDE_INSTANCE_ID}"
       }
     }
   }

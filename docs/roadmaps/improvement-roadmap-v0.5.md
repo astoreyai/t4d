@@ -1,4 +1,4 @@
-# World Weaver Improvement Roadmap v0.5
+# T4DM Improvement Roadmap v0.5
 
 **Target**: Hinton 7.4→9.5 | Biology 87→95
 **Created**: 2026-01-03

@@ -113,11 +113,11 @@ Successfully decomposed episodic.py while maintaining 100% backward compatibilit
 ### Key Changes:
 ```python
 # Added imports
-from ww.memory.episodic_fusion import LearnedFusionWeights, LearnedReranker
-from ww.memory.episodic_saga import EpisodicSagaCoordinator
-from ww.memory.episodic_storage import EpisodicStorageOps, _validate_uuid as _validate_uuid_impl
-from ww.memory.episodic_learning import EpisodicLearningOps
-from ww.memory.episodic_retrieval import EpisodicRetrievalOps
+from t4dm.memory.episodic_fusion import LearnedFusionWeights, LearnedReranker
+from t4dm.memory.episodic_saga import EpisodicSagaCoordinator
+from t4dm.memory.episodic_storage import EpisodicStorageOps, _validate_uuid as _validate_uuid_impl
+from t4dm.memory.episodic_learning import EpisodicLearningOps
+from t4dm.memory.episodic_retrieval import EpisodicRetrievalOps
 
 # Removed 411 lines of duplicate class definitions
 # Kept EpisodicMemory class intact for backward compatibility
@@ -135,7 +135,7 @@ pytest tests/unit/test_episodic.py -x
 ### Backward Compatibility
 - All public APIs preserved
 - No signature changes
-- Import path unchanged: `from ww.memory.episodic import EpisodicMemory`
+- Import path unchanged: `from t4dm.memory.episodic import EpisodicMemory`
 - Module-level functions still available
 
 ## Files Created

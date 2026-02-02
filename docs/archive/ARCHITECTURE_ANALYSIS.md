@@ -1,4 +1,4 @@
-# World Weaver Architecture Analysis
+# T4DM Architecture Analysis
 
 **Date**: 2025-12-03
 **Purpose**: Standalone, Dockerized, Programmatic API Memory System
@@ -7,7 +7,7 @@
 
 ## Executive Summary
 
-World Weaver is a **well-architected tripartite memory system** with solid core components but missing the glue to make it truly standalone. The foundations are strong (93%+ coverage on memory systems), but it currently requires MCP protocol and external orchestration.
+T4DM is a **well-architected tripartite memory system** with solid core components but missing the glue to make it truly standalone. The foundations are strong (93%+ coverage on memory systems), but it currently requires MCP protocol and external orchestration.
 
 ### Current State: 7/10
 - Core memory systems: **Working**
@@ -26,8 +26,8 @@ World Weaver is a **well-architected tripartite memory system** with solid core 
 
 | Component | Status | Coverage | Notes |
 |-----------|--------|----------|-------|
-| `neo4j_store.py` | Working | 63% | Graph operations, APOC support |
-| `qdrant_store.py` | Working | 62% | Vector operations, scroll, batch |
+| `t4dx_graph_adapter.py` | Working | 63% | Graph operations, APOC support |
+| `t4dx_vector_adapter.py` | Working | 62% | Vector operations, scroll, batch |
 | `saga.py` | Working | 97% | Dual-store atomicity |
 
 **Strengths**:
@@ -131,7 +131,7 @@ ImportError: HDBSCAN not found
 
 ### Current Architecture
 ```
-Claude Code ─────► MCP Protocol ─────► World Weaver
+Claude Code ─────► MCP Protocol ─────► T4DM
                     (stdio/SSE)           │
                                           ▼
                                ┌──────────┴──────────┐
@@ -171,7 +171,7 @@ Claude Code ─────► MCP Protocol ─────► World Weaver
 ### Target Architecture
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                     World Weaver Server                      │
+│                     T4DM Server                      │
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐ │
 │  │  REST API   │  │  MCP Server │  │  Python SDK        │ │
 │  │  (FastAPI)  │  │  (FastMCP)  │  │  (Direct Import)   │ │
@@ -220,7 +220,7 @@ Docker Compose:
 
 3. **Verify MCP server starts**
    ```bash
-   python -m ww.mcp.server
+   python -m t4dm.mcp.server
    ```
 
 ### Phase 2: Add REST API (2-3 days)
@@ -230,11 +230,11 @@ Create `src/t4dm/api/` with FastAPI:
 ```python
 # src/t4dm/api/server.py
 from fastapi import FastAPI
-from ww.memory.episodic import get_episodic_memory
-from ww.memory.semantic import get_semantic_memory
-from ww.memory.procedural import get_procedural_memory
+from t4dm.memory.episodic import get_episodic_memory
+from t4dm.memory.semantic import get_semantic_memory
+from t4dm.memory.procedural import get_procedural_memory
 
-app = FastAPI(title="World Weaver API")
+app = FastAPI(title="T4DM API")
 
 @app.post("/v1/episodes")
 async def create_episode(content: str, context: dict = None):
@@ -255,8 +255,8 @@ async def search_episodes(query: str, limit: int = 10):
 
 ```python
 # src/t4dm/client.py
-class WorldWeaverClient:
-    """Standalone Python client for World Weaver."""
+class T4DMClient:
+    """Standalone Python client for T4DM."""
 
     def __init__(
         self,
@@ -291,13 +291,13 @@ class WorldWeaverClient:
 
     async def close(self):
         """Clean up connections."""
-        from ww.storage.neo4j_store import close_neo4j_store
-        from ww.storage.qdrant_store import close_qdrant_store
-        await close_neo4j_store()
-        await close_qdrant_store()
+        from t4dm.storage.t4dx_graph_adapter import close_t4dx_graph_adapter
+        from t4dm.storage.t4dx_vector_adapter import close_t4dx_vector_adapter
+        await close_t4dx_graph_adapter()
+        await close_t4dx_vector_adapter()
 
 # Usage:
-# async with WorldWeaverClient() as ww:
+# async with T4DMClient() as ww:
 #     await ww.store("Fixed critical bug in parser")
 #     memories = await ww.recall("parser issues")
 ```
@@ -325,7 +325,7 @@ EXPOSE 8766  # MCP Server
 HEALTHCHECK --interval=30s --timeout=10s \
   CMD curl -f http://localhost:8765/health || exit 1
 
-CMD ["python", "-m", "ww.api.server"]
+CMD ["python", "-m", "t4dm.api.server"]
 ```
 
 ```yaml
@@ -340,9 +340,9 @@ services:
       - "8765:8765"  # REST API
       - "8766:8766"  # MCP
     environment:
-      - WW_NEO4J_URI=bolt://neo4j:7687
-      - WW_QDRANT_URL=http://qdrant:6333
-      - WW_NEO4J_PASSWORD=${NEO4J_PASSWORD}
+      - T4DM_NEO4J_URI=bolt://neo4j:7687
+      - T4DM_QDRANT_URL=http://qdrant:6333
+      - T4DM_NEO4J_PASSWORD=${NEO4J_PASSWORD}
     depends_on:
       neo4j:
         condition: service_healthy
@@ -379,8 +379,8 @@ Already have `src/t4dm/observability/` but need to:
 ### Option 1: Docker Compose (Recommended)
 ```bash
 # Clone and start
-git clone https://github.com/astoreyai/world-weaver
-cd world-weaver
+git clone https://github.com/astoreyai/t4dm
+cd t4dm
 cp .env.example .env
 # Edit .env with NEO4J_PASSWORD
 
@@ -392,10 +392,10 @@ curl http://localhost:8765/health
 
 ### Option 2: Python SDK
 ```python
-from ww import WorldWeaverClient
+from ww import T4DMClient
 
 async def main():
-    async with WorldWeaverClient() as ww:
+    async with T4DMClient() as ww:
         # Store
         episode_id = await ww.store(
             "Implemented new feature X",
@@ -429,7 +429,7 @@ curl "http://localhost:8765/v1/episodes/search?query=parser&limit=5"
   "mcpServers": {
     "ww-memory": {
       "command": "docker",
-      "args": ["exec", "-i", "ww-server", "python", "-m", "ww.mcp.server"]
+      "args": ["exec", "-i", "ww-server", "python", "-m", "t4dm.mcp.server"]
     }
   }
 }
@@ -439,7 +439,7 @@ curl "http://localhost:8765/v1/episodes/search?query=parser&limit=5"
 
 ## Conclusion
 
-**World Weaver has excellent bones** - cognitively-inspired memory systems, proper dual-store architecture, and comprehensive configuration. The main issues are:
+**T4DM has excellent bones** - cognitively-inspired memory systems, proper dual-store architecture, and comprehensive configuration. The main issues are:
 
 1. **Missing packages** - Easy fix
 2. **No standalone API** - 2-3 days to add REST

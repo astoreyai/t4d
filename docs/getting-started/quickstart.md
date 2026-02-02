@@ -1,11 +1,11 @@
 # Quick Start
 
-Get started with World Weaver in 5 minutes.
+Get started with T4DM in 5 minutes.
 
 ## Prerequisites
 
 - Python 3.10+
-- World Weaver installed (`pip install world-weaver`)
+- T4DM installed (`pip install t4dm`)
 
 ## Your First Memory Operations
 
@@ -20,7 +20,7 @@ Get started with World Weaver in 5 minutes.
     async def main():
         # Store an episodic memory
         await memory.store(
-            "Learned that World Weaver uses tripartite memory architecture",
+            "Learned that T4DM uses tripartite memory architecture",
             importance=0.8,
             tags=["learning", "architecture"]
         )
@@ -32,7 +32,7 @@ Get started with World Weaver in 5 minutes.
 === "CLI"
 
     ```bash
-    ww store "Learned that World Weaver uses tripartite memory architecture" \
+    ww store "Learned that T4DM uses tripartite memory architecture" \
         --importance 0.8 \
         --tags "learning,architecture"
     ```
@@ -43,7 +43,7 @@ Get started with World Weaver in 5 minutes.
     curl -X POST http://localhost:8765/api/v1/episodes \
       -H "Content-Type: application/json" \
       -d '{
-        "content": "Learned that World Weaver uses tripartite memory architecture",
+        "content": "Learned that T4DM uses tripartite memory architecture",
         "emotional_valence": 0.8
       }'
     ```
@@ -91,7 +91,7 @@ Get started with World Weaver in 5 minutes.
     async def main():
         # Store an entity (semantic memory)
         await memory.store_entity(
-            name="World Weaver",
+            name="T4DM",
             description="A biologically-inspired memory system for AI",
             entity_type="concept"
         )
@@ -110,7 +110,7 @@ Get started with World Weaver in 5 minutes.
 === "CLI"
 
     ```bash
-    ww semantic add "World Weaver" \
+    ww semantic add "T4DM" \
         --desc "A biologically-inspired memory system for AI" \
         --type concept
     ```
@@ -129,7 +129,7 @@ Get started with World Weaver in 5 minutes.
             name="query_memories",
             script="results = await memory.recall(query, limit=k)",
             domain="coding",
-            description="Query World Weaver for relevant memories"
+            description="Query T4DM for relevant memories"
         )
         print("Skill stored!")
 
@@ -140,7 +140,7 @@ Get started with World Weaver in 5 minutes.
 
     ```bash
     ww procedural add "query_memories" \
-        --desc "Query World Weaver for relevant memories"
+        --desc "Query T4DM for relevant memories"
     ```
 
 ## Session Isolation
@@ -218,7 +218,7 @@ Access Swagger UI at `http://localhost:8765/docs` for interactive API exploratio
 
     ---
 
-    Extend World Weaver with custom hooks
+    Extend T4DM with custom hooks
 
 -   :material-api: **[API Reference](../reference/rest-api.md)**
 

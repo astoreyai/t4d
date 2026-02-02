@@ -58,7 +58,7 @@ The prediction module implements JEPA-style (Joint Embedding Predictive Architec
 Compresses recent episodes into a single context vector:
 
 ```python
-from ww.prediction import ContextEncoder, ContextEncoderConfig
+from t4dm.prediction import ContextEncoder, ContextEncoderConfig
 
 config = ContextEncoderConfig(
     embedding_dim=1024,       # BGE-M3 compatibility
@@ -84,7 +84,7 @@ context = encoder.encode([ep1_embedding, ep2_embedding, ep3_embedding])
 MLP predicting next latent state:
 
 ```python
-from ww.prediction import LatentPredictor, LatentPredictorConfig
+from t4dm.prediction import LatentPredictor, LatentPredictorConfig
 
 config = LatentPredictorConfig(
     context_dim=1024,
@@ -121,7 +121,7 @@ loss = predictor.train_step(context_vector, target_embedding, lr=0.001)
 Tracks pending predictions and prioritizes high-error episodes:
 
 ```python
-from ww.prediction import PredictionTracker, TrackerConfig
+from t4dm.prediction import PredictionTracker, TrackerConfig
 
 config = TrackerConfig(
     max_pending_predictions=1000,
@@ -156,7 +156,7 @@ priorities = tracker.get_high_error_episodes(k=10)
 Bridges prediction to memory lifecycle:
 
 ```python
-from ww.prediction import PredictionIntegration, create_prediction_integration
+from t4dm.prediction import PredictionIntegration, create_prediction_integration
 
 integration = create_prediction_integration(
     context_size=5,
@@ -187,7 +187,7 @@ predicted_next = integration.predict_next(recent_embeddings)
 Multi-timescale prediction:
 
 ```python
-from ww.prediction import HierarchicalPredictor, HierarchicalConfig
+from t4dm.prediction import HierarchicalPredictor, HierarchicalConfig
 
 config = HierarchicalConfig(
     # Horizons
@@ -260,7 +260,7 @@ Dreaming
 
 ```python
 # consolidation/sleep.py
-from ww.prediction import PredictionTracker
+from t4dm.prediction import PredictionTracker
 
 # REM phase seeds from high-error episodes
 high_error = tracker.get_high_error_episodes(k=10)
@@ -270,7 +270,7 @@ high_error = tracker.get_high_error_episodes(k=10)
 
 ```python
 # dreaming/trajectory.py
-from ww.prediction import ContextEncoder, LatentPredictor
+from t4dm.prediction import ContextEncoder, LatentPredictor
 
 # Dream generation uses prediction for trajectories
 dreamer = DreamingSystem(encoder, predictor)
@@ -347,7 +347,7 @@ dropout: float = 0.1
 pytest tests/prediction/ -v
 
 # With coverage
-pytest tests/prediction/ --cov=ww.prediction
+pytest tests/prediction/ --cov=t4dm.prediction
 
 # Benchmarks
 pytest tests/prediction/ -v -m benchmark

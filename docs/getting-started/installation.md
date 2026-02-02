@@ -3,7 +3,7 @@
 ## Quick Install
 
 ```bash
-pip install world-weaver
+pip install t4dm
 ```
 
 ## Installation Options
@@ -13,7 +13,7 @@ pip install world-weaver
 The basic installation includes all core functionality:
 
 ```bash
-pip install world-weaver
+pip install t4dm
 ```
 
 ### With API Server
@@ -21,7 +21,7 @@ pip install world-weaver
 To run the REST API server:
 
 ```bash
-pip install world-weaver[api]
+pip install t4dm[api]
 ```
 
 ### With Embeddings
@@ -29,7 +29,7 @@ pip install world-weaver[api]
 For local BGE-M3 embeddings (requires ~1.3GB GPU memory):
 
 ```bash
-pip install world-weaver[embedding]
+pip install t4dm[embedding]
 ```
 
 ### Full Installation
@@ -37,7 +37,7 @@ pip install world-weaver[embedding]
 All optional dependencies:
 
 ```bash
-pip install world-weaver[api,embedding,dev]
+pip install t4dm[api,embedding,dev]
 ```
 
 ## Docker
@@ -175,8 +175,8 @@ After installation, verify everything works:
 
     The BGE-M3 model requires ~1.3GB GPU memory. Options:
 
-    - Use CPU mode: Set `WW_EMBEDDING_DEVICE=cpu`
-    - Use smaller batch size: Set `WW_EMBEDDING_BATCH_SIZE=8`
+    - Use CPU mode: Set `T4DM_EMBEDDING_DEVICE=cpu`
+    - Use smaller batch size: Set `T4DM_EMBEDDING_BATCH_SIZE=8`
 
 ### Getting Help
 

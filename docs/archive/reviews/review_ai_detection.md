@@ -1,6 +1,6 @@
-# World Weaver IEEE Paper: AI Detection Analysis
+# T4DM IEEE Paper: AI Detection Analysis
 
-**Document**: `/mnt/projects/t4d/t4dm/docs/world_weaver_ieee.tex`
+**Document**: `/mnt/projects/t4d/t4dm/docs/t4dm_ieee.tex`
 **Analysis Date**: 2025-12-04
 **Overall AI Detection Risk Score**: **6.5/10** (Medium-High Risk)
 
@@ -8,7 +8,7 @@
 
 ## Executive Summary
 
-The World Weaver IEEE paper shows **moderate to high risk** of being flagged as AI-generated. While the paper demonstrates strong technical content and genuine critical thinking, several linguistic and structural patterns align with common AI-generated text characteristics. The most significant issues are:
+The T4DM IEEE paper shows **moderate to high risk** of being flagged as AI-generated. While the paper demonstrates strong technical content and genuine critical thinking, several linguistic and structural patterns align with common AI-generated text characteristics. The most significant issues are:
 
 1. Overly smooth transitions and uniform paragraph structure
 2. Heavy use of AI-typical vocabulary ("fundamental," "framework," "substantial")
@@ -79,10 +79,10 @@ Most hedging in the paper is **appropriate** for academic writing:
 These are genuine epistemic markers, not AI filler.
 
 #### Slightly Generic Hedging
-**Line 219**: "World Weaver forces **explicit engagement** with memory"
+**Line 219**: "T4DM forces **explicit engagement** with memory"
 
 **Detection Risk**: Low
-**Suggested Alternative**: "World Weaver **directly confronts** memory design" (more active voice)
+**Suggested Alternative**: "T4DM **directly confronts** memory design" (more active voice)
 
 ---
 
@@ -177,11 +177,11 @@ The grammar is consistently correct throughout, but **not suspiciously perfect**
 ### 2.2 Overly Smooth Transitions (MEDIUM-HIGH RISK)
 
 #### Lines 217-227 (Critical Analysis transitions)
-> "**What World Weaver Does Well**
+> "**What T4DM Does Well**
 >
-> **Explicit Confrontation**: World Weaver forces explicit engagement with memory as a first-class architectural concern..."
+> **Explicit Confrontation**: T4DM forces explicit engagement with memory as a first-class architectural concern..."
 >
-> **What World Weaver Does Poorly**
+> **What T4DM Does Poorly**
 >
 > **No True Neural Integration**: We build symbolic systems alongside neural networks..."
 
@@ -189,15 +189,15 @@ The grammar is consistently correct throughout, but **not suspiciously perfect**
 **Issue**: Section transitions are extremely clean and balanced. Each subsection follows identical `**Bold Statement**: Explanation` format.
 
 **Suggested Revision**: Add natural transitions or variation:
-> "**What World Weaver Does Well**
+> "**What T4DM Does Well**
 >
-> The system succeeds in several key areas. Most importantly, World Weaver forces explicit engagement with memory as a first-class architectural concern..."
+> The system succeeds in several key areas. Most importantly, T4DM forces explicit engagement with memory as a first-class architectural concern..."
 
 ---
 
 ### 2.3 Section Length Balance (LOW-MEDIUM RISK)
 
-Sections are reasonably balanced, but the "What World Weaver Does Well" and "What World Weaver Does Poorly" sections are **suspiciously similar** in structure:
+Sections are reasonably balanced, but the "What T4DM Does Well" and "What T4DM Does Poorly" sections are **suspiciously similar** in structure:
 - Both have exactly 4 subsections
 - Each subsection is 2-3 sentences
 - Parallel bold headings followed by colons
@@ -211,13 +211,13 @@ Sections are reasonably balanced, but the "What World Weaver Does Well" and "Wha
 
 ### 3.1 Overclaiming in Abstract (MEDIUM RISK)
 
-**Line 36**: "World Weaver, a tripartite cognitive memory architecture **designed to provide AI agents with persistent, inspectable world models**"
+**Line 36**: "T4DM, a tripartite cognitive memory architecture **designed to provide AI agents with persistent, inspectable world models**"
 
 **Detection Risk**: Medium
 **Issue**: "Designed to provide" is a common AI phrase. The claim is also quite broad.
 
 **Suggested Revision**:
-> "World Weaver, a tripartite cognitive memory architecture **that gives AI agents persistent, inspectable world models**"
+> "T4DM, a tripartite cognitive memory architecture **that gives AI agents persistent, inspectable world models**"
 
 ---
 
@@ -236,7 +236,7 @@ The paper uses passive voice **sparingly** and appropriately:
 - "are progressively deprecated" (appropriate for system description)
 
 Active voice dominates where appropriate:
-- "World Weaver emerges from a simple question" (line 49)
+- "T4DM emerges from a simple question" (line 49)
 - "We situate this work" (line 36)
 - "We argue that" (line 36)
 
@@ -332,7 +332,7 @@ The prose is consistently polished throughout. There are **very few rough edges*
 
 ### 5.1 Genuine Self-Criticism (STRONG POSITIVE)
 
-The "What World Weaver Does Poorly" section (lines 228-236) contains **honest, specific limitations**:
+The "What T4DM Does Poorly" section (lines 228-236) contains **honest, specific limitations**:
 
 **Line 229**: "**No True Neural Integration**: We build symbolic systems alongside neural networks rather than integrating with them"
 
@@ -514,7 +514,7 @@ This paper **likely passes as human-written** with minor revisions. The strong p
 
 ## Conclusion
 
-The World Weaver IEEE paper demonstrates **strong technical content and genuine intellectual contribution**. While some linguistic and structural patterns align with AI-generated text, the paper's **honest self-criticism, specific details, and authentic voice** provide strong counterevidence.
+The T4DM IEEE paper demonstrates **strong technical content and genuine intellectual contribution**. While some linguistic and structural patterns align with AI-generated text, the paper's **honest self-criticism, specific details, and authentic voice** provide strong counterevidence.
 
 With the high-priority revisions outlined above—particularly addressing list parallelism and sentence structure variation—the AI detection risk drops from **6.5/10 to approximately 4.0/10**, placing it firmly in the **"likely human-written"** category.
 

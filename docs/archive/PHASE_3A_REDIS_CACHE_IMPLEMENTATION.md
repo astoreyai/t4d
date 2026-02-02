@@ -8,7 +8,7 @@
 
 ## Summary
 
-Implemented multi-tier Redis caching layer for World Weaver with graceful degradation to in-memory cache when Redis is unavailable. This addresses Phase 3A of the 9-Phase Improvement Plan.
+Implemented multi-tier Redis caching layer for T4DM with graceful degradation to in-memory cache when Redis is unavailable. This addresses Phase 3A of the 9-Phase Improvement Plan.
 
 ## Components Created
 
@@ -55,12 +55,12 @@ Key Classes:
 - `RedisCacheConfig`: Complete cache configuration
 
 Environment Variables:
-- `WW_REDIS_URL`: Redis connection URL (default: redis://localhost:6379)
-- `WW_REDIS_ENABLED`: Enable/disable Redis cache (default: true)
-- `WW_CACHE_FALLBACK_ENABLED`: Enable fallback cache (default: true)
-- `WW_CACHE_EMBEDDING_TTL`: Embedding cache TTL in seconds (default: 3600)
-- `WW_CACHE_SEARCH_TTL`: Search cache TTL in seconds (default: 300)
-- `WW_CACHE_GRAPH_TTL`: Graph cache TTL in seconds (default: 600)
+- `T4DM_REDIS_URL`: Redis connection URL (default: redis://localhost:6379)
+- `T4DM_REDIS_ENABLED`: Enable/disable Redis cache (default: true)
+- `T4DM_CACHE_FALLBACK_ENABLED`: Enable fallback cache (default: true)
+- `T4DM_CACHE_EMBEDDING_TTL`: Embedding cache TTL in seconds (default: 3600)
+- `T4DM_CACHE_SEARCH_TTL`: Search cache TTL in seconds (default: 300)
+- `T4DM_CACHE_GRAPH_TTL`: Graph cache TTL in seconds (default: 600)
 
 ### 3. Embedding Adapter Integration (`src/t4dm/embedding/adapter.py`)
 
@@ -105,7 +105,7 @@ cache = [
 
 Install with:
 ```bash
-pip install world-weaver[cache]
+pip install t4dm[cache]
 ```
 
 ---
@@ -213,7 +213,7 @@ pip install world-weaver[cache]
 ### Basic Usage
 
 ```python
-from ww.core import get_cache, hash_text
+from t4dm.core import get_cache, hash_text
 import numpy as np
 
 # Get cache instance
@@ -231,7 +231,7 @@ cached = await cache.get_embedding(text_hash)
 ### Integration with Embedding Adapter
 
 ```python
-from ww.embedding.adapter import BGEM3Adapter
+from t4dm.embedding.adapter import BGEM3Adapter
 
 # Create adapter (cache is automatic)
 adapter = BGEM3Adapter(dimension=1024)
@@ -246,7 +246,7 @@ result2 = await adapter.embed_query("test query")
 ### Configuration
 
 ```python
-from ww.core import RedisCacheConfig
+from t4dm.core import RedisCacheConfig
 
 # Development config
 config = RedisCacheConfig.development()

@@ -8,7 +8,7 @@
 
 ## 1. Executive Summary
 
-This audit covers the entire T4DM (formerly World Weaver) codebase across six subsystem areas:
+This audit covers the entire T4DM (formerly T4DM) codebase across six subsystem areas:
 
 1. **Hippocampal circuit** (hippocampus.py, DG/CA3/CA1/subiculum)
 2. **Neuromodulator systems** (VTA, LC, NBM, SNc, crosstalk, dopamine integration)
@@ -326,8 +326,8 @@ This audit covers the entire T4DM (formerly World Weaver) codebase across six su
 | C6 | Inject patterns during SWR replay | CRITICAL | swr_coupling.py:540 |
 | H2 | Direct CA3.store() bypasses DG processing | HIGH | hippocampus.py:341 |
 | H29 | Poison FF training with adversarial samples | HIGH | forward_forward.py |
-| M-1.1 | Store malformed vectors in Qdrant | MEDIUM | qdrant_store.py:301 |
-| M-1.3 | Inject arbitrary metadata to fake consolidation status | LOW | qdrant_store.py:316 |
+| M-1.1 | Store malformed vectors in Qdrant | MEDIUM | t4dx_vector_adapter.py:301 |
+| M-1.3 | Inject arbitrary metadata to fake consolidation status | LOW | t4dx_vector_adapter.py:316 |
 
 ### 4.2 Memory Falsification (Modifying Existing Memories)
 
@@ -337,7 +337,7 @@ This audit covers the entire T4DM (formerly World Weaver) codebase across six su
 | H21 | Modify via PUT /episodes/{id} with no audit trail | HIGH | hooks/memory.py:298 |
 | H22 | Backdate memories via client-controlled timestamps | HIGH | api/routes/episodes.py:36 |
 | H13 | Exploit lability window for reconsolidation | HIGH | lability.py, sleep.py:1751 |
-| M-4.3 | Change consolidated vs raw status via payload update | MEDIUM | qdrant_store.py |
+| M-4.3 | Change consolidated vs raw status via payload update | MEDIUM | t4dx_vector_adapter.py |
 | M-4.4 | Forge provenance links in Neo4j | MEDIUM | consolidation/service.py:888 |
 
 ### 4.3 Neuromodulator Manipulation (Forcing Brain States)
@@ -561,12 +561,12 @@ Beyond what was fixed in the previous sync commit, the following NEW mismatches 
 | 36 | Global np.random usage (non-reproducible) | neural_ode_capsules.py, coupling.py |
 | 37 | Theta-gamma plasticity gating bypass | theta_gamma_integration.py |
 | 38 | STDP weights directly accessible via private dict | stdp_integration.py |
-| 39 | No embedding dimension/range validation on storage | qdrant_store.py:301 |
+| 39 | No embedding dimension/range validation on storage | t4dx_vector_adapter.py:301 |
 | 40 | mark-important allows permanent anti-forgetting | api/routes/episodes.py:391 |
 | 41 | /metrics exposed without authentication | api/server.py:279 |
 | 42 | Saga compensation failure no automated recovery | storage/saga.py:20 |
 | 43 | Pickle protocol version lock-in | checkpoint.py:120 |
-| 44 | Consolidated vs raw memories not distinguishable | qdrant_store.py |
+| 44 | Consolidated vs raw memories not distinguishable | t4dx_vector_adapter.py |
 | 45 | Provenance links not cryptographically signed | consolidation/service.py |
 | 46 | No adversarial embedding detection | retrieval layer |
 | 47 | Striatal lateral inhibition symmetric (should be asymmetric) | striatal_msn.py |

@@ -72,7 +72,7 @@ prediction = pose_matrix @ lower_capsule
 agreement = np.dot(prediction, upper_capsule)
 ```
 
-## Integration with World Weaver
+## Integration with T4DM
 
 ### Neuromodulator Coupling
 
@@ -86,7 +86,7 @@ Capsule routing is modulated by the NT state:
 | 5-HT | Routing convergence (patience) |
 
 ```python
-from ww.nca import CapsuleNCACoupling
+from t4dm.nca import CapsuleNCACoupling
 
 coupling = CapsuleNCACoupling()
 
@@ -121,7 +121,7 @@ nca_field.apply_external_input(stability_signal)
 ### Basic Capsule Layer
 
 ```python
-from ww.nca import CapsuleNetwork, CapsuleConfig
+from t4dm.nca import CapsuleNetwork, CapsuleConfig
 
 config = CapsuleConfig(
     input_dim=1024,
@@ -148,7 +148,7 @@ poses = caps.get_poses()
 ### With NT Modulation
 
 ```python
-from ww.nca import CapsuleNCACoupling
+from t4dm.nca import CapsuleNCACoupling
 
 coupling = CapsuleNCACoupling()
 
@@ -222,7 +222,7 @@ Primary Caps  →  Mid Caps   →  High Caps  →  Entity Caps
 Capsules integrate with memory retrieval through the `CapsuleRetrievalBridge`:
 
 ```python
-from ww.bridges import CapsuleRetrievalBridge, create_capsule_bridge
+from t4dm.bridges import CapsuleRetrievalBridge, create_capsule_bridge
 
 # Create bridge
 bridge = create_capsule_bridge(
@@ -479,7 +479,7 @@ See [Cross-Region Integration](cross-region-integration.md) for full details on 
 The coupling now provides `forward_with_nt_modulation()` for integrated NT-modulated capsule encoding:
 
 ```python
-from ww.nca import CapsuleNCACoupling, CapsuleLayer
+from t4dm.nca import CapsuleNCACoupling, CapsuleLayer
 
 # Create coupling and layer
 coupling = CapsuleNCACoupling()

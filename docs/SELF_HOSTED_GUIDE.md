@@ -1,4 +1,4 @@
-# World Weaver - Self-Hosted Deployment Guide
+# T4DM - Self-Hosted Deployment Guide
 
 **Version**: 0.2.0
 **Last Updated**: 2025-12-06
@@ -34,8 +34,8 @@
 
 ```bash
 # Clone repository
-git clone https://github.com/astoreyai/world-weaver.git
-cd world-weaver
+git clone https://github.com/astoreyai/t4dm.git
+cd t4dm
 
 # Create environment file
 cp .env.example .env
@@ -200,13 +200,13 @@ sudo systemctl enable qdrant
 sudo systemctl start qdrant
 ```
 
-### Step 4: Install World Weaver
+### Step 4: Install T4DM
 
 ```bash
 # Clone repository
 cd /opt
-sudo git clone https://github.com/astoreyai/world-weaver.git
-cd world-weaver
+sudo git clone https://github.com/astoreyai/t4dm.git
+cd t4dm
 
 # Create virtual environment
 python3.11 -m venv .venv
@@ -237,25 +237,25 @@ NEO4J_URI=bolt://localhost:7687
 QDRANT_URL=http://localhost:6333
 
 # Embedding (use 'cuda:0' if you have GPU)
-WW_EMBEDDING_DEVICE=cpu
-WW_EMBEDDING_USE_FP16=true
+T4DM_EMBEDDING_DEVICE=cpu
+T4DM_EMBEDDING_USE_FP16=true
 ```
 
 ### Step 6: Initialize Database
 
 ```bash
 # Create indexes
-python -m ww.scripts.init_database
+python -m t4dm.scripts.init_database
 
 # Verify
 python -c "
-from ww.storage.neo4j_store import get_neo4j_store
-from ww.storage.qdrant_store import get_qdrant_store
+from t4dm.storage.t4dx_graph_adapter import get_t4dx_graph_adapter
+from t4dm.storage.t4dx_vector_adapter import get_t4dx_vector_adapter
 import asyncio
 
 async def verify():
-    neo4j = get_neo4j_store()
-    qdrant = get_qdrant_store()
+    neo4j = get_t4dx_graph_adapter()
+    qdrant = get_t4dx_vector_adapter()
     await neo4j.initialize()
     await qdrant.initialize()
     print('✓ Databases initialized')
@@ -272,88 +272,88 @@ asyncio.run(verify())
 
 #### Session Management
 ```bash
-WW_SESSION_ID=default               # Instance namespace
+T4DM_SESSION_ID=default               # Instance namespace
 ```
 
 #### Neo4j Connection
 ```bash
-WW_NEO4J_URI=bolt://localhost:7687
-WW_NEO4J_USER=neo4j
-WW_NEO4J_PASSWORD=<secure-password>
-WW_NEO4J_DATABASE=neo4j
-WW_NEO4J_MAX_CONNECTION_LIFETIME=3600  # seconds
-WW_NEO4J_MAX_CONNECTION_POOL_SIZE=50
-WW_NEO4J_CONNECTION_TIMEOUT=30
+T4DM_NEO4J_URI=bolt://localhost:7687
+T4DM_NEO4J_USER=neo4j
+T4DM_NEO4J_PASSWORD=<secure-password>
+T4DM_NEO4J_DATABASE=neo4j
+T4DM_NEO4J_MAX_CONNECTION_LIFETIME=3600  # seconds
+T4DM_NEO4J_MAX_CONNECTION_POOL_SIZE=50
+T4DM_NEO4J_CONNECTION_TIMEOUT=30
 ```
 
 #### Qdrant Connection
 ```bash
-WW_QDRANT_URL=http://localhost:6333
-WW_QDRANT_API_KEY=                  # Optional, for production
-WW_QDRANT_TIMEOUT=60
-WW_QDRANT_GRPC_PORT=6334
+T4DM_QDRANT_URL=http://localhost:6333
+T4DM_QDRANT_API_KEY=                  # Optional, for production
+T4DM_QDRANT_TIMEOUT=60
+T4DM_QDRANT_GRPC_PORT=6334
 ```
 
 #### Embedding Configuration
 ```bash
-WW_EMBEDDING_MODEL=BAAI/bge-m3      # Or other sentence-transformers model
-WW_EMBEDDING_DIMENSION=1024         # Must match model output
-WW_EMBEDDING_DEVICE=cuda:0          # cpu, cuda:0, cuda:1, etc.
-WW_EMBEDDING_USE_FP16=true          # Faster, uses less VRAM
-WW_EMBEDDING_BATCH_SIZE=32
-WW_EMBEDDING_MAX_LENGTH=512
-WW_EMBEDDING_CACHE_DIR=/opt/models
+T4DM_EMBEDDING_MODEL=BAAI/bge-m3      # Or other sentence-transformers model
+T4DM_EMBEDDING_DIMENSION=1024         # Must match model output
+T4DM_EMBEDDING_DEVICE=cuda:0          # cpu, cuda:0, cuda:1, etc.
+T4DM_EMBEDDING_USE_FP16=true          # Faster, uses less VRAM
+T4DM_EMBEDDING_BATCH_SIZE=32
+T4DM_EMBEDDING_MAX_LENGTH=512
+T4DM_EMBEDDING_CACHE_DIR=/opt/models
 ```
 
 #### Memory Parameters
 ```bash
 # FSRS decay
-WW_FSRS_DEFAULT_STABILITY=1.0       # Initial stability (days)
-WW_FSRS_RETENTION_TARGET=0.9        # Target retrievability
+T4DM_FSRS_DEFAULT_STABILITY=1.0       # Initial stability (days)
+T4DM_FSRS_RETENTION_TARGET=0.9        # Target retrievability
 
 # Hebbian learning
-WW_HEBBIAN_LEARNING_RATE=0.1        # η in w' = w + η(1-w)
-WW_HEBBIAN_INITIAL_WEIGHT=0.1
-WW_HEBBIAN_DECAY_RATE=0.01
-WW_HEBBIAN_MIN_WEIGHT=0.01
-WW_HEBBIAN_STALE_DAYS=180
+T4DM_HEBBIAN_LEARNING_RATE=0.1        # η in w' = w + η(1-w)
+T4DM_HEBBIAN_INITIAL_WEIGHT=0.1
+T4DM_HEBBIAN_DECAY_RATE=0.01
+T4DM_HEBBIAN_MIN_WEIGHT=0.01
+T4DM_HEBBIAN_STALE_DAYS=180
 
 # ACT-R activation
-WW_ACTR_DECAY=0.5                   # d in t^(-d)
-WW_ACTR_THRESHOLD=0.0
-WW_ACTR_NOISE=0.5                   # σ in N(0, σ²)
-WW_ACTR_SPREADING_STRENGTH=1.6
+T4DM_ACTR_DECAY=0.5                   # d in t^(-d)
+T4DM_ACTR_THRESHOLD=0.0
+T4DM_ACTR_NOISE=0.5                   # σ in N(0, σ²)
+T4DM_ACTR_SPREADING_STRENGTH=1.6
 ```
 
 #### Retrieval Weights
 ```bash
-WW_RETRIEVAL_SEMANTIC_WEIGHT=0.4
-WW_RETRIEVAL_RECENCY_WEIGHT=0.25
-WW_RETRIEVAL_OUTCOME_WEIGHT=0.2
-WW_RETRIEVAL_IMPORTANCE_WEIGHT=0.15
+T4DM_RETRIEVAL_SEMANTIC_WEIGHT=0.4
+T4DM_RETRIEVAL_RECENCY_WEIGHT=0.25
+T4DM_RETRIEVAL_OUTCOME_WEIGHT=0.2
+T4DM_RETRIEVAL_IMPORTANCE_WEIGHT=0.15
 ```
 
 #### Consolidation
 ```bash
-WW_CONSOLIDATION_MIN_SIMILARITY=0.75
-WW_CONSOLIDATION_MIN_OCCURRENCES=3
-WW_CONSOLIDATION_SKILL_SIMILARITY=0.85
+T4DM_CONSOLIDATION_MIN_SIMILARITY=0.75
+T4DM_CONSOLIDATION_MIN_OCCURRENCES=3
+T4DM_CONSOLIDATION_SKILL_SIMILARITY=0.85
 ```
 
 #### API Server
 ```bash
-WW_API_HOST=0.0.0.0
-WW_API_PORT=8765
-WW_API_WORKERS=4                    # Uvicorn workers
-WW_API_CORS_ORIGINS=*               # Restrict in production!
+T4DM_API_HOST=0.0.0.0
+T4DM_API_PORT=8765
+T4DM_API_WORKERS=4                    # Uvicorn workers
+T4DM_API_CORS_ORIGINS=*               # Restrict in production!
 ```
 
 #### Observability
 ```bash
-WW_OTEL_ENABLED=false
-WW_OTEL_ENDPOINT=http://localhost:4317
-WW_OTEL_INSECURE=true               # Set false in production
-WW_LOG_LEVEL=INFO                   # DEBUG, INFO, WARNING, ERROR
+T4DM_OTEL_ENABLED=false
+T4DM_OTEL_ENDPOINT=http://localhost:4317
+T4DM_OTEL_INSECURE=true               # Set false in production
+T4DM_LOG_LEVEL=INFO                   # DEBUG, INFO, WARNING, ERROR
 ```
 
 ---
@@ -369,15 +369,15 @@ Edit `~/.claude/claude_desktop_config.json`:
   "mcpServers": {
     "ww-memory": {
       "command": "python",
-      "args": ["-m", "ww.mcp.server"],
+      "args": ["-m", "t4dm.mcp.server"],
       "env": {
         "NEO4J_URI": "bolt://localhost:7687",
         "NEO4J_USER": "neo4j",
         "NEO4J_PASSWORD": "${NEO4J_PASSWORD}",
         "QDRANT_URL": "http://localhost:6333",
-        "WW_SESSION_ID": "claude-desktop-${USER}",
-        "WW_EMBEDDING_DEVICE": "cuda:0",
-        "PYTHONPATH": "/opt/world-weaver"
+        "T4DM_SESSION_ID": "claude-desktop-${USER}",
+        "T4DM_EMBEDDING_DEVICE": "cuda:0",
+        "PYTHONPATH": "/opt/t4dm"
       }
     }
   }
@@ -386,7 +386,7 @@ Edit `~/.claude/claude_desktop_config.json`:
 
 **Important**: Use absolute path to Python if not in PATH:
 ```json
-"command": "/opt/world-weaver/.venv/bin/python"
+"command": "/opt/t4dm/.venv/bin/python"
 ```
 
 ### Claude Code CLI Configuration
@@ -395,15 +395,15 @@ Install as skill:
 ```bash
 # Clone to skills directory
 cd ~/.claude/skills
-ln -s /opt/world-weaver ww-memory
+ln -s /opt/t4dm ww-memory
 
 # Add to skills manifest
 cat >> ~/.claude/skills/manifest.json << EOF
 {
   "ww-memory": {
     "description": "Tripartite neural memory system",
-    "command": "python -m ww.mcp.server",
-    "working_directory": "/opt/world-weaver"
+    "command": "python -m t4dm.mcp.server",
+    "working_directory": "/opt/t4dm"
   }
 }
 EOF
@@ -413,8 +413,8 @@ EOF
 
 ```bash
 # Test MCP server standalone
-cd /opt/world-weaver
-python -m ww.mcp.server
+cd /opt/t4dm
+python -m t4dm.mcp.server
 
 # Should output JSON-RPC initialization
 # Press Ctrl+D to send EOF and trigger response
@@ -428,9 +428,9 @@ python -m ww.mcp.server
 
 ```bash
 # Direct invocation
-cd /opt/world-weaver
+cd /opt/t4dm
 source .venv/bin/activate
-python -m ww.api.server
+python -m t4dm.api.server
 
 # Or using script entry point
 ww-api
@@ -442,17 +442,17 @@ Create `/etc/systemd/system/ww-api.service`:
 
 ```ini
 [Unit]
-Description=World Weaver REST API
+Description=T4DM REST API
 After=network.target neo4j.service qdrant.service
 
 [Service]
 Type=notify
 User=ww
 Group=ww
-WorkingDirectory=/opt/world-weaver
-Environment="PATH=/opt/world-weaver/.venv/bin"
-EnvironmentFile=/opt/world-weaver/.env
-ExecStart=/opt/world-weaver/.venv/bin/uvicorn ww.api.server:app \
+WorkingDirectory=/opt/t4dm
+Environment="PATH=/opt/t4dm/.venv/bin"
+EnvironmentFile=/opt/t4dm/.env
+ExecStart=/opt/t4dm/.venv/bin/uvicorn t4dm.api.server:app \
   --host 0.0.0.0 \
   --port 8765 \
   --workers 4 \
@@ -466,7 +466,7 @@ NoNewPrivileges=true
 PrivateTmp=true
 ProtectSystem=strict
 ProtectHome=true
-ReadWritePaths=/opt/world-weaver/models
+ReadWritePaths=/opt/t4dm/models
 
 [Install]
 WantedBy=multi-user.target
@@ -474,8 +474,8 @@ WantedBy=multi-user.target
 
 Create dedicated user:
 ```bash
-sudo useradd -r -s /bin/false -d /opt/world-weaver ww
-sudo chown -R ww:ww /opt/world-weaver
+sudo useradd -r -s /bin/false -d /opt/t4dm ww
+sudo chown -R ww:ww /opt/t4dm
 ```
 
 Start service:
@@ -550,12 +550,12 @@ sudo systemctl reload nginx
 
 ### Prometheus Metrics (Available)
 
-World Weaver exposes OpenTelemetry metrics convertible to Prometheus format:
+T4DM exposes OpenTelemetry metrics convertible to Prometheus format:
 
 ```bash
 # Enable in .env
-WW_OTEL_ENABLED=true
-WW_OTEL_ENDPOINT=http://localhost:4317
+T4DM_OTEL_ENABLED=true
+T4DM_OTEL_ENDPOINT=http://localhost:4317
 ```
 
 **Available Metrics**:
@@ -571,7 +571,7 @@ WW_OTEL_ENDPOINT=http://localhost:4317
 `/etc/prometheus/prometheus.yml`:
 ```yaml
 scrape_configs:
-  - job_name: 'world-weaver'
+  - job_name: 't4dm'
     scrape_interval: 15s
     static_configs:
       - targets: ['localhost:8765']
@@ -626,7 +626,7 @@ sudo journalctl -u ww-api -f
 docker logs -f ww-api
 
 # Adjust log level
-WW_LOG_LEVEL=DEBUG python -m ww.api.server
+T4DM_LOG_LEVEL=DEBUG python -m t4dm.api.server
 ```
 
 Log format (JSON structured):
@@ -634,7 +634,7 @@ Log format (JSON structured):
 {
   "timestamp": "2025-12-06T10:30:00Z",
   "level": "INFO",
-  "logger": "ww.memory.episodic",
+  "logger": "t4dm.memory.episodic",
   "message": "Created episode",
   "session_id": "default",
   "episode_id": "550e8400-e29b-41d4-a716-446655440000",
@@ -651,7 +651,7 @@ Log format (JSON structured):
 1. **Bind to localhost only** (edit configs):
    - Neo4j: `server.bolt.listen_address=127.0.0.1:7687`
    - Qdrant: `service.host=127.0.0.1`
-   - API: `WW_API_HOST=127.0.0.1` (use reverse proxy for external access)
+   - API: `T4DM_API_HOST=127.0.0.1` (use reverse proxy for external access)
 
 2. **Firewall rules**:
 ```bash
@@ -666,7 +666,7 @@ sudo ufw enable
 
 #### API Key Authentication (Production)
 
-Add to `/opt/world-weaver/t4dm/api/middleware.py`:
+Add to `/opt/t4dm/t4dm/api/middleware.py`:
 ```python
 from fastapi import Security, HTTPException
 from fastapi.security import APIKeyHeader
@@ -674,14 +674,14 @@ from fastapi.security import APIKeyHeader
 api_key_header = APIKeyHeader(name="X-API-Key")
 
 async def verify_api_key(api_key: str = Security(api_key_header)):
-    if api_key != os.getenv("WW_API_KEY"):
+    if api_key != os.getenv("T4DM_API_KEY"):
         raise HTTPException(status_code=403, detail="Invalid API key")
     return api_key
 ```
 
 Set in `.env`:
 ```bash
-WW_API_KEY=$(openssl rand -hex 32)
+T4DM_API_KEY=$(openssl rand -hex 32)
 ```
 
 #### Neo4j Encryption
@@ -696,7 +696,7 @@ dbms.ssl.policy.bolt.public_certificate=public.crt
 
 Update URI:
 ```bash
-WW_NEO4J_URI=bolt+s://localhost:7687
+T4DM_NEO4J_URI=bolt+s://localhost:7687
 ```
 
 ### Secrets Management
@@ -712,7 +712,7 @@ sudo systemctl edit ww-api
 # Add:
 [Service]
 Environment="NEO4J_PASSWORD=<from-vault>"
-Environment="WW_API_KEY=<from-vault>"
+Environment="T4DM_API_KEY=<from-vault>"
 ```
 
 Or use external secrets manager:
@@ -723,7 +723,7 @@ Or use external secrets manager:
 ### File Permissions
 
 ```bash
-cd /opt/world-weaver
+cd /opt/t4dm
 sudo chown -R ww:ww .
 sudo chmod 600 .env
 sudo chmod 700 scripts/*.sh
@@ -760,12 +760,12 @@ sudo cp -r /var/lib/qdrant/snapshots /backups/qdrant-$(date +%Y%m%d)
 
 ### Automated Backup Script
 
-`/opt/world-weaver/scripts/backup.sh`:
+`/opt/t4dm/scripts/backup.sh`:
 ```bash
 #!/bin/bash
 set -euo pipefail
 
-BACKUP_DIR=/backups/world-weaver
+BACKUP_DIR=/backups/t4dm
 DATE=$(date +%Y%m%d-%H%M%S)
 RETENTION_DAYS=30
 
@@ -785,7 +785,7 @@ sudo cp -r /var/lib/qdrant/snapshots "$BACKUP_DIR/qdrant-$DATE"
 
 # Backup config
 echo "Backing up configuration..."
-sudo cp /opt/world-weaver/.env "$BACKUP_DIR/env-$DATE"
+sudo cp /opt/t4dm/.env "$BACKUP_DIR/env-$DATE"
 
 # Cleanup old backups
 echo "Cleaning up old backups (older than $RETENTION_DAYS days)..."
@@ -799,7 +799,7 @@ Add to crontab:
 sudo crontab -e
 
 # Daily backup at 2 AM
-0 2 * * * /opt/world-weaver/scripts/backup.sh >> /var/log/ww-backup.log 2>&1
+0 2 * * * /opt/t4dm/scripts/backup.sh >> /var/log/ww-backup.log 2>&1
 ```
 
 ### Recovery
@@ -810,16 +810,16 @@ sudo systemctl stop ww-api neo4j qdrant
 
 # Restore Neo4j
 sudo rm -rf /var/lib/neo4j/data/*
-sudo tar xzf /backups/world-weaver/neo4j-20251206-020000.tar.gz -C /
+sudo tar xzf /backups/t4dm/neo4j-20251206-020000.tar.gz -C /
 sudo chown -R neo4j:neo4j /var/lib/neo4j/data
 
 # Restore Qdrant
 sudo rm -rf /var/lib/qdrant/storage/*
-sudo cp -r /backups/world-weaver/qdrant-20251206-020000/* /var/lib/qdrant/snapshots/
+sudo cp -r /backups/t4dm/qdrant-20251206-020000/* /var/lib/qdrant/snapshots/
 curl -X POST http://localhost:6333/snapshots/recover?snapshot_name=<snapshot-name>
 
 # Restore config
-sudo cp /backups/world-weaver/env-20251206-020000 /opt/world-weaver/.env
+sudo cp /backups/t4dm/env-20251206-020000 /opt/t4dm/.env
 
 # Restart services
 sudo systemctl start neo4j qdrant ww-api
@@ -858,7 +858,7 @@ nvidia-smi
 
 # Test embedding speed
 python -c "
-from ww.embedding.bge_m3 import get_embedding_provider
+from t4dm.embedding.bge_m3 import get_embedding_provider
 import time
 
 emb = get_embedding_provider()
@@ -870,9 +870,9 @@ print(f'Device: {emb.device}')
 ```
 
 **Solutions**:
-1. **Enable GPU**: Set `WW_EMBEDDING_DEVICE=cuda:0` in `.env`
-2. **Enable FP16**: Set `WW_EMBEDDING_USE_FP16=true` (2x speedup)
-3. **Reduce max_length**: Set `WW_EMBEDDING_MAX_LENGTH=256` if long texts not needed
+1. **Enable GPU**: Set `T4DM_EMBEDDING_DEVICE=cuda:0` in `.env`
+2. **Enable FP16**: Set `T4DM_EMBEDDING_USE_FP16=true` (2x speedup)
+3. **Reduce max_length**: Set `T4DM_EMBEDDING_MAX_LENGTH=256` if long texts not needed
 4. **Batch requests**: Use SDK batch methods instead of individual calls
 
 ---
@@ -891,7 +891,7 @@ cypher-shell -u neo4j -p "$NEO4J_PASSWORD" -a bolt://localhost:7687
 ```
 
 **Solutions**:
-1. **Increase timeout**: Set `WW_NEO4J_CONNECTION_TIMEOUT=60` in `.env`
+1. **Increase timeout**: Set `T4DM_NEO4J_CONNECTION_TIMEOUT=60` in `.env`
 2. **Check password**: Verify `NEO4J_PASSWORD` matches database
 3. **Check network**: Ensure `127.0.0.1:7687` is accessible
 4. **Review logs**: `sudo journalctl -u neo4j -f`
@@ -912,8 +912,8 @@ curl http://localhost:6333/collections/ww-episodes-default
 ```
 
 **Solutions**:
-1. **Initialize database**: `python -m ww.scripts.init_database`
-2. **Verify session ID**: Ensure `WW_SESSION_ID` matches collection name
+1. **Initialize database**: `python -m t4dm.scripts.init_database`
+2. **Verify session ID**: Ensure `T4DM_SESSION_ID` matches collection name
 3. **Check Qdrant logs**: `sudo journalctl -u qdrant -f`
 
 ---
@@ -934,8 +934,8 @@ sudo ps aux --sort=-%mem | head -20
 
 **Solutions**:
 1. **Reduce Neo4j heap**: Set `dbms.memory.heap.max_size=1G` (down from 2G)
-2. **Limit API workers**: Set `WW_API_WORKERS=2` (down from 4)
-3. **Use CPU instead of GPU**: Set `WW_EMBEDDING_DEVICE=cpu` (frees VRAM)
+2. **Limit API workers**: Set `T4DM_API_WORKERS=2` (down from 4)
+3. **Use CPU instead of GPU**: Set `T4DM_EMBEDDING_DEVICE=cpu` (frees VRAM)
 4. **Enable consolidation**: Periodically run `curl -X POST http://localhost:8765/api/v1/consolidate`
 
 ---
@@ -966,14 +966,14 @@ du -sh /var/lib/qdrant/storage
 **Diagnosis**:
 ```bash
 # Test MCP server manually
-cd /opt/world-weaver
-python -m ww.mcp.server
+cd /opt/t4dm
+python -m t4dm.mcp.server
 # Type: {"method": "initialize", "id": 1}
 # Press Ctrl+D
 ```
 
 **Solutions**:
-1. **Check Python path**: Use absolute path in config: `/opt/world-weaver/.venv/bin/python`
+1. **Check Python path**: Use absolute path in config: `/opt/t4dm/.venv/bin/python`
 2. **Verify environment**: Ensure all env vars are set in config
 3. **Check logs**: Look in Claude Desktop logs (`~/Library/Logs/Claude/` on macOS)
 4. **Test dependencies**: `pip list | grep -E "mcp|fastmcp"`
@@ -1017,13 +1017,13 @@ storage:
 
 ```bash
 # Increase worker count (1 per CPU core)
-WW_API_WORKERS=8
+T4DM_API_WORKERS=8
 
 # Enable connection pooling
-WW_NEO4J_MAX_CONNECTION_POOL_SIZE=100
+T4DM_NEO4J_MAX_CONNECTION_POOL_SIZE=100
 
 # Reduce batch size for lower latency
-WW_EMBEDDING_BATCH_SIZE=16
+T4DM_EMBEDDING_BATCH_SIZE=16
 ```
 
 ---
@@ -1031,7 +1031,7 @@ WW_EMBEDDING_BATCH_SIZE=16
 ## Support Resources
 
 - **Documentation**: `/mnt/projects/t4d/t4dm/docs/`
-- **GitHub Issues**: https://github.com/astoreyai/world-weaver/issues
+- **GitHub Issues**: https://github.com/astoreyai/t4dm/issues
 - **Neo4j Docs**: https://neo4j.com/docs/
 - **Qdrant Docs**: https://qdrant.tech/documentation/
 - **MCP Spec**: https://spec.modelcontextprotocol.io/

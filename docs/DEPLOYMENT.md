@@ -1,4 +1,4 @@
-# World Weaver Deployment Guide
+# T4DM Deployment Guide
 
 ## Prerequisites
 
@@ -10,8 +10,8 @@
 
 1. **Clone and configure**
 ```bash
-git clone https://github.com/astoreyai/world-weaver
-cd world-weaver
+git clone https://github.com/astoreyai/t4dm
+cd t4dm
 cp .env.example .env
 ./scripts/setup-env.sh  # Generates secure passwords
 ```
@@ -24,7 +24,7 @@ docker-compose up -d
 3. **Run API locally** (for development)
 ```bash
 pip install -e ".[api]"
-python -m ww.api.server
+python -m t4dm.api.server
 ```
 
 4. **Access API**
@@ -64,38 +64,38 @@ NEO4J_USER=neo4j
 NEO4J_PASSWORD=<secure-password>
 
 # Must match Neo4j
-WW_NEO4J_URI=bolt://localhost:7687
-WW_NEO4J_USER=neo4j
-WW_NEO4J_PASSWORD=<same-password>
+T4DM_NEO4J_URI=bolt://localhost:7687
+T4DM_NEO4J_USER=neo4j
+T4DM_NEO4J_PASSWORD=<same-password>
 ```
 
 ### Optional Variables
 
 ```bash
 # Session isolation
-WW_SESSION_ID=production
+T4DM_SESSION_ID=production
 
 # Qdrant (vector storage)
-WW_QDRANT_URL=http://localhost:6333
+T4DM_QDRANT_URL=http://localhost:6333
 
 # Embedding model
-WW_EMBEDDING_MODEL=BAAI/bge-m3
-WW_EMBEDDING_DIMENSION=1024
-WW_EMBEDDING_DEVICE=cuda:0  # or 'cpu'
+T4DM_EMBEDDING_MODEL=BAAI/bge-m3
+T4DM_EMBEDDING_DIMENSION=1024
+T4DM_EMBEDDING_DEVICE=cuda:0  # or 'cpu'
 
 # API settings
-WW_API_HOST=0.0.0.0
-WW_API_PORT=8765
-WW_API_WORKERS=4
+T4DM_API_HOST=0.0.0.0
+T4DM_API_PORT=8765
+T4DM_API_WORKERS=4
 
 # Memory parameters
-WW_FSRS_DEFAULT_STABILITY=1.0
-WW_FSRS_RETENTION_TARGET=0.9
-WW_HEBBIAN_LEARNING_RATE=0.1
+T4DM_FSRS_DEFAULT_STABILITY=1.0
+T4DM_FSRS_RETENTION_TARGET=0.9
+T4DM_HEBBIAN_LEARNING_RATE=0.1
 
 # Observability
-WW_OTEL_ENABLED=true
-WW_OTEL_ENDPOINT=http://jaeger:4317
+T4DM_OTEL_ENABLED=true
+T4DM_OTEL_ENDPOINT=http://jaeger:4317
 ```
 
 ## Production Checklist
@@ -107,21 +107,21 @@ WW_OTEL_ENDPOINT=http://jaeger:4317
 - [ ] Enable Qdrant API key: `QDRANT__SERVICE__API_KEY=<key>`
 - [ ] **Enable API key authentication** (required for production):
   ```bash
-  WW_API_KEY=$(openssl rand -hex 32)
-  # API key auto-required when WW_ENVIRONMENT=production and WW_API_KEY is set
+  T4DM_API_KEY=$(openssl rand -hex 32)
+  # API key auto-required when T4DM_ENVIRONMENT=production and T4DM_API_KEY is set
   # Pass via X-API-Key header on all requests
   ```
   - Exempt endpoints: `/`, `/api/v1/health`, `/docs`, `/redoc`, `/openapi.json`
-- [ ] Configure CORS: `WW_API_CORS_ORIGINS=https://yourdomain.com`
-  - **Note**: Wildcards (`*`) are rejected in production (`WW_ENVIRONMENT=production`)
+- [ ] Configure CORS: `T4DM_API_CORS_ORIGINS=https://yourdomain.com`
+  - **Note**: Wildcards (`*`) are rejected in production (`T4DM_ENVIRONMENT=production`)
   - Allowed headers: `Authorization`, `Content-Type`, `X-Session-ID`, `X-Request-ID`, `X-API-Key`, `X-Admin-Key`
 - [ ] Run behind reverse proxy (nginx/traefik) with TLS
 - [ ] Bind ports to 127.0.0.1 (not 0.0.0.0) when using reverse proxy
-- [ ] Set `WW_ENVIRONMENT=production` to enable security validators
+- [ ] Set `T4DM_ENVIRONMENT=production` to enable security validators
 
 ### Performance
 
-- [ ] Use GPU for embeddings: `WW_EMBEDDING_DEVICE=cuda:0`
+- [ ] Use GPU for embeddings: `T4DM_EMBEDDING_DEVICE=cuda:0`
 - [ ] Configure API workers appropriately (see Worker Configuration section below)
 - [ ] Tune Neo4j memory in docker-compose:
   ```yaml
@@ -143,7 +143,7 @@ WW_OTEL_ENDPOINT=http://jaeger:4317
 
 ### Monitoring
 
-- [ ] Enable OpenTelemetry: `WW_OTEL_ENABLED=true`
+- [ ] Enable OpenTelemetry: `T4DM_OTEL_ENABLED=true`
 - [ ] Configure health check alerts
 - [ ] Set up log aggregation
 
@@ -175,7 +175,7 @@ WW_OTEL_ENDPOINT=http://jaeger:4317
 
 ### Overview
 
-The `WW_API_WORKERS` setting controls how many Uvicorn worker processes handle requests.
+The `T4DM_API_WORKERS` setting controls how many Uvicorn worker processes handle requests.
 Each worker is a separate Python process with its own memory space.
 
 **Default**: 1 worker (recommended for development and small deployments)
@@ -194,10 +194,10 @@ Each worker is a separate Python process with its own memory space.
 
 ```bash
 # For CPU-bound workloads (embedding generation)
-WW_API_WORKERS=$(($(nproc) - 1))
+T4DM_API_WORKERS=$(($(nproc) - 1))
 
 # For I/O-bound workloads (database queries)
-WW_API_WORKERS=$(($(nproc) * 2))
+T4DM_API_WORKERS=$(($(nproc) * 2))
 ```
 
 ### Memory Considerations
@@ -222,7 +222,7 @@ Available: 16GB
 
 **IMPORTANT**: The built-in rate limiter is **per-worker, not distributed**.
 
-With `WW_API_WORKERS=4` and rate limit of 100 req/min:
+With `T4DM_API_WORKERS=4` and rate limit of 100 req/min:
 - Each worker allows 100 req/min independently
 - Effective limit: 400 req/min (4 × 100)
 
@@ -230,7 +230,7 @@ With `WW_API_WORKERS=4` and rate limit of 100 req/min:
 
 1. **Option A: Keep single worker** (simplest)
    ```bash
-   WW_API_WORKERS=1  # Built-in rate limiter works correctly
+   T4DM_API_WORKERS=1  # Built-in rate limiter works correctly
    ```
 
 2. **Option B: Use nginx rate limiting** (recommended for production)
@@ -247,23 +247,23 @@ With `WW_API_WORKERS=4` and rate limit of 100 req/min:
 3. **Option C: Use Redis-based rate limiter** (for distributed deployments)
    ```bash
    # Future enhancement - not yet implemented
-   WW_RATE_LIMITER_BACKEND=redis
-   WW_REDIS_URL=redis://localhost:6379
+   T4DM_RATE_LIMITER_BACKEND=redis
+   T4DM_REDIS_URL=redis://localhost:6379
    ```
 
 ### Configuration Example
 
 ```bash
 # .env for 8-core, 32GB production server
-WW_API_WORKERS=8
-WW_API_HOST=127.0.0.1  # Behind reverse proxy
-WW_API_PORT=8765
+T4DM_API_WORKERS=8
+T4DM_API_HOST=127.0.0.1  # Behind reverse proxy
+T4DM_API_PORT=8765
 
 # Neo4j tuning for 8 workers
-WW_NEO4J_POOL_SIZE=100  # 100 connections shared across workers
+T4DM_NEO4J_POOL_SIZE=100  # 100 connections shared across workers
 
 # Embedding cache (per-worker)
-WW_EMBEDDING_CACHE_SIZE=500  # Reduce if memory constrained
+T4DM_EMBEDDING_CACHE_SIZE=500  # Reduce if memory constrained
 ```
 
 ## Scaling
@@ -314,19 +314,19 @@ docker-compose logs ww-api
 
 3. Verify environment:
 ```bash
-docker exec ww-api env | grep WW_
+docker exec ww-api env | grep T4DM_
 ```
 
 ### Slow Embedding
 
-1. Use GPU if available: `WW_EMBEDDING_DEVICE=cuda:0`
-2. Reduce batch size: `WW_EMBEDDING_BATCH_SIZE=16`
+1. Use GPU if available: `T4DM_EMBEDDING_DEVICE=cuda:0`
+2. Reduce batch size: `T4DM_EMBEDDING_BATCH_SIZE=16`
 3. First request loads model (~30s), subsequent requests are fast
 
 ### Memory Issues
 
 1. Reduce Neo4j heap: `NEO4J_dbms_memory_heap_max__size=1G`
-2. Use FP16 embeddings: `WW_EMBEDDING_USE_FP16=true`
+2. Use FP16 embeddings: `T4DM_EMBEDDING_USE_FP16=true`
 3. Limit concurrent requests via API workers
 
 ### Connection Refused
@@ -405,18 +405,18 @@ kubectl apply -k deploy/kubernetes/overlays/prod
 
 ```bash
 # Add dependencies
-helm dependency update deploy/helm/world-weaver
+helm dependency update deploy/helm/t4dm
 
 # Install with secrets
-helm install ww deploy/helm/world-weaver \
-  --namespace world-weaver \
+helm install ww deploy/helm/t4dm \
+  --namespace t4dm \
   --create-namespace \
   --set secrets.jwtSecret="$(openssl rand -base64 32)" \
   --set secrets.databasePassword="$(openssl rand -base64 16)" \
   --set secrets.neo4jPassword="$(openssl rand -base64 16)"
 
 # Upgrade
-helm upgrade ww deploy/helm/world-weaver --reuse-values
+helm upgrade ww deploy/helm/t4dm --reuse-values
 ```
 
 ### Control Plane API (Phase 9)
@@ -475,7 +475,7 @@ The system auto-detects the secrets backend:
 | `file` | File-based (`/run/secrets/`) | Docker/K8s secrets |
 | `chained` | File fallback to env | Production |
 
-Override with `WW_SECRETS_BACKEND=<backend>`.
+Override with `T4DM_SECRETS_BACKEND=<backend>`.
 
 ### Feature Flags (Phase 9)
 
@@ -491,4 +491,4 @@ Control subsystems at runtime without restart:
 | `read_only_mode` | Block all writes | `false` |
 | `maintenance_mode` | Block all requests | `false` |
 
-Set via environment: `WW_FLAG_<NAME>=true|false`
+Set via environment: `T4DM_FLAG_<NAME>=true|false`

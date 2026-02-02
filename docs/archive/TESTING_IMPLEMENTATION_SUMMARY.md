@@ -1,12 +1,12 @@
 # Testing Infrastructure Implementation Summary
 
-**Project**: World Weaver (Tripartite Memory System)
+**Project**: T4DM (Tripartite Memory System)
 **Date**: 2025-11-27
 **Status**: COMPLETE
 
 ## Overview
 
-Successfully implemented comprehensive test infrastructure for World Weaver with property-based testing, extensive mocking, CI/CD integration, and detailed documentation.
+Successfully implemented comprehensive test infrastructure for T4DM with property-based testing, extensive mocking, CI/CD integration, and detailed documentation.
 
 ## Files Implemented
 
@@ -119,8 +119,8 @@ Tests validate:
 ### Storage Backends
 
 ```
-mock_qdrant_store         → AsyncMock vector store (7 methods)
-mock_neo4j_store          → AsyncMock graph store (9 methods)
+mock_t4dx_vector_adapter         → AsyncMock vector store (7 methods)
+mock_t4dx_graph_adapter          → AsyncMock graph store (9 methods)
 mock_embedding_provider   → AsyncMock embeddings (2 methods)
 ```
 
@@ -222,11 +222,11 @@ open htmlcov/index.html
 
 ```python
 @pytest.mark.asyncio
-async def test_vector_search(mock_qdrant_store):
-    mock_qdrant_store.search.return_value = [
+async def test_vector_search(mock_t4dx_vector_adapter):
+    mock_t4dx_vector_adapter.search.return_value = [
         {"id": "1", "score": 0.95}
     ]
-    results = await mock_qdrant_store.search([0.1] * 1024)
+    results = await mock_t4dx_vector_adapter.search([0.1] * 1024)
     assert len(results) == 1
 ```
 

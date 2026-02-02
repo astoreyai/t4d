@@ -1,6 +1,6 @@
 # Persistence Layer
 
-World Weaver implements durable persistence with write-ahead logging, checkpointing, and recovery mechanisms.
+T4DM implements durable persistence with write-ahead logging, checkpointing, and recovery mechanisms.
 
 ## Overview
 

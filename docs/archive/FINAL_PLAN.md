@@ -1,4 +1,4 @@
-# World Weaver: FINAL EXECUTION PLAN
+# T4DM: FINAL EXECUTION PLAN
 ## Single Source of Truth - All Other Plans Superseded
 
 **Created**: 2026-01-17
@@ -101,7 +101,7 @@ if updated_embedding is not None:
 **Fix in `episodic.py` `__init__()`:
 ```python
 # After existing bridge container init
-from ww.bridges import create_ff_capsule_bridge
+from t4dm.bridges import create_ff_capsule_bridge
 
 if self._ff_encoder_enabled and self._capsule_layer_enabled:
     self._ff_capsule_bridge = create_ff_capsule_bridge(

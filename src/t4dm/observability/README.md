@@ -2,7 +2,7 @@
 
 **6 files | ~2,200 lines | Centrality: 6**
 
-The observability module provides integrated monitoring, tracing, logging, and health checks for World Weaver with OpenTelemetry, Prometheus, and structured JSON logging.
+The observability module provides integrated monitoring, tracing, logging, and health checks for T4DM with OpenTelemetry, Prometheus, and structured JSON logging.
 
 ## Architecture Overview
 
@@ -61,11 +61,11 @@ The observability module provides integrated monitoring, tracing, logging, and h
 W3C trace context propagation with secure TLS:
 
 ```python
-from ww.observability import init_tracing, traced, trace_span, get_tracer
+from t4dm.observability import init_tracing, traced, trace_span, get_tracer
 
 # Initialize tracing
 tracer = init_tracing(
-    service_name="world-weaver",
+    service_name="t4dm",
     otlp_endpoint="https://otel-collector:4317"
 )
 
@@ -93,13 +93,13 @@ context = get_trace_context()
 
 **Configuration**:
 ```bash
-WW_OTEL_ENABLED=true
-WW_OTEL_ENDPOINT=https://otel-collector:4317
-WW_OTEL_CERT_FILE=/etc/ssl/certs/ca-bundle.crt
-WW_OTEL_HEADERS='{"Authorization": "Bearer token"}'
-WW_OTEL_SERVICE_NAME=world-weaver
-WW_OTEL_BATCH_DELAY_MS=5000
-WW_OTEL_MAX_EXPORT_BATCH_SIZE=512
+T4DM_OTEL_ENABLED=true
+T4DM_OTEL_ENDPOINT=https://otel-collector:4317
+T4DM_OTEL_CERT_FILE=/etc/ssl/certs/ca-bundle.crt
+T4DM_OTEL_HEADERS='{"Authorization": "Bearer token"}'
+T4DM_OTEL_SERVICE_NAME=t4dm
+T4DM_OTEL_BATCH_DELAY_MS=5000
+T4DM_OTEL_MAX_EXPORT_BATCH_SIZE=512
 ```
 
 ### Metrics (Prometheus)
@@ -107,7 +107,7 @@ WW_OTEL_MAX_EXPORT_BATCH_SIZE=512
 Dual-mode: uses `prometheus_client` when available, falls back to internal:
 
 ```python
-from ww.observability import (
+from t4dm.observability import (
     get_prometheus_metrics, track_latency, count_calls,
     PROMETHEUS_AVAILABLE
 )
@@ -152,7 +152,7 @@ content_type = metrics.get_content_type()
 Thread-safe application-level metrics:
 
 ```python
-from ww.observability import (
+from t4dm.observability import (
     get_metrics, timed_operation, Timer, AsyncTimer
 )
 
@@ -191,7 +191,7 @@ summary = collector.get_summary()
 JSON-structured logging with security hardening:
 
 ```python
-from ww.observability import (
+from t4dm.observability import (
     configure_logging, get_logger, OperationLogger,
     log_operation, set_context, clear_context
 )
@@ -200,11 +200,11 @@ from ww.observability import (
 configure_logging(
     level="INFO",
     json_output=True,
-    log_file="/var/log/ww.log"
+    log_file="/var/log/t4dm.log"
 )
 
 # Get logger
-logger = get_logger("ww.memory")
+logger = get_logger("t4dm.memory")
 logger.info("Memory initialized", extra={"session_id": "abc"})
 
 # Set context for all logs in this scope
@@ -229,7 +229,7 @@ async def recall(query: str):
 {
   "timestamp": "2024-01-15T10:30:45.123Z",
   "level": "INFO",
-  "logger": "ww.memory",
+  "logger": "t4dm.memory",
   "message": "Episode created",
   "session_id": "abc123",
   "operation_id": "create-456",
@@ -245,7 +245,7 @@ async def recall(query: str):
 Security-focused event logging:
 
 ```python
-from ww.observability.logging import get_audit_logger, AuditEventType
+from t4dm.observability.logging import get_audit_logger, AuditEventType
 
 audit = get_audit_logger()
 
@@ -299,7 +299,7 @@ audit.log_admin_action(action="config_change", key="max_sessions")
 Async component health monitoring:
 
 ```python
-from ww.observability import (
+from t4dm.observability import (
     get_health_checker, HealthStatus, ComponentHealth, SystemHealth
 )
 
@@ -347,12 +347,12 @@ init_tracing(console_export=True)  # Spans to console
 ### Production
 
 ```python
-configure_logging(level="INFO", json_output=True, log_file="/var/log/ww.log")
+configure_logging(level="INFO", json_output=True, log_file="/var/log/t4dm.log")
 
 # Environment variables
-WW_OTEL_ENABLED=true
-WW_OTEL_ENDPOINT=https://otel-collector:4317
-WW_OTEL_CERT_FILE=/etc/ssl/certs/ca-bundle.crt
+T4DM_OTEL_ENABLED=true
+T4DM_OTEL_ENDPOINT=https://otel-collector:4317
+T4DM_OTEL_CERT_FILE=/etc/ssl/certs/ca-bundle.crt
 ```
 
 ## Public API
@@ -384,7 +384,7 @@ InternalCounter, InternalGauge, InternalHistogram
 ## Complete Example
 
 ```python
-from ww.observability import (
+from t4dm.observability import (
     configure_logging, init_tracing, get_health_checker,
     get_metrics, get_prometheus_metrics, traced, OperationLogger
 )
@@ -428,7 +428,7 @@ async def metrics_endpoint():
 pytest tests/observability/ -v
 
 # With coverage
-pytest tests/observability/ --cov=ww.observability
+pytest tests/observability/ --cov=t4dm.observability
 
 # Security tests (log injection)
 pytest tests/observability/test_logging.py -v -k injection

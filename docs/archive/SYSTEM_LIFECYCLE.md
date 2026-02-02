@@ -1,4 +1,4 @@
-# World Weaver System Lifecycle
+# T4DM System Lifecycle
 
 **Version**: 1.0.0
 **Status**: Production Ready
@@ -6,7 +6,7 @@
 
 ## Overview
 
-World Weaver is designed as an **always-on memory system** that survives crashes and restarts without data loss. This document explains the complete system lifecycle including startup, operation, and shutdown.
+T4DM is designed as an **always-on memory system** that survives crashes and restarts without data loss. This document explains the complete system lifecycle including startup, operation, and shutdown.
 
 ## Architecture
 
@@ -354,9 +354,9 @@ Checkpoint(
 ### Systemd Service
 
 ```ini
-# /etc/systemd/system/world-weaver.service
+# /etc/systemd/system/t4dm.service
 [Unit]
-Description=World Weaver Memory System
+Description=T4DM Memory System
 After=network.target qdrant.service neo4j.service
 Wants=qdrant.service neo4j.service
 
@@ -364,8 +364,8 @@ Wants=qdrant.service neo4j.service
 Type=notify
 User=ww
 Group=ww
-WorkingDirectory=/opt/world-weaver
-ExecStart=/opt/world-weaver/venv/bin/python -m ww.server
+WorkingDirectory=/opt/t4dm
+ExecStart=/opt/t4dm/venv/bin/python -m ww.server
 ExecReload=/bin/kill -HUP $MAINPID
 
 # Graceful shutdown
@@ -383,8 +383,8 @@ MemoryMax=8G
 CPUQuota=400%
 
 # Environment
-Environment=WW_DATA_DIR=/var/lib/world-weaver
-Environment=WW_LOG_LEVEL=INFO
+Environment=T4DM_DATA_DIR=/var/lib/t4dm
+Environment=T4DM_LOG_LEVEL=INFO
 
 [Install]
 WantedBy=multi-user.target
@@ -397,16 +397,16 @@ WantedBy=multi-user.target
 version: '3.8'
 
 services:
-  world-weaver:
-    image: world-weaver:latest
+  t4dm:
+    image: t4dm:latest
     restart: always
     stop_grace_period: 60s
     volumes:
-      - ww-data:/var/lib/world-weaver
+      - ww-data:/var/lib/t4dm
     environment:
-      - WW_DATA_DIR=/var/lib/world-weaver
-      - WW_CHECKPOINT_INTERVAL=300
-      - WW_WAL_SYNC_MODE=fsync
+      - T4DM_DATA_DIR=/var/lib/t4dm
+      - T4DM_CHECKPOINT_INTERVAL=300
+      - T4DM_WAL_SYNC_MODE=fsync
     depends_on:
       qdrant:
         condition: service_healthy
@@ -460,7 +460,7 @@ volumes:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: world-weaver
+  name: t4dm
 spec:
   replicas: 1  # Single instance (stateful)
   strategy:
@@ -469,13 +469,13 @@ spec:
     spec:
       terminationGracePeriodSeconds: 60
       containers:
-      - name: world-weaver
-        image: world-weaver:latest
+      - name: t4dm
+        image: t4dm:latest
         ports:
         - containerPort: 8080
         volumeMounts:
         - name: data
-          mountPath: /var/lib/world-weaver
+          mountPath: /var/lib/t4dm
         livenessProbe:
           httpGet:
             path: /health
@@ -524,7 +524,7 @@ spec:
 ```yaml
 # prometheus/alerts.yml
 groups:
-- name: world-weaver
+- name: t4dm
   rules:
   - alert: WWCheckpointStale
     expr: time() - ww_checkpoint_timestamp > 600
@@ -557,14 +557,14 @@ groups:
 ```bash
 # Daily backup script
 #!/bin/bash
-BACKUP_DIR=/backup/world-weaver/$(date +%Y%m%d)
+BACKUP_DIR=/backup/t4dm/$(date +%Y%m%d)
 mkdir -p $BACKUP_DIR
 
 # 1. Create fresh checkpoint (forces fsync)
 curl -X POST http://localhost:8080/api/v1/checkpoint
 
 # 2. Copy checkpoint files
-cp -a /var/lib/world-weaver/checkpoints/* $BACKUP_DIR/
+cp -a /var/lib/t4dm/checkpoints/* $BACKUP_DIR/
 
 # 3. Backup Qdrant
 qdrant-backup --output $BACKUP_DIR/qdrant/
@@ -585,13 +585,13 @@ rm -rf $BACKUP_DIR
 BACKUP_FILE=$1
 
 # 1. Stop service
-systemctl stop world-weaver
+systemctl stop t4dm
 
 # 2. Extract backup
 tar -xzf $BACKUP_FILE -C /tmp/restore
 
 # 3. Restore checkpoint
-cp /tmp/restore/checkpoints/* /var/lib/world-weaver/checkpoints/
+cp /tmp/restore/checkpoints/* /var/lib/t4dm/checkpoints/
 
 # 4. Restore Qdrant
 qdrant-restore --input /tmp/restore/qdrant/
@@ -600,10 +600,10 @@ qdrant-restore --input /tmp/restore/qdrant/
 neo4j-admin load --from=/tmp/restore/neo4j.dump --force
 
 # 6. Clear WAL (will replay from checkpoint)
-rm -rf /var/lib/world-weaver/wal/*
+rm -rf /var/lib/t4dm/wal/*
 
 # 7. Start service (warm start from restored checkpoint)
-systemctl start world-weaver
+systemctl start t4dm
 ```
 
 ## FAQ
@@ -619,7 +619,7 @@ Maximum loss: Operations between last fsync and crash (typically milliseconds wi
 
 ### Q: Can I run multiple instances?
 
-**A**: Not currently. World Weaver is designed as a **single-instance stateful service**. The in-memory learning state (gate/scorer weights, eligibility traces) cannot be easily distributed.
+**A**: Not currently. T4DM is designed as a **single-instance stateful service**. The in-memory learning state (gate/scorer weights, eligibility traces) cannot be easily distributed.
 
 Future: Possible leader-follower setup where followers handle reads and replicate WAL from leader.
 
@@ -642,8 +642,8 @@ Checkpoint files: ~1-10MB each (compressed), keep last 5.
 **A**:
 ```bash
 # Option 1: Delete persistence data
-rm -rf /var/lib/world-weaver/*
-systemctl start world-weaver
+rm -rf /var/lib/t4dm/*
+systemctl start t4dm
 
 # Option 2: API call
 curl -X POST http://localhost:8080/api/v1/reset?confirm=true
@@ -652,5 +652,5 @@ curl -X POST http://localhost:8080/api/v1/reset?confirm=true
 ---
 
 **Document Version**: 1.0.0
-**Author**: World Weaver Team
+**Author**: T4DM Team
 **Review Date**: 2025-12-08

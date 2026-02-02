@@ -1,4 +1,4 @@
-# World Weaver: Technical AI/ML Systems Review
+# T4DM: Technical AI/ML Systems Review
 
 **Reviewer**: AI Systems Architect
 **Date**: 2025-12-04
@@ -102,13 +102,13 @@ This is correct but oversimplified. NTMs use content-based and location-based ad
 
 **Table Comparison** (Journal, lines 139-154):
 ```
-Property      | NTM/Memory Net | RAG | World Weaver
+Property      | NTM/Memory Net | RAG | T4DM
 --------------|----------------|-----|-------------
 Differentiable| Yes            | No  | No
 Structured    | No             | No  | Yes
 ```
 
-**Issue**: Calling NTM memory "not structured" is misleading. NTMs have structured addressing (content + location-based). What World Weaver means is "not typed" (no episodic/semantic/procedural distinction).
+**Issue**: Calling NTM memory "not structured" is misleading. NTMs have structured addressing (content + location-based). What T4DM means is "not typed" (no episodic/semantic/procedural distinction).
 
 **Severity**: **MINOR** (3/10)
 
@@ -158,7 +158,7 @@ Park et al.'s Generative Agents paper does implement memory streams with reflect
 ### 2.5 CoALA Framework
 
 **Claim** (IEEE, lines 83-84):
-> "The Cognitive Architectures for Language Agents (CoALA) framework provides a principled approach to modular memory components, directly comparable to World Weaver's architecture."
+> "The Cognitive Architectures for Language Agents (CoALA) framework provides a principled approach to modular memory components, directly comparable to T4DM's architecture."
 
 **Technical Reality**: ✅ **ACCURATE**
 
@@ -300,7 +300,7 @@ The comparisons are balanced. The papers acknowledge that different systems opti
 
 ### 4.3 Novelty Claim Assessment
 
-**Claim** (Implicit throughout): World Weaver's tripartite architecture + hybrid retrieval + adaptive skills is novel.
+**Claim** (Implicit throughout): T4DM's tripartite architecture + hybrid retrieval + adaptive skills is novel.
 
 **Technical Reality**: ✅ **JUSTIFIED**
 
@@ -591,7 +591,7 @@ The precision degradation is the bigger concern. This is expected: more candidat
 
 **Claim** (Journal, lines 139-154):
 ```
-Property         | NTM/Memory Net | RAG | World Weaver
+Property         | NTM/Memory Net | RAG | T4DM
 -----------------|----------------|-----|-------------
 Differentiable   | Yes            | No  | No
 Consolidation    | No             | No  | Yes
@@ -600,7 +600,7 @@ Decay dynamics   | No             | No  | Yes
 
 **Technical Reality**: ⚠️ **MOSTLY ACCURATE, ONE ISSUE**
 
-**Issue**: NTMs technically have decay if you count attention-based "forgetting" (writing to memory cells overwrite old content). But this isn't the same as World Weaver's FSRS decay.
+**Issue**: NTMs technically have decay if you count attention-based "forgetting" (writing to memory cells overwrite old content). But this isn't the same as T4DM's FSRS decay.
 
 **Severity**: TRIVIAL (1/10)
 
@@ -610,11 +610,11 @@ Decay dynamics   | No             | No  | Yes
 
 ### 9.2 MemGPT Comparison
 
-**Claim** (Implicit): World Weaver differs from MemGPT by having typed memories and consolidation.
+**Claim** (Implicit): T4DM differs from MemGPT by having typed memories and consolidation.
 
 **Technical Reality**: ✅ **ACCURATE**
 
-MemGPT focuses on context management (paging), World Weaver on memory transformation. The distinction is clear.
+MemGPT focuses on context management (paging), T4DM on memory transformation. The distinction is clear.
 
 **Severity**: N/A (correct)
 
@@ -724,11 +724,11 @@ However, these are **fixable issues** that don't undermine the core contribution
 
 ## 14. Conclusion
 
-The World Weaver papers present technically sound work with accurate characterizations of embedding models, retrieval methods, and existing memory systems. The hybrid retrieval approach is well-designed, and the skillbook metrics are thoughtful. The main weaknesses are underestimation of consolidation complexity at scale (particularly HDBSCAN on high-dimensional embeddings) and missing implementation details.
+The T4DM papers present technically sound work with accurate characterizations of embedding models, retrieval methods, and existing memory systems. The hybrid retrieval approach is well-designed, and the skillbook metrics are thoughtful. The main weaknesses are underestimation of consolidation complexity at scale (particularly HDBSCAN on high-dimensional embeddings) and missing implementation details.
 
 **The work is publication-ready with moderate revisions focused on consolidation scalability analysis.**
 
-The intellectual honesty in acknowledging limitations is a major strength. Rather than overclaiming, the papers position World Weaver as a step toward solving agent memory, not a complete solution. This positions the work appropriately within the research landscape.
+The intellectual honesty in acknowledging limitations is a major strength. Rather than overclaiming, the papers position T4DM as a step toward solving agent memory, not a complete solution. This positions the work appropriately within the research landscape.
 
 **Recommendation**: ACCEPT with revisions focused on consolidation complexity (HDBSCAN dimensionality reduction, runtime analysis) and entity extraction metrics (precision + recall).
 

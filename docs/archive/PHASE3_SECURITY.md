@@ -1,7 +1,7 @@
 # Phase 3 Security Implementation
 
 ## Overview
-Implemented comprehensive input sanitization and authentication context for World Weaver MCP gateway.
+Implemented comprehensive input sanitization and authentication context for T4DM MCP gateway.
 
 ## Files Modified
 
@@ -137,7 +137,7 @@ Implemented comprehensive input sanitization and authentication context for Worl
 
 ### Sanitization in MCP Tools
 ```python
-from ww.mcp.validation import (
+from t4dm.mcp.validation import (
     sanitize_string,
     sanitize_identifier,
     validate_limit,
@@ -156,7 +156,7 @@ async def create_episode(content: str, context: dict, limit: int):
 
 ### Authentication Context Usage
 ```python
-from ww.mcp.memory_gateway import (
+from t4dm.mcp.memory_gateway import (
     set_auth_context,
     get_auth_context,
     require_auth,

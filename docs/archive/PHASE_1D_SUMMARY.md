@@ -204,8 +204,8 @@ This multi-factor approach provides robust value estimates for RPE computation.
 ## Usage Example
 
 ```python
-from ww.consolidation.sleep import SleepConsolidation
-from ww.nca.vta import VTACircuit, VTAConfig
+from t4dm.consolidation.sleep import SleepConsolidation
+from t4dm.nca.vta import VTACircuit, VTAConfig
 
 # Create VTA circuit
 vta_config = VTAConfig(

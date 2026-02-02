@@ -1,4 +1,4 @@
-# World Weaver NCA: Biologically-Grounded Visualization Telemetry Specification
+# T4DM NCA: Biologically-Grounded Visualization Telemetry Specification
 
 **Date**: 2026-01-01
 **Version**: 1.0
@@ -6,7 +6,7 @@
 
 ## Executive Summary
 
-This document specifies visualization telemetry for World Weaver's Neural Cellular Automata (NCA) memory system from a computational neuroscience perspective. The system models 6 neuromodulator systems, hippocampal circuits, and homeostatic mechanisms. Current visualization coverage is incomplete (35-68%), indicating substantial blind spots in system observability.
+This document specifies visualization telemetry for T4DM's Neural Cellular Automata (NCA) memory system from a computational neuroscience perspective. The system models 6 neuromodulator systems, hippocampal circuits, and homeostatic mechanisms. Current visualization coverage is incomplete (35-68%), indicating substantial blind spots in system observability.
 
 ## I. Essential Biological Signals
 
@@ -661,7 +661,7 @@ def test_consolidation_mode():
 7. **BCM learning**: Bienenstock et al. (1982) - Sliding threshold
 8. **Sharp-wave ripples**: Buzsáki (2015) - Memory consolidation
 
-### World Weaver Source Files
+### T4DM Source Files
 - `/t4dm/nca/vta.py` - VTA dopamine circuit
 - `/t4dm/nca/raphe.py` - Raphe serotonin circuit
 - `/t4dm/nca/hippocampus.py` - DG/CA3/CA1 subregions

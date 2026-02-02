@@ -1,4 +1,4 @@
-# World Weaver: A Hinton-Perspective Analysis of Neural Memory Architecture
+# T4DM: A Hinton-Perspective Analysis of Neural Memory Architecture
 
 **Author**: Geoffrey Hinton (design perspective)
 **Date**: 2025-12-06
@@ -8,7 +8,7 @@
 
 ## Executive Summary
 
-World Weaver represents a serious attempt to build an AI memory system grounded in neuroscience principles rather than pure software engineering convenience. This document analyzes the system from my perspective on how neural systems learn, represent, and retrieve information. The architecture demonstrates both genuine insights and areas where computational convenience has overridden biological plausibility.
+T4DM represents a serious attempt to build an AI memory system grounded in neuroscience principles rather than pure software engineering convenience. This document analyzes the system from my perspective on how neural systems learn, represent, and retrieve information. The architecture demonstrates both genuine insights and areas where computational convenience has overridden biological plausibility.
 
 **Key Assessment**: The system successfully implements a tripartite memory taxonomy with meaningful learning dynamics. It goes beyond simple storage to incorporate Hebbian learning, neuromodulation, and complementary learning systems. However, there remain significant gaps between the implemented mechanisms and what we understand about how biological neural networks actually process and store information.
 
@@ -18,7 +18,7 @@ World Weaver represents a serious attempt to build an AI memory system grounded 
 
 ### 1.1 Theoretical Foundation: Tulving's Memory Taxonomy
 
-World Weaver implements a tripartite memory system directly inspired by Endel Tulving's classification of human memory:
+T4DM implements a tripartite memory system directly inspired by Endel Tulving's classification of human memory:
 
 | Memory Type | Brain Region | WW Implementation | Key File |
 |-------------|--------------|-------------------|----------|
@@ -249,7 +249,7 @@ This implements a form of skill extinction - unsuccessful procedures are eventua
 
 ### 2.1 The Core Insight: Memory Should Learn
 
-The most important principle in World Weaver's design is that **memory should be a learning system, not just a storage system**. This is the key insight that distinguishes it from simpler approaches.
+The most important principle in T4DM's design is that **memory should be a learning system, not just a storage system**. This is the key insight that distinguishes it from simpler approaches.
 
 From `/mnt/projects/t4d/t4dm/docs/LEARNING_ARCHITECTURE.md`:
 
@@ -342,7 +342,7 @@ In biological memory, retrieved memories become labile and can be modified durin
 
 **Location**: `/mnt/projects/t4d/t4dm/src/t4dm/core/learned_gate.py`
 
-Not all inputs should be stored. The brain has gating mechanisms that filter incoming information. World Weaver implements this:
+Not all inputs should be stored. The brain has gating mechanisms that filter incoming information. T4DM implements this:
 
 ```python
 class LearnedMemoryGate:
@@ -363,7 +363,7 @@ The Thompson sampling exploration is important - the system needs to explore dif
 
 ## Part 3: Neuromodulation System
 
-This is the most neurobiologically sophisticated component of World Weaver.
+This is the most neurobiologically sophisticated component of T4DM.
 
 ### 3.1 The Orchestra Architecture
 
@@ -543,7 +543,7 @@ def apply_inhibition(self, scores: dict[str, float], embeddings: Optional[dict] 
 
 **Location**: `/mnt/projects/t4d/t4dm/src/t4dm/consolidation/service.py`
 
-World Weaver implements the McClelland-McNaughton-O'Reilly complementary learning systems (CLS) theory:
+T4DM implements the McClelland-McNaughton-O'Reilly complementary learning systems (CLS) theory:
 
 - **Fast learning (hippocampal)**: Episodic memory rapidly encodes specific episodes
 - **Slow learning (cortical)**: Semantic memory gradually abstracts knowledge from episodes
@@ -708,9 +708,9 @@ This would sacrifice some efficiency but gain biological plausibility. For a res
 
 In my work on knowledge distillation, I identified "dark knowledge" as the information captured in the soft outputs of a model that isn't visible in the hard predictions. A model trained on images of dogs learns not just "this is a dog" but also "this is somewhat like a wolf" and "this is definitely not a cat."
 
-### 7.2 Dark Knowledge in World Weaver
+### 7.2 Dark Knowledge in T4DM
 
-World Weaver's architecture enables several forms of dark knowledge:
+T4DM's architecture enables several forms of dark knowledge:
 
 1. **Embedding relationships**: The BGE-M3 embeddings encode relationships between concepts that were never explicitly taught. "Python" is close to "programming" not because anyone labeled it, but because they co-occur in training data.
 
@@ -784,7 +784,7 @@ The interaction of multiple systems produces emergent behaviors:
 
 ## Conclusion
 
-World Weaver represents a serious attempt to build AI memory grounded in neuroscience. It goes far beyond simple storage systems to implement genuine learning mechanisms: Hebbian strengthening, neuromodulation, pattern separation/completion, and temporal credit assignment.
+T4DM represents a serious attempt to build AI memory grounded in neuroscience. It goes far beyond simple storage systems to implement genuine learning mechanisms: Hebbian strengthening, neuromodulation, pattern separation/completion, and temporal credit assignment.
 
 The system correctly identifies that **memory should be a learning system, not just a database**. The core insight - that retrieval should modify representations, that storage decisions should be learned, that multiple neuromodulatory systems should coordinate - reflects deep engagement with how biological memory actually works.
 
@@ -792,7 +792,7 @@ Where it falls short of full biological plausibility, it does so intentionally, 
 
 The architecture provides a strong foundation for future development. The modular design (separate neuromodulator systems, pluggable learning components, configurable consolidation) enables incremental improvement without wholesale redesign.
 
-Most importantly, the system embodies the right philosophy: **instead of programming intelligence, we should be growing it**. World Weaver grows its knowledge through use, not through explicit programming. That's the essential insight that makes it worth studying and extending.
+Most importantly, the system embodies the right philosophy: **instead of programming intelligence, we should be growing it**. T4DM grows its knowledge through use, not through explicit programming. That's the essential insight that makes it worth studying and extending.
 
 ---
 
@@ -817,4 +817,4 @@ Most importantly, the system embodies the right philosophy: **instead of program
 
 ---
 
-*Document generated through analysis of World Weaver codebase at /mnt/projects/ww*
+*Document generated through analysis of T4DM codebase at /mnt/projects/ww*

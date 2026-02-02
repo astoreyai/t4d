@@ -1,6 +1,6 @@
 # Storage Resilience
 
-World Weaver implements multiple resilience patterns to ensure data durability and graceful degradation.
+T4DM implements multiple resilience patterns to ensure data durability and graceful degradation.
 
 ## Overview
 

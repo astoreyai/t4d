@@ -9,7 +9,7 @@ Biologically-inspired memory consolidation with sleep phases (NREM/REM/PRUNE), S
 ## Quick Start
 
 ```python
-from ww.consolidation import (
+from t4dm.consolidation import (
     SleepConsolidation, ConsolidationService, ConsolidationScheduler,
     ParallelExecutor,
 )
@@ -224,7 +224,7 @@ await scheduler.start_background_task(service.consolidate)
 Weight updates during sleep replay:
 
 ```python
-from ww.consolidation import ConsolidationSTDP, ConsolidationSTDPConfig
+from t4dm.consolidation import ConsolidationSTDP, ConsolidationSTDPConfig
 
 stdp = ConsolidationSTDP(
     learner=stdp_learner,
@@ -257,7 +257,7 @@ synced = stdp.sync_weights_with_tags()
 Transfer from Fast Episodic Store to permanent storage:
 
 ```python
-from ww.consolidation import FESConsolidator
+from t4dm.consolidation import FESConsolidator
 
 fes = FESConsolidator(
     fast_store=fast_episodic,
@@ -289,7 +289,7 @@ await fes.start_background_consolidation(interval_seconds=3600)
 10x speedup target for consolidation:
 
 ```python
-from ww.consolidation import ParallelExecutor, ParallelConfig
+from t4dm.consolidation import ParallelExecutor, ParallelConfig
 
 executor = ParallelExecutor(ParallelConfig(
     max_workers=4,
@@ -315,7 +315,7 @@ print(f"Speedup: {stats.speedup_factor}x")
 ### Standalone HDBSCAN
 
 ```python
-from ww.consolidation import cluster_embeddings_hdbscan
+from t4dm.consolidation import cluster_embeddings_hdbscan
 
 labels = cluster_embeddings_hdbscan(
     embeddings,
@@ -417,9 +417,9 @@ ConsolidationScheduler(
 ## Dependencies
 
 **Internal**:
-- `ww.memory` - Episodic, semantic, procedural stores
-- `ww.storage` - Qdrant, Neo4j backends
-- `ww.learning` - STDP, synaptic tagging
+- `t4dm.memory` - Episodic, semantic, procedural stores
+- `t4dm.storage` - Qdrant, Neo4j backends
+- `t4dm.learning` - STDP, synaptic tagging
 
 **External**:
 - `hdbscan` - Clustering

@@ -1,6 +1,6 @@
 # Getting Started
 
-Welcome to World Weaver! This section will help you get up and running quickly.
+Welcome to T4DM! This section will help you get up and running quickly.
 
 ## Installation Options
 
@@ -18,7 +18,7 @@ Welcome to World Weaver! This section will help you get up and running quickly.
 
     ---
 
-    Install World Weaver and its dependencies
+    Install T4DM and its dependencies
 
 -   :material-rocket-launch: **[Quick Start](quickstart.md)**
 

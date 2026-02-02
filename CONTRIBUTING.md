@@ -1,4 +1,4 @@
-# Contributing to World Weaver
+# Contributing to T4DM
 
 ## Development Setup
 
@@ -10,8 +10,8 @@
 ### Setup
 ```bash
 # Clone repo
-git clone https://github.com/user/world-weaver.git
-cd world-weaver
+git clone https://github.com/user/t4dm.git
+cd t4dm
 
 # Create virtual environment
 python -m venv venv

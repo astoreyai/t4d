@@ -56,7 +56,7 @@
 |---|------|-------|--------|
 | 12 | `system_architecture.md` | Storage section, tech stack list Neo4j/Qdrant | Update storage section + tech stack |
 | 13 | `memory_subsystems.md` | References Neo4j graph storage | Update storage refs, add κ-gradient explanation |
-| 14 | `DIAGRAM_SUMMARY.md` | References "World Weaver", old file list | Rewrite with new diagram inventory |
+| 14 | `DIAGRAM_SUMMARY.md` | References "T4DM", old file list | Rewrite with new diagram inventory |
 
 ### Should Deprecate (4 items)
 

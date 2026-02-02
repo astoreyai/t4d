@@ -1,4 +1,4 @@
-# World Weaver - Honest Evaluation
+# T4DM - Honest Evaluation
 
 **Version**: 0.2.0
 **Evaluation Date**: 2025-12-06
@@ -227,7 +227,7 @@ context_features = np.frombuffer(context_hash[:64], dtype=np.float32)
 ```
 
 **Impact**:
-- Lost semantic similarity (project="ww" vs project="world-weaver" = completely different)
+- Lost semantic similarity (project="ww" vs project="t4dm" = completely different)
 - Hash collisions possible (rare but non-zero)
 - No learned context representation
 
@@ -472,7 +472,7 @@ logger.info("Created episode", extra={"episode_id": episode.id})  # JSON
 
 ### vs. Mem0 (Popular Memory Layer)
 
-| Feature | World Weaver | Mem0 |
+| Feature | T4DM | Mem0 |
 |---------|--------------|------|
 | **Architecture** | Tripartite (episodic/semantic/procedural) | Unified vector store |
 | **Cognitive Model** | ACT-R + FSRS + Hebbian | Simple recency decay |
@@ -490,7 +490,7 @@ logger.info("Created episode", extra={"episode_id": episode.id})  # JSON
 
 ### vs. LangChain Memory
 
-| Feature | World Weaver | LangChain Memory |
+| Feature | T4DM | LangChain Memory |
 |---------|--------------|------------------|
 | **Persistence** | Neo4j + Qdrant | In-memory or Redis |
 | **Multi-Instance** | Session-isolated | Shared state |
@@ -506,7 +506,7 @@ logger.info("Created episode", extra={"episode_id": episode.id})  # JSON
 
 ### vs. Zep (Memory for LLMs)
 
-| Feature | World Weaver | Zep |
+| Feature | T4DM | Zep |
 |---------|--------------|-----|
 | **Architecture** | Tripartite neural | Fact extraction |
 | **Graph Database** | Neo4j (declarative) | Zep Graphiti (proprietary) |
@@ -719,7 +719,7 @@ logger.info("Created episode", extra={"episode_id": episode.id})  # JSON
 
 ## Conclusion
 
-World Weaver is a **solid research prototype** with **strong cognitive foundations** but **limited production validation**. It works well for personal knowledge management and research but needs hardening for production web applications.
+T4DM is a **solid research prototype** with **strong cognitive foundations** but **limited production validation**. It works well for personal knowledge management and research but needs hardening for production web applications.
 
 **Biggest Strength**: Cognitively-grounded architecture that models human memory better than alternatives
 

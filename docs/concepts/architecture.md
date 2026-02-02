@@ -1,6 +1,6 @@
 # Architecture
 
-World Weaver's architecture combines cognitive neuroscience principles with modern software engineering.
+T4DM's architecture combines cognitive neuroscience principles with modern software engineering.
 
 ## System Overview
 
@@ -261,7 +261,7 @@ All I/O operations are async with sync wrappers for convenience.
 
 ## MCP/Claude Integration
 
-World Weaver integrates with Claude through the Model Context Protocol (MCP).
+T4DM integrates with Claude through the Model Context Protocol (MCP).
 
 ### Integration Architecture
 
@@ -272,13 +272,13 @@ graph TB
         MCP_CLIENT[MCP Client]
     end
 
-    subgraph WW_Server["World Weaver MCP Server"]
+    subgraph T4DM_Server["T4DM MCP Server"]
         MCP_HANDLER[MCP Handler]
         TOOLS[Tool Definitions]
         RESOURCES[Resources]
     end
 
-    subgraph WW_Core["World Weaver Core"]
+    subgraph T4DM_Core["T4DM Core"]
         MEMORY_API[Memory API]
         SESSION[Session Manager]
     end
@@ -366,11 +366,11 @@ Claude Desktop `claude_desktop_config.json`:
 ```json
 {
   "mcpServers": {
-    "world-weaver": {
+    "t4dm": {
       "command": "ww",
       "args": ["mcp", "serve"],
       "env": {
-        "WW_SESSION_ID": "claude-desktop"
+        "T4DM_SESSION_ID": "claude-desktop"
       }
     }
   }
@@ -383,7 +383,7 @@ Claude Desktop `claude_desktop_config.json`:
 sequenceDiagram
     participant Claude1 as Claude Session 1
     participant Claude2 as Claude Session 2
-    participant WW as World Weaver
+    participant WW as T4DM
 
     Note over Claude1,WW: Morning Session
     Claude1->>WW: ww_store("Working on auth feature")

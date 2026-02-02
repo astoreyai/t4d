@@ -9,16 +9,16 @@ Storage abstraction layer with Neo4j (graph), Qdrant (vector), resilience patter
 ## Quick Start
 
 ```python
-from ww.storage import Neo4jStore, QdrantStore, get_circuit_breaker
+from t4dm.storage import T4DXGraphAdapter, T4DXVectorAdapter, get_circuit_breaker
 
 # Vector store
-qdrant = QdrantStore(url="http://localhost:6333")
+qdrant = T4DXVectorAdapter(url="http://localhost:6333")
 await qdrant.initialize()
 await qdrant.add("episodes", ids, vectors, payloads)
 results = await qdrant.search("episodes", query_vector, limit=10)
 
 # Graph store
-neo4j = Neo4jStore(uri="bolt://localhost:7687", user="neo4j", password="...")
+neo4j = T4DXGraphAdapter(uri="bolt://localhost:7687", user="neo4j", password="...")
 await neo4j.initialize()
 node_id = await neo4j.create_node("Episode", {"content": "..."})
 await neo4j.create_relationship(source_id, target_id, "RELATES_TO")
@@ -42,7 +42,7 @@ await neo4j.create_relationship(source_id, target_id, "RELATES_TO")
          │                 │                 │
          ▼                 ▼                 ▼
 ┌─────────────────┐ ┌─────────────────┐ ┌─────────────────┐
-│   QdrantStore   │ │   Neo4jStore    │ │   MemorySaga    │
+│   T4DXVectorAdapter   │ │   T4DXGraphAdapter    │ │   MemorySaga    │
 │   (Vectors)     │ │   (Graph)       │ │  (Coordination) │
 ├─────────────────┤ ├─────────────────┤ ├─────────────────┤
 │ BGE-M3 (1024d)  │ │ Cypher queries  │ │ Compensation    │
@@ -81,8 +81,8 @@ await neo4j.create_relationship(source_id, target_id, "RELATES_TO")
 
 | File | Lines | Purpose | Key Classes |
 |------|-------|---------|-------------|
-| `neo4j_store.py` | 1,270 | Graph database | `Neo4jStore` |
-| `qdrant_store.py` | 1,150 | Vector database | `QdrantStore` |
+| `t4dx_graph_adapter.py` | 1,270 | Graph database | `T4DXGraphAdapter` |
+| `t4dx_vector_adapter.py` | 1,150 | Vector database | `T4DXVectorAdapter` |
 | `saga.py` | 515 | Cross-store transactions | `Saga`, `MemorySaga` |
 | `resilience.py` | 1,123 | Fault tolerance | `CircuitBreaker`, `GracefulDegradation` |
 | `archive.py` | 450 | Cold storage | `ColdStorageManager`, `FilesystemArchive` |
@@ -188,7 +188,7 @@ await qdrant.add(
 Cross-store atomicity via compensation:
 
 ```python
-from ww.storage import Saga, MemorySaga
+from t4dm.storage import Saga, MemorySaga
 
 # Generic saga
 saga = Saga("create-memory", timeout=60.0)
@@ -233,7 +233,7 @@ LIFO (last step first) for proper rollback.
 Fail fast on repeated failures:
 
 ```python
-from ww.storage import CircuitBreaker, CircuitBreakerConfig
+from t4dm.storage import CircuitBreaker, CircuitBreakerConfig
 
 config = CircuitBreakerConfig(
     failure_threshold=5,      # Failures before opening
@@ -267,7 +267,7 @@ async def my_function():
 Fallback when primary unavailable:
 
 ```python
-from ww.storage import GracefulDegradation
+from t4dm.storage import GracefulDegradation
 
 degradation = GracefulDegradation(breaker, fallback)
 
@@ -303,7 +303,7 @@ await degradation.drain_pending_operations(replay_func)
 Move old memories to cheaper storage:
 
 ```python
-from ww.storage import ColdStorageManager, ArchiveConfig
+from t4dm.storage import ColdStorageManager, ArchiveConfig
 
 config = ArchiveConfig(
     backend="filesystem",  # or "s3", "postgres"
@@ -405,5 +405,5 @@ reset_timeout = 60
 - `asyncio` - Async operations
 
 **Internal**:
-- `ww.core.config` - Settings
-- `ww.observability` - Tracing
+- `t4dm.core.config` - Settings
+- `t4dm.observability` - Tracing

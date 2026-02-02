@@ -1,5 +1,5 @@
 # Biology Fidelity Roadmap: 87 → 95/100
-## World Weaver Memory System
+## T4DM Memory System
 
 **Current Score**: 87/100 (2026-01-03)
 **Target Score**: 95/100

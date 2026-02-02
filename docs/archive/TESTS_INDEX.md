@@ -1,4 +1,4 @@
-# World Weaver Tests Index
+# T4DM Tests Index
 
 ## Quick Navigation
 
@@ -156,8 +156,8 @@ markers = [
 
 ### Mock Stores
 - `mock_embedding_provider` - BGE-M3 embeddings (1024-dim)
-- `mock_qdrant_store` - Vector store simulation
-- `mock_neo4j_store` - Graph store simulation
+- `mock_t4dx_vector_adapter` - Vector store simulation
+- `mock_t4dx_graph_adapter` - Graph store simulation
 
 ### Convenience Fixtures
 - `episodic_memory_with_mocks` - Pre-configured EpisodicMemory
@@ -324,7 +324,7 @@ pytest --timeout=300 tests/  # 5 minute timeout
 ### Mock Import Error
 Ensure patches apply before import:
 ```python
-with patch("ww.memory.episodic.get_embedding_provider", return_value=mock):
+with patch("t4dm.memory.episodic.get_embedding_provider", return_value=mock):
     # Import and use here
 ```
 
@@ -338,7 +338,7 @@ mock = AsyncMock()
 ### Session Filter Not Applied
 Verify mock's `search()` call includes filter:
 ```python
-search_filter = mock_qdrant_store.search.call_args[1]["filter"]
+search_filter = mock_t4dx_vector_adapter.search.call_args[1]["filter"]
 assert search_filter["session_id"] == expected_session
 ```
 
@@ -364,7 +364,7 @@ assert search_filter["session_id"] == expected_session
 
 ## Summary
 
-World Weaver has enterprise-grade testing with:
+T4DM has enterprise-grade testing with:
 - ✓ 8 integration tests for full workflows
 - ✓ 8 performance benchmarks with thresholds
 - ✓ Pytest markers for flexible execution

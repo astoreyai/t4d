@@ -1,4 +1,4 @@
-# World Weaver Security Audit - Executive Summary
+# T4DM Security Audit - Executive Summary
 
 **Date**: 2025-12-06
 **Overall Grade**: **B+ (Good)**
@@ -26,7 +26,7 @@ Info:       5 ℹ️  (Best practices)
 
 ## What's Good ✓
 
-World Weaver has **strong security fundamentals**:
+T4DM has **strong security fundamentals**:
 
 1. **Excellent Input Validation**
    - Comprehensive validation module (`validation.py`)
@@ -61,7 +61,7 @@ World Weaver has **strong security fundamentals**:
 ### High Priority (Before Production)
 
 **1. CORS Wildcard Allowed** (H-1) ✅ FIXED
-- **Risk**: Any origin can make requests if WW_API_CORS_ORIGINS=*
+- **Risk**: Any origin can make requests if T4DM_API_CORS_ORIGINS=*
 - **Fix**: Added `validate_cors_origins()` validator in `config.py`
 - **Status**: Rejects wildcards in production mode
 
@@ -104,13 +104,13 @@ World Weaver has **strong security fundamentals**:
 **Before deploying to production**, complete these items:
 
 ### Critical (P0 - Cannot deploy without)
-- [ ] Add API key authentication (WW_API_KEY=<32+ chars>)
+- [ ] Add API key authentication (T4DM_API_KEY=<32+ chars>)
 - [ ] Configure TLS for Neo4j (bolt+s:// URI)
 - [ ] Configure TLS for OTLP (if enabled)
 - [ ] Set explicit CORS origins (no wildcards)
 - [ ] Sanitize all API error messages
 - [ ] Set .env permissions to 600
-- [ ] Set WW_ENVIRONMENT=production
+- [ ] Set T4DM_ENVIRONMENT=production
 
 ### High Priority (P1 - Should fix before deployment)
 - [ ] Strengthen password validation (12+ chars)
@@ -145,7 +145,7 @@ validated = validate_session_id(
 @field_validator("cors_allowed_origins")
 @classmethod
 def validate_cors_origins(cls, v: list[str]) -> list[str]:
-    env = os.getenv("WW_ENVIRONMENT", "development")
+    env = os.getenv("T4DM_ENVIRONMENT", "development")
     if env == "production" and "*" in v:
         raise ValueError("CORS wildcard not allowed in production")
     return v
@@ -155,7 +155,7 @@ def validate_cors_origins(cls, v: list[str]) -> list[str]:
 ```bash
 # In .env.example
 # WARNING: Rate limiting is per-worker (100 req/min * workers)
-WW_API_WORKERS=1
+T4DM_API_WORKERS=1
 ```
 
 ---
@@ -221,7 +221,7 @@ WW_API_WORKERS=1
 
 ```bash
 # 1. Check config validation
-WW_ENVIRONMENT=production WW_API_CORS_ORIGINS="*" python -m ww.api.server
+T4DM_ENVIRONMENT=production T4DM_API_CORS_ORIGINS="*" python -m t4dm.api.server
 # Should FAIL with "CORS wildcard not allowed"
 
 # 2. Test API key requirement
@@ -233,7 +233,7 @@ curl -H "X-Session-ID: admin" http://localhost:8765/api/v1/health
 # Should return 400 Bad Request
 
 # 4. Test TLS enforcement
-WW_ENVIRONMENT=production WW_NEO4J_URI="bolt://localhost:7687" python -m ww.api.server
+T4DM_ENVIRONMENT=production T4DM_NEO4J_URI="bolt://localhost:7687" python -m t4dm.api.server
 # Should FAIL with "Neo4j must use bolt+s://"
 
 # 5. Run security test suite
@@ -280,4 +280,4 @@ A: Recommended before public launch, but not required for internal deployment.
 
 ---
 
-**Security Contact**: For questions about this audit, contact the security team or file an issue at https://github.com/astoreyai/world-weaver/issues
+**Security Contact**: For questions about this audit, contact the security team or file an issue at https://github.com/astoreyai/t4dm/issues

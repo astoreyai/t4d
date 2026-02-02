@@ -9,7 +9,7 @@ Biologically-inspired adaptive learning framework combining eligibility traces, 
 ## Quick Start
 
 ```python
-from ww.learning import (
+from t4dm.learning import (
     NeuromodulatorOrchestra, create_neuromodulator_orchestra,
     ThreeFactorLearningRule, ReconsolidationEngine,
     emit_retrieval_event,
@@ -128,7 +128,7 @@ effective_lr = base_lr × eligibility × neuromod_gate × dopamine_surprise
 Which synapses were recently active?
 
 ```python
-from ww.learning import EligibilityTrace
+from t4dm.learning import EligibilityTrace
 
 traces = EligibilityTrace(decay=0.95, tau=20.0)
 
@@ -172,7 +172,7 @@ factor = 1.0 - abs(mood - 0.5)  # Optimal at mood=0.5
 How unexpected was this?
 
 ```python
-from ww.learning import DopamineSystem
+from t4dm.learning import DopamineSystem
 
 da = DopamineSystem()
 
@@ -228,7 +228,7 @@ print(params.combined_learning_signal)  # Final multiplier
 Update memory embeddings based on outcomes:
 
 ```python
-from ww.learning import ReconsolidationEngine
+from t4dm.learning import ReconsolidationEngine
 
 engine = ReconsolidationEngine(base_lr=0.01)
 
@@ -257,7 +257,7 @@ engine = ReconsolidationEngine(
 Neural network for ranking memories:
 
 ```python
-from ww.learning import LearnedRetrievalScorer, ScorerTrainer
+from t4dm.learning import LearnedRetrievalScorer, ScorerTrainer
 
 scorer = LearnedRetrievalScorer()
 trainer = ScorerTrainer(scorer)
@@ -281,7 +281,7 @@ loss = trainer.train_step(experiences)
 ## STDP (Spike-Timing-Dependent Plasticity)
 
 ```python
-from ww.learning import STDPLearner
+from t4dm.learning import STDPLearner
 
 stdp = STDPLearner(
     a_plus=0.005,   # LTP rate
@@ -305,7 +305,7 @@ delta_w = stdp.get_weight_update("pre-123", "post-456")
 Capture and store learning events:
 
 ```python
-from ww.learning import emit_retrieval_event, EventCollector
+from t4dm.learning import emit_retrieval_event, EventCollector
 
 # Emit retrieval event
 emit_retrieval_event(

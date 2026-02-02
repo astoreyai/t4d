@@ -1,6 +1,6 @@
 # Bioinspired Components
 
-World Weaver implements biologically-inspired encoding, learning, and memory mechanisms.
+T4DM implements biologically-inspired encoding, learning, and memory mechanisms.
 
 ## Overview
 
@@ -552,7 +552,7 @@ stateDiagram-v2
     }
 ```
 
-**Phase 2 Surprise Model** (`ww.nca.locus_coeruleus`):
+**Phase 2 Surprise Model** (`t4dm.nca.locus_coeruleus`):
 
 Norepinephrine now encodes unexpected uncertainty and drives adaptive learning:
 
@@ -567,7 +567,7 @@ graph LR
 ```
 
 ```python
-from ww.nca import create_locus_coeruleus
+from t4dm.nca import create_locus_coeruleus
 
 lc = create_locus_coeruleus()
 
@@ -648,10 +648,10 @@ sequenceDiagram
     Raphe->>Action: Credit = reward × discount^delay
 ```
 
-**Phase 2 Patience Model** (`ww.nca.raphe`):
+**Phase 2 Patience Model** (`t4dm.nca.raphe`):
 
 ```python
-from ww.nca import create_raphe_nucleus
+from t4dm.nca import create_raphe_nucleus
 
 raphe = create_raphe_nucleus(setpoint=0.5)
 
@@ -876,10 +876,10 @@ stateDiagram-v2
     note right of REM: No SWRs (0%)
 ```
 
-**Phase 2 SWR Implementation** (`ww.nca.swr_coupling`):
+**Phase 2 SWR Implementation** (`t4dm.nca.swr_coupling`):
 
 ```python
-from ww.nca import (
+from t4dm.nca import (
     SWRNeuralFieldCoupling, WakeSleepMode,
     RIPPLE_FREQ_MIN, RIPPLE_FREQ_MAX, RIPPLE_FREQ_OPTIMAL,
     create_swr_coupling,
@@ -921,7 +921,7 @@ assert not swr.validate_ripple_frequency(100.0)  # False (too low)
 
 ### Learnable Embedding Adaptation
 
-World Weaver uses contrastive learning to adapt frozen embeddings to task-specific needs.
+T4DM uses contrastive learning to adapt frozen embeddings to task-specific needs.
 
 ```mermaid
 graph TB
@@ -1114,7 +1114,7 @@ $$G(h) = \sum_i h_i^2$$
 **Learning Rule:**
 
 ```python
-from ww.nca import create_ff_network, FFPhase
+from t4dm.nca import create_ff_network, FFPhase
 
 ff = create_ff_network(layer_sizes=[64, 128, 64])
 
@@ -1129,7 +1129,7 @@ for layer in ff.layers:
     layer.update_weights(threshold=2.0)
 ```
 
-**NT Modulation of FF** (`ww.nca.forward_forward_nca_coupling`):
+**NT Modulation of FF** (`t4dm.nca.forward_forward_nca_coupling`):
 
 | NT | Effect on FF | Mechanism |
 |----|--------------|-----------|
@@ -1179,7 +1179,7 @@ $$v_j = \frac{||s_j||^2}{1 + ||s_j||^2} \cdot \frac{s_j}{||s_j||}$$
 **Dynamic Routing:**
 
 ```python
-from ww.nca import create_capsule_network, RoutingType
+from t4dm.nca import create_capsule_network, RoutingType
 
 caps = create_capsule_network(
     input_dim=64,
@@ -1243,7 +1243,7 @@ graph TB
 **Clearance Dynamics:**
 
 ```python
-from ww.nca import create_glymphatic_system, SleepStage
+from t4dm.nca import create_glymphatic_system, SleepStage
 
 glymph = create_glymphatic_system()
 
@@ -1326,7 +1326,7 @@ clearance = base_rate * sleep_gate * (1 - activity_level)
 **Integration API:**
 
 ```python
-from ww.nca import (
+from t4dm.nca import (
     create_ff_network,
     create_capsule_network,
     create_glymphatic_system,

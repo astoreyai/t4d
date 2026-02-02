@@ -151,7 +151,7 @@ Test categories:
 ## Usage Example
 
 ```python
-from ww.learning.reconsolidation import NeuromodulatorIntegratedReconsolidation
+from t4dm.learning.reconsolidation import NeuromodulatorIntegratedReconsolidation
 import numpy as np
 from uuid import uuid4
 
@@ -194,10 +194,10 @@ print(f"Combined: {params.combined_learning_signal}")
 **Backward compatible**: Existing code using `NeuromodulatorOrchestra.process_outcome()` continues to work. The return type is still `Dict[str, float]`, but the values are now computed using multiplicative gating instead of additive combination.
 
 **New APIs**:
-- `LearningParams` dataclass (exported from `ww.learning.neuromodulators`)
+- `LearningParams` dataclass (exported from `t4dm.learning.neuromodulators`)
 - `NeuromodulatorOrchestra.get_learning_params(memory_id)`
 - `NeuromodulatorOrchestra.get_learning_params_with_outcome(memory_id, outcome)`
-- `NeuromodulatorIntegratedReconsolidation` class (exported from `ww.learning.reconsolidation`)
+- `NeuromodulatorIntegratedReconsolidation` class (exported from `t4dm.learning.reconsolidation`)
 
 ## Future Work
 

@@ -5,7 +5,7 @@
 Python SDK providing sync and async REST API clients for the T4DM memory system, plus a Claude Agent SDK integration for building learning agents.
 
 ## How
-- **Client** (`client.py`): `WorldWeaverClient` (sync) and `AsyncWorldWeaverClient` (async) using httpx. Methods for storing/recalling episodes, entities, and skills. Custom exceptions: `ConnectionError`, `NotFoundError`, `RateLimitError`.
+- **Client** (`client.py`): `T4DMClient` (sync) and `AsyncT4DMClient` (async) using httpx. Methods for storing/recalling episodes, entities, and skills. Custom exceptions: `ConnectionError`, `NotFoundError`, `RateLimitError`.
 - **Models** (`models.py`): Pydantic models for API payloads -- `Episode`, `Entity`, `Skill`, `RecallResult`, `ActivationResult`, `HealthStatus`, `MemoryStats`.
 - **Agent** (`agent.py`): `WWAgent` with `AgentPhase` lifecycle and `AgentConfig`. Wraps memory operations for agent reasoning loops.
 - **Agent Client** (`agent_client.py`): `AgentMemoryClient` with `RetrievalContext`, `ScoredMemory`, and `CreditAssignmentResult`. Factory via `create_agent_memory_client()`.
@@ -28,6 +28,6 @@ Agent Code --> WWAgent --> AgentMemoryClient --> HTTP --> FastAPI --> Core Memor
 ```
 
 ## Integration Points
-- **API**: Consumes REST endpoints defined in `ww.api`
-- **Core**: Models mirror `ww.core.types` for serialization
+- **API**: Consumes REST endpoints defined in `t4dm.api`
+- **Core**: Models mirror `t4dm.core.types` for serialization
 - **Kymera**: Kymera agents use this SDK for memory access

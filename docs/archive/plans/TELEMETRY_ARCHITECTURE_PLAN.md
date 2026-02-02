@@ -1,4 +1,4 @@
-# World Weaver NCA: Multi-Layered Telemetry Architecture Plan
+# T4DM NCA: Multi-Layered Telemetry Architecture Plan
 
 **Authors**: Hinton Agent + CompBio Agent (Synthesized)
 **Date**: 2026-01-01

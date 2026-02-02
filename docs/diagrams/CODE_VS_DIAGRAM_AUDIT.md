@@ -1,7 +1,7 @@
 # Code vs Diagram Architecture Audit
-**Project**: T4DM (formerly World Weaver)
+**Project**: T4DM (formerly T4DM)
 **Date**: 2026-01-29
-**Auditor**: Claude Agent (World Weaver Neuroscience)
+**Auditor**: Claude Agent (T4DM Neuroscience)
 
 ## Executive Summary
 

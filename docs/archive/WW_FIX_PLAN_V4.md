@@ -1,4 +1,4 @@
-# World Weaver Fix Plan v4.0
+# T4DM Fix Plan v4.0
 
 **Created**: 2025-11-27 | **Based On**: Gap Analysis Post-Phase 9 | **Priority**: Production Hardening
 
@@ -51,7 +51,7 @@
 | M4 | No chaos/fault injection tests | Tests missing | Resilience unknown |
 | M5 | HDBSCAN memory at scale | `consolidation/service.py` | Scalability limit |
 | M6 | Embedding cache no TTL | `embedding/bge_m3.py` | Memory leak potential |
-| M7 | Sequential batch updates | `storage/qdrant_store.py` | Performance issue |
+| M7 | Sequential batch updates | `storage/t4dx_vector_adapter.py` | Performance issue |
 | M8 | OTLP exporter insecure | `observability/tracing.py` | Security risk |
 
 ---
@@ -68,7 +68,7 @@
 
 **Files**:
 - `src/t4dm/consolidation/service.py` (modify)
-- `src/t4dm/storage/qdrant_store.py` (add method)
+- `src/t4dm/storage/t4dx_vector_adapter.py` (add method)
 
 **Description**: The `_find_duplicates()` method at line 397 uses O(n^2) pairwise comparison for finding near-duplicate episodes. This becomes prohibitively slow with >1000 episodes.
 
@@ -287,7 +287,7 @@ async def _consolidate_light_paginated(
 
 **Files**:
 - `src/t4dm/memory/semantic.py` (modify)
-- `src/t4dm/storage/neo4j_store.py` (add batch method)
+- `src/t4dm/storage/t4dx_graph_adapter.py` (add batch method)
 
 **Description**: The `apply_hebbian_decay()` method at line 686 iterates through stale relationships with N individual update queries. This should use batch operations.
 
@@ -312,7 +312,7 @@ for rel in stale_rels:
 
 **Implementation**:
 ```python
-# In neo4j_store.py - add batch methods
+# In t4dx_graph_adapter.py - add batch methods
 async def batch_update_relationships(
     self,
     updates: list[tuple[str, dict]],
@@ -511,7 +511,7 @@ networks:
 
 ```bash
 # .env.example
-# World Weaver Environment Variables
+# T4DM Environment Variables
 # Copy to .env and update with secure values
 
 # Neo4j Configuration (REQUIRED)
@@ -521,13 +521,13 @@ NEO4J_PASSWORD=  # REQUIRED: Set a strong password (min 8 chars)
 # Qdrant Configuration (Optional)
 QDRANT_API_KEY=  # Optional: Set for production
 
-# World Weaver Configuration
-WW_SESSION_ID=default
-WW_NEO4J_URI=bolt://localhost:7687
-WW_NEO4J_USER=neo4j
-WW_NEO4J_PASSWORD=  # Must match NEO4J_PASSWORD above
-WW_QDRANT_URL=http://localhost:6333
-WW_QDRANT_API_KEY=  # Must match QDRANT_API_KEY above
+# T4DM Configuration
+T4DM_SESSION_ID=default
+T4DM_NEO4J_URI=bolt://localhost:7687
+T4DM_NEO4J_USER=neo4j
+T4DM_NEO4J_PASSWORD=  # Must match NEO4J_PASSWORD above
+T4DM_QDRANT_URL=http://localhost:6333
+T4DM_QDRANT_API_KEY=  # Must match QDRANT_API_KEY above
 ```
 
 **Testing Requirements**:
@@ -599,7 +599,7 @@ class Settings(BaseSettings):
         """Validate Neo4j password is set and not weak."""
         if not v:
             raise ValueError(
-                "WW_NEO4J_PASSWORD environment variable is required. "
+                "T4DM_NEO4J_PASSWORD environment variable is required. "
                 "Set a strong password (min 8 characters)."
             )
         if len(v) < 8:
@@ -618,7 +618,7 @@ class Settings(BaseSettings):
         """Warn if Qdrant API key not set in production-like environment."""
         if not v:
             import os
-            env = os.getenv("WW_ENVIRONMENT", "development")
+            env = os.getenv("T4DM_ENVIRONMENT", "development")
             if env in ("production", "staging"):
                 logger.warning(
                     "QDRANT_API_KEY not set in production environment. "
@@ -638,7 +638,7 @@ class Settings(BaseSettings):
 **Hooks**: Configuration validation hook (startup check)
 
 **Validation**:
-- [ ] Application fails to start without WW_NEO4J_PASSWORD
+- [ ] Application fails to start without T4DM_NEO4J_PASSWORD
 - [ ] Weak passwords are rejected with clear error message
 - [ ] All configuration tests pass
 
@@ -774,7 +774,7 @@ import pytest
 import asyncio
 from unittest.mock import AsyncMock, MagicMock
 
-from ww.storage.saga import Saga, SagaState, SagaResult
+from t4dm.storage.saga import Saga, SagaState, SagaResult
 
 
 class TestSagaCompensation:
@@ -949,7 +949,7 @@ class TestSagaCompensation:
 ```python
 # tests/mcp/test_errors.py
 import pytest
-from ww.mcp.errors import make_error, ErrorCode, rate_limited, validation_error
+from t4dm.mcp.errors import make_error, ErrorCode, rate_limited, validation_error
 
 
 class TestMCPErrors:
@@ -976,7 +976,7 @@ class TestMCPErrors:
 # tests/mcp/test_gateway.py
 import pytest
 from unittest.mock import AsyncMock, patch
-from ww.mcp.gateway import (
+from t4dm.mcp.gateway import (
     RateLimiter,
     rate_limited,
     with_request_id,
@@ -1031,9 +1031,9 @@ class TestRateLimitedDecorator:
 class TestServiceManagement:
     @pytest.mark.asyncio
     async def test_get_services_initializes(self):
-        with patch("ww.mcp.gateway.get_episodic_memory") as mock_ep, \
-             patch("ww.mcp.gateway.get_semantic_memory") as mock_sem, \
-             patch("ww.mcp.gateway.get_procedural_memory") as mock_proc:
+        with patch("t4dm.mcp.gateway.get_episodic_memory") as mock_ep, \
+             patch("t4dm.mcp.gateway.get_semantic_memory") as mock_sem, \
+             patch("t4dm.mcp.gateway.get_procedural_memory") as mock_proc:
 
             mock_ep.return_value.initialize = AsyncMock()
             mock_sem.return_value.initialize = AsyncMock()
@@ -1045,8 +1045,8 @@ class TestServiceManagement:
 
     @pytest.mark.asyncio
     async def test_cleanup_services(self):
-        with patch("ww.mcp.gateway.close_qdrant_store") as mock_qdrant, \
-             patch("ww.mcp.gateway.close_neo4j_store") as mock_neo4j:
+        with patch("t4dm.mcp.gateway.close_t4dx_vector_adapter") as mock_qdrant, \
+             patch("t4dm.mcp.gateway.close_t4dx_graph_adapter") as mock_neo4j:
 
             mock_qdrant.return_value = AsyncMock()
             mock_neo4j.return_value = AsyncMock()
@@ -1341,8 +1341,8 @@ def validate_session_id(session_id: Optional[str]) -> str:
 
 # In gateway.py - add validation decorator
 
-from ww.mcp.validation import validate_session_id
-from ww.mcp.errors import make_error, ErrorCode
+from t4dm.mcp.validation import validate_session_id
+from t4dm.mcp.errors import make_error, ErrorCode
 
 
 def validated_session(func):
@@ -1406,7 +1406,7 @@ async def create_episode(
 
 **Files**:
 - `docker-compose.yml` (modify)
-- `src/t4dm/storage/qdrant_store.py` (modify)
+- `src/t4dm/storage/t4dx_vector_adapter.py` (modify)
 - `scripts/setup_auth.sh` (create)
 
 **Description**: Qdrant and Neo4j are exposed without authentication in docker-compose.
@@ -1454,7 +1454,7 @@ services:
 
 set -e
 
-echo "World Weaver Authentication Setup"
+echo "T4DM Authentication Setup"
 echo "=================================="
 
 # Generate secure API key for Qdrant
@@ -1492,9 +1492,9 @@ cat >> .env << EOF
 
 # Generated by setup_auth.sh on $(date)
 NEO4J_PASSWORD=$neo4j_pass
-WW_NEO4J_PASSWORD=$neo4j_pass
+T4DM_NEO4J_PASSWORD=$neo4j_pass
 QDRANT_API_KEY=$qdrant_key
-WW_QDRANT_API_KEY=$qdrant_key
+T4DM_QDRANT_API_KEY=$qdrant_key
 EOF
 
 echo ""
@@ -1545,7 +1545,7 @@ echo "To start services: docker-compose up -d"
 ```python
 # src/t4dm/core/serialization.py
 """
-Shared serialization utilities for World Weaver.
+Shared serialization utilities for T4DM.
 
 Provides consistent conversion between domain objects and storage formats.
 """
@@ -1607,7 +1607,7 @@ class EpisodeSerializer(Serializer):
         }
 
     def from_payload(self, id_str: str, payload: dict[str, Any]) -> 'Episode':
-        from ww.core.types import Episode, EpisodeContext, Outcome
+        from t4dm.core.types import Episode, EpisodeContext, Outcome
         return Episode(
             id=UUID(id_str),
             session_id=payload["session_id"],
@@ -1679,7 +1679,7 @@ def get_serializer(type_name: str) -> Serializer:
 ```python
 # src/t4dm/core/container.py
 """
-Dependency Injection Container for World Weaver.
+Dependency Injection Container for T4DM.
 
 Provides centralized service registration and resolution,
 enabling better testability and configuration.
@@ -1789,13 +1789,13 @@ def configure_production() -> None:
     """Configure container for production."""
     c = get_container()
 
-    from ww.storage.qdrant_store import QdrantStore
-    from ww.storage.neo4j_store import Neo4jStore
-    from ww.embedding.bge_m3 import BGE_M3Provider
+    from t4dm.storage.t4dx_vector_adapter import T4DXVectorAdapter
+    from t4dm.storage.t4dx_graph_adapter import T4DXGraphAdapter
+    from t4dm.embedding.bge_m3 import BGE_M3Provider
 
     c.register_singleton("embedding", BGE_M3Provider)
-    c.register_scoped("qdrant", lambda session: QdrantStore())
-    c.register_scoped("neo4j", lambda session: Neo4jStore())
+    c.register_scoped("qdrant", lambda session: T4DXVectorAdapter())
+    c.register_scoped("neo4j", lambda session: T4DXGraphAdapter())
 
 
 def configure_testing() -> None:
@@ -1836,7 +1836,7 @@ import pytest
 import numpy as np
 from unittest.mock import MagicMock, patch
 
-from ww.embedding.bge_m3 import BGE_M3Provider, get_embedding_provider
+from t4dm.embedding.bge_m3 import BGE_M3Provider, get_embedding_provider
 
 
 class TestBGE_M3Provider:
@@ -1847,7 +1847,7 @@ class TestBGE_M3Provider:
         return model
 
     def test_embed_query_returns_list(self, mock_model):
-        with patch("ww.embedding.bge_m3.SentenceTransformer", return_value=mock_model):
+        with patch("t4dm.embedding.bge_m3.SentenceTransformer", return_value=mock_model):
             provider = BGE_M3Provider()
             result = provider.embed_query("test query")
 
@@ -1857,7 +1857,7 @@ class TestBGE_M3Provider:
     def test_embed_batch_returns_lists(self, mock_model):
         mock_model.encode.return_value = np.random.rand(3, 1024).astype(np.float32)
 
-        with patch("ww.embedding.bge_m3.SentenceTransformer", return_value=mock_model):
+        with patch("t4dm.embedding.bge_m3.SentenceTransformer", return_value=mock_model):
             provider = BGE_M3Provider()
             result = provider.embed(["text1", "text2", "text3"])
 
@@ -1867,7 +1867,7 @@ class TestBGE_M3Provider:
     def test_embed_empty_input(self, mock_model):
         mock_model.encode.return_value = np.array([]).reshape(0, 1024)
 
-        with patch("ww.embedding.bge_m3.SentenceTransformer", return_value=mock_model):
+        with patch("t4dm.embedding.bge_m3.SentenceTransformer", return_value=mock_model):
             provider = BGE_M3Provider()
             result = provider.embed([])
 
@@ -1877,7 +1877,7 @@ class TestBGE_M3Provider:
         # Return non-normalized embedding
         mock_model.encode.return_value = np.array([[2.0] * 1024], dtype=np.float32)
 
-        with patch("ww.embedding.bge_m3.SentenceTransformer", return_value=mock_model):
+        with patch("t4dm.embedding.bge_m3.SentenceTransformer", return_value=mock_model):
             provider = BGE_M3Provider(normalize=True)
             result = provider.embed_query("test")
 
@@ -1886,7 +1886,7 @@ class TestBGE_M3Provider:
             assert 0.99 < norm < 1.01
 
     def test_caching_same_text(self, mock_model):
-        with patch("ww.embedding.bge_m3.SentenceTransformer", return_value=mock_model):
+        with patch("t4dm.embedding.bge_m3.SentenceTransformer", return_value=mock_model):
             provider = BGE_M3Provider()
 
             result1 = provider.embed_query("same text")
@@ -1896,7 +1896,7 @@ class TestBGE_M3Provider:
             assert mock_model.encode.call_count == 1
 
     def test_singleton_instance(self):
-        with patch("ww.embedding.bge_m3.SentenceTransformer"):
+        with patch("t4dm.embedding.bge_m3.SentenceTransformer"):
             provider1 = get_embedding_provider()
             provider2 = get_embedding_provider()
 
@@ -1972,8 +1972,8 @@ def chaos_monkey():
 import pytest
 from unittest.mock import AsyncMock, patch
 
-from ww.memory.episodic import EpisodicMemory
-from ww.storage.saga import Saga, SagaState
+from t4dm.memory.episodic import EpisodicMemory
+from t4dm.storage.saga import Saga, SagaState
 
 
 class TestDatabaseFailures:
@@ -2010,9 +2010,9 @@ class TestDatabaseFailures:
     @pytest.mark.asyncio
     async def test_partial_batch_failure_recovery(self, chaos_monkey):
         """Batch operations should handle partial failures."""
-        from ww.storage.qdrant_store import QdrantStore
+        from t4dm.storage.t4dx_vector_adapter import T4DXVectorAdapter
 
-        store = QdrantStore()
+        store = T4DXVectorAdapter()
         chaos_monkey.set_failure_rate(0.3)
 
         # Mock with chaos
@@ -2040,9 +2040,9 @@ class TestNetworkFailures:
     @pytest.mark.asyncio
     async def test_timeout_handling(self):
         """Operations should timeout and not hang."""
-        from ww.storage.qdrant_store import QdrantStore, DatabaseTimeoutError
+        from t4dm.storage.t4dx_vector_adapter import T4DXVectorAdapter, DatabaseTimeoutError
 
-        store = QdrantStore(timeout=0.1)
+        store = T4DXVectorAdapter(timeout=0.1)
 
         async def slow_operation():
             await asyncio.sleep(10)
@@ -2069,7 +2069,7 @@ class TestNetworkFailures:
             return "success"
 
         # Test with retry wrapper
-        from ww.core.retry import with_retry
+        from t4dm.core.retry import with_retry
 
         result = await with_retry(flaky_operation, max_attempts=5)
         assert result == "success"
@@ -2292,7 +2292,7 @@ class BGE_M3Provider:
 ### TASK-P12-007: Parallelize Batch Updates
 
 **Files**:
-- `src/t4dm/storage/qdrant_store.py` (modify)
+- `src/t4dm/storage/t4dx_vector_adapter.py` (modify)
 
 **Description**: `batch_update_payloads()` at line 507 uses sequential loop.
 
@@ -2422,7 +2422,7 @@ def configure_tracing() -> None:
         if settings.otel_environment == "production":
             logger.warning(
                 "OTLP exporter using insecure channel in production. "
-                "Set WW_OTEL_INSECURE=false and provide WW_OTEL_CERT_FILE."
+                "Set T4DM_OTEL_INSECURE=false and provide T4DM_OTEL_CERT_FILE."
             )
     else:
         if settings.otel_cert_file:
@@ -2459,7 +2459,7 @@ def configure_tracing() -> None:
 ```python
 # src/t4dm/core/hooks.py
 """
-Lifecycle hooks for World Weaver modules.
+Lifecycle hooks for T4DM modules.
 
 Provides extensible hook system for:
 - Pre/post operation hooks
@@ -2608,7 +2608,7 @@ class PostCreateHook(Hook):
             return {"extracted": False, "reason": "disabled"}
 
         # Trigger async extraction
-        from ww.extraction.entity_extractor import create_default_extractor
+        from t4dm.extraction.entity_extractor import create_default_extractor
         extractor = create_default_extractor(use_llm=settings.extraction_use_llm)
 
         entities = await extractor.extract(episode.content)
@@ -2631,8 +2631,8 @@ class HealthCheckHook(Hook):
 
         # Database connectivity
         try:
-            from ww.storage.qdrant_store import get_qdrant_store
-            store = get_qdrant_store()
+            from t4dm.storage.t4dx_vector_adapter import get_t4dx_vector_adapter
+            store = get_t4dx_vector_adapter()
             await asyncio.wait_for(store.count("ww_episodes"), timeout=5.0)
             checks["qdrant"] = "healthy"
         except Exception as e:
@@ -2665,7 +2665,7 @@ class ConfigValidationHook(Hook):
             issues.append("Neo4j password too short")
 
         # Check production settings
-        env = os.getenv("WW_ENVIRONMENT", "development")
+        env = os.getenv("T4DM_ENVIRONMENT", "development")
         if env == "production":
             if settings.otel_insecure:
                 issues.append("OTLP insecure in production")
@@ -2764,7 +2764,7 @@ Phase 12 (Medium) ────────────────────�
 |------|---------|----------|------|
 | P10-001 | consolidation/service.py | CRITICAL | 4h |
 | P10-002 | consolidation/service.py, episodic.py | CRITICAL | 4h |
-| P10-003 | semantic.py, neo4j_store.py | CRITICAL | 3h |
+| P10-003 | semantic.py, t4dx_graph_adapter.py | CRITICAL | 3h |
 | P10-004 | docker-compose.yml, .env.example | CRITICAL | 2h |
 | P10-005 | core/config.py | CRITICAL | 2h |
 | P11-001 | extraction/entity_extractor.py | HIGH | 4h |
@@ -2780,7 +2780,7 @@ Phase 12 (Medium) ────────────────────�
 | P12-004 | tests/chaos/*.py | MEDIUM | 4h |
 | P12-005 | consolidation/service.py | MEDIUM | 2h |
 | P12-006 | embedding/bge_m3.py | MEDIUM | 2h |
-| P12-007 | storage/qdrant_store.py | MEDIUM | 2h |
+| P12-007 | storage/t4dx_vector_adapter.py | MEDIUM | 2h |
 | P12-008 | observability/tracing.py | MEDIUM | 2h |
 
 ---
@@ -2834,8 +2834,8 @@ Phase 12 (Medium) ────────────────────�
 | `src/t4dm/consolidation/service.py` | P10-001, P10-002, P12-005 |
 | `src/t4dm/memory/episodic.py` | P10-002, P11-004 |
 | `src/t4dm/memory/semantic.py` | P10-003, P11-005 |
-| `src/t4dm/storage/neo4j_store.py` | P10-003 |
-| `src/t4dm/storage/qdrant_store.py` | P12-007 |
+| `src/t4dm/storage/t4dx_graph_adapter.py` | P10-003 |
+| `src/t4dm/storage/t4dx_vector_adapter.py` | P12-007 |
 | `src/t4dm/core/config.py` | P10-005, P12-008 |
 | `docker-compose.yml` | P10-004, P11-007 |
 | `src/t4dm/extraction/entity_extractor.py` | P11-001 |

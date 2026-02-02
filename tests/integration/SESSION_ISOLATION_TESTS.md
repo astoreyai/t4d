@@ -92,8 +92,8 @@ Each memory type implements isolation by:
 ### Mock Objects
 All tests use mocked storage backends:
 - `mock_embedding`: AsyncMock of embedding provider
-- `mock_qdrant_store`: AsyncMock of Qdrant vector store
-- `mock_neo4j_store`: AsyncMock of Neo4j graph store
+- `mock_t4dx_vector_adapter`: AsyncMock of Qdrant vector store
+- `mock_t4dx_graph_adapter`: AsyncMock of Neo4j graph store
 
 ## Running the Tests
 

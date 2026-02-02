@@ -533,14 +533,14 @@ API_TOKEN = CallerToken("api", "external", {"read", "store_episodic"})
 - **Test**: `test_no_direct_weights_access` — grep codebase for `._weights` outside stdp.py
 
 ### ATOM-P2-24: Qdrant embedding dimension validation
-- **File**: `src/t4dm/storage/qdrant_store.py:301-332`
+- **File**: `src/t4dm/storage/t4dx_vector_adapter.py:301-332`
 - **Root cause**: `add()` accepts arbitrary vectors with no dimension/range validation (M-39)
 - **Fix**: Add `validate_embedding(vec, dim=self.dimension)` before upsert. Reject NaN/Inf/wrong-dim.
 - **Test**: `test_qdrant_rejects_wrong_dim` — 512-dim vector to 1024-dim collection rejected
 - **Test**: `test_qdrant_rejects_nan` — NaN vector rejected
 
 ### ATOM-P2-25: Memory origin type field
-- **File**: `src/t4dm/storage/qdrant_store.py`, `src/t4dm/api/routes/episodes.py`
+- **File**: `src/t4dm/storage/t4dx_vector_adapter.py`, `src/t4dm/api/routes/episodes.py`
 - **Root cause**: Consolidated vs raw memories not distinguishable (M-44)
 - **Fix**: Add immutable `origin_type` field to payload: `"episodic_raw"`, `"episodic_consolidated"`, `"semantic"`, `"rem_abstraction"`. Set at creation, immutable via update.
 - **Test**: `test_origin_type_set_on_create` — new memory has origin_type
@@ -699,7 +699,7 @@ API_TOKEN = CallerToken("api", "external", {"read", "store_episodic"})
 - **Test**: `test_saga_dead_letter_on_failure` — 3x failure logged as CRITICAL
 
 #### ATOM-P3-23: Adversarial embedding detection
-- **File**: `src/t4dm/storage/qdrant_store.py` or new `src/t4dm/core/embedding_guard.py`
+- **File**: `src/t4dm/storage/t4dx_vector_adapter.py` or new `src/t4dm/core/embedding_guard.py`
 - **Root cause**: No detection of adversarial query/storage embeddings (M-46)
 - **Fix**: Add norm validation (reject if L2 norm > 10x or < 0.01x of mean stored norm). Track running mean/std of stored embedding norms. Warn on outliers > 3 sigma.
 - **Test**: `test_adversarial_embedding_detected` — 1000x norm vector rejected

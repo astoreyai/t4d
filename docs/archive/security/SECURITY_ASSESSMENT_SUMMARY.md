@@ -1,7 +1,7 @@
 # Security Assessment Summary: Eligibility Trace System
 
 **Assessment Date:** 2025-12-06
-**System:** World Weaver Memory System v0.1.0
+**System:** T4DM Memory System v0.1.0
 **Component:** `/mnt/projects/t4d/t4dm/src/t4dm/learning/eligibility.py`
 **Scope:** Input validation, resource limits, overflow protection, thread safety
 

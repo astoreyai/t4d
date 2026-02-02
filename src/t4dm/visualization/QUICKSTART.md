@@ -1,9 +1,9 @@
-# World Weaver Visualization - Quick Start Guide
+# T4DM Visualization - Quick Start Guide
 
 ## 30-Second Overview
 
 ```python
-from ww.visualization import (
+from t4dm.visualization import (
     ActivationHeatmap,           # Memory activation heatmaps
     PlasticityTracer,            # LTP/LTD weight changes
     NeuromodulatorDashboard,     # DA/NE/ACh/5-HT/GABA traces
@@ -28,7 +28,7 @@ tracker.record_snapshot(
 )
 
 # Visualize
-from ww.visualization import plot_activation_heatmap
+from t4dm.visualization import plot_activation_heatmap
 plot_activation_heatmap(tracker, save_path="activations.png")
 ```
 
@@ -48,7 +48,7 @@ tracer.record_update(
 )
 
 # Visualize BCM curve
-from ww.visualization import plot_bcm_curve
+from t4dm.visualization import plot_bcm_curve
 plot_bcm_curve(tracer, interactive=True)
 ```
 
@@ -67,14 +67,14 @@ dashboard.record_state(
 )
 
 # Visualize timeline
-from ww.visualization import plot_neuromodulator_traces
+from t4dm.visualization import plot_neuromodulator_traces
 plot_neuromodulator_traces(dashboard)
 ```
 
 ### Pattern 4: Evaluate Pattern Separation
 
 ```python
-from ww.visualization import plot_separation_comparison
+from t4dm.visualization import plot_separation_comparison
 
 # Compare before/after
 plot_separation_comparison(
@@ -98,7 +98,7 @@ visualizer.record_replay_sequence(
 )
 
 # Visualize
-from ww.visualization import plot_swr_sequence
+from t4dm.visualization import plot_swr_sequence
 plot_swr_sequence(visualizer, sequence_index=0)
 ```
 
@@ -107,7 +107,7 @@ plot_swr_sequence(visualizer, sequence_index=0)
 ```python
 projector = EmbeddingProjector()
 
-from ww.visualization import plot_tsne_projection
+from t4dm.visualization import plot_tsne_projection
 plot_tsne_projection(
     embeddings,
     labels=memory_ids,
@@ -139,8 +139,8 @@ plot_function(
 ### With DentateGyrus
 
 ```python
-from ww.memory.pattern_separation import DentateGyrus
-from ww.visualization import PatternSeparationVisualizer
+from t4dm.memory.pattern_separation import DentateGyrus
+from t4dm.visualization import PatternSeparationVisualizer
 
 dg = DentateGyrus(embedding_provider, vector_store)
 vis = PatternSeparationVisualizer()
@@ -160,8 +160,8 @@ for result in history:
 ### With NeuromodulatorOrchestra
 
 ```python
-from ww.learning.neuromodulators import NeuromodulatorOrchestra
-from ww.visualization import NeuromodulatorDashboard
+from t4dm.learning.neuromodulators import NeuromodulatorOrchestra
+from t4dm.visualization import NeuromodulatorDashboard
 
 orchestra = NeuromodulatorOrchestra()
 dashboard = NeuromodulatorDashboard()
@@ -180,8 +180,8 @@ dashboard.record_state(
 ### With SleepConsolidation
 
 ```python
-from ww.consolidation.sleep import SleepConsolidation
-from ww.visualization import ConsolidationVisualizer
+from t4dm.consolidation.sleep import SleepConsolidation
+from t4dm.visualization import ConsolidationVisualizer
 
 consolidation = SleepConsolidation(episodic, semantic, graph_store)
 visualizer = ConsolidationVisualizer()

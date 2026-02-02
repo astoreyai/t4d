@@ -34,8 +34,8 @@ python -m pytest tests/consolidation/test_sleep_rpe.py -v -k "without_vta or emp
 
 ```python
 # Quick test of RPE generation
-from ww.consolidation.sleep import SleepConsolidation
-from ww.nca.vta import VTACircuit
+from t4dm.consolidation.sleep import SleepConsolidation
+from t4dm.nca.vta import VTACircuit
 
 # Create mocks
 from tests.consolidation.test_sleep_rpe import MockMemory, MockSemanticMemory, MockGraphStore

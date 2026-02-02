@@ -1,6 +1,6 @@
 # Performance Tuning Guide
 
-Optimize World Weaver for your workload.
+Optimize T4DM for your workload.
 
 ## Quick Wins
 
@@ -60,7 +60,7 @@ qdrant_pool_size: 10    # Default is 10
 Enable cluster-based search for large collections:
 
 ```python
-from ww.memory.episodic import EpisodicMemory
+from t4dm.memory.episodic import EpisodicMemory
 
 memory = EpisodicMemory(
     hierarchical_search=True,
@@ -137,7 +137,7 @@ consolidation_batch_size: 500   # Episodes per batch
 
 ```python
 # Monitor cache hit rate
-from ww.embedding import get_embedding_service
+from t4dm.embedding import get_embedding_service
 
 service = get_embedding_service()
 stats = service.cache_stats()
@@ -158,7 +158,7 @@ print(f"Hit rate: {stats['hits'] / stats['total']:.2%}")
 ### Key Metrics
 
 ```python
-from ww.observability import get_metrics
+from t4dm.observability import get_metrics
 
 metrics = get_metrics()
 

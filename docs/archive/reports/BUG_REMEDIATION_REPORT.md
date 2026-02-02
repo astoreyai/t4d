@@ -1,9 +1,9 @@
-# World Weaver Bug Remediation Report
+# T4DM Bug Remediation Report
 
 **Generated**: 2025-12-08
 **Last Updated**: 2025-12-09
 **Session**: Autonomous bug fixing session
-**Source**: WW_COMPLETE_ISSUE_INVENTORY.md (89 unique issues)
+**Source**: T4DM_COMPLETE_ISSUE_INVENTORY.md (89 unique issues)
 
 ---
 
@@ -42,7 +42,7 @@
 | ID | Module | Fix | Status |
 |----|--------|-----|--------|
 | MCP-C2 (TOCTOU) | gateway.py | Keep lock held during service access | DONE |
-| QDRANT-001 | qdrant_store.py | Added asyncio.Semaphore(10) for parallelism | DONE |
+| QDRANT-001 | t4dx_vector_adapter.py | Added asyncio.Semaphore(10) for parallelism | DONE |
 | API-001 | episodes.py | Added max_length constraints | DONE |
 | RACE-BUFFER-002 | buffer_manager.py | Snapshot iteration with list() | DONE |
 | CLS-001 | episodic.py | Increased learning rate 0.01→0.1 | DONE |
@@ -58,9 +58,9 @@
 | LOGIC-001 | reconsolidation.py | Neutral outcomes track dopamine learning | DONE |
 | M1 | validation.py | XSS sanitization applied in sanitize_string() | DONE |
 | M2 | gateway.py | Validate before rate limiting | DONE |
-| QDRANT-002 | qdrant_store.py | Track completed_ids for precise rollback | DONE |
-| QDRANT-004 | qdrant_store.py | Double-checked locking for client init | DONE |
-| STORAGE-CRITICAL-003 | qdrant_store.py | Thread-safe cleanup with lock | DONE |
+| QDRANT-002 | t4dx_vector_adapter.py | Track completed_ids for precise rollback | DONE |
+| QDRANT-004 | t4dx_vector_adapter.py | Double-checked locking for client init | DONE |
+| STORAGE-CRITICAL-003 | t4dx_vector_adapter.py | Thread-safe cleanup with lock | DONE |
 | MEMORY-CRITICAL-001 | buffer_manager.py | Added threading.RLock for thread safety | DONE |
 | MEMORY-HIGH-001 | buffer_manager.py | Added cooldown dict size limit (100) | DONE |
 | LEARNING-CRITICAL-001 | serotonin.py | Integrated compute_patience_factor() in receive_outcome() | DONE |
@@ -68,9 +68,9 @@
 | LEARNING-HIGH-001 | norepinephrine.py | Changed _arousal_history to deque(maxlen=1000) | DONE |
 | LEARNING-HIGH-002 | learned_gate.py | Integrated ThreeFactorLearningRule.compute() | DONE |
 | MEMORY-HIGH-002 | buffer_manager.py | Scaled discard utility [0.1, 0.45] based on evidence | DONE |
-| STORAGE-HIGH-002 | qdrant_store.py | Added warning for session_id filter override | DONE |
+| STORAGE-HIGH-002 | t4dx_vector_adapter.py | Added warning for session_id filter override | DONE |
 | MEMORY-HIGH-005 | pattern_separation.py | Lowered similarity_threshold 0.75→0.55 | DONE |
-| STORAGE-HIGH-003 | qdrant_store.py, neo4j_store.py | Cleanup closed event loops in lock dicts | DONE |
+| STORAGE-HIGH-003 | t4dx_vector_adapter.py, t4dx_graph_adapter.py | Cleanup closed event loops in lock dicts | DONE |
 | LEARNING-HIGH-003 | three_factor.py | Connected serotonin's eligibility trace | DONE |
 | MEMORY-HIGH-004 | episodic.py | Added save/load to LearnedFusionWeights, LearnedReranker | DONE |
 | MEMORY-HIGH-006 | cluster_index.py | Added save/load for cluster persistence | DONE |
@@ -151,8 +151,8 @@
 
 | ID | Module | Fix | Status |
 |----|--------|-----|--------|
-| P2-OPT-B2.1 | qdrant_store.py | Added session_id payload index for O(log n) filtering | DONE |
-| P2-OPT-B2.3 | qdrant_store.py | Already fixed with asyncio.Semaphore (max_concurrency=10) | VERIFIED |
+| P2-OPT-B2.1 | t4dx_vector_adapter.py | Added session_id payload index for O(log n) filtering | DONE |
+| P2-OPT-B2.3 | t4dx_vector_adapter.py | Already fixed with asyncio.Semaphore (max_concurrency=10) | VERIFIED |
 | P2-OPT-B1.1 | bge_m3.py | Heap-based cache eviction for O(log n) instead of O(n) | DONE |
 
 ##### P2/P3 Security (Already Fixed)
@@ -177,14 +177,14 @@
 | P2-OPT-B5.2 | DEPLOYMENT.md | Worker configuration documentation: formulas, memory calc, nginx config | DONE |
 | P2-SEC-M3 | DEPLOYMENT.md | Rate limiter multi-worker documentation with nginx example | DONE |
 | P2-SEC-M4 | config.py, server.py, deps.py | API key authentication middleware with X-API-Key header | DONE |
-| P2-OPT-B2.2 | qdrant_store.py | Configurable hybrid search prefetch multiplier (default 1.5x, was 2x) | DONE |
-| P2-OPT-B3.3 | neo4j_store.py | Connection pool metrics: acquisitions, failures, avg/max timing | DONE |
+| P2-OPT-B2.2 | t4dx_vector_adapter.py | Configurable hybrid search prefetch multiplier (default 1.5x, was 2x) | DONE |
+| P2-OPT-B3.3 | t4dx_graph_adapter.py | Connection pool metrics: acquisitions, failures, avg/max timing | DONE |
 
 ##### P3 Security & Quality
 
 | ID | Module | Fix | Status |
 |----|--------|-----|--------|
-| P3-SEC-L2 | neo4j_store.py | Cypher injection defense-in-depth: _assert_no_cypher_injection() | DONE |
+| P3-SEC-L2 | t4dx_graph_adapter.py | Cypher injection defense-in-depth: _assert_no_cypher_injection() | DONE |
 | P3-QUALITY-001 | dynamics.py | Original embedding parameter in record_retrieval() for reconsolidation | DONE |
 | P3-QUALITY-002 | eligibility.py | Input validation already complete (40 security tests pass) | VERIFIED |
 

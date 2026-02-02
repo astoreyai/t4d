@@ -1,9 +1,9 @@
-# World Weaver Architecture Refactoring Plan
+# T4DM Architecture Refactoring Plan
 
 **Version**: 0.5.0 → 0.6.0
 **Status**: Design Phase
 **Created**: 2026-01-07
-**Author**: ww-algorithm (World Weaver Algorithm Design Agent)
+**Author**: ww-algorithm (T4DM Algorithm Design Agent)
 **Priority**: P1 (Production Readiness)
 
 ---
@@ -78,17 +78,17 @@ Episodic Memory Storage Layer.
 Handles create/update/delete operations with saga pattern for dual-store consistency.
 """
 
-from ww.storage.saga import Saga, SagaState
-from ww.storage.neo4j_store import Neo4jStore
-from ww.storage.qdrant_store import QdrantStore
+from t4dm.storage.saga import Saga, SagaState
+from t4dm.storage.t4dx_graph_adapter import T4DXGraphAdapter
+from t4dm.storage.t4dx_vector_adapter import T4DXVectorAdapter
 
 class EpisodicStorageService:
     """Storage service for episodic memories with saga-based consistency."""
 
     def __init__(
         self,
-        vector_store: QdrantStore,
-        graph_store: Neo4jStore,
+        vector_store: T4DXVectorAdapter,
+        graph_store: T4DXGraphAdapter,
         session_id: str,
     ):
         self.vector_store = vector_store
@@ -162,17 +162,17 @@ Episodic Memory Retrieval Layer.
 Handles recall operations with FSRS decay, ACT-R activation, and hybrid search.
 """
 
-from ww.memory.cluster_index import ClusterIndex
-from ww.memory.learned_sparse_index import LearnedSparseIndex
-from ww.embedding.query_memory_separation import QueryMemorySeparator
+from t4dm.memory.cluster_index import ClusterIndex
+from t4dm.memory.learned_sparse_index import LearnedSparseIndex
+from t4dm.embedding.query_memory_separation import QueryMemorySeparator
 
 class EpisodicRetrievalService:
     """Retrieval service with multi-stage search pipeline."""
 
     def __init__(
         self,
-        vector_store: QdrantStore,
-        graph_store: Neo4jStore,
+        vector_store: T4DXVectorAdapter,
+        graph_store: T4DXGraphAdapter,
         session_id: str,
         cluster_index: ClusterIndex | None = None,
     ):
@@ -280,10 +280,10 @@ Episodic Memory Learning Layer.
 Handles memory updating, pattern separation, and credit assignment.
 """
 
-from ww.learning.reconsolidation import ReconsolidationEngine
-from ww.learning.three_factor import ThreeFactorLearningRule
-from ww.learning.dopamine import DopamineSystem
-from ww.memory.pattern_separation import DentateGyrus
+from t4dm.learning.reconsolidation import ReconsolidationEngine
+from t4dm.learning.three_factor import ThreeFactorLearningRule
+from t4dm.learning.dopamine import DopamineSystem
+from t4dm.memory.pattern_separation import DentateGyrus
 
 class EpisodicLearningService:
     """Learning service for memory plasticity and credit assignment."""
@@ -292,7 +292,7 @@ class EpisodicLearningService:
         self,
         storage_service: EpisodicStorageService,
         embedding_provider,
-        vector_store: QdrantStore,
+        vector_store: T4DXVectorAdapter,
     ):
         self.storage = storage_service
         self.embedding = embedding_provider
@@ -476,7 +476,7 @@ Episodic Memory Saga Orchestration.
 Coordinates multi-step operations across vector and graph stores.
 """
 
-from ww.storage.saga import Saga, SagaState
+from t4dm.storage.saga import Saga, SagaState
 
 class EpisodicSagaOrchestrator:
     """Saga coordinator for episodic memory operations."""
@@ -552,16 +552,16 @@ class EpisodicSagaOrchestrator:
 
 ```python
 """
-Episodic Memory Service for World Weaver.
+Episodic Memory Service for T4DM.
 
 Facade for episodic memory subsystem with backward compatibility.
 """
 
-from ww.memory.episodic_storage import EpisodicStorageService
-from ww.memory.episodic_retrieval import EpisodicRetrievalService
-from ww.memory.episodic_learning import EpisodicLearningService
-from ww.memory.episodic_fusion import LearnedFusionWeights, LearnedReranker
-from ww.memory.episodic_saga import EpisodicSagaOrchestrator
+from t4dm.memory.episodic_storage import EpisodicStorageService
+from t4dm.memory.episodic_retrieval import EpisodicRetrievalService
+from t4dm.memory.episodic_learning import EpisodicLearningService
+from t4dm.memory.episodic_fusion import LearnedFusionWeights, LearnedReranker
+from t4dm.memory.episodic_saga import EpisodicSagaOrchestrator
 
 class EpisodicMemory:
     """
@@ -576,8 +576,8 @@ class EpisodicMemory:
 
         # Initialize stores
         self.embedding = get_embedding_provider()
-        self.vector_store = get_qdrant_store(self.session_id)
-        self.graph_store = get_neo4j_store(self.session_id)
+        self.vector_store = get_t4dx_vector_adapter(self.session_id)
+        self.graph_store = get_t4dx_graph_adapter(self.session_id)
 
         # Initialize services
         self.storage = EpisodicStorageService(
@@ -741,7 +741,7 @@ class ConfigModelBuilder:
         )
 
 # REFACTORED: src/t4dm/api/routes/config.py (now ~150 lines)
-from ww.api.models.config_models import ConfigModelBuilder
+from t4dm.api.models.config_models import ConfigModelBuilder
 
 @router.get("", response_model=SystemConfigResponse)
 async def get_config():
@@ -802,7 +802,7 @@ async def get_config():
 
 ```python
 """
-Redis caching layer for World Weaver.
+Redis caching layer for T4DM.
 
 Caches embeddings, search results, and graph relationships.
 """
@@ -1241,13 +1241,13 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
 **Integration**: Add to `/mnt/projects/t4d/t4dm/src/t4dm/api/server.py`:
 
 ```python
-from ww.api.middleware.rate_limit import RateLimitMiddleware
+from t4dm.api.middleware.rate_limit import RateLimitMiddleware
 
 app = FastAPI(...)
 app.add_middleware(RateLimitMiddleware)
 ```
 
-**Bypass for tests**: Environment variable `WW_DISABLE_RATE_LIMIT=1`
+**Bypass for tests**: Environment variable `T4DM_DISABLE_RATE_LIMIT=1`
 
 ---
 
@@ -1580,14 +1580,14 @@ def test_recall_with_cache(benchmark, episodic_memory):
 
 
 @pytest.mark.benchmark(group="graph-traversal")
-def test_batch_graph_query(benchmark, neo4j_store):
+def test_batch_graph_query(benchmark, t4dx_graph_adapter):
     """Benchmark batch graph queries (should be 10-100x faster)."""
 
     # Create test nodes
     node_ids = [str(uuid4()) for _ in range(100)]
 
     def batch_query():
-        return neo4j_store.get_relationships_batch(node_ids)
+        return t4dx_graph_adapter.get_relationships_batch(node_ids)
 
     result = benchmark(batch_query)
 
@@ -1628,12 +1628,12 @@ pytest-benchmark compare before after
 
 ```python
 # OLD: Direct access to EpisodicMemory internals
-from ww.memory.episodic import EpisodicMemory
+from t4dm.memory.episodic import EpisodicMemory
 em = EpisodicMemory()
 em.vector_store.add(...)  # Direct access
 
 # NEW: Use public API (preferred) or access services
-from ww.memory.episodic import EpisodicMemory
+from t4dm.memory.episodic import EpisodicMemory
 em = EpisodicMemory()
 em.storage.store(...)  # Service-oriented
 

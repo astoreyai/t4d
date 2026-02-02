@@ -1,4 +1,4 @@
-# World Weaver Test Coverage Analysis
+# T4DM Test Coverage Analysis
 
 **Date**: 2025-11-27
 **Test Run**: pytest with coverage (source/ww)
@@ -9,7 +9,7 @@
 
 ## Executive Summary
 
-The World Weaver project has a **foundation of good test structure** but significant **coverage and quality gaps** in critical modules. Key issues:
+The T4DM project has a **foundation of good test structure** but significant **coverage and quality gaps** in critical modules. Key issues:
 
 1. **5 async/event loop failures** affecting integration tests (fixable)
 2. **Zero coverage** in observability layer (logging, metrics, health - ~350 LOC untested)
@@ -32,8 +32,8 @@ The World Weaver project has a **foundation of good test structure** but signifi
 | **observability/health.py** | 0% | 108 | 108 | CRITICAL | P2 |
 | **observability/logging.py** | 0% | 107 | 107 | CRITICAL | P2 |
 | **observability/metrics.py** | 0% | 133 | 133 | CRITICAL | P2 |
-| **storage/neo4j_store.py** | 41% | 232 | 136 | HIGH | P1 |
-| **storage/qdrant_store.py** | 56% | 181 | 79 | HIGH | P2 |
+| **storage/t4dx_graph_adapter.py** | 41% | 232 | 136 | HIGH | P1 |
+| **storage/t4dx_vector_adapter.py** | 56% | 181 | 79 | HIGH | P2 |
 | **memory/semantic.py** | 53% | 177 | 84 | MEDIUM | P2 |
 | **memory/procedural.py** | 64% | 124 | 45 | MEDIUM | P2 |
 | **embedding/bge_m3.py** | 59% | 87 | 36 | MEDIUM | P3 |
@@ -305,8 +305,8 @@ async def test_entity_merge_deduplication():
 ## Mock & Fixture Analysis
 
 ### Well-Used Mocks
-- ✅ `mock_qdrant_store` - AsyncMock with proper return types
-- ✅ `mock_neo4j_store` - Proper relationship method signatures
+- ✅ `mock_t4dx_vector_adapter` - AsyncMock with proper return types
+- ✅ `mock_t4dx_graph_adapter` - Proper relationship method signatures
 - ✅ `mock_embedding` - Returns correct 1024-dim vectors
 
 ### Over-Mocking Issues
@@ -399,8 +399,8 @@ Memory services not properly cleaned up between tests
 async def cleanup_services():
     """Clean up memory services after each test."""
     yield
-    await close_qdrant_store()
-    await close_neo4j_store()
+    await close_t4dx_vector_adapter()
+    await close_t4dx_graph_adapter()
     _service_instances.clear()
 ```
 
@@ -534,9 +534,9 @@ Driver created per test vs. shared across tests
 # tests/conftest.py
 import asyncio
 import pytest
-from ww.storage.qdrant_store import close_qdrant_store
-from ww.storage.neo4j_store import close_neo4j_store
-from ww.mcp.memory_gateway import _service_instances, _initialized_sessions
+from t4dm.storage.t4dx_vector_adapter import close_t4dx_vector_adapter
+from t4dm.storage.t4dx_graph_adapter import close_t4dx_graph_adapter
+from t4dm.mcp.memory_gateway import _service_instances, _initialized_sessions
 
 @pytest.fixture(scope="session")
 def event_loop():
@@ -553,8 +553,8 @@ async def cleanup_services():
     _service_instances.clear()
     _initialized_sessions.clear()
     try:
-        await close_qdrant_store()
-        await close_neo4j_store()
+        await close_t4dx_vector_adapter()
+        await close_t4dx_graph_adapter()
     except Exception:
         pass
 ```
@@ -564,7 +564,7 @@ async def cleanup_services():
 ```python
 # tests/unit/test_consolidation.py
 import pytest
-from ww.consolidation.service import get_consolidation_service
+from t4dm.consolidation.service import get_consolidation_service
 
 @pytest.mark.asyncio
 async def test_consolidate_light_deduplicates():
@@ -584,7 +584,7 @@ async def test_consolidate_error_recovery():
 ```python
 # tests/unit/test_mcp_gateway.py
 import pytest
-from ww.mcp.memory_gateway import mcp_app
+from t4dm.mcp.memory_gateway import mcp_app
 
 @pytest.mark.asyncio
 async def test_episodic_create_validates_input():
@@ -627,8 +627,8 @@ async def test_error_returns_mcp_format():
 | consolidation/service.py | 18% | 80% | 62% |
 | mcp/memory_gateway.py | 18% | 80% | 62% |
 | observability/* | 0% | 50% | 50% |
-| storage/neo4j_store.py | 41% | 75% | 34% |
-| storage/qdrant_store.py | 56% | 75% | 19% |
+| storage/t4dx_graph_adapter.py | 41% | 75% | 34% |
+| storage/t4dx_vector_adapter.py | 56% | 75% | 19% |
 | memory/semantic.py | 53% | 80% | 27% |
 | memory/procedural.py | 64% | 80% | 16% |
 | memory/episodic.py | 87% | 90% | 3% |

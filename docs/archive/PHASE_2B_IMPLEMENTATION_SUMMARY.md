@@ -49,7 +49,7 @@ Added bridge container cleanup to the service lifecycle:
 
 ```python
 # P7.1 Phase 2B: Clean up bridge container for session
-from ww.core.bridge_container import clear_bridge_containers, _containers
+from t4dm.core.bridge_container import clear_bridge_containers, _containers
 if session_id in _containers:
     _containers.pop(session_id, None)
     logger.info(f"P7.1 Phase 2B: Bridge container cleaned up for session: {session_id}")
@@ -68,7 +68,7 @@ async def get_bridge_container_dep(
     session_id: Annotated[str, Depends(check_rate_limit)],
 ):
     """Get bridge container for session."""
-    from ww.core.bridge_container import get_bridge_container
+    from t4dm.core.bridge_container import get_bridge_container
 
     try:
         container = get_bridge_container(session_id)
@@ -164,9 +164,9 @@ The bridge container uses a session-scoped singleton pattern:
 
 The bridge container now integrates with:
 
-1. **Memory Services** (`ww.core.services`): Initialized during service creation
-2. **Episodic Memory** (`ww.memory.episodic`): Wires NCA components
-3. **API Layer** (`ww.api.deps`): Provides dependency injection for endpoints
+1. **Memory Services** (`t4dm.core.services`): Initialized during service creation
+2. **Episodic Memory** (`t4dm.memory.episodic`): Wires NCA components
+3. **API Layer** (`t4dm.api.deps`): Provides dependency injection for endpoints
 4. **Cleanup Hooks**: Proper teardown on session end
 
 ## Biological Validation

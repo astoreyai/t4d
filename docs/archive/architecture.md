@@ -1,4 +1,4 @@
-# World Weaver Architecture
+# T4DM Architecture
 
 ## System Overview
 
@@ -58,7 +58,7 @@
 
 ### 1. MCP Gateway (`/mnt/projects/t4d/t4dm/src/t4dm/mcp/`)
 
-**Purpose**: Expose World Weaver memory system to Claude Code via MCP protocol.
+**Purpose**: Expose T4DM memory system to Claude Code via MCP protocol.
 
 #### Files
 - **memory_gateway.py** (450+ lines): FastMCP server with 17 tools
@@ -171,7 +171,7 @@ Execution → Update stats → Recalculate success rate
 
 ### 3. Storage Layer (`/mnt/projects/t4d/t4dm/src/t4dm/storage/`)
 
-#### Qdrant (`qdrant_store.py`)
+#### Qdrant (`t4dx_vector_adapter.py`)
 **Purpose**: Vector similarity search for embeddings
 
 **Collections**:
@@ -193,7 +193,7 @@ Execution → Update stats → Recalculate success rate
 - Host: `localhost:6333`
 - Async client with connection pooling
 
-#### Neo4j (`neo4j_store.py`)
+#### Neo4j (`t4dx_graph_adapter.py`)
 **Purpose**: Graph queries for relationships and provenance
 
 **Node Labels**:
@@ -474,7 +474,7 @@ cd /mnt/projects/ww
 pip install -e .
 
 # Run MCP server
-python -m ww.mcp.memory_gateway
+python -m t4dm.mcp.memory_gateway
 ```
 
 ### Production Considerations

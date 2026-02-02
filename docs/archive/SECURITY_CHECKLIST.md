@@ -1,4 +1,4 @@
-# World Weaver Security Checklist
+# T4DM Security Checklist
 
 Quick reference for security verification before deployment.
 
@@ -7,8 +7,8 @@ Quick reference for security verification before deployment.
 ### Configuration Security
 
 - [ ] **Database Credentials**
-  - [ ] `WW_NEO4J_PASSWORD` set to strong password (not "password")
-  - [ ] `WW_QDRANT_API_KEY` set for production Qdrant instances
+  - [ ] `T4DM_NEO4J_PASSWORD` set to strong password (not "password")
+  - [ ] `T4DM_QDRANT_API_KEY` set for production Qdrant instances
   - [ ] No credentials in version control (.env in .gitignore)
   - [ ] Credentials rotated regularly (every 90 days)
 
@@ -27,7 +27,7 @@ Quick reference for security verification before deployment.
 
 - [ ] **Input Validation**
   - [ ] All MCP tool inputs validated via `validation.py`
-  - [ ] Label/type whitelisting added to `neo4j_store.py`
+  - [ ] Label/type whitelisting added to `t4dx_graph_adapter.py`
   - [ ] Content length limits enforced (max 100KB per episode)
   - [ ] Enum validation for all type fields
 
@@ -80,16 +80,16 @@ Quick reference for security verification before deployment.
 
 ```bash
 # .env.production
-WW_SESSION_ID=$(openssl rand -hex 16)
-WW_NEO4J_URI=bolt://neo4j.internal:7687
-WW_NEO4J_USER=ww_app
-WW_NEO4J_PASSWORD=$(openssl rand -base64 32)
-WW_NEO4J_DATABASE=worldweaver_prod
+T4DM_SESSION_ID=$(openssl rand -hex 16)
+T4DM_NEO4J_URI=bolt://neo4j.internal:7687
+T4DM_NEO4J_USER=ww_app
+T4DM_NEO4J_PASSWORD=$(openssl rand -base64 32)
+T4DM_NEO4J_DATABASE=worldweaver_prod
 
-WW_QDRANT_URL=https://qdrant.internal:6333
-WW_QDRANT_API_KEY=$(openssl rand -base64 32)
+T4DM_QDRANT_URL=https://qdrant.internal:6333
+T4DM_QDRANT_API_KEY=$(openssl rand -base64 32)
 
-WW_EMBEDDING_CACHE_DIR=/var/lib/world_weaver/models
+T4DM_EMBEDDING_CACHE_DIR=/var/lib/t4dm/models
 ```
 
 ### Docker Security
@@ -148,10 +148,10 @@ server {
 grep -r "password" .env && echo "FAIL: Default password in use"
 
 # Test 2: Secret exposure in logs
-grep -r "neo4j_password\|api_key" /var/log/world_weaver/ && echo "FAIL: Secrets in logs"
+grep -r "neo4j_password\|api_key" /var/log/t4dm/ && echo "FAIL: Secrets in logs"
 
 # Test 3: File permissions
-find /var/lib/world_weaver -type f -perm /022 && echo "FAIL: Insecure permissions"
+find /var/lib/t4dm -type f -perm /022 && echo "FAIL: Insecure permissions"
 
 # Test 4: Open ports
 nmap localhost -p 7687,6333 && echo "WARNING: Databases exposed"

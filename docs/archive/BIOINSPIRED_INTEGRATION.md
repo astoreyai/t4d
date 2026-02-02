@@ -1,7 +1,7 @@
 # Biologically-Inspired Memory Integration Architecture
-## CompBio System Integration into World Weaver
+## CompBio System Integration into T4DM
 
-**Author**: World Weaver Team
+**Author**: T4DM Team
 **Date**: 2025-12-06
 **Status**: Architecture Specification
 **Version**: 1.0.0
@@ -10,7 +10,7 @@
 
 ## Executive Summary
 
-This document defines the integration architecture for incorporating biologically-inspired neural memory components (from the CompBio agent analysis at `~/mem`) into World Weaver's existing tripartite memory system. The goal is to create a unified cognitive architecture that combines:
+This document defines the integration architecture for incorporating biologically-inspired neural memory components (from the CompBio agent analysis at `~/mem`) into T4DM's existing tripartite memory system. The goal is to create a unified cognitive architecture that combines:
 
 1. **WW Strengths**: Neo4j symbolic reasoning, MCP integration, tripartite memory, NeuromodulatorOrchestra (5 signals), Thompson sampling, FSRS decay, ACT-R activation
 2. **CompBio Additions**: Dendritic computation, sparse coding (k-WTA), attractor dynamics, eligibility traces, Forward-Forward learning (future)
@@ -291,7 +291,7 @@ class BioinspiredConfig:
 ```python
 @dataclass
 class SystemConfig:
-    """Complete World Weaver configuration."""
+    """Complete T4DM configuration."""
 
     # Existing WW configs
     embedding: EmbeddingConfig

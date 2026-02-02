@@ -78,9 +78,9 @@ Optional gating prevents learning when DA too low:
 ### Basic Usage
 
 ```python
-from ww.integration import STDPVTABridge
-from ww.learning.stdp import STDPLearner
-from ww.nca.vta import VTACircuit
+from t4dm.integration import STDPVTABridge
+from t4dm.learning.stdp import STDPLearner
+from t4dm.nca.vta import VTACircuit
 
 # Create components
 stdp = STDPLearner()
@@ -103,7 +103,7 @@ update = stdp.compute_update(
 ### Direct STDP Modulation
 
 ```python
-from ww.learning.stdp import get_stdp_learner
+from t4dm.learning.stdp import get_stdp_learner
 
 stdp = get_stdp_learner()
 
@@ -127,7 +127,7 @@ update = stdp.compute_update(
 ### Using Bridge
 
 ```python
-from ww.integration import get_stdp_vta_bridge
+from t4dm.integration import get_stdp_vta_bridge
 
 bridge = get_stdp_vta_bridge()
 
@@ -153,7 +153,7 @@ if bridge.should_gate_learning():
 ## Configuration
 
 ```python
-from ww.integration import STDPVTAConfig
+from t4dm.integration import STDPVTAConfig
 
 config = STDPVTAConfig(
     ltp_da_gain=0.5,       # LTP modulation strength [0-1]

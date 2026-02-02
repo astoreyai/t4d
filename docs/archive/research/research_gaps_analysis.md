@@ -64,7 +64,7 @@ This analysis identifies 23 critical research gaps across AI agent memory system
 - Memory bloat: unbounded growth degrades retrieval quality and latency
 
 **Research Directions**:
-1. Bi-temporal versioning with validity intervals (implemented in World Weaver, understudied elsewhere)
+1. Bi-temporal versioning with validity intervals (implemented in T4DM, understudied elsewhere)
 2. Conflict resolution strategies: CRDT vs. OT vs. LLM-based reconciliation
 3. Adaptive decay functions based on access patterns (FSRS shows promise but needs agent-specific validation)
 4. Memory consolidation as lossy compression with controlled information loss
@@ -81,7 +81,7 @@ This analysis identifies 23 critical research gaps across AI agent memory system
 
 **Evidence**:
 - Memp: Build-Retrieve-Update lifecycle, but success_threshold=0.7 is arbitrary
-- Only 2/38 studies address procedural memory (Memp, World Weaver)
+- Only 2/38 studies address procedural memory (Memp, T4DM)
 - **Gap**: No formal analysis of skill transferability or compositionality
 
 **Why It Matters**:
@@ -105,7 +105,7 @@ This analysis identifies 23 critical research gaps across AI agent memory system
 
 ### Gap 2.1: Hebbian Learning in Semantic Graphs
 
-**Description**: While cognitive models (ACT-R) and neuroscience support Hebbian learning ("fire together, wire together"), only 1/38 AI agent studies implements it (World Weaver). No empirical validation of Hebbian vs. alternative graph weighting schemes.
+**Description**: While cognitive models (ACT-R) and neuroscience support Hebbian learning ("fire together, wire together"), only 1/38 AI agent studies implements it (T4DM). No empirical validation of Hebbian vs. alternative graph weighting schemes.
 
 **Evidence**:
 - ACT-R: Spreading activation with fan-effect normalization (validated in human cognition)
@@ -164,7 +164,7 @@ This analysis identifies 23 critical research gaps across AI agent memory system
 **Evidence**:
 - MemGPT: Timestamps exist but only used for recency bias
 - Generative Agents: No temporal querying beyond "recent events"
-- World Weaver: Implements bi-temporal versioning (T_ref, T_sys) but no published alternatives
+- T4DM: Implements bi-temporal versioning (T_ref, T_sys) but no published alternatives
 - **Gap**: 2/38 studies support "as-of" queries, 0/38 support causal temporal reasoning
 
 **Why It Matters**:
@@ -225,7 +225,7 @@ This analysis identifies 23 critical research gaps across AI agent memory system
 - **Gap**: 0/38 studies use standardized benchmarks, 32/38 use custom evaluations
 
 **Why It Matters**:
-- Can't compare systems objectively (MemGPT vs. Generative Agents vs. World Weaver)
+- Can't compare systems objectively (MemGPT vs. Generative Agents vs. T4DM)
 - Results not reproducible (different datasets, metrics, setups)
 - Slows research progress (every paper reinvents evaluation)
 
@@ -261,7 +261,7 @@ This analysis identifies 23 critical research gaps across AI agent memory system
 **Evidence**:
 - ACT-R: 100+ published experiments matching human reaction times, error patterns
 - MemGPT/Generative Agents: Zero cognitive validity studies
-- World Weaver: Uses ACT-R/FSRS equations but no human validation
+- T4DM: Uses ACT-R/FSRS equations but no human validation
 - **Gap**: 38/38 studies lack cognitive plausibility testing
 
 **Why It Matters**:
@@ -363,11 +363,11 @@ This analysis identifies 23 critical research gaps across AI agent memory system
 
 ### Gap 4.3: Memory-Action Integration
 
-**Description**: Procedural memory systems (Memp, World Weaver) store skills but don't tightly integrate with action execution. No feedback loop from action outcomes to skill refinement.
+**Description**: Procedural memory systems (Memp, T4DM) store skills but don't tightly integrate with action execution. No feedback loop from action outcomes to skill refinement.
 
 **Evidence**:
 - Memp: Manual feedback required for skill update (not automatic from execution)
-- World Weaver: Procedure storage exists, but no execution engine integration
+- T4DM: Procedure storage exists, but no execution engine integration
 - **Gap**: 36/38 studies don't connect memory to action execution
 
 **Why It Matters**:
@@ -444,10 +444,10 @@ This analysis identifies 23 critical research gaps across AI agent memory system
 
 ### Gap 5.3: Distributed Memory Architectures
 
-**Description**: Multi-agent systems (collaborative teams, swarm robotics) need shared memory, but no distributed memory architectures exist. CRDTs mentioned (Zep, World Weaver) but not implemented or evaluated.
+**Description**: Multi-agent systems (collaborative teams, swarm robotics) need shared memory, but no distributed memory architectures exist. CRDTs mentioned (Zep, T4DM) but not implemented or evaluated.
 
 **Evidence**:
-- World Weaver: Specifies OR-Set CRDTs but not implemented
+- T4DM: Specifies OR-Set CRDTs but not implemented
 - Zep: Mentions CRDTs in docs but doesn't provide details
 - **Gap**: 0/38 studies implement distributed memory
 
@@ -783,13 +783,13 @@ This analysis identifies 23 critical research gaps across AI agent memory system
 ### For Consolidation Theory (Gap 1.1):
 1. **Month 1**: Formalize consolidation as optimization problem (information-theoretic framework)
 2. **Month 2-3**: Prove convergence for clustering-based consolidation (HDBSCAN, DBSCAN)
-3. **Month 4-6**: Implement and evaluate rate-distortion consolidation on World Weaver
+3. **Month 4-6**: Implement and evaluate rate-distortion consolidation on T4DM
 4. **Month 7-9**: Ablation studies (hyperparameter sensitivity, dataset dependence)
 5. **Month 10-12**: Write paper, submit to JAIR or NeurIPS
 
 ### For Memory Governance (Gap 6.1):
 1. **Month 1**: Legal consultation (GDPR experts, privacy lawyers)
-2. **Month 2-3**: Design cascading deletion algorithm, implement in World Weaver
+2. **Month 2-3**: Design cascading deletion algorithm, implement in T4DM
 3. **Month 4-5**: Reconstruction attack evaluation (differential privacy guarantees)
 4. **Month 6**: Write technical report + legal whitepaper for policy makers
 
@@ -878,8 +878,8 @@ This analysis identifies 23 critical research gaps across AI agent memory system
 | **ACT-R activation predicts human recall** | Anderson+07, Altmann+02 (N=2) | R²=0.70-0.85 for RT, accuracy | None |
 | **HDBSCAN consolidation preserves semantics** | Zep Graphiti (N=1) | 94.8% accuracy on DMR benchmark | Insufficient data |
 | **FSRS outperforms SM-2 for spaced repetition** | Modarressi+24 (N=1) | 20-30% better retention prediction | None |
-| **Hebbian learning improves knowledge graphs** | World Weaver (N=1) | Not yet evaluated | **GAP: needs validation** |
-| **Bi-temporal versioning handles updates** | World Weaver (N=1) | Not yet evaluated | **GAP: needs validation** |
+| **Hebbian learning improves knowledge graphs** | T4DM (N=1) | Not yet evaluated | **GAP: needs validation** |
+| **Bi-temporal versioning handles updates** | T4DM (N=1) | Not yet evaluated | **GAP: needs validation** |
 | **CRDTs enable distributed memory** | Kleppmann+17 (general), 0 agent studies | Convergence proved (general CRDTs) | **GAP: no agent implementations** |
 
 **Consistent Findings** (3+ studies):

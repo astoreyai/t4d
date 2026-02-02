@@ -1,6 +1,6 @@
 # Guides
 
-Practical guides for extending and optimizing World Weaver.
+Practical guides for extending and optimizing T4DM.
 
 ## Available Guides
 
@@ -22,7 +22,7 @@ Practical guides for extending and optimizing World Weaver.
 
     ---
 
-    Write tests for World Weaver integrations and extensions
+    Write tests for T4DM integrations and extensions
 
 </div>
 

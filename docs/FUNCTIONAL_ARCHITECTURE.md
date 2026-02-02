@@ -1,4 +1,4 @@
-# World Weaver Functional Architecture
+# T4DM Functional Architecture
 
 **Generated**: 2025-12-06
 **Purpose**: Functional decomposition by system role and data flow
@@ -73,7 +73,7 @@
 │  ┌─────────────────────────────────────────────────────────────┐       │
 │  │                  PERSISTENCE LAYER                          │       │
 │  ├────────────────────────┬────────────────────────────────────┤       │
-│  │      QdrantStore       │         Neo4jStore                 │       │
+│  │      T4DXVectorAdapter       │         T4DXGraphAdapter                 │       │
 │  │   (Vector Embeddings)  │    (Graph Relationships)           │       │
 │  │   ┌──────────────┐     │     ┌──────────────┐               │       │
 │  │   │Circuit Break.│     │     │Circuit Break.│               │       │
@@ -90,7 +90,7 @@
 - `ClusterIndex` → CA3-like hierarchical clustering
 - `LearnedSparseIndex` → Query-dependent sparse addressing
 - `FeatureAligner` → Joint gating-retrieval optimization
-- `QdrantStore`, `Neo4jStore` → Persistence backends with circuit breaker protection
+- `T4DXVectorAdapter`, `T4DXGraphAdapter` → Persistence backends with circuit breaker protection
 - `CircuitBreaker` → Fault tolerance and graceful degradation
 
 ---
@@ -409,7 +409,7 @@
 ║  ┌─────────────────────────────────────────────────────────────────────────┐ ║
 ║  │                       PERSISTENCE LAYER                                 │ ║
 ║  │  ┌─────────────────────────┐    ┌─────────────────────────┐            │ ║
-║  │  │      QdrantStore        │    │       Neo4jStore        │            │ ║
+║  │  │      T4DXVectorAdapter        │    │       T4DXGraphAdapter        │            │ ║
 ║  │  │   (Vector Embeddings)   │    │   (Graph Relations)     │            │ ║
 ║  │  │                         │    │                         │            │ ║
 ║  │  │  - Dense vectors        │    │  - Entities             │            │ ║

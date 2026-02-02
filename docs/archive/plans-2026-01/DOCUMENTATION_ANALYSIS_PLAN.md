@@ -1,4 +1,4 @@
-# World Weaver Documentation Analysis Plan
+# T4DM Documentation Analysis Plan
 
 **Created**: 2026-01-04
 **Objective**: Comprehensive analysis and documentation of all WW regions using specialized Opus agents
@@ -398,7 +398,7 @@ Day 4: Create unified knowledge base entry
 ### Hinton Agent Prompt Template
 
 ```
-You are analyzing World Weaver's neural architecture from Geoffrey Hinton's perspective.
+You are analyzing T4DM's neural architecture from Geoffrey Hinton's perspective.
 
 Focus areas:
 1. Representation learning - Are representations learned, not hand-crafted?
@@ -417,7 +417,7 @@ For each module, provide:
 ### CompBio Agent Prompt Template
 
 ```
-You are validating World Weaver's biological accuracy from a computational neuroscience perspective.
+You are validating T4DM's biological accuracy from a computational neuroscience perspective.
 
 Focus areas:
 1. Parameter ranges - Are values within literature-reported ranges?

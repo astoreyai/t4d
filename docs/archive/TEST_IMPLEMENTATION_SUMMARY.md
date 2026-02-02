@@ -1,4 +1,4 @@
-# World Weaver Test Implementation Summary
+# T4DM Test Implementation Summary
 
 **Status**: Complete
 **Date**: 2025-11-27
@@ -6,7 +6,7 @@
 
 ## Executive Summary
 
-Implemented comprehensive integration and performance test suites for World Weaver memory system:
+Implemented comprehensive integration and performance test suites for T4DM memory system:
 - **8 integration tests** covering full system workflows
 - **8 performance benchmarks** with regression detection
 - **Pytest markers** for flexible test execution
@@ -87,8 +87,8 @@ Provides:
 - **Session Fixtures**: `integration_session_a`, `integration_session_b`
 - **Mock Stores**:
   - `integration_embedding_provider` (1024-dim BGE-M3)
-  - `integration_qdrant_store` (with storage simulation)
-  - `integration_neo4j_store` (with node/relationship tracking)
+  - `integration_t4dx_vector_adapter` (with storage simulation)
+  - `integration_t4dx_graph_adapter` (with node/relationship tracking)
 - **Convenience Fixtures**:
   - `episodic_memory_with_mocks`
   - `semantic_memory_with_mocks`
@@ -342,7 +342,7 @@ All components are validated:
 
 ## Conclusion
 
-World Weaver now has enterprise-grade testing infrastructure:
+T4DM now has enterprise-grade testing infrastructure:
 - ✓ End-to-end integration workflows
 - ✓ Performance regression detection
 - ✓ Session isolation verification

@@ -164,8 +164,8 @@ Conduct comprehensive WW bug audit using all specialized agents:
 5. Cache Coherence Analyzer on src/t4dm/indexes/, src/t4dm/storage/
 6. Eligibility Trace Debugger on src/t4dm/learning/eligibility_traces.py
 
-Generate reports to /home/aaron/mem/WW_AUDIT_{agent}_{timestamp}.md
-Consolidate findings to /home/aaron/mem/WW_MASTER_AUDIT.md
+Generate reports to /home/aaron/mem/T4DM_AUDIT_{agent}_{timestamp}.md
+Consolidate findings to /home/aaron/mem/T4DM_MASTER_AUDIT.md
 ```
 
 ## Report Output Locations
@@ -180,7 +180,7 @@ All agents write reports to `/home/aaron/mem/`:
 ├── HINTON_VALIDATION_{filename}.md
 ├── CACHE_AUDIT_{filename}.md
 ├── TRACE_DEBUG_{filename}.md
-└── WW_MASTER_AUDIT.md (consolidated)
+└── T4DM_MASTER_AUDIT.md (consolidated)
 ```
 
 ## Theoretical Foundations

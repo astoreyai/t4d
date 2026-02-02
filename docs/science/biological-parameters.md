@@ -7,7 +7,7 @@
 
 ## Overview
 
-This document catalogs all biologically-inspired parameters in World Weaver, with literature sources and validation status. Parameters are organized by system and include reference ranges from neuroscience literature.
+This document catalogs all biologically-inspired parameters in T4DM, with literature sources and validation status. Parameters are organized by system and include reference ranges from neuroscience literature.
 
 ---
 

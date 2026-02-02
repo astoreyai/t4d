@@ -1,4 +1,4 @@
-# World Weaver System Walkthrough
+# T4DM System Walkthrough
 
 **Version**: 0.1.0
 **Last Updated**: 2025-12-09
@@ -18,7 +18,7 @@
 
 ## System Overview
 
-World Weaver is a biologically-inspired memory system for AI agents, implementing:
+T4DM is a biologically-inspired memory system for AI agents, implementing:
 
 - **Tripartite Memory**: Episodic (events), Semantic (knowledge), Procedural (skills)
 - **Neuromodulation**: 5-factor system (DA, NE, ACh, 5-HT, GABA)
@@ -87,8 +87,8 @@ t4dm/
 │   └── fsrs.py        # Spaced repetition decay
 │
 ├── storage/           # Persistence backends
-│   ├── qdrant_store.py # Vector similarity search
-│   ├── neo4j_store.py  # Knowledge graph storage
+│   ├── t4dx_vector_adapter.py # Vector similarity search
+│   ├── t4dx_graph_adapter.py  # Knowledge graph storage
 │   ├── resilience.py   # Circuit breaker pattern
 │   └── saga.py         # Distributed transactions
 │
@@ -175,8 +175,8 @@ t4dm/
     ▼                ▼                ▼
 ┌──────────┐  ┌─────────────┐  ┌──────────────┐
 │embedding/│  │  learning/  │  │  storage/    │
-│bge_m3.py │  │neuromod.py  │  │qdrant_store  │
-│          │  │dopamine.py  │  │neo4j_store   │
+│bge_m3.py │  │neuromod.py  │  │t4dx_vector_adapter  │
+│          │  │dopamine.py  │  │t4dx_graph_adapter   │
 └──────────┘  │serotonin.py │  └──────────────┘
               │eligibility  │
               └─────────────┘
@@ -241,9 +241,9 @@ t4dm/api/server.py → FastAPI → t4dm/api/routes/*.py
 ### 3. Python SDK
 
 ```python
-from ww.sdk import WorldWeaverClient
+from t4dm.sdk import T4DMClient
 
-client = WorldWeaverClient("http://localhost:8080")
+client = T4DMClient("http://localhost:8080")
 episode = await client.create_episode("Fixed auth bug", outcome="success")
 results = await client.recall_episodes("authentication issues")
 ```

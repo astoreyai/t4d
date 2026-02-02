@@ -1,10 +1,10 @@
 # Concepts
 
-Understanding the core concepts behind World Weaver.
+Understanding the core concepts behind T4DM.
 
 ## Overview
 
-World Weaver implements a biologically-inspired memory architecture based on cognitive neuroscience research. The system combines multiple memory subsystems with neural dynamics to create an AI memory system that exhibits properties similar to human memory.
+T4DM implements a biologically-inspired memory architecture based on cognitive neuroscience research. The system combines multiple memory subsystems with neural dynamics to create an AI memory system that exhibits properties similar to human memory.
 
 ## Key Concepts
 
@@ -32,7 +32,7 @@ World Weaver implements a biologically-inspired memory architecture based on cog
 
     ---
 
-    Mapping World Weaver components to brain regions
+    Mapping T4DM components to brain regions
 
 -   :material-play-network: **[Forward-Forward Algorithm](forward-forward.md)**
 
@@ -64,7 +64,7 @@ World Weaver implements a biologically-inspired memory architecture based on cog
 
 ### 1. Biological Plausibility
 
-World Weaver's algorithms are informed by neuroscience research:
+T4DM's algorithms are informed by neuroscience research:
 
 - **FSRS** for episodic memory decay (spaced repetition)
 - **ACT-R** activation for semantic retrieval

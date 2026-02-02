@@ -1,6 +1,6 @@
-# Literature Review Gap Analysis: World Weaver Paper
+# Literature Review Gap Analysis: T4DM Paper
 
-**Paper:** "World Weaver: Cognitive Memory Architecture for Persistent World Models in Agentic AI Systems"
+**Paper:** "T4DM: Cognitive Memory Architecture for Persistent World Models in Agentic AI Systems"
 **Current Citations:** ~59
 **Analysis Date:** 2024-12-04
 **Methodology:** Systematic search across OpenAlex database covering 2020-2024 publications
@@ -9,7 +9,7 @@
 
 ## Executive Summary
 
-The World Weaver paper has strong foundational coverage of cognitive science (Tulving, Anderson, ACT-R) and covers many key AI memory systems (MemGPT, Generative Agents, RAG). However, there are **10 critical citation gaps** that would significantly strengthen the paper, particularly in:
+The T4DM paper has strong foundational coverage of cognitive science (Tulving, Anderson, ACT-R) and covers many key AI memory systems (MemGPT, Generative Agents, RAG). However, there are **10 critical citation gaps** that would significantly strengthen the paper, particularly in:
 
 1. Tool-use and API integration for agents
 2. Long-context alternatives to external memory

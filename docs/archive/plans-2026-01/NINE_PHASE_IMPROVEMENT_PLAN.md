@@ -1,4 +1,4 @@
-# World Weaver: 9-Phase Improvement Plan
+# T4DM: 9-Phase Improvement Plan
 
 **Created**: 2026-01-07 | **Status**: PLANNING
 **Target**: Address all findings from CompBio, Hinton, and Architecture analyses
@@ -319,7 +319,7 @@ class RedisCache:
 
 **Files to Modify**:
 - `src/t4dm/embedding/adapter.py` - Add cache checks
-- `src/t4dm/storage/qdrant_store.py` - Cache search results
+- `src/t4dm/storage/t4dx_vector_adapter.py` - Cache search results
 
 ### 3B. API Rate Limiting
 **Owner**: Architecture Agent | **Effort**: 16h
@@ -803,7 +803,7 @@ src/t4dm/learning/generative_replay.py
 src/t4dm/encoding/ff_encoder.py
 src/t4dm/encoding/adapter.py
 src/t4dm/consolidation/sleep.py
-src/t4dm/storage/qdrant_store.py
+src/t4dm/storage/t4dx_vector_adapter.py
 src/t4dm/api/routes/config.py
 src/t4dm/api/server.py
 docs/architecture.md

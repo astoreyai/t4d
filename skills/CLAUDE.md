@@ -15,11 +15,11 @@ Provides specialized AI capabilities for working with bio-inspired memory system
 ## Key Files
 | Category | Skills |
 |----------|--------|
-| `domain/` | ww-algorithm, ww-compbio, ww-neuro |
-| `knowledge/` | ww-knowledge, ww-retriever |
-| `memory/` | ww-consolidate, ww-episodic, ww-graph, ww-memory, ww-procedural, ww-semantic, ww-semantic-mem |
-| `orchestration/` | ww-conductor, ww-init, ww-session |
-| `workflow/` | ww-finetune, ww-planner, ww-synthesizer, ww-validator |
+| `domain/` | t4dm-algorithm, t4dm-compbio, t4dm-neuro |
+| `knowledge/` | t4dm-knowledge, t4dm-retriever |
+| `memory/` | t4dm-consolidate, t4dm-episodic, t4dm-graph, t4dm-memory, t4dm-procedural, t4dm-semantic, t4dm-semantic-mem |
+| `orchestration/` | t4dm-conductor, t4dm-init, t4dm-session |
+| `workflow/` | t4dm-finetune, t4dm-planner, t4dm-synthesizer, t4dm-validator |
 
 ## Data Flow
 ```
@@ -28,5 +28,5 @@ User invokes skill → SKILL.md (prompt) → Claude Code session
 ```
 
 ## Integration Points
-- **Config**: `config/ww-features.json` and `config/ww-progress.json` used by orchestration skills
+- **Config**: `config/t4dm-features.json` and `config/t4dm-progress.json` used by orchestration skills
 - **Agents**: Complementary to agents (skills assist, agents debug)

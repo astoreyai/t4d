@@ -1,4 +1,4 @@
-# World Weaver (WW) - Personal AI Assistant Framework
+# T4DM (WW) - Personal AI Assistant Framework
 
 **Version**: 0.1.0-alpha
 **Status**: Architecture Design Phase
@@ -327,7 +327,7 @@ class InitializerAgent(BaseAgent):
 
 ```json
 {
-  "project": "world-weaver",
+  "project": "t4dm",
   "version": "0.1.0",
   "last_updated": "2025-11-27T10:00:00Z",
   "sessions": [
@@ -358,7 +358,7 @@ class InitializerAgent(BaseAgent):
 
 ```json
 {
-  "project": "world-weaver",
+  "project": "t4dm",
   "generated": "2025-11-27T09:00:00Z",
   "features": [
     {

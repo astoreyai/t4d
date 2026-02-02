@@ -1,12 +1,12 @@
 # Phase 3 Security Implementation Report
 
 **Date**: 2025-11-27
-**Project**: World Weaver - Tripartite Memory System
+**Project**: T4DM - Tripartite Memory System
 **Phase**: P3-002 (Input Sanitization) & P3-003 (Authentication Context)
 
 ## Summary
 
-Successfully implemented production-grade input validation and authentication context for the World Weaver MCP gateway. All functionality tested and verified working.
+Successfully implemented production-grade input validation and authentication context for the T4DM MCP gateway. All functionality tested and verified working.
 
 ## Files Modified
 
@@ -145,8 +145,8 @@ All tests verified working through direct function calls:
 ## Usage Example
 
 ```python
-from ww.mcp.validation import sanitize_string, validate_metadata
-from ww.mcp.memory_gateway import require_auth, get_auth_context
+from t4dm.mcp.validation import sanitize_string, validate_metadata
+from t4dm.mcp.memory_gateway import require_auth, get_auth_context
 
 @mcp_app.tool()
 @require_auth

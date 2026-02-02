@@ -1,8 +1,8 @@
 # Citation Verification Report
-## World Weaver Journal Article
+## T4DM Journal Article
 
 **Generated:** 2024-12-04
-**Document:** /mnt/projects/t4d/t4dm/docs/world_weaver_journal_article.tex
+**Document:** /mnt/projects/t4d/t4dm/docs/t4dm_journal_article.tex
 **Bibliography Style:** plainnat (natbib)
 **Total Citations in Bibliography:** 47
 **Total Citation Keys Used:** 33
@@ -11,7 +11,7 @@
 
 ## Executive Summary
 
-The World Weaver journal article contains a well-structured bibliography with 47 entries spanning cognitive science, AI memory systems, and foundational AI research. The citation verification reveals:
+The T4DM journal article contains a well-structured bibliography with 47 entries spanning cognitive science, AI memory systems, and foundational AI research. The citation verification reveals:
 
 **STRENGTHS:**
 - Good coverage of foundational cognitive science (Tulving, Squire, Anderson)
@@ -176,7 +176,7 @@ The literature review identifies 52 highly relevant papers. The following are CR
 }
 ```
 
-**JUSTIFICATION:** Paper discusses associative memory mechanisms. Modern Hopfield networks connect classical associative memory to transformer attention - directly relevant to World Weaver's memory architecture.
+**JUSTIFICATION:** Paper discusses associative memory mechanisms. Modern Hopfield networks connect classical associative memory to transformer attention - directly relevant to T4DM's memory architecture.
 
 #### 3. Cognitive Architectures (CRITICAL OMISSION)
 
@@ -202,7 +202,7 @@ The literature review identifies 52 highly relevant papers. The following are CR
 }
 ```
 
-**JUSTIFICATION:** CoALA is THE framework for cognitive architectures applied to LLM agents - directly comparable to World Weaver's approach.
+**JUSTIFICATION:** CoALA is THE framework for cognitive architectures applied to LLM agents - directly comparable to T4DM's approach.
 
 #### 4. LLM Long-Context & Memory Management
 
@@ -449,7 +449,7 @@ The literature review identifies 52 highly relevant papers. The following are CR
   journal={arXiv preprint arXiv:2309.02427},
   year={2023},
   doi={10.48550/arxiv.2309.02427},
-  note={Framework for modular memory in language agents - directly comparable to World Weaver}
+  note={Framework for modular memory in language agents - directly comparable to T4DM}
 }
 
 % ===== MODERN ASSOCIATIVE MEMORY =====

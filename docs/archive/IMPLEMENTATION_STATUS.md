@@ -505,7 +505,7 @@ src/t4dm/mcp/validation.py   # Added validate_non_negative_float helper
 ### Security Features
 
 All MCP tools include:
-- Input validation via ww.mcp.validation helpers
+- Input validation via t4dm.mcp.validation helpers
 - Security bounds enforcement (MAX_INPUT_DIM, MAX_MEMORY_ID_LENGTH, etc.)
 - Error handling with descriptive messages
 - Type validation for all parameters

@@ -1,4 +1,4 @@
-# Phase 12: Research Extensions for World Weaver
+# Phase 12: Research Extensions for T4DM
 
 **Version**: 0.4.0+ | **Status**: Planning Document
 **Author**: Geoffrey Hinton AI Architect Agent
@@ -9,7 +9,7 @@
 
 ## Executive Summary
 
-This document outlines four cutting-edge research extensions for World Weaver that push beyond standard memory system capabilities into novel territory. Each extension is grounded in neural learning principles and designed to integrate with the existing biologically-inspired architecture.
+This document outlines four cutting-edge research extensions for T4DM that push beyond standard memory system capabilities into novel territory. Each extension is grounded in neural learning principles and designed to integrate with the existing biologically-inspired architecture.
 
 **Key Insight**: The existing infrastructure already implements the *substrate* for these extensions. The dreaming system (P3), hierarchical prediction (P4), and neuromodulator dynamics (P5) provide the foundation. What's needed is the *learning objectives* and *integration patterns* to unlock emergent capabilities.
 
@@ -666,7 +666,7 @@ class SharedMemoryBroker:
         self,
         registry: AgentRegistry,
         semantic_store: SemanticMemory,
-        vector_store: QdrantStore,
+        vector_store: T4DXVectorAdapter,
     ):
         self.registry = registry
         self.semantic = semantic_store
@@ -939,7 +939,7 @@ Integrate standard continual learning benchmarks to validate catastrophic forget
 
 ### Scientific Context
 
-World Weaver implements multiple anti-forgetting mechanisms:
+T4DM implements multiple anti-forgetting mechanisms:
 - **Complementary Learning Systems**: Fast hippocampal + slow neocortical
 - **Elastic Weight Consolidation (EWC)**: Fisher information regularization
 - **Generative Replay**: Wake-sleep style pseudo-rehearsal
@@ -978,7 +978,7 @@ class CLEARTask:
 
 class CLEARBenchmark:
     """
-    CLEAR benchmark integration for World Weaver.
+    CLEAR benchmark integration for T4DM.
 
     Measures:
     1. Forward Transfer (FWT): Does learning task T help with T+1?
@@ -1138,7 +1138,7 @@ class SplitBenchmark:
     """
     Split benchmark implementation.
 
-    Compares World Weaver's anti-forgetting mechanisms against:
+    Compares T4DM's anti-forgetting mechanisms against:
     - Naive (no protection)
     - Replay only
     - EWC only
@@ -1199,7 +1199,7 @@ class ForgettingMetrics:
     backward_transfer: float  # Negative = forgetting
     forward_transfer: float  # Positive = transfer
 
-    # World Weaver specific
+    # T4DM specific
     semantic_stability: float  # Entity embedding drift
     graph_coherence: float  # Relationship pattern stability
     retrieval_drift: float  # Ranking stability over time
@@ -1208,7 +1208,7 @@ class ForgettingMetrics:
 
 class ForgettingAnalyzer:
     """
-    Analyze forgetting patterns in World Weaver memory.
+    Analyze forgetting patterns in T4DM memory.
     """
 
     async def analyze_semantic_stability(
@@ -1311,7 +1311,7 @@ class ForgettingAnalyzer:
 
 ### Overview
 
-Connect World Weaver to sensorimotor simulation for embodied memory grounding. This is the most speculative extension but potentially the most impactful.
+Connect T4DM to sensorimotor simulation for embodied memory grounding. This is the most speculative extension but potentially the most impactful.
 
 ### Rationale
 
@@ -1325,7 +1325,7 @@ Current memories are purely symbolic/embedding-based. Embodied grounding would:
 ```
                     EMBODIED GROUNDING ARCHITECTURE
 
-    World Weaver Memory          Sensorimotor Layer           Simulation
+    T4DM Memory          Sensorimotor Layer           Simulation
 
     +-----------------+         +-------------------+         +----------+
     | Procedural      |<------->| Action Encoder    |<------->| MuJoCo   |

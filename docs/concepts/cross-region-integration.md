@@ -1,6 +1,6 @@
 # Cross-Region Integration (H10)
 
-Consistency mechanisms for integrating neural subsystems in World Weaver.
+Consistency mechanisms for integrating neural subsystems in T4DM.
 
 **Implementation**: H10 (cross-region consistency validation)
 
@@ -30,7 +30,7 @@ Threshold θ     ←→  Energy barrier
 ```
 
 ```python
-from ww.nca import FFNCACoupling, FFNCACouplingConfig
+from t4dm.nca import FFNCACoupling, FFNCACouplingConfig
 
 coupling = FFNCACoupling(FFNCACouplingConfig(
     goodness_to_energy_scale=1.0,   # G → -E
@@ -55,7 +55,7 @@ Integrates capsule routing with neural field dynamics:
 | 5-HT | Routing convergence (patience) |
 
 ```python
-from ww.nca import CapsuleNCACoupling, CapsuleNCACouplingConfig
+from t4dm.nca import CapsuleNCACoupling, CapsuleNCACouplingConfig
 
 coupling = CapsuleNCACoupling(CapsuleNCACouplingConfig(
     da_routing_gain=0.5,
@@ -89,7 +89,7 @@ Sleep State → SWR Events → Replay Selection
 ```
 
 ```python
-from ww.nca import GlymphaticConsolidationBridge
+from t4dm.nca import GlymphaticConsolidationBridge
 
 bridge = GlymphaticConsolidationBridge(
     glymphatic=glymphatic_system,
@@ -233,7 +233,7 @@ pytest tests/integration/test_h10_cross_region_consistency.py::TestGlymphaticBri
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
-│                        World Weaver Architecture                    │
+│                        T4DM Architecture                    │
 │                                                                     │
 │  ┌───────────┐     ┌───────────┐     ┌───────────┐                 │
 │  │Forward-   │◄───►│  Energy   │◄───►│ Capsule   │                 │

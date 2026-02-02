@@ -200,7 +200,7 @@ result = await saga.execute()
 
 #### 8. Qdrant Storage
 
-**File**: `storage/qdrant_store.py:add()`
+**File**: `storage/t4dx_vector_adapter.py:add()`
 
 ```python
 await client.upsert(
@@ -226,7 +226,7 @@ await client.upsert(
 
 #### 9. Neo4j Storage
 
-**File**: `storage/neo4j_store.py:create_node()`
+**File**: `storage/t4dx_graph_adapter.py:create_node()`
 
 ```cypher
 CREATE (e:Episode {
@@ -363,7 +363,7 @@ cluster_weights = self.sparse_index.compute_weights(query_emb)
 
 #### 6. Vector Search
 
-**File**: `storage/qdrant_store.py:search()`
+**File**: `storage/t4dx_vector_adapter.py:search()`
 
 ```python
 results = await client.search(
@@ -500,8 +500,8 @@ return {
 | Gate | `core/learned_gate.py` | Storage decision |
 | Memory | `memory/episodic.py` | EpisodicMemory.create() |
 | Saga | `storage/saga.py` | Transaction orchestration |
-| Vector | `storage/qdrant_store.py` | Vector storage |
-| Graph | `storage/neo4j_store.py` | Knowledge graph |
+| Vector | `storage/t4dx_vector_adapter.py` | Vector storage |
+| Graph | `storage/t4dx_graph_adapter.py` | Knowledge graph |
 | Attractor | `memory/pattern_separation.py` | PatternCompletion |
 | Extract | `extraction/entity_extractor.py` | Entity extraction |
 
@@ -517,7 +517,7 @@ return {
 | Complete | `memory/pattern_separation.py` | Attractor completion |
 | Cluster | `memory/cluster_index.py` | Hierarchical search |
 | Sparse | `memory/learned_sparse_index.py` | Sparse addressing |
-| Vector | `storage/qdrant_store.py` | Similarity search |
+| Vector | `storage/t4dx_vector_adapter.py` | Similarity search |
 | Score | `memory/episodic.py` | Multi-component score |
 | Fusion | `memory/episodic.py` | LearnedFusionWeights |
 | Rerank | `memory/episodic.py` | LearnedReranker |

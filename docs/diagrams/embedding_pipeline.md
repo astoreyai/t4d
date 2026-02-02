@@ -553,7 +553,7 @@ class EpisodicMemory:
         query_embedding = await self.embedding_adapter.embed_query(query)
 
         # Vector search in Qdrant
-        results = await self.qdrant_store.search(
+        results = await self.t4dx_vector_adapter.search(
             query_embedding,
             limit=limit * 3  # Retrieve more for reranking
         )

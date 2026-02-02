@@ -1,4 +1,4 @@
-# World Weaver Neural Memory Architecture Upgrade Roadmap
+# T4DM Neural Memory Architecture Upgrade Roadmap
 
 **Created**: 2025-12-06
 **Version**: 1.0
@@ -7,7 +7,7 @@
 
 ## Executive Summary
 
-This roadmap integrates 6 cutting-edge neural memory components into World Weaver's existing tripartite memory system. The upgrade transforms WW from a static vector store into a biologically-inspired, continuously learning memory architecture.
+This roadmap integrates 6 cutting-edge neural memory components into T4DM's existing tripartite memory system. The upgrade transforms WW from a static vector store into a biologically-inspired, continuously learning memory architecture.
 
 **Key Improvements**:
 - Online learning during LLM inference (Forward-Forward)
@@ -24,7 +24,7 @@ This roadmap integrates 6 cutting-edge neural memory components into World Weave
 
 ---
 
-## Current World Weaver Architecture
+## Current T4DM Architecture
 
 ### Existing Components (Keep)
 ```
@@ -46,8 +46,8 @@ This roadmap integrates 6 cutting-edge neural memory components into World Weave
 │   ├── serotonin.py             # Long-term credit
 │   └── inhibition.py            # GABA/Glutamate
 ├── storage/
-│   ├── neo4j_store.py           # Graph backend
-│   ├── qdrant_store.py          # Vector backend
+│   ├── t4dx_graph_adapter.py           # Graph backend
+│   ├── t4dx_vector_adapter.py          # Vector backend
 │   └── saga.py                  # Dual-store consistency
 └── embedding/
     └── bge_m3.py                # BGE-M3 1024-dim embeddings
@@ -1740,7 +1740,7 @@ class NeuralConfig:
 6. **Titans Memory**: Granger et al. (2024) - arxiv:2501.00663
 
 ### Code References
-- World Weaver: `/mnt/projects/t4d/t4dm/`
+- T4DM: `/mnt/projects/t4d/t4dm/`
 - Existing tests: `/mnt/projects/t4d/t4dm/tests/`
 - HSA implementation plan: `/mnt/projects/t4d/t4dm/docs/IMPLEMENTATION_PLAN_HSA.md`
 

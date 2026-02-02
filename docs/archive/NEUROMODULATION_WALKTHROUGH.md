@@ -3,7 +3,7 @@
 **Version**: 0.1.0
 **Last Updated**: 2025-12-09
 
-This document details the five neuromodulator systems that coordinate World Weaver's brain-like dynamics.
+This document details the five neuromodulator systems that coordinate T4DM's brain-like dynamics.
 
 ---
 
@@ -20,7 +20,7 @@ This document details the five neuromodulator systems that coordinate World Weav
 
 ## Overview
 
-World Weaver implements a biologically-inspired neuromodulation system based on five key neurotransmitters:
+T4DM implements a biologically-inspired neuromodulation system based on five key neurotransmitters:
 
 | System | Neurotransmitter | Role |
 |--------|-----------------|------|

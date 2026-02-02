@@ -33,14 +33,14 @@ All 70 optimization atoms across phases A-G have been COMPLETED in 4 sprints:
 - **A-02**: Fix GraphStore.query() Cypher parameter
 - **A-03**: Fix archive.py datetime.timedelta bug
 - **A-04**: Unify dual WAL systems
-- **A-05**: Update package docstring "World Weaver" → "T4DM"
+- **A-05**: Update package docstring "T4DM" → "T4DM"
 - **A-06**: Fix VectorAdapter stubs (scroll, count)
 - **A-07**: Add threading locks to T4DXEngine
 - **A-08**: Fix visualization.py Neo4j comment
 - **A-09**: Update observability/CLAUDE.md references
 - **A-10**: Update src/t4dm/CLAUDE.md references
 - **A-11**: Update storage/CLAUDE.md for T4DX
-- **A-12**: Clean remaining "World Weaver" / "ww" references
+- **A-12**: Clean remaining "T4DM" / "ww" references
 - **C-01**: Create 01_system_architecture
 - **C-02**: Create 05_storage_architecture
 - **C-03**: Create 14_storage_subsystem
@@ -190,14 +190,14 @@ All 70 optimization atoms across phases A-G have been COMPLETED in 4 sprints:
 | A-02 | Fix GraphStore.query() — remove Cypher parameter, replace with generic query dict | core/protocols.py, storage/t4dx/graph_adapter.py | M |
 | A-03 | Fix archive.py bug: `datetime.timedelta` → `timedelta` (line 396) | storage/archive.py | S |
 | A-04 | Remove dual WAL: unify T4DX WAL with persistence/wal.py binary format | storage/t4dx/wal.py, persistence/wal.py | L |
-| A-05 | Update package docstring "World Weaver" → "T4DM" in `__init__.py` | src/t4dm/__init__.py | S |
+| A-05 | Update package docstring "T4DM" → "T4DM" in `__init__.py` | src/t4dm/__init__.py | S |
 | A-06 | Fix VectorAdapter stubs: `scroll()` returns empty, `count()` returns 0 | storage/t4dx/vector_adapter.py | M |
 | A-07 | Add threading locks to T4DXEngine for concurrent access safety | storage/t4dx/engine.py | M |
 | A-08 | Fix visualization.py line 2082 Neo4j comment | api/routes/visualization.py | S |
 | A-09 | Update observability/CLAUDE.md Neo4j/Qdrant reference | observability/CLAUDE.md | S |
 | A-10 | Update src/t4dm/CLAUDE.md: remove Neo4j/Qdrant/Saga references, fix "ww" naming | src/t4dm/CLAUDE.md | M |
 | A-11 | Update storage/CLAUDE.md: rewrite for T4DX architecture | storage/CLAUDE.md | M |
-| A-12 | Clean remaining "World Weaver" / "ww" references in Python docstrings | grep -r "World Weaver\|ww\." src/ | M |
+| A-12 | Clean remaining "T4DM" / "ww" references in Python docstrings | grep -r "T4DM\|ww\." src/ | M |
 
 ### Phase B: T4DX Storage Engine Completion (7 atoms)
 

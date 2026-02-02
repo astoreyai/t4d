@@ -1,8 +1,8 @@
-site_name: World Weaver
+site_name: T4DM - Temporal 4D Memory
 site_description: Biologically-inspired memory for AI
-site_url: https://astoreyai.github.io/ww
-repo_url: https://github.com/astoreyai/ww
-repo_name: astoreyai/ww
+site_url: https://astoreyai.github.io/t4d
+repo_url: https://github.com/astoreyai/t4d
+repo_name: astoreyai/t4d
 
 theme:
   name: material

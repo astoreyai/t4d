@@ -1,4 +1,4 @@
-# Plan: Complete All World Weaver Tests
+# Plan: Complete All T4DM Tests
 
 ## Overview
 
@@ -32,7 +32,7 @@ Rather than requiring a live Neo4j instance, create equivalent unit tests using 
 
 #### Step 1.1: Create `tests/unit/test_hebbian_strengthening_mock.py`
 
-Uses `integration_neo4j_store` fixture pattern with in-memory storage:
+Uses `integration_t4dx_graph_adapter` fixture pattern with in-memory storage:
 
 ```python
 """Unit tests for Hebbian strengthening with mock Neo4j."""
@@ -102,7 +102,7 @@ class TestHebbianStrengtheningMock:
 
 import pytest
 import numpy as np
-from ww.memory.semantic import SpreadingActivation
+from t4dm.memory.semantic import SpreadingActivation
 
 class TestSpreadingActivationDenseGraph:
     """Test spreading activation with simulated dense graph."""

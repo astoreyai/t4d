@@ -1,4 +1,4 @@
-# World Weaver NCA Visualization: Biological Perspective - Quick Answers
+# T4DM NCA Visualization: Biological Perspective - Quick Answers
 
 ## 1. What biological signals are ESSENTIAL to visualize?
 

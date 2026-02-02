@@ -1,8 +1,8 @@
-# World Weaver REST API Documentation
+# T4DM REST API Documentation
 
 ## Overview
 
-The World Weaver REST API provides programmatic access to the tripartite neural memory system:
+The T4DM REST API provides programmatic access to the tripartite neural memory system:
 
 - **Episodic Memory**: Time-sequenced experiences with FSRS decay
 - **Semantic Memory**: Knowledge graph with ACT-R activation and Hebbian learning
@@ -93,7 +93,7 @@ Request:
 ```json
 {
   "content": "Implemented FSRS decay algorithm for memory retrieval",
-  "project": "world-weaver",
+  "project": "t4dm",
   "file": "src/memory/episodic.py",
   "tool": "python",
   "outcome": "success",
@@ -110,7 +110,7 @@ Response:
   "timestamp": "2024-01-15T10:30:00Z",
   "outcome": "success",
   "emotional_valence": 0.8,
-  "context": {"project": "world-weaver", "file": "src/memory/episodic.py"},
+  "context": {"project": "t4dm", "file": "src/memory/episodic.py"},
   "access_count": 1,
   "stability": 1.0,
   "retrievability": 1.0
@@ -124,7 +124,7 @@ GET /api/v1/episodes/{episode_id}
 
 #### List Episodes
 ```
-GET /api/v1/episodes?page=1&page_size=20&project=world-weaver&outcome=success
+GET /api/v1/episodes?page=1&page_size=20&project=t4dm&outcome=success
 ```
 
 #### Recall Episodes (Semantic Search)
@@ -138,7 +138,7 @@ Request:
   "query": "memory decay algorithms",
   "limit": 10,
   "min_similarity": 0.5,
-  "project": "world-weaver"
+  "project": "t4dm"
 }
 ```
 

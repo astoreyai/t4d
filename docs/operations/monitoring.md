@@ -1,12 +1,12 @@
 # Monitoring Guide
 
-Observability and monitoring for World Weaver.
+Observability and monitoring for T4DM.
 
 ## Overview
 
 ```mermaid
 graph TB
-    subgraph WW["World Weaver"]
+    subgraph WW["T4DM"]
         API[API Server]
         OTEL[OpenTelemetry]
     end
@@ -51,7 +51,7 @@ global:
   scrape_interval: 15s
 
 scrape_configs:
-  - job_name: 'world-weaver'
+  - job_name: 't4dm'
     static_configs:
       - targets: ['ww-api:8765']
     metrics_path: '/metrics'
@@ -88,10 +88,10 @@ ww_qdrant_queue_depth
 ### OpenTelemetry Setup
 
 ```python
-from ww.observability import WWObserver
+from t4dm.observability import WWObserver
 
 observer = WWObserver(
-    service_name="world-weaver",
+    service_name="t4dm",
     jaeger_endpoint="http://jaeger:14268/api/traces"
 )
 ```
@@ -125,10 +125,10 @@ gantt
 
 | Attribute | Description |
 |-----------|-------------|
-| `ww.session_id` | Session identifier |
-| `ww.operation` | Operation type |
-| `ww.memory_type` | Memory subsystem |
-| `ww.result_count` | Number of results |
+| `t4dm.session_id` | Session identifier |
+| `t4dm.operation` | Operation type |
+| `t4dm.memory_type` | Memory subsystem |
+| `t4dm.result_count` | Number of results |
 
 ## Logging
 
@@ -171,7 +171,7 @@ scrape_configs:
       - targets:
           - localhost
         labels:
-          job: world-weaver
+          job: t4dm
           __path__: /var/log/t4dm/*.log
 ```
 
@@ -182,7 +182,7 @@ scrape_configs:
 ```yaml
 # prometheus-rules.yml
 groups:
-  - name: world-weaver
+  - name: t4dm
     rules:
       - alert: WWHighLatency
         expr: histogram_quantile(0.95, rate(ww_recall_duration_seconds_bucket[5m])) > 0.5
@@ -309,7 +309,7 @@ curl -X POST http://grafana:3000/api/dashboards/db \
 
 ```mermaid
 graph TB
-    subgraph Application["World Weaver Application"]
+    subgraph Application["T4DM Application"]
         API[API Server]
         MEM[Memory Operations]
         LEARN[Learning System]
@@ -380,32 +380,32 @@ graph TB
 ```mermaid
 graph TB
     subgraph RootSpan["Root: HTTP Request"]
-        HTTP[ww.http.request<br/>method, path, status]
+        HTTP[t4dm.http.request<br/>method, path, status]
     end
 
     subgraph Level1["Level 1: Operations"]
-        STORE_OP[ww.store<br/>content_length, importance]
-        RECALL_OP[ww.recall<br/>query, limit]
-        CONSOL_OP[ww.consolidate<br/>phase]
+        STORE_OP[t4dm.store<br/>content_length, importance]
+        RECALL_OP[t4dm.recall<br/>query, limit]
+        CONSOL_OP[t4dm.consolidate<br/>phase]
     end
 
     subgraph Level2["Level 2: Subsystems"]
-        EMBED[ww.embedding<br/>cache_hit, latency]
-        GATE[ww.gate<br/>decision, evidence]
-        PATTERN[ww.pattern_completion<br/>iterations]
-        NCA[ww.nca<br/>nt_levels]
+        EMBED[t4dm.embedding<br/>cache_hit, latency]
+        GATE[t4dm.gate<br/>decision, evidence]
+        PATTERN[t4dm.pattern_completion<br/>iterations]
+        NCA[t4dm.nca<br/>nt_levels]
     end
 
     subgraph Level3["Level 3: Storage"]
-        NEO4J_SPAN[ww.neo4j<br/>query, rows]
-        QDRANT_SPAN[ww.qdrant<br/>collection, matches]
-        SAGA_SPAN[ww.saga<br/>state, duration]
+        T4DX_SPAN[t4dm.t4dx<br/>query, rows]
+        T4DX_VEC_SPAN[t4dm.t4dx_vector<br/>collection, matches]
+        ENGINE_SPAN[t4dm.engine<br/>state, duration]
     end
 
     subgraph Level4["Level 4: Learning"]
-        DA_SPAN[ww.dopamine<br/>rpe, signal]
-        HEBB_SPAN[ww.hebbian<br/>updates, strength]
-        STDP_SPAN[ww.stdp<br/>potentiation, depression]
+        DA_SPAN[t4dm.dopamine<br/>rpe, signal]
+        HEBB_SPAN[t4dm.hebbian<br/>updates, strength]
+        STDP_SPAN[t4dm.stdp<br/>potentiation, depression]
     end
 
     HTTP --> STORE_OP
@@ -418,20 +418,20 @@ graph TB
     RECALL_OP --> PATTERN
     RECALL_OP --> NCA
 
-    EMBED --> QDRANT_SPAN
-    GATE --> NEO4J_SPAN
-    PATTERN --> QDRANT_SPAN
+    EMBED --> T4DX_VEC_SPAN
+    GATE --> T4DX_SPAN
+    PATTERN --> T4DX_VEC_SPAN
 
-    STORE_OP --> SAGA_SPAN
-    SAGA_SPAN --> NEO4J_SPAN
-    SAGA_SPAN --> QDRANT_SPAN
+    STORE_OP --> ENGINE_SPAN
+    ENGINE_SPAN --> T4DX_SPAN
+    ENGINE_SPAN --> T4DX_VEC_SPAN
 
     STORE_OP --> DA_SPAN
     RECALL_OP --> HEBB_SPAN
     DA_SPAN --> STDP_SPAN
 
     style HTTP fill:#e8f5e9
-    style SAGA_SPAN fill:#fff3e0
+    style ENGINE_SPAN fill:#fff3e0
 ```
 
 ### Detailed Store Trace
@@ -447,41 +447,41 @@ sequenceDiagram
     participant Qdrant
     participant Learn
 
-    Note over Client,Learn: Trace: ww.store (trace_id: abc123)
+    Note over Client,Learn: Trace: t4dm.store (trace_id: abc123)
 
     rect rgb(232, 245, 233)
-        Note over API: Span: ww.http.request
+        Note over API: Span: t4dm.http.request
         Client->>API: POST /api/v1/store
         API->>API: Parse & validate
     end
 
     rect rgb(227, 242, 253)
-        Note over Embed: Span: ww.embedding
+        Note over Embed: Span: t4dm.embedding
         API->>Embed: generate_embedding()
         Note right of Embed: cache_hit: false<br/>latency_ms: 12
         Embed-->>API: embedding[1024]
     end
 
     rect rgb(255, 243, 224)
-        Note over Gate: Span: ww.gate
+        Note over Gate: Span: t4dm.gate
         API->>Gate: evaluate()
         Note right of Gate: decision: ACCEPT<br/>evidence: 0.85
         Gate-->>API: accept
     end
 
     rect rgb(232, 245, 233)
-        Note over Saga: Span: ww.saga
+        Note over Engine: Span: t4dm.engine
         API->>Saga: begin()
 
         rect rgb(227, 242, 253)
-            Note over Qdrant: Span: ww.qdrant
+            Note over T4DX: Span: t4dm.t4dx_vector
             Saga->>Qdrant: upsert()
             Note right of Qdrant: collection: episodes<br/>point_id: xyz789
             Qdrant-->>Saga: ok
         end
 
         rect rgb(255, 243, 224)
-            Note over Neo4j: Span: ww.neo4j
+            Note over T4DX: Span: t4dm.t4dx
             Saga->>Neo4j: create_node()
             Note right of Neo4j: labels: Episode<br/>properties: 5
             Neo4j-->>Saga: ok
@@ -491,7 +491,7 @@ sequenceDiagram
     end
 
     rect rgb(255, 235, 238)
-        Note over Learn: Span: ww.dopamine
+        Note over Learn: Span: t4dm.dopamine
         API->>Learn: signal()
         Note right of Learn: rpe: 0.3<br/>update: true
     end

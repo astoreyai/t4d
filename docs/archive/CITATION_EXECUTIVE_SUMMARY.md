@@ -1,7 +1,7 @@
 # Citation Verification Executive Summary
 
 **Date**: 2025-12-05
-**Document**: World Weaver IEEE Paper (`/mnt/projects/t4d/t4dm/docs/world_weaver_final.tex`)
+**Document**: T4DM IEEE Paper (`/mnt/projects/t4d/t4dm/docs/t4dm_final.tex`)
 **Verification Method**: CrossRef API + arXiv API + Manual Review
 **For**: PhD Dissertation - IEEE Transactions on Artificial Intelligence
 

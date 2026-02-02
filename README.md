@@ -1,4 +1,4 @@
-# World Weaver (WW)
+# T4DM (WW)
 
 [![Release](https://img.shields.io/badge/release-v1.0.0-blue.svg)](https://github.com/astoreyai/t4d/releases/tag/v1.0.0)
 [![Tests](https://img.shields.io/badge/tests-8%2C905%20passed-brightgreen.svg)](https://github.com/astoreyai/ww)
@@ -67,7 +67,7 @@ Biologically-inspired memory for AI. A modular framework implementing tripartite
 ### Installation
 
 ```bash
-pip install world-weaver
+pip install t4dm
 ```
 
 ### Simplified Memory API
@@ -117,8 +117,8 @@ t4dm serve --port 8765
 
 ```bash
 # Clone and configure
-git clone https://github.com/astoreyai/world-weaver
-cd world-weaver
+git clone https://github.com/astoreyai/t4dm
+cd t4dm
 cp .env.example .env
 ./scripts/setup-env.sh  # Generates secure passwords
 
@@ -152,7 +152,7 @@ pytest tests/ -v
 
 ## Configuration
 
-World Weaver supports YAML configuration with environment variable overrides:
+T4DM supports YAML configuration with environment variable overrides:
 
 ```yaml
 # t4dm.yaml (in project root or ~/.t4dm/config.yaml)
@@ -175,10 +175,10 @@ api_host: 0.0.0.0
 api_port: 8765
 ```
 
-Environment variables override YAML (prefixed with `WW_`):
+Environment variables override YAML (prefixed with `T4DM_`):
 ```bash
-export WW_SESSION_ID=my-session
-export WW_QDRANT_HOST=localhost
+export T4DM_SESSION_ID=my-session
+export T4DM_QDRANT_HOST=localhost
 ```
 
 ## Architecture
@@ -336,8 +336,8 @@ pytest tests/ --cov=src/ww --cov-report=term-missing
 - `rich>=13.0.0` - Rich terminal output
 
 ### Optional
-- `fastapi>=0.100.0` - REST API (install with `pip install world-weaver[api]`)
-- `FlagEmbedding>=1.2.7` - BGE-M3 embeddings (install with `pip install world-weaver[embedding]`)
+- `fastapi>=0.100.0` - REST API (install with `pip install t4dm[api]`)
+- `FlagEmbedding>=1.2.7` - BGE-M3 embeddings (install with `pip install t4dm[embedding]`)
 - `hdbscan>=0.8.33` - Memory consolidation clustering
 
 ## Author
@@ -355,7 +355,7 @@ MIT License - see [LICENSE](LICENSE) for details.
 ```bibtex
 @software{storey2026worldweaver,
   author = {Storey, Aaron W.},
-  title = {World Weaver: Biologically-Inspired Memory for AI},
+  title = {T4DM: Biologically-Inspired Memory for AI},
   year = {2026},
   url = {https://github.com/astoreyai/ww}
 }

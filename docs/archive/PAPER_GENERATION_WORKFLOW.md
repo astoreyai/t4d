@@ -1,14 +1,14 @@
-# World Weaver Paper Generation Workflow
+# T4DM Paper Generation Workflow
 
 **Document**: Comprehensive workflow for generating publication-ready academic papers
-**Source**: world_weaver_final.tex generation process
+**Source**: t4dm_final.tex generation process
 **Date**: 2024-12-04
 
 ---
 
 ## Overview
 
-This workflow transforms draft papers into publication-ready manuscripts through systematic review, revision, and quality assurance. It was developed during the creation of `world_weaver_final.tex` and is designed to be reproducible using research-assistant agents.
+This workflow transforms draft papers into publication-ready manuscripts through systematic review, revision, and quality assurance. It was developed during the creation of `t4dm_final.tex` and is designed to be reproducible using research-assistant agents.
 
 ---
 

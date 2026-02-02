@@ -1,6 +1,6 @@
 # Forward-Forward Algorithm API Reference
 
-**Module**: `ww.nca.forward_forward`, `ww.nca.forward_forward_nca_coupling`
+**Module**: `t4dm.nca.forward_forward`, `t4dm.nca.forward_forward_nca_coupling`
 **Version**: Phase 4
 **Hinton Score**: 0.8/1.0
 
@@ -24,7 +24,7 @@ The Forward-Forward (FF) algorithm implements layer-local learning without backp
 ### ForwardForwardLayer
 
 ```python
-from ww.nca.forward_forward import ForwardForwardLayer
+from t4dm.nca.forward_forward import ForwardForwardLayer
 
 layer = ForwardForwardLayer(
     input_dim=256,
@@ -81,7 +81,7 @@ layer.update_threshold(0.1)  # Increase threshold
 ### ForwardForwardNetwork
 
 ```python
-from ww.nca.forward_forward import ForwardForwardNetwork
+from t4dm.nca.forward_forward import ForwardForwardNetwork
 
 network = ForwardForwardNetwork(
     layer_dims=[256, 128, 64],
@@ -118,7 +118,7 @@ Get goodness values for all layers.
 Couples Forward-Forward learning with NCA neural field dynamics.
 
 ```python
-from ww.nca.forward_forward_nca_coupling import (
+from t4dm.nca.forward_forward_nca_coupling import (
     FFNCACoupling,
     FFNCACouplingConfig,
     FFPhase,
@@ -186,7 +186,7 @@ alignment = coupling.align_with_energy(goodness, energy)
 ### FFPhase
 
 ```python
-from ww.nca.forward_forward_nca_coupling import FFPhase
+from t4dm.nca.forward_forward_nca_coupling import FFPhase
 
 FFPhase.POSITIVE   # Real data: maximize goodness
 FFPhase.NEGATIVE   # Fake data: minimize goodness
@@ -196,7 +196,7 @@ FFPhase.INFERENCE  # No learning, just forward pass
 ### EnergyAlignment
 
 ```python
-from ww.nca.forward_forward_nca_coupling import EnergyAlignment
+from t4dm.nca.forward_forward_nca_coupling import EnergyAlignment
 
 EnergyAlignment.BASIN      # In attractor basin (high goodness, low energy)
 EnergyAlignment.BARRIER    # At energy barrier (threshold goodness)
@@ -211,7 +211,7 @@ EnergyAlignment.TRANSITION # Transitioning between attractors
 ### Basic Training
 
 ```python
-from ww.nca.forward_forward import ForwardForwardNetwork
+from t4dm.nca.forward_forward import ForwardForwardNetwork
 
 # Create network
 net = ForwardForwardNetwork(layer_dims=[784, 500, 500])
@@ -229,8 +229,8 @@ for x_real in dataloader:
 ### NT-Modulated Learning
 
 ```python
-from ww.nca.forward_forward_nca_coupling import FFNCACoupling
-from ww.nca.neural_field import NeurotransmitterState
+from t4dm.nca.forward_forward_nca_coupling import FFNCACoupling
+from t4dm.nca.neural_field import NeurotransmitterState
 
 coupling = FFNCACoupling()
 nt_state = NeurotransmitterState(
@@ -269,7 +269,7 @@ if sleep_stage == SleepStage.NREM_DEEP:
 ### With NCA Energy Landscape
 
 ```python
-from ww.nca.energy import EnergyLandscape
+from t4dm.nca.energy import EnergyLandscape
 
 energy = EnergyLandscape()
 ff_coupling = FFNCACoupling()
@@ -290,8 +290,8 @@ if alignment == EnergyAlignment.BASIN:
 ### With Telemetry Hub
 
 ```python
-from ww.visualization.telemetry_hub import TelemetryHub
-from ww.visualization.ff_visualizer import ForwardForwardVisualizer
+from t4dm.visualization.telemetry_hub import TelemetryHub
+from t4dm.visualization.ff_visualizer import ForwardForwardVisualizer
 
 hub = TelemetryHub()
 ff_viz = ForwardForwardVisualizer()
@@ -352,8 +352,8 @@ During NREM, the FF system integrates with consolidation:
 3. **Clearance**: Low-goodness patterns pruned via glymphatic
 
 ```python
-from ww.nca.forward_forward_nca_coupling import FFNCACoupling
-from ww.nca.glymphatic_consolidation_bridge import GlymphaticConsolidationBridge
+from t4dm.nca.forward_forward_nca_coupling import FFNCACoupling
+from t4dm.nca.glymphatic_consolidation_bridge import GlymphaticConsolidationBridge
 
 ff_coupling = FFNCACoupling()
 glymphatic = GlymphaticConsolidationBridge()
@@ -375,7 +375,7 @@ for memory in replay_buffer:
 ### Cross-Scale Telemetry Events
 
 ```python
-from ww.visualization.telemetry_hub import TelemetryHub
+from t4dm.visualization.telemetry_hub import TelemetryHub
 
 hub = TelemetryHub()
 

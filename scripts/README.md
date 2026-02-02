@@ -1,6 +1,6 @@
-# World Weaver Operational Scripts
+# T4DM Operational Scripts
 
-Production-ready scripts for managing World Weaver infrastructure.
+Production-ready scripts for managing T4DM infrastructure.
 
 ## Security Scripts
 
@@ -41,9 +41,9 @@ Validates environment configuration for security and completeness.
 ```
 
 **Checks**:
-- Required variables (NEO4J_PASSWORD, WW_NEO4J_PASSWORD, etc.)
+- Required variables (NEO4J_PASSWORD, T4DM_NEO4J_PASSWORD, etc.)
 - Password strength (min 8 chars, no common passwords)
-- Password synchronization (NEO4J_PASSWORD == WW_NEO4J_PASSWORD)
+- Password synchronization (NEO4J_PASSWORD == T4DM_NEO4J_PASSWORD)
 - File permissions (.env should be 600)
 - Production security (Qdrant API key, OTEL settings)
 - Docker configuration (no hardcoded passwords)
@@ -179,7 +179,7 @@ All scripts support the following environment variables from `.env`:
 |----------|-------------|----------|---------|
 | `NEO4J_USER` | Neo4j username (Docker) | Yes | `neo4j` |
 | `NEO4J_PASSWORD` | Neo4j password (Docker) | Yes | - |
-| `WW_NEO4J_PASSWORD` | Neo4j password (App) | Yes | - |
+| `T4DM_NEO4J_PASSWORD` | Neo4j password (App) | Yes | - |
 | `QDRANT_API_KEY` | Qdrant API key | Production | - |
 | `QDRANT_READ_ONLY_KEY` | Qdrant read-only API key | No | - |
 | `QDRANT_HOST` | Qdrant hostname | No | `localhost` |
@@ -190,7 +190,7 @@ All scripts support the following environment variables from `.env`:
 | `BACKUP_RETENTION_DAYS` | Days to keep backups | No | `30` |
 
 **Security Requirements**:
-- `NEO4J_PASSWORD` must match `WW_NEO4J_PASSWORD`
+- `NEO4J_PASSWORD` must match `T4DM_NEO4J_PASSWORD`
 - Passwords must be min 8 characters with complexity (2 of: upper, lower, digit, special)
 - No common passwords (password, admin, neo4j, etc.)
 - `.env` file must have 600 permissions
@@ -346,7 +346,7 @@ command[check_ww]=/mnt/projects/t4d/t4dm/scripts/health_check.sh
 ```bash
 #!/bin/bash
 # In cron job
-./health_check.sh || echo "World Weaver health check failed!" | mail -s "WW Alert" admin@example.com
+./health_check.sh || echo "T4DM health check failed!" | mail -s "WW Alert" admin@example.com
 ```
 
 ## See Also

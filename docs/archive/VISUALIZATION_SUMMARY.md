@@ -1,8 +1,8 @@
-# World Weaver Visualization Modules - Implementation Summary
+# T4DM Visualization Modules - Implementation Summary
 
 ## Overview
 
-Complete visualization suite for the World Weaver neurocomputational memory system, providing comprehensive tools to analyze and understand neural dynamics.
+Complete visualization suite for the T4DM neurocomputational memory system, providing comprehensive tools to analyze and understand neural dynamics.
 
 ## What Was Created
 
@@ -101,34 +101,34 @@ Created `/mnt/projects/t4d/t4dm/examples/visualization_demo.py`:
 
 ## Integration Points
 
-The visualization modules integrate with these World Weaver components:
+The visualization modules integrate with these T4DM components:
 
-1. **DentateGyrus** (`ww.memory.pattern_separation`)
+1. **DentateGyrus** (`t4dm.memory.pattern_separation`)
    - Visualize pattern separation effects
    - Track separation history
    - Analyze orthogonalization statistics
 
-2. **NeuromodulatorOrchestra** (`ww.learning.neuromodulators`)
+2. **NeuromodulatorOrchestra** (`t4dm.learning.neuromodulators`)
    - Monitor DA/NE/ACh/5-HT/GABA state
    - Track state changes over time
    - Visualize exploration/exploitation balance
 
-3. **PlasticityManager** (`ww.learning.plasticity`)
+3. **PlasticityManager** (`t4dm.learning.plasticity`)
    - Visualize LTP/LTD events
    - Track BCM dynamics
    - Monitor homeostatic scaling
 
-4. **SleepConsolidation** (`ww.consolidation.sleep`)
+4. **SleepConsolidation** (`t4dm.consolidation.sleep`)
    - Visualize SWR sequences
    - Track NREM/REM replay priorities
    - Analyze consolidation effectiveness
 
-5. **HomeostaticPlasticity** (`ww.learning.homeostatic`)
+5. **HomeostaticPlasticity** (`t4dm.learning.homeostatic`)
    - Monitor synaptic scaling events
    - Track norm distributions
    - Visualize threshold adaptation
 
-6. **LearnedMemoryGate** (`ww.core.learned_gate`)
+6. **LearnedMemoryGate** (`t4dm.core.learned_gate`)
    - Visualize content projection learning
    - Track feature importance
    - Monitor decision distributions
@@ -168,7 +168,7 @@ The visualization modules integrate with these World Weaver components:
 ### Basic Pattern
 
 ```python
-from ww.visualization import ActivationHeatmap, plot_activation_heatmap
+from t4dm.visualization import ActivationHeatmap, plot_activation_heatmap
 
 # Create tracker
 tracker = ActivationHeatmap(window_size=100)
@@ -187,8 +187,8 @@ plot_activation_heatmap(tracker, save_path="output.png")
 ### Integration Pattern
 
 ```python
-from ww.memory.pattern_separation import DentateGyrus
-from ww.visualization import PatternSeparationVisualizer
+from t4dm.memory.pattern_separation import DentateGyrus
+from t4dm.visualization import PatternSeparationVisualizer
 
 # Create components
 dg = DentateGyrus(embedding_provider, vector_store)
@@ -219,7 +219,7 @@ Test imports:
 
 ```bash
 PYTHONPATH=/mnt/projects/t4d/t4dm/src python -c "
-from ww.visualization import (
+from t4dm.visualization import (
     ActivationHeatmap,
     PlasticityTracer,
     NeuromodulatorDashboard,
@@ -287,7 +287,7 @@ Potential additions:
 
 ## Summary
 
-Complete, production-ready visualization suite for World Weaver with:
+Complete, production-ready visualization suite for T4DM with:
 - 6 comprehensive visualization modules
 - 2,435 lines of well-documented code
 - Full type hints and examples

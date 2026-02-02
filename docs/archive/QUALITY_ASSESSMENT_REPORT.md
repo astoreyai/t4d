@@ -1,6 +1,6 @@
-# Quality Assessment Report: World Weaver Paper
+# Quality Assessment Report: T4DM Paper
 
-**Paper**: World Weaver: Cognitive Memory Architecture for Persistent World Models in Agentic AI Systems
+**Paper**: T4DM: Cognitive Memory Architecture for Persistent World Models in Agentic AI Systems
 **Target Journal**: IEEE Transactions on Artificial Intelligence
 **Assessment Date**: 2025-12-04
 **Reviewer**: Research Quality Assurance Agent

@@ -14,9 +14,9 @@ T4DM's bio-inspired architecture requires deep domain knowledge in neuroscience 
 ## Key Files
 | Skill | Directory | Purpose |
 |-------|-----------|---------|
-| **ww-algorithm** | `ww-algorithm/SKILL.md` | Algorithm design and analysis (HDBSCAN, FSRS, Hopfield, STDP) |
-| **ww-compbio** | `ww-compbio/SKILL.md` | Computational biology concepts (neural dynamics, plasticity models) |
-| **ww-neuro** | `ww-neuro/SKILL.md` | Neuroscience foundations (brain regions, neuromodulators, CLS theory) |
+| **t4dm-algorithm** | `t4dm-algorithm/SKILL.md` | Algorithm design and analysis (HDBSCAN, FSRS, Hopfield, STDP) |
+| **t4dm-compbio** | `t4dm-compbio/SKILL.md` | Computational biology concepts (neural dynamics, plasticity models) |
+| **t4dm-neuro** | `t4dm-neuro/SKILL.md` | Neuroscience foundations (brain regions, neuromodulators, CLS theory) |
 
 ## Data Flow
 ```

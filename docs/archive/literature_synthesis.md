@@ -8,7 +8,7 @@
 
 ## Abstract
 
-This systematic review examines neural-symbolic memory systems for AI agents, synthesizing 40 papers from 2020-2025. We identify five key memory subsystems: episodic (event storage and retrieval), semantic (knowledge representation), procedural (skill learning), consolidation (memory optimization), and credit assignment (learning signals). The review reveals significant gaps in integrated tripartite memory architectures, particularly regarding automatic consolidation mechanisms and cross-memory learning. World Weaver's architecture addresses several identified gaps through its unified episodic-semantic-procedural design with Hebbian co-retrieval strengthening.
+This systematic review examines neural-symbolic memory systems for AI agents, synthesizing 40 papers from 2020-2025. We identify five key memory subsystems: episodic (event storage and retrieval), semantic (knowledge representation), procedural (skill learning), consolidation (memory optimization), and credit assignment (learning signals). The review reveals significant gaps in integrated tripartite memory architectures, particularly regarding automatic consolidation mechanisms and cross-memory learning. T4DM's architecture addresses several identified gaps through its unified episodic-semantic-procedural design with Hebbian co-retrieval strengthening.
 
 ---
 
@@ -22,7 +22,7 @@ Memory systems are fundamental to intelligent agent behavior. While biological c
 
 1. Identify state-of-the-art approaches across memory subsystems
 2. Analyze gaps in current neural-symbolic memory research
-3. Evaluate systems similar to World Weaver's tripartite architecture
+3. Evaluate systems similar to T4DM's tripartite architecture
 4. Recommend promising research directions
 
 ### 1.3 Research Questions
@@ -128,7 +128,7 @@ Pan et al. (2024) provide a comprehensive survey of vector database management s
 - Approximate nearest neighbor (ANN) algorithms enable scaling
 - Hybrid keyword-vector search improves precision
 
-**Relevance to World Weaver**: The dual-store architecture (Neo4j + Qdrant) aligns with emerging best practices for combining graph structure with vector similarity.
+**Relevance to T4DM**: The dual-store architecture (Neo4j + Qdrant) aligns with emerging best practices for combining graph structure with vector similarity.
 
 ### 3.4 Procedural Memory Systems
 
@@ -205,7 +205,7 @@ Brasoveanu & Dotlacil (2021) examine RL for production-based cognitive models:
 2. **Episodic memory**: Intermediate storage with indexing
 3. **Semantic memory**: Long-term compressed knowledge
 
-**Relevance to World Weaver**: This tripartite design closely parallels World Weaver's episodic-semantic-procedural subsystems, validating the architectural approach.
+**Relevance to T4DM**: This tripartite design closely parallels T4DM's episodic-semantic-procedural subsystems, validating the architectural approach.
 
 ### 3.6 Credit Assignment
 
@@ -252,7 +252,7 @@ Gallistel & Shahan (2024) demonstrate one-shot learning with 16+ minute delays u
 └─────────────────────────────────────┘
 ```
 
-**Alignment with World Weaver**: CoALA's modular memory design directly validates World Weaver's tripartite approach.
+**Alignment with T4DM**: CoALA's modular memory design directly validates T4DM's tripartite approach.
 
 #### 3.7.2 MemGPT
 
@@ -275,7 +275,7 @@ Hou et al. (2024) introduce dynamic memory recall and consolidation:
 - Autonomous recall during generation
 - Consolidation dynamics modeled on human memory
 
-**Relevance**: This work most closely resembles World Weaver's Hebbian co-retrieval strengthening mechanism.
+**Relevance**: This work most closely resembles T4DM's Hebbian co-retrieval strengthening mechanism.
 
 #### 3.7.4 FinMem
 
@@ -355,7 +355,7 @@ No existing system fully integrates:
 - Semantic (structured knowledge with relations)
 - Procedural (skills with execution traces)
 
-**World Weaver addresses this** through its unified architecture with session isolation and cross-subsystem queries.
+**T4DM addresses this** through its unified architecture with session isolation and cross-subsystem queries.
 
 **G2: Automatic Consolidation**
 
@@ -364,7 +364,7 @@ Current systems require:
 - Fixed replay schedules (experience replay)
 - No sleep-like optimization cycles
 
-**World Weaver addresses this** through HDBSCAN-based clustering for semantic consolidation.
+**T4DM addresses this** through HDBSCAN-based clustering for semantic consolidation.
 
 **G3: Cross-Memory Learning**
 
@@ -373,7 +373,7 @@ Existing approaches:
 - No strengthening based on co-retrieval patterns
 - No transfer between memory types
 
-**World Weaver addresses this** through Hebbian co-retrieval strengthening that automatically increases connection weights between memories retrieved together.
+**T4DM addresses this** through Hebbian co-retrieval strengthening that automatically increases connection weights between memories retrieved together.
 
 **G4: Unified Credit Assignment**
 
@@ -383,11 +383,11 @@ Current limitations:
 - Semantic memory uses static weights
 - No unified signal for cross-system learning
 
-**Partially addressed** by World Weaver through Hebbian mechanisms, but formal credit assignment across memory types remains open.
+**Partially addressed** by T4DM through Hebbian mechanisms, but formal credit assignment across memory types remains open.
 
-### 4.3 Comparison with World Weaver
+### 4.3 Comparison with T4DM
 
-| Feature | Literature State-of-Art | World Weaver |
+| Feature | Literature State-of-Art | T4DM |
 |---------|------------------------|--------------|
 | Tripartite memory | CoALA framework (conceptual) | Implemented |
 | Dual-store backend | Research proposals | Neo4j + Qdrant |
@@ -397,7 +397,7 @@ Current limitations:
 | MCP integration | Not found | stdio JSON-RPC |
 | Cross-memory queries | Limited | Batch-optimized |
 
-**Assessment**: World Weaver represents a practical implementation of architectures that remain largely theoretical in the literature.
+**Assessment**: T4DM represents a practical implementation of architectures that remain largely theoretical in the literature.
 
 ### 4.4 Limitations of This Review
 
@@ -406,7 +406,7 @@ Current limitations:
 3. **Language**: English-only excludes international research
 4. **Autonomous mode**: Simulated inter-rater reliability, not human validation
 
-### 4.5 Implications for World Weaver Development
+### 4.5 Implications for T4DM Development
 
 #### 4.5.1 Validated Design Decisions
 
@@ -443,14 +443,14 @@ This systematic review of 40 papers (2020-2025) identifies five key gaps in neur
 4. **Catastrophic forgetting is partially solved** through replay but sleep-inspired consolidation remains theoretical
 5. **Credit assignment innovations exist** but are not integrated across memory types
 
-### 5.3 World Weaver Positioning
+### 5.3 T4DM Positioning
 
-World Weaver addresses multiple identified gaps:
+T4DM addresses multiple identified gaps:
 - Integrated tripartite architecture (Gap 1)
 - HDBSCAN-based consolidation (Gap 2)
 - Hebbian co-retrieval strengthening (Gap 3)
 
-This positions World Weaver as a unique contribution to the neural-symbolic memory literature.
+This positions T4DM as a unique contribution to the neural-symbolic memory literature.
 
 ### 5.4 Future Directions
 

@@ -1,6 +1,6 @@
-# World Weaver Paper - Quality Scores Summary
+# T4DM Paper - Quality Scores Summary
 
-**Paper**: World Weaver: Cognitive Memory Architecture for Persistent World Models in Agentic AI Systems
+**Paper**: T4DM: Cognitive Memory Architecture for Persistent World Models in Agentic AI Systems
 **Assessment Date**: 2025-12-04
 **Overall Score**: 7.8/10
 **Recommendation**: MINOR REVISION REQUIRED
@@ -298,7 +298,7 @@ The paper makes solid contributions and is well-written, but validity threats an
 - Theory: WW much stronger
 - Reproducibility: Similar gaps
 
-**World Weaver Position**: Middle of the pack - stronger theory than most, weaker empirical validation than best
+**T4DM Position**: Middle of the pack - stronger theory than most, weaker empirical validation than best
 
 ---
 

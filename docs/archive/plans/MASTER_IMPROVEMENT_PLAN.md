@@ -1,4 +1,4 @@
-# World Weaver Master Improvement Plan
+# T4DM Master Improvement Plan
 
 **Generated**: 2025-12-06 | **Last Updated**: 2025-12-31
 **Analysis Sources**: Hinton Neural Analysis, CompBio Biological Analysis, System Integration Analysis
@@ -116,15 +116,15 @@ Three specialized analyses identified **47 improvement areas** across neural arc
 **Status**: COMPLETED 2025-12-06
 
 **Implementation Notes**:
-- Circuit breaker added to QdrantStore with 5 failure threshold
-- Circuit breaker added to Neo4jStore with 5 failure threshold
+- Circuit breaker added to T4DXVectorAdapter with 5 failure threshold
+- Circuit breaker added to T4DXGraphAdapter with 5 failure threshold
 - Recovery timeout: 30 seconds (configurable)
 - Health check integration complete
 - Tests for circuit breaker open/close states
 
 **Completed**:
-- [x] Add circuit breaker to QdrantStore
-- [x] Add circuit breaker to Neo4jStore
+- [x] Add circuit breaker to T4DXVectorAdapter
+- [x] Add circuit breaker to T4DXGraphAdapter
 - [x] Configure thresholds via settings
 - [x] Add health check integration
 
@@ -286,7 +286,7 @@ Three specialized analyses identified **47 improvement areas** across neural arc
 
 ```python
 # Example usage
-from ww.embedding import create_lora_adapter, LoRAConfig
+from t4dm.embedding import create_lora_adapter, LoRAConfig
 
 config = LoRAConfig(rank=16, use_asymmetric=True)
 adapter = create_lora_adapter(config)
@@ -329,7 +329,7 @@ adapter.train_on_outcomes(outcomes, epochs=10)
 
 ```python
 # Example usage
-from ww.memory import (
+from t4dm.memory import (
     PatternCompletion, HopfieldMode,
     modern_hopfield_update, create_pattern_completion
 )
@@ -375,7 +375,7 @@ print(f"Converged: {result.converged}, Entropy: {result.attention_entropy:.3f}")
 
 ```python
 # Example usage
-from ww.consolidation import (
+from t4dm.consolidation import (
     get_consolidation_scheduler,
     get_consolidation_service,
 )
@@ -428,7 +428,7 @@ forgetting while still prioritizing new learning.
 
 ```python
 # Example usage
-from ww.consolidation.sleep import SleepConsolidation
+from t4dm.consolidation.sleep import SleepConsolidation
 
 consolidator = SleepConsolidation(
     episodic_memory=episodic,
@@ -539,7 +539,7 @@ class EWCRegularizer:
 | Module | Current | Target | Priority |
 |--------|---------|--------|----------|
 | memory/episodic.py | 53% | 75% | MEDIUM |
-| storage/neo4j_store.py | 46% | 70% | LOW (external dep) |
+| storage/t4dx_graph_adapter.py | 46% | 70% | LOW (external dep) |
 | consolidation/service.py | 66% | 75% | MEDIUM |
 
 **TODO**:
@@ -560,7 +560,7 @@ class EWCRegularizer:
 **Status**: COMPLETED 2026-01-01
 
 **Implementation Notes**:
-- Added `batch_create_relationships()` to Neo4jStore using UNWIND for O(1) batch creation
+- Added `batch_create_relationships()` to T4DXGraphAdapter using UNWIND for O(1) batch creation
 - Fixed consolidation/service.py:720-738 - provenance links now batched
 - Fixed consolidation/service.py:1374-1465 - entity extraction relationships now batched
 - Groups by relationship type for efficient Cypher queries

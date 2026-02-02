@@ -1,4 +1,4 @@
-# World Weaver Strategic Analysis: World Models Integration
+# T4DM Strategic Analysis: World Models Integration
 
 **Date**: 2026-01-03 | **Version**: 0.4.0 | **Status**: P1-P4 Complete
 
@@ -6,7 +6,7 @@
 
 ## Executive Summary
 
-Analysis of World Weaver's position relative to the emerging "World Models" paradigm shift, synthesizing perspectives from neural learning theory (Hinton), computational biology, and engineering pragmatism. Key insight: WW's biologically-inspired architecture positions it uniquely to integrate prediction-based learning without the architectural rewrites required by pure LLM systems.
+Analysis of T4DM's position relative to the emerging "World Models" paradigm shift, synthesizing perspectives from neural learning theory (Hinton), computational biology, and engineering pragmatism. Key insight: WW's biologically-inspired architecture positions it uniquely to integrate prediction-based learning without the architectural rewrites required by pure LLM systems.
 
 ---
 
@@ -202,7 +202,7 @@ class DreamingConsolidation:
 | P1-4 | Prediction error in Episode schema | ✓ Done |
 | P1-5 | Prediction accuracy metrics | ✓ Done |
 
-**Modules**: `ww.learning.self_supervised`, striatal MSN GABA modulation
+**Modules**: `t4dm.learning.self_supervised`, striatal MSN GABA modulation
 
 ### P2: Latent Prediction Module ✓ COMPLETE
 
@@ -214,7 +214,7 @@ class DreamingConsolidation:
 | P2-4 | PredictionIntegration (lifecycle hooks) | ✓ Done |
 | P2-5 | Benchmark vs random baseline | ✓ Done |
 
-**Module**: `ww.prediction` - 49 tests, trained beats random/mean baselines
+**Module**: `t4dm.prediction` - 49 tests, trained beats random/mean baselines
 
 ### P3: Dreaming System ✓ COMPLETE
 
@@ -225,7 +225,7 @@ class DreamingConsolidation:
 | P3-3 | DreamConsolidation (REM integration) | ✓ Done |
 | P3-4 | Reference manifold constraints | ✓ Done |
 
-**Module**: `ww.dreaming` - 29 tests, coherence/smoothness/novelty/informativeness
+**Module**: `t4dm.dreaming` - 29 tests, coherence/smoothness/novelty/informativeness
 
 ### P4: Advanced Neuroscience Integration ✓ COMPLETE
 
@@ -236,7 +236,7 @@ class DreamingConsolidation:
 | P4-3 | Place/grid cell spatial prediction | ✓ Done |
 | P4-4 | Theta-gamma coupling (WM slots, plasticity gating) | ✓ Done |
 
-**Modules**: `ww.prediction.hierarchical_predictor`, `ww.learning.causal_discovery`, `ww.nca.spatial_cells`, `ww.nca.theta_gamma_integration` - 31 tests
+**Modules**: `t4dm.prediction.hierarchical_predictor`, `t4dm.learning.causal_discovery`, `t4dm.nca.spatial_cells`, `t4dm.nca.theta_gamma_integration` - 31 tests
 
 ---
 
@@ -334,10 +334,10 @@ t4dm/
 
 | Module | Tests | Coverage |
 |--------|-------|----------|
-| ww.prediction | 49 + hierarchical | 87% |
-| ww.dreaming | 29 | 85% |
-| ww.nca (spatial/theta-gamma) | 31 | 82-91% |
-| ww.learning (causal) | included | 88% |
+| t4dm.prediction | 49 + hierarchical | 87% |
+| t4dm.dreaming | 29 | 85% |
+| t4dm.nca (spatial/theta-gamma) | 31 | 82-91% |
+| t4dm.learning (causal) | included | 88% |
 | Total | 6,540 | 80% |
 
 ### Key Metrics

@@ -1,16 +1,16 @@
-# Neurocognitive Review: World Weaver Memory Architecture Papers
+# Neurocognitive Review: T4DM Memory Architecture Papers
 
 **Reviewer**: Neuroscience and Cognitive Architecture Specialist
 **Date**: 2025-12-04
 **Documents Reviewed**:
-- `/mnt/projects/t4d/t4dm/docs/world_weaver_ieee.tex` (IEEE Transactions format)
-- `/mnt/projects/t4d/t4dm/docs/world_weaver_journal_article.tex` (Full journal article)
+- `/mnt/projects/t4d/t4dm/docs/t4dm_ieee.tex` (IEEE Transactions format)
+- `/mnt/projects/t4d/t4dm/docs/t4dm_journal_article.tex` (Full journal article)
 
 **Overall Neurocognitive Rigor: 7.5/10**
 
 ## Executive Summary
 
-The World Weaver papers demonstrate **strong grounding in cognitive science theory** with generally accurate citations and characterizations of memory systems research. The authors show sophisticated understanding of Tulving's memory taxonomy, ACT-R architecture, and consolidation processes. However, there are several areas where neuroscientific claims are **oversimplified**, **technically imprecise**, or **missing critical nuances** that would concern cognitive scientists and neuroscientists. The papers are strongest in their theoretical framing and weakest in their treatment of biological mechanisms and consolidation processes.
+The T4DM papers demonstrate **strong grounding in cognitive science theory** with generally accurate citations and characterizations of memory systems research. The authors show sophisticated understanding of Tulving's memory taxonomy, ACT-R architecture, and consolidation processes. However, there are several areas where neuroscientific claims are **oversimplified**, **technically imprecise**, or **missing critical nuances** that would concern cognitive scientists and neuroscientists. The papers are strongest in their theoretical framing and weakest in their treatment of biological mechanisms and consolidation processes.
 
 ---
 
@@ -28,7 +28,7 @@ The World Weaver papers demonstrate **strong grounding in cognitive science theo
 #### Issue 1.1: Autonoetic Consciousness - INCOMPLETE
 
 **Problematic claim** (Journal article, line 879):
-> "Thomas Nagel famously asked 'What is it like to be a bat?' We might similarly ask: what is it like for World Weaver to remember? The answer, almost certainly, is that it isn't like anything. There is no phenomenal experience of recollection, no felt sense of the past, no autonoetic consciousness---Tulving's term for the self-knowing awareness that accompanies human episodic memory."
+> "Thomas Nagel famously asked 'What is it like to be a bat?' We might similarly ask: what is it like for T4DM to remember? The answer, almost certainly, is that it isn't like anything. There is no phenomenal experience of recollection, no felt sense of the past, no autonoetic consciousness---Tulving's term for the self-knowing awareness that accompanies human episodic memory."
 
 **Why it's incomplete:**
 This correctly identifies the absence of autonoetic consciousness but doesn't explain its **functional role** in episodic memory. Tulving (2002) argued that autonoetic consciousness is not merely phenomenal decoration but **constitutive** of episodic memory—without it, you have semantic memory about personal events, not true episodic memory.
@@ -43,18 +43,18 @@ Autonoetic consciousness involves:
 The system described is actually a **semantic personal event memory system**, not true episodic memory in Tulving's sense. This distinction matters theoretically.
 
 **Suggested revision:**
-> "Tulving distinguished episodic from semantic memory not merely by content (personal events vs. facts) but by consciousness: episodic retrieval involves autonoetic consciousness—the self-knowing awareness of mentally traveling back to re-experience past events. Without this phenomenal quality, World Weaver implements what Wheeler (2000) calls 'personal semantic memory'—factual knowledge about one's past rather than re-experiencing it. This is not a deficiency but a clarification: the system stores structured records of past events without the subjective time travel that characterizes human episodic memory."
+> "Tulving distinguished episodic from semantic memory not merely by content (personal events vs. facts) but by consciousness: episodic retrieval involves autonoetic consciousness—the self-knowing awareness of mentally traveling back to re-experience past events. Without this phenomenal quality, T4DM implements what Wheeler (2000) calls 'personal semantic memory'—factual knowledge about one's past rather than re-experiencing it. This is not a deficiency but a clarification: the system stores structured records of past events without the subjective time travel that characterizes human episodic memory."
 
 #### Issue 1.2: Declarative vs. Procedural - ACCURATE but SURFACE-LEVEL ✓
 
 **Citation** (IEEE line 87):
-> "World Weaver's tripartite structure draws on Tulving's distinction between episodic and semantic memory, extended with procedural memory following Anderson's ACT-R framework."
+> "T4DM's tripartite structure draws on Tulving's distinction between episodic and semantic memory, extended with procedural memory following Anderson's ACT-R framework."
 
 **Assessment:**
 This is technically correct but elides important distinctions. The episodic/semantic distinction falls under **declarative memory** (Squire's taxonomy), which is distinct from **procedural memory** (Squire & Zola, 1996). The papers appropriately cite both Tulving and Anderson, avoiding conflation.
 
 **Minor improvement:**
-Could mention that procedural memory in humans is typically **implicit** (non-conscious), while World Weaver's "procedural memory" is explicit executable code—a significant architectural difference from biological systems.
+Could mention that procedural memory in humans is typically **implicit** (non-conscious), while T4DM's "procedural memory" is explicit executable code—a significant architectural difference from biological systems.
 
 ---
 
@@ -144,11 +144,11 @@ The papers present **Standard Consolidation Theory** (Squire & Alvarez, 1995) as
 - Patient case studies (e.g., K.C.) show dissociation between semantic and episodic remote memory
 - fMRI studies show continued hippocampal activation for detailed episodic memories regardless of age
 
-**Why this matters for World Weaver:**
+**Why this matters for T4DM:**
 The consolidation algorithm clusters episodes and extracts semantic nodes, implying episodes become **less important over time**. But if MTT is correct, episodic details should remain accessible even after semantic extraction. The architecture should preserve both.
 
 **Suggested revision:**
-> "Memory consolidation remains theoretically contested. Standard Consolidation Theory (Squire & Alvarez, 1995) proposes hippocampus-to-cortex transfer over time. However, Multiple Trace Theory (Nadel & Moscovitch, 1997) argues that episodic details remain hippocampus-dependent indefinitely, with only semantic extraction becoming cortex-based. World Weaver's consolidation implements selective semantic extraction while preserving episodic sources, more aligned with MTT's framework. However, the system lacks the biological hippocampus's ability to reactivate specific episodes for re-consolidation."
+> "Memory consolidation remains theoretically contested. Standard Consolidation Theory (Squire & Alvarez, 1995) proposes hippocampus-to-cortex transfer over time. However, Multiple Trace Theory (Nadel & Moscovitch, 1997) argues that episodic details remain hippocampus-dependent indefinitely, with only semantic extraction becoming cortex-based. T4DM's consolidation implements selective semantic extraction while preserving episodic sources, more aligned with MTT's framework. However, the system lacks the biological hippocampus's ability to reactivate specific episodes for re-consolidation."
 
 ### 3.2 Sleep-Dependent Consolidation: ACCURATE but INCOMPLETE ✓
 
@@ -174,7 +174,7 @@ Recent research (Rasch & Born, 2013; Hu et al., 2020) shows that:
 The consolidation algorithm (Journal lines 171-185) clusters episodes and extracts entities but **lacks selectivity mechanisms** based on importance. Biological consolidation is **highly selective**—important memories preferentially consolidated.
 
 **Suggested enhancement:**
-> "Sleep-dependent consolidation involves targeted memory reactivation (Rasch & Born, 2013): hippocampal replay during slow-wave sleep preferentially reactivates emotionally salient or reward-associated memories. This selectivity, coordinated by hippocampal sharp-wave ripples and cortical spindles, determines what consolidates to long-term cortical storage. World Weaver's consolidation uses clustering and frequency thresholds but lacks biological systems' sophisticated selection based on importance, outcome, and emotional salience—though the 'importance' parameter (ν) provides a rudimentary analog."
+> "Sleep-dependent consolidation involves targeted memory reactivation (Rasch & Born, 2013): hippocampal replay during slow-wave sleep preferentially reactivates emotionally salient or reward-associated memories. This selectivity, coordinated by hippocampal sharp-wave ripples and cortical spindles, determines what consolidates to long-term cortical storage. T4DM's consolidation uses clustering and frequency thresholds but lacks biological systems' sophisticated selection based on importance, outcome, and emotional salience—though the 'importance' parameter (ν) provides a rudimentary analog."
 
 ### 3.3 Schematization: ACCURATE ✓✓
 
@@ -225,7 +225,7 @@ See section 2.3 for detailed analysis. Generally accurate with minor clarificati
 **Citation** (Journal line 341):
 > "Bartlett's seminal work demonstrated that memory is reconstructive, not reproductive---we don't replay recordings but actively rebuild memories each time, influenced by current knowledge and context."
 
-**Assessment:** **Perfect characterization** of Bartlett's "War of the Ghosts" studies showing schema-based reconstruction. The papers correctly note that World Weaver **doesn't implement reconstruction**—it retrieves static records (Journal lines 566-567). This is intellectually honest.
+**Assessment:** **Perfect characterization** of Bartlett's "War of the Ghosts" studies showing schema-based reconstruction. The papers correctly note that T4DM **doesn't implement reconstruction**—it retrieves static records (Journal lines 566-567). This is intellectually honest.
 
 ### 5.2 Schacter: NOT CITED but SHOULD BE
 
@@ -259,17 +259,17 @@ Sleep-memory citations are current and accurate (see section 3.2).
 The papers discuss encoding → storage → retrieval but **omit reconsolidation** (Nader & Hardt, 2009; Sara, 2000)—the finding that **retrieved memories become labile** and require re-stabilization.
 
 **Why it matters:**
-When World Weaver retrieves a memory, that memory should potentially be **modifiable** based on current context. In biological systems:
+When T4DM retrieves a memory, that memory should potentially be **modifiable** based on current context. In biological systems:
 1. Retrieval destabilizes memory trace
 2. Memory enters labile state (30min-6hr window)
 3. Re-encoding can modify memory
 4. Blockers during reconsolidation impair memory
 
-**Implications for World Weaver:**
+**Implications for T4DM:**
 The current architecture treats retrieval as **read-only**. But reconsolidation suggests retrieval should be **read-write**—retrieved memories could be updated, strengthened, or integrated with new information.
 
 **Suggested addition** (in consolidation section):
-> "Biological memory consolidation has a counterpart in reconsolidation: retrieved memories enter a labile state and require re-stabilization (Nader & Hardt, 2009). This provides a mechanism for memory updating—retrieved memories can be modified before re-storage. World Weaver's current architecture treats retrieval as read-only, missing reconsolidation's update mechanism. Future versions might implement retrieval-triggered re-encoding, where memories retrieved in new contexts are updated to incorporate current information, implementing a computational analog of reconsolidation."
+> "Biological memory consolidation has a counterpart in reconsolidation: retrieved memories enter a labile state and require re-stabilization (Nader & Hardt, 2009). This provides a mechanism for memory updating—retrieved memories can be modified before re-storage. T4DM's current architecture treats retrieval as read-only, missing reconsolidation's update mechanism. Future versions might implement retrieval-triggered re-encoding, where memories retrieved in new contexts are updated to incorporate current information, implementing a computational analog of reconsolidation."
 
 ### 6.2 Working Memory: UNDERSPECIFIED
 
@@ -284,7 +284,7 @@ Baddeley's working memory model (Baddeley & Hitch, 1974) includes:
 - **Episodic buffer** (integration of multimodal information)
 
 **Relevance:**
-World Weaver needs a **working memory analog** for:
+T4DM needs a **working memory analog** for:
 - Maintaining current context during retrieval
 - Holding retrieved memories for reasoning
 - Integrating information across memories
@@ -301,7 +301,7 @@ The hippocampus performs:
 - **Pattern separation**: Making similar experiences distinguishable (Lacy et al., 2011)
 - **Pattern completion**: Retrieving complete memories from partial cues (Rolls, 2013)
 
-**Relevance for World Weaver:**
+**Relevance for T4DM:**
 - **Pattern separation** → how to avoid conflating similar episodes (currently addressed via embeddings + metadata)
 - **Pattern completion** → how to retrieve relevant memories from partial queries (currently addressed via hybrid retrieval)
 
@@ -319,7 +319,7 @@ The system **functionally implements these** but doesn't frame them neuroscienti
 
 **Hebb's principle:** "Cells that fire together wire together" → co-activated neurons strengthen connections.
 
-**Application in World Weaver:**
+**Application in T4DM:**
 Co-retrieved memories should have strengthened associations, implemented via:
 ```
 S_ji += η · A_j · A_i
@@ -375,7 +375,7 @@ A cognitive scientist would note that consolidation **isn't just clustering + ex
 5. **Schema formation** (structured knowledge, not just entity lists)
 
 **Suggested acknowledgment:**
-> "The consolidation algorithm provides a first-order approximation of biological consolidation through clustering and extraction, but lacks crucial processes: deep abstraction beyond entity extraction, integration of new with prior knowledge (rather than simple addition), causal inference of relationships, and genuine schema formation. Biological consolidation involves complex hippocampal-cortical dialogue during sleep, with selective reactivation based on salience. World Weaver's batch processing simplifies this drastically. Future work should explore incremental consolidation with importance-based selection and deeper semantic integration."
+> "The consolidation algorithm provides a first-order approximation of biological consolidation through clustering and extraction, but lacks crucial processes: deep abstraction beyond entity extraction, integration of new with prior knowledge (rather than simple addition), causal inference of relationships, and genuine schema formation. Biological consolidation involves complex hippocampal-cortical dialogue during sleep, with selective reactivation based on salience. T4DM's batch processing simplifies this drastically. Future work should explore incremental consolidation with importance-based selection and deeper semantic integration."
 
 ### 7.2 "Forgetting" Implementation: THEORETICALLY WEAK
 
@@ -395,7 +395,7 @@ FSRS (Free Spaced Repetition System) is designed for **flashcard learning**—op
 Forgetting follows environmental statistics—information that was useful recently/frequently is more likely useful now. Memory decay should track **need probability**, not arbitrary time constants.
 
 **Issue with FSRS:**
-FSRS assumes you **want to retain everything** (just efficiently). But biological forgetting is **adaptive**—it clears out-of-date information. World Weaver needs theory-driven forgetting based on:
+FSRS assumes you **want to retain everything** (just efficiently). But biological forgetting is **adaptive**—it clears out-of-date information. T4DM needs theory-driven forgetting based on:
 - Temporal dynamics of information relevance
 - Resource constraints
 - Interference minimization
@@ -438,10 +438,10 @@ But **no false statements** about neurobiology or cognitive theory.
 > "Does this absence [of phenomenal experience] matter functionally? Perhaps not for task performance."
 
 **On reconstruction** (Journal line 566):
-> "No Reconstruction: Human memory is reconstructive; we rebuild memories each time, influenced by current context. World Weaver's memories are static records. We retrieve but don't reconstruct."
+> "No Reconstruction: Human memory is reconstructive; we rebuild memories each time, influenced by current context. T4DM's memories are static records. We retrieve but don't reconstruct."
 
 **On grounding** (Journal line 556):
-> "Grounding Problem: Human episodic memories are grounded in sensorimotor experience. World Weaver's memories are grounded in text, which is itself a symbolic abstraction."
+> "Grounding Problem: Human episodic memories are grounded in sensorimotor experience. T4DM's memories are grounded in text, which is itself a symbolic abstraction."
 
 **Assessment:**
 The papers **do not overclaim**. They clearly acknowledge where the system differs from biological memory, where simplifications are made, and what remains unsolved. This is **exemplary scientific practice**.
@@ -451,10 +451,10 @@ The papers **do not overclaim**. They clearly acknowledge where the system diffe
 **Examples:**
 
 **Epistemology** (Journal lines 833-843):
-> "In classical epistemology, knowledge requires truth, belief, and justification. Does an AI agent with World Weaver have beliefs? [...] More troubling is justification."
+> "In classical epistemology, knowledge requires truth, belief, and justification. Does an AI agent with T4DM have beliefs? [...] More troubling is justification."
 
 **Philosophy of memory** (Journal lines 905-914):
-> "Franz Brentano characterized mental states by their intentionality—they are 'about' something, directed toward objects or states of affairs. [...] Do World Weaver's memories have intentionality?"
+> "Franz Brentano characterized mental states by their intentionality—they are 'about' something, directed toward objects or states of affairs. [...] Do T4DM's memories have intentionality?"
 
 **Assessment:**
 The theoretical depth exceeds typical ML systems papers. The authors engage seriously with **philosophy of mind**, **phenomenology**, and **epistemology**—appropriate for a system claiming to implement "memory."
@@ -462,7 +462,7 @@ The theoretical depth exceeds typical ML systems papers. The authors engage seri
 ### 9.3 Critical Self-Analysis ✓✓
 
 **Section 5 "Critical Analysis"** (Journal lines 536-581):
-The paper dedicates substantial space to **"What World Weaver Does Poorly"** and **"Fundamental Questions"**, including:
+The paper dedicates substantial space to **"What T4DM Does Poorly"** and **"Fundamental Questions"**, including:
 - No true neural integration
 - Grounding problem
 - Scale questions
@@ -534,7 +534,7 @@ This level of self-critique is **rare and valuable**. Most papers emphasize cont
 > "There is no phenomenal experience of recollection, no felt sense of the past, no autonoetic consciousness—Tulving's term for the self-knowing awareness that accompanies human episodic memory."
 
 **Suggested:**
-> "There is no phenomenal experience of recollection, no felt sense of the past, no autonoetic consciousness—Tulving's term for the self-knowing awareness of mentally traveling through subjective time that he argued is constitutive of episodic memory. Without this phenomenal quality, World Weaver implements what Wheeler (2000) termed 'personal semantic memory'—factual knowledge about one's past rather than the re-experiencing of it. This is not a deficiency but a clarification of what kind of memory system we have built."
+> "There is no phenomenal experience of recollection, no felt sense of the past, no autonoetic consciousness—Tulving's term for the self-knowing awareness of mentally traveling through subjective time that he argued is constitutive of episodic memory. Without this phenomenal quality, T4DM implements what Wheeler (2000) termed 'personal semantic memory'—factual knowledge about one's past rather than the re-experiencing of it. This is not a deficiency but a clarification of what kind of memory system we have built."
 
 ### Suggestion 2: Systems Consolidation (Journal line 161)
 
@@ -542,7 +542,7 @@ This level of self-critique is **rare and valuable**. Most papers emphasize cont
 > "Systems Consolidation: Newly formed memories depend on the hippocampus but gradually become independent, stored in neocortical networks. This transfer takes days to years."
 
 **Suggested:**
-> "Systems Consolidation: Standard Consolidation Theory (Squire & Alvarez, 1995) proposes that newly formed memories initially depend on the hippocampus but gradually become cortically independent through a transfer process taking days to years. However, Multiple Trace Theory (Nadel & Moscovitch, 1997) argues that episodic memories remain hippocampus-dependent indefinitely, with only extracted semantic knowledge becoming cortex-based. World Weaver's consolidation—extracting semantic entities while preserving episodic sources—aligns more closely with MTT's framework, though implemented through computational clustering rather than biological replay mechanisms."
+> "Systems Consolidation: Standard Consolidation Theory (Squire & Alvarez, 1995) proposes that newly formed memories initially depend on the hippocampus but gradually become cortically independent through a transfer process taking days to years. However, Multiple Trace Theory (Nadel & Moscovitch, 1997) argues that episodic memories remain hippocampus-dependent indefinitely, with only extracted semantic knowledge becoming cortex-based. T4DM's consolidation—extracting semantic entities while preserving episodic sources—aligns more closely with MTT's framework, though implemented through computational clustering rather than biological replay mechanisms."
 
 ### Suggestion 3: Forgetting (IEEE line 109)
 
@@ -557,7 +557,7 @@ This level of self-critique is **rare and valuable**. Most papers emphasize cont
 **Location:** After consolidation discussion (Journal line ~188)
 
 **Suggested addition:**
-> "Memory reconsolidation (Nader & Hardt, 2009) reveals that retrieved memories enter a labile state requiring re-stabilization. This provides a mechanism for memory updating: retrieved memories can be modified before being re-stored. Reconsolidation has important implications for World Weaver. Currently, retrieval is read-only—memories are fetched but not modified. A reconsolidation-inspired mechanism would allow retrieved memories to be updated when accessed in new contexts, strengthening associations, correcting errors, or integrating new information. This would transform memory from static storage to dynamic, context-sensitive knowledge that evolves through use."
+> "Memory reconsolidation (Nader & Hardt, 2009) reveals that retrieved memories enter a labile state requiring re-stabilization. This provides a mechanism for memory updating: retrieved memories can be modified before being re-stored. Reconsolidation has important implications for T4DM. Currently, retrieval is read-only—memories are fetched but not modified. A reconsolidation-inspired mechanism would allow retrieved memories to be updated when accessed in new contexts, strengthening associations, correcting errors, or integrating new information. This would transform memory from static storage to dynamic, context-sensitive knowledge that evolves through use."
 
 ### Suggestion 5: Spreading Activation Source Constraint
 
@@ -596,7 +596,7 @@ This level of self-critique is **rare and valuable**. Most papers emphasize cont
 - Cherry-pick neuroscience citations
 - Ignore contradictory evidence
 
-**World Weaver papers**: 7.5/10
+**T4DM papers**: 7.5/10
 - Substantially more rigorous than typical
 - Honest about limitations
 - Engages seriously with cognitive science
@@ -639,7 +639,7 @@ For an AI systems paper implementing cognitive architecture, **7.5/10 is very st
 
 ## 14. CONCLUSION
 
-The World Weaver papers demonstrate **strong neurocognitive rigor** with accurate characterization of memory systems, appropriate use of cognitive architecture frameworks (ACT-R), and intellectually honest discussion of limitations. The papers are significantly more sophisticated than typical AI systems work in their engagement with cognitive science.
+The T4DM papers demonstrate **strong neurocognitive rigor** with accurate characterization of memory systems, appropriate use of cognitive architecture frameworks (ACT-R), and intellectually honest discussion of limitations. The papers are significantly more sophisticated than typical AI systems work in their engagement with cognitive science.
 
 **Main areas for improvement:**
 1. Address reconsolidation (significant omission)

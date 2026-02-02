@@ -1,11 +1,11 @@
-# World Weaver Plugin Architecture Plan
+# T4DM Plugin Architecture Plan
 
 **Date**: 2025-11-27
 **Status**: Proposed
 
 ## Executive Summary
 
-Restructure World Weaver from a standalone MCP server into a **Claude Code plugin** that provides:
+Restructure T4DM from a standalone MCP server into a **Claude Code plugin** that provides:
 - Skills for memory operations
 - Hooks for automatic memory capture
 - Slash commands for quick access
@@ -46,7 +46,7 @@ The MCP server remains as the storage backend; the plugin adds a UX layer.
 ┌─────────────────────────────────────────────────────────────┐
 │                     Claude Code CLI                          │
 │  ┌─────────────────────────────────────────────────────────┐│
-│  │                World Weaver Plugin                       ││
+│  │                T4DM Plugin                       ││
 │  │  ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐       ││
 │  │  │ Skills  │ │  Hooks  │ │Commands │ │ Agents  │       ││
 │  │  │ww-store │ │SessionS │ │/remember│ │ww-memory│       ││
@@ -72,7 +72,7 @@ The MCP server remains as the storage backend; the plugin adds a UX layer.
 ## Plugin Structure
 
 ```
-world-weaver-plugin/
+t4dm-plugin/
 ├── plugin.json                 # Plugin manifest
 ├── README.md                   # Installation guide
 ├── CHANGELOG.md
@@ -118,13 +118,13 @@ world-weaver-plugin/
 ```markdown
 ---
 name: ww-store
-description: Store memories in World Weaver (episodes, entities, skills)
+description: Store memories in T4DM (episodes, entities, skills)
 allowed-tools: ['mcp__ww-memory__*']
 ---
 
 # WW Store Skill
 
-Store information in World Weaver's tripartite memory system.
+Store information in T4DM's tripartite memory system.
 
 ## Capabilities
 
@@ -244,7 +244,7 @@ def call_mcp_tool(tool: str, params: dict) -> dict:
 def format_context(episodes, entities, skills) -> str:
     """Format memory context for injection."""
     return f"""
-## Memory Context (World Weaver)
+## Memory Context (T4DM)
 
 ### Recent Episodes ({len(episodes)} found)
 {format_episodes(episodes)}
@@ -268,7 +268,7 @@ if __name__ == "__main__":
 SessionEnd hook: Store session summary as episode.
 
 Extracts completed tasks, git activity, and conversation summary
-to create an autobiographical episode in World Weaver.
+to create an autobiographical episode in T4DM.
 """
 
 import json
@@ -348,7 +348,7 @@ When invoked:
 ```markdown
 # /recall Command
 
-Search World Weaver memories.
+Search T4DM memories.
 
 ## Usage
 
@@ -374,12 +374,12 @@ When invoked:
 ```markdown
 ---
 name: ww-memory
-description: Direct interface to World Weaver memory systems
+description: Direct interface to T4DM memory systems
 tools: ['mcp__ww-memory__*', 'Read', 'Write']
 model: haiku
 ---
 
-You are the World Weaver memory agent. You have direct access to all
+You are the T4DM memory agent. You have direct access to all
 memory MCP tools and can perform complex memory operations.
 
 ## Capabilities
@@ -407,7 +407,7 @@ tools: ['mcp__ww-memory__*', 'Read']
 model: haiku
 ---
 
-You are the World Weaver retrieval agent. You specialize in finding
+You are the T4DM retrieval agent. You specialize in finding
 the most relevant memories using optimal retrieval strategies.
 
 ## Strategies
@@ -427,7 +427,7 @@ the most relevant memories using optimal retrieval strategies.
 
 ## Integration with Existing Hooks
 
-World Weaver plugin hooks should **extend** Aaron's existing hooks:
+T4DM plugin hooks should **extend** Aaron's existing hooks:
 
 ### session-initializer Enhancement
 ```python
@@ -506,7 +506,7 @@ def enhanced_session_end():
 ### plugin.json
 ```json
 {
-  "name": "world-weaver",
+  "name": "t4dm",
   "version": "1.0.0",
   "description": "Tripartite neural memory system for Claude Code",
   "author": "Aaron Storey",
@@ -545,15 +545,15 @@ def enhanced_session_end():
   "mcpServers": {
     "ww-memory": {
       "command": "/mnt/projects/t4d/t4dm/.venv/bin/python",
-      "args": ["-m", "ww.mcp.server"],
+      "args": ["-m", "t4dm.mcp.server"],
       "env": {
-        "WW_SESSION_ID": "default",
-        "WW_NEO4J_URI": "bolt://localhost:7687"
+        "T4DM_SESSION_ID": "default",
+        "T4DM_NEO4J_URI": "bolt://localhost:7687"
       }
     }
   },
   "enabledPlugins": {
-    "world-weaver@astoreyai": true
+    "t4dm@astoreyai": true
   }
 }
 ```
@@ -581,7 +581,7 @@ def enhanced_session_end():
 ## Next Steps
 
 1. Review and approve this plan
-2. Create plugin skeleton in `~/github/astoreyai/claude-skills/skills/world-weaver/`
+2. Create plugin skeleton in `~/github/astoreyai/claude-skills/skills/t4dm/`
 3. Implement Phase 1 components
 4. Test integration with existing WW MCP server
 5. Iterate based on usage feedback

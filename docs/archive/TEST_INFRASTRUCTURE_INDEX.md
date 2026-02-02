@@ -1,6 +1,6 @@
-# World Weaver Test Infrastructure Index
+# T4DM Test Infrastructure Index
 
-This document indexes all test infrastructure files created for World Weaver.
+This document indexes all test infrastructure files created for T4DM.
 
 ## Quick Links
 
@@ -71,8 +71,8 @@ Pytest configuration with 17 fixtures for testing.
 **Fixture Categories:**
 
 1. **Storage Mocks (3)**
-   - `mock_qdrant_store` - Vector store mock
-   - `mock_neo4j_store` - Graph store mock
+   - `mock_t4dx_vector_adapter` - Vector store mock
+   - `mock_t4dx_graph_adapter` - Graph store mock
    - `mock_embedding_provider` - Embedding service mock
 
 2. **Memory Service Mocks (4)**

@@ -1,4 +1,4 @@
-# World Weaver NCA Telemetry: Implementation Guide
+# T4DM NCA Telemetry: Implementation Guide
 **Author**: Claude Sonnet 4.5 (CompBio Agent)
 **Date**: 2026-01-01
 **Sprint Goal**: Implement P0 (critical) telemetry enhancements
@@ -29,7 +29,7 @@ Sharp-wave ripples (SWRs) are **150-250 Hz oscillations** in hippocampal CA1 dur
 
 ```python
 """
-SWR Telemetry for World Weaver NCA.
+SWR Telemetry for T4DM NCA.
 
 Visualizes sharp-wave ripple events for consolidation monitoring:
 - Ripple frequency (150-250 Hz)
@@ -54,7 +54,7 @@ from typing import TYPE_CHECKING, List, Optional
 import numpy as np
 
 if TYPE_CHECKING:
-    from ww.nca.swr_coupling import SWRState, SWRPhase
+    from t4dm.nca.swr_coupling import SWRState, SWRPhase
 
 logger = logging.getLogger(__name__)
 
@@ -408,7 +408,7 @@ __all__ = ["SWRTelemetry", "SWREvent"]
 import pytest
 from datetime import datetime
 from dataclasses import dataclass
-from ww.visualization.swr_telemetry import SWRTelemetry, SWREvent
+from t4dm.visualization.swr_telemetry import SWRTelemetry, SWREvent
 
 
 @dataclass
@@ -527,7 +527,7 @@ Phase-amplitude coupling (PAC) between theta (4-8 Hz) and gamma (30-80 Hz) is th
 
 ```python
 """
-Phase-Amplitude Coupling (PAC) Telemetry for World Weaver NCA.
+Phase-Amplitude Coupling (PAC) Telemetry for T4DM NCA.
 
 Measures theta-gamma coupling for working memory capacity estimation.
 
@@ -548,7 +548,7 @@ import numpy as np
 from scipy import signal
 
 if TYPE_CHECKING:
-    from ww.nca.oscillators import OscillatorState
+    from t4dm.nca.oscillators import OscillatorState
 
 logger = logging.getLogger(__name__)
 

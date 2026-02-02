@@ -1,4 +1,4 @@
-# World Weaver Learning Improvement Plan
+# T4DM Learning Improvement Plan
 
 **Created**: 2026-01-07
 **Author**: Geoffrey Hinton AI Architect Agent
@@ -9,7 +9,7 @@
 
 ## Executive Summary
 
-The current World Weaver implementation has sophisticated neural architecture components (Forward-Forward, Capsules, VAE) but lacks deep integration that would make representations actually improve through use. This plan addresses five core limitations:
+The current T4DM implementation has sophisticated neural architecture components (Forward-Forward, Capsules, VAE) but lacks deep integration that would make representations actually improve through use. This plan addresses five core limitations:
 
 1. **Frozen Embeddings**: BGE-M3 produces static vectors; FF only refines downstream
 2. **Hand-Set Poses**: Capsule pose dimensions are manually defined, not emergent

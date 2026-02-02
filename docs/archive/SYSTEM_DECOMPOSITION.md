@@ -1,4 +1,4 @@
-# World Weaver (ww) System Decomposition
+# T4DM (ww) System Decomposition
 
 **Generated**: 2025-12-06
 **Version**: 0.1.0
@@ -252,15 +252,15 @@ Foundation classes, types, and configuration.
 Persistent storage implementations.
 
 ### 4.1 Vector Store (Qdrant)
-**File**: `qdrant_store.py` (1,058 LOC)
+**File**: `t4dx_vector_adapter.py` (1,058 LOC)
 - **Classes**:
-  - `QdrantStore` - Qdrant vector database
+  - `T4DXVectorAdapter` - Qdrant vector database
   - `DatabaseTimeoutError` - Timeout exception
 
 ### 4.2 Graph Store (Neo4j)
-**File**: `neo4j_store.py` (1,011 LOC)
+**File**: `t4dx_graph_adapter.py` (1,011 LOC)
 - **Classes**:
-  - `Neo4jStore` - Neo4j graph database
+  - `T4DXGraphAdapter` - Neo4j graph database
   - `DatabaseConnectionError`, `DatabaseTimeoutError` - Exceptions
 
 ### 4.3 Saga Pattern (Transactions)
@@ -526,9 +526,9 @@ Client libraries for external consumers.
 
 **Files**: `client.py`, `models.py`
 - **Classes**:
-  - `WorldWeaverClient` - Sync client
-  - `AsyncWorldWeaverClient` - Async client
-  - Exceptions: `WorldWeaverError`, `ConnectionError`, `NotFoundError`, `RateLimitError`
+  - `T4DMClient` - Sync client
+  - `AsyncT4DMClient` - Async client
+  - Exceptions: `T4DMError`, `ConnectionError`, `NotFoundError`, `RateLimitError`
   - Models: `Episode`, `Entity`, `Skill`, `Step`, `Relationship`
   - `EpisodeContext`, `RecallResult`, `ActivationResult`
   - `MemoryStats`, `HealthStatus`

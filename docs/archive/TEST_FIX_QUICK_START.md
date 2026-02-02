@@ -9,10 +9,10 @@
 ### Edit `.env` File
 ```bash
 # Current (WRONG):
-WW_NEO4J_PASSWORD=wwpassword
+T4DM_NEO4J_PASSWORD=wwpassword
 
 # Change to (CORRECT):
-WW_NEO4J_PASSWORD=Ww@Secure123
+T4DM_NEO4J_PASSWORD=Ww@Secure123
 ```
 
 **Why**: Weak passwords violate new validation rules. Password must have:
@@ -25,7 +25,7 @@ WW_NEO4J_PASSWORD=Ww@Secure123
 ```bash
 cd /mnt/projects/ww
 source venv/bin/activate
-python -c "from ww.core.config import Settings; s = Settings(); print('✓ Settings loaded successfully')"
+python -c "from t4dm.core.config import Settings; s = Settings(); print('✓ Settings loaded successfully')"
 ```
 
 ---
@@ -40,7 +40,7 @@ python -c "from ww.core.config import Settings; s = Settings(); print('✓ Setti
 # ============================================================================
 
 @pytest.fixture(autouse=True)
-def auto_patch_storage(request, mock_neo4j_store, mock_qdrant_store, mock_embedding_provider):
+def auto_patch_storage(request, mock_t4dx_graph_adapter, mock_t4dx_vector_adapter, mock_embedding_provider):
     """
     Automatically patch all storage backends for every test.
 
@@ -52,9 +52,9 @@ def auto_patch_storage(request, mock_neo4j_store, mock_qdrant_store, mock_embedd
         yield
         return
 
-    with patch('ww.storage.get_neo4j_store', return_value=mock_neo4j_store), \
-         patch('ww.storage.get_qdrant_store', return_value=mock_qdrant_store), \
-         patch('ww.embedding.get_embedding_provider', return_value=mock_embedding_provider):
+    with patch('t4dm.storage.get_t4dx_graph_adapter', return_value=mock_t4dx_graph_adapter), \
+         patch('t4dm.storage.get_t4dx_vector_adapter', return_value=mock_t4dx_vector_adapter), \
+         patch('t4dm.embedding.get_embedding_provider', return_value=mock_embedding_provider):
         yield
 ```
 
@@ -277,7 +277,7 @@ def sanitize_content(content: str) -> str:
 
 ```bash
 # After Step 1:
-python -c "from ww.core.config import Settings; Settings()" && echo "✓ Password fix works"
+python -c "from t4dm.core.config import Settings; Settings()" && echo "✓ Password fix works"
 
 # After Step 3:
 pytest tests/unit/test_consolidation.py::test_light_consolidation_duplicate_detection -v && echo "✓ Fixture fix works"

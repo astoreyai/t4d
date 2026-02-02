@@ -6,7 +6,7 @@ Sleep-based memory consolidation with VAE generative replay and multi-night sche
 
 ## Overview
 
-World Weaver implements a biologically-inspired sleep consolidation system based on Complementary Learning Systems (CLS) theory. The system integrates:
+T4DM implements a biologically-inspired sleep consolidation system based on Complementary Learning Systems (CLS) theory. The system integrates:
 
 1. **Sharp-Wave Ripple (SWR) Replay** - Compressed hippocampal replay
 2. **Generative Replay (VAE)** - Synthetic memory generation to prevent catastrophic forgetting
@@ -59,7 +59,7 @@ The system uses a Variational Autoencoder (VAE) to generate synthetic memories d
 ### Configuration
 
 ```python
-from ww.consolidation import SleepConsolidation
+from t4dm.consolidation import SleepConsolidation
 
 consolidation = SleepConsolidation(
     # VAE parameters
@@ -93,7 +93,7 @@ During consolidation, the system runs a modified wake-sleep algorithm:
 3. **Interleave**: Alternate real/synthetic to maintain old representations
 
 ```python
-from ww.learning import GenerativeReplaySystem
+from t4dm.learning import GenerativeReplaySystem
 
 # The system automatically interleaves:
 # - 50% real memories (recent episodes)
@@ -116,7 +116,7 @@ Consolidation depth increases progressively across multiple "nights" (consolidat
 ### Usage
 
 ```python
-from ww.consolidation import ConsolidationService
+from t4dm.consolidation import ConsolidationService
 
 service = ConsolidationService()
 
@@ -183,7 +183,7 @@ Key findings:
 ### Configuration
 
 ```python
-from ww.consolidation import (
+from t4dm.consolidation import (
     LabilityManager,
     LabilityConfig,
     is_reconsolidation_eligible,
@@ -267,8 +267,8 @@ Retrieval
 
 ```python
 import asyncio
-from ww.consolidation import SleepConsolidation, ConsolidationService
-from ww.memory import EpisodicMemory
+from t4dm.consolidation import SleepConsolidation, ConsolidationService
+from t4dm.memory import EpisodicMemory
 
 async def nightly_routine():
     # Initialize
@@ -327,7 +327,7 @@ vae.train_step(embeddings, learning_rate=effective_lr)
 Sharp-Wave Ripple replay is gated by theta oscillations:
 
 ```python
-from ww.nca import SWRCoupling
+from t4dm.nca import SWRCoupling
 
 swr = SWRCoupling(
     theta_phase_window=(0.2, 0.4),  # Optimal replay window

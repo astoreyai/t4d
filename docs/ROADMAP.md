@@ -1,4 +1,4 @@
-# World Weaver Development Roadmap
+# T4DM Development Roadmap
 
 > **NOTICE (2026-01-17)**: For active execution, see `/FINAL_PLAN.md` - the single source of truth.
 > 17 planning documents have been archived to `/docs/archive/plans-2026-01/`.
@@ -469,7 +469,7 @@ The following test coverage gaps remain:
 - Neo4j/Qdrant alternatives (e.g., Weaviate, Milvus)
 
 **Deliverables**:
-- `ww.plugins` - Plugin interface
+- `t4dm.plugins` - Plugin interface
 - Example plugins (OpenAI embeddings, Weaviate store)
 - Plugin development guide
 
@@ -769,7 +769,7 @@ docker-compose up -d                      # Neo4j + Qdrant
 docker-compose -f docker-compose.full.yml up -d  # Full stack
 
 # Services
-python -m ww.api.server                   # REST API
+python -m t4dm.api.server                   # REST API
 ww-memory                                 # MCP gateway
 ww-explore                                # Memory explorer
 ww-dashboard                              # Monitoring dashboard

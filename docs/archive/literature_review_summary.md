@@ -1,4 +1,4 @@
-# World Weaver Literature Review Summary
+# T4DM Literature Review Summary
 
 ## PRISMA 2020 Systematic Review Results
 
@@ -18,7 +18,7 @@
 
 ## Critical Gaps Identified
 
-| Gap | Current State | World Weaver Status |
+| Gap | Current State | T4DM Status |
 |-----|---------------|---------------------|
 | G1: Integrated tripartite memory | Conceptual only (CoALA) | **ADDRESSED** |
 | G2: Automatic consolidation | Theoretical (sleep-inspired) | **PARTIAL** (HDBSCAN) |
@@ -36,9 +36,9 @@
 | MemGPT (Packer 2023) | 60% | Tier-based, not type-based |
 | FinMem (Yu 2024) | 55% | Domain-specific (finance) |
 
-## World Weaver Unique Contributions
+## T4DM Unique Contributions
 
-World Weaver is the **only identified system** combining:
+T4DM is the **only identified system** combining:
 1. Implemented tripartite architecture (not just proposed)
 2. Software-based Hebbian co-retrieval learning
 3. Dual-store backend (Neo4j + Qdrant)
@@ -47,7 +47,7 @@ World Weaver is the **only identified system** combining:
 
 ## Publication Opportunity
 
-World Weaver represents the first production implementation of tripartite memory with Hebbian learning - a significant gap in the literature.
+T4DM represents the first production implementation of tripartite memory with Hebbian learning - a significant gap in the literature.
 
 ## Recommended Extensions
 

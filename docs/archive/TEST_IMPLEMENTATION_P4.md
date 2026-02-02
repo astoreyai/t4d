@@ -1,8 +1,8 @@
-# World Weaver Service Layer Test Implementation (P4)
+# T4DM Service Layer Test Implementation (P4)
 
 ## Project Summary
 
-Implemented comprehensive unit tests for World Weaver service layer components to increase test coverage from 47% to 75%+.
+Implemented comprehensive unit tests for T4DM service layer components to increase test coverage from 47% to 75%+.
 
 ## Files Created
 

@@ -1,9 +1,9 @@
-# World Weaver Visualization Walkthrough
+# T4DM Visualization Walkthrough
 
 **Version**: 0.1.0
 **Last Updated**: 2025-12-09
 
-A comprehensive guide to all visualization modules in the World Weaver memory system.
+A comprehensive guide to all visualization modules in the T4DM memory system.
 
 ---
 
@@ -25,7 +25,7 @@ A comprehensive guide to all visualization modules in the World Weaver memory sy
 
 ### Purpose of Visualizations
 
-The World Weaver visualization suite provides tools for understanding and analyzing the neurocomputational dynamics of the memory system. Each module corresponds to actual neuroscience mechanisms and offers insights into how memories are encoded, consolidated, and retrieved.
+The T4DM visualization suite provides tools for understanding and analyzing the neurocomputational dynamics of the memory system. Each module corresponds to actual neuroscience mechanisms and offers insights into how memories are encoded, consolidated, and retrieved.
 
 **Key Focus Areas**:
 - Memory activation patterns across episodic and semantic systems
@@ -114,7 +114,7 @@ Visualizes activation patterns across memory types (episodic, semantic) over tim
 The `ActivationHeatmap` class tracks activation snapshots in a sliding window.
 
 ```python
-from ww.visualization import ActivationHeatmap
+from t4dm.visualization import ActivationHeatmap
 
 tracker = ActivationHeatmap(
     window_size=100,           # Number of timesteps to track
@@ -164,7 +164,7 @@ matrix, mod_names, timestamps = tracker.get_neuromod_timeline()
 Visualizes memory activation patterns as a heatmap.
 
 ```python
-from ww.visualization import plot_activation_heatmap
+from t4dm.visualization import plot_activation_heatmap
 
 plot_activation_heatmap(
     tracker,
@@ -185,7 +185,7 @@ plot_activation_heatmap(
 Plots neuromodulator levels over time.
 
 ```python
-from ww.visualization import plot_activation_timeline
+from t4dm.visualization import plot_activation_timeline
 
 plot_activation_timeline(
     tracker,
@@ -203,7 +203,7 @@ plot_activation_timeline(
 ### Example Usage
 
 ```python
-from ww.visualization import ActivationHeatmap, plot_activation_heatmap
+from t4dm.visualization import ActivationHeatmap, plot_activation_heatmap
 from datetime import datetime
 import time
 
@@ -254,7 +254,7 @@ Visualizes synaptic weight changes following BCM (Bienenstock-Cooper-Munro) and 
 The `PlasticityTracer` class tracks weight updates from LTP/LTD and homeostatic mechanisms.
 
 ```python
-from ww.visualization import PlasticityTracer
+from t4dm.visualization import PlasticityTracer
 
 tracer = PlasticityTracer(max_updates=10000)
 ```
@@ -304,7 +304,7 @@ bin_times, type_counts = tracer.get_timeline_data(bin_size_minutes=5)
 Visualizes the BCM learning rule: weight change as a function of activation level.
 
 ```python
-from ww.visualization import plot_bcm_curve
+from t4dm.visualization import plot_bcm_curve
 
 plot_bcm_curve(
     tracer,
@@ -327,7 +327,7 @@ plot_bcm_curve(
 Timeline of weight change events, stacked by type.
 
 ```python
-from ww.visualization import plot_weight_changes
+from t4dm.visualization import plot_weight_changes
 
 plot_weight_changes(
     tracer,
@@ -347,7 +347,7 @@ plot_weight_changes(
 Distribution of LTP and LTD magnitudes.
 
 ```python
-from ww.visualization import plot_ltp_ltd_distribution
+from t4dm.visualization import plot_ltp_ltd_distribution
 
 plot_ltp_ltd_distribution(
     tracer,
@@ -365,7 +365,7 @@ plot_ltp_ltd_distribution(
 ### Example Usage
 
 ```python
-from ww.visualization import PlasticityTracer, plot_bcm_curve, plot_ltp_ltd_distribution
+from t4dm.visualization import PlasticityTracer, plot_bcm_curve, plot_ltp_ltd_distribution
 
 tracer = PlasticityTracer(max_updates=5000)
 
@@ -413,7 +413,7 @@ Comprehensive dashboard for neuromodulator dynamics across five systems:
 ### NeuromodulatorDashboard Class
 
 ```python
-from ww.visualization import NeuromodulatorDashboard
+from t4dm.visualization import NeuromodulatorDashboard
 
 dashboard = NeuromodulatorDashboard(window_size=1000)
 ```
@@ -462,7 +462,7 @@ stats = dashboard.get_statistics()
 Multi-panel timeline of all neuromodulator levels.
 
 ```python
-from ww.visualization import plot_neuromodulator_traces
+from t4dm.visualization import plot_neuromodulator_traces
 
 plot_neuromodulator_traces(
     dashboard,
@@ -482,7 +482,7 @@ plot_neuromodulator_traces(
 Radar chart showing current neuromodulator state snapshot.
 
 ```python
-from ww.visualization import plot_neuromodulator_radar
+from t4dm.visualization import plot_neuromodulator_radar
 
 plot_neuromodulator_radar(
     dashboard,
@@ -500,7 +500,7 @@ plot_neuromodulator_radar(
 ### Example Usage
 
 ```python
-from ww.visualization import NeuromodulatorDashboard, plot_neuromodulator_traces, plot_neuromodulator_radar
+from t4dm.visualization import NeuromodulatorDashboard, plot_neuromodulator_traces, plot_neuromodulator_radar
 import time
 
 dashboard = NeuromodulatorDashboard(window_size=500)
@@ -552,7 +552,7 @@ Visualizes the effects of dentate gyrus-style pattern separation: orthogonalizat
 ### PatternSeparationVisualizer Class
 
 ```python
-from ww.visualization import PatternSeparationVisualizer
+from t4dm.visualization import PatternSeparationVisualizer
 
 vis = PatternSeparationVisualizer()
 ```
@@ -610,7 +610,7 @@ stats = vis.analyze_separation(
 Side-by-side similarity matrices showing before/after separation.
 
 ```python
-from ww.visualization import plot_separation_comparison
+from t4dm.visualization import plot_separation_comparison
 
 plot_separation_comparison(
     original_embeddings,
@@ -630,7 +630,7 @@ plot_separation_comparison(
 Distribution of sparsity before and after separation.
 
 ```python
-from ww.visualization import plot_sparsity_distribution
+from t4dm.visualization import plot_sparsity_distribution
 
 plot_sparsity_distribution(
     original_embeddings,
@@ -649,8 +649,8 @@ plot_sparsity_distribution(
 ### Example Usage
 
 ```python
-from ww.visualization import PatternSeparationVisualizer, plot_separation_comparison
-from ww.memory.pattern_separation import DentateGyrus
+from t4dm.visualization import PatternSeparationVisualizer, plot_separation_comparison
+from t4dm.memory.pattern_separation import DentateGyrus
 import numpy as np
 
 # Create sample embeddings (similar pairs)
@@ -677,7 +677,7 @@ plot_sparsity_distribution(original, separated, interactive=True)
 **Integration with DentateGyrus**:
 
 ```python
-from ww.memory.pattern_separation import DentateGyrus
+from t4dm.memory.pattern_separation import DentateGyrus
 
 dg = DentateGyrus(embedding_provider, vector_store)
 
@@ -704,7 +704,7 @@ Visualizes sleep-based memory consolidation: sharp-wave ripple (SWR) sequences a
 ### ConsolidationVisualizer Class
 
 ```python
-from ww.visualization import ConsolidationVisualizer
+from t4dm.visualization import ConsolidationVisualizer
 
 visualizer = ConsolidationVisualizer()
 ```
@@ -749,7 +749,7 @@ matrix, memory_ids, sequence_ids = visualizer.get_replay_matrix()
 Visualizes a single SWR replay sequence.
 
 ```python
-from ww.visualization import plot_swr_sequence
+from t4dm.visualization import plot_swr_sequence
 
 plot_swr_sequence(
     visualizer,
@@ -770,7 +770,7 @@ plot_swr_sequence(
 Distribution of replay priorities by sleep phase.
 
 ```python
-from ww.visualization import plot_replay_priority
+from t4dm.visualization import plot_replay_priority
 
 plot_replay_priority(
     visualizer,
@@ -788,7 +788,7 @@ plot_replay_priority(
 ### Example Usage
 
 ```python
-from ww.visualization import ConsolidationVisualizer, plot_swr_sequence, plot_replay_priority
+from t4dm.visualization import ConsolidationVisualizer, plot_swr_sequence, plot_replay_priority
 
 visualizer = ConsolidationVisualizer()
 
@@ -828,7 +828,7 @@ Projects high-dimensional memory embeddings to 2D/3D using dimensionality reduct
 The `EmbeddingProjector` class handles projection with automatic caching.
 
 ```python
-from ww.visualization import EmbeddingProjector
+from t4dm.visualization import EmbeddingProjector
 
 projector = EmbeddingProjector()
 ```
@@ -897,7 +897,7 @@ projector.clear_cache()
 Plots t-SNE projection of embeddings.
 
 ```python
-from ww.visualization import plot_tsne_projection
+from t4dm.visualization import plot_tsne_projection
 
 plot_tsne_projection(
     embeddings,
@@ -919,7 +919,7 @@ plot_tsne_projection(
 Plots UMAP projection of embeddings.
 
 ```python
-from ww.visualization import plot_umap_projection
+from t4dm.visualization import plot_umap_projection
 
 plot_umap_projection(
     embeddings,
@@ -939,7 +939,7 @@ plot_umap_projection(
 ### Example Usage
 
 ```python
-from ww.visualization import EmbeddingProjector, plot_tsne_projection, plot_umap_projection
+from t4dm.visualization import EmbeddingProjector, plot_tsne_projection, plot_umap_projection
 import numpy as np
 
 # Generate sample embeddings (e.g., from memory system)
@@ -995,7 +995,7 @@ Visualizes WAL (Write-Ahead Log), checkpoints, and durability metrics for the pe
 ### PersistenceVisualizer Class
 
 ```python
-from ww.visualization import PersistenceVisualizer, PersistenceMetrics
+from t4dm.visualization import PersistenceVisualizer, PersistenceMetrics
 
 visualizer = PersistenceVisualizer(max_history=1000)
 ```
@@ -1004,7 +1004,7 @@ visualizer = PersistenceVisualizer(max_history=1000)
 
 #### WALSegmentInfo
 ```python
-from ww.visualization import WALSegmentInfo
+from t4dm.visualization import WALSegmentInfo
 from pathlib import Path
 from datetime import datetime
 
@@ -1021,7 +1021,7 @@ segment = WALSegmentInfo(
 
 #### CheckpointInfo
 ```python
-from ww.visualization import CheckpointInfo
+from t4dm.visualization import CheckpointInfo
 
 checkpoint = CheckpointInfo(
     lsn=2000,
@@ -1083,7 +1083,7 @@ timestamps, lsns = visualizer.get_checkpoint_timeline()
 Visualizes WAL segment sizes and LSN progression.
 
 ```python
-from ww.visualization import plot_wal_timeline
+from t4dm.visualization import plot_wal_timeline
 
 plot_wal_timeline(
     visualizer,
@@ -1103,7 +1103,7 @@ plot_wal_timeline(
 Real-time durability metrics dashboard.
 
 ```python
-from ww.visualization import plot_durability_dashboard
+from t4dm.visualization import plot_durability_dashboard
 
 plot_durability_dashboard(
     visualizer,
@@ -1133,7 +1133,7 @@ plot_durability_dashboard(
 Checkpoint size and duration over time.
 
 ```python
-from ww.visualization import plot_checkpoint_history
+from t4dm.visualization import plot_checkpoint_history
 
 plot_checkpoint_history(
     visualizer,
@@ -1150,7 +1150,7 @@ plot_checkpoint_history(
 ### Example Usage
 
 ```python
-from ww.visualization import (
+from t4dm.visualization import (
     PersistenceVisualizer,
     WALSegmentInfo,
     CheckpointInfo,
@@ -1224,13 +1224,13 @@ plot_checkpoint_history(visualizer, interactive=True)
 
 ## 9. Advanced Usage Patterns
 
-### Integration with World Weaver Components
+### Integration with T4DM Components
 
 #### Pattern Separation Integration
 
 ```python
-from ww.memory.pattern_separation import DentateGyrus
-from ww.visualization import PatternSeparationVisualizer, plot_separation_comparison
+from t4dm.memory.pattern_separation import DentateGyrus
+from t4dm.visualization import PatternSeparationVisualizer, plot_separation_comparison
 
 # Create DG
 dg = DentateGyrus(embedding_provider, vector_store)
@@ -1257,8 +1257,8 @@ plot_separation_comparison(
 #### Neuromodulator Integration
 
 ```python
-from ww.learning.neuromodulators import NeuromodulatorOrchestra
-from ww.visualization import NeuromodulatorDashboard, plot_neuromodulator_traces
+from t4dm.learning.neuromodulators import NeuromodulatorOrchestra
+from t4dm.visualization import NeuromodulatorDashboard, plot_neuromodulator_traces
 
 orchestra = NeuromodulatorOrchestra()
 dashboard = NeuromodulatorDashboard()
@@ -1283,8 +1283,8 @@ plot_neuromodulator_traces(dashboard, interactive=True)
 #### Plasticity Tracking During Learning
 
 ```python
-from ww.learning.synaptic_plasticity import BCMPlasticity
-from ww.visualization import PlasticityTracer, plot_bcm_curve
+from t4dm.learning.synaptic_plasticity import BCMPlasticity
+from t4dm.visualization import PlasticityTracer, plot_bcm_curve
 
 plasticity = BCMPlasticity()
 tracer = PlasticityTracer()
@@ -1310,7 +1310,7 @@ plot_ltp_ltd_distribution(tracer, interactive=True)
 Combine multiple visualizations to understand system-wide dynamics:
 
 ```python
-from ww.visualization import *
+from t4dm.visualization import *
 from pathlib import Path
 
 output_dir = Path("outputs/system_analysis")
@@ -1611,4 +1611,4 @@ python examples/visualization_demo.py
 
 ## License
 
-Part of the World Weaver project. See main repository for license details.
+Part of the T4DM project. See main repository for license details.

@@ -28,7 +28,7 @@ The cold start system addresses the "chicken and egg" problem in learned memory 
 Handles saving/loading learned state across sessions:
 
 ```python
-from ww.learning.persistence import StatePersister
+from t4dm.learning.persistence import StatePersister
 
 persister = StatePersister(storage_path="~/.t4dm/learned_state")
 
@@ -52,7 +52,7 @@ persister.save_neuromodulator_state(orchestra)
 Extracts context from project files to inform priors:
 
 ```python
-from ww.learning.cold_start import ContextLoader
+from t4dm.learning.cold_start import ContextLoader
 
 loader = ContextLoader(working_dir="/home/user/project")
 signals = loader.load_context(
@@ -72,7 +72,7 @@ signals = loader.load_context(
 Default priors based on observed patterns:
 
 ```python
-from ww.learning.cold_start import PopulationPrior
+from t4dm.learning.cold_start import PopulationPrior
 
 prior = PopulationPrior()
 weights = prior.get_prior_weights(feature_dim=1143)
@@ -90,7 +90,7 @@ weights = prior.get_prior_weights(feature_dim=1143)
 Orchestrates the initialization lifecycle:
 
 ```python
-from ww.learning.cold_start import ColdStartManager
+from t4dm.learning.cold_start import ColdStartManager
 
 manager = ColdStartManager(gate, orchestra, persister)
 
@@ -144,9 +144,9 @@ State is stored in `~/.t4dm/learned_state/`:
 ## Integration Example
 
 ```python
-from ww.core.learned_gate import LearnedMemoryGate
-from ww.learning.neuromodulators import NeuromodulatorOrchestra
-from ww.learning.cold_start import ColdStartManager
+from t4dm.core.learned_gate import LearnedMemoryGate
+from t4dm.learning.neuromodulators import NeuromodulatorOrchestra
+from t4dm.learning.cold_start import ColdStartManager
 
 # Create components
 orchestra = NeuromodulatorOrchestra()

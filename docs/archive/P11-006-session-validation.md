@@ -6,7 +6,7 @@
 
 ## Summary
 
-Added comprehensive session ID validation at the gateway level to prevent injection attacks and ensure data integrity across the World Weaver MCP system.
+Added comprehensive session ID validation at the gateway level to prevent injection attacks and ensure data integrity across the T4DM MCP system.
 
 ## Implementation
 
@@ -132,7 +132,7 @@ validate_session_id("admin")  # REJECTED (unless allow_reserved=True)
 Apply decorator to any tool with session parameters:
 
 ```python
-from ww.mcp.gateway import with_session_validation
+from t4dm.mcp.gateway import with_session_validation
 
 @with_session_validation
 async def my_episodic_tool(
@@ -149,7 +149,7 @@ async def my_episodic_tool(
 For custom validation logic:
 
 ```python
-from ww.mcp.validation import validate_session_id, SessionValidationError
+from t4dm.mcp.validation import validate_session_id, SessionValidationError
 
 try:
     session_id = validate_session_id(
@@ -166,7 +166,7 @@ except SessionValidationError as e:
 For cleaning untrusted input:
 
 ```python
-from ww.mcp.validation import sanitize_session_id
+from t4dm.mcp.validation import sanitize_session_id
 
 clean_id = sanitize_session_id(user_input)
 if clean_id is None:

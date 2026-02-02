@@ -1,4 +1,4 @@
-# World Weaver: Master Implementation Plan
+# T4DM: Master Implementation Plan
 
 **Version**: 0.5.0 → 1.0.0
 **Created**: 2026-01-05
@@ -9,7 +9,7 @@
 
 ## Executive Summary
 
-World Weaver is a biologically-inspired neural memory system implementing Hinton's Forward-Forward algorithm, capsule networks, and tripartite memory architecture. This plan outlines the path from current alpha state to production-ready v1.0.
+T4DM is a biologically-inspired neural memory system implementing Hinton's Forward-Forward algorithm, capsule networks, and tripartite memory architecture. This plan outlines the path from current alpha state to production-ready v1.0.
 
 ### Current Scores
 | Metric | Score | Target |
@@ -454,11 +454,11 @@ class SessionEndHook:
 {
   "hooks": {
     "sessionStart": {
-      "command": "python -m ww.hooks.claude_code session_start",
+      "command": "python -m t4dm.hooks.claude_code session_start",
       "timeout": 5000
     },
     "sessionEnd": {
-      "command": "python -m ww.hooks.claude_code session_end",
+      "command": "python -m t4dm.hooks.claude_code session_end",
       "timeout": 10000
     }
   }

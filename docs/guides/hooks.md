@@ -1,6 +1,6 @@
 # Hook Development Guide
 
-Extend World Weaver's behavior with custom hooks.
+Extend T4DM's behavior with custom hooks.
 
 ## Overview
 
@@ -16,7 +16,7 @@ The hook system allows you to inject custom logic at various points in memory op
 ### Basic Hook
 
 ```python
-from ww.hooks.base import Hook, HookContext, HookPhase, HookPriority
+from t4dm.hooks.base import Hook, HookContext, HookPhase, HookPriority
 
 class MyValidationHook(Hook):
     """Validate memory content before storage."""
@@ -44,7 +44,7 @@ class MyValidationHook(Hook):
 ### Registering Hooks
 
 ```python
-from ww.hooks import get_global_registry, HookPhase
+from t4dm.hooks import get_global_registry, HookPhase
 
 # Get the episodic memory registry
 registry = get_global_registry("episodic")
@@ -71,7 +71,7 @@ Hooks execute in priority order (lowest first):
 Cache query results for faster repeated queries:
 
 ```python
-from ww.hooks.memory import CachingRecallHook
+from t4dm.hooks.memory import CachingRecallHook
 
 hook = CachingRecallHook(
     cache_size=1000,
@@ -85,7 +85,7 @@ registry.register(hook, HookPhase.PRE)
 Log all memory operations:
 
 ```python
-from ww.hooks.memory import AuditTrailHook
+from t4dm.hooks.memory import AuditTrailHook
 
 hook = AuditTrailHook(
     log_file="audit.log",
@@ -99,7 +99,7 @@ registry.register(hook, HookPhase.POST)
 Strengthen co-retrieved memories:
 
 ```python
-from ww.hooks.memory import HebbianUpdateHook
+from t4dm.hooks.memory import HebbianUpdateHook
 
 hook = HebbianUpdateHook(
     learning_rate=0.01,
@@ -113,7 +113,7 @@ registry.register(hook, HookPhase.POST)
 Validate input data:
 
 ```python
-from ww.hooks.memory import ValidationHook
+from t4dm.hooks.memory import ValidationHook
 
 hook = ValidationHook(
     max_content_length=50000,
@@ -177,7 +177,7 @@ class EnrichmentHook(Hook):
 
 ## Hook Registries
 
-World Weaver has multiple registries for different components:
+T4DM has multiple registries for different components:
 
 | Registry | Purpose |
 |----------|---------|
@@ -190,7 +190,7 @@ World Weaver has multiple registries for different components:
 | `storage_qdrant` | Qdrant storage hooks |
 
 ```python
-from ww.hooks import get_global_registry
+from t4dm.hooks import get_global_registry
 
 # Get specific registries
 episodic_reg = get_global_registry("episodic")
@@ -202,7 +202,7 @@ storage_reg = get_global_registry("storage_qdrant")
 
 ```python
 import pytest
-from ww.hooks.base import HookContext, HookPhase
+from t4dm.hooks.base import HookContext, HookPhase
 
 @pytest.mark.asyncio
 async def test_validation_hook():

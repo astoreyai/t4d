@@ -39,7 +39,7 @@ def _get_sparse_encoder():
     global _sparse_encoder
     if _sparse_encoder is None:
         try:
-            from ww.encoding.sparse import SparseEncoder
+            from t4dm.encoding.sparse import SparseEncoder
             _sparse_encoder = SparseEncoder(
                 input_dim=1024,
                 hidden_dim=8192,
@@ -77,7 +77,7 @@ def _get_sparse_encoder():
         with _encoder_lock:  # Acquire lock
             if _sparse_encoder is None:  # Second check (with lock)
                 try:
-                    from ww.encoding.sparse import SparseEncoder
+                    from t4dm.encoding.sparse import SparseEncoder
                     _sparse_encoder = SparseEncoder(
                         input_dim=1024,
                         hidden_dim=8192,
@@ -433,7 +433,7 @@ async def _get_sparse_encoder_async():
     return _sparse_encoder
 
 def _init_sparse_encoder():
-    from ww.encoding.sparse import SparseEncoder
+    from t4dm.encoding.sparse import SparseEncoder
     return SparseEncoder(...)
 ```
 
@@ -645,7 +645,7 @@ class BatchProcessor:
 
 **Solution**: Add metrics to traced functions
 ```python
-from ww.observability.tracing import traced
+from t4dm.observability.tracing import traced
 
 @mcp_app.tool()
 @traced("mcp.bio_encode", kind=SpanKind.SERVER)

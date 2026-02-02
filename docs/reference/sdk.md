@@ -1,25 +1,25 @@
 # Python SDK Reference
 
-Python client library for World Weaver.
+Python client library for T4DM.
 
 ## Installation
 
 ```bash
-pip install world-weaver
+pip install t4dm
 ```
 
 ## Quick Start
 
 ```python
-from ww.sdk import AsyncWorldWeaverClient, WorldWeaverClient
+from t4dm.sdk import AsyncT4DMClient, T4DMClient
 
 # Async client
-async with AsyncWorldWeaverClient() as client:
+async with AsyncT4DMClient() as client:
     episode = await client.create_episode("Hello World")
     results = await client.recall_episodes("hello")
 
 # Sync client
-with WorldWeaverClient() as client:
+with T4DMClient() as client:
     episode = client.create_episode("Hello World")
     results = client.recall_episodes("hello")
 ```
@@ -27,7 +27,7 @@ with WorldWeaverClient() as client:
 ## Client Configuration
 
 ```python
-client = AsyncWorldWeaverClient(
+client = AsyncT4DMClient(
     base_url="http://localhost:8765",
     api_key="your-api-key",
     session_id="my-session",
@@ -119,7 +119,7 @@ await client.mark_important(episode_id, importance=1.0)
 entity = await client.create_entity(
     name="Python SDK",
     entity_type="TOOL",
-    summary="Client library for World Weaver"
+    summary="Client library for T4DM"
 )
 ```
 
@@ -216,8 +216,8 @@ await client.consolidate(deep=True)
 ## Error Handling
 
 ```python
-from ww.sdk import (
-    WorldWeaverError,
+from t4dm.sdk import (
+    T4DMError,
     ConnectionError,
     NotFoundError,
     RateLimitError,
@@ -234,7 +234,7 @@ except ConnectionError:
     print("Failed to connect to server")
 except ValidationError as e:
     print(f"Invalid request: {e.message}")
-except WorldWeaverError as e:
+except T4DMError as e:
     print(f"API error: {e}")
 ```
 
@@ -298,10 +298,10 @@ class Skill:
 
 ```python
 import asyncio
-from ww.sdk import AsyncWorldWeaverClient
+from t4dm.sdk import AsyncT4DMClient
 
 async def main():
-    async with AsyncWorldWeaverClient() as client:
+    async with AsyncT4DMClient() as client:
         # Concurrent operations
         results = await asyncio.gather(
             client.recall_episodes("query 1"),
@@ -315,9 +315,9 @@ asyncio.run(main())
 ### Sync Client
 
 ```python
-from ww.sdk import WorldWeaverClient
+from t4dm.sdk import T4DMClient
 
-with WorldWeaverClient() as client:
+with T4DMClient() as client:
     # Sequential operations
     r1 = client.recall_episodes("query 1")
     r2 = client.recall_episodes("query 2")
@@ -329,10 +329,10 @@ with WorldWeaverClient() as client:
 
 ```python
 # Different sessions for different contexts
-async with AsyncWorldWeaverClient(session_id="project-a") as client_a:
+async with AsyncT4DMClient(session_id="project-a") as client_a:
     await client_a.create_episode("Project A data")
 
-async with AsyncWorldWeaverClient(session_id="project-b") as client_b:
+async with AsyncT4DMClient(session_id="project-b") as client_b:
     await client_b.create_episode("Project B data")
 ```
 

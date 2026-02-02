@@ -497,7 +497,7 @@ def merge_entities(local: EntityCRDT, remote: EntityCRDT) -> EntityCRDT:
 
 ---
 
-## Integration with World Weaver
+## Integration with T4DM
 
 The tripartite memory system replaces the simplified hot/warm/cold model:
 

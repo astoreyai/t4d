@@ -1,6 +1,6 @@
-# World Weaver Visualization Modules
+# T4DM Visualization Modules
 
-Comprehensive visualization tools for analyzing the neurocomputational dynamics of the World Weaver memory system.
+Comprehensive visualization tools for analyzing the neurocomputational dynamics of the T4DM memory system.
 
 ## Overview
 
@@ -21,7 +21,7 @@ This package provides visualizations for understanding:
 Visualizes activation patterns across memory types over time.
 
 ```python
-from ww.visualization import ActivationHeatmap, plot_activation_heatmap
+from t4dm.visualization import ActivationHeatmap, plot_activation_heatmap
 
 tracker = ActivationHeatmap(window_size=100)
 
@@ -47,7 +47,7 @@ plot_activation_heatmap(tracker, memory_type="episodic")
 Visualizes synaptic weight changes following BCM and homeostatic plasticity rules.
 
 ```python
-from ww.visualization import PlasticityTracer, plot_bcm_curve
+from t4dm.visualization import PlasticityTracer, plot_bcm_curve
 
 tracer = PlasticityTracer(max_updates=10000)
 
@@ -79,7 +79,7 @@ plot_ltp_ltd_distribution(tracer)
 Comprehensive dashboard for neuromodulator dynamics.
 
 ```python
-from ww.visualization import NeuromodulatorDashboard, plot_neuromodulator_traces
+from t4dm.visualization import NeuromodulatorDashboard, plot_neuromodulator_traces
 
 dashboard = NeuromodulatorDashboard(window_size=1000)
 
@@ -110,7 +110,7 @@ plot_neuromodulator_radar(dashboard)
 Visualizes the effects of dentate gyrus-style pattern separation.
 
 ```python
-from ww.visualization import (
+from t4dm.visualization import (
     PatternSeparationVisualizer,
     plot_separation_comparison
 )
@@ -138,7 +138,7 @@ plot_sparsity_distribution(original_embeddings, separated_embeddings)
 Visualizes sharp-wave ripple sequences and consolidation dynamics.
 
 ```python
-from ww.visualization import ConsolidationVisualizer, plot_swr_sequence
+from t4dm.visualization import ConsolidationVisualizer, plot_swr_sequence
 
 visualizer = ConsolidationVisualizer()
 
@@ -167,7 +167,7 @@ plot_replay_priority(visualizer)
 Projects high-dimensional embeddings to 2D/3D for visualization.
 
 ```python
-from ww.visualization import EmbeddingProjector, plot_tsne_projection
+from t4dm.visualization import EmbeddingProjector, plot_tsne_projection
 
 projector = EmbeddingProjector()
 
@@ -249,13 +249,13 @@ plot_bcm_curve(
 )
 ```
 
-### Integration with World Weaver Components
+### Integration with T4DM Components
 
 Example integration with pattern separation:
 
 ```python
-from ww.memory.pattern_separation import DentateGyrus
-from ww.visualization import PatternSeparationVisualizer
+from t4dm.memory.pattern_separation import DentateGyrus
+from t4dm.visualization import PatternSeparationVisualizer
 
 # Create DG
 dg = DentateGyrus(embedding_provider, vector_store)
@@ -276,8 +276,8 @@ print(f"Separation magnitude: {stats['mean_separation_magnitude']:.4f}")
 Example integration with neuromodulators:
 
 ```python
-from ww.learning.neuromodulators import NeuromodulatorOrchestra
-from ww.visualization import NeuromodulatorDashboard
+from t4dm.learning.neuromodulators import NeuromodulatorOrchestra
+from t4dm.visualization import NeuromodulatorDashboard
 
 orchestra = NeuromodulatorOrchestra()
 dashboard = NeuromodulatorDashboard()
@@ -303,7 +303,7 @@ plot_neuromodulator_traces(dashboard)
 Visualizes WAL, checkpoints, and durability metrics for the persistence layer.
 
 ```python
-from ww.visualization import (
+from t4dm.visualization import (
     PersistenceVisualizer,
     PersistenceMetrics,
     plot_wal_timeline,
@@ -358,7 +358,7 @@ python examples/visualization_demo.py
 
 2. **Dual Rendering**: All plots support both matplotlib (static, publication-ready) and plotly (interactive, exploratory)
 
-3. **Async-Compatible**: Designed to work with async World Weaver components
+3. **Async-Compatible**: Designed to work with async T4DM components
 
 4. **Export Options**: PNG/HTML export for integration into reports and dashboards
 
@@ -393,4 +393,4 @@ Each visualization module corresponds to actual neuroscience:
 
 ## License
 
-Part of the World Weaver project. See main repository for license details.
+Part of the T4DM project. See main repository for license details.

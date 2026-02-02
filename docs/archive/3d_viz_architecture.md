@@ -1,4 +1,4 @@
-# World Weaver 3D Memory Visualization Architecture
+# T4DM 3D Memory Visualization Architecture
 
 ## Recommended Stack
 

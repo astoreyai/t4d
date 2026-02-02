@@ -1,4 +1,4 @@
-# World Weaver Database Migrations
+# T4DM Database Migrations
 
 This directory contains Cypher migration scripts for Neo4j schema changes.
 
@@ -22,7 +22,7 @@ Each migration file should:
 
 ```cypher
 // 001_initial_schema.cypher
-// Initial schema setup for World Weaver
+// Initial schema setup for T4DM
 
 // Create indexes for Episode nodes
 CREATE INDEX episode_id_idx IF NOT EXISTS FOR (e:Episode) ON (e.id);

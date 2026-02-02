@@ -641,7 +641,7 @@ Create `/mnt/projects/t4d/t4dm/tests/security/test_eligibility_security.py`:
 ```python
 import pytest
 import numpy as np
-from ww.learning.eligibility import EligibilityTrace, MAX_TRACE_VALUE
+from t4dm.learning.eligibility import EligibilityTrace, MAX_TRACE_VALUE
 
 class TestEligibilityTraceSecurity:
     """Security-focused tests for eligibility trace system."""
@@ -718,7 +718,7 @@ class TestEligibilityTraceSecurity:
 
     def test_layered_capacity_bypass(self):
         """LayeredEligibilityTrace must enforce max_traces."""
-        from ww.learning.eligibility import LayeredEligibilityTrace
+        from t4dm.learning.eligibility import LayeredEligibilityTrace
 
         trace = LayeredEligibilityTrace(max_traces=100)
 

@@ -1,4 +1,4 @@
-# World Weaver - Agents & Skills Catalog
+# T4DM - Agents & Skills Catalog
 
 **Version**: 0.1.0-alpha
 **Last Updated**: 2025-11-27
@@ -83,7 +83,7 @@
 **Agent Definition**:
 ```yaml
 name: ww-init
-description: Bootstrap World Weaver projects with proper structure, progress tracking, and feature lists following Anthropic's initializer pattern
+description: Bootstrap T4DM projects with proper structure, progress tracking, and feature lists following Anthropic's initializer pattern
 tools:
   - Read
   - Write
@@ -371,7 +371,7 @@ tools:
 |------|-------------|
 | CONCEPT | Abstract idea (e.g., "Hebbian learning") |
 | PERSON | Individual (e.g., "Tulving") |
-| PROJECT | Work item (e.g., "World Weaver") |
+| PROJECT | Work item (e.g., "T4DM") |
 | TOOL | Software/utility (e.g., "Neo4j") |
 | TECHNIQUE | Method/approach (e.g., "FSRS decay") |
 | FACT | Discrete knowledge (e.g., "BGE-M3 uses 1024 dims") |

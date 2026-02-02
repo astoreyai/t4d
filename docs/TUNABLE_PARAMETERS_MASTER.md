@@ -1,4 +1,4 @@
-# World Weaver: Master Parameter Reference
+# T4DM: Master Parameter Reference
 
 **Generated**: 2025-12-09 | **Version**: 0.3.0 | **Audit Status**: COMPLETE
 
@@ -422,7 +422,7 @@ Parameters marked **MISSING** in this document can be added without breaking cha
 
 ## 9. STORAGE & VISUALIZATION
 
-### 9.1 Neo4j Storage (storage/neo4j_store.py)
+### 9.1 Neo4j Storage (storage/t4dx_graph_adapter.py)
 
 | Parameter | Default | Range | API | Description |
 |-----------|---------|-------|-----|-------------|
@@ -664,7 +664,7 @@ The following parameters have similar names but distinct semantics - NOT duplica
 **All parameters safe to tune:**
 - Existing defaults preserved as fallbacks
 - New API endpoints are additive (no breaking changes)
-- Environment variable prefixes unchanged (`WW_*`)
+- Environment variable prefixes unchanged (`T4DM_*`)
 - Pydantic validators ensure range compliance
 - Weight sum constraints enforced automatically
 

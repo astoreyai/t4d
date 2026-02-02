@@ -20,8 +20,8 @@ classDiagram
     }
 
     class SemanticMemory {
-        -knowledge_graph: Neo4jStore
-        -vector_store: QdrantStore
+        -knowledge_graph: T4DXGraphAdapter
+        -vector_store: T4DXVectorAdapter
         -hebbian_learner: HebbianLearner
         +store_entity(content, entity_type) str
         +retrieve_entities(query, filters) List

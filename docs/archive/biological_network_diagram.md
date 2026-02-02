@@ -1,4 +1,4 @@
-# World Weaver Biological Network Architecture
+# T4DM Biological Network Architecture
 
 **Visual Network Maps and Connectivity Diagrams**
 
@@ -597,5 +597,5 @@ Theta Phase → Encoding/Retrieval Mode
 
 **Document Version**: 1.0
 **Last Updated**: 2026-01-04
-**Maintained By**: World Weaver Development Team
+**Maintained By**: T4DM Development Team
 **Related**: `biological_validation.md`, Module docstrings

@@ -1,14 +1,14 @@
-# World Weaver Learning Flow
+# T4DM Learning Flow
 
 **Phase 5 Documentation** | **Last Updated**: 2026-01-05
 
-This document describes how World Weaver **actually learns** representations through use, addressing the critical "Learning Gap" identified by the Hinton agent analysis.
+This document describes how T4DM **actually learns** representations through use, addressing the critical "Learning Gap" identified by the Hinton agent analysis.
 
 ---
 
 ## The Learning Gap (Pre-Phase 5)
 
-Before Phase 5, World Weaver had a fundamental limitation:
+Before Phase 5, T4DM had a fundamental limitation:
 
 ```
 BEFORE (No Learning):
@@ -237,7 +237,7 @@ This mimics hippocampal replay during sleep, where real memories are interleaved
 
 ## Biological Mapping
 
-| World Weaver Component | Brain Analog |
+| T4DM Component | Brain Analog |
 |------------------------|--------------|
 | Frozen BGE-M3 Embedder | Sensory cortex (feature extraction) |
 | FFEncoder | Hippocampal CA3 (pattern completion/separation) |
@@ -274,7 +274,7 @@ FFEncoderConfig(
 To verify the system is actually learning:
 
 ```python
-from ww.encoding import get_ff_encoder
+from t4dm.encoding import get_ff_encoder
 
 encoder = get_ff_encoder()
 stats = encoder.get_stats()

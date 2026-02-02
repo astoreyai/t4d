@@ -1000,7 +1000,7 @@ class NeurogenicEncoder:
 ```python
 # In /mnt/projects/t4d/t4dm/src/t4dm/consolidation/service.py
 
-from ww.encoding.neurogenesis import NeurogenicEncoder
+from t4dm.encoding.neurogenesis import NeurogenicEncoder
 
 class ConsolidationService:
     def __init__(self, ..., neurogenic_encoder: NeurogenicEncoder | None = None):

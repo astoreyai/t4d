@@ -1,4 +1,4 @@
-# World Weaver: Test Coverage & Quality Analysis Report
+# T4DM: Test Coverage & Quality Analysis Report
 
 **Generated**: 2025-11-27
 **Test Suite Results**: 1121 passed, 114 failed, 2 skipped (774 items collected)
@@ -8,7 +8,7 @@
 
 ## Executive Summary
 
-The World Weaver test suite has **strong overall coverage at 77%**, but this masks significant quality issues:
+The T4DM test suite has **strong overall coverage at 77%**, but this masks significant quality issues:
 
 - **Configuration Issues** prevent 114 tests from running reliably
 - **Integration Test Failures** stem from missing database connectivity (Neo4j, Qdrant)
@@ -49,14 +49,14 @@ Coverage %:          77%
 #### Good Coverage (70-95%)
 | Module | Coverage | Statements | Critical Gaps |
 |--------|----------|------------|----------------|
-| `storage/qdrant_store.py` | 62% | 263 | Vector search optimizations, error handling |
+| `storage/t4dx_vector_adapter.py` | 62% | 263 | Vector search optimizations, error handling |
 | `consolidation/service.py` | 69% | 402 | Deep consolidation paths, entity extraction |
 | `observability/health.py` | 59% | 108 | Health check timeouts, recovery procedures |
 
 #### Poor Coverage (<70%)
 | Module | Coverage | Statements | Issues |
 |--------|----------|------------|--------|
-| `storage/neo4j_store.py` | **39%** | 427 | **CRITICAL** - 260 uncovered statements |
+| `storage/t4dx_graph_adapter.py` | **39%** | 427 | **CRITICAL** - 260 uncovered statements |
 | `memory/unified.py` | **18%** | 116 | **CRITICAL** - Unified memory interface |
 | `mcp/server.py` | **20%** | 64 | **CRITICAL** - MCP server initialization |
 | `mcp/tools/episodic.py` | **49%** | 176 | High-level episodic tools untested |
@@ -77,7 +77,7 @@ Coverage %:          77%
 ## 2. CRITICAL COVERAGE GAPS
 
 ### Gap 1: Neo4j Database Layer (39% coverage)
-**File**: `/mnt/projects/t4d/t4dm/src/t4dm/storage/neo4j_store.py` (427 statements, 260 untested)
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/storage/t4dx_graph_adapter.py` (427 statements, 260 untested)
 
 **Untested Critical Paths**:
 ```python
@@ -176,7 +176,7 @@ Coverage %:          77%
 ---
 
 ### Gap 4: Qdrant Vector Store (62% coverage)
-**File**: `/mnt/projects/t4d/t4dm/src/t4dm/storage/qdrant_store.py` (263 statements, 100 untested)
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/storage/t4dx_vector_adapter.py` (263 statements, 100 untested)
 
 **Critical Untested Areas**:
 ```python
@@ -300,7 +300,7 @@ docker-compose up neo4j qdrant  # Missing!
 **Severity**: MEDIUM (affects test reliability)
 
 **Problem**: Some tests use mocks, others use real instances
-- `conftest.py` provides mocks for `mock_qdrant_store`, `mock_neo4j_store`
+- `conftest.py` provides mocks for `mock_t4dx_vector_adapter`, `mock_t4dx_graph_adapter`
 - But many unit tests try to create real instances
 - Leads to inconsistent test behavior
 
@@ -354,7 +354,7 @@ TestACTRActivation::test_recency_weighted_by_decay
 ## 4. CRITICAL PATHS NOT TESTED
 
 ### A. Cypher Injection Prevention
-**File**: `storage/neo4j_store.py` (lines 1018-1088)
+**File**: `storage/t4dx_graph_adapter.py` (lines 1018-1088)
 **Tests**: `tests/security/test_injection.py` (all 12 tests FAILING)
 
 **Scenarios Not Verified**:
@@ -506,7 +506,7 @@ Defined markers:
    - Cover lines 880-898 (error handling)
 
    **Estimated Tests**: 20-30 new tests
-   **Target Coverage**: neo4j_store.py 39% → 80%
+   **Target Coverage**: t4dx_graph_adapter.py 39% → 80%
 
 ---
 
@@ -534,7 +534,7 @@ Defined markers:
    - Cover batch operations
    - Cover error recovery
 
-   **Target**: qdrant_store.py 62% → 85%
+   **Target**: t4dx_vector_adapter.py 62% → 85%
 
 8. **Add Security Testing Suite** (6-8 hours)
    - Fix all 12 `test_injection.py` tests

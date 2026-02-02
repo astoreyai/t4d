@@ -6,7 +6,7 @@ Central hub of the system providing domain types (Episode, Entity, Procedure, Re
 
 ## How
 - **Types** (Pydantic): Episode with FSRS decay (`R(t,S) = (1 + 0.9*t/S)^-0.5`), Entity with bi-temporal versioning, Procedure with success tracking, Relationship with Hebbian strengthening (`w' = w + lr*(1-w)`)
-- **Config**: Settings class with 80+ params, loaded from env vars (`WW_*`) -> YAML -> defaults
+- **Config**: Settings class with 80+ params, loaded from env vars (`T4DM_*`) -> YAML -> defaults
 - **Protocols**: `EmbeddingProvider`, `VectorStore`, `GraphStore` -- runtime-checkable abstract interfaces
 - **Services**: Thread-safe lazy initialization via `get_services(session_id)`, RateLimiter
 - **Validation**: XSS pattern blocking (12 regexes), path traversal prevention, null byte checks, session ID sanitization

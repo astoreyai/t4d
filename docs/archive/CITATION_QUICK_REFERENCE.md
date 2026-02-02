@@ -7,7 +7,7 @@
 
 ## CRITICAL: Fix Before Submission
 
-**Line 671** in `world_weaver_final.tex`:
+**Line 671** in `t4dm_final.tex`:
 
 ```diff
 - J. R. Anderson and C. Lebiere, \textit{The Atomic Components of Thought}. Psychology Press, 2004.

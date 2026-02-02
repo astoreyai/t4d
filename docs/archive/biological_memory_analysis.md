@@ -1,14 +1,14 @@
-# Biological Memory Mechanisms: Analysis for World Weaver Design
+# Biological Memory Mechanisms: Analysis for T4DM Design
 
 **Date**: 2025-12-06
-**Author**: World Weaver Computational Biology Agent
+**Author**: T4DM Computational Biology Agent
 **Purpose**: Evaluate WW architecture against neuroscience research
 
 ---
 
 ## Executive Summary
 
-World Weaver implements a tripartite memory system (episodic, semantic, procedural) inspired by cognitive neuroscience, but several key biological mechanisms are missing or simplified. This analysis identifies gaps and recommends enhancements based on 2024-2025 research in computational neuroscience.
+T4DM implements a tripartite memory system (episodic, semantic, procedural) inspired by cognitive neuroscience, but several key biological mechanisms are missing or simplified. This analysis identifies gaps and recommends enhancements based on 2024-2025 research in computational neuroscience.
 
 **Key Findings**:
 1. Pattern separation/completion not explicitly modeled
@@ -869,7 +869,7 @@ async def recall(self, query, context_entities, ...):
 
 ## Conclusion
 
-World Weaver's tripartite architecture provides a solid cognitive foundation, but lacks several key biological mechanisms:
+T4DM's tripartite architecture provides a solid cognitive foundation, but lacks several key biological mechanisms:
 
 1. **Pattern separation/completion**: Current vector similarity doesn't capture DG orthogonalization or CA3 reconstruction.
 2. **Balanced plasticity**: Only LTP implemented; missing LTD, STDP, and homeostatic scaling.

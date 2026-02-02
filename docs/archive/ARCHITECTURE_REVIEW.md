@@ -1,4 +1,4 @@
-# World Weaver Architecture Review
+# T4DM Architecture Review
 
 **Review Date**: 2026-01-07
 **Version**: 0.5.0
@@ -135,14 +135,14 @@ This enables:
 Standardize on DI container for all stateful services. Migrate from:
 ```python
 @lru_cache(maxsize=1)
-def get_qdrant_store() -> QdrantStore:
-    return QdrantStore()
+def get_t4dx_vector_adapter() -> T4DXVectorAdapter:
+    return T4DXVectorAdapter()
 ```
 
 To:
 ```python
-def get_qdrant_store() -> QdrantStore:
-    return get_container().resolve("qdrant_store")
+def get_t4dx_vector_adapter() -> T4DXVectorAdapter:
+    return get_container().resolve("t4dx_vector_adapter")
 ```
 
 ### Repository Pattern
@@ -151,8 +151,8 @@ def get_qdrant_store() -> QdrantStore:
 
 - Clean separation between domain models (`core/types.py`) and storage (`storage/`)
 - Storage abstractions:
-  - `QdrantStore` - Vector operations
-  - `Neo4jStore` - Graph operations
+  - `T4DXVectorAdapter` - Vector operations
+  - `T4DXGraphAdapter` - Graph operations
   - `EpisodicMemory`, `SemanticMemory`, `ProceduralMemory` - Domain repositories
 
 **Strengths**:
@@ -237,19 +237,19 @@ class EventBus:
 **Score**: 9/10 ✓
 
 **Client Classes**:
-- `AsyncWorldWeaverClient` - Async httpx client
-- `WorldWeaverClient` - Synchronous wrapper
+- `AsyncT4DMClient` - Async httpx client
+- `T4DMClient` - Synchronous wrapper
 
 **Strengths**:
 - Context manager support (`async with` / `with`)
 - Pydantic models for type safety (`sdk/models.py`)
-- Custom exceptions (`WorldWeaverError`, `NotFoundError`, `RateLimitError`)
+- Custom exceptions (`T4DMError`, `NotFoundError`, `RateLimitError`)
 - Session ID propagation via headers
 - Timeout configuration
 
 **Example**:
 ```python
-async with AsyncWorldWeaverClient(session_id="user-123") as ww:
+async with AsyncT4DMClient(session_id="user-123") as ww:
     episode = await ww.create_episode("Learned about async/await")
     results = await ww.recall_episodes("async patterns")
 ```
@@ -765,7 +765,7 @@ async def db_operation():
 
 ## 10. Conclusion
 
-World Weaver demonstrates **strong architectural fundamentals** with excellent separation of concerns, protocol-based abstractions, and comprehensive testing. The codebase is production-ready with the following caveats:
+T4DM demonstrates **strong architectural fundamentals** with excellent separation of concerns, protocol-based abstractions, and comprehensive testing. The codebase is production-ready with the following caveats:
 
 **Strengths**:
 - Clean layered architecture

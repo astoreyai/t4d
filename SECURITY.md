@@ -9,7 +9,7 @@
 
 ## Reporting a Vulnerability
 
-We take security seriously. If you discover a security vulnerability in World Weaver, please report it responsibly.
+We take security seriously. If you discover a security vulnerability in T4DM, please report it responsibly.
 
 ### How to Report
 
@@ -64,12 +64,12 @@ We take security seriously. If you discover a security vulnerability in World We
 
 4. **API Security**: Configure CORS appropriately
    ```bash
-   WW_API_CORS_ORIGINS=https://your-domain.com
+   T4DM_API_CORS_ORIGINS=https://your-domain.com
    ```
 
 ### Session Isolation
 
-World Weaver implements strict session isolation:
+T4DM implements strict session isolation:
 - Each session has separate memory namespaces
 - Session IDs are validated and sanitized
 - Cross-session data access is prevented by design
@@ -98,7 +98,7 @@ The API includes built-in rate limiting:
 
 - BGE-M3 models are downloaded from HuggingFace
 - Verify model checksums when possible
-- Use `WW_EMBEDDING_CACHE_DIR` to control model storage location
+- Use `T4DM_EMBEDDING_CACHE_DIR` to control model storage location
 
 ### Storage Security
 
@@ -108,7 +108,7 @@ The API includes built-in rate limiting:
 
 ### Memory Content
 
-- World Weaver stores user-provided content
+- T4DM stores user-provided content
 - Implement appropriate content filtering for your use case
 - Consider PII detection and masking for sensitive applications
 

@@ -7,7 +7,7 @@ Typer-based command-line interface providing the `ww` command for interacting wi
 ## How
 - Typer app with Rich console output for styled tables
 - Async-sync bridge: `run_async()` wraps async memory service calls for sync CLI commands
-- Session isolation via `WW_SESSION_ID` environment variable (default: `cli-session`)
+- Session isolation via `T4DM_SESSION_ID` environment variable (default: `cli-session`)
 - Sub-apps for namespaced commands: `ww episodic`, `ww semantic`, `ww procedural`
 - Core commands: `store`, `recall`, `consolidate`, `status`, `serve`, `config`, `version`
 
@@ -31,4 +31,4 @@ CLI Command -> Typer parser -> run_async()
 ## Integration Points
 - **core**: `get_services()` for memory operations, `get_settings()` for config, types (Episode, Entity, Procedure)
 - **consolidation**: `get_consolidation_service()` for `t4dm consolidate`
-- **api**: `ww.api.server:app` launched by `t4dm serve` via uvicorn
+- **api**: `t4dm.api.server:app` launched by `t4dm serve` via uvicorn

@@ -1,4 +1,4 @@
-# World Weaver Fix Plan v5.0
+# T4DM Fix Plan v5.0
 
 **Created**: 2025-11-27 | **Based On**: Comprehensive Gap Analysis | **Priority**: Production-Critical
 
@@ -87,14 +87,14 @@
 **Current Code** (`.env`):
 ```bash
 NEO4J_PASSWORD=wwpassword
-WW_NEO4J_PASSWORD=wwpassword
+T4DM_NEO4J_PASSWORD=wwpassword
 ```
 
 **Solution**:
 ```bash
 # .env - Use strong password
 NEO4J_PASSWORD=Ww@Secure123!
-WW_NEO4J_PASSWORD=Ww@Secure123!
+T4DM_NEO4J_PASSWORD=Ww@Secure123!
 ```
 
 **Also update** `tests/conftest.py` to auto-patch settings:
@@ -102,9 +102,9 @@ WW_NEO4J_PASSWORD=Ww@Secure123!
 @pytest.fixture(autouse=True)
 def patch_settings(monkeypatch):
     """Auto-patch settings for all tests."""
-    monkeypatch.setenv("WW_NEO4J_PASSWORD", "TestPassword123!")
+    monkeypatch.setenv("T4DM_NEO4J_PASSWORD", "TestPassword123!")
     monkeypatch.setenv("NEO4J_PASSWORD", "TestPassword123!")
-    monkeypatch.setenv("WW_TEST_MODE", "true")
+    monkeypatch.setenv("T4DM_TEST_MODE", "true")
 ```
 
 **Testing**: Run `pytest tests/ -v --tb=short | head -100`
@@ -133,7 +133,7 @@ def patch_settings(monkeypatch):
 @pytest.fixture
 def mock_neo4j_driver():
     """Mock Neo4j driver for all tests."""
-    with patch("ww.storage.neo4j_store.AsyncGraphDatabase") as mock:
+    with patch("t4dm.storage.t4dx_graph_adapter.AsyncGraphDatabase") as mock:
         mock_driver = AsyncMock()
         mock_session = AsyncMock()
         mock_result = AsyncMock()
@@ -148,7 +148,7 @@ def mock_neo4j_driver():
 @pytest.fixture
 def mock_qdrant_client():
     """Mock Qdrant client for all tests."""
-    with patch("ww.storage.qdrant_store.AsyncQdrantClient") as mock:
+    with patch("t4dm.storage.t4dx_vector_adapter.AsyncQdrantClient") as mock:
         mock_client = AsyncMock()
         mock_client.search.return_value = []
         mock_client.upsert.return_value = None
@@ -289,7 +289,7 @@ assert len(result["episodes"]) == 3
 @pytest.fixture
 def mock_embedding_provider():
     """Mock embedding provider with realistic outputs."""
-    with patch("ww.embedding.bge_m3.BGEM3Embedding") as mock:
+    with patch("t4dm.embedding.bge_m3.BGEM3Embedding") as mock:
         instance = MagicMock()
         # Return consistent 1024-dim embeddings
         instance.embed_query.return_value = [0.1] * 1024
@@ -307,7 +307,7 @@ def mock_embedding_provider():
 @pytest.fixture
 def mock_services(mock_neo4j_driver, mock_qdrant_client, mock_embedding_provider):
     """Combined mock for all services."""
-    with patch("ww.mcp.gateway.get_services") as mock_get:
+    with patch("t4dm.mcp.gateway.get_services") as mock_get:
         episodic = MagicMock()
         semantic = MagicMock()
         procedural = MagicMock()
@@ -788,8 +788,8 @@ async def resource_episodes(session_id: str) -> str:
 
 **Solution**:
 ```python
-from ww.mcp.validation import validate_session_id, validate_enum
-from ww.core.types import Domain, EntityType
+from t4dm.mcp.validation import validate_session_id, validate_enum
+from t4dm.core.types import Domain, EntityType
 
 @mcp_app.resource("memory://episodes/{session_id}")
 async def resource_episodes(session_id: str) -> str:
@@ -842,7 +842,7 @@ async def resource_procedures(domain: str) -> str:
 
 **Solution**: Apply `@rate_limited` to write operations:
 ```python
-from ww.mcp.gateway import rate_limited
+from t4dm.mcp.gateway import rate_limited
 
 @mcp_app.tool()
 @with_request_id
@@ -902,11 +902,11 @@ async def create_episodes_batch(...) -> dict:
 
 **Solution**: Create security documentation:
 ```markdown
-# World Weaver Security Guide
+# T4DM Security Guide
 
 ## Authentication
 
-World Weaver supports optional authentication via decorators:
+T4DM supports optional authentication via decorators:
 - `@require_auth` - Require authenticated session
 - `@require_role(role)` - Require specific role
 
@@ -917,7 +917,7 @@ By default, WW runs without authentication. Each MCP connection is trusted.
 ### Enabling Multi-User Mode
 
 To enable authentication:
-1. Set `WW_AUTH_REQUIRED=true`
+1. Set `T4DM_AUTH_REQUIRED=true`
 2. Apply `@require_auth` to sensitive tools
 3. Configure role-based access
 
@@ -926,7 +926,7 @@ To enable authentication:
 Sessions are isolated by `session_id`:
 - Each session sees only its own data
 - Reserved session IDs are blocked
-- Default session ID from `WW_SESSION_ID` env var
+- Default session ID from `T4DM_SESSION_ID` env var
 ```
 
 **Validation**:
@@ -1005,7 +1005,7 @@ ls -la src/t4dm/hooks/
 
 **Validation**:
 - [ ] All hook modules exist
-- [ ] `from ww.hooks import Hook, HookRegistry` works
+- [ ] `from t4dm.hooks import Hook, HookRegistry` works
 
 ---
 
@@ -1023,7 +1023,7 @@ ls -la src/t4dm/hooks/
 **Implementation**:
 ```python
 # episodic.py
-from ww.hooks import get_global_registry, with_hooks
+from t4dm.hooks import get_global_registry, with_hooks
 
 class EpisodicMemory:
     def __init__(self, session_id: Optional[str] = None):
@@ -1049,8 +1049,8 @@ class EpisodicMemory:
 ### TASK-P16-003: Integrate Hooks into Storage Layer
 
 **Files**:
-- `src/t4dm/storage/qdrant_store.py` (modify)
-- `src/t4dm/storage/neo4j_store.py` (modify)
+- `src/t4dm/storage/t4dx_vector_adapter.py` (modify)
+- `src/t4dm/storage/t4dx_graph_adapter.py` (modify)
 
 **Severity**: MEDIUM
 
@@ -1058,10 +1058,10 @@ class EpisodicMemory:
 
 **Implementation**:
 ```python
-# qdrant_store.py
-from ww.hooks import get_global_registry
+# t4dx_vector_adapter.py
+from t4dm.hooks import get_global_registry
 
-class QdrantStore:
+class T4DXVectorAdapter:
     def __init__(self):
         self.hooks = get_global_registry("qdrant")
         ...
@@ -1102,7 +1102,7 @@ class QdrantStore:
 
 **Implementation**:
 ```python
-from ww.hooks import get_global_registry, ToolCallHook
+from t4dm.hooks import get_global_registry, ToolCallHook
 
 # Global MCP hook registry
 _mcp_hooks = get_global_registry("mcp")
@@ -1154,7 +1154,7 @@ def with_mcp_hooks(func):
 ```python
 """Default hook implementations for common observability patterns."""
 
-from ww.hooks import Hook, HookContext, HookPhase
+from t4dm.hooks import Hook, HookContext, HookPhase
 import logging
 import time
 
@@ -1196,7 +1196,7 @@ class TracingHook(Hook):
     """OpenTelemetry tracing integration."""
 
     async def execute(self, context: HookContext) -> HookContext:
-        from ww.observability.tracing import get_tracer
+        from t4dm.observability.tracing import get_tracer
 
         tracer = get_tracer(context.module)
         if context.phase == HookPhase.PRE:
@@ -1213,7 +1213,7 @@ class TracingHook(Hook):
 
 def register_default_hooks():
     """Register default hooks for all modules."""
-    from ww.hooks import get_global_registry
+    from t4dm.hooks import get_global_registry
 
     modules = ["episodic", "semantic", "procedural", "qdrant", "neo4j", "mcp"]
 
@@ -1262,7 +1262,7 @@ def _to_payload(self, episode: Episode) -> dict:
 
 **Solution**:
 ```python
-from ww.core.serialization import get_serializer
+from t4dm.core.serialization import get_serializer
 
 class EpisodicMemory:
     def __init__(self, session_id: Optional[str] = None):
@@ -1437,4 +1437,4 @@ Phase 17 (Serialization) ──┬── P17-001: Episodic refactor
 | Hooks Coverage | 0% | 100% |
 | Test Coverage | 77% | 85%+ |
 
-**Status**: After Phase 17, World Weaver will be **PRODUCTION READY**.
+**Status**: After Phase 17, T4DM will be **PRODUCTION READY**.

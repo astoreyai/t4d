@@ -1,14 +1,14 @@
-# World Weaver Documentation Plan v0.4
+# T4DM Documentation Plan v0.4
 
 **Created**: 2026-01-03
 **Status**: Planning Phase (Not Started)
-**Scope**: Comprehensive documentation for World Weaver v0.4.0
+**Scope**: Comprehensive documentation for T4DM v0.4.0
 
 ---
 
 ## Executive Summary
 
-This plan synthesizes findings from 7 specialized analysis agents (Hinton, CompBio, Neuro, Algorithm, API/Integration, Test Coverage, and Codebase Structure) to create a comprehensive documentation roadmap for World Weaver v0.4.0.
+This plan synthesizes findings from 7 specialized analysis agents (Hinton, CompBio, Neuro, Algorithm, API/Integration, Test Coverage, and Codebase Structure) to create a comprehensive documentation roadmap for T4DM v0.4.0.
 
 ### Key Metrics from Analysis
 

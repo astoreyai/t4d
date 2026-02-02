@@ -1,8 +1,8 @@
 # Computational Biology Audit Report
-## World Weaver Memory System
+## T4DM Memory System
 
 **Date**: 2026-01-03 (Updated: Phase 3 Complete)
-**Auditor**: World Weaver CompBio Agent
+**Auditor**: T4DM CompBio Agent
 **Previous Score**: 92/100 (Phase 2)
 **Current Score**: 94/100 (Phase 3) ✅ TARGET ACHIEVED
 **Next Target**: 95/100 (Phase 4)
@@ -11,7 +11,7 @@
 
 ## Executive Summary
 
-World Weaver demonstrates **strong biological plausibility** across neurotransmitter dynamics, learning mechanisms, and spatial cognition. The system successfully implements core neuroscience principles with parameters grounded in empirical literature. This audit validates the system against 2025-2026 neuroscience research and identifies specific improvements to reach 92/100.
+T4DM demonstrates **strong biological plausibility** across neurotransmitter dynamics, learning mechanisms, and spatial cognition. The system successfully implements core neuroscience principles with parameters grounded in empirical literature. This audit validates the system against 2025-2026 neuroscience research and identifies specific improvements to reach 92/100.
 
 **Key Strengths:**
 - Accurate 6-NT PDE system with biologically validated timescales
@@ -113,7 +113,7 @@ tau_minus: float = 20.0   # LTD time window (SECONDS)
 - [Scholarpedia STDP](http://www.scholarpedia.org/article/Spike-timing_dependent_plasticity)
 - [Frontiers Neuroscience (2011)](https://www.frontiersin.org/journals/synaptic-neuroscience/articles/10.3389/fnsyn.2011.00004/full)
 
-**World Weaver STDP** (Memory-level):
+**T4DM STDP** (Memory-level):
 - τ₊ = 20 s (memory co-access window)
 - τ₋ = 20 s (decorrelation window)
 - Time window: ±20-100 s
@@ -182,7 +182,7 @@ Hebbian-modulated eligibility traces:
 
 ### 3.1 NREM/REM Phases (Score: 90/100, +10 from 80) ✅ PHASE 2 COMPLETE
 
-**Implementation** (`/mnt/projects/t4d/t4dm/consolidation/service.py`, `ww.nca`)
+**Implementation** (`/mnt/projects/t4d/t4dm/consolidation/service.py`, `t4dm.nca`)
 
 **Current Features (Phase 1+2):**
 - ✅ HDBSCAN clustering (biologically plausible pattern separation)
@@ -387,19 +387,19 @@ WW's 4-8 Hz theta and 30-100 Hz gamma are **consistent** with recent literature.
 ### 8.1 Resolved High Priority Gaps (Phase 1+2) ✅
 
 1. ✅ **Delta Oscillations (0.5-4 Hz)** - RESOLVED (Phase 1)
-   - **Status**: Implemented in `DeltaOscillator` (`ww.nca.oscillators`)
+   - **Status**: Implemented in `DeltaOscillator` (`t4dm.nca.oscillators`)
    - **Features**: Adenosine-sensitive, up/down state dynamics
 
 2. ✅ **Sleep Spindles (11-16 Hz)** - RESOLVED (Phase 1)
-   - **Status**: Implemented in `SleepSpindleGenerator` (`ww.nca.sleep_spindles`)
+   - **Status**: Implemented in `SleepSpindleGenerator` (`t4dm.nca.sleep_spindles`)
    - **Features**: 4-phase lifecycle, delta-coupled
 
 3. ✅ **Contrastive Embeddings** - RESOLVED (Phase 1)
-   - **Status**: Implemented in `ContrastiveAdapter` (`ww.embedding.contrastive_trainer`)
+   - **Status**: Implemented in `ContrastiveAdapter` (`t4dm.embedding.contrastive_trainer`)
    - **Features**: InfoNCE loss, hard negative mining, learned temperature
 
 4. ✅ **SWR Timing Validation** - RESOLVED (Phase 2)
-   - **Status**: 150-250 Hz range validated in `ww.nca.swr_coupling`
+   - **Status**: 150-250 Hz range validated in `t4dm.nca.swr_coupling`
    - **Features**: RIPPLE_FREQ_MIN/MAX/OPTIMAL constants
 
 5. ✅ **Wake-Sleep State Separation** - RESOLVED (Phase 2)
@@ -407,7 +407,7 @@ WW's 4-8 Hz theta and 30-100 Hz gamma are **consistent** with recent literature.
    - **Features**: ACh/NE-based inference, state-dependent SWR gating
 
 6. ✅ **Serotonin Credit Assignment** - RESOLVED (Phase 2)
-   - **Status**: Implemented in `PatienceModel` (`ww.nca.raphe`)
+   - **Status**: Implemented in `PatienceModel` (`t4dm.nca.raphe`)
    - **Features**: Temporal discounting, wait/don't-wait decisions
 
 ### 8.2 Remaining Medium Priority Gaps
@@ -565,7 +565,7 @@ WW's 4-8 Hz theta and 30-100 Hz gamma are **consistent** with recent literature.
 
 ## 12. Conclusion
 
-**World Weaver achieves a computational biology score of 92/100** ✅, demonstrating strong biological plausibility across neurotransmitter dynamics, learning mechanisms, spatial cognition, and sleep consolidation. The system successfully implements core neuroscience principles with parameters grounded in empirical literature from 1976 to 2025.
+**T4DM achieves a computational biology score of 92/100** ✅, demonstrating strong biological plausibility across neurotransmitter dynamics, learning mechanisms, spatial cognition, and sleep consolidation. The system successfully implements core neuroscience principles with parameters grounded in empirical literature from 1976 to 2025.
 
 **Phase 2 Achievements:**
 - ✅ SWR timing validated (150-250 Hz per Buzsaki 2015, Carr et al. 2011)

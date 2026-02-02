@@ -13,16 +13,16 @@ Coordinates feature tracking, session state, and multi-skill workflows to mainta
 ## Key Files
 | Skill | Directory | Purpose |
 |-------|-----------|---------|
-| **ww-conductor** | `ww-conductor/SKILL.md` | Multi-skill orchestration and task routing |
-| **ww-init** | `ww-init/SKILL.md` | Project bootstrapping, feature list generation |
-| **ww-session** | `ww-session/SKILL.md` | Session state loading and progress tracking |
+| **t4dm-conductor** | `t4dm-conductor/SKILL.md` | Multi-skill orchestration and task routing |
+| **t4dm-init** | `t4dm-init/SKILL.md` | Project bootstrapping, feature list generation |
+| **t4dm-session** | `t4dm-session/SKILL.md` | Session state loading and progress tracking |
 
 ## Data Flow
 ```
-Session start → ww-session (load state) → ww-conductor (route tasks) → domain/memory/workflow skills
-                                        ← ww-session (save state)
+Session start → t4dm-session (load state) → t4dm-conductor (route tasks) → domain/memory/workflow skills
+                                        ← t4dm-session (save state)
 ```
 
 ## Integration Points
-- **Config**: Reads/writes `config/ww-features.json` and `config/ww-progress.json`
-- **Hooks**: `config/hooks/ww-session-start.py` and `ww-session-end.py`
+- **Config**: Reads/writes `config/t4dm-features.json` and `config/t4dm-progress.json`
+- **Hooks**: `config/hooks/t4dm-session-start.py` and `t4dm-session-end.py`

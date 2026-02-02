@@ -1,7 +1,7 @@
-# World Weaver Algorithms
+# T4DM Algorithms
 
 ## Overview
-World Weaver implements cognitive science-inspired algorithms for memory management across three subsystems: episodic, semantic, and procedural memory.
+T4DM implements cognitive science-inspired algorithms for memory management across three subsystems: episodic, semantic, and procedural memory.
 
 ## 1. FSRS (Free Spaced Repetition Scheduler)
 
@@ -124,7 +124,7 @@ w_decay = w * (1 - decay_rate * dt)
 ```
 
 ### Context
-Hebbian learning models synaptic plasticity. In World Weaver, entities that are frequently recalled together develop stronger associative bonds, enabling better context-aware retrieval.
+Hebbian learning models synaptic plasticity. In T4DM, entities that are frequently recalled together develop stronger associative bonds, enabling better context-aware retrieval.
 
 ---
 

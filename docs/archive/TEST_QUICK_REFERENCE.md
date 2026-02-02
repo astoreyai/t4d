@@ -34,7 +34,7 @@ pytest tests/test_memory.py -v
 ### RED - Critical Gaps
 | File | Coverage | Tests Failing | Action |
 |------|----------|---------------|--------|
-| neo4j_store.py | 39% | 30+ | Add 25-30 tests |
+| t4dx_graph_adapter.py | 39% | 30+ | Add 25-30 tests |
 | mcp/schema.py | 0% | unknown | Add 10+ tests |
 | unified.py | 18% | missing | Add 35-40 tests |
 | mcp/server.py | 20% | unknown | Add 10+ tests |
@@ -46,7 +46,7 @@ pytest tests/test_memory.py -v
 | mcp/tools/procedural.py | 53% | 12 | Add 10-15 tests |
 | mcp/tools/semantic.py | 46% | 8 | Add 12-15 tests |
 | mcp/tools/system.py | 33% | 12 | Add 15-20 tests |
-| qdrant_store.py | 62% | 8 | Add 15-20 tests |
+| t4dx_vector_adapter.py | 62% | 8 | Add 15-20 tests |
 | consolidation/service.py | 69% | 12 | Add 10-15 tests |
 
 ### GREEN - Good Shape
@@ -101,8 +101,8 @@ MCP Layer              77% ~ (mixed)
 
 Storage Layer          50% ~ (mixed)
 ├── saga.py             97% ✓
-├── neo4j_store.py      39% ✗ CRITICAL
-└── qdrant_store.py     62% ~ (needs work)
+├── t4dx_graph_adapter.py      39% ✗ CRITICAL
+└── t4dx_vector_adapter.py     62% ~ (needs work)
 
 Observability          64% ~ (mixed)
 ├── logging.py         100% ✓
@@ -177,7 +177,7 @@ pytest tests/ --cov=src/ww --cov-report=html -v
 
 ```bash
 # Required for tests
-WW_TEST_MODE=true
+T4DM_TEST_MODE=true
 NEO4J_PASSWORD=WwPass123!  # Must be complex (2+ of: upper, lower, digit, special)
 NEO4J_HOST=localhost
 NEO4J_PORT=7687
@@ -190,7 +190,7 @@ QDRANT_PORT=6333
 | Target | Current | Gap | Tests Needed |
 |--------|---------|-----|--------------|
 | Overall | 77% | 13% | 500+ statements |
-| neo4j_store | 39% | 41% | 170+ statements |
+| t4dx_graph_adapter | 39% | 41% | 170+ statements |
 | unified.py | 18% | 67% | 80+ statements |
 | mcp/tools | 45% | 50% | 180+ statements |
 | Overall Target | 85% | - | ~100 new tests |
@@ -215,9 +215,9 @@ async def test_feature_name(mock_episodic_memory):
 ### Storage Test Template
 ```python
 @pytest.mark.asyncio
-async def test_database_feature(mock_neo4j_store):
+async def test_database_feature(mock_t4dx_graph_adapter):
     """Test description."""
-    store = mock_neo4j_store
+    store = mock_t4dx_graph_adapter
     store.query.return_value = [{"id": "test"}]
 
     result = await store.query("...")
@@ -230,7 +230,7 @@ async def test_database_feature(mock_neo4j_store):
 @pytest.mark.asyncio
 async def test_workflow():
     """Test complete workflow."""
-    from ww.memory.episodic import get_episodic_memory
+    from t4dm.memory.episodic import get_episodic_memory
 
     memory = get_episodic_memory("session-001")
     await memory.initialize()
@@ -245,8 +245,8 @@ async def test_workflow():
 ### See what mocks are returning
 ```python
 # In test code
-print(mock_neo4j_store.query.return_value)
-print(mock_neo4j_store.query.call_args)
+print(mock_t4dx_graph_adapter.query.return_value)
+print(mock_t4dx_graph_adapter.query.call_args)
 ```
 
 ### Check what's being tested

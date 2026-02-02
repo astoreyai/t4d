@@ -1,4 +1,4 @@
-# World Weaver Current State
+# T4DM Current State
 
 **Last Updated**: 2026-01-05 | **Version**: 0.5.0
 
@@ -77,7 +77,7 @@ Some parameters need alignment with neuroscience literature:
 
 ### Storage Backend Requirements
 
-World Weaver requires:
+T4DM requires:
 - **Qdrant**: Vector database for embeddings
 - **Neo4j**: Graph database for relationships
 
@@ -121,19 +121,19 @@ These must be running for full functionality. Docker Compose is provided.
 import sys
 sys.path.insert(0, 'src')
 
-from ww.nca import (
+from t4dm.nca import (
     HippocampalCircuit, create_hippocampal_circuit,
     VTACircuit, create_vta_circuit,
     GlymphaticSystem, create_glymphatic_system,
     ForwardForwardLayer, ForwardForwardConfig,
     CapsuleLayer, create_capsule_layer,
 )
-from ww.learning import (
+from t4dm.learning import (
     EligibilityTrace,
     DopamineSystem,
     ThreeFactorLearningRule,
 )
-from ww.consolidation import SleepConsolidation
+from t4dm.consolidation import SleepConsolidation
 
 import numpy as np
 

@@ -306,7 +306,7 @@ Before deploying to production:
 **Re-Assessment:** Required after remediation
 
 **Additional Resources:**
-- World Weaver project: `/mnt/projects/t4d/t4dm/`
+- T4DM project: `/mnt/projects/t4d/t4dm/`
 - Test coverage: 79% (overall), 0% (security)
 - Documentation: See project README
 

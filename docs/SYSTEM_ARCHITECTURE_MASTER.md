@@ -75,7 +75,7 @@ graph TB
 | Interface | `api/` | FastAPI routes | REST API endpoints |
 | Interface | `cli/` | `t4dm` command | Command-line interface |
 | Interface | `mcp/` | Model Context Protocol | MCP server integration |
-| Interface | `sdk/` | Python sync/async clients | `WorldWeaverClient`, `AsyncWorldWeaverClient`, agent SDK |
+| Interface | `sdk/` | Python sync/async clients | `T4DMClient`, `AsyncT4DMClient`, agent SDK |
 | Interface | `interfaces/` | Abstract interfaces | Protocol definitions for extensibility |
 | Interface | `hooks/` | Lifecycle hooks | Pre/post operation hook system |
 | Support | `observability/` | Logging, metrics, tracing | Prometheus metrics, structured logging, health checks |

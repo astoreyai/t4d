@@ -1,4 +1,4 @@
-# World Weaver Test Implementation Checklist
+# T4DM Test Implementation Checklist
 
 **Status**: Ready to implement | **Est. Time**: 60 hours | **Priority**: P1
 
@@ -170,7 +170,7 @@ pytest tests/unit/test_observability.py -v
 ### Create `/mnt/projects/t4d/t4dm/tests/unit/test_storage.py`
 
 #### Neo4j Storage Tests
-- [ ] `TestNeo4jStore` class
+- [ ] `TestT4DXGraphAdapter` class
   - [ ] `test_initialize_creates_connection()`
   - [ ] `test_create_node_with_properties()`
   - [ ] `test_update_node_properties()`
@@ -183,7 +183,7 @@ pytest tests/unit/test_observability.py -v
   - [ ] `test_batch_operations()`
 
 #### Qdrant Storage Tests
-- [ ] `TestQdrantStore` class
+- [ ] `TestT4DXVectorAdapter` class
   - [ ] `test_initialize_creates_collections()`
   - [ ] `test_add_vector_with_payload()`
   - [ ] `test_search_returns_scored_results()`
@@ -271,8 +271,8 @@ pytest tests/unit/test_storage.py tests/unit/test_edge_cases.py -v
   - [ ] consolidation/service.py: 18% → 75%+
   - [ ] mcp/memory_gateway.py: 18% → 75%+
   - [ ] observability/*: 0% → 50%+
-  - [ ] storage/neo4j_store.py: 41% → 70%+
-  - [ ] storage/qdrant_store.py: 56% → 70%+
+  - [ ] storage/t4dx_graph_adapter.py: 41% → 70%+
+  - [ ] storage/t4dx_vector_adapter.py: 56% → 70%+
   - [ ] memory/semantic.py: 53% → 75%+
   - [ ] memory/procedural.py: 64% → 75%+
   - [ ] memory/episodic.py: 87% → 90%

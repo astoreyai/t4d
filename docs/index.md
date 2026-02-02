@@ -1,4 +1,4 @@
-# World Weaver
+# T4DM
 
 **Biologically-inspired memory for AI**
 
@@ -6,7 +6,7 @@
 [![Tests](https://img.shields.io/badge/tests-6%2C540%2B%20passing-green)](https://github.com/astoreyai/ww)
 [![Coverage](https://img.shields.io/badge/coverage-80%25-green)](https://github.com/astoreyai/ww)
 
-World Weaver is a modular framework implementing tripartite neural memory (episodic, semantic, procedural) with cognitive consolidation, neuromodulator dynamics, FSRS-based spaced repetition, and world model prediction.
+T4DM is a modular framework implementing tripartite neural memory (episodic, semantic, procedural) with cognitive consolidation, neuromodulator dynamics, FSRS-based spaced repetition, and world model prediction.
 
 ## Features
 
@@ -73,12 +73,12 @@ World Weaver is a modular framework implementing tripartite neural memory (episo
     # Create episode
     curl -X POST http://localhost:8765/api/v1/episodes \
       -H "Content-Type: application/json" \
-      -d '{"content": "Learning about World Weaver"}'
+      -d '{"content": "Learning about T4DM"}'
 
     # Search memories
     curl -X POST http://localhost:8765/api/v1/episodes/recall \
       -H "Content-Type: application/json" \
-      -d '{"query": "World Weaver", "limit": 5}'
+      -d '{"query": "T4DM", "limit": 5}'
     ```
 
 ## Architecture

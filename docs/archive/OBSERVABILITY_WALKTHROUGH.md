@@ -1,8 +1,8 @@
-# World Weaver Observability Walkthrough
+# T4DM Observability Walkthrough
 
 **Version**: 0.1.0 | **Last Updated**: 2025-12-09
 
-A comprehensive guide to monitoring, logging, tracing, and health checking in the World Weaver memory system.
+A comprehensive guide to monitoring, logging, tracing, and health checking in the T4DM memory system.
 
 ---
 
@@ -52,7 +52,7 @@ t4dm/observability/
 ### Configuration
 
 ```python
-from ww.observability import configure_logging, get_logger
+from t4dm.observability import configure_logging, get_logger
 
 # Configure at startup
 configure_logging(
@@ -69,7 +69,7 @@ logger.info("Memory system started", extra={"session_id": "abc123"})
 ### Context Management
 
 ```python
-from ww.observability import set_context, clear_context
+from t4dm.observability import set_context, clear_context
 
 # Set request context (thread-local)
 set_context(
@@ -88,7 +88,7 @@ clear_context()
 ### Operation Logging
 
 ```python
-from ww.observability import OperationLogger, log_operation
+from t4dm.observability import OperationLogger, log_operation
 
 # Decorator style
 @log_operation("create_episode")
@@ -128,7 +128,7 @@ with OperationLogger("recall_episodes") as op:
 Thread-safe singleton for collecting metrics:
 
 ```python
-from ww.observability import MetricsCollector, get_metrics
+from t4dm.observability import MetricsCollector, get_metrics
 
 # Get singleton instance
 metrics = get_metrics()
@@ -153,7 +153,7 @@ stats = metrics.get_stats("create_episode")
 ### Decorators
 
 ```python
-from ww.observability import timed_operation, count_operation
+from t4dm.observability import timed_operation, count_operation
 
 @timed_operation("embedding_generation")
 async def generate_embedding(text: str):
@@ -169,7 +169,7 @@ def check_cache(key: str):
 ### Timer Context Managers
 
 ```python
-from ww.observability import Timer, AsyncTimer
+from t4dm.observability import Timer, AsyncTimer
 
 # Sync timer
 with Timer("qdrant_search") as t:
@@ -196,7 +196,7 @@ async with AsyncTimer("neo4j_query") as t:
 ### HealthChecker
 
 ```python
-from ww.observability import HealthChecker, get_health_checker, HealthStatus
+from t4dm.observability import HealthChecker, get_health_checker, HealthStatus
 
 # Get singleton
 checker = get_health_checker()
@@ -242,7 +242,7 @@ class ComponentHealth:
 ### Custom Health Check
 
 ```python
-from ww.observability import HealthChecker, ComponentHealth, HealthStatus
+from t4dm.observability import HealthChecker, ComponentHealth, HealthStatus
 
 checker = get_health_checker()
 
@@ -283,11 +283,11 @@ class SystemHealth:
 ### OpenTelemetry Integration
 
 ```python
-from ww.observability import init_tracing, shutdown_tracing
+from t4dm.observability import init_tracing, shutdown_tracing
 
 # Initialize at startup
 init_tracing(
-    service_name="world-weaver",
+    service_name="t4dm",
     otlp_endpoint="http://localhost:4317",  # Optional OTLP collector
     console_export=True                      # Also print to console
 )
@@ -299,7 +299,7 @@ shutdown_tracing()
 ### Traced Operations
 
 ```python
-from ww.observability import traced, traced_sync, add_span_attribute
+from t4dm.observability import traced, traced_sync, add_span_attribute
 
 # Async decorator
 @traced("create_episode")
@@ -316,7 +316,7 @@ def compute_embedding(text: str):
 ### Manual Spans
 
 ```python
-from ww.observability import trace_span, add_span_event
+from t4dm.observability import trace_span, add_span_event
 
 async with trace_span("complex_operation") as span:
     # Phase 1
@@ -330,7 +330,7 @@ async with trace_span("complex_operation") as span:
 ### Trace Context Propagation
 
 ```python
-from ww.observability import get_trace_context
+from t4dm.observability import get_trace_context
 
 # Get current trace context for propagation
 context = get_trace_context()
@@ -347,22 +347,22 @@ headers = {"traceparent": context["traceparent"]}
 ### Availability Check
 
 ```python
-from ww.observability import PROMETHEUS_AVAILABLE
+from t4dm.observability import PROMETHEUS_AVAILABLE
 
 if PROMETHEUS_AVAILABLE:
     # Use native prometheus_client
     from prometheus_client import Counter
 else:
     # Use internal fallback
-    from ww.observability import InternalCounter as Counter
+    from t4dm.observability import InternalCounter as Counter
 ```
 
 ### WWMetrics
 
-Predefined metrics for World Weaver:
+Predefined metrics for T4DM:
 
 ```python
-from ww.observability import WWMetrics
+from t4dm.observability import WWMetrics
 
 metrics = WWMetrics()
 
@@ -396,7 +396,7 @@ text_output = metrics.export()
 ### Decorators
 
 ```python
-from ww.observability import track_latency, count_calls
+from t4dm.observability import track_latency, count_calls
 
 @track_latency("qdrant_search")
 async def search_vectors(query):
@@ -470,7 +470,7 @@ ws.onmessage = (event) => {
 ### Broadcasting (Server)
 
 ```python
-from ww.api.websocket import broadcast_event
+from t4dm.api.websocket import broadcast_event
 
 # Broadcast health update
 await broadcast_event(
@@ -492,7 +492,7 @@ await broadcast_event(
 ```python
 # api/server.py
 from fastapi import FastAPI
-from ww.observability import (
+from t4dm.observability import (
     configure_logging,
     init_tracing,
     get_health_checker
@@ -503,7 +503,7 @@ app = FastAPI()
 @app.on_event("startup")
 async def startup():
     configure_logging(level="INFO", format="json")
-    init_tracing(service_name="world-weaver")
+    init_tracing(service_name="t4dm")
 
 @app.get("/health")
 async def health():
@@ -515,7 +515,7 @@ async def health():
 
 ```python
 # mcp/tools/episodic.py
-from ww.observability import traced, get_metrics
+from t4dm.observability import traced, get_metrics
 
 @traced("mcp.create_episode")
 async def create_episode(content: str):
@@ -533,7 +533,7 @@ async def create_episode(content: str):
 ```python
 # api/routes/metrics.py
 from fastapi import APIRouter
-from ww.observability import WWMetrics
+from t4dm.observability import WWMetrics
 
 router = APIRouter()
 
