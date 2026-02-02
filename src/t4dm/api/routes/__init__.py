@@ -26,6 +26,9 @@ from t4dm.api.routes.skills import router as skills_router
 from t4dm.api.routes.system import router as system_router
 from t4dm.api.routes.visualization import router as visualization_router
 
+# Mem0-compatible API
+from t4dm.api.routes.compat import router as compat_router
+
 __all__ = [
     "agents_router",
     "config_router",
@@ -42,4 +45,5 @@ __all__ = [
     "dream_router",
     "nt_router",
     "learning_router",
+    "compat_router",
 ]

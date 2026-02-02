@@ -23,7 +23,7 @@ t4dm/
 ├── prediction/        # JEPA latent prediction, active inference, predictive coding
 ├── temporal/          # Temporal dynamics, session management, lifecycle
 ├── extraction/        # Entity/relationship extraction from text
-├── nca/               # Neural Cellular Automata
+├── nca/               # Neural Circuit Architecture (brain region simulations, NOT Mordvintsev cellular automata)
 ├── spiking/           # Spiking cortical blocks (LIF, thalamic gate, STDP attention)
 ├── qwen/              # Qwen 3B + QLoRA integration
 ├── observability/     # Logging, metrics, health, tracing, Prometheus

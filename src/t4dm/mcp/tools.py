@@ -2,12 +2,12 @@
 MCP Tool Definitions for T4DM.
 
 Provides memory tools for Claude Code/Desktop integration:
-- ww_store: Store experiences in episodic memory
-- ww_recall: Retrieve relevant memories
-- ww_learn_outcome: Report task outcomes for learning
-- ww_consolidate: Trigger memory consolidation
-- ww_get_context: Get project/session context
-- ww_entity: Create/retrieve semantic entities
+- t4dm_store: Store experiences in episodic memory
+- t4dm_search: Retrieve relevant memories
+- t4dm_learn: Report task outcomes for learning
+- t4dm_consolidate: Trigger memory consolidation
+- t4dm_context: Get project/session context
+- t4dm_entity: Create/retrieve semantic entities
 """
 
 from dataclasses import dataclass
@@ -16,7 +16,7 @@ from typing import Any
 # Tool definitions using MCP schema format
 MEMORY_TOOLS = [
     {
-        "name": "ww_store",
+        "name": "t4dm_store",
         "description": (
             "Store information in T4DM episodic memory. "
             "Use this to remember important learnings, patterns, solutions, "
@@ -56,7 +56,7 @@ MEMORY_TOOLS = [
         },
     },
     {
-        "name": "ww_recall",
+        "name": "t4dm_search",
         "description": (
             "Search episodic memory for relevant past experiences. "
             "Use this to retrieve context, patterns, or solutions from previous sessions. "
@@ -97,7 +97,7 @@ MEMORY_TOOLS = [
         },
     },
     {
-        "name": "ww_learn_outcome",
+        "name": "t4dm_learn",
         "description": (
             "Report task outcome to enable learning. "
             "Call this after completing a task where you used recalled memories. "
@@ -130,7 +130,7 @@ MEMORY_TOOLS = [
         },
     },
     {
-        "name": "ww_consolidate",
+        "name": "t4dm_consolidate",
         "description": (
             "Trigger memory consolidation (mimics biological sleep). "
             "Use 'light' during work breaks, 'deep' at session end, "
@@ -154,7 +154,7 @@ MEMORY_TOOLS = [
         },
     },
     {
-        "name": "ww_get_context",
+        "name": "t4dm_context",
         "description": (
             "Get current session and project context. "
             "Returns recent memories, session statistics, and project-specific knowledge."
@@ -180,7 +180,7 @@ MEMORY_TOOLS = [
         },
     },
     {
-        "name": "ww_entity",
+        "name": "t4dm_entity",
         "description": (
             "Create or retrieve semantic entities (concepts, people, projects). "
             "Entities form the knowledge graph for structured memory."
@@ -226,7 +226,7 @@ MEMORY_TOOLS = [
         },
     },
     {
-        "name": "ww_skill",
+        "name": "t4dm_skill",
         "description": (
             "Store or retrieve procedural skills (how-to knowledge). "
             "Skills are step-by-step procedures that can be recalled and executed."
@@ -294,9 +294,9 @@ Session ID: {{session_id}}
 Project: {{project}}
 
 Available memory tools:
-- ww_recall: Search for relevant past experiences
-- ww_store: Save important learnings
-- ww_learn_outcome: Report task success/failure for learning
+- t4dm_search: Search for relevant past experiences
+- t4dm_store: Save important learnings
+- t4dm_learn: Report task success/failure for learning
 
 Before starting work, consider recalling relevant context:
 1. What patterns or solutions have worked before?
@@ -314,7 +314,7 @@ Session is ending. Please:
 2. Report outcomes for tasks where memories were used
 3. Trigger consolidation to strengthen useful memories
 
-Use ww_store for each key insight, and ww_consolidate with mode="deep".
+Use t4dm_store for each key insight, and t4dm_consolidate with mode="deep".
 """,
     },
     {
@@ -329,7 +329,7 @@ Reflect on this task:
 2. What could be improved?
 3. What patterns should be remembered?
 
-Store insights using ww_store and report outcome using ww_learn_outcome.
+Store insights using t4dm_store and report outcome using t4dm_learn.
 """,
     },
 ]

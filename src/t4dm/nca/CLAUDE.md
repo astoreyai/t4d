@@ -1,5 +1,7 @@
-# NCA (Neural Cellular Automata)
+# NCA (Neural Circuit Architecture)
 **Path**: `/mnt/projects/t4d/t4dm/src/t4dm/nca/`
+
+> **Naming Note**: NCA in this project stands for "Neural Circuit Architecture" -- biologically-inspired brain region simulation modules. This is NOT Mordvintsev-style Neural Cellular Automata (self-organizing pixel patterns). The module implements computational models of specific brain regions and neural circuits.
 
 ## What
 Biologically-inspired neural field dynamics implementing brain-region simulations, neurotransmitter systems, oscillatory networks, Hinton architectures (Forward-Forward, Capsule Networks), and sleep/wake consolidation. The most neuroscience-heavy module (~40 files).

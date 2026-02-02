@@ -1,8 +1,10 @@
-# World Weaver: Brain Region Mapping and Neuroscience Architecture Analysis
+# T4DM: Brain Region Mapping and Neuroscience Architecture Analysis
 
-**Version**: 1.0 | **Date**: 2026-01-03 | **Status**: Complete Analysis
+**Version**: 2.0 | **Date**: 2026-02-02 | **Status**: Updated Analysis
 
-This document maps World Weaver's computational architecture to established neuroscience models, brain regions, and cognitive theories.
+This document maps T4DM's computational architecture to established neuroscience models, brain regions, and cognitive theories.
+
+> **Note**: The `nca/` module directory name stands for "Neural Circuit Architecture" (brain region simulation modules), not Mordvintsev-style Neural Cellular Automata. The module implements biologically-inspired circuit simulations of specific brain regions.
 
 ---
 
@@ -21,7 +23,7 @@ This document maps World Weaver's computational architecture to established neur
 
 ## Executive Summary
 
-World Weaver implements a biologically-inspired cognitive architecture with strong correspondence to neuroscience models. Key findings:
+T4DM implements a biologically-inspired cognitive architecture with strong correspondence to neuroscience models. Key findings:
 
 | Category | Implementation Score | Notes |
 |----------|---------------------|-------|
@@ -235,10 +237,12 @@ NCA (NE field) ──► ALERT/EXPLORE states
               └──► Arousal modulation
               └──► Adenosine antagonism
 
-Accuracy: 75/100
+Accuracy: 90/100
 - NE drives alertness and vigilance
-- Missing: NE effects on gain modulation
-- Missing: NE role in surprise/novelty detection
+- 5 firing modes in LC (nca/locus_coeruleus.py, 1102 lines)
+- Phasic/tonic NE modes implemented
+- Gain modulation implemented
+- Surprise/novelty detection via phasic bursts
 
 HIPPOCAMPAL-CORTICAL DIALOGUE
 =============================
@@ -317,7 +321,7 @@ Accuracy: 85/100
 
 | Circuit | Brain Regions | Function | WW Status |
 |---------|--------------|----------|-----------|
-| Papez Circuit | Hippocampus-Thalamus-Cingulate | Emotion-memory | Partial (amygdala absent) |
+| Papez Circuit | Hippocampus-Thalamus-Cingulate | Emotion-memory | Partial (amygdala now implemented: nca/amygdala.py) |
 | Dorsal Attention Network | FEF-IPS | Top-down attention | Missing |
 | Default Mode Network | mPFC-PCC-TPJ | Self-referential | Missing |
 | Salience Network | ACC-AI | Switching | Partial (attractor transitions) |
@@ -417,9 +421,9 @@ Implemented:
 [x] Abstract concept formation in REM
 
 Missing:
-[ ] Sleep spindles
+[x] Sleep spindles (IMPLEMENTED: nca/sleep_spindles.py, 608 lines — SleepSpindleGenerator with delta coupling)
 [ ] K-complexes
-[ ] Slow oscillation coupling
+[x] Slow oscillation coupling (IMPLEMENTED: SpindleDeltaCoupler in nca/sleep_spindles.py)
 [ ] REM theta (only NREM SWR)
 ```
 
@@ -443,17 +447,17 @@ NCA Dynamics:
   ACh field ─► Attention/encoding signal
   Coupling matrix ─► NE-ACh interaction
 
-ACCURACY: 75/100
+ACCURACY: 85/100
 
 Implemented:
 [x] NE-driven alertness states
 [x] ACh-driven focus states
 [x] State-dependent processing modes
 [x] Attractor dynamics for state switching
+[x] Phasic vs. tonic NE distinction (IMPLEMENTED: nca/locus_coeruleus.py, 1102 lines, 5 firing modes)
+[x] Gain modulation (IMPLEMENTED: LC modulates cortical gain via NE)
 
 Missing:
-[ ] Phasic vs. tonic NE distinction
-[ ] Gain modulation (multiplicative)
 [ ] Covert attention shifts
 [ ] Feature-based vs. spatial attention
 ```
@@ -512,7 +516,7 @@ Context (recent episodes) → ContextEncoder → LatentPredictor → Next embedd
 | Semantic-Prediction | Semantic | Prediction | Conceptual priors guide prediction | Medium |
 | NCA-Procedural | NCA | Procedural | DA modulates habit selection | High |
 | Prediction-Semantic | Prediction | Semantic | Prediction shapes concept learning | Medium |
-| Emotion-All | Missing | All | Amygdala modulates all memory | High |
+| Emotion-All | nca/amygdala.py | All | Amygdala modulates all memory | Implemented (574 lines) |
 
 ---
 
@@ -603,16 +607,15 @@ WW aligns with GWT through:
 PRIORITY 1 (High Impact):
 ═════════════════════════
 
-1. AMYGDALA MODULE (Emotion)
-   Current: emotional_valence field only
-   Needed: Full emotional memory system
-   Impact: All memory modulation
+1. AMYGDALA MODULE (Emotion) — IMPLEMENTED
+   Current: Full amygdala circuit (nca/amygdala.py, 574 lines)
+   Status: Fear conditioning, emotional tagging, BLA pathways
+   Remaining gap: Social cognition, nuanced emotion categories
 
-   Components:
+   Implemented Components:
    - Fear conditioning pathway
-   - Reward pathway (BLA → NAcc)
    - Emotional tagging of episodes
-   - Anxiety/arousal state effects
+   - Arousal state effects via NE coupling
 
 2. ATTENTION NETWORK
    Current: Implicit in attractor states
@@ -733,31 +736,33 @@ LONG-TERM (6+ Sprints):
 | NCA/Neural Field | 88 | 6-NT PDE, attractors | Gain modulation |
 | DopamineSystem | 90 | RPE, TD(lambda) | Phasic vs. tonic |
 | SerotoninSystem | 85 | Long-term credit | Impulsivity effects |
-| SleepConsolidation | 85 | NREM/REM, SWR | Sleep spindles |
+| SleepConsolidation | 90 | NREM/REM, SWR, sleep spindles (nca/sleep_spindles.py, 608 lines) | K-complexes |
 | Prediction | 80 | JEPA, hierarchical | Semantic priors |
 | Attention | 70 | ACh gating | Explicit mechanisms |
-| Emotion | 40 | Basic valence | Full amygdala system |
+| Amygdala/Emotion | 75 | Full amygdala circuit (nca/amygdala.py, 574 lines) | Social cognition |
 | Spatial | 50 | Concept present | Implementation needed |
 
 ### Overall Architecture Assessment
 
 ```
-BIOLOGICAL PLAUSIBILITY:  82/100
+BIOLOGICAL PLAUSIBILITY:  87/100
 ════════════════════════════════
 
 Strengths:
 + Tripartite memory model (Tulving)
 + Neuromodulator dynamics (6-NT)
-+ Sleep consolidation (NREM/REM)
++ Sleep consolidation (NREM/REM) with sleep spindles
 + Prediction error learning (RPE)
 + Attractor-based cognitive states
++ Full amygdala circuit (574 lines)
++ LC with 5 firing modes (1102 lines)
++ Sleep spindle-delta coupling (608 lines)
 
 Weaknesses:
-- Emotional system incomplete
-- Attention mechanisms implicit
 - Spatial cognition partial
-- Motor system absent
+- Motor system absent (cerebellum NOT IMPLEMENTED — critical gap)
 - Metacognition missing
+- Social cognition absent
 
 COGNITIVE ARCHITECTURE ALIGNMENT:
 ════════════════════════════════
@@ -790,5 +795,5 @@ UNIQUE CONTRIBUTIONS:
 
 ---
 
-*Document generated by World Weaver Neuroscience Agent*
-*Based on codebase analysis as of 2026-01-03*
+*Document generated by T4DM Neuroscience Agent*
+*Based on codebase analysis as of 2026-01-03, updated 2026-02-02*

@@ -1,6 +1,6 @@
-# World Weaver - Tripartite Neural Memory Architecture
+# T4DM - Tripartite Neural Memory Architecture
 
-**Version**: 0.1.0 | **Status**: Specification Complete
+**Version**: 0.2.0 | **Status**: Specification Complete, T4DX Migration Done
 **Target**: Archimedes (RTX 3090 24GB, i9, 128GB RAM)
 
 ---
@@ -81,8 +81,7 @@ This memory system implements Tulving's (1972) tripartite model with neural path
 
 | Component | Technology | Resources |
 |-----------|------------|-----------|
-| Graph Database | Neo4j Community | 16GB heap, 80GB page cache |
-| Vector Store | Qdrant | 16GB RAM |
+| Storage Engine | T4DX (embedded LSM) | In-process, zero network hops |
 | Embeddings | BGE-M3 (local) | ~4GB VRAM (fp16) |
 | Reranker | BGE-reranker-large | ~2GB VRAM (fp16) |
 | MCP Framework | TypeScript SDK + FastMCP | - |
@@ -90,6 +89,8 @@ This memory system implements Tulving's (1972) tripartite model with neural path
 | Conflict Resolution | OR-Set CRDT | - |
 
 **Total Allocation**: ~20GB RAM system, ~6GB VRAM
+
+> **Migration Note**: Neo4j and Qdrant have been replaced by T4DX, a custom embedded LSM-style spatiotemporal database where vectors, edges, metadata, and temporal indices are co-located. See `docs/plans/FULL_SYSTEM_PLAN.md` for details.
 
 ---
 
@@ -517,11 +518,55 @@ The tripartite memory system replaces the simplified hot/warm/cold model:
 
 ---
 
+## 7. Kappa-Gradient Consolidation (Systems Consolidation)
+
+The discrete tripartite memory stores (episodic, semantic, procedural) are unified by a continuous consolidation gradient, kappa (kappa), inspired by systems consolidation theory.
+
+### Theoretical Basis
+
+Frankland & Bontempi (2005) demonstrated that memories undergo systems consolidation: initially dependent on hippocampus, they gradually become neocortical over time. This process is not a discrete transfer but a gradual shift in dependence.
+
+T4DM models this with a continuous kappa in [0, 1]:
+
+| kappa Range | State | Biological Analog |
+|------------|-------|-------------------|
+| 0.0 | Raw episodic (just encoded) | Hippocampus-dependent |
+| ~0.15 | Replayed (NREM strengthened) | Early consolidation |
+| ~0.4 | Transitional (being abstracted) | Hippocampal-neocortical dialogue |
+| ~0.85 | Semantic concept (REM prototype) | Neocortex-dependent |
+| 1.0 | Stable knowledge (fully consolidated) | Neocortical only |
+
+### Mapping to T4DX LSM Compaction
+
+The T4DX storage engine's compaction operations directly implement consolidation:
+
+- **MemTable flush** = working memory to episodic (kappa = 0.0)
+- **NREM compaction** = merge segments + kappa += 0.05 per replay + STDP weight updates
+- **REM compaction** = cluster items + create prototypes (kappa += 0.2, item_type to semantic)
+- **PRUNE compaction** = garbage-collect tombstoned + low-kappa items
+
+This eliminates the need for cross-store transactions (the former Saga pattern). An item's transition from episodic to semantic is a field update, not a delete-and-reinsert.
+
+### Key Advantage Over Discrete Stores
+
+In the previous architecture (Neo4j + Qdrant + Saga), moving a memory from episodic to semantic required:
+1. Read from episodic store
+2. Delete from episodic store
+3. Insert into semantic store
+4. Compensate on failure (Saga)
+
+With kappa-gradient on T4DX, the same operation is:
+1. `UPDATE_FIELDS(id, {kappa: 0.85, item_type: semantic})`
+
+---
+
 ## References
 
 - Tulving, E. (1972). Episodic and semantic memory
 - Squire, L.R. (1992). Memory systems of the brain
 - Anderson, J.R. (2007). ACT-R cognitive architecture
+- **Frankland, P.W. & Bontempi, B. (2005). The organization of recent and remote memories. Nature Reviews Neuroscience, 6(2), 119-130.** -- Theoretical basis for kappa-gradient systems consolidation
+- McClelland, J.L., McNaughton, B.L., & O'Reilly, R.C. (1995). Why there are complementary learning systems in the hippocampus and neocortex. Psychological Review, 102(3), 419-457.
 - Zep Graphiti - 94.8% accuracy on DMR benchmarks
 - Memp Framework (Zhejiang/Alibaba, 2025)
 - FSRS - 20-30% improvement over SM-2

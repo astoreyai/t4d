@@ -111,7 +111,7 @@ src/t4dm/                        # Current package (will rename to src/t4dm/)
 │   └── saga.py                # LEGACY (to be eliminated)
 ├── consolidation/             # Sleep-phase consolidation
 ├── learning/                  # Hebbian, STDP, neuromodulators
-├── nca/                       # Neural Cellular Automata
+├── nca/                       # Neural Circuit Architecture (brain region simulations, NOT Mordvintsev cellular automata)
 ├── memory/                    # Episodic, semantic, procedural stores
 ├── bridges/                   # Higher-level memory semantics
 ├── persistence/               # WAL, checkpoint, recovery

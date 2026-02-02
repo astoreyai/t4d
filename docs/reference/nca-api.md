@@ -1,6 +1,8 @@
 # NCA Module API Reference
 
-Complete API reference for the Neural Cellular Automata (NCA) module.
+Complete API reference for the Neural Circuit Architecture (NCA) module.
+
+> **Naming Note**: NCA in T4DM stands for "Neural Circuit Architecture" -- biologically-inspired brain region simulation modules, not Mordvintsev-style Neural Cellular Automata.
 
 ## Module Structure
 

@@ -1,0 +1,124 @@
+[
+  {
+    "type": "function",
+    "function": {
+      "name": "t4dm_store",
+      "description": "Store a memory in T4DM. Use this to persist important information, learnings, or experiences for future retrieval.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "The content to store as a memory"
+          },
+          "metadata": {
+            "type": "object",
+            "description": "Optional metadata to attach to the memory",
+            "properties": {
+              "project": { "type": "string" },
+              "outcome": { "type": "string", "enum": ["success", "failure", "neutral"] },
+              "importance": { "type": "number", "minimum": 0, "maximum": 1 },
+              "tags": { "type": "array", "items": { "type": "string" } }
+            }
+          },
+          "user_id": {
+            "type": "string",
+            "description": "Optional user identifier for memory isolation"
+          },
+          "agent_id": {
+            "type": "string",
+            "description": "Optional agent identifier"
+          }
+        },
+        "required": ["content"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "t4dm_search",
+      "description": "Search memories in T4DM using semantic similarity. Returns the most relevant memories matching the query.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "Semantic search query"
+          },
+          "limit": {
+            "type": "integer",
+            "description": "Maximum number of results to return",
+            "default": 5,
+            "minimum": 1,
+            "maximum": 50
+          },
+          "score_threshold": {
+            "type": "number",
+            "description": "Minimum similarity score threshold",
+            "default": 0.5,
+            "minimum": 0,
+            "maximum": 1
+          },
+          "user_id": {
+            "type": "string",
+            "description": "Filter by user ID"
+          }
+        },
+        "required": ["query"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "t4dm_get",
+      "description": "Get a specific memory by its ID.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "memory_id": {
+            "type": "string",
+            "description": "The unique identifier of the memory to retrieve"
+          }
+        },
+        "required": ["memory_id"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "t4dm_delete",
+      "description": "Delete a memory by its ID.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "memory_id": {
+            "type": "string",
+            "description": "The unique identifier of the memory to delete"
+          }
+        },
+        "required": ["memory_id"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "t4dm_consolidate",
+      "description": "Trigger memory consolidation, which strengthens important memories and prunes weak ones. Mimics biological sleep-based memory consolidation.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "mode": {
+            "type": "string",
+            "enum": ["light", "deep", "full"],
+            "description": "Consolidation intensity: light (quick), deep (thorough), full (complete reorganization)",
+            "default": "light"
+          }
+        }
+      }
+    }
+  }
+]

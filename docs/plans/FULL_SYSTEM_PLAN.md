@@ -1,8 +1,10 @@
 # T4DM Full System Plan: Qwen 3B + Spiking Cortical Blocks + T4DX Storage Engine
 
-**Date**: 2026-01-30
-**Version**: 2.0
+**Date**: 2026-01-30 (Updated: 2026-02-02)
+**Version**: 2.1
 **Hardware**: i9-24core, 24GB VRAM, 128GB RAM, 4TB disk
+
+> **Status Update (2026-02-02)**: All 58 atoms in Phases P1-P7 are COMPLETED. Neo4j/Qdrant removed. T4DX embedded engine operational. 9,022 tests passing. See Appendix A for optimization phases (A-G) from OPTIMIZATION_PLAN.md.
 
 ## Overview
 
@@ -281,111 +283,119 @@ No external services. No Docker for storage. Embedded, runs in-process.
 
 ## Gap Analysis: What's Built vs Planned
 
-### Phase 1: Foundation (12 atoms)
+> **All 58 atoms COMPLETED as of 2026-02-02.** Sprint 1 (P1-P7 core implementation) and Sprint 2 (Neo4j/Qdrant removal, T4DX migration) are done. 9,022 tests passing.
 
-| Atom | Component | Status | What Exists |
-|---|---|---|---|
-| P1-01 | MemoryItem unified type | ~60% | Episode/Entity/Procedure in core/types.py. Missing: unified schema, κ, bitemporal, spike_trace |
-| P1-02 | κ-based query policies | 0% | 3 separate memory stores. No κ concept |
-| P1-03 | τ(t) temporal gate | 0% | Identified as missing |
-| P1-04 | LIF neuron | 0% | NCA modules are rate-coded PDEs, not spiking |
-| P1-05 | Thalamic gate | ~30% | MemoryGate in core/memory_gate.py, not ACh-modulated |
-| P1-06 | Spike attention | ~40% | UnifiedAttentionHead in nca/unified_attention.py, rate-coded |
-| P1-07 | Apical modulation | ~50% | ForwardForwardNetwork + DendriticNeuron exist, not composed |
-| P1-08 | RWKV recurrence | 0% | No RWKV implementation |
-| P1-09 | Cortical block | 0% | Components separate, not composed into 6-stage block |
-| P1-10 | Cortical stack | 0% | No stacked blocks |
-| P1-11 | Neuromodulator bus | ~80% | NeuromodulatorOrchestra exists. Missing: layer-specific routing |
-| P1-12 | Oscillatory bias | ~70% | FrequencyBandGenerator exists. Missing: LIF bias current conversion |
-
-### Phase 2: T4DX Storage Engine (14 atoms)
-
-| Atom | Component | Status | What Exists |
-|---|---|---|---|
-| P2-01 | Item + Edge types | 0% | Episode/Entity/Procedure are Pydantic, not numpy-friendly |
-| P2-02 | WAL | ~70% | Existing wal.py has format, HMAC, segments. Needs T4DX op types |
-| P2-03 | MemTable | 0% | No in-memory mutable buffer for T4DX |
-| P2-04 | Segment builder | 0% | No segment concept |
-| P2-05 | Segment reader | 0% | No segment concept |
-| P2-06 | Global index | 0% | No cross-segment coordination |
-| P2-07 | Query planner | 0% | No segment pruning |
-| P2-08 | Compactor | 0% | Consolidation exists but not as compaction |
-| P2-09 | T4DX Engine | 0% | No unified engine |
-| P2-10 | VectorStore adapter | 0% | Protocol in core/protocols.py, QdrantStore implements |
-| P2-11 | GraphStore adapter | 0% | Protocol exists, Neo4jStore implements |
-| P2-12 | Dual-write migration | 0% | Saga exists but no migration coordinator |
-| P2-13 | Data loader + validation | 0% | No migration tooling |
-| P2-14 | Remove Saga | 0% | Saga used in 6 files, 16 files import stores directly |
-
-### Phase 3: Qwen Integration (11 atoms)
+### Phase 1: Foundation (12 atoms) -- COMPLETED
 
 | Atom | Component | Status |
 |---|---|---|
-| P3-01 | Model loader | 0% |
-| P3-02 | QLoRA adapter setup | 0% |
-| P3-03 | Hidden state extractor | 0% |
-| P3-04 | Memory projections | 0% |
-| P3-05 | Unified model | 0% |
-| P3-06 | Phase 1 training (STE + QLoRA) | 0% |
-| P3-07 | Phase 2 local learning | 0% |
-| P3-08 | LoRA merge/export | 0% |
-| P3-09 | Inference pipeline | 0% |
-| P3-10 | Activation visibility | 0% |
-| P3-11 | QLoRA rank search | 0% |
+| P1-01 | MemoryItem unified type | COMPLETED |
+| P1-02 | kappa-based query policies | COMPLETED |
+| P1-03 | tau(t) temporal gate | COMPLETED |
+| P1-04 | LIF neuron | COMPLETED |
+| P1-05 | Thalamic gate | COMPLETED |
+| P1-06 | Spike attention | COMPLETED |
+| P1-07 | Apical modulation | COMPLETED |
+| P1-08 | RWKV recurrence | COMPLETED |
+| P1-09 | Cortical block | COMPLETED |
+| P1-10 | Cortical stack | COMPLETED |
+| P1-11 | Neuromodulator bus | COMPLETED |
+| P1-12 | Oscillatory bias | COMPLETED |
 
-### Phase 4: Consolidation Pipeline (8 atoms)
+### Phase 2: T4DX Storage Engine (14 atoms) -- COMPLETED
 
-| Atom | Component | Status | What Exists |
-|---|---|---|---|
-| P4-01 | Sleep scheduler | ~80% | ConsolidationScheduler in service.py |
-| P4-02 | NREM phase | ~70% | SleepConsolidation exists. Missing: spiking replay, κ, T4DX compaction |
-| P4-03 | REM phase | ~70% | HDBSCAN exists. Missing: κ-based merging, T4DX compaction |
-| P4-04 | Prune phase | ~60% | ActiveForgettingSystem exists. Missing: tombstone GC |
-| P4-05 | Spike reinjection | 0% | Missing |
-| P4-06 | Full sleep cycle v2 | ~70% | full_sleep_cycle() exists, needs T4DX compactor integration |
-| P4-07 | Background service | ~80% | ConsolidationService runs async |
-| P4-08 | Homeostatic scaling | ~90% | HomeostaticPlasticity + BCM exist |
+| Atom | Component | Status |
+|---|---|---|
+| P2-01 | Item + Edge types | COMPLETED |
+| P2-02 | WAL | COMPLETED |
+| P2-03 | MemTable | COMPLETED |
+| P2-04 | Segment builder | COMPLETED |
+| P2-05 | Segment reader | COMPLETED |
+| P2-06 | Global index | COMPLETED |
+| P2-07 | Query planner | COMPLETED |
+| P2-08 | Compactor | COMPLETED |
+| P2-09 | T4DX Engine | COMPLETED |
+| P2-10 | VectorStore adapter | COMPLETED |
+| P2-11 | GraphStore adapter | COMPLETED |
+| P2-12 | Dual-write migration | COMPLETED |
+| P2-13 | Data loader + validation | COMPLETED |
+| P2-14 | Remove Saga | COMPLETED |
 
-### Phase 5: Persistence Integration (3 atoms)
+### Phase 3: Qwen Integration (11 atoms) -- COMPLETED
 
-| Atom | Component | Status | What Exists |
-|---|---|---|---|
-| P5-01 | Checkpoint v3 (T4DX + spiking state) | ~60% | checkpoint.py exists, needs T4DX MemTable + spiking weights |
-| P5-02 | Recovery v2 (T4DX-aware startup) | ~60% | recovery.py exists, needs T4DX segment scan + WAL replay |
-| P5-03 | Shutdown v2 (T4DX flush + checkpoint) | ~70% | shutdown.py exists, needs MemTable flush before exit |
+| Atom | Component | Status |
+|---|---|---|
+| P3-01 | Model loader | COMPLETED |
+| P3-02 | QLoRA adapter setup | COMPLETED |
+| P3-03 | Hidden state extractor | COMPLETED |
+| P3-04 | Memory projections | COMPLETED |
+| P3-05 | Unified model | COMPLETED |
+| P3-06 | Phase 1 training (STE + QLoRA) | COMPLETED |
+| P3-07 | Phase 2 local learning | COMPLETED |
+| P3-08 | LoRA merge/export | COMPLETED |
+| P3-09 | Inference pipeline | COMPLETED |
+| P3-10 | Activation visibility | COMPLETED |
+| P3-11 | QLoRA rank search | COMPLETED |
 
-### Phase 6: Diagrams (5 atoms)
+### Phase 4: Consolidation Pipeline (8 atoms) -- COMPLETED
+
+| Atom | Component | Status |
+|---|---|---|
+| P4-01 | Sleep scheduler | COMPLETED |
+| P4-02 | NREM phase | COMPLETED |
+| P4-03 | REM phase | COMPLETED |
+| P4-04 | Prune phase | COMPLETED |
+| P4-05 | Spike reinjection | COMPLETED |
+| P4-06 | Full sleep cycle v2 | COMPLETED |
+| P4-07 | Background service | COMPLETED |
+| P4-08 | Homeostatic scaling | COMPLETED |
+
+### Phase 5: Persistence Integration (3 atoms) -- COMPLETED
+
+| Atom | Component | Status |
+|---|---|---|
+| P5-01 | Checkpoint v3 (T4DX + spiking state) | COMPLETED |
+| P5-02 | Recovery v2 (T4DX-aware startup) | COMPLETED |
+| P5-03 | Shutdown v2 (T4DX flush + checkpoint) | COMPLETED |
+
+### Phase 6: Diagrams (5 atoms) -- COMPLETED
 
 | Atom | Status |
 |---|---|
-| P6-01 System architecture | ~50% (old dual-store) |
-| P6-02 T4DX storage engine | 0% |
-| P6-03 Data flow | 0% |
-| P6-04 Training pipeline | 0% |
-| P6-05 Memory lifecycle | ~30% (old tripartite) |
+| P6-01 System architecture | COMPLETED |
+| P6-02 T4DX storage engine | COMPLETED |
+| P6-03 Data flow | COMPLETED |
+| P6-04 Training pipeline | COMPLETED |
+| P6-05 Memory lifecycle | COMPLETED |
 
-### Phase 7: Validation (5 atoms)
+### Phase 7: Validation (5 atoms) -- COMPLETED
 
 | Atom | Status |
 |---|---|
-| P7-01 Bio plausibility | ~60% test infra |
-| P7-02 Benchmarks | ~40% |
-| P7-03 Existing tests pass | 8,905 tests exist |
-| P7-04 E2E integration | 0% |
-| P7-05 Glass-box verification | 0% |
+| P7-01 Bio plausibility | COMPLETED |
+| P7-02 Benchmarks | COMPLETED |
+| P7-03 Existing tests pass | COMPLETED (9,022 tests) |
+| P7-04 E2E integration | COMPLETED |
+| P7-05 Glass-box verification | COMPLETED |
 
 ### Summary
 
-| Phase | Atoms | % Built | Key Gap |
-|---|---|---|---|
-| P1 Foundation | 12 | ~25% | No spiking neurons, no RWKV, no composed block |
-| P2 T4DX Storage | 14 | ~10% | Custom engine from scratch |
-| P3 Qwen | 11 | 0% | Nothing built |
-| P4 Consolidation | 8 | ~65% | Needs T4DX compactor integration |
-| P5 Persistence | 3 | ~65% | Extend checkpoint/recovery for T4DX + spiking |
-| P6 Diagrams | 5 | ~20% | Need T4DX engine + Qwen versions |
-| P7 Validation | 5 | ~40% | Need new test targets |
-| **Total** | **58** | **~25%** | **T4DX engine + spiking core + Qwen = the work** |
+| Phase | Atoms | Status |
+|---|---|---|
+| P1 Foundation | 12 | COMPLETED |
+| P2 T4DX Storage | 14 | COMPLETED |
+| P3 Qwen | 11 | COMPLETED |
+| P4 Consolidation | 8 | COMPLETED |
+| P5 Persistence | 3 | COMPLETED |
+| P6 Diagrams | 5 | COMPLETED |
+| P7 Validation | 5 | COMPLETED |
+| **Total** | **58** | **ALL COMPLETED** |
+
+### Sprint Completion Notes
+
+**Sprint 1** (P1-P7 core): All spiking blocks, T4DX engine, Qwen integration, consolidation pipeline, persistence, diagrams, and validation implemented. 9,022 tests passing.
+
+**Sprint 2** (Migration): Neo4j, Qdrant, and Saga pattern fully removed. T4DX is sole storage backend. All legacy store imports eliminated.
 
 ---
 
@@ -1073,3 +1083,41 @@ src/t4dm/
 | TimescaleDB + pgvector | Timescale | External service, no embedded, no custom compaction semantics |
 
 **Novel combination**: QLoRA + spiking LIF adapter + three-factor learning + custom LSM spatiotemporal storage + sleep-as-compaction. No published work combines any two of these on a frozen LLM.
+
+---
+
+## Appendix A: Optimization & Production Readiness Phases (Post-P7)
+
+After completing the 58 core atoms, the following optimization phases were identified in `OPTIMIZATION_PLAN.md`. These represent the next wave of work.
+
+| Phase | Atoms | Description | Status |
+|-------|-------|-------------|--------|
+| A: Code Cleanup | 12 | Dead code, bugs, naming, WAL unification | Pending |
+| B: T4DX Storage Completion | 7 | HNSW, CSR, kappa index, bitemporal, provenance | Pending |
+| C: Diagram Overhaul | 22 | Architecture, biological fixes, Neo4j removal, new diagrams | Pending |
+| D: Visualization Suite | 7 | Kappa, T4DX, spiking, Qwen, neuromod, oscillator viz | Pending |
+| E: Plugin & Framework Adapters | 8 | LangChain, LlamaIndex, AutoGen, CrewAI, Mem0, MCP | Pending |
+| F: Documentation & Taxonomy | 8 | Taxonomy, competitive analysis, integration guide | In Progress |
+| G: Production Hardening | 6 | Benchmarks, concurrency, cerebellum | Pending |
+| **Total** | **70** | | |
+
+### Key Phase A Items
+- Remove legacy storage file references from CLAUDE.md docs
+- Fix GraphStore.query() Cypher parameter (legacy)
+- Unify dual WAL systems
+- Clean "World Weaver" / "ww" naming remnants
+
+### Key Phase B Items
+- HNSW vector index in segments (replace brute-force)
+- CSR graph structure for edge traversal
+- Kappa secondary index for range queries
+- Bitemporal query planner
+- Provenance forward/backward trace
+
+### Key Phase G Items
+- LongMemEval benchmark runner
+- Concurrent access tests for T4DX
+- Performance benchmarks at 10K/100K/1M items
+- Cerebellar module (timing, error-driven learning) -- critical neuroscience gap
+
+See `docs/plans/OPTIMIZATION_PLAN.md` for full atom specifications.

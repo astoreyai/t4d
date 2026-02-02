@@ -117,13 +117,13 @@ class WorldWeaverMCPServer:
             await self.initialize()
 
         handlers = {
-            "ww_store": self._handle_store,
-            "ww_recall": self._handle_recall,
-            "ww_learn_outcome": self._handle_learn_outcome,
-            "ww_consolidate": self._handle_consolidate,
-            "ww_get_context": self._handle_get_context,
-            "ww_entity": self._handle_entity,
-            "ww_skill": self._handle_skill,
+            "t4dm_store": self._handle_store,
+            "t4dm_search": self._handle_recall,
+            "t4dm_learn": self._handle_learn_outcome,
+            "t4dm_consolidate": self._handle_consolidate,
+            "t4dm_context": self._handle_get_context,
+            "t4dm_entity": self._handle_entity,
+            "t4dm_skill": self._handle_skill,
         }
 
         handler = handlers.get(name)
@@ -266,7 +266,7 @@ class WorldWeaverMCPServer:
                     }
                     for m in memories
                 ],
-                "hint": "Use ww_learn_outcome with this task_id after completing your task",
+                "hint": "Use t4dm_learn with this task_id after completing your task",
             },
         )
 

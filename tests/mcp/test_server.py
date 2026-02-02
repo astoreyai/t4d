@@ -198,7 +198,7 @@ class TestMCPToolHandlers:
 
     @pytest.mark.asyncio
     async def test_handle_store(self, mcp_server, mock_episode):
-        """Test ww_store tool."""
+        """Test t4dm_store tool."""
         with patch("t4dm.mcp.server.AgentMemoryClient") as MockClient:
             mock_instance = AsyncMock()
             mock_instance.store_experience.return_value = mock_episode
@@ -207,7 +207,7 @@ class TestMCPToolHandlers:
             await mcp_server.initialize()
 
             result = await mcp_server.handle_call_tool(
-                "ww_store",
+                "t4dm_store",
                 {"content": "Test content", "outcome": "success"},
             )
 
@@ -217,20 +217,20 @@ class TestMCPToolHandlers:
 
     @pytest.mark.asyncio
     async def test_handle_store_missing_content(self, mcp_server):
-        """Test ww_store requires content."""
+        """Test t4dm_store requires content."""
         with patch("t4dm.mcp.server.AgentMemoryClient") as MockClient:
             mock_instance = AsyncMock()
             MockClient.return_value = mock_instance
 
             await mcp_server.initialize()
 
-            result = await mcp_server.handle_call_tool("ww_store", {})
+            result = await mcp_server.handle_call_tool("t4dm_store", {})
 
             assert result["isError"] is True
 
     @pytest.mark.asyncio
     async def test_handle_recall(self, mcp_server, mock_episode):
-        """Test ww_recall tool."""
+        """Test t4dm_search tool."""
         with patch("t4dm.mcp.server.AgentMemoryClient") as MockClient:
             mock_instance = AsyncMock()
             mock_instance.retrieve_for_task.return_value = [
@@ -241,7 +241,7 @@ class TestMCPToolHandlers:
             await mcp_server.initialize()
 
             result = await mcp_server.handle_call_tool(
-                "ww_recall",
+                "t4dm_search",
                 {"query": "Python patterns"},
             )
 
@@ -251,20 +251,20 @@ class TestMCPToolHandlers:
 
     @pytest.mark.asyncio
     async def test_handle_recall_missing_query(self, mcp_server):
-        """Test ww_recall requires query."""
+        """Test t4dm_search requires query."""
         with patch("t4dm.mcp.server.AgentMemoryClient") as MockClient:
             mock_instance = AsyncMock()
             MockClient.return_value = mock_instance
 
             await mcp_server.initialize()
 
-            result = await mcp_server.handle_call_tool("ww_recall", {})
+            result = await mcp_server.handle_call_tool("t4dm_search", {})
 
             assert result["isError"] is True
 
     @pytest.mark.asyncio
     async def test_handle_learn_outcome(self, mcp_server):
-        """Test ww_learn_outcome tool."""
+        """Test t4dm_learn tool."""
         with patch("t4dm.mcp.server.AgentMemoryClient") as MockClient:
             mock_instance = AsyncMock()
             mock_instance.report_task_outcome.return_value = MagicMock(
@@ -277,7 +277,7 @@ class TestMCPToolHandlers:
             await mcp_server.initialize()
 
             result = await mcp_server.handle_call_tool(
-                "ww_learn_outcome",
+                "t4dm_learn",
                 {"task_id": "task-123", "success": True},
             )
 
@@ -285,7 +285,7 @@ class TestMCPToolHandlers:
 
     @pytest.mark.asyncio
     async def test_handle_learn_outcome_missing_task_id(self, mcp_server):
-        """Test ww_learn_outcome requires task_id."""
+        """Test t4dm_learn requires task_id."""
         with patch("t4dm.mcp.server.AgentMemoryClient") as MockClient:
             mock_instance = AsyncMock()
             MockClient.return_value = mock_instance
@@ -293,7 +293,7 @@ class TestMCPToolHandlers:
             await mcp_server.initialize()
 
             result = await mcp_server.handle_call_tool(
-                "ww_learn_outcome",
+                "t4dm_learn",
                 {"success": True},
             )
 
@@ -301,7 +301,7 @@ class TestMCPToolHandlers:
 
     @pytest.mark.asyncio
     async def test_handle_consolidate(self, mcp_server):
-        """Test ww_consolidate tool."""
+        """Test t4dm_consolidate tool."""
         with patch("t4dm.mcp.server.AgentMemoryClient") as MockClient:
             mock_instance = AsyncMock()
             mock_instance.trigger_consolidation.return_value = {"status": "complete"}
@@ -310,7 +310,7 @@ class TestMCPToolHandlers:
             await mcp_server.initialize()
 
             result = await mcp_server.handle_call_tool(
-                "ww_consolidate",
+                "t4dm_consolidate",
                 {"mode": "deep"},
             )
 
@@ -319,7 +319,7 @@ class TestMCPToolHandlers:
 
     @pytest.mark.asyncio
     async def test_handle_get_context(self, mcp_server, mock_episode):
-        """Test ww_get_context tool."""
+        """Test t4dm_context tool."""
         with patch("t4dm.mcp.server.AgentMemoryClient") as MockClient:
             mock_instance = AsyncMock()
             mock_instance.get_stats.return_value = {"total_retrievals": 5}
@@ -331,7 +331,7 @@ class TestMCPToolHandlers:
             await mcp_server.initialize()
 
             result = await mcp_server.handle_call_tool(
-                "ww_get_context",
+                "t4dm_context",
                 {"include_stats": True, "include_recent": True},
             )
 
@@ -421,7 +421,7 @@ class TestHandleRequest:
                 "id": 3,
                 "method": "tools/call",
                 "params": {
-                    "name": "ww_store",
+                    "name": "t4dm_store",
                     "arguments": {"content": "Test"},
                 },
             }

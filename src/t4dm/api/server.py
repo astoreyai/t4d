@@ -367,6 +367,7 @@ app.add_middleware(RateLimitMiddleware, rate=100, burst=200)
 
 # Import and include routers
 from t4dm.api.routes import (
+    compat_router,
     config_router,
     dream_router,
     entities_router,
@@ -396,6 +397,9 @@ app.include_router(explorer_router, prefix="/api/v1/demo/explorer", tags=["Demo:
 app.include_router(dream_router, prefix="/api/v1/demo/dream", tags=["Demo: Dream Viewer"])
 app.include_router(nt_router, prefix="/api/v1/demo/nt", tags=["Demo: NT Dashboard"])
 app.include_router(learning_router, prefix="/api/v1/demo/learning", tags=["Demo: Learning Trace"])
+
+# Mem0-compatible API
+app.include_router(compat_router, tags=["Mem0 Compatibility"])
 
 # Include WebSocket routes
 try:
