@@ -11,7 +11,10 @@ from uuid import UUID
 
 
 class EdgeType(str, Enum):
-    """Edge relationship types stored in T4DX."""
+    """Edge relationship types stored in T4DX.
+
+    Maps all Neo4j relationship types from the legacy store.
+    """
 
     USES = "USES"
     PRODUCES = "PRODUCES"
@@ -24,7 +27,14 @@ class EdgeType(str, Enum):
     CONSOLIDATED_INTO = "CONSOLIDATED_INTO"
     SOURCE_OF = "SOURCE_OF"
     SEQUENCE = "SEQUENCE"
-    TEMPORAL = "TEMPORAL"
+    TEMPORAL_BEFORE = "TEMPORAL_BEFORE"
+    TEMPORAL_AFTER = "TEMPORAL_AFTER"
+    MERGED_FROM = "MERGED_FROM"
+    SUPERSEDES = "SUPERSEDES"
+    RELATES_TO = "RELATES_TO"
+    HAS_CONTEXT = "HAS_CONTEXT"
+    DERIVED_FROM = "DERIVED_FROM"
+    DEPENDS_ON = "DEPENDS_ON"
 
 
 @dataclass(slots=True)
@@ -47,6 +57,8 @@ class ItemRecord:
     access_count: int
     session_id: str | None
     metadata: dict[str, Any] = field(default_factory=dict)
+    spike_trace: dict[str, Any] | None = None
+    graph_delta: dict[str, Any] | None = None
 
     # --- UUID helpers ---
 
@@ -77,6 +89,8 @@ class ItemRecord:
             access_count=mi.access_count,
             session_id=mi.session_id,
             metadata=dict(mi.metadata),
+            spike_trace=dict(mi.spike_trace) if mi.spike_trace else None,
+            graph_delta=dict(mi.graph_delta) if mi.graph_delta else None,
         )
 
     def to_memory_item(self) -> Any:
@@ -101,6 +115,8 @@ class ItemRecord:
             access_count=self.access_count,
             session_id=self.session_id,
             metadata=dict(self.metadata),
+            spike_trace=dict(self.spike_trace) if self.spike_trace else None,
+            graph_delta=dict(self.graph_delta) if self.graph_delta else None,
         )
 
     # --- Serialisation (JSON-safe dicts) ---
@@ -120,6 +136,8 @@ class ItemRecord:
             "access_count": self.access_count,
             "session_id": self.session_id,
             "metadata": self.metadata,
+            "spike_trace": self.spike_trace,
+            "graph_delta": self.graph_delta,
         }
 
     @classmethod
@@ -138,6 +156,8 @@ class ItemRecord:
             access_count=d["access_count"],
             session_id=d.get("session_id"),
             metadata=d.get("metadata", {}),
+            spike_trace=d.get("spike_trace"),
+            graph_delta=d.get("graph_delta"),
         )
 
 
@@ -149,6 +169,7 @@ class EdgeRecord:
     target_id: bytes  # 16-byte UUID
     edge_type: str
     weight: float = 0.1
+    created_at: float = 0.0  # unix timestamp
     metadata: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -157,6 +178,7 @@ class EdgeRecord:
             "target_id": self.target_id.hex(),
             "edge_type": self.edge_type,
             "weight": self.weight,
+            "created_at": self.created_at,
             "metadata": self.metadata,
         }
 
@@ -167,6 +189,7 @@ class EdgeRecord:
             target_id=bytes.fromhex(d["target_id"]),
             edge_type=d["edge_type"],
             weight=d.get("weight", 0.1),
+            created_at=d.get("created_at", 0.0),
             metadata=d.get("metadata", {}),
         )
 

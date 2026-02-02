@@ -45,6 +45,9 @@ class MemoryItem(BaseModel):
     session_id: str | None = None
     metadata: dict[str, Any] = Field(default_factory=dict)
 
+    spike_trace: dict[str, Any] | None = None
+    graph_delta: dict[str, Any] | None = None
+
     @classmethod
     def from_episode(cls, ep: Episode) -> MemoryItem:
         """Convert an Episode to a MemoryItem (κ near 0)."""

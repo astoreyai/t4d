@@ -45,6 +45,22 @@ class TestMemoryItem:
         with pytest.raises(ValidationError):
             MemoryItem(content="")
 
+    def test_spike_trace_and_graph_delta_default_none(self):
+        item = MemoryItem(content="hello")
+        assert item.spike_trace is None
+        assert item.graph_delta is None
+
+    def test_spike_trace_and_graph_delta_round_trip(self):
+        trace = {"neuron_ids": [1, 2, 3], "firing_rate": 0.7}
+        delta = {"added_edges": [("a", "b")], "removed_edges": []}
+        item = MemoryItem(content="x", spike_trace=trace, graph_delta=delta)
+        dumped = item.model_dump()
+        assert dumped["spike_trace"] == trace
+        assert dumped["graph_delta"] == delta
+        restored = MemoryItem.model_validate(dumped)
+        assert restored.spike_trace == trace
+        assert restored.graph_delta == delta
+
 
 class TestFromEpisode:
     @pytest.fixture
