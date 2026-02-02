@@ -1,7 +1,7 @@
 # Citation Verification Report: World Weaver IEEE Paper
 
 **Date**: 2025-12-05
-**Document**: `/mnt/projects/ww/docs/world_weaver_final.tex`
+**Document**: `/mnt/projects/t4d/t4dm/docs/world_weaver_final.tex`
 **Total Citations**: 59
 **Prepared For**: PhD Dissertation Submission - IEEE Transactions on Artificial Intelligence
 
@@ -340,7 +340,7 @@ arXiv preprint arXiv:2310.08560, 2023.
 5. **CITATION_QUICK_REFERENCE.md** - One-page quick reference
 6. **citation_verification_results.pkl** - Machine-readable verification data
 
-**All files located in**: `/mnt/projects/ww/docs/`
+**All files located in**: `/mnt/projects/t4d/t4dm/docs/`
 
 ---
 

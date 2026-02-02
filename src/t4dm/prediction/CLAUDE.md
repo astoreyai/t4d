@@ -1,5 +1,5 @@
 # Prediction
-**Path**: `/mnt/projects/t4d/t4dm/src/ww/prediction/`
+**Path**: `/mnt/projects/t4d/t4dm/src/t4dm/prediction/`
 
 ## What
 JEPA-style latent prediction, hierarchical multi-timescale prediction, active inference, and predictive coding hierarchy inspired by DreamerV3, Friston's Free Energy Principle, and Rao & Ballard.

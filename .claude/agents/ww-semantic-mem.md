@@ -75,4 +75,4 @@ When entities are co-retrieved:
 1. Apply Hebbian strengthening to their connections
 2. Update coAccessCount and lastCoAccess
 
-Refer to `/mnt/projects/ww/skills/memory/ww-semantic-mem/SKILL.md` for complete specification.
+Refer to `/mnt/projects/t4d/t4dm/skills/memory/ww-semantic-mem/SKILL.md` for complete specification.

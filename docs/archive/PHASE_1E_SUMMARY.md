@@ -49,12 +49,12 @@ The decoder output layer doesn't match the embedding_dim (1024).
    - Updated assertions to handle float comparisons properly
    - Added proper mock semantic memory
 
-2. **`src/ww/learning/vae_training.py`**:
+2. **`src/t4dm/learning/vae_training.py`**:
    - Complete rewrite of VAEReplayTrainer class
    - Proper handling of dict return from train_step()
    - Robust buffer management and statistics
 
-3. **`src/ww/learning/vae_generator.py`**:
+3. **`src/t4dm/learning/vae_generator.py`**:
    - Fixed train_step() to accept both list and ndarray inputs
    - Removed unsafe array truthiness checks
 

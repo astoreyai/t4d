@@ -227,7 +227,7 @@ class DopamineSystem:
         }
 ```
 
-**Integration**: Replace raw reward in `/mnt/projects/ww/src/ww/learning/collector.py` line 914 with RPE from a learned value function.
+**Integration**: Replace raw reward in `/mnt/projects/t4d/t4dm/src/t4dm/learning/collector.py` line 914 with RPE from a learned value function.
 
 ### 1.4 Systems Consolidation (Hippocampus → Neocortex Transfer)
 
@@ -388,7 +388,7 @@ class NeuromodulatorSystem:
 
 ### 2.1 Pattern Separation: Timing is Wrong
 
-**File**: `/mnt/projects/ww/src/ww/memory/pattern_separation.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/pattern_separation.py`
 
 **Issue**: Pattern separation is applied at encoding (line 128-130), but in biology it's applied DURING retrieval in DG before pattern completion in CA3.
 
@@ -435,7 +435,7 @@ class HippocampalCircuit:
 
 ### 2.2 Sleep Consolidation: No REM Integration
 
-**File**: `/mnt/projects/ww/src/ww/consolidation/sleep.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/consolidation/sleep.py`
 
 **Issue**: NREM and REM phases are separate (lines 249-385). In biology, they are integrated cycles with different roles that build on each other.
 
@@ -486,7 +486,7 @@ async def integrated_sleep_cycle(self) -> SleepCycleResult:
 
 ### 2.3 Hebbian Learning: Missing Temporal Asymmetry (STDP)
 
-**File**: `/mnt/projects/ww/src/ww/memory/semantic.py` (lines 436-498)
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/semantic.py` (lines 436-498)
 
 **Issue**: Co-retrieval strengthening is symmetric. In biology, synaptic plasticity is temporally asymmetric (STDP: spike-timing-dependent plasticity).
 
@@ -535,7 +535,7 @@ async def strengthen_with_stdp(
 
 ### 2.4 FSRS Decay: Missing Spacing Effect and Difficulty
 
-**File**: `/mnt/projects/ww/src/ww/memory/episodic.py` (lines 58-61, 851-856)
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic.py` (lines 58-61, 851-856)
 
 **Issue**: FSRS stability is updated on every access uniformly. In biology and optimal spaced repetition, the spacing interval and retrieval difficulty matter.
 
@@ -594,7 +594,7 @@ def update_stability_with_spacing(
 
 ### 3.1 Replace ACT-R Decay with Neural Fatigue Model
 
-**File**: `/mnt/projects/ww/src/ww/memory/semantic.py` (lines 331-369)
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/semantic.py` (lines 331-369)
 
 **Current**: `B = ln(access_count) - decay * ln(time_since_access)`
 
@@ -891,41 +891,41 @@ class ContextualBinding:
 ### Priority 0 (Must-Have, 1-2 months)
 
 1. **Implement Attention Controller**
-   - File: Create `/mnt/projects/ww/src/ww/memory/attention.py`
+   - File: Create `/mnt/projects/t4d/t4dm/src/t4dm/memory/attention.py`
    - Integrate with all retrieval operations
    - Add task context to `recall()` APIs
 
 2. **Add Predictive Model**
-   - File: Create `/mnt/projects/ww/src/ww/learning/predictive_model.py`
+   - File: Create `/mnt/projects/t4d/t4dm/src/t4dm/learning/predictive_model.py`
    - Train on retrieval → outcome pairs
    - Use prediction errors for learning
 
 3. **Fix Dopamine System**
-   - File: Modify `/mnt/projects/ww/src/ww/learning/collector.py`
+   - File: Modify `/mnt/projects/t4d/t4dm/src/t4dm/learning/collector.py`
    - Replace raw rewards with RPE
    - Train value function critic
 
 ### Priority 1 (Important, 2-3 months)
 
 4. **Systems Consolidation**
-   - File: Modify `/mnt/projects/ww/src/ww/consolidation/sleep.py`
+   - File: Modify `/mnt/projects/t4d/t4dm/src/t4dm/consolidation/sleep.py`
    - Add temporal gradients
    - Track hippocampal dependency
 
 5. **Neuromodulation**
-   - File: Create `/mnt/projects/ww/src/ww/memory/neuromodulation.py`
+   - File: Create `/mnt/projects/t4d/t4dm/src/t4dm/memory/neuromodulation.py`
    - ACh encoding/retrieval mode switching
    - NE emotional tagging
 
 ### Priority 2 (Nice-to-Have, 3-4 months)
 
 6. **STDP Temporal Learning**
-   - File: Modify `/mnt/projects/ww/src/ww/memory/semantic.py`
+   - File: Modify `/mnt/projects/t4d/t4dm/src/t4dm/memory/semantic.py`
    - Add temporal ordering to co-retrieval
    - Implement asymmetric strengthening
 
 7. **Theta-Gamma Coupling**
-   - File: Create `/mnt/projects/ww/src/ww/memory/oscillations.py`
+   - File: Create `/mnt/projects/t4d/t4dm/src/t4dm/memory/oscillations.py`
    - Phase-based encoding/retrieval
    - Sequence compression
 

@@ -68,4 +68,4 @@ When scheduling:
 2. Deep consolidation: Full transfer, decay unused connections
 3. Skill consolidation: Optimize across all domains
 
-Refer to `/mnt/projects/ww/skills/memory/ww-consolidate/SKILL.md` for complete specification.
+Refer to `/mnt/projects/t4d/t4dm/skills/memory/ww-consolidate/SKILL.md` for complete specification.

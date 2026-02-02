@@ -571,7 +571,7 @@ The saga pattern ensures transactional consistency across Qdrant and Neo4j with 
 
 CORS (Cross-Origin Resource Sharing) is now configurable via settings for secure API access.
 
-**Settings Location**: `src/ww/settings.py`
+**Settings Location**: `src/t4dm/settings.py`
 
 **Default Configuration**:
 ```python

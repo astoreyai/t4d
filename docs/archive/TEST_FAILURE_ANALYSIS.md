@@ -88,7 +88,7 @@ neo4j.exceptions.ClientError:
 - **Solution Category**: Missing Service (Docker/Neo4j not running)
 
 ### Why Tests Should Pass Without Real Services
-These tests should use the `mock_neo4j_store` and `mock_qdrant_store` fixtures defined in `/mnt/projects/ww/tests/conftest.py`. Instead, they're attempting real connections.
+These tests should use the `mock_neo4j_store` and `mock_qdrant_store` fixtures defined in `/mnt/projects/t4d/t4dm/tests/conftest.py`. Instead, they're attempting real connections.
 
 ---
 
@@ -276,7 +276,7 @@ def test_null_byte_injection():
 ## QUICK WIN FIXES (High Impact, Low Effort)
 
 ### 1. Fix Password in `.env` (CRITICAL - 38 tests)
-**File**: `/mnt/projects/ww/.env`
+**File**: `/mnt/projects/t4d/t4dm/.env`
 **Current**: `WW_NEO4J_PASSWORD=wwpassword`
 **Fix**: Change to: `WW_NEO4J_PASSWORD=Ww@Secure123`
 **Impact**: Unlocks 38+ cascading test failures
@@ -289,8 +289,8 @@ WW_NEO4J_PASSWORD=Ww@Secure123  # Has uppercase, lowercase, digits, special char
 
 ### 2. Update Test Fixtures (MEDIUM - 12 tests)
 **Files**:
-- `/mnt/projects/ww/tests/unit/test_consolidation.py` (lines 71-89)
-- `/mnt/projects/ww/tests/unit/test_episodic.py`
+- `/mnt/projects/t4d/t4dm/tests/unit/test_consolidation.py` (lines 71-89)
+- `/mnt/projects/t4d/t4dm/tests/unit/test_episodic.py`
 
 **Fix**: Update function signatures to accept `timestamp` parameter or remove from test calls
 **Effort**: 15 minutes
@@ -340,8 +340,8 @@ def patch_storage(mock_neo4j_store, mock_qdrant_store, mock_embedding_provider):
 
 ### 4. Fix Response Format Assertions (MEDIUM - 14 tests)
 **Files**:
-- `/mnt/projects/ww/tests/mcp/test_batch_operations.py`
-- `/mnt/projects/ww/tests/mcp/test_cross_memory_search.py`
+- `/mnt/projects/t4d/t4dm/tests/mcp/test_batch_operations.py`
+- `/mnt/projects/t4d/t4dm/tests/mcp/test_cross_memory_search.py`
 
 **Fix**: Update assertions to match actual API response format
 **Effort**: 30 minutes per file
@@ -364,7 +364,7 @@ assert result['count'] > 0
 
 **Issue**: FSRS decay and Hebbian learning convergence formulas need adjustment
 
-**File**: `/mnt/projects/ww/src/ww/memory/episodic.py` (FSRS implementation)
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic.py` (FSRS implementation)
 
 **Tests failing**:
 - `test_fsrs_retrievability_decay_over_time` - Decay rate wrong
@@ -385,9 +385,9 @@ WW_FSRS_RETENTION_TARGET=0.9
 **Issue**: Input validation for XSS, null bytes, rate limiting not implemented
 
 **Files**:
-- `/mnt/projects/ww/src/ww/mcp/validation.py` - Add sanitization
-- `/mnt/projects/ww/src/ww/storage/neo4j_store.py` - Add rate limiting
-- `/mnt/projects/ww/src/ww/mcp/gateway.py` - Enforce validation
+- `/mnt/projects/t4d/t4dm/src/t4dm/mcp/validation.py` - Add sanitization
+- `/mnt/projects/t4d/t4dm/src/t4dm/storage/neo4j_store.py` - Add rate limiting
+- `/mnt/projects/t4d/t4dm/src/t4dm/mcp/gateway.py` - Enforce validation
 
 **Missing Features**:
 1. **XSS Sanitization**: Use `bleach` or `html.escape()` on content
@@ -415,7 +415,7 @@ def validate_content(content: str) -> str:
 
 **Issue**: Tests expect mock responses in wrong format
 
-**File**: `/mnt/projects/ww/tests/conftest.py`
+**File**: `/mnt/projects/t4d/t4dm/tests/conftest.py`
 
 **Fix**: Update mock return values to match actual implementation
 ```python
@@ -468,16 +468,16 @@ async def mock_neo4j_store():
 ### Current Coverage: 76%
 ```
 Most Covered:
-  - src/ww/core/config.py: 99%
-  - src/ww/core/container.py: 94%
-  - src/ww/memory/procedural.py: 97%
-  - src/ww/core/serialization.py: 100%
+  - src/t4dm/core/config.py: 99%
+  - src/t4dm/core/container.py: 94%
+  - src/t4dm/memory/procedural.py: 97%
+  - src/t4dm/core/serialization.py: 100%
 
 Least Covered (Need Tests):
-  - src/ww/hooks/__init__.py: 0%
-  - src/ww/mcp/schema.py: 0%
-  - src/ww/memory/unified.py: 18%
-  - src/ww/observability/health.py: 59%
+  - src/t4dm/hooks/__init__.py: 0%
+  - src/t4dm/mcp/schema.py: 0%
+  - src/t4dm/memory/unified.py: 18%
+  - src/t4dm/observability/health.py: 59%
 ```
 
 **Note**: Some low-coverage areas are tested but excluded by mock patches.

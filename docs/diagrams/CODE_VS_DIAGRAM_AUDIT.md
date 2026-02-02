@@ -5,7 +5,7 @@
 
 ## Executive Summary
 
-This audit verifies whether the T4DM source code at `/mnt/projects/t4d/t4dm/src/ww/` implements the neural pathways and architectures shown in documentation diagrams. Overall finding: **SUBSTANTIAL IMPLEMENTATION WITH SOME GAPS**.
+This audit verifies whether the T4DM source code at `/mnt/projects/t4d/t4dm/src/t4dm/` implements the neural pathways and architectures shown in documentation diagrams. Overall finding: **SUBSTANTIAL IMPLEMENTATION WITH SOME GAPS**.
 
 ### Overall Assessment
 - **Implemented Well**: Neuromodulator systems, encoding layers, three-factor learning, sleep consolidation
@@ -24,7 +24,7 @@ This audit verifies whether the T4DM source code at `/mnt/projects/t4d/t4dm/src/
 ### What Code Implements
 
 #### ✅ DG Pattern Separation EXISTS
-**File**: `src/ww/nca/hippocampus.py:127-200`
+**File**: `src/t4dm/nca/hippocampus.py:127-200`
 ```python
 class DentateGyrusLayer:
     """Dentate Gyrus: Pattern separation via expansion and sparse coding."""
@@ -34,7 +34,7 @@ class DentateGyrusLayer:
     # - Orthogonalization against recent patterns
 ```
 
-**Also**: `src/ww/encoding/sparse.py`
+**Also**: `src/t4dm/encoding/sparse.py`
 ```python
 class SparseEncoder(nn.Module):
     """8x expansion (1024->8192) with k-WTA (2% sparsity)"""
@@ -44,7 +44,7 @@ class SparseEncoder(nn.Module):
 ```
 
 #### ⚠️ CA3 Auto-Association PARTIALLY IMPLEMENTED
-**File**: `src/ww/encoding/attractor.py`
+**File**: `src/t4dm/encoding/attractor.py`
 ```python
 class AttractorNetwork:
     """Hopfield network for associative memory"""
@@ -55,7 +55,7 @@ class AttractorNetwork:
     # - ~0.14N capacity limit
 ```
 
-**File**: `src/ww/encoding/attractor.py:375-487`
+**File**: `src/t4dm/encoding/attractor.py:375-487`
 ```python
 class ModernHopfieldNetwork(AttractorNetwork):
     """Modern Hopfield with exponential energy, increased capacity"""
@@ -67,14 +67,14 @@ class ModernHopfieldNetwork(AttractorNetwork):
 **⚠️ GAP**: No clear evidence this is used as CA3 during *retrieval*. The attractor networks exist but integration with episodic memory recall is not verified in this audit.
 
 #### ✅ CA1 Output Gating EXISTS (partially)
-**File**: `src/ww/nca/hippocampus.py` (CA1Layer class expected around line 300+)
+**File**: `src/t4dm/nca/hippocampus.py` (CA1Layer class expected around line 300+)
 - Code exists but not examined in detail during this audit
 - Novelty detection logic present in `HippocampalState.novelty_score`
 
 #### ❌ MISSING: Direct encoding → hippocampal circuit → retrieval flow
 - The components exist (`DentateGyrusLayer`, `CA3Layer`, `CA1Layer`, `AttractorNetwork`)
-- **GAP**: No clear evidence in `src/ww/memory/episodic.py` or `src/ww/bridges/` that these are wired together for actual memory operations
-- May be present in integration code not examined (e.g., `src/ww/bridges/nca_binding.py`)
+- **GAP**: No clear evidence in `src/t4dm/memory/episodic.py` or `src/t4dm/bridges/` that these are wired together for actual memory operations
+- May be present in integration code not examined (e.g., `src/t4dm/bridges/nca_binding.py`)
 
 ### Discrepancy Summary
 | Feature | Diagram | Code | Gap |
@@ -105,16 +105,16 @@ Diagram shows interactions:
 
 #### ✅ ALL SIX SYSTEMS IMPLEMENTED
 
-**File**: `src/ww/learning/neuromodulators.py:203-696`
+**File**: `src/t4dm/learning/neuromodulators.py:203-696`
 ```python
 class NeuromodulatorOrchestra:
     """Coordinates all neuromodulatory systems"""
     def __init__(self, dopamine, norepinephrine, acetylcholine,
                  serotonin, inhibitory):
-        # All 5 systems present (adenosine is in src/ww/nca/adenosine.py)
+        # All 5 systems present (adenosine is in src/t4dm/nca/adenosine.py)
 ```
 
-**Dopamine**: `src/ww/learning/dopamine.py`
+**Dopamine**: `src/t4dm/learning/dopamine.py`
 ```python
 class DopamineSystem:
     """RPE computation: delta = actual - expected"""
@@ -125,7 +125,7 @@ class DopamineSystem:
     # Lines: 948 total
 ```
 
-**Norepinephrine**: `src/ww/learning/norepinephrine.py`
+**Norepinephrine**: `src/t4dm/learning/norepinephrine.py`
 ```python
 class NorepinephrineSystem:
     """Global arousal and attention modulator"""
@@ -135,7 +135,7 @@ class NorepinephrineSystem:
     # - Gain modulation [0.5, 2.0]
 ```
 
-**Acetylcholine**: `src/ww/learning/acetylcholine.py`
+**Acetylcholine**: `src/t4dm/learning/acetylcholine.py`
 ```python
 class AcetylcholineSystem:
     """Encoding/retrieval mode switch"""
@@ -143,7 +143,7 @@ class AcetylcholineSystem:
     # High ACh -> encoding, Low ACh -> retrieval
 ```
 
-**Serotonin**: `src/ww/learning/serotonin.py`
+**Serotonin**: `src/t4dm/learning/serotonin.py`
 ```python
 class SerotoninSystem:
     """Long-term credit assignment"""
@@ -153,14 +153,14 @@ class SerotoninSystem:
     # - Session-level outcome tracking
 ```
 
-**GABA/Inhibition**: `src/ww/learning/inhibition.py`
+**GABA/Inhibition**: `src/t4dm/learning/inhibition.py`
 ```python
 class InhibitoryNetwork:
     """Lateral inhibition, winner-take-all"""
     # Sparse retrieval via competition
 ```
 
-**Adenosine**: `src/ww/nca/adenosine.py`
+**Adenosine**: `src/t4dm/nca/adenosine.py`
 ```python
 class AdenosineDynamics:
     """Sleep pressure accumulation"""
@@ -170,14 +170,14 @@ class AdenosineDynamics:
 #### ⚠️ INTERACTIONS PARTIALLY IMPLEMENTED
 
 **5-HT → VTA Inhibition**: Not explicitly coded in audit scope
-- `src/ww/nca/vta.py` exists but interaction with raphe not verified
-- `src/ww/nca/raphe.py` exists
+- `src/t4dm/nca/vta.py` exists but interaction with raphe not verified
+- `src/t4dm/nca/raphe.py` exists
 
 **PFC Feedback**: Not verified
-- Would be in `src/ww/nca/connectome.py` or region-specific files
+- Would be in `src/t4dm/nca/connectome.py` or region-specific files
 
 #### ✅ ORCHESTRA COORDINATION EXISTS
-**File**: `src/ww/learning/neuromodulators.py:252-657`
+**File**: `src/t4dm/learning/neuromodulators.py:252-657`
 ```python
 def process_query(self, query_embedding, is_question, explicit_importance):
     """Process query through all systems"""
@@ -217,7 +217,7 @@ def process_outcome(self, memory_outcomes, session_outcome):
 ### What Code Implements
 
 #### ✅ SLEEP PHASES IMPLEMENTED
-**File**: `src/ww/consolidation/sleep.py:62-106`
+**File**: `src/t4dm/consolidation/sleep.py:62-106`
 ```python
 class SleepPhase(Enum):
     NREM = "nrem"
@@ -227,7 +227,7 @@ class SleepPhase(Enum):
 ```
 
 #### ⚠️ SWR FREQUENCY MISMATCH
-**File**: `src/ww/consolidation/sleep.py:147-292`
+**File**: `src/t4dm/consolidation/sleep.py:147-292`
 ```python
 class SharpWaveRipple:
     """SWR generator for compressed memory replay"""
@@ -237,7 +237,7 @@ class SharpWaveRipple:
 
 **⚠️ ISSUE**: Comments say "~100ms high-frequency bursts" but no explicit 150-250 Hz frequency implementation found in this excerpt. The compression factor is correct (10x).
 
-**File**: `src/ww/nca/swr_coupling.py` likely contains frequency constants:
+**File**: `src/t4dm/nca/swr_coupling.py` likely contains frequency constants:
 ```python
 RIPPLE_FREQ_MIN = 150  # Hz (from __init__.py exports)
 RIPPLE_FREQ_MAX = 250  # Hz
@@ -246,7 +246,7 @@ RIPPLE_FREQ_OPTIMAL = 200  # Hz
 This suggests frequencies ARE implemented correctly in NCA layer.
 
 #### ⚠️ SPINDLE-SWR COUPLING
-**File**: `src/ww/nca/sleep_spindles.py` (exported in `__init__.py`)
+**File**: `src/t4dm/nca/sleep_spindles.py` (exported in `__init__.py`)
 ```python
 class SleepSpindleGenerator:
     """Thalamocortical spindles for memory consolidation"""
@@ -261,7 +261,7 @@ class SpindleDeltaCoupler:
 No explicit "exclude procedural from SWR" logic found in `sleep.py` excerpt. May be present in episode selection logic.
 
 #### ✅ REM ABSTRACTION IMPLEMENTED
-**File**: `src/ww/consolidation/sleep.py:122-145`
+**File**: `src/t4dm/consolidation/sleep.py:122-145`
 ```python
 @dataclass
 class AbstractionEvent:
@@ -272,7 +272,7 @@ class AbstractionEvent:
     centroid_embedding: list[float] | None
 ```
 
-**Also**: `src/ww/dreaming/` module
+**Also**: `src/t4dm/dreaming/` module
 ```python
 # dreaming/trajectory.py: DreamingSystem (trajectory generation)
 # dreaming/quality.py: DreamQualityEvaluator
@@ -308,7 +308,7 @@ Where:
 ### What Code Implements
 
 #### ✅ FULLY IMPLEMENTED
-**File**: `src/ww/learning/three_factor.py:108-496`
+**File**: `src/t4dm/learning/three_factor.py:108-496`
 ```python
 class ThreeFactorLearningRule:
     """Unified three-factor learning rule"""
@@ -326,7 +326,7 @@ class ThreeFactorLearningRule:
         """
 ```
 
-**File**: `src/ww/learning/eligibility.py`
+**File**: `src/t4dm/learning/eligibility.py`
 ```python
 class EligibilityTrace:
     """Multi-timescale eligibility traces"""
@@ -334,7 +334,7 @@ class EligibilityTrace:
     # Decay rates, trace accumulation
 ```
 
-**File**: `src/ww/learning/neuromodulators.py:443-496`
+**File**: `src/t4dm/learning/neuromodulators.py:443-496`
 ```python
 def get_learning_params(self, memory_id) -> LearningParams:
     """Get integrated learning parameters"""
@@ -384,16 +384,16 @@ effective_lr = base × eligibility × neuromod_gate × surprise
 ### What Code Implements
 
 #### ⚠️ CA3 PATTERN COMPLETION - UNCLEAR USAGE
-**EXISTS**: `src/ww/encoding/attractor.py` (Hopfield networks)
-**UNCLEAR**: Whether `src/ww/memory/episodic.py` or `src/ww/bridges/` actually calls this during retrieval
+**EXISTS**: `src/t4dm/encoding/attractor.py` (Hopfield networks)
+**UNCLEAR**: Whether `src/t4dm/memory/episodic.py` or `src/t4dm/bridges/` actually calls this during retrieval
 
 Would need to audit:
-- `src/ww/memory/episodic.py` recall methods
-- `src/ww/bridges/` integration code
-- `src/ww/core/memory.py` high-level API
+- `src/t4dm/memory/episodic.py` recall methods
+- `src/t4dm/bridges/` integration code
+- `src/t4dm/core/memory.py` high-level API
 
 #### ✅ RECONSOLIDATION IMPLEMENTED
-**File**: `src/ww/consolidation/lability.py`
+**File**: `src/t4dm/consolidation/lability.py`
 ```python
 class LabilityManager:
     """Protein synthesis gate controlling reconsolidation eligibility"""
@@ -405,7 +405,7 @@ class LabilityPhase(Enum):
     RECONSOLIDATING = "reconsolidating"
 ```
 
-**File**: `src/ww/learning/reconsolidation.py`
+**File**: `src/t4dm/learning/reconsolidation.py`
 ```python
 class ReconsolidationEngine:
     """Memory reconsolidation with dopamine modulation"""
@@ -431,7 +431,7 @@ class ReconsolidationEngine:
 ### What Code Implements
 
 #### ✅ FORWARD-FORWARD IMPLEMENTED
-**File**: `src/ww/nca/forward_forward.py`
+**File**: `src/t4dm/nca/forward_forward.py`
 ```python
 class ForwardForwardLayer:
     """FF layer with goodness-based local learning"""
@@ -444,7 +444,7 @@ class FFPhase(Enum):
     NEGATIVE = "negative"  # Negative examples
 ```
 
-**File**: `src/ww/encoding/ff_encoder.py`
+**File**: `src/t4dm/encoding/ff_encoder.py`
 ```python
 class FFEncoder:
     """Learnable Forward-Forward encoder (Phase 5)"""
@@ -452,7 +452,7 @@ class FFEncoder:
 ```
 
 #### ✅ CAPSULE NETWORKS IMPLEMENTED
-**File**: `src/ww/nca/capsules.py`
+**File**: `src/t4dm/nca/capsules.py`
 ```python
 class CapsuleLayer:
     """Capsule layer with pose matrices"""
@@ -466,7 +466,7 @@ class RoutingType(Enum):
     SELF_ATTENTION = "self_attention"  # Transformer-like
 ```
 
-**File**: `src/ww/nca/pose.py`
+**File**: `src/t4dm/nca/pose.py`
 ```python
 class PoseMatrix:
     """4x4 pose matrix for part transformations"""
@@ -478,7 +478,7 @@ class SemanticDimension(Enum):
     TRANSLATION = "translation"
 ```
 
-**File**: `src/ww/nca/pose_learner.py`
+**File**: `src/t4dm/nca/pose_learner.py`
 ```python
 class PoseDimensionDiscovery:
     """Emergent semantic dimension discovery"""
@@ -501,52 +501,52 @@ class PoseDimensionDiscovery:
 
 ### Found But Not Diagrammed
 
-1. **VAE Generator** (`src/ww/learning/vae_generator.py`, `vae_training.py`)
+1. **VAE Generator** (`src/t4dm/learning/vae_generator.py`, `vae_training.py`)
    - Variational autoencoder for memory generation
    - Used in generative replay
    - **Not in any reviewed diagram**
 
-2. **Glymphatic System** (`src/ww/nca/glymphatic.py`)
+2. **Glymphatic System** (`src/t4dm/nca/glymphatic.py`)
    - Metabolic waste clearance during sleep
    - Biologically detailed
    - **Not in sleep consolidation diagrams**
 
-3. **Spatial Cells** (`src/ww/nca/spatial_cells.py`)
+3. **Spatial Cells** (`src/t4dm/nca/spatial_cells.py`)
    - Place cells and grid cells
    - Cognitive spatial mapping
    - **Not in hippocampal circuit diagrams**
 
-4. **Theta-Gamma Integration** (`src/ww/nca/theta_gamma_integration.py`)
+4. **Theta-Gamma Integration** (`src/t4dm/nca/theta_gamma_integration.py`)
    - Working memory slot binding
    - Phase-amplitude coupling
    - **Not in oscillator diagrams**
 
-5. **Transmission Delays** (`src/ww/nca/delays.py`)
+5. **Transmission Delays** (`src/t4dm/nca/delays.py`)
    - Axonal conduction delays
    - Delay differential equations
    - **Biologically detailed but not diagrammed**
 
-6. **Astrocyte Layer** (`src/ww/nca/astrocyte.py`)
+6. **Astrocyte Layer** (`src/t4dm/nca/astrocyte.py`)
    - Tripartite synapse modulation
    - Glial influence on transmission
    - **Not in neuromodulator diagrams**
 
-7. **Striatal MSN Populations** (`src/ww/nca/striatal_msn.py`)
+7. **Striatal MSN Populations** (`src/t4dm/nca/striatal_msn.py`)
    - D1 (go) / D2 (no-go) pathways
    - Action selection
    - **Not in dopamine system diagrams**
 
-8. **Connectome** (`src/ww/nca/connectome.py`)
+8. **Connectome** (`src/t4dm/nca/connectome.py`)
    - Brain region connectivity graph
    - Projection pathways
    - **Underlying infrastructure, not diagrammed**
 
-9. **Causal Discovery** (`src/ww/learning/causal_discovery.py`)
+9. **Causal Discovery** (`src/t4dm/learning/causal_discovery.py`)
    - Granger causality + transfer entropy
    - Causal graph learning
    - **Not in learning diagrams**
 
-10. **Self-Supervised Credit** (`src/ww/learning/self_supervised.py`)
+10. **Self-Supervised Credit** (`src/t4dm/learning/self_supervised.py`)
     - Credit estimation without explicit outcomes
     - **Not in learning diagrams**
 
@@ -588,15 +588,15 @@ These are **implementation details** that support the high-level architecture. T
 - Module-level integration (e.g., `NeuromodulatorOrchestra`)
 
 ### What Was NOT Audited
-- **High-level memory API** (`src/ww/core/memory.py`, `src/ww/memory_api.py`)
-- **Bridge modules** (`src/ww/bridges/`) - critical for system integration
+- **High-level memory API** (`src/t4dm/core/memory.py`, `src/t4dm/memory_api.py`)
+- **Bridge modules** (`src/t4dm/bridges/`) - critical for system integration
 - **Actual recall flow** (query → encoding → hippocampus → retrieval → output)
 - **Cross-module data flow** (how embeddings flow from memory stores to NCA layers)
 
 ### Risk Assessment
 **MEDIUM RISK**: Components exist but end-to-end integration not verified.
 
-**Recommendation**: Audit `src/ww/bridges/`, `src/ww/memory/episodic.py`, and trace a single recall operation to verify:
+**Recommendation**: Audit `src/t4dm/bridges/`, `src/t4dm/memory/episodic.py`, and trace a single recall operation to verify:
 - DG sparse encoding is applied
 - CA3 pattern completion is invoked
 - CA1 novelty detection influences encoding/retrieval decision
@@ -675,9 +675,9 @@ Documentation claims: **8,905 tests passing with 81% coverage**
 
 ### For Code Verification
 1. **Audit Integration Layer**:
-   - `src/ww/bridges/` (all files)
-   - `src/ww/memory/episodic.py` recall methods
-   - `src/ww/core/memory.py` high-level API
+   - `src/t4dm/bridges/` (all files)
+   - `src/t4dm/memory/episodic.py` recall methods
+   - `src/t4dm/core/memory.py` high-level API
 
 2. **Trace End-to-End Operation**:
    - Start: `memory.recall("query")`
@@ -685,8 +685,8 @@ Documentation claims: **8,905 tests passing with 81% coverage**
    - Verify: DG/CA3/CA1 are actually invoked
 
 3. **Verify Cross-System Interactions**:
-   - `src/ww/nca/raphe.py` ↔ `src/ww/nca/vta.py` (5-HT → DA inhibition)
-   - PFC module existence (may be in `src/ww/nca/connectome.py` regions)
+   - `src/t4dm/nca/raphe.py` ↔ `src/t4dm/nca/vta.py` (5-HT → DA inhibition)
+   - PFC module existence (may be in `src/t4dm/nca/connectome.py` regions)
 
 ### For Testing
 1. Review `tests/integration/` for cross-module tests
@@ -714,7 +714,7 @@ Documentation claims: **8,905 tests passing with 81% coverage**
 
 **Confidence Level**: **HIGH** for individual components, **MEDIUM** for end-to-end integration.
 
-**Next Steps**: Audit `src/ww/bridges/`, trace a recall operation, and verify the integration tests confirm cross-module data flow.
+**Next Steps**: Audit `src/t4dm/bridges/`, trace a recall operation, and verify the integration tests confirm cross-module data flow.
 
 ---
 

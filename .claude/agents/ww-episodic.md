@@ -67,4 +67,4 @@ When retrieving:
 3. Update access counts for retrieved episodes
 4. Return ranked results with scores
 
-Refer to `/mnt/projects/ww/skills/memory/ww-episodic/SKILL.md` for complete specification.
+Refer to `/mnt/projects/t4d/t4dm/skills/memory/ww-episodic/SKILL.md` for complete specification.

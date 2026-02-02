@@ -11,7 +11,7 @@
 **Effort**: 4 hours | **Risk**: HIGH
 
 ```python
-# Add to src/ww/core/config.py
+# Add to src/t4dm/core/config.py
 api_key: Optional[str] = Field(default=None, description="API key for auth")
 
 @field_validator("api_key")
@@ -26,7 +26,7 @@ def validate_api_key_production(cls, v: Optional[str]) -> Optional[str]:
 ```
 
 ```python
-# Add to src/ww/api/deps.py
+# Add to src/t4dm/api/deps.py
 async def verify_api_key(x_api_key: Annotated[Optional[str], Header()] = None):
     settings = get_settings()
     if settings.api_key:
@@ -35,9 +35,9 @@ async def verify_api_key(x_api_key: Annotated[Optional[str], Header()] = None):
 ```
 
 **Files to modify**:
-- `src/ww/core/config.py` (add field + validator)
-- `src/ww/api/deps.py` (add verify_api_key dependency)
-- `src/ww/api/server.py` (add to router dependencies)
+- `src/t4dm/core/config.py` (add field + validator)
+- `src/t4dm/api/deps.py` (add verify_api_key dependency)
+- `src/t4dm/api/server.py` (add to router dependencies)
 - `.env.example` (add WW_API_KEY with generation instructions)
 
 **Testing**:
@@ -55,7 +55,7 @@ curl -H "X-API-Key: <valid>" http://localhost:8765/api/v1/health  # Should 200
 ### 2. Sanitize API Error Messages (H-2)
 **Effort**: 3 hours | **Risk**: HIGH
 
-**Create error utilities** (`src/ww/api/errors.py`):
+**Create error utilities** (`src/t4dm/api/errors.py`):
 ```python
 from ww.mcp.gateway import get_request_id
 import logging
@@ -88,19 +88,19 @@ except Exception as e:
 ```
 
 **Files to modify**:
-- `src/ww/api/errors.py` (new file)
-- `src/ww/api/routes/episodes.py` (6 locations)
-- `src/ww/api/routes/entities.py` (7 locations)
-- `src/ww/api/routes/skills.py` (5 locations)
-- `src/ww/api/routes/visualization.py` (3 locations)
-- `src/ww/api/routes/system.py` (2 locations)
+- `src/t4dm/api/errors.py` (new file)
+- `src/t4dm/api/routes/episodes.py` (6 locations)
+- `src/t4dm/api/routes/entities.py` (7 locations)
+- `src/t4dm/api/routes/skills.py` (5 locations)
+- `src/t4dm/api/routes/visualization.py` (3 locations)
+- `src/t4dm/api/routes/system.py` (2 locations)
 
 ---
 
 ### 3. Enforce Production TLS (H-3)
 **Effort**: 2 hours | **Risk**: HIGH
 
-**Add production validator** (`src/ww/core/config.py`):
+**Add production validator** (`src/t4dm/core/config.py`):
 ```python
 @model_validator(mode="after")
 def validate_production_tls(self) -> "Settings":
@@ -141,7 +141,7 @@ services:
 ```
 
 **Files to modify**:
-- `src/ww/core/config.py` (add validator)
+- `src/t4dm/core/config.py` (add validator)
 - `docker-compose.production.yml` (new file)
 - `docs/DEPLOYMENT.md` (add TLS setup instructions)
 
@@ -150,7 +150,7 @@ services:
 ### 4. Fix CORS Configuration (H-1)
 **Effort**: 1 hour | **Risk**: HIGH
 
-**Add CORS validator** (`src/ww/core/config.py`):
+**Add CORS validator** (`src/t4dm/core/config.py`):
 ```python
 @field_validator("cors_allowed_origins")
 @classmethod
@@ -183,7 +183,7 @@ WW_API_CORS_ORIGINS=http://localhost:3000,http://localhost:8080
 ```
 
 **Files to modify**:
-- `src/ww/core/config.py` (add validator)
+- `src/t4dm/core/config.py` (add validator)
 - `.env.example` (update with clear guidance)
 
 ---
@@ -231,7 +231,7 @@ def validate_password_strength(password: str, field_name: str = "password") -> s
 ```
 
 **Files to modify**:
-- `src/ww/core/config.py:32-80` (replace function)
+- `src/t4dm/core/config.py:32-80` (replace function)
 
 ---
 
@@ -239,7 +239,7 @@ def validate_password_strength(password: str, field_name: str = "password") -> s
 **Effort**: 30 minutes | **Risk**: MEDIUM
 
 ```python
-# In src/ww/api/deps.py
+# In src/t4dm/api/deps.py
 validated = validate_session_id(
     x_session_id,
     allow_none=True,
@@ -248,7 +248,7 @@ validated = validate_session_id(
 ```
 
 **Files to modify**:
-- `src/ww/api/deps.py:42` (change allow_reserved)
+- `src/t4dm/api/deps.py:42` (change allow_reserved)
 
 ---
 
@@ -256,7 +256,7 @@ validated = validate_session_id(
 **Effort**: 1 hour | **Risk**: MEDIUM
 
 ```python
-# src/ww/api/middleware.py (new file)
+# src/t4dm/api/middleware.py (new file)
 from starlette.middleware.base import BaseHTTPMiddleware
 
 class SecurityHeadersMiddleware(BaseHTTPMiddleware):
@@ -276,14 +276,14 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
 ```
 
 ```python
-# In src/ww/api/server.py
+# In src/t4dm/api/server.py
 from ww.api.middleware import SecurityHeadersMiddleware
 app.add_middleware(SecurityHeadersMiddleware)
 ```
 
 **Files to modify**:
-- `src/ww/api/middleware.py` (new file)
-- `src/ww/api/server.py` (add middleware)
+- `src/t4dm/api/middleware.py` (new file)
+- `src/t4dm/api/server.py` (add middleware)
 
 ---
 
@@ -330,7 +330,7 @@ RUN pip install --no-cache-dir -r /tmp/requirements.txt
 
 # Switch to non-root user
 USER ww
-WORKDIR /home/ww/app
+WORKDIR /home/t4dm/app
 
 # Copy application
 COPY --chown=ww:ww . .
@@ -347,7 +347,7 @@ CMD ["python", "-m", "ww.api.server"]
 **Effort**: 1 hour | **Risk**: LOW
 
 ```python
-# src/ww/api/middleware.py
+# src/t4dm/api/middleware.py
 class RequestSizeLimitMiddleware(BaseHTTPMiddleware):
     def __init__(self, app, max_body_size: int = 5 * 1024 * 1024):
         super().__init__(app)
@@ -364,8 +364,8 @@ class RequestSizeLimitMiddleware(BaseHTTPMiddleware):
 ```
 
 **Files to modify**:
-- `src/ww/api/middleware.py` (add class)
-- `src/ww/api/server.py` (add middleware)
+- `src/t4dm/api/middleware.py` (add class)
+- `src/t4dm/api/server.py` (add middleware)
 
 ---
 
@@ -373,7 +373,7 @@ class RequestSizeLimitMiddleware(BaseHTTPMiddleware):
 **Effort**: 2 hours | **Risk**: LOW
 
 ```python
-# src/ww/observability/audit.py (new file)
+# src/t4dm/observability/audit.py (new file)
 import logging
 from fastapi import Request
 
@@ -404,7 +404,7 @@ log_api_event("episode_deleted", request, episode_id=str(episode_id))
 ```
 
 **Files to modify**:
-- `src/ww/observability/audit.py` (new file)
+- `src/t4dm/observability/audit.py` (new file)
 - All route files (add audit logging)
 
 ---
@@ -413,7 +413,7 @@ log_api_event("episode_deleted", request, episode_id=str(episode_id))
 **Effort**: 30 minutes | **Risk**: LOW
 
 ```python
-# In src/ww/core/config.py
+# In src/t4dm/core/config.py
 def check_file_permissions(path: Path) -> None:
     """Check and enforce file permissions."""
     if not path.exists():
@@ -432,7 +432,7 @@ def check_file_permissions(path: Path) -> None:
 ```
 
 **Files to modify**:
-- `src/ww/core/config.py:99-117` (update function)
+- `src/t4dm/core/config.py:99-117` (update function)
 
 ---
 

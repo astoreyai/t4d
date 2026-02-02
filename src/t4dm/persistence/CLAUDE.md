@@ -1,5 +1,5 @@
 # Persistence
-**Path**: `/mnt/projects/t4d/t4dm/src/ww/persistence/`
+**Path**: `/mnt/projects/t4d/t4dm/src/t4dm/persistence/`
 
 ## What
 Crash-safe durability layer providing Write-Ahead Logging (WAL), periodic checkpointing, cold/warm start recovery, and graceful shutdown handling.

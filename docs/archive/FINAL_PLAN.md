@@ -31,7 +31,7 @@ The system has **excellent components** but **weak integration**. Three fixes un
 ### Task 1.1: Wire Three-Factor Learning to Embedding Persistence
 
 **Problem**: Learning signals computed but never applied to stored embeddings
-**File**: `src/ww/memory/episodic.py` (around line 2946)
+**File**: `src/t4dm/memory/episodic.py` (around line 2946)
 
 **Current (BROKEN)**:
 ```python
@@ -66,7 +66,7 @@ for eid in episode_ids:
 ### Task 1.2: Persist Reconsolidated Embeddings
 
 **Problem**: Sleep consolidation computes updates but doesn't persist them
-**File**: `src/ww/consolidation/sleep.py` (line 1763)
+**File**: `src/t4dm/consolidation/sleep.py` (line 1763)
 
 **Current (BROKEN)**:
 ```python
@@ -95,8 +95,8 @@ if updated_embedding is not None:
 
 **Problem**: Bridge class exists (27KB) but never instantiated in production paths
 **Files**:
-- `src/ww/bridges/ff_capsule_bridge.py` (exists, well-designed)
-- `src/ww/memory/episodic.py` (needs wiring)
+- `src/t4dm/bridges/ff_capsule_bridge.py` (exists, well-designed)
+- `src/t4dm/memory/episodic.py` (needs wiring)
 
 **Fix in `episodic.py` `__init__()`:
 ```python
@@ -131,7 +131,7 @@ if self._ff_capsule_bridge is not None:
 
 ### Task 2.1: Fix GenerativeReplaySystem Stub Mode
 
-**File**: `src/ww/learning/generative_replay.py` (line 188)
+**File**: `src/t4dm/learning/generative_replay.py` (line 188)
 
 **Problem**: System initializes in stub mode by default
 ```python
@@ -144,7 +144,7 @@ logger.info("GenerativeReplaySystem initialized (stub mode)")
 
 ### Task 2.2: Complete MemoryNCABridge Integration
 
-**File**: `src/ww/bridge/memory_nca.py` (line 95)
+**File**: `src/t4dm/bridge/memory_nca.py` (line 95)
 
 **Problem**: "STUB: Full integration with WW memory system" - 90% ready
 
@@ -154,7 +154,7 @@ logger.info("GenerativeReplaySystem initialized (stub mode)")
 
 ### Task 2.3: Remove Mock Metrics from Visualization
 
-**File**: `src/ww/api/routes/visualization.py` (lines 1218, 1255, 2082)
+**File**: `src/t4dm/api/routes/visualization.py` (lines 1218, 1255, 2082)
 
 **Problem**: Mock/placeholder data in production API endpoints
 
@@ -205,10 +205,10 @@ async def test_vta_stdp_modulation():
 
 ```bash
 # Create archive directory
-mkdir -p /mnt/projects/ww/docs/archive/plans-2026-01
+mkdir -p /mnt/projects/t4d/t4dm/docs/archive/plans-2026-01
 
 # Move superseded plans
-mv /mnt/projects/ww/docs/plans/*.md /mnt/projects/ww/docs/archive/plans-2026-01/
+mv /mnt/projects/t4d/t4dm/docs/plans/*.md /mnt/projects/t4d/t4dm/docs/archive/plans-2026-01/
 
 # Keep only FINAL_PLAN.md as active
 ```

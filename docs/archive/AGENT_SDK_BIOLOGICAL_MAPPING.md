@@ -621,7 +621,7 @@ class WorkingMemoryBuffer:
 ### 3.2 Agent SDK Bridge
 
 ```python
-# src/ww/sdk/agent_bridge.py
+# src/t4dm/sdk/agent_bridge.py
 from claude_agent_sdk import Agent, Task, ToolResult
 
 class WorldWeaverAgent(Agent):

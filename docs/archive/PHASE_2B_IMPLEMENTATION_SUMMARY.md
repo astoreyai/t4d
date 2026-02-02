@@ -10,7 +10,7 @@ Successfully activated lazy initialization for the BridgeContainer, ensuring it 
 
 ## Changes Made
 
-### 1. EpisodicMemory Initialization (`src/ww/memory/episodic.py`)
+### 1. EpisodicMemory Initialization (`src/t4dm/memory/episodic.py`)
 
 **Modified**: `async def initialize()`
 
@@ -41,7 +41,7 @@ if self._bridge_container.config.lazy_init:
 
 **Biological Mapping**: This corresponds to the wiring phase during neural development, where different brain regions establish connections. The bridge container acts as the "white matter" connecting cortical regions (NCA subsystems) to the hippocampus (episodic memory).
 
-### 2. Service Cleanup (`src/ww/core/services.py`)
+### 2. Service Cleanup (`src/t4dm/core/services.py`)
 
 **Modified**: `async def cleanup_services()`
 
@@ -57,7 +57,7 @@ if session_id in _containers:
 
 This ensures proper cleanup on session end, preventing memory leaks from dangling bridge references.
 
-### 3. API Dependencies (`src/ww/api/deps.py`)
+### 3. API Dependencies (`src/t4dm/api/deps.py`)
 
 **Added**: `async def get_bridge_container_dep()`
 
@@ -189,13 +189,13 @@ The bridge container is now activated and ready for use in production code paths
 
 ## Files Modified
 
-- `/mnt/projects/ww/src/ww/memory/episodic.py` - Added bridge initialization
-- `/mnt/projects/ww/src/ww/core/services.py` - Added cleanup logic
-- `/mnt/projects/ww/src/ww/api/deps.py` - Added API dependency
+- `/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic.py` - Added bridge initialization
+- `/mnt/projects/t4d/t4dm/src/t4dm/core/services.py` - Added cleanup logic
+- `/mnt/projects/t4d/t4dm/src/t4dm/api/deps.py` - Added API dependency
 
 ## Files Created
 
-- `/mnt/projects/ww/tests/core/test_bridge_container.py` - Comprehensive test suite
+- `/mnt/projects/t4d/t4dm/tests/core/test_bridge_container.py` - Comprehensive test suite
 
 ## Test Coverage
 

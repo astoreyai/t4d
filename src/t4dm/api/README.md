@@ -1,6 +1,6 @@
 # API Module
 
-**Path**: `ww/api/` | **Files**: 13 | **Framework**: FastAPI
+**Path**: `t4dm/api/` | **Files**: 13 | **Framework**: FastAPI
 
 Production-grade REST API for the World Weaver tripartite memory system.
 

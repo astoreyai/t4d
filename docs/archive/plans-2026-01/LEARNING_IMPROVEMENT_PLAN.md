@@ -41,7 +41,7 @@ The core question: **Should we fine-tune BGE-M3 or build a more powerful FF stac
 
 #### 1.1 Retrieval Feedback Collector
 
-**File**: `/mnt/projects/ww/src/ww/learning/retrieval_feedback.py` (new)
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/learning/retrieval_feedback.py` (new)
 
 ```python
 @dataclass
@@ -72,7 +72,7 @@ class RetrievalFeedbackCollector:
 
 #### 1.2 Online Adapter Training
 
-**File**: `/mnt/projects/ww/src/ww/learning/online_adapter.py` (new)
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/learning/online_adapter.py` (new)
 
 ```python
 class OnlineAdapterTrainer:
@@ -107,9 +107,9 @@ class OnlineAdapterTrainer:
 #### 1.3 Integration with Memory Pipeline
 
 **Files to modify**:
-- `/mnt/projects/ww/src/ww/memory/episodic.py`: Add feedback hooks
-- `/mnt/projects/ww/src/ww/embedding/adapter.py`: Connect to OnlineAdapterTrainer
-- `/mnt/projects/ww/src/ww/api/routes/episodes.py`: Expose feedback endpoints
+- `/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic.py`: Add feedback hooks
+- `/mnt/projects/t4d/t4dm/src/t4dm/embedding/adapter.py`: Connect to OnlineAdapterTrainer
+- `/mnt/projects/t4d/t4dm/src/t4dm/api/routes/episodes.py`: Expose feedback endpoints
 
 ### Validation Strategy
 
@@ -128,7 +128,7 @@ class OnlineAdapterTrainer:
    - Track embedding space clustering quality over time
    - Measure semantic coherence of retrieved sets
 
-**File**: `/mnt/projects/ww/src/ww/observability/retrieval_metrics.py` (new)
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/observability/retrieval_metrics.py` (new)
 
 ```python
 class RetrievalQualityTracker:
@@ -181,9 +181,9 @@ class RetrievalQualityTracker:
 
 ### Documentation Updates
 
-- Update `/mnt/projects/ww/docs/CLAUDE_CODE_INTEGRATION.md` with feedback API
-- Add `/mnt/projects/ww/docs/EMBEDDING_ADAPTATION.md` explaining the approach
-- Update `/mnt/projects/ww/docs/architecture.md` with new components
+- Update `/mnt/projects/t4d/t4dm/docs/CLAUDE_CODE_INTEGRATION.md` with feedback API
+- Add `/mnt/projects/t4d/t4dm/docs/EMBEDDING_ADAPTATION.md` explaining the approach
+- Update `/mnt/projects/t4d/t4dm/docs/architecture.md` with new components
 
 ### Estimated Effort
 
@@ -217,7 +217,7 @@ The key insight from Hinton's capsule work: poses should emerge from routing agr
 
 #### 2.1 Pose Dimension Discovery
 
-**File**: `/mnt/projects/ww/src/ww/nca/pose_learner.py` (new)
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/nca/pose_learner.py` (new)
 
 ```python
 class PoseDimensionDiscovery:
@@ -259,7 +259,7 @@ class PoseDimensionDiscovery:
 
 The existing `learn_pose_from_routing()` in `capsules.py` (lines 592-688) is a good start but needs enhancement:
 
-**File**: `/mnt/projects/ww/src/ww/nca/capsules.py` (modify)
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/nca/capsules.py` (modify)
 
 ```python
 def learn_pose_from_routing_v2(
@@ -291,7 +291,7 @@ def learn_pose_from_routing_v2(
 
 #### 2.3 Pose Initialization from Data
 
-**File**: `/mnt/projects/ww/src/ww/nca/pose_initializer.py` (new)
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/nca/pose_initializer.py` (new)
 
 ```python
 class DataDrivenPoseInitializer:
@@ -333,7 +333,7 @@ class DataDrivenPoseInitializer:
    - Do similar memories cluster in pose space?
    - Does pose similarity predict semantic similarity?
 
-**File**: `/mnt/projects/ww/src/ww/interfaces/pose_inspector.py` (new)
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/interfaces/pose_inspector.py` (new)
 
 ```python
 class PoseInspector:
@@ -378,9 +378,9 @@ class PoseInspector:
 
 ### Documentation Updates
 
-- Update `/mnt/projects/ww/docs/concepts/capsules.md`
-- Add `/mnt/projects/ww/docs/POSE_LEARNING.md`
-- Update `/mnt/projects/ww/src/ww/nca/PARAMETERS.md`
+- Update `/mnt/projects/t4d/t4dm/docs/concepts/capsules.md`
+- Add `/mnt/projects/t4d/t4dm/docs/POSE_LEARNING.md`
+- Update `/mnt/projects/t4d/t4dm/src/t4dm/nca/PARAMETERS.md`
 
 ### Estimated Effort
 
@@ -419,7 +419,7 @@ But needs proper integration with the consolidation pipeline.
 
 #### 3.1 VAE Training Pipeline
 
-**File**: `/mnt/projects/ww/src/ww/learning/vae_training.py` (new)
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/learning/vae_training.py` (new)
 
 ```python
 class VAETrainingPipeline:
@@ -453,7 +453,7 @@ class VAETrainingPipeline:
 
 #### 3.2 Sleep Consolidation Integration
 
-**File**: `/mnt/projects/ww/src/ww/consolidation/sleep.py` (modify)
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/consolidation/sleep.py` (modify)
 
 The existing `SleepConsolidation` class needs to integrate with VAE:
 
@@ -492,7 +492,7 @@ class SleepConsolidation:
 
 #### 3.3 Quality-Filtered Replay
 
-**File**: `/mnt/projects/ww/src/ww/learning/quality_replay.py` (new)
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/learning/quality_replay.py` (new)
 
 ```python
 class QualityFilteredReplay:
@@ -535,7 +535,7 @@ class QualityFilteredReplay:
    - Does replay cover the embedding space uniformly?
    - Are rare/important memories replayed appropriately?
 
-**File**: `/mnt/projects/ww/tests/integration/test_generative_consolidation.py` (new)
+**File**: `/mnt/projects/t4d/t4dm/tests/integration/test_generative_consolidation.py` (new)
 
 ```python
 async def test_replay_prevents_forgetting():
@@ -569,9 +569,9 @@ async def test_replay_prevents_forgetting():
 
 ### Documentation Updates
 
-- Update `/mnt/projects/ww/docs/concepts/forward-forward.md` with replay integration
-- Update `/mnt/projects/ww/src/ww/consolidation/README.md`
-- Add `/mnt/projects/ww/docs/GENERATIVE_REPLAY.md`
+- Update `/mnt/projects/t4d/t4dm/docs/concepts/forward-forward.md` with replay integration
+- Update `/mnt/projects/t4d/t4dm/src/t4dm/consolidation/README.md`
+- Add `/mnt/projects/t4d/t4dm/docs/GENERATIVE_REPLAY.md`
 
 ### Estimated Effort
 
@@ -606,7 +606,7 @@ But integration is shallow:
 
 #### 4.1 FF-Capsule Bridge
 
-**File**: `/mnt/projects/ww/src/ww/bridges/ff_capsule_bridge.py` (new)
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/bridges/ff_capsule_bridge.py` (new)
 
 ```python
 class FFCapsuleBridge:
@@ -682,7 +682,7 @@ class FFCapsuleBridge:
 
 #### 4.2 NCA-Driven Learning Signals
 
-**File**: `/mnt/projects/ww/src/ww/nca/learning_signals.py` (new)
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/nca/learning_signals.py` (new)
 
 ```python
 class NCALearningSignalGenerator:
@@ -734,7 +734,7 @@ class NCALearningSignalGenerator:
 
 Currently capsule routing is rarely exercised. Integration with retrieval changes this:
 
-**File**: `/mnt/projects/ww/src/ww/memory/episodic.py` (modify)
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic.py` (modify)
 
 ```python
 async def retrieve(
@@ -792,9 +792,9 @@ async def retrieve(
 
 ### Documentation Updates
 
-- Update `/mnt/projects/ww/docs/architecture.md` with integration diagram
-- Add `/mnt/projects/ww/docs/DEEP_INTEGRATION.md`
-- Update `/mnt/projects/ww/docs/HINTON_DESIGN_RATIONALE.md`
+- Update `/mnt/projects/t4d/t4dm/docs/architecture.md` with integration diagram
+- Add `/mnt/projects/t4d/t4dm/docs/DEEP_INTEGRATION.md`
+- Update `/mnt/projects/t4d/t4dm/docs/HINTON_DESIGN_RATIONALE.md`
 
 ### Estimated Effort
 

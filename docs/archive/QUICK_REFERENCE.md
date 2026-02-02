@@ -385,8 +385,8 @@ When you receive reviews, emphasize:
 - Writing/organization: already excellent, minimal help needed
 
 **Next Steps**:
-1. Review full assessment: `/mnt/projects/ww/docs/papers/QUALITY_ASSESSMENT_REPORT.md`
-2. Work through checklist: `/mnt/projects/ww/docs/papers/REVISION_CHECKLIST.md`
+1. Review full assessment: `/mnt/projects/t4d/t4dm/docs/papers/QUALITY_ASSESSMENT_REPORT.md`
+2. Work through checklist: `/mnt/projects/t4d/t4dm/docs/papers/REVISION_CHECKLIST.md`
 3. Track progress on critical items
 4. Submit when GREEN LIGHT criteria met
 

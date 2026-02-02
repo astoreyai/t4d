@@ -1,6 +1,6 @@
 # Optimization Assessment: MCP Bioinspired Tools
 
-**File**: `/mnt/projects/ww/src/ww/mcp/tools/bioinspired.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/mcp/tools/bioinspired.py`
 **Assessed**: 2025-12-06
 **Lines of Code**: 598
 **Component Type**: MCP Tool Layer (async API handlers)

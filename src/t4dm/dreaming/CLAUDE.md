@@ -1,5 +1,5 @@
 # Dreaming Module
-**Path**: `/mnt/projects/t4d/t4dm/src/ww/dreaming/`
+**Path**: `/mnt/projects/t4d/t4dm/src/t4dm/dreaming/`
 
 ## What
 REM-sleep-inspired imagination system for memory consolidation. Generates dream trajectories from high-error episodes, evaluates dream quality across multiple dimensions, and trains the world model predictor on imagined experience. Inspired by DreamerV3 and biological REM sleep.

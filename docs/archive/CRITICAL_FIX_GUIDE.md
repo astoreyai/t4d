@@ -47,7 +47,7 @@ script
 
 ### Step 1: Identify the Issue
 
-**File**: `/mnt/projects/ww/tests/integration/test_api_flows.py`
+**File**: `/mnt/projects/t4d/t4dm/tests/integration/test_api_flows.py`
 **Lines**: 107-131
 **Function**: `mock_procedural_service` fixture
 
@@ -129,7 +129,7 @@ def mock_procedural_service(mock_skill):
 
 ### Option 1: Manual Edit
 
-1. Open file: `/mnt/projects/ww/tests/integration/test_api_flows.py`
+1. Open file: `/mnt/projects/t4d/t4dm/tests/integration/test_api_flows.py`
 2. Navigate to line 130
 3. Add after `service.update = AsyncMock(return_value=mock_procedure)`:
    ```python
@@ -219,7 +219,7 @@ python -m pytest tests/ -v --tb=line 2>&1 | tail -20
 
 2. **API endpoint calls service**:
    ```python
-   # src/ww/api/routes/skills.py:140
+   # src/t4dm/api/routes/skills.py:140
    stored = await procedural.store_skill_direct(
        name=procedure.name,
        domain=procedure.domain,
@@ -331,10 +331,10 @@ The fixture was created with most service methods mocked, but during development
 
 ## Reference Files
 
-- **Failing Test**: `/mnt/projects/ww/tests/integration/test_api_flows.py:360-376`
-- **Fixture Definition**: `/mnt/projects/ww/tests/integration/test_api_flows.py:107-131`
-- **API Implementation**: `/mnt/projects/ww/src/ww/api/routes/skills.py:110-176`
-- **Service Interface**: `/mnt/projects/ww/src/ww/memory/procedural.py`
+- **Failing Test**: `/mnt/projects/t4d/t4dm/tests/integration/test_api_flows.py:360-376`
+- **Fixture Definition**: `/mnt/projects/t4d/t4dm/tests/integration/test_api_flows.py:107-131`
+- **API Implementation**: `/mnt/projects/t4d/t4dm/src/t4dm/api/routes/skills.py:110-176`
+- **Service Interface**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/procedural.py`
 
 ---
 

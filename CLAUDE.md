@@ -69,7 +69,7 @@ INSERT, GET, SEARCH, UPDATE_FIELDS, UPDATE_EDGE_WEIGHT, TRAVERSE, SCAN, DELETE, 
 ## Architecture
 
 ```
-src/ww/                        # Current package (will rename to src/t4dm/)
+src/t4dm/                        # Current package (will rename to src/t4dm/)
 ├── core/                      # Core types + protocols
 │   ├── types.py               # Episode, Entity, Procedure, Relationship
 │   ├── protocols.py           # VectorStore, GraphStore protocols
@@ -191,7 +191,7 @@ pytest -x --tb=short        # Stop on first failure
 
 ## Migration Notes (WW → T4DM)
 
-- Package currently at `src/ww/` — will rename to `src/t4dm/`
+- Package currently at `src/t4dm/` — will rename to `src/t4dm/`
 - CLI command `ww` → `t4dm`
 - Storage: Neo4j+Qdrant+Saga → T4DX embedded engine (dual-write migration path)
 - All 8,905 existing tests must pass through migration

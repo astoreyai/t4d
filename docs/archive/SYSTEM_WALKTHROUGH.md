@@ -55,7 +55,7 @@ World Weaver is a biologically-inspired memory system for AI agents, implementin
 ## Module Structure
 
 ```
-ww/
+t4dm/
 ├── core/              # Foundation layer
 │   ├── types.py       # Episode, Entity, Procedure, Outcome
 │   ├── config.py      # Settings with environment config
@@ -211,7 +211,7 @@ ww/
 ### 1. MCP Server (Claude Code)
 
 ```
-ww/mcp/server.py → ww/mcp/gateway.py → ww/mcp/tools/*.py
+t4dm/mcp/server.py → t4dm/mcp/gateway.py → t4dm/mcp/tools/*.py
 ```
 
 **Tools Available**:
@@ -225,7 +225,7 @@ ww/mcp/server.py → ww/mcp/gateway.py → ww/mcp/tools/*.py
 ### 2. REST API
 
 ```
-ww/api/server.py → FastAPI → ww/api/routes/*.py
+t4dm/api/server.py → FastAPI → t4dm/api/routes/*.py
 ```
 
 **Endpoints**:

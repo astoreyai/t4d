@@ -25,7 +25,7 @@ Sharp-wave ripples (SWRs) are **150-250 Hz oscillations** in hippocampal CA1 dur
 
 ### Implementation
 
-**File**: `/mnt/projects/ww/src/ww/visualization/swr_telemetry.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/visualization/swr_telemetry.py`
 
 ```python
 """
@@ -400,7 +400,7 @@ __all__ = ["SWRTelemetry", "SWREvent"]
 
 ### Testing
 
-**File**: `/mnt/projects/ww/tests/visualization/test_swr_telemetry.py`
+**File**: `/mnt/projects/t4d/t4dm/tests/visualization/test_swr_telemetry.py`
 
 ```python
 """Tests for SWR telemetry."""
@@ -523,7 +523,7 @@ Phase-amplitude coupling (PAC) between theta (4-8 Hz) and gamma (30-80 Hz) is th
 
 ### Implementation
 
-**File**: `/mnt/projects/ww/src/ww/visualization/pac_telemetry.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/visualization/pac_telemetry.py`
 
 ```python
 """
@@ -847,7 +847,7 @@ __all__ = ["PACTelemetry", "PACSnapshot"]
 
 ### Update `stability_monitor.py`
 
-Add to `/mnt/projects/ww/src/ww/visualization/stability_monitor.py`:
+Add to `/mnt/projects/t4d/t4dm/src/t4dm/visualization/stability_monitor.py`:
 
 ```python
 # Add to StabilityMonitor class:

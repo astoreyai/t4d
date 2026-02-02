@@ -19,7 +19,7 @@
 
 #### 5.1 Contrastive Adapter (Hinton H1)
 ```python
-# src/ww/embedding/contrastive_trainer.py
+# src/t4dm/embedding/contrastive_trainer.py
 class ContrastiveAdapter:
     """
     Learnable projection head on top of frozen BGE-M3.
@@ -33,7 +33,7 @@ class ContrastiveAdapter:
 
 #### 5.2 Delta Oscillator (Biology B1)
 ```python
-# Extension to src/ww/nca/oscillators.py
+# Extension to src/t4dm/nca/oscillators.py
 class DeltaOscillator:
     """
     Delta band (0.5-4 Hz) for slow-wave sleep.
@@ -47,7 +47,7 @@ class DeltaOscillator:
 
 #### 5.3 Sleep Spindle Generator (Biology B2)
 ```python
-# src/ww/nca/sleep_spindles.py
+# src/t4dm/nca/sleep_spindles.py
 class SleepSpindleGenerator:
     """
     Spindle bursts (11-16 Hz) during NREM stage 2.
@@ -96,7 +96,7 @@ class SleepSpindleGenerator:
 
 #### 8.1 SWR Timing (Biology B5)
 ```python
-# src/ww/nca/swr_coupling.py
+# src/t4dm/nca/swr_coupling.py
 RIPPLE_FREQ_MIN = 150.0   # Hz - Buzsaki 2015
 RIPPLE_FREQ_MAX = 250.0   # Hz - Carr et al. 2011
 RIPPLE_FREQ_OPTIMAL = 180.0  # Hz - CA1 common
@@ -106,7 +106,7 @@ RIPPLE_FREQ_OPTIMAL = 180.0  # Hz - CA1 common
 
 #### 8.2 Wake-Sleep Separation (Hinton H4)
 ```python
-# src/ww/nca/swr_coupling.py
+# src/t4dm/nca/swr_coupling.py
 class WakeSleepMode(Enum):
     ACTIVE_WAKE = "active_wake"   # No SWRs (0%)
     QUIET_WAKE = "quiet_wake"     # Rare SWRs (30%)
@@ -123,7 +123,7 @@ class WakeSleepMode(Enum):
 
 #### 9.1 Serotonin Patience Model (Biology B6)
 ```python
-# src/ww/nca/raphe.py
+# src/t4dm/nca/raphe.py
 class PatienceModel:
     """
     Temporal discounting based on Doya (2002), Miyazaki et al. (2014).
@@ -135,7 +135,7 @@ class PatienceModel:
 
 #### 9.2 Surprise-Driven NE (Hinton H5)
 ```python
-# src/ww/nca/locus_coeruleus.py
+# src/t4dm/nca/locus_coeruleus.py
 class SurpriseModel:
     """
     Uncertainty signaling based on Dayan & Yu (2006), Nassar et al. (2012).
@@ -171,7 +171,7 @@ class SurpriseModel:
 
 #### 10.1 Forward-Forward Layer (Hinton H6)
 ```python
-# src/ww/nca/forward_forward.py
+# src/t4dm/nca/forward_forward.py
 class ForwardForwardLayer:
     """
     Single FF layer with local learning (Hinton 2022).
@@ -198,7 +198,7 @@ class ForwardForwardNetwork:
 
 #### 10.3 Grid Cell Validation (Biology B7)
 ```python
-# src/ww/nca/spatial_cells.py
+# src/t4dm/nca/spatial_cells.py
 def validate_hexagonal_pattern(resolution=50, threshold=0.3):
     """
     Validate grid cells produce hexagonal firing patterns.
@@ -237,7 +237,7 @@ def compute_gridness_score(autocorr):
 
 #### 11.1 Capsule Network (Hinton H8-H9)
 ```python
-# src/ww/nca/capsules.py
+# src/t4dm/nca/capsules.py
 class CapsuleNetwork:
     """
     Part-whole hierarchical representations (Hinton 2017).
@@ -252,7 +252,7 @@ class CapsuleNetwork:
 
 #### 11.2 Glymphatic System (Biology B8)
 ```python
-# src/ww/nca/glymphatic.py
+# src/t4dm/nca/glymphatic.py
 class GlymphaticSystem:
     """
     Waste clearance analog for memory hygiene.
@@ -273,15 +273,15 @@ class GlymphaticSystem:
 
 #### 12.1 Cross-Region Consistency (Hinton H10)
 ```python
-# src/ww/nca/capsule_nca_coupling.py
+# src/t4dm/nca/capsule_nca_coupling.py
 class CapsuleNCACoupling:
     """Bidirectional capsule ↔ NCA coupling."""
 
-# src/ww/nca/forward_forward_nca_coupling.py
+# src/t4dm/nca/forward_forward_nca_coupling.py
 class FFNCACoupling:
     """FF goodness ↔ NCA energy alignment."""
 
-# src/ww/nca/glymphatic_consolidation_bridge.py
+# src/t4dm/nca/glymphatic_consolidation_bridge.py
 class GlymphaticConsolidationBridge:
     """Sleep-gated clearance ↔ consolidation."""
 ```

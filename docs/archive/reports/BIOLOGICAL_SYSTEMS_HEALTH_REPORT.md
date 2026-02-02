@@ -556,7 +556,7 @@ Comprehensive testing of 26 biological and neural endpoints reveals a **HEALTHY*
 
 ### 12.1 Authentication Model
 
-**Configuration Source**: `/mnt/projects/ww/src/ww/core/config.py`
+**Configuration Source**: `/mnt/projects/t4d/t4dm/src/t4dm/core/config.py`
 
 **Key Security Features**:
 1. **API Key Authentication**:
@@ -706,13 +706,13 @@ Comprehensive testing of 26 biological and neural endpoints reveals a **HEALTHY*
 
 ### Related Test Files
 ```
-/mnt/projects/ww/tests/integration/test_neural_integration.py
-/mnt/projects/ww/tests/unit/test_biological_validation.py
-/mnt/projects/ww/tests/unit/test_neuro_symbolic.py
-/mnt/projects/ww/tests/learning/test_neuromodulators.py
-/mnt/projects/ww/tests/visualization/test_neuromodulator_dashboard.py
-/mnt/projects/ww/tests/visualization/test_neuromodulator_state.py
-/mnt/projects/ww/tests/mcp/test_bioinspired_tools.py
+/mnt/projects/t4d/t4dm/tests/integration/test_neural_integration.py
+/mnt/projects/t4d/t4dm/tests/unit/test_biological_validation.py
+/mnt/projects/t4d/t4dm/tests/unit/test_neuro_symbolic.py
+/mnt/projects/t4d/t4dm/tests/learning/test_neuromodulators.py
+/mnt/projects/t4d/t4dm/tests/visualization/test_neuromodulator_dashboard.py
+/mnt/projects/t4d/t4dm/tests/visualization/test_neuromodulator_state.py
+/mnt/projects/t4d/t4dm/tests/mcp/test_bioinspired_tools.py
 ```
 
 **Test Coverage**: 79% overall (per project status)

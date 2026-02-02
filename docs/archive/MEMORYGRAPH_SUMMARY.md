@@ -34,7 +34,7 @@ Data loading, visual configs, layout, timeline, search, camera control, performa
 ## File Structure
 
 ```
-/mnt/projects/ww/frontend/app/view/memorygraph/
+/mnt/projects/t4d/t4dm/frontend/app/view/memorygraph/
 ├── index.ts                          # Barrel exports
 ├── memorygraph-types.ts              # TypeScript types (900 lines)
 ├── memorygraph-state.ts              # Jotai atoms (450 lines)
@@ -218,7 +218,7 @@ const edges = await RpcApi.GetMemoryEdges(TabRpcClient, {});
 ## Installation
 
 ```bash
-cd /mnt/projects/ww/frontend
+cd /mnt/projects/t4d/t4dm/frontend
 
 npm install three @react-three/fiber @react-three/drei jotai
 
@@ -350,7 +350,7 @@ UI Updates
 
 ## Documentation
 
-- **Integration Guide**: `/mnt/projects/ww/MEMORYGRAPH_INTEGRATION.md`
+- **Integration Guide**: `/mnt/projects/t4d/t4dm/MEMORYGRAPH_INTEGRATION.md`
   - Complete API reference
   - Component props
   - State management
@@ -358,14 +358,14 @@ UI Updates
   - Backend integration
   - Styling guide
 
-- **Architecture**: `/mnt/projects/ww/MEMORYGRAPH_ARCHITECTURE.md`
+- **Architecture**: `/mnt/projects/t4d/t4dm/MEMORYGRAPH_ARCHITECTURE.md`
   - Component hierarchy diagrams
   - State flow charts
   - Event flow examples
   - Performance optimization points
   - Technology stack details
 
-- **Quick Start**: `/mnt/projects/ww/MEMORYGRAPH_QUICKSTART.md`
+- **Quick Start**: `/mnt/projects/t4d/t4dm/MEMORYGRAPH_QUICKSTART.md`
   - Installation steps
   - Basic usage examples
   - Common operations
@@ -447,8 +447,8 @@ When fully integrated, this system provides:
 
 ## Contact & Support
 
-- **Files**: `/mnt/projects/ww/frontend/app/view/memorygraph/`
-- **Documentation**: `/mnt/projects/ww/MEMORYGRAPH_*.md`
+- **Files**: `/mnt/projects/t4d/t4dm/frontend/app/view/memorygraph/`
+- **Documentation**: `/mnt/projects/t4d/t4dm/MEMORYGRAPH_*.md`
 - **Examples**: See `MEMORYGRAPH_QUICKSTART.md`
 - **Troubleshooting**: See docs or check console for errors
 

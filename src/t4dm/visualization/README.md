@@ -343,7 +343,7 @@ plot_checkpoint_history(visualizer)
 
 ## Example Application
 
-See `/mnt/projects/ww/examples/visualization_demo.py` for a comprehensive demonstration of all visualization modules.
+See `/mnt/projects/t4d/t4dm/examples/visualization_demo.py` for a comprehensive demonstration of all visualization modules.
 
 Run the demo:
 

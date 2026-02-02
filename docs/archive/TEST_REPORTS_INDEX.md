@@ -160,7 +160,7 @@ OVERALL:         85/100 ✓ READY
 
 ## Files Referenced
 
-### Report Files (in /mnt/projects/ww/)
+### Report Files (in /mnt/projects/t4d/t4dm/)
 - `TEST_EXECUTION_SUMMARY.txt` - Quick reference
 - `TEST_EXECUTION_REPORT.md` - Full analysis
 - `CRITICAL_FIX_GUIDE.md` - Implementation guide
@@ -173,8 +173,8 @@ OVERALL:         85/100 ✓ READY
 - `tests/` - Full test suite
 
 ### Source Files
-- `src/ww/api/routes/skills.py` - API implementation
-- `src/ww/memory/procedural.py` - Procedural memory service
+- `src/t4dm/api/routes/skills.py` - API implementation
+- `src/t4dm/memory/procedural.py` - Procedural memory service
 
 ---
 
@@ -299,4 +299,4 @@ OVERALL:         85/100 ✓ READY
 **Python**: 3.11.2
 **Status**: READY FOR REVIEW AND DISTRIBUTION
 
-*All reports and guides available in /mnt/projects/ww/*
+*All reports and guides available in /mnt/projects/t4d/t4dm/*

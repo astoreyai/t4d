@@ -7,7 +7,7 @@ Wire sleep replay to actually update episode embeddings via reconsolidation engi
 
 ## Files Modified
 
-### 1. `/mnt/projects/ww/src/ww/consolidation/sleep.py`
+### 1. `/mnt/projects/t4d/t4dm/src/t4dm/consolidation/sleep.py`
 **Changes**:
 - Added `_reconsolidation_engine` attribute to `SleepConsolidation.__init__()` (line ~611)
 - Added `set_reconsolidation_engine()` setter method (after `set_vta_circuit()`)
@@ -48,7 +48,7 @@ if self._reconsolidation_engine is not None:
         )
 ```
 
-### 2. `/mnt/projects/ww/tests/consolidation/test_sleep_reconsolidation.py` (NEW)
+### 2. `/mnt/projects/t4d/t4dm/tests/consolidation/test_sleep_reconsolidation.py` (NEW)
 **Purpose**: Comprehensive test coverage for Phase 1A
 
 **Tests Created**:
@@ -135,7 +135,7 @@ Currently, reconsolidation computes updated embeddings but they are NOT persiste
 - Biological basis for sleep-based memory consolidation
 
 ## Files Changed
-- `src/ww/consolidation/sleep.py` (modified, +68 lines)
+- `src/t4dm/consolidation/sleep.py` (modified, +68 lines)
 - `tests/consolidation/test_sleep_reconsolidation.py` (new, 391 lines)
 
 ---

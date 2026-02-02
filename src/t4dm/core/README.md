@@ -177,9 +177,9 @@ settings.episodic_weight_importance  # 0.15
 1. **Environment Variables** (`WW_*` prefix)
 2. **YAML Config File** (searched in order):
    - `WW_CONFIG_FILE` env var
-   - `./ww.yaml`
-   - `~/.ww/config.yaml`
-   - `/etc/ww/config.yaml`
+   - `./t4dm.yaml`
+   - `~/.t4dm/config.yaml`
+   - `/etc/t4dm/config.yaml`
 3. **Default Values**
 
 ## Validation

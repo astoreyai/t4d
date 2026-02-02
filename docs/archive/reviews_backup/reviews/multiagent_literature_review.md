@@ -1,6 +1,6 @@
 # Systematic Literature Review: Collective Memory for Multi-Agent AI Systems
 
-**Paper Under Review:** `/mnt/projects/ww/docs/papers/collective_agent_memory.tex`
+**Paper Under Review:** `/mnt/projects/t4d/t4dm/docs/papers/collective_agent_memory.tex`
 
 **Review Date:** 2024-12-04
 

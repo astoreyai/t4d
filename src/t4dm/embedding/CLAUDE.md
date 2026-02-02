@@ -1,5 +1,5 @@
 # Embedding Module
-**Path**: `/mnt/projects/t4d/t4dm/src/ww/embedding/`
+**Path**: `/mnt/projects/t4d/t4dm/src/t4dm/embedding/`
 
 ## What
 Composable vector embedding pipeline built on BGE-M3 (1024-dim multilingual). Provides base embedding generation, TTL caching, and five adaptation strategies: LoRA fine-tuning, contrastive projection (InfoNCE), ensemble voting, neuromodulator-dependent modulation, and asymmetric query-memory separation.

@@ -6,7 +6,7 @@ Concrete code changes to address findings from security audit.
 
 ### Fix M-1: Cypher Injection Prevention
 
-**File**: `src/ww/storage/neo4j_store.py`
+**File**: `src/t4dm/storage/neo4j_store.py`
 
 Add label/type validation at the beginning of the file:
 
@@ -97,7 +97,7 @@ Update all other methods that use `label` or `rel_type` parameters:
 
 ### Fix M-2: Session Authentication
 
-**File**: `src/ww/mcp/session_manager.py` (new file)
+**File**: `src/t4dm/mcp/session_manager.py` (new file)
 
 Create session management system:
 
@@ -214,7 +214,7 @@ def get_session_manager() -> SessionManager:
     return _session_manager
 ```
 
-**File**: `src/ww/mcp/memory_gateway.py`
+**File**: `src/t4dm/mcp/memory_gateway.py`
 
 Add authentication to MCP tools:
 
@@ -258,7 +258,7 @@ async def create_episode(...):
     # Implementation unchanged
 ```
 
-**File**: `src/ww/core/config.py`
+**File**: `src/t4dm/core/config.py`
 
 Add authentication configuration:
 
@@ -274,7 +274,7 @@ require_auth: bool = Field(
 
 ### Fix M-3: Remove Default Credentials
 
-**File**: `src/ww/core/config.py`
+**File**: `src/t4dm/core/config.py`
 
 Replace hardcoded defaults with required fields:
 
@@ -318,7 +318,7 @@ def model_post_init(self, __context):
 
 ### Fix M-4: Rate Limiting
 
-**File**: `src/ww/mcp/rate_limiter.py` (new file)
+**File**: `src/t4dm/mcp/rate_limiter.py` (new file)
 
 ```python
 """
@@ -402,7 +402,7 @@ def get_rate_limiter(operation: str = "default") -> RateLimiter:
     return _rate_limiters.get(operation, _rate_limiters["create"])
 ```
 
-**File**: `src/ww/mcp/memory_gateway.py`
+**File**: `src/t4dm/mcp/memory_gateway.py`
 
 Add rate limiting to tools:
 
@@ -453,7 +453,7 @@ async def spread_activation(...):
 
 ### Fix L-1: Error Message Sanitization
 
-**File**: `src/ww/mcp/memory_gateway.py`
+**File**: `src/t4dm/mcp/memory_gateway.py`
 
 Update error handling:
 
@@ -519,7 +519,7 @@ except Exception as e:
 
 ### Fix L-2: Content Sanitization
 
-**File**: `src/ww/mcp/validation.py`
+**File**: `src/t4dm/mcp/validation.py`
 
 Add sanitization function:
 
@@ -596,7 +596,7 @@ def validate_non_empty_string(
 
 ### Fix L-3: Secure Cache Directory
 
-**File**: `src/ww/core/config.py`
+**File**: `src/t4dm/core/config.py`
 
 ```python
 from pathlib import Path
@@ -653,7 +653,7 @@ pytest tests/security/test_injection.py -v
 pytest tests/ -v --cov=src/ww
 
 # Security scan
-bandit -r src/ww/ -ll
+bandit -r src/t4dm/ -ll
 
 # Dependency check
 safety check

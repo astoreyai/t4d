@@ -33,12 +33,12 @@ World Weaver demonstrates **exceptional biological plausibility** across all maj
 #### Score: 91/100
 
 **Files Analyzed:**
-- `src/ww/nca/hippocampus.py` (1047 lines)
-- `src/ww/nca/vta.py` (732 lines)
-- `src/ww/nca/dopamine_integration.py` (599 lines)
-- `src/ww/nca/oscillators.py` (1037 lines)
-- `src/ww/nca/glymphatic.py` (714 lines)
-- `src/ww/nca/raphe.py`, `locus_coeruleus.py`, `striatal_msn.py`
+- `src/t4dm/nca/hippocampus.py` (1047 lines)
+- `src/t4dm/nca/vta.py` (732 lines)
+- `src/t4dm/nca/dopamine_integration.py` (599 lines)
+- `src/t4dm/nca/oscillators.py` (1037 lines)
+- `src/t4dm/nca/glymphatic.py` (714 lines)
+- `src/t4dm/nca/raphe.py`, `locus_coeruleus.py`, `striatal_msn.py`
 
 #### 1.1.1 Hippocampal Circuit (B4)
 
@@ -570,8 +570,8 @@ serotonin_factor = 1.0 - 0.5 * mood_deviation
 **Implementation Status:**
 
 The codebase includes extensive forward-forward infrastructure:
-- `src/ww/nca/forward_forward.py`
-- `src/ww/nca/forward_forward_nca_coupling.py`
+- `src/t4dm/nca/forward_forward.py`
+- `src/t4dm/nca/forward_forward_nca_coupling.py`
 - Theta-phase gating for positive/negative phases
 - Goodness function for layer-wise learning
 
@@ -609,7 +609,7 @@ def _apply_theta_gating(
 
 **Score: 85/100**
 
-**Implementation**: `src/ww/nca/capsule_nca_coupling.py`
+**Implementation**: `src/t4dm/nca/capsule_nca_coupling.py`
 
 **Biological Analogy:**
 - Capsules ≈ Cortical columns
@@ -646,7 +646,7 @@ routing_weight = base_weight * (1 + ne_level * 0.3)
 #### Issue 1: VTA DA Decay Implementation
 
 **Severity**: Low
-**File**: `src/ww/nca/vta.py:410`
+**File**: `src/t4dm/nca/vta.py:410`
 
 **Current**:
 ```python
@@ -670,7 +670,7 @@ self.state.current_da += (self.config.tonic_da_level - self.state.current_da) *
 #### Issue 2: STDP Lacks Multiplicative Weight Dependence
 
 **Severity**: Low
-**File**: `src/ww/learning/stdp.py:213-217`
+**File**: `src/t4dm/learning/stdp.py:213-217`
 
 **Current**:
 ```python
@@ -693,7 +693,7 @@ return self.config.a_plus * np.exp(-delta_t_s / self.config.tau_plus) *
 #### Issue 3: Missing TAN Pause in Striatum
 
 **Severity**: Low
-**File**: `src/ww/nca/striatal_msn.py` (mechanism absent)
+**File**: `src/t4dm/nca/striatal_msn.py` (mechanism absent)
 
 **Biological Finding**: Tonically active neurons (TANs) pause briefly during unexpected rewards (Aosaki et al. 1994).
 
@@ -708,7 +708,7 @@ return self.config.a_plus * np.exp(-delta_t_s / self.config.tau_plus) *
 #### Issue 4: No Astrocyte Gap Junction Coupling
 
 **Severity**: Low
-**File**: `src/ww/nca/astrocyte.py` (mechanism absent)
+**File**: `src/t4dm/nca/astrocyte.py` (mechanism absent)
 
 **Biological Finding**: Astrocytes form gap junction-coupled networks enabling Ca²⁺ wave propagation (Giaume & Theis 2010).
 
@@ -726,7 +726,7 @@ return self.config.a_plus * np.exp(-delta_t_s / self.config.tau_plus) *
 
 #### 1. Synaptic Scaling (Present but Could Be Enhanced)
 
-**Current Status**: Basic homeostatic scaling in `src/ww/learning/homeostatic.py`
+**Current Status**: Basic homeostatic scaling in `src/t4dm/learning/homeostatic.py`
 
 **Enhancement Opportunity**: Turrigiano-style synaptic scaling with multiplicative factors.
 
@@ -736,7 +736,7 @@ return self.config.a_plus * np.exp(-delta_t_s / self.config.tau_plus) *
 
 #### 2. Metaplasticity (BCM Rule Present)
 
-**Current Status**: BCM metaplasticity in `src/ww/learning/bcm_metaplasticity.py`
+**Current Status**: BCM metaplasticity in `src/t4dm/learning/bcm_metaplasticity.py`
 
 **Assessment**: ✓ **Excellent implementation** of sliding threshold.
 
@@ -894,25 +894,25 @@ All identified issues are **minor** and do not affect core memory functionality.
 ## Appendix A: Key Files Reference
 
 ### Core NCA Modules
-- `/mnt/projects/ww/src/ww/nca/hippocampus.py` - Hippocampal DG/CA3/CA1 circuit
-- `/mnt/projects/ww/src/ww/nca/vta.py` - Dopamine RPE system
-- `/mnt/projects/ww/src/ww/nca/dopamine_integration.py` - DA system integration
-- `/mnt/projects/ww/src/ww/nca/oscillators.py` - 5-band oscillation system
-- `/mnt/projects/ww/src/ww/nca/glymphatic.py` - Sleep waste clearance
+- `/mnt/projects/t4d/t4dm/src/t4dm/nca/hippocampus.py` - Hippocampal DG/CA3/CA1 circuit
+- `/mnt/projects/t4d/t4dm/src/t4dm/nca/vta.py` - Dopamine RPE system
+- `/mnt/projects/t4d/t4dm/src/t4dm/nca/dopamine_integration.py` - DA system integration
+- `/mnt/projects/t4d/t4dm/src/t4dm/nca/oscillators.py` - 5-band oscillation system
+- `/mnt/projects/t4d/t4dm/src/t4dm/nca/glymphatic.py` - Sleep waste clearance
 
 ### Learning Mechanisms
-- `/mnt/projects/ww/src/ww/learning/stdp.py` - Spike-timing plasticity
-- `/mnt/projects/ww/src/ww/learning/three_factor.py` - Three-factor rule
-- `/mnt/projects/ww/src/ww/learning/eligibility.py` - Eligibility traces
-- `/mnt/projects/ww/src/ww/learning/dopamine.py` - RPE computation
+- `/mnt/projects/t4d/t4dm/src/t4dm/learning/stdp.py` - Spike-timing plasticity
+- `/mnt/projects/t4d/t4dm/src/t4dm/learning/three_factor.py` - Three-factor rule
+- `/mnt/projects/t4d/t4dm/src/t4dm/learning/eligibility.py` - Eligibility traces
+- `/mnt/projects/t4d/t4dm/src/t4dm/learning/dopamine.py` - RPE computation
 
 ### Consolidation
-- `/mnt/projects/ww/src/ww/consolidation/sleep.py` - NREM/REM cycles
-- `/mnt/projects/ww/src/ww/consolidation/stdp_integration.py` - STDP during sleep
+- `/mnt/projects/t4d/t4dm/src/t4dm/consolidation/sleep.py` - NREM/REM cycles
+- `/mnt/projects/t4d/t4dm/src/t4dm/consolidation/stdp_integration.py` - STDP during sleep
 
 ### Documentation
-- `/mnt/projects/ww/docs/science/biology-audit.md` - Biology audit report
-- `/mnt/projects/ww/docs/science/biological-parameters.md` - Parameter reference
+- `/mnt/projects/t4d/t4dm/docs/science/biology-audit.md` - Biology audit report
+- `/mnt/projects/t4d/t4dm/docs/science/biological-parameters.md` - Parameter reference
 
 ---
 

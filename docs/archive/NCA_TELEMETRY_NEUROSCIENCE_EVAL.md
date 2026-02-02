@@ -1024,7 +1024,7 @@ assert causal_graph.has_edge("theta_phase", "encoding"), "Theta phase gates enco
 
 **Priority 1: Add SWR Telemetry**
 ```python
-# File: src/ww/visualization/swr_telemetry.py
+# File: src/t4dm/visualization/swr_telemetry.py
 class SWRTelemetry:
     def record_swr_event(self, swr_state):
         # Track ripple frequency, duration, reactivated patterns
@@ -1037,7 +1037,7 @@ class SWRTelemetry:
 
 **Priority 2: Add PAC Visualization**
 ```python
-# File: src/ww/visualization/pac_telemetry.py
+# File: src/t4dm/visualization/pac_telemetry.py
 class PACTelemetry:
     def compute_modulation_index(self, theta_phase, gamma_amplitude):
         # Tort et al. 2010 modulation index
@@ -1050,7 +1050,7 @@ class PACTelemetry:
 
 **Priority 3: Add DA Temporal Structure**
 ```python
-# File: src/ww/visualization/da_telemetry.py
+# File: src/t4dm/visualization/da_telemetry.py
 class DATelemetry:
     def classify_da_signal(self, da_trace):
         # Classify: tonic, phasic, ramp
@@ -1065,7 +1065,7 @@ class DATelemetry:
 
 **Implement Hierarchical Telemetry Hub**
 ```python
-# File: src/ww/visualization/telemetry_hub.py
+# File: src/t4dm/visualization/telemetry_hub.py
 class TelemetryHub:
     def __init__(self):
         self.synaptic = SynapticTelemetry()      # 1 kHz
@@ -1080,7 +1080,7 @@ class TelemetryHub:
 
 **Add Cross-Scale Causal Inference**
 ```python
-# File: src/ww/visualization/causal_inference.py
+# File: src/t4dm/visualization/causal_inference.py
 class CausalInferenceEngine:
     def infer_causality(self):
         # Granger, CCM, transfer entropy
@@ -1091,7 +1091,7 @@ class CausalInferenceEngine:
 
 **Unified Anomaly Detector**
 ```python
-# File: src/ww/visualization/anomaly_detector.py
+# File: src/t4dm/visualization/anomaly_detector.py
 class AnomalyDetector:
     def detect_all_anomalies(self, telemetry_state):
         # Excitotoxicity, seizures, forgetting, depletion
@@ -1106,7 +1106,7 @@ class AnomalyDetector:
 
 **Ground-Truth Comparison**
 ```python
-# File: src/ww/validation/neuroscience_benchmarks.py
+# File: src/t4dm/validation/neuroscience_benchmarks.py
 class NeuroscienceBenchmarks:
     def load_dataset(self, name):
         # Load Buzsáki HC-3, Axmacher MEG, etc.

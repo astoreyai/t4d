@@ -1,6 +1,6 @@
 # Architecture Refactoring Code Templates
 
-**Reference**: [ARCHITECTURE_REFACTORING_PLAN.md](/mnt/projects/ww/docs/ARCHITECTURE_REFACTORING_PLAN.md)
+**Reference**: [ARCHITECTURE_REFACTORING_PLAN.md](/mnt/projects/t4d/t4dm/docs/ARCHITECTURE_REFACTORING_PLAN.md)
 
 This document provides copy-paste code templates for critical refactoring tasks.
 
@@ -8,7 +8,7 @@ This document provides copy-paste code templates for critical refactoring tasks.
 
 ## Phase 1: Episodic Storage Service Template
 
-**File**: `/mnt/projects/ww/src/ww/memory/episodic_storage.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic_storage.py`
 
 ```python
 """
@@ -291,7 +291,7 @@ class EpisodicStorageService:
 
 ## Phase 2: Redis Cache Template
 
-**File**: `/mnt/projects/ww/src/ww/storage/redis_cache.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/storage/redis_cache.py`
 
 ```python
 """
@@ -555,7 +555,7 @@ def get_redis_cache() -> RedisCache:
 
 ## Phase 2: Rate Limiting Middleware Template
 
-**File**: `/mnt/projects/ww/src/ww/api/middleware/rate_limit.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/api/middleware/rate_limit.py`
 
 ```python
 """
@@ -734,7 +734,7 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
 
 ## Phase 2: Embedding Provider with Cache Integration
 
-**File**: Modify `/mnt/projects/ww/src/ww/embedding/bge_m3.py`
+**File**: Modify `/mnt/projects/t4d/t4dm/src/t4dm/embedding/bge_m3.py`
 
 ```python
 # Add at top of file:
@@ -834,7 +834,7 @@ logger.critical(f"Database connection lost")
 
 ## Testing Template: Bridge Tests
 
-**File**: `/mnt/projects/ww/tests/bridges/test_glymphatic_bridge.py`
+**File**: `/mnt/projects/t4d/t4dm/tests/bridges/test_glymphatic_bridge.py`
 
 ```python
 """
@@ -955,7 +955,7 @@ async def test_adenosine_gates_consolidation(
 
 ## Configuration Template: Settings Updates
 
-**File**: Modify `/mnt/projects/ww/src/ww/core/config.py`
+**File**: Modify `/mnt/projects/t4d/t4dm/src/t4dm/core/config.py`
 
 ```python
 class Settings(BaseSettings):
@@ -982,7 +982,7 @@ class Settings(BaseSettings):
 
 ## Docker Compose Template: Redis Service
 
-**File**: Modify `/mnt/projects/ww/docker-compose.yml`
+**File**: Modify `/mnt/projects/t4d/t4dm/docker-compose.yml`
 
 ```yaml
 version: "3.8"
@@ -1026,7 +1026,7 @@ networks:
 
 ## Testing Template: Performance Benchmarks
 
-**File**: `/mnt/projects/ww/tests/benchmarks/test_refactoring_performance.py`
+**File**: `/mnt/projects/t4d/t4dm/tests/benchmarks/test_refactoring_performance.py`
 
 ```python
 """
@@ -1141,7 +1141,7 @@ def test_batch_graph_query(benchmark, neo4j_store):
 
 - [ ] Convert print() to logger (run script or manual)
 - [ ] Create 15 new bridge test files
-- [ ] Run coverage: `pytest --cov=src/ww/bridges`
+- [ ] Run coverage: `pytest --cov=src/t4dm/bridges`
 - [ ] Update documentation
 - [ ] Final validation: all 8,075+ tests pass
 

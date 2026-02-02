@@ -1,5 +1,5 @@
 # ww (World Weaver) Package
-**Path**: `/mnt/projects/t4d/t4dm/src/ww/`
+**Path**: `/mnt/projects/t4d/t4dm/src/t4dm/`
 **Version**: 0.5.0
 
 ## What
@@ -8,7 +8,7 @@ Biologically-inspired tripartite memory system (episodic, semantic, procedural) 
 ## Package Structure
 
 ```
-ww/
+t4dm/
 ├── core/              # Types, config, memory interface
 ├── api/               # FastAPI REST endpoints
 ├── cli/               # Command-line interface (t4dm command)

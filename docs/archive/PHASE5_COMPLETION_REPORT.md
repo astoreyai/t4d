@@ -13,7 +13,7 @@ Successfully implemented Phase 5 API cleanup for World Weaver, adding pagination
 
 ### Implementation
 
-Added `offset` parameter to three list operations in `/mnt/projects/ww/src/ww/mcp/memory_gateway.py`:
+Added `offset` parameter to three list operations in `/mnt/projects/t4d/t4dm/src/t4dm/mcp/memory_gateway.py`:
 
 1. **recall_episodes** (Line 449-522)
    - Added `offset: int = 0` parameter
@@ -32,7 +32,7 @@ Added `offset` parameter to three list operations in `/mnt/projects/ww/src/ww/mc
 
 ### Validation Enhancement
 
-Added new validator in `/mnt/projects/ww/src/ww/mcp/validation.py` (Line 160-188):
+Added new validator in `/mnt/projects/t4d/t4dm/src/t4dm/mcp/validation.py` (Line 160-188):
 
 ```python
 def validate_non_negative_int(value, field, max_val=None):
@@ -72,7 +72,7 @@ Validated pagination logic:
 
 ### Implementation
 
-Added 6 high-level query methods to `/mnt/projects/ww/src/ww/storage/neo4j_store.py` (Line 696-999):
+Added 6 high-level query methods to `/mnt/projects/t4d/t4dm/src/t4dm/storage/neo4j_store.py` (Line 696-999):
 
 1. **find_entities_by_type** (Line 698-736)
    - Find entities by entity_type and session_id
@@ -136,7 +136,7 @@ Added 6 high-level query methods to `/mnt/projects/ww/src/ww/storage/neo4j_store
 
 ### Implementation
 
-Created `/mnt/projects/ww/src/ww/mcp/schema.py` with:
+Created `/mnt/projects/t4d/t4dm/src/t4dm/mcp/schema.py` with:
 
 1. **TOOL_SCHEMAS dict** (Line 10-159)
    - Defines all 17 MCP tools
@@ -173,8 +173,8 @@ Created `/mnt/projects/ww/src/ww/mcp/schema.py` with:
 
 ### Generated Files
 
-- `/mnt/projects/ww/openapi.json` - JSON format (readable, parsable)
-- `/mnt/projects/ww/openapi.yaml` - YAML format (human-friendly)
+- `/mnt/projects/t4d/t4dm/openapi.json` - JSON format (readable, parsable)
+- `/mnt/projects/t4d/t4dm/openapi.yaml` - YAML format (human-friendly)
 
 ### Schema Features
 
@@ -199,32 +199,32 @@ Verified schema includes:
 
 ## Files Modified
 
-1. `/mnt/projects/ww/src/ww/mcp/memory_gateway.py`
+1. `/mnt/projects/t4d/t4dm/src/t4dm/mcp/memory_gateway.py`
    - Added offset parameter to 3 functions
    - Updated validation imports
    - Fixed error response calls (noted linter changes)
 
-2. `/mnt/projects/ww/src/ww/mcp/validation.py`
+2. `/mnt/projects/t4d/t4dm/src/t4dm/mcp/validation.py`
    - Added `validate_non_negative_int()` function
 
-3. `/mnt/projects/ww/src/ww/storage/neo4j_store.py`
+3. `/mnt/projects/t4d/t4dm/src/t4dm/storage/neo4j_store.py`
    - Added 6 high-level query methods
    - Added internal `_execute_read()` helper
 
 ## Files Created
 
-1. `/mnt/projects/ww/src/ww/mcp/schema.py`
+1. `/mnt/projects/t4d/t4dm/src/t4dm/mcp/schema.py`
    - OpenAPI schema generator
    - 17 tool definitions
    - Export functions
 
-2. `/mnt/projects/ww/openapi.json`
+2. `/mnt/projects/t4d/t4dm/openapi.json`
    - Generated OpenAPI schema (JSON)
 
-3. `/mnt/projects/ww/openapi.yaml`
+3. `/mnt/projects/t4d/t4dm/openapi.yaml`
    - Generated OpenAPI schema (YAML)
 
-4. `/mnt/projects/ww/PHASE5_COMPLETION_REPORT.md`
+4. `/mnt/projects/t4d/t4dm/PHASE5_COMPLETION_REPORT.md`
    - This document
 
 ---
@@ -312,7 +312,7 @@ neighbors = await neo4j_store.get_entity_neighbors(
 
 ```bash
 # Generate schema
-python src/ww/mcp/schema.py
+python src/t4dm/mcp/schema.py
 
 # Use in API documentation tools
 # - Swagger UI: Load openapi.json

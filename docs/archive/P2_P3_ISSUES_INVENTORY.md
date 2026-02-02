@@ -33,55 +33,55 @@ Sources:
 ### Category 1: Memory Leaks & Resource Management (9 issues)
 
 #### P2-MEM-001: Unbounded histogram in metrics.py
-**File**: `/mnt/projects/ww/src/ww/observability/metrics.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/observability/metrics.py`
 **Status**: FIXED (Session 3)
 **Description**: Operation and gauge histograms had no size limits
 **Fix Applied**: Added 10K max for operations, 1K max for gauges
 
 #### P2-MEM-002: Unbounded history in plasticity.py
-**File**: `/mnt/projects/ww/src/ww/learning/plasticity.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/learning/plasticity.py`
 **Status**: FIXED (Session 3)
 **Description**: LTDEngine, HomeostaticScaler, MetaplasticityController, SynapticTagger had unbounded history
 **Fix Applied**: Added history limits to all components
 
 #### P2-MEM-003: Unbounded dicts in collector.py
-**File**: `/mnt/projects/ww/src/ww/observability/collector.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/observability/collector.py`
 **Status**: FIXED (Session 3) - Uses SQLite with natural bounds
 **Description**: Event collector dictionaries could grow unbounded
 **Fix Applied**: Verified SQLite storage provides natural boundaries
 
 #### P2-MEM-004: Unbounded RPE history in dopamine.py
-**File**: `/mnt/projects/ww/src/ww/learning/dopamine.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/learning/dopamine.py`
 **Status**: FIXED (Session 3)
 **Description**: RPE history and value estimates grew unbounded
 **Fix Applied**: Added 10K history limit and cleanup for value estimates
 
 #### P2-MEM-005: Unbounded traces in eligibility.py
-**File**: `/mnt/projects/ww/src/ww/learning/eligibility.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/learning/eligibility.py`
 **Status**: FIXED (Session 3) - Already had max_traces with eviction
 **Description**: Eligibility traces could accumulate without limit
 **Fix Applied**: Verified max_traces parameter with LRU eviction already implemented
 
 #### P2-MEM-006: Figure leaks in visualization/*.py
-**File**: `/mnt/projects/ww/src/ww/visualization/*.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/visualization/*.py`
 **Status**: FIXED (Session 7)
 **Description**: Matplotlib figures not closed after plt.show()
 **Fix Applied**: Added plt.close(fig) in 6 files, 13 instances (6 new tests)
 
 #### P2-MEM-007: Signal history unbounded in three_factor.py
-**File**: `/mnt/projects/ww/src/ww/learning/three_factor.py:164`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/learning/three_factor.py:164`
 **Status**: FIXED (Session 2)
 **Description**: Learning signal history grew without limit
 **Fix Applied**: Added 10K max size limit
 
 #### P2-MEM-008: Cooldown dict unbounded in reconsolidation.py
-**File**: `/mnt/projects/ww/src/ww/memory/reconsolidation.py:128`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/reconsolidation.py:128`
 **Status**: FIXED (Session 2)
 **Description**: Episode cooldown tracking dict never cleaned up
 **Fix Applied**: Added cleanup with expiration (7 days)
 
 #### P2-MEM-009: Eviction history unbounded in working_memory.py
-**File**: `/mnt/projects/ww/src/ww/memory/working_memory.py:153`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/working_memory.py:153`
 **Status**: FIXED (Session 3)
 **Description**: Eviction history tracked without limits
 **Fix Applied**: Added 10K history limit
@@ -93,49 +93,49 @@ Sources:
 ### Category 2: Logic Errors (8 issues)
 
 #### P2-LOGIC-004: Hebbian learning not true Hebbian
-**File**: `/mnt/projects/ww/src/ww/learning/hebbian.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/learning/hebbian.py`
 **Status**: VERIFIED CORRECT (Session 8)
 **Description**: Implementation uses bounded Hebbian (w' = w + lr*(1-w))
 **Resolution**: This is intentional design, not a bug
 
 #### P2-LOGIC-005: BCM formula incorrect
-**File**: `/mnt/projects/ww/src/ww/learning/plasticity.py` (no BCM.py exists)
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/learning/plasticity.py` (no BCM.py exists)
 **Status**: VERIFIED CORRECT (Session 8)
 **Description**: BCM implementation in plasticity.py uses correct squared activity threshold
 **Resolution**: Implementation is correct, no BCM.py file exists
 
 #### P2-LOGIC-006: FSRS implementation missing
-**File**: `/mnt/projects/ww/src/ww/learning/fsrs.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/learning/fsrs.py`
 **Status**: FIXED (Session 9)
 **Description**: FSRS-4.5 spaced repetition algorithm was missing
 **Fix Applied**: Created full FSRS implementation (33 new tests): Rating enum, FSRSParameters, MemoryState, SchedulingInfo, FSRS scheduler, FSRSMemoryTracker. Fixed w6/w7 parameter swap.
 
 #### P2-LOGIC-007: Double counting in serotonin.py
-**File**: `/mnt/projects/ww/src/ww/learning/neuromodulators.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/learning/neuromodulators.py`
 **Status**: FIXED (Session 9)
 **Description**: process_outcome() used serotonin_credits which included trace, causing trace² double counting
 **Fix Applied**: Use get_long_term_value() and get_eligibility() separately
 
 #### P2-LOGIC-008: Wrong order in collector.py
-**File**: `/mnt/projects/ww/src/ww/observability/collector.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/observability/collector.py`
 **Status**: FIXED (Session 9)
 **Description**: get_retrievals_by_context() ordered DESC instead of ASC, preventing newest retrieval rewards from taking precedence
 **Fix Applied**: Changed ORDER BY from DESC to ASC
 
 #### P2-LOGIC-009: Double decay in eligibility.py
-**File**: `/mnt/projects/ww/src/ww/learning/eligibility.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/learning/eligibility.py`
 **Status**: FIXED (Session 9)
 **Description**: step() didn't update entry.last_update, causing subsequent update() calls to re-apply decay
 **Fix Applied**: Update entry.last_update to prevent double decay
 
 #### P2-LOGIC-010: Signal sign not preserved in credit_flow.py
-**File**: `/mnt/projects/ww/src/ww/learning/credit_flow.py:125`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/learning/credit_flow.py:125`
 **Status**: FIXED (Session 8)
 **Description**: Signal transformation didn't preserve sign for outcome direction
 **Fix Applied**: Added get_signed_rpe() to orchestra, use signed RPE (3 new tests)
 
 #### P2-LOGIC-011: Wrong expected value in credit_flow.py
-**File**: `/mnt/projects/ww/src/ww/learning/credit_flow.py:140`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/learning/credit_flow.py:140`
 **Status**: FIXED (Session 8)
 **Description**: Re-computed expected value from mismatched scales instead of using dopamine's surprise
 **Fix Applied**: Use dopamine's computed surprise directly
@@ -147,7 +147,7 @@ Sources:
 ### Category 3: Security Issues - Medium Severity (6 issues)
 
 #### P2-SEC-M1: Weak password validation
-**File**: `/mnt/projects/ww/src/ww/core/config.py:32-80`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/core/config.py:32-80`
 **Status**: FIXED (Session 4)
 **Priority**: P2 Medium
 **Impact**: Passwords that pass validation may still be weak
@@ -162,7 +162,7 @@ Sources:
 ---
 
 #### P2-SEC-M2: Session ID validation allows reserved IDs
-**File**: `/mnt/projects/ww/src/ww/api/deps.py:23-49`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/api/deps.py:23-49`
 **Status**: FIXED (Session 3)
 **Priority**: P2 Medium
 **Impact**: Inconsistent session validation could allow bypass
@@ -189,7 +189,7 @@ validated = validate_session_id(
 ---
 
 #### P2-SEC-M3: Rate limiter not distributed (multi-worker issue)
-**File**: `/mnt/projects/ww/src/ww/mcp/gateway.py:36-114`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/mcp/gateway.py:36-114`
 **Status**: FIXED (Session 6) - Documentation approach
 **Priority**: P2 Medium
 **Impact**: Rate limiting ineffective in multi-worker deployments
@@ -202,7 +202,7 @@ validated = validate_session_id(
 ---
 
 #### P2-SEC-M4: No API key authentication
-**File**: `/mnt/projects/ww/src/ww/api/server.py`, `deps.py`, `config.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/api/server.py`, `deps.py`, `config.py`
 **Status**: FIXED (Session 6)
 **Priority**: P2 Medium
 **Impact**: Unauthorized access if deployed on public network
@@ -234,7 +234,7 @@ validated = validate_session_id(
 ---
 
 #### P2-SEC-M6: No Content Security Policy headers
-**File**: `/mnt/projects/ww/src/ww/api/server.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/api/server.py`
 **Status**: FIXED (Session 3)
 **Priority**: P2 Medium
 **Impact**: XSS attacks if API serves HTML (e.g., /docs, /redoc)
@@ -258,7 +258,7 @@ Add `SecurityHeadersMiddleware`:
 ### Category 4: Performance Optimization Issues (9 issues)
 
 #### P2-OPT-B1.1: Cache eviction strategy O(n) scan
-**File**: `/mnt/projects/ww/src/ww/embedding/bge_m3.py:83-91`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/embedding/bge_m3.py:83-91`
 **Status**: FIXED (Session 5)
 **Priority**: P2 Medium
 **Impact**: ~1000μs delay on every cache eviction when full
@@ -267,7 +267,7 @@ Add `SecurityHeadersMiddleware`:
 ---
 
 #### P2-OPT-B2.1: Session ID filtering without index
-**File**: `/mnt/projects/ww/src/ww/storage/qdrant_store.py:289-350`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/storage/qdrant_store.py:289-350`
 **Status**: FIXED (Session 5)
 **Priority**: P2 High (listed as P2 for consistency)
 **Impact**: O(n) full collection scan instead of O(log n) for multi-session deployments
@@ -276,7 +276,7 @@ Add `SecurityHeadersMiddleware`:
 ---
 
 #### P2-OPT-B2.2: Hybrid search over-fetching candidates
-**File**: `/mnt/projects/ww/src/ww/storage/qdrant_store.py:352-432`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/storage/qdrant_store.py:352-432`
 **Status**: FIXED (Session 6)
 **Priority**: P2 Medium
 **Impact**: 4x network transfer and scoring overhead (limit * 2 for dense + sparse)
@@ -289,7 +289,7 @@ Add `SecurityHeadersMiddleware`:
 ---
 
 #### P2-OPT-B2.3: Batch operation parallelism not controlled
-**File**: `/mnt/projects/ww/src/ww/storage/qdrant_store.py:215-286`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/storage/qdrant_store.py:215-286`
 **Status**: FIXED (QDRANT-001 in Session 1)
 **Priority**: P2 Medium
 **Impact**: Rate limiting / connection pool exhaustion on large batches
@@ -302,7 +302,7 @@ Add `SecurityHeadersMiddleware`:
 ---
 
 #### P2-OPT-B3.2: Cypher query string composition
-**File**: `/mnt/projects/ww/src/ww/storage/neo4j_store.py` (multiple locations)
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/storage/neo4j_store.py` (multiple locations)
 **Status**: NEEDS REVIEW (Defense-in-depth)
 **Priority**: P2 Medium
 **Impact**: Potential for Cypher injection despite validation
@@ -319,7 +319,7 @@ Add `SecurityHeadersMiddleware`:
 ---
 
 #### P2-OPT-B3.3: Connection pool utilization unknown
-**File**: `/mnt/projects/ww/src/ww/storage/neo4j_store.py:199-216`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/storage/neo4j_store.py:199-216`
 **Status**: FIXED (Session 6)
 **Priority**: P2 Medium
 **Impact**: Unknown if pool is saturated or oversized
@@ -336,7 +336,7 @@ Add `SecurityHeadersMiddleware`:
 ---
 
 #### P2-OPT-B4.2.1: Context cache miss rate
-**File**: `/mnt/projects/ww/src/ww/memory/semantic.py:350-358`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/semantic.py:350-358`
 **Status**: FIXED (Session 6)
 **Priority**: P2 Medium
 **Impact**: No fallback caching if context changes mid-retrieval
@@ -351,7 +351,7 @@ Add `SecurityHeadersMiddleware`:
 ---
 
 #### P2-OPT-B4.3.1: Sorted node processing
-**File**: `/mnt/projects/ww/src/ww/memory/semantic.py:332`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/semantic.py:332`
 **Status**: VERIFIED - Already Implemented (Session 6)
 **Priority**: P2 Medium
 **Impact**: Processing nodes in arbitrary order may miss optimization opportunities
@@ -365,7 +365,7 @@ Add `SecurityHeadersMiddleware`:
 ---
 
 #### P2-OPT-B5.2: Worker configuration not optimized
-**File**: `/mnt/projects/ww/docs/DEPLOYMENT.md`
+**File**: `/mnt/projects/t4d/t4dm/docs/DEPLOYMENT.md`
 **Status**: FIXED (Session 6)
 **Priority**: P2 Medium
 **Impact**: Default worker count may not match deployment environment
@@ -383,7 +383,7 @@ Add `SecurityHeadersMiddleware`:
 ### Category 1: Security Issues - Low Severity (8 issues)
 
 #### P3-SEC-L1: .env file permissions not enforced
-**File**: `/mnt/projects/ww/src/ww/core/config.py:127-171`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/core/config.py:127-171`
 **Status**: FIXED (Session 4)
 **Priority**: P3 Low
 **Impact**: Secrets readable by other users if permissions too permissive
@@ -398,7 +398,7 @@ Add `SecurityHeadersMiddleware`:
 ---
 
 #### P3-SEC-L2: No SQL injection protection in direct Cypher queries
-**File**: `/mnt/projects/ww/src/ww/storage/neo4j_store.py:281-302`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/storage/neo4j_store.py:281-302`
 **Status**: FIXED (Session 6)
 **Priority**: P3 Low
 **Impact**: Cypher injection if validation bypassed (mitigated by validation)
@@ -412,7 +412,7 @@ Add `SecurityHeadersMiddleware`:
 ---
 
 #### P3-SEC-L3: XSS sanitization uses pattern removal (not encoding)
-**File**: `/mnt/projects/ww/src/ww/mcp/validation.py:265-299`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/mcp/validation.py:265-299`
 **Status**: VERIFIED DOCUMENTED (Session 5)
 **Priority**: P3 Low
 **Impact**: XSS if content rendered in HTML without escaping
@@ -422,7 +422,7 @@ Add `SecurityHeadersMiddleware`:
 ---
 
 #### P3-SEC-L4: Embedding cache has no size/memory limits
-**File**: `/mnt/projects/ww/src/ww/embedding/bge_m3.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/embedding/bge_m3.py`
 **Status**: VERIFIED FIXED (Session 5)
 **Priority**: P3 Low
 **Impact**: Memory exhaustion if cache grows unbounded
@@ -436,7 +436,7 @@ Add `SecurityHeadersMiddleware`:
 ---
 
 #### P3-SEC-L5: No audit logging for sensitive operations
-**File**: `/mnt/projects/ww/src/ww/observability/logging.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/observability/logging.py`
 **Status**: FIXED (Session 5)
 **Priority**: P3 Low
 **Impact**: Insufficient forensics after security incident
@@ -464,7 +464,7 @@ Integrated into gateway.py (rate limiting) and deps.py (admin auth).
 ---
 
 #### P3-SEC-L7: No request size limits
-**File**: `/mnt/projects/ww/src/ww/api/server.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/api/server.py`
 **Status**: FIXED (Session 3)
 **Priority**: P3 Low
 **Impact**: DoS via large payloads
@@ -480,7 +480,7 @@ Integrated into gateway.py (rate limiting) and deps.py (admin auth).
 ---
 
 #### P3-SEC-L8: No timeout on external LLM calls
-**File**: `/mnt/projects/ww/src/ww/extraction/entity_extractor.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/extraction/entity_extractor.py`
 **Status**: VERIFIED FIXED (Session 5)
 **Priority**: P3 Low
 **Impact**: Hang on slow/malicious LLM endpoint
@@ -493,7 +493,7 @@ Integrated into gateway.py (rate limiting) and deps.py (admin auth).
 ### Category 2: Code Quality & Validation Issues (12 issues)
 
 #### P3-QUALITY-001: Missing TODO implementation in dynamics.py
-**File**: `/mnt/projects/ww/src/ww/temporal/dynamics.py:350`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/temporal/dynamics.py:350`
 **Status**: FIXED (Session 6)
 **Priority**: P3 Low
 **Impact**: Feature incomplete
@@ -506,7 +506,7 @@ Integrated into gateway.py (rate limiting) and deps.py (admin auth).
 ---
 
 #### P3-QUALITY-002: Test security TODOs in eligibility_security.py
-**File**: `/mnt/projects/ww/tests/security/test_eligibility_security.py`
+**File**: `/mnt/projects/t4d/t4dm/tests/security/test_eligibility_security.py`
 **Status**: VERIFIED COMPLETE (Session 6)
 **Priority**: P3 Low
 **Impact**: Security validation gaps

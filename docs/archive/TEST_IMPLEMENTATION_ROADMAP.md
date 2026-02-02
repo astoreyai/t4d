@@ -11,7 +11,7 @@
 
 ### Solution
 
-Create `/mnt/projects/ww/tests/conftest.py`:
+Create `/mnt/projects/t4d/t4dm/tests/conftest.py`:
 
 ```python
 """Pytest configuration and shared fixtures for World Weaver tests."""
@@ -168,7 +168,7 @@ pytest tests/test_memory.py -v  # Should fix all 5 failures
 
 ## Phase 1: Consolidation Service Tests (8-10 hours)
 
-### File: `/mnt/projects/ww/tests/unit/test_consolidation.py`
+### File: `/mnt/projects/t4d/t4dm/tests/unit/test_consolidation.py`
 
 ```python
 """
@@ -598,7 +598,7 @@ if __name__ == "__main__":
 
 ## Phase 2: MCP Gateway Tests (10-12 hours)
 
-### File: `/mnt/projects/ww/tests/unit/test_mcp_gateway.py`
+### File: `/mnt/projects/t4d/t4dm/tests/unit/test_mcp_gateway.py`
 
 ```python
 """
@@ -1056,7 +1056,7 @@ if __name__ == "__main__":
 
 ## Phase 3: Observability Tests (8-10 hours)
 
-### File: `/mnt/projects/ww/tests/unit/test_observability.py`
+### File: `/mnt/projects/t4d/t4dm/tests/unit/test_observability.py`
 
 ```python
 """
@@ -1277,7 +1277,7 @@ if __name__ == "__main__":
 
 ## Phase 4: Storage & Edge Cases (12-15 hours)
 
-### Create `/mnt/projects/ww/tests/unit/test_storage.py`
+### Create `/mnt/projects/t4d/t4dm/tests/unit/test_storage.py`
 
 **Key Tests**:
 - Neo4j timeout handling
@@ -1286,7 +1286,7 @@ if __name__ == "__main__":
 - Error recovery
 - Concurrent operations
 
-### Create `/mnt/projects/ww/tests/unit/test_edge_cases.py`
+### Create `/mnt/projects/t4d/t4dm/tests/unit/test_edge_cases.py`
 
 **Key Tests**:
 - Empty results
@@ -1383,16 +1383,16 @@ pytest -m integration
 ## Files to Create/Modify
 
 **Create**:
-- `/mnt/projects/ww/tests/conftest.py` - Shared pytest fixtures
-- `/mnt/projects/ww/tests/unit/test_consolidation.py` - Consolidation tests
-- `/mnt/projects/ww/tests/unit/test_mcp_gateway.py` - MCP tests
-- `/mnt/projects/ww/tests/unit/test_observability.py` - Logging/metrics/health tests
-- `/mnt/projects/ww/tests/unit/test_storage.py` - Storage layer tests
-- `/mnt/projects/ww/tests/unit/test_edge_cases.py` - Edge case tests
+- `/mnt/projects/t4d/t4dm/tests/conftest.py` - Shared pytest fixtures
+- `/mnt/projects/t4d/t4dm/tests/unit/test_consolidation.py` - Consolidation tests
+- `/mnt/projects/t4d/t4dm/tests/unit/test_mcp_gateway.py` - MCP tests
+- `/mnt/projects/t4d/t4dm/tests/unit/test_observability.py` - Logging/metrics/health tests
+- `/mnt/projects/t4d/t4dm/tests/unit/test_storage.py` - Storage layer tests
+- `/mnt/projects/t4d/t4dm/tests/unit/test_edge_cases.py` - Edge case tests
 
 **Modify**:
-- `/mnt/projects/ww/pyproject.toml` - pytest configuration
-- `/mnt/projects/ww/tests/__init__.py` - Package documentation
+- `/mnt/projects/t4d/t4dm/pyproject.toml` - pytest configuration
+- `/mnt/projects/t4d/t4dm/tests/__init__.py` - Package documentation
 
 ---
 

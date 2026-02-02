@@ -392,7 +392,7 @@ No external services. No Docker for storage. Embedded, runs in-process.
 ## Phase 1: Foundation (12 atoms)
 
 ### T4D-P1-01: Unified MemoryItem Type
-- **Create**: `src/ww/core/memory_item.py`
+- **Create**: `src/t4dm/core/memory_item.py`
 - **Schema**: id, content, embedding(1024d), event_time, record_time, valid_from, valid_until, κ∈[0,1], importance, spike_trace, graph_delta, metadata, memory_type
 - **Test**: `tests/unit/core/test_memory_item.py`
 - **Deps**: None
@@ -400,79 +400,79 @@ No external services. No Docker for storage. Embedded, runs in-process.
 - **Note**: This is the high-level API type. T4DX stores the numpy-friendly Item (P2-01) internally; MemoryItem↔Item conversion happens in the adapter layer.
 
 ### T4D-P1-02: κ-Based Query Policies
-- **Create**: `src/ww/core/query_policies.py`
+- **Create**: `src/t4dm/core/query_policies.py`
 - **Define**: EpisodicPolicy(κ<0.3, tight Δt), SemanticPolicy(κ>0.7, wide Δt), ProceduralPolicy(type=proc, success-ranked)
 - **Test**: `tests/unit/core/test_query_policies.py`
 - **Deps**: T4D-P1-01
 - **Accept**: Each policy returns filter params that map to T4DX SEARCH filters
 
 ### T4D-P1-03: τ(t) Temporal Gate
-- **Create**: `src/ww/core/temporal_gate.py`
+- **Create**: `src/t4dm/core/temporal_gate.py`
 - **Equation**: τ(t) = σ(λ_ε·ε + λ_Δ·novelty + λ_r·reward)
 - **Test**: `tests/unit/core/test_temporal_gate.py`
 - **Deps**: None
 - **Accept**: Gates write/plasticity/replay, returns float∈[0,1], configurable λ weights
 
 ### T4D-P1-04: LIF Neuron Module
-- **Create**: `src/ww/spiking/lif.py`
+- **Create**: `src/t4dm/spiking/lif.py`
 - **Impl**: u(t+Δt) = αu + I − β·spike, soft reset (u -= V_thresh × spike), STE surrogate gradient
 - **Test**: `tests/unit/spiking/test_lif.py`
 - **Deps**: None (PyTorch only)
 - **Accept**: Forward returns (spikes, membrane_state), soft reset preserves potential, gradient flows through STE
 
 ### T4D-P1-05: Thalamic Gate (Stage ①)
-- **Create**: `src/ww/spiking/thalamic_gate.py`
+- **Create**: `src/t4dm/spiking/thalamic_gate.py`
 - **Impl**: sigmoid(linear(context)) × input — ACh-modulated input mask
 - **Test**: `tests/unit/spiking/test_thalamic_gate.py`
 - **Deps**: T4D-P1-04
 - **Accept**: Multiplicative gating, ACh level modulates gate strength
 
 ### T4D-P1-06: Spike Attention (Stage ③)
-- **Create**: `src/ww/spiking/spike_attention.py`
+- **Create**: `src/t4dm/spiking/spike_attention.py`
 - **Impl**: STDP-weighted Q·K via spike timing, linear attention (no softmax), first-spike coding
 - **Test**: `tests/unit/spiking/test_spike_attention.py`
 - **Deps**: T4D-P1-04
 - **Accept**: STDP weight update, linear O(N) complexity, spike-driven output
 
 ### T4D-P1-07: Apical Modulation (Stage ④)
-- **Create**: `src/ww/spiking/apical_modulation.py`
+- **Create**: `src/t4dm/spiking/apical_modulation.py`
 - **Impl**: prediction error + Ca²⁺ dendritic gate + FF goodness (output = basal × σ(apical))
 - **Test**: `tests/unit/spiking/test_apical_modulation.py`
 - **Deps**: T4D-P1-04
 - **Accept**: Multiplicative gating, goodness G(h) = Σhᵢ², prediction error computed
 
 ### T4D-P1-08: RWKV Linear Recurrence (Stage ⑤)
-- **Create**: `src/ww/spiking/rwkv_recurrence.py`
+- **Create**: `src/t4dm/spiking/rwkv_recurrence.py`
 - **Impl**: Time-mixing (learned decay, token shift) + channel-mixing (gated FFN), O(N) streaming
 - **Test**: `tests/unit/spiking/test_rwkv_recurrence.py`
 - **Deps**: T4D-P1-04
 - **Accept**: Constant memory per token, state carries across sequence, LIF output
 
 ### T4D-P1-09: Spiking Cortical Block (Composed)
-- **Create**: `src/ww/spiking/cortical_block.py`
+- **Create**: `src/t4dm/spiking/cortical_block.py`
 - **Impl**: Compose stages ①→②→③→④→⑤→⑥ with capsule routing and RMP-SNN residual
 - **Test**: `tests/unit/spiking/test_cortical_block.py`
 - **Deps**: T4D-P1-05, T4D-P1-06, T4D-P1-07, T4D-P1-08
 - **Accept**: 6-stage forward pass, residual from stage② to stage⑥, all u_states tracked
 
 ### T4D-P1-10: Spiking Cortical Stack (×N blocks)
-- **Create**: `src/ww/spiking/cortical_stack.py`
+- **Create**: `src/t4dm/spiking/cortical_stack.py`
 - **Impl**: N sequential cortical blocks with shared memory context and neuromodulator bus
 - **Test**: `tests/unit/spiking/test_cortical_stack.py`
 - **Deps**: T4D-P1-09
 - **Accept**: Configurable N (default=6), shared memory read, per-block state
 
 ### T4D-P1-11: Neuromodulator Bus for Spiking Blocks
-- **Modify**: `src/ww/learning/neuromodulators.py` (NeuromodulatorOrchestra:225)
-- **Create**: `src/ww/spiking/neuromod_bus.py`
+- **Modify**: `src/t4dm/learning/neuromodulators.py` (NeuromodulatorOrchestra:225)
+- **Create**: `src/t4dm/spiking/neuromod_bus.py`
 - **Impl**: Route DA→L2/3+L5 (STDP LR), NE→L5 (gain), ACh→L1/L4 (gate), 5-HT→L5/6 (patience)
 - **Test**: `tests/unit/spiking/test_neuromod_bus.py`
 - **Deps**: T4D-P1-09
 - **Accept**: Layer-specific injection, uses existing NT systems, configurable coupling
 
 ### T4D-P1-12: Oscillatory Phase Bias
-- **Modify**: `src/ww/nca/oscillators.py` (FrequencyBandGenerator)
-- **Create**: `src/ww/spiking/oscillator_bias.py`
+- **Modify**: `src/t4dm/nca/oscillators.py` (FrequencyBandGenerator)
+- **Create**: `src/t4dm/spiking/oscillator_bias.py`
 - **Impl**: θ(4-8Hz), γ(30-100Hz), δ(0.5-4Hz) → bias currents into LIF neurons
 - **Test**: `tests/unit/spiking/test_oscillator_bias.py`
 - **Deps**: T4D-P1-04
@@ -483,14 +483,14 @@ No external services. No Docker for storage. Embedded, runs in-process.
 ## Phase 2: T4DX Storage Engine (14 atoms)
 
 ### T4D-P2-01: Item + Edge Storage Types
-- **Create**: `src/ww/storage/t4dx/types.py`
+- **Create**: `src/t4dm/storage/t4dx/types.py`
 - **Impl**: `Item` (numpy-friendly, fixed-size fields, slots=True), `Edge` (45 bytes), `SegmentMetadata`, `EdgeType` enum (CAUSES, TEMPORAL_BEFORE, TEMPORAL_AFTER, PART_OF, SIMILAR_TO, MERGED_FROM, SUPERSEDES, RELATES_TO, CONSOLIDATED_INTO, IMPLEMENTS, HAS_CONTEXT, DERIVED_FROM, DEPENDS_ON — all 17 relationship types from Neo4j)
 - **Test**: `tests/unit/storage/test_t4dx_types.py`
 - **Deps**: T4D-P1-01
 - **Accept**: MemoryItem↔Item round-trip conversion, numpy structured dtype for Item, all Neo4j relationship types mapped to EdgeType
 
 ### T4D-P2-02: T4DX WAL
-- **Create**: `src/ww/storage/t4dx/wal.py`
+- **Create**: `src/t4dm/storage/t4dx/wal.py`
 - **Impl**: Extend existing WAL format with T4DX operation types: INSERT_ITEM, INSERT_EDGE, UPDATE_FIELDS, UPDATE_EDGE_WEIGHT, DELETE_ITEM, BATCH_SCALE. Binary entry format: [magic][LSN][timestamp][op_type][payload_len][msgpack_payload][HMAC-SHA256]. 64MB segment files, append-only, fsync on configurable interval.
 - **Note**: Reuses existing WAL infrastructure from `persistence/wal.py` where possible, but T4DX needs its own WAL file (separate from the legacy memory WAL) because the operation types and recovery protocol differ.
 - **Test**: `tests/unit/storage/test_t4dx_wal.py`
@@ -498,14 +498,14 @@ No external services. No Docker for storage. Embedded, runs in-process.
 - **Accept**: Survives kill -9, CRC/HMAC verification, replay produces correct MemTable state
 
 ### T4D-P2-03: MemTable
-- **Create**: `src/ww/storage/t4dx/memtable.py`
+- **Create**: `src/t4dm/storage/t4dx/memtable.py`
 - **Impl**: Mutable in-memory buffer. insert(Item, edges[]), get(id), brute_force_search(vector, k, filters), update_fields(id, fields), add_edge(edge), update_edge_weight(src, tgt, Δw), delete(id, tombstone), scan(filters). Field overlays dict, edge deltas dict. Flush to Segment when count >= threshold (default 10K) or timer fires.
 - **Test**: `tests/unit/storage/test_t4dx_memtable.py`
 - **Deps**: T4D-P2-01
 - **Accept**: All 9 operations work on in-memory data, κ-sorted via SortedList, overlay merge correct, flush produces valid Segment
 
 ### T4D-P2-04: Segment Builder
-- **Create**: `src/ww/storage/t4dx/segment.py` (builder portion)
+- **Create**: `src/t4dm/storage/t4dx/segment.py` (builder portion)
 - **Impl**: Build immutable segment from lists of Items + Edges:
   1. Build hnswlib index from vectors (ef_construction=200, M=16)
   2. Sort items by ID for binary search
@@ -521,7 +521,7 @@ No external services. No Docker for storage. Embedded, runs in-process.
 - **Accept**: All index files created, HNSW recall >95% on self-query, sorted arrays correct, CSR traversal matches input edges
 
 ### T4D-P2-05: Segment Reader
-- **Create**: `src/ww/storage/t4dx/segment.py` (reader portion)
+- **Create**: `src/t4dm/storage/t4dx/segment.py` (reader portion)
 - **Impl**: Load segment from disk via mmap. Operations:
   - `get(id)` → binary search on sorted ID array → O(log N)
   - `hnsw_search(vector, k, ef_search)` → hnswlib query → O(log N)
@@ -535,7 +535,7 @@ No external services. No Docker for storage. Embedded, runs in-process.
 - **Accept**: All read paths return correct results, mmap'd files work, overlay merge correct
 
 ### T4D-P2-06: Global Index
-- **Create**: `src/ww/storage/t4dx/global_index.py`
+- **Create**: `src/t4dm/storage/t4dx/global_index.py`
 - **Impl**: Cross-segment coordination:
   - `id_map: dict[bytes, int]` — UUID → segment_id for point lookups
   - `cross_edges: CSR` — edges where source and target are in different segments
@@ -549,7 +549,7 @@ No external services. No Docker for storage. Embedded, runs in-process.
 - **Accept**: Point lookup routes to correct segment, cross-segment traversal works, manifest stays sorted
 
 ### T4D-P2-07: Query Planner
-- **Create**: `src/ww/storage/t4dx/query_planner.py`
+- **Create**: `src/t4dm/storage/t4dx/query_planner.py`
 - **Impl**: Routes queries to relevant segments, merges results:
   1. Prune segments by time_range (skip segments where time_max < query_min or time_min > query_max)
   2. Prune by κ_range (skip segments where κ_max < query_min or κ_min > query_max)
@@ -563,7 +563,7 @@ No external services. No Docker for storage. Embedded, runs in-process.
 - **Accept**: Pruning reduces segments searched, results identical to brute-force, TRAVERSE spans segments
 
 ### T4D-P2-08: Compactor
-- **Create**: `src/ww/storage/t4dx/compactor.py`
+- **Create**: `src/t4dm/storage/t4dx/compactor.py`
 - **Impl**: LSM compaction that IS memory consolidation:
   - `flush(memtable)` → write new L0 segment, truncate WAL
   - `nrem_compact(segments)` → merge L0→L1: read all items, apply field_overlays + edge_deltas, boost κ for high-PE items (+0.05), run STDP weight updates on replayed sequences, write new segment, mark inputs as garbage
@@ -576,7 +576,7 @@ No external services. No Docker for storage. Embedded, runs in-process.
 - **Accept**: κ correctly updated, deltas consumed, tombstones removed, HDBSCAN clusters formed, prototype items created with correct κ
 
 ### T4D-P2-09: T4DX Engine
-- **Create**: `src/ww/storage/t4dx/engine.py`
+- **Create**: `src/t4dm/storage/t4dx/engine.py`
 - **Impl**: Top-level orchestrator. Public API = the 9 operations:
   1. `insert(item, edges)` → WAL + MemTable + auto-flush
   2. `get(id)` → MemTable check → bloom filter → segment lookup
@@ -596,7 +596,7 @@ No external services. No Docker for storage. Embedded, runs in-process.
 - **Accept**: All 9 operations work end-to-end, crash recovery restores state, auto-flush triggers
 
 ### T4D-P2-10: VectorStore Protocol Adapter
-- **Create**: `src/ww/storage/t4dx/vector_adapter.py`
+- **Create**: `src/t4dm/storage/t4dx/vector_adapter.py`
 - **Impl**: Implements `VectorStore` protocol from `core/protocols.py` backed by T4DXEngine:
   - `create_collection(name, dim, distance)` → register namespace prefix
   - `add(collection, ids, vectors, payloads)` → engine.insert() for each, collection stored in metadata
@@ -609,7 +609,7 @@ No external services. No Docker for storage. Embedded, runs in-process.
 - **Accept**: Passes all existing VectorStore protocol tests, drop-in for QdrantStore
 
 ### T4D-P2-11: GraphStore Protocol Adapter
-- **Create**: `src/ww/storage/t4dx/graph_adapter.py`
+- **Create**: `src/t4dm/storage/t4dx/graph_adapter.py`
 - **Impl**: Implements `GraphStore` protocol backed by T4DXEngine:
   - `create_node(label, properties)` → engine.insert(Item from props, no vector)
   - `get_node(node_id, label)` → engine.get(id), return properties
@@ -627,7 +627,7 @@ No external services. No Docker for storage. Embedded, runs in-process.
 - **Accept**: Passes all existing GraphStore protocol tests, all Cypher patterns translated
 
 ### T4D-P2-12: Dual-Write Migration Coordinator
-- **Create**: `src/ww/storage/migration.py`
+- **Create**: `src/t4dm/storage/migration.py`
 - **Impl**: Wraps both VectorStore and GraphStore protocols:
   - `write_mode`: `legacy_only` | `dual` | `t4dx_only`
   - `read_source`: `legacy` | `t4dx` | `both` (compare)
@@ -639,7 +639,7 @@ No external services. No Docker for storage. Embedded, runs in-process.
 - **Accept**: Configurable mode, consistency monitoring, gradual migration
 
 ### T4D-P2-13: Data Loader + Migration Validation
-- **Create**: `src/ww/storage/t4dx/data_loader.py`, `tests/integration/test_migration_validation.py`
+- **Create**: `src/t4dm/storage/t4dx/data_loader.py`, `tests/integration/test_migration_validation.py`
 - **Impl**:
   - Bulk load: Qdrant.scroll() all collections → convert to Items → engine.insert()
   - Bulk load: Neo4j.get_all_nodes() all labels → convert to Items + Edges → engine.insert()
@@ -650,7 +650,7 @@ No external services. No Docker for storage. Embedded, runs in-process.
 ### T4D-P2-14: Remove Saga Pattern
 - **Modify**: All files that import from `ww.storage.saga` (6 files: episodic.py, semantic.py, procedural.py, episodic_saga.py, plus episodic_ORIGINAL_BACKUP.py)
 - **Modify**: All 16 files that import qdrant_store or neo4j_store → use T4DX adapters
-- **Modify**: `src/ww/storage/__init__.py` → export T4DX adapters
+- **Modify**: `src/t4dm/storage/__init__.py` → export T4DX adapters
 - **Test**: All 8,905+ existing tests pass with T4DX adapter as sole backend
 - **Deps**: T4D-P2-13 (migration validated)
 - **Accept**: No Saga/Qdrant/Neo4j imports in hot path, single-store writes, all tests green
@@ -660,14 +660,14 @@ No external services. No Docker for storage. Embedded, runs in-process.
 ## Phase 3: Qwen Integration (11 atoms)
 
 ### T4D-P3-01: Qwen 3B Model Loader
-- **Create**: `src/ww/qwen/loader.py`
+- **Create**: `src/t4dm/qwen/loader.py`
 - **Impl**: Load Qwen2.5-3B with BitsAndBytes 4-bit NF4, device_map="auto", freeze all params
 - **Test**: `tests/unit/qwen/test_loader.py`
 - **Deps**: None
 - **Accept**: <2GB VRAM, all params frozen, hidden_dim=2048 exposed
 
 ### T4D-P3-02: QLoRA Adapter Setup
-- **Create**: `src/ww/qwen/qlora.py`
+- **Create**: `src/t4dm/qwen/qlora.py`
 - **Impl**: Apply PEFT LoRA(r=16, alpha=32) to q_proj + v_proj on all 36 Qwen layers, ~15M trainable params
 - **Test**: `tests/unit/qwen/test_qlora.py`
 - **Deps**: T4D-P3-01
@@ -675,35 +675,35 @@ No external services. No Docker for storage. Embedded, runs in-process.
 - **Config**: Configurable rank (8/16/32/64), target_modules, alpha, dropout
 
 ### T4D-P3-03: Hidden State Extractor
-- **Create**: `src/ww/qwen/extractor.py`
+- **Create**: `src/t4dm/qwen/extractor.py`
 - **Impl**: Hook layer 18 (middle of 36), extract hidden states [B, S, 2048]
 - **Test**: `tests/unit/qwen/test_extractor.py`
 - **Deps**: T4D-P3-01
 - **Accept**: Returns hidden states without gradient, configurable tap layer
 
 ### T4D-P3-04: Memory Projection Layers
-- **Create**: `src/ww/qwen/projections.py`
+- **Create**: `src/t4dm/qwen/projections.py`
 - **Impl**: mem_encoder(2048→1024) for T4DX write, mem_decoder(1024→2048) for T4DX read
 - **Test**: `tests/unit/qwen/test_projections.py`
 - **Deps**: None
 - **Accept**: Trainable, bidirectional, reconstruction loss <0.1
 
 ### T4D-P3-05: Unified Model (Qwen + QLoRA + Spiking + Memory)
-- **Create**: `src/ww/qwen/unified_model.py`
+- **Create**: `src/t4dm/qwen/unified_model.py`
 - **Impl**: Qwen(0-17, QLoRA) → spiking adapter → Qwen(18-35, QLoRA) → LM head, with T4DX read/write
 - **Test**: `tests/unit/qwen/test_unified_model.py`
 - **Deps**: T4D-P3-01, T4D-P3-02, T4D-P3-03, T4D-P3-04, T4D-P1-10
 - **Accept**: End-to-end forward pass produces logits, ~65-95M trainable params (15M QLoRA + 50-80M spiking), ≤12GB VRAM
 
 ### T4D-P3-06: Phase 1 Training Loop (Surrogate Gradient + QLoRA)
-- **Create**: `src/ww/qwen/training.py`
+- **Create**: `src/t4dm/qwen/training.py`
 - **Impl**: AdamW on QLoRA + spiking params, CE + FF goodness loss, mixed precision
 - **Test**: `tests/unit/qwen/test_training.py`
 - **Deps**: T4D-P3-05
 - **Accept**: Loss decreases, gradient flows through LIF (STE) AND QLoRA, VRAM ≤18GB during training
 
 ### T4D-P3-07: Phase 2 Learning Mode Switch
-- **Create**: `src/ww/qwen/local_learning.py`
+- **Create**: `src/t4dm/qwen/local_learning.py`
 - **Impl**: Spiking params → three-factor local learning. QLoRA → optional freeze after Phase 1.
 - **Test**: `tests/unit/qwen/test_local_learning.py`
 - **Deps**: T4D-P3-06, T4D-P1-11
@@ -711,28 +711,28 @@ No external services. No Docker for storage. Embedded, runs in-process.
 - **Config**: `qlora_freeze_after_phase1: bool`
 
 ### T4D-P3-08: LoRA Merge/Export
-- **Create**: `src/ww/qwen/lora_merge.py`
+- **Create**: `src/t4dm/qwen/lora_merge.py`
 - **Impl**: Merge LoRA weights into base model for inference (no adapter overhead), export to safetensors
 - **Test**: `tests/unit/qwen/test_lora_merge.py`
 - **Deps**: T4D-P3-06
 - **Accept**: Merged model produces identical outputs, saves ~0.3GB VRAM
 
 ### T4D-P3-09: Inference Pipeline
-- **Create**: `src/ww/qwen/inference.py`
+- **Create**: `src/t4dm/qwen/inference.py`
 - **Impl**: Tokenize → Qwen+QLoRA → spiking adapter (with T4DX SEARCH for context) → generate, memory INSERT gated by τ(t)
 - **Test**: `tests/unit/qwen/test_inference.py`
 - **Deps**: T4D-P3-05, T4D-P2-09, T4D-P1-03
 - **Accept**: Generates coherent text, memory context improves responses, τ(t) gates writes
 
 ### T4D-P3-10: Activation Visibility Hooks
-- **Create**: `src/ww/qwen/visibility.py`
+- **Create**: `src/t4dm/qwen/visibility.py`
 - **Impl**: Hook all 36 Qwen layers (including LoRA deltas) + 6 spiking blocks, capture activations, attention, spikes, membrane potentials, LoRA contribution diffs
 - **Test**: `tests/unit/qwen/test_visibility.py`
 - **Deps**: T4D-P3-05
 - **Accept**: Full glass-box: every activation, spike, STDP update, LoRA delta observable
 
 ### T4D-P3-11: QLoRA Rank Search
-- **Create**: `src/ww/qwen/rank_search.py`
+- **Create**: `src/t4dm/qwen/rank_search.py`
 - **Impl**: Grid search r∈{8,16,32,64}, measure perplexity + recall + VRAM
 - **Test**: `tests/unit/qwen/test_rank_search.py`
 - **Deps**: T4D-P3-06
@@ -745,7 +745,7 @@ No external services. No Docker for storage. Embedded, runs in-process.
 These atoms integrate the existing consolidation code with T4DX compaction. The key change: consolidation phases now call `Compactor` methods instead of separate Qdrant/Neo4j operations.
 
 ### T4D-P4-01: Sleep Scheduler
-- **Create**: `src/ww/consolidation/sleep_scheduler.py`
+- **Create**: `src/t4dm/consolidation/sleep_scheduler.py`
 - **Impl**: Trigger compaction after N items in MemTable OR T seconds idle, adenosine pressure model from NCA
 - **Maps to**: T4DX Compactor trigger events
 - **Test**: `tests/unit/consolidation/test_sleep_scheduler.py`
@@ -753,28 +753,28 @@ These atoms integrate the existing consolidation code with T4DX compaction. The 
 - **Accept**: Configurable triggers, adenosine accumulates with activity
 
 ### T4D-P4-02: NREM Phase (= T4DX NREM Compaction)
-- **Modify**: `src/ww/consolidation/sleep.py` (SleepConsolidation)
+- **Modify**: `src/t4dm/consolidation/sleep.py` (SleepConsolidation)
 - **Impl**: Select high-PE items from T4DX via SCAN(κ<0.3, importance>0.5) → replay through spiking blocks → STDP strengthening via UPDATE_EDGE_WEIGHT → κ += 0.05 via UPDATE_FIELDS → trigger Compactor.nrem_compact() to merge segments
 - **Test**: `tests/unit/consolidation/test_nrem_spiking.py`
 - **Deps**: T4D-P1-10, T4D-P2-09
 - **Accept**: Spike reinjection works, κ increases, STDP weights update, compacted segment produced
 
 ### T4D-P4-03: REM Phase (= T4DX REM Compaction)
-- **Modify**: `src/ww/consolidation/sleep.py`
+- **Modify**: `src/t4dm/consolidation/sleep.py`
 - **Impl**: SCAN(0.3≤κ≤0.7) → HDBSCAN cluster embeddings → create prototype Items (centroid vector, κ += 0.2, item_type=semantic) → INSERT prototypes with MERGED_FROM edges → trigger Compactor.rem_compact()
 - **Test**: `tests/unit/consolidation/test_rem_spiking.py`
 - **Deps**: T4D-P2-09
 - **Accept**: Clusters formed, prototypes created with correct κ, originals linked via MERGED_FROM
 
 ### T4D-P4-04: Prune Phase (= T4DX Prune Compaction)
-- **Modify**: `src/ww/consolidation/sleep.py`
+- **Modify**: `src/t4dm/consolidation/sleep.py`
 - **Impl**: DELETE items where κ < θ_forget AND importance < 0.1 → trigger Compactor.prune() to rewrite segments without tombstoned items → update causal graph (remove dangling edges)
 - **Test**: `tests/unit/consolidation/test_prune_spiking.py`
 - **Deps**: T4D-P2-09
 - **Accept**: Low-κ items pruned, tombstones cleaned, disk space freed
 
 ### T4D-P4-05: Spike Reinjection Loop
-- **Create**: `src/ww/consolidation/spike_reinjection.py`
+- **Create**: `src/t4dm/consolidation/spike_reinjection.py`
 - **Impl**: z_replay = engine.get(id).vector → spiking cortical blocks → spikes → STDP update → engine.update_edge_weight() → engine.update_fields(κ +=) → write back
 - **Mixing**: α·z_live + (1-α)·z_replay for interleaved replay
 - **Test**: `tests/unit/consolidation/test_spike_reinjection.py`
@@ -782,7 +782,7 @@ These atoms integrate the existing consolidation code with T4DX compaction. The 
 - **Accept**: Full loop: T4DX read → spike → learn → T4DX write back
 
 ### T4D-P4-06: Full Sleep Cycle v2
-- **Create**: `src/ww/consolidation/sleep_cycle_v2.py`
+- **Create**: `src/t4dm/consolidation/sleep_cycle_v2.py`
 - **Impl**: Orchestrate NREM → REM → PRUNE with T4DX Compactor, emit metrics
 - **Maps to**: Compactor.nrem_compact() → Compactor.rem_compact() → Compactor.prune()
 - **Test**: `tests/unit/consolidation/test_full_sleep_cycle.py`
@@ -790,14 +790,14 @@ These atoms integrate the existing consolidation code with T4DX compaction. The 
 - **Accept**: All phases execute, metrics: replayed/clustered/pruned counts, segments compacted
 
 ### T4D-P4-07: Background Consolidation Service
-- **Create**: `src/ww/consolidation/background_service.py`
+- **Create**: `src/t4dm/consolidation/background_service.py`
 - **Impl**: Async background task triggered by sleep scheduler, graceful shutdown (flush MemTable first)
 - **Test**: `tests/unit/consolidation/test_background_service.py`
 - **Deps**: T4D-P4-01, T4D-P4-06
 - **Accept**: Runs in background, doesn't block inference, thread-safe T4DX access
 
 ### T4D-P4-08: Homeostatic Scaling Integration
-- **Modify**: `src/ww/learning/homeostatic.py` (HomeostaticPlasticity:70)
+- **Modify**: `src/t4dm/learning/homeostatic.py` (HomeostaticPlasticity:70)
 - **Impl**: w ← w·(r*/r̂)^γ targeting <5% firing rate → uses engine.batch_scale_weights() → BCM sliding threshold
 - **Test**: `tests/unit/consolidation/test_homeostatic.py`
 - **Deps**: T4D-P1-10, T4D-P2-09
@@ -808,7 +808,7 @@ These atoms integrate the existing consolidation code with T4DX compaction. The 
 ## Phase 5: Persistence Integration (3 atoms)
 
 ### T4D-P5-01: Checkpoint v3 (T4DX + Spiking State)
-- **Modify**: `src/ww/persistence/checkpoint.py`
+- **Modify**: `src/t4dm/persistence/checkpoint.py`
 - **Impl**: Extend CheckpointManager to include:
   - T4DX MemTable state (items, edges, field_overlays, edge_deltas, tombstones)
   - T4DX WAL position (LSN)
@@ -825,7 +825,7 @@ These atoms integrate the existing consolidation code with T4DX compaction. The 
 - **Accept**: Full round-trip: save → kill -9 → restart → load → state matches (within checkpoint window)
 
 ### T4D-P5-02: Recovery v2 (T4DX-Aware Startup)
-- **Modify**: `src/ww/persistence/recovery.py`
+- **Modify**: `src/t4dm/persistence/recovery.py`
 - **Impl**: Extend RecoveryManager:
   - COLD START: initialize T4DX engine with empty MemTable, no segments
   - WARM START:
@@ -842,7 +842,7 @@ These atoms integrate the existing consolidation code with T4DX compaction. The 
 - **Accept**: Warm start recovers full state, cold start initializes clean, WAL replay fills gap
 
 ### T4D-P5-03: Shutdown v2 (T4DX Flush + Checkpoint)
-- **Modify**: `src/ww/persistence/shutdown.py`
+- **Modify**: `src/t4dm/persistence/shutdown.py`
 - **Impl**: Extend ShutdownManager:
   1. Signal: stop accepting new writes
   2. Drain in-flight operations (30s timeout)
@@ -985,7 +985,7 @@ P5-03 (Shutdown v2) ← P2-09, P5-01                                            
 ## New File Structure
 
 ```
-src/ww/
+src/t4dm/
 ├── spiking/                    # NEW: Spiking cortical blocks
 │   ├── __init__.py
 │   ├── lif.py                  # LIF neuron (P1-04)

@@ -1,6 +1,6 @@
 # Learning Module
 
-**Path**: `ww/learning/` | **Files**: 24 | **Lines**: ~8,500
+**Path**: `t4dm/learning/` | **Files**: 24 | **Lines**: ~8,500
 
 Biologically-inspired adaptive learning framework combining eligibility traces, neuromodulator dynamics, and reward prediction errors.
 

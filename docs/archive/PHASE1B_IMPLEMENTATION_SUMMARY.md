@@ -12,7 +12,7 @@ Implemented biological fixes for VTA dopamine decay and TAN (cholinergic interne
 
 ### Implementation
 
-**File**: `/mnt/projects/ww/src/ww/nca/vta.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/nca/vta.py`
 
 **Changes**:
 - Replaced linear decay with exponential decay in `_to_tonic_mode()`
@@ -37,7 +37,7 @@ self.state.current_da = da_target + (da_level - da_target) * np.exp(-dt / self.c
 
 ### Tests
 
-**File**: `/mnt/projects/ww/tests/nca/test_vta_decay.py`
+**File**: `/mnt/projects/t4d/t4dm/tests/nca/test_vta_decay.py`
 
 **Test Coverage**:
 1. `test_exponential_decay_curve` - Verifies decay follows exponential trajectory
@@ -54,7 +54,7 @@ self.state.current_da = da_target + (da_level - da_target) * np.exp(-dt / self.c
 ### Implementation
 
 **Files**:
-- `/mnt/projects/ww/src/ww/nca/striatal_msn.py` (primary)
+- `/mnt/projects/t4d/t4dm/src/t4dm/nca/striatal_msn.py` (primary)
 
 **New Components**:
 
@@ -114,7 +114,7 @@ ach_modulation = np.clip(ach_modulation, 0, 1) * 0.3  # Max 30% boost
 
 ### Tests
 
-**File**: `/mnt/projects/ww/tests/nca/test_tan_pause.py`
+**File**: `/mnt/projects/t4d/t4dm/tests/nca/test_tan_pause.py`
 
 **Test Coverage**:
 1. `test_tan_pause_triggers_on_surprise` - Pause triggered by RPE > threshold
@@ -183,12 +183,12 @@ Recommended follow-on work:
 ## Files Modified
 
 ### Core Implementation
-- `/mnt/projects/ww/src/ww/nca/vta.py`
-- `/mnt/projects/ww/src/ww/nca/striatal_msn.py`
+- `/mnt/projects/t4d/t4dm/src/t4dm/nca/vta.py`
+- `/mnt/projects/t4d/t4dm/src/t4dm/nca/striatal_msn.py`
 
 ### Tests
-- `/mnt/projects/ww/tests/nca/test_vta_decay.py` (new)
-- `/mnt/projects/ww/tests/nca/test_tan_pause.py` (new)
+- `/mnt/projects/t4d/t4dm/tests/nca/test_vta_decay.py` (new)
+- `/mnt/projects/t4d/t4dm/tests/nca/test_tan_pause.py` (new)
 
 ## Test Results
 

@@ -128,7 +128,7 @@ WW needs:
 **Risk**: Low
 
 ```python
-# New module: ww/prediction/
+# New module: t4dm/prediction/
 class PredictionModule:
     def predict_next(self, episode: Episode) -> EmbeddingVector:
         """Predict next episode embedding given current context."""
@@ -308,7 +308,7 @@ class DreamingConsolidation:
 ### New Modules
 
 ```
-ww/
+t4dm/
 ├── prediction/           # P2: Latent prediction + P4-1: Hierarchical
 │   ├── context_encoder.py       # Attention-weighted context
 │   ├── latent_predictor.py      # 2-layer MLP predictor

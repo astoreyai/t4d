@@ -67,8 +67,8 @@
 ### TASK-P10-001: Replace O(n^2) Duplicate Detection with LSH
 
 **Files**:
-- `src/ww/consolidation/service.py` (modify)
-- `src/ww/storage/qdrant_store.py` (add method)
+- `src/t4dm/consolidation/service.py` (modify)
+- `src/t4dm/storage/qdrant_store.py` (add method)
 
 **Description**: The `_find_duplicates()` method at line 397 uses O(n^2) pairwise comparison for finding near-duplicate episodes. This becomes prohibitively slow with >1000 episodes.
 
@@ -152,8 +152,8 @@ async def _find_duplicates(
 ### TASK-P10-002: Add Pagination to Unbounded Queries
 
 **Files**:
-- `src/ww/consolidation/service.py` (modify)
-- `src/ww/memory/episodic.py` (add paginated recall)
+- `src/t4dm/consolidation/service.py` (modify)
+- `src/t4dm/memory/episodic.py` (add paginated recall)
 
 **Description**: The `_consolidate_light()` method uses `query="*"` with limit=1000, which can exhaust memory with large datasets.
 
@@ -286,8 +286,8 @@ async def _consolidate_light_paginated(
 ### TASK-P10-003: Batch Hebbian Decay Updates
 
 **Files**:
-- `src/ww/memory/semantic.py` (modify)
-- `src/ww/storage/neo4j_store.py` (add batch method)
+- `src/t4dm/memory/semantic.py` (modify)
+- `src/t4dm/storage/neo4j_store.py` (add batch method)
 
 **Description**: The `apply_hebbian_decay()` method at line 686 iterates through stale relationships with N individual update queries. This should use batch operations.
 
@@ -549,7 +549,7 @@ WW_QDRANT_API_KEY=  # Must match QDRANT_API_KEY above
 ### TASK-P10-005: Remove Default Password from Config
 
 **Files**:
-- `src/ww/core/config.py` (modify)
+- `src/t4dm/core/config.py` (modify)
 
 **Description**: The config.py has `default="password"` at line 135 for `neo4j_password`. This should require explicit configuration.
 
@@ -655,7 +655,7 @@ class Settings(BaseSettings):
 ### TASK-P11-001: Complete LLM Entity Extraction
 
 **Files**:
-- `src/ww/extraction/entity_extractor.py` (modify)
+- `src/t4dm/extraction/entity_extractor.py` (modify)
 - `tests/extraction/test_entity_extractor.py` (create)
 
 **Description**: The `LLMEntityExtractor._call_llm()` method at line 252 is a placeholder returning empty. Implement actual LLM integration.
@@ -762,7 +762,7 @@ class LLMEntityExtractor:
 ### TASK-P11-002: Add Saga Compensation Tests
 
 **Files**:
-- `src/ww/storage/saga.py` (reference)
+- `src/t4dm/storage/saga.py` (reference)
 - `tests/storage/test_saga.py` (create)
 
 **Description**: The saga pattern in `storage/saga.py` lacks comprehensive compensation tests for failure scenarios.
@@ -1077,7 +1077,7 @@ class TestServiceManagement:
 ### TASK-P11-004: Batch Access Updates on Recall
 
 **Files**:
-- `src/ww/memory/episodic.py` (modify)
+- `src/t4dm/memory/episodic.py` (modify)
 
 **Description**: The `recall()` method at line 249 updates access counts in a loop (N+1 pattern).
 
@@ -1175,7 +1175,7 @@ async def recall(self, ...) -> list[ScoredResult]:
 ### TASK-P11-005: Add Spreading Activation Limits
 
 **Files**:
-- `src/ww/memory/semantic.py` (modify)
+- `src/t4dm/memory/semantic.py` (modify)
 
 **Description**: The `spread_activation()` method at line 597 can explode on highly connected graphs without limits.
 
@@ -1291,8 +1291,8 @@ async def spread_activation(
 ### TASK-P11-006: Validate Session ID at Gateway Level
 
 **Files**:
-- `src/ww/mcp/gateway.py` (modify)
-- `src/ww/mcp/validation.py` (add session validation)
+- `src/t4dm/mcp/gateway.py` (modify)
+- `src/t4dm/mcp/validation.py` (add session validation)
 
 **Description**: Session ID validation happens deep in service calls, not at the gateway. This allows potential bypass.
 
@@ -1406,7 +1406,7 @@ async def create_episode(
 
 **Files**:
 - `docker-compose.yml` (modify)
-- `src/ww/storage/qdrant_store.py` (modify)
+- `src/t4dm/storage/qdrant_store.py` (modify)
 - `scripts/setup_auth.sh` (create)
 
 **Description**: Qdrant and Neo4j are exposed without authentication in docker-compose.
@@ -1532,10 +1532,10 @@ echo "To start services: docker-compose up -d"
 ### TASK-P12-001: Extract Common Serialization
 
 **Files**:
-- `src/ww/core/serialization.py` (create)
-- `src/ww/memory/episodic.py` (modify)
-- `src/ww/memory/semantic.py` (modify)
-- `src/ww/memory/procedural.py` (modify)
+- `src/t4dm/core/serialization.py` (create)
+- `src/t4dm/memory/episodic.py` (modify)
+- `src/t4dm/memory/semantic.py` (modify)
+- `src/t4dm/memory/procedural.py` (modify)
 
 **Description**: `_to_payload()` and `_from_payload()` methods are duplicated across memory modules (~150 lines).
 
@@ -1543,7 +1543,7 @@ echo "To start services: docker-compose up -d"
 
 **Implementation**:
 ```python
-# src/ww/core/serialization.py
+# src/t4dm/core/serialization.py
 """
 Shared serialization utilities for World Weaver.
 
@@ -1669,15 +1669,15 @@ def get_serializer(type_name: str) -> Serializer:
 ### TASK-P12-002: Add Dependency Injection Container
 
 **Files**:
-- `src/ww/core/container.py` (create)
-- `src/ww/memory/*.py` (modify)
-- `src/ww/storage/*.py` (modify)
+- `src/t4dm/core/container.py` (create)
+- `src/t4dm/memory/*.py` (modify)
+- `src/t4dm/storage/*.py` (modify)
 
 **Description**: Singleton patterns limit testability. Add DI container for better testing.
 
 **Implementation**:
 ```python
-# src/ww/core/container.py
+# src/t4dm/core/container.py
 """
 Dependency Injection Container for World Weaver.
 
@@ -2096,7 +2096,7 @@ class TestNetworkFailures:
 ### TASK-P12-005: Add HDBSCAN Memory Limit
 
 **Files**:
-- `src/ww/consolidation/service.py` (modify)
+- `src/t4dm/consolidation/service.py` (modify)
 
 **Description**: HDBSCAN can exhaust memory with large datasets.
 
@@ -2188,7 +2188,7 @@ def _stratified_sample(
 ### TASK-P12-006: Add Embedding Cache TTL
 
 **Files**:
-- `src/ww/embedding/bge_m3.py` (modify)
+- `src/t4dm/embedding/bge_m3.py` (modify)
 
 **Description**: Embedding cache has no TTL, leading to potential memory leaks.
 
@@ -2292,7 +2292,7 @@ class BGE_M3Provider:
 ### TASK-P12-007: Parallelize Batch Updates
 
 **Files**:
-- `src/ww/storage/qdrant_store.py` (modify)
+- `src/t4dm/storage/qdrant_store.py` (modify)
 
 **Description**: `batch_update_payloads()` at line 507 uses sequential loop.
 
@@ -2381,8 +2381,8 @@ async def batch_update_payloads(
 ### TASK-P12-008: Secure OTLP Exporter
 
 **Files**:
-- `src/ww/observability/tracing.py` (modify)
-- `src/ww/core/config.py` (add settings)
+- `src/t4dm/observability/tracing.py` (modify)
+- `src/t4dm/core/config.py` (add settings)
 
 **Description**: OTLP exporter uses insecure channel by default.
 
@@ -2457,7 +2457,7 @@ def configure_tracing() -> None:
 ### Hook Specification
 
 ```python
-# src/ww/core/hooks.py
+# src/t4dm/core/hooks.py
 """
 Lifecycle hooks for World Weaver modules.
 
@@ -2562,7 +2562,7 @@ def get_hook_registry() -> HookRegistry:
 ### Hook Implementations
 
 ```python
-# src/ww/hooks/consolidation.py
+# src/t4dm/hooks/consolidation.py
 
 class PreConsolidationHook(Hook):
     """Validate data before consolidation."""
@@ -2831,22 +2831,22 @@ Phase 12 (Medium) ────────────────────�
 
 | File | Tasks |
 |------|-------|
-| `src/ww/consolidation/service.py` | P10-001, P10-002, P12-005 |
-| `src/ww/memory/episodic.py` | P10-002, P11-004 |
-| `src/ww/memory/semantic.py` | P10-003, P11-005 |
-| `src/ww/storage/neo4j_store.py` | P10-003 |
-| `src/ww/storage/qdrant_store.py` | P12-007 |
-| `src/ww/core/config.py` | P10-005, P12-008 |
+| `src/t4dm/consolidation/service.py` | P10-001, P10-002, P12-005 |
+| `src/t4dm/memory/episodic.py` | P10-002, P11-004 |
+| `src/t4dm/memory/semantic.py` | P10-003, P11-005 |
+| `src/t4dm/storage/neo4j_store.py` | P10-003 |
+| `src/t4dm/storage/qdrant_store.py` | P12-007 |
+| `src/t4dm/core/config.py` | P10-005, P12-008 |
 | `docker-compose.yml` | P10-004, P11-007 |
-| `src/ww/extraction/entity_extractor.py` | P11-001 |
-| `src/ww/storage/saga.py` | P11-002 |
-| `src/ww/mcp/gateway.py` | P11-003, P11-006 |
-| `src/ww/mcp/validation.py` | P11-006 |
-| `src/ww/core/serialization.py` | P12-001 (new) |
-| `src/ww/core/container.py` | P12-002 (new) |
-| `src/ww/embedding/bge_m3.py` | P12-003, P12-006 |
-| `src/ww/observability/tracing.py` | P12-008 |
-| `src/ww/core/hooks.py` | All (new) |
+| `src/t4dm/extraction/entity_extractor.py` | P11-001 |
+| `src/t4dm/storage/saga.py` | P11-002 |
+| `src/t4dm/mcp/gateway.py` | P11-003, P11-006 |
+| `src/t4dm/mcp/validation.py` | P11-006 |
+| `src/t4dm/core/serialization.py` | P12-001 (new) |
+| `src/t4dm/core/container.py` | P12-002 (new) |
+| `src/t4dm/embedding/bge_m3.py` | P12-003, P12-006 |
+| `src/t4dm/observability/tracing.py` | P12-008 |
+| `src/t4dm/core/hooks.py` | All (new) |
 | `tests/storage/test_saga.py` | P11-002 (new) |
 | `tests/mcp/*.py` | P11-003 (new/expand) |
 | `tests/embedding/*.py` | P12-003 (new) |

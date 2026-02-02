@@ -47,7 +47,7 @@ This document provides a detailed, actionable implementation plan for integratin
 
 ### Task 0.1: Implement ClusterIndex
 
-**File**: `/mnt/projects/ww/src/ww/memory/cluster_index.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/cluster_index.py`
 
 **Purpose**: Hierarchical memory clustering for fast candidate generation
 
@@ -121,12 +121,12 @@ class ClusterIndex:
 - [ ] Benchmark: 10-67x speedup vs flat k-NN (depending on data size)
 
 **Testing Requirements**:
-- Unit tests: `/mnt/projects/ww/tests/unit/test_cluster_index.py`
+- Unit tests: `/mnt/projects/t4d/t4dm/tests/unit/test_cluster_index.py`
   - Test clustering with 1K, 10K, 100K synthetic memories
   - Test search accuracy (recall@10 >= 95% vs flat)
   - Test rebuild logic
   - Test fallback to flat search
-- Integration test: `/mnt/projects/ww/tests/integration/test_episodic_cluster.py`
+- Integration test: `/mnt/projects/t4d/t4dm/tests/integration/test_episodic_cluster.py`
   - Test end-to-end episodic recall with ClusterIndex
   - Verify saga consistency (no partial states)
 
@@ -146,7 +146,7 @@ class ClusterIndex:
 
 ### Task 0.2: Implement LearnedSparseIndex
 
-**File**: `/mnt/projects/ww/src/ww/memory/learned_sparse_index.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/learned_sparse_index.py`
 
 **Purpose**: Learn optimal per-query sparsity (not fixed 10%)
 
@@ -232,7 +232,7 @@ class LearnedSparseIndex:
 - [ ] Ablation study: learned vs fixed sparsity
 
 **Testing Requirements**:
-- Unit tests: `/mnt/projects/ww/tests/unit/test_learned_sparse_index.py`
+- Unit tests: `/mnt/projects/t4d/t4dm/tests/unit/test_learned_sparse_index.py`
   - Test sparsity prediction (bounded to [min, max])
   - Test learning (utility high → sparsity increases)
   - Test integration with NeuromodulatorState
@@ -254,7 +254,7 @@ class LearnedSparseIndex:
 
 ### Task 0.3: Implement FeatureAligner
 
-**File**: `/mnt/projects/ww/src/ww/memory/feature_aligner.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/feature_aligner.py`
 
 **Purpose**: Ensure gate and retrieval scorer use same feature space
 
@@ -350,7 +350,7 @@ class FeatureAligner:
 - [ ] Integration test: gate predictions correlate with scorer utilities
 
 **Testing Requirements**:
-- Unit tests: `/mnt/projects/ww/tests/unit/test_feature_aligner.py`
+- Unit tests: `/mnt/projects/t4d/t4dm/tests/unit/test_feature_aligner.py`
   - Test forward passes (gate, scorer)
   - Test separate updates
   - Test gradient flow to shared layer
@@ -374,7 +374,7 @@ class FeatureAligner:
 ### Task 0.4: Integration with EpisodicMemory
 
 **Files Modified**:
-- `/mnt/projects/ww/src/ww/memory/episodic.py`
+- `/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic.py`
 
 **Purpose**: Wire hierarchical sparse addressing into existing recall flow
 
@@ -438,7 +438,7 @@ class EpisodicMemory:
 - [ ] All existing tests pass
 
 **Testing Requirements**:
-- Integration tests: `/mnt/projects/ww/tests/integration/test_episodic_hierarchical.py`
+- Integration tests: `/mnt/projects/t4d/t4dm/tests/integration/test_episodic_hierarchical.py`
   - Test recall with hierarchical retrieval enabled
   - Test fallback to flat when disabled
   - Test index rebuilding
@@ -462,8 +462,8 @@ class EpisodicMemory:
 ### Task 0.5: Benchmarking and Documentation
 
 **Files Created**:
-- `/mnt/projects/ww/benchmarks/hierarchical_retrieval_benchmark.py`
-- `/mnt/projects/ww/docs/HIERARCHICAL_RETRIEVAL.md`
+- `/mnt/projects/t4d/t4dm/benchmarks/hierarchical_retrieval_benchmark.py`
+- `/mnt/projects/t4d/t4dm/docs/HIERARCHICAL_RETRIEVAL.md`
 
 **Purpose**: Validate speedup claims and document usage
 
@@ -548,7 +548,7 @@ class EpisodicMemory:
 
 ### Task 1.1: Implement Forward-Forward Base Module
 
-**File**: `/mnt/projects/ww/src/ww/learning/forward_forward.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/learning/forward_forward.py`
 
 **Purpose**: Generic FF goodness functions and update rules
 
@@ -747,7 +747,7 @@ def generate_negative_sample(
 - [ ] Unit tests: forward pass, update, goodness computation
 
 **Testing Requirements**:
-- Unit tests: `/mnt/projects/ww/tests/unit/test_forward_forward.py`
+- Unit tests: `/mnt/projects/t4d/t4dm/tests/unit/test_forward_forward.py`
   - Test forward pass (activations, goodness)
   - Test update (weights change in expected direction)
   - Test negative sample generation (all methods)
@@ -765,7 +765,7 @@ def generate_negative_sample(
 ### Task 1.2: Add FF to LearnedMemoryGate
 
 **Files Modified**:
-- `/mnt/projects/ww/src/ww/learning/learned_gate.py` (if exists)
+- `/mnt/projects/t4d/t4dm/src/t4dm/learning/learned_gate.py` (if exists)
 - Or create new file if gate is inline in episodic.py
 
 **Purpose**: Gate learns during encoding pass, not just from delayed feedback
@@ -899,7 +899,7 @@ class LearnedMemoryGate(GoodnessMixin):
 - [ ] Integration test: Dual learning (FF + Bayesian) works together
 
 **Testing Requirements**:
-- Unit tests: `/mnt/projects/ww/tests/unit/test_learned_gate_ff.py`
+- Unit tests: `/mnt/projects/t4d/t4dm/tests/unit/test_learned_gate_ff.py`
   - Test FF update during should_store()
   - Test positive example detection (high neuromod)
   - Test negative sample generation
@@ -918,7 +918,7 @@ class LearnedMemoryGate(GoodnessMixin):
 ### Task 1.3: Add FF to LearnedFusionWeights
 
 **Files Modified**:
-- `/mnt/projects/ww/src/ww/memory/episodic.py` (LearnedFusionWeights class)
+- `/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic.py` (LearnedFusionWeights class)
 
 **Purpose**: Scorer learns during retrieval pass, not just from outcome feedback
 
@@ -1055,7 +1055,7 @@ class LearnedFusionWeights(GoodnessMixin):
 - [ ] Unit tests: FF updates work correctly
 
 **Testing Requirements**:
-- Unit tests: `/mnt/projects/ww/tests/unit/test_fusion_weights_ff.py`
+- Unit tests: `/mnt/projects/t4d/t4dm/tests/unit/test_fusion_weights_ff.py`
   - Test FF update from good retrieval (positive)
   - Test FF update from poor retrieval (negative)
   - Test weight updates align with outcomes
@@ -1072,7 +1072,7 @@ class LearnedFusionWeights(GoodnessMixin):
 
 ### Task 1.4: Ablation Study and Tuning
 
-**File**: `/mnt/projects/ww/experiments/forward_forward_ablation.py`
+**File**: `/mnt/projects/t4d/t4dm/experiments/forward_forward_ablation.py`
 
 **Purpose**: Validate FF learning improves over delayed-only
 
@@ -1246,7 +1246,7 @@ async def run_single_trial(
 
 ### Task 2.1: Implement HFY Memory Core
 
-**File**: `/mnt/projects/ww/src/ww/memory/hopfield_memory.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/hopfield_memory.py`
 
 **Purpose**: Energy-based associative memory with sparse attention
 
@@ -1463,7 +1463,7 @@ class HopfieldMemory:
 ### Task 2.2: Integrate HFY with EpisodicMemory
 
 **Files Modified**:
-- `/mnt/projects/ww/src/ww/memory/episodic.py`
+- `/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic.py`
 
 **Purpose**: Add HFY as third retrieval source (Qdrant, Neo4j, HFY)
 
@@ -1551,7 +1551,7 @@ class EpisodicMemory:
 
 ### Task 2.3: Benchmark HFY vs Qdrant
 
-**File**: `/mnt/projects/ww/benchmarks/hopfield_vs_qdrant_benchmark.py`
+**File**: `/mnt/projects/t4d/t4dm/benchmarks/hopfield_vs_qdrant_benchmark.py`
 
 **Purpose**: Determine if HFY adds value in practice
 
@@ -1609,7 +1609,7 @@ class EpisodicMemory:
 
 ### Task 3.1: Implement Pattern Separation Layer
 
-**File**: `/mnt/projects/ww/src/ww/memory/pattern_separation.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/pattern_separation.py`
 
 **Purpose**: Sparse random projection for orthogonalization
 
@@ -1746,8 +1746,8 @@ class PatternSeparationLayer:
 ### Task 3.2: Integrate with BufferManager
 
 **Files Modified**:
-- `/mnt/projects/ww/src/ww/memory/buffer_manager.py` (if exists)
-- Or `/mnt/projects/ww/src/ww/memory/episodic.py`
+- `/mnt/projects/t4d/t4dm/src/t4dm/memory/buffer_manager.py` (if exists)
+- Or `/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic.py`
 
 **Purpose**: Apply pattern separation before buffer storage
 
@@ -1873,7 +1873,7 @@ class PatternSeparationLayer:
 
 ## Configuration
 
-New settings in `/mnt/projects/ww/src/ww/core/config.py`:
+New settings in `/mnt/projects/t4d/t4dm/src/t4dm/core/config.py`:
 
 ```python
 class Settings(BaseSettings):
@@ -1937,12 +1937,12 @@ class Settings(BaseSettings):
 ## Documentation Updates
 
 Files to update:
-- `/mnt/projects/ww/README.md` - Add new features
-- `/mnt/projects/ww/ARCHITECTURE.md` - Update architecture diagram
-- `/mnt/projects/ww/docs/HIERARCHICAL_RETRIEVAL.md` - New doc
-- `/mnt/projects/ww/docs/FORWARD_FORWARD_LEARNING.md` - New doc
-- `/mnt/projects/ww/docs/HOPFIELD_MEMORY.md` - New doc (if Phase 2)
-- `/mnt/projects/ww/docs/PATTERN_SEPARATION.md` - New doc (if Phase 3)
+- `/mnt/projects/t4d/t4dm/README.md` - Add new features
+- `/mnt/projects/t4d/t4dm/ARCHITECTURE.md` - Update architecture diagram
+- `/mnt/projects/t4d/t4dm/docs/HIERARCHICAL_RETRIEVAL.md` - New doc
+- `/mnt/projects/t4d/t4dm/docs/FORWARD_FORWARD_LEARNING.md` - New doc
+- `/mnt/projects/t4d/t4dm/docs/HOPFIELD_MEMORY.md` - New doc (if Phase 2)
+- `/mnt/projects/t4d/t4dm/docs/PATTERN_SEPARATION.md` - New doc (if Phase 3)
 
 ---
 
@@ -1974,7 +1974,7 @@ If interrupted, read:
 ## References
 
 1. **Gap Analysis**: `/home/aaron/mem/NEURAL_MEMORY_VS_WW_COMPARISON.md`
-2. **WW Architecture**: `/mnt/projects/ww/ARCHITECTURE.md`
+2. **WW Architecture**: `/mnt/projects/t4d/t4dm/ARCHITECTURE.md`
 3. **Forward-Forward**: Hinton (2022) "The Forward-Forward Algorithm"
 4. **Hopfield Networks**: Ramsauer et al. (2020) "Hopfield Networks is All You Need"
 5. **Pattern Separation**: Treves & Rolls (1994) "Computational analysis of the role of the hippocampus"

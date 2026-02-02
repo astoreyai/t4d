@@ -18,7 +18,7 @@
 - Temp files (`=2.6`, `texput.log`, `test_pagination.py`)
 
 ### Preserved Artifacts
-- Source code (`src/ww/`): 29,020 lines
+- Source code (`src/t4dm/`): 29,020 lines
 - Test suite (`tests/`): 1,259 tests
 - Essential documentation (`README.md`, `ARCHITECTURE.md`)
 - Configuration files (`pyproject.toml`, `requirements.txt`, `.env.example`)
@@ -97,8 +97,8 @@
 
 ### Directory Structure
 ```
-ww/
-├── src/ww/              # Core implementation (29,020 LOC)
+t4dm/
+├── src/t4dm/              # Core implementation (29,020 LOC)
 ├── tests/               # Test suite (1,259 tests)
 ├── docs/
 │   ├── world_weaver_final.tex   # Main IEEE paper

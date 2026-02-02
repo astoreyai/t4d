@@ -154,7 +154,7 @@ Status: All deliverables implemented and validated
 - [x] TESTING_GUIDE.md complete
 - [x] TEST_IMPLEMENTATION_SUMMARY.md complete
 - [x] TESTS_INDEX.md complete
-- [x] All files in `/mnt/projects/ww/` root
+- [x] All files in `/mnt/projects/t4d/t4dm/` root
 
 ---
 
@@ -221,23 +221,23 @@ Status: All deliverables implemented and validated
 ## Files Created
 
 ### Test Files
-- [x] `/mnt/projects/ww/tests/integration/test_memory_lifecycle.py` (20 KB)
-- [x] `/mnt/projects/ww/tests/integration/conftest.py` (10 KB)
-- [x] `/mnt/projects/ww/tests/performance/test_benchmarks.py` (20 KB)
-- [x] `/mnt/projects/ww/tests/performance/conftest.py` (15 KB)
+- [x] `/mnt/projects/t4d/t4dm/tests/integration/test_memory_lifecycle.py` (20 KB)
+- [x] `/mnt/projects/t4d/t4dm/tests/integration/conftest.py` (10 KB)
+- [x] `/mnt/projects/t4d/t4dm/tests/performance/test_benchmarks.py` (20 KB)
+- [x] `/mnt/projects/t4d/t4dm/tests/performance/conftest.py` (15 KB)
 
 ### Documentation Files
-- [x] `/mnt/projects/ww/TESTING_GUIDE.md` (15 KB)
-- [x] `/mnt/projects/ww/TEST_IMPLEMENTATION_SUMMARY.md` (11 KB)
-- [x] `/mnt/projects/ww/TESTS_INDEX.md` (reference)
-- [x] `/mnt/projects/ww/IMPLEMENTATION_CHECKLIST.md` (this file)
+- [x] `/mnt/projects/t4d/t4dm/TESTING_GUIDE.md` (15 KB)
+- [x] `/mnt/projects/t4d/t4dm/TEST_IMPLEMENTATION_SUMMARY.md` (11 KB)
+- [x] `/mnt/projects/t4d/t4dm/TESTS_INDEX.md` (reference)
+- [x] `/mnt/projects/t4d/t4dm/IMPLEMENTATION_CHECKLIST.md` (this file)
 
 ### Modified Files
-- [x] `/mnt/projects/ww/pyproject.toml` (markers + dependencies)
+- [x] `/mnt/projects/t4d/t4dm/pyproject.toml` (markers + dependencies)
 
 ### Created Directories
-- [x] `/mnt/projects/ww/tests/performance/`
-- [x] `/mnt/projects/ww/tests/performance/__init__.py`
+- [x] `/mnt/projects/t4d/t4dm/tests/performance/`
+- [x] `/mnt/projects/t4d/t4dm/tests/performance/__init__.py`
 
 ---
 

@@ -17,7 +17,7 @@ The cold start system addresses the "chicken and egg" problem in learned memory 
          ▼                    ▼                    ▼
 ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐
 │  StatePersister │  │  ContextLoader  │  │ PopulationPrior │
-│  ~/.ww/state/   │  │  CLAUDE.md etc  │  │  Default weights│
+│  ~/.t4dm/state/   │  │  CLAUDE.md etc  │  │  Default weights│
 └─────────────────┘  └─────────────────┘  └─────────────────┘
 ```
 
@@ -30,7 +30,7 @@ Handles saving/loading learned state across sessions:
 ```python
 from ww.learning.persistence import StatePersister
 
-persister = StatePersister(storage_path="~/.ww/learned_state")
+persister = StatePersister(storage_path="~/.t4dm/learned_state")
 
 # Save gate state
 persister.save_gate_state(learned_gate)
@@ -136,7 +136,7 @@ weights = manager.get_current_blend_weights()
 
 ## File Locations
 
-State is stored in `~/.ww/learned_state/`:
+State is stored in `~/.t4dm/learned_state/`:
 - `learned_gate.json.gz` - Gate weights and statistics
 - `learned_scorer.pkl.gz` - Scorer MLP weights
 - `neuromodulators.pkl.gz` - Neuromodulator system state

@@ -25,7 +25,7 @@ The World Weaver system implements a biologically-inspired neural field model wi
 
 ---
 
-## 1. PDE System Analysis (src/ww/nca/neural_field.py)
+## 1. PDE System Analysis (src/t4dm/nca/neural_field.py)
 
 ### Numerical Stability: 85/100
 
@@ -93,7 +93,7 @@ Numerical Parameters:
 
 ---
 
-## 2. Hippocampal Architecture (src/ww/nca/hippocampus.py)
+## 2. Hippocampal Architecture (src/t4dm/nca/hippocampus.py)
 
 ### Score: 87/100 (+42 from baseline)
 
@@ -179,7 +179,7 @@ novelty_score = 1.0 - max(0.0, similarity)
 
 ---
 
-## 3. VTA Dopamine Circuit (src/ww/nca/vta.py)
+## 3. VTA Dopamine Circuit (src/t4dm/nca/vta.py)
 
 ### Score: 90/100 (+20 from baseline)
 
@@ -234,7 +234,7 @@ striatum_da = self.state.dopamine_release * striatum_efficacy
 
 ---
 
-## 4. Raphe Nucleus Serotonin (src/ww/nca/raphe.py)
+## 4. Raphe Nucleus Serotonin (src/t4dm/nca/raphe.py)
 
 ### Score: 88/100 (+23 from baseline)
 
@@ -295,7 +295,7 @@ This accurately captures the 2-6 week delay in SSRI efficacy (Blier & de Montign
 
 ---
 
-## 5. Sharp-Wave Ripples & Consolidation (src/ww/nca/swr_coupling.py)
+## 5. Sharp-Wave Ripples & Consolidation (src/t4dm/nca/swr_coupling.py)
 
 ### Score: 90/100 (+15 from baseline)
 
@@ -348,7 +348,7 @@ gaba_amount = gaba_boost * current_amplitude * dt
 
 ---
 
-## 6. Striatal D1/D2 MSN Populations (src/ww/nca/striatal_msn.py)
+## 6. Striatal D1/D2 MSN Populations (src/t4dm/nca/striatal_msn.py)
 
 ### Score: 90/100 (+15 from baseline)
 
@@ -403,7 +403,7 @@ habit_strength += win_signal * dopamine * learning_rate
 
 ---
 
-## 7. Adenosine Sleep-Wake Dynamics (src/ww/nca/adenosine.py)
+## 7. Adenosine Sleep-Wake Dynamics (src/t4dm/nca/adenosine.py)
 
 ### Score: 95/100 (Unchanged - Already Excellent)
 
@@ -453,7 +453,7 @@ sleep_pressure = max(0, effective_adenosine - caffeine_block)
 
 ---
 
-## 8. Astrocyte Tripartite Synapse (src/ww/nca/astrocyte.py)
+## 8. Astrocyte Tripartite Synapse (src/t4dm/nca/astrocyte.py)
 
 ### Score: 92/100 (Unchanged - Excellent)
 
@@ -529,7 +529,7 @@ ca += glu_drive + activity_drive - decay
 
 ---
 
-## 9. Neural Oscillations (src/ww/nca/oscillators.py)
+## 9. Neural Oscillations (src/t4dm/nca/oscillators.py)
 
 ### Score: 90/100 (+0 - Previously excellent)
 
@@ -611,7 +611,7 @@ gamma_amplitude = base_amplitude * pac_modulation
 
 ---
 
-## 10. Locus Coeruleus NE System (src/ww/nca/locus_coeruleus.py)
+## 10. Locus Coeruleus NE System (src/t4dm/nca/locus_coeruleus.py)
 
 ### Score: 90/100 (NEW - Sprint 4)
 
@@ -661,7 +661,7 @@ elif arousal < tonic_threshold:
 
 ---
 
-## 11. Synaptic/Extrasynaptic Glutamate (src/ww/nca/glutamate_signaling.py)
+## 11. Synaptic/Extrasynaptic Glutamate (src/t4dm/nca/glutamate_signaling.py)
 
 ### Score: 90/100 (NEW - Sprint 4)
 
@@ -761,7 +761,7 @@ vta.state.baseline_firing *= (1 - vta_inhibition)
 
 ---
 
-## 13. Learning Systems (src/ww/learning/)
+## 13. Learning Systems (src/t4dm/learning/)
 
 ### Dopamine System (dopamine.py): 88/100
 

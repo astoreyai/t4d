@@ -39,7 +39,7 @@ Memory systems are fundamental to intelligent agent behavior. While biological c
 
 **Databases**: OpenAlex (comprehensive), arXiv (preprints)
 **Date Range**: January 2020 - December 2025
-**Search Terms**: See `/mnt/projects/ww/data/literature/search_strategy.md`
+**Search Terms**: See `/mnt/projects/t4d/t4dm/data/literature/search_strategy.md`
 
 ### 2.2 Screening Process
 
@@ -63,7 +63,7 @@ Minimum score: 6/12
 
 ### 3.1 Study Selection
 
-From 360 identified records, 40 studies were included after deduplication and screening (see PRISMA diagram at `/mnt/projects/ww/results/prisma_flow_diagram.md`).
+From 360 identified records, 40 studies were included after deduplication and screening (see PRISMA diagram at `/mnt/projects/t4d/t4dm/results/prisma_flow_diagram.md`).
 
 ### 3.2 Episodic Memory Systems
 
@@ -529,19 +529,19 @@ This positions World Weaver as a unique contribution to the neural-symbolic memo
 
 ### A. Search Query Log
 
-See `/mnt/projects/ww/data/literature/search_strategy.md`
+See `/mnt/projects/t4d/t4dm/data/literature/search_strategy.md`
 
 ### B. Full Screening Log
 
-See `/mnt/projects/ww/data/literature/screening_log.md`
+See `/mnt/projects/t4d/t4dm/data/literature/screening_log.md`
 
 ### C. Extracted Data
 
-See `/mnt/projects/ww/data/literature/search_results.csv`
+See `/mnt/projects/t4d/t4dm/data/literature/search_results.csv`
 
 ### D. PRISMA Flow Diagram
 
-See `/mnt/projects/ww/results/prisma_flow_diagram.md`
+See `/mnt/projects/t4d/t4dm/results/prisma_flow_diagram.md`
 
 ---
 

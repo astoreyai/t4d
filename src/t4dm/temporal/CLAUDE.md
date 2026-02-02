@@ -1,5 +1,5 @@
 # Temporal
-**Path**: `/mnt/projects/t4d/t4dm/src/ww/temporal/`
+**Path**: `/mnt/projects/t4d/t4dm/src/t4dm/temporal/`
 
 ## What
 Temporal dynamics coordination managing neuromodulator states, memory lifecycle phases, session context, and plasticity across multiple timescales (milliseconds to days).

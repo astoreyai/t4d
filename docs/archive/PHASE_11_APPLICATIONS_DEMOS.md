@@ -22,7 +22,7 @@ Phase 11 delivers four biologically-grounded interactive demonstrations that sho
 
 ### Visualization Modules (Ready to Expose)
 ```
-/mnt/projects/ww/src/ww/visualization/
+/mnt/projects/t4d/t4dm/src/t4dm/visualization/
 ├── telemetry_hub.py              # Multi-scale integration hub
 ├── nt_state_dashboard.py         # 6-channel NT visualization
 ├── consolidation_replay.py       # SWR replay sequences
@@ -41,7 +41,7 @@ Phase 11 delivers four biologically-grounded interactive demonstrations that sho
 
 ### Existing API Infrastructure
 ```
-/mnt/projects/ww/src/ww/api/
+/mnt/projects/t4d/t4dm/src/t4dm/api/
 ├── websocket.py                  # WebSocket with channels (events, memory, learning, health)
 ├── routes/visualization.py       # REST endpoints for biological mechanisms
 └── routes/                       # Other REST endpoints
@@ -71,7 +71,7 @@ Visualize the full lifecycle of memory encoding, storage, retrieval, and consoli
 ### Data to Expose
 
 ```python
-# /mnt/projects/ww/src/ww/visualization/memory_explorer.py
+# /mnt/projects/t4d/t4dm/src/t4dm/visualization/memory_explorer.py
 
 @dataclass
 class MemoryExplorerState:
@@ -135,7 +135,7 @@ async def websocket_memory_explorer(websocket: WebSocket):
 ### REST API Endpoints
 
 ```python
-# /mnt/projects/ww/src/ww/api/routes/explorer.py
+# /mnt/projects/t4d/t4dm/src/t4dm/api/routes/explorer.py
 
 @router.get("/explorer/state")
 async def get_explorer_state() -> MemoryExplorerState:
@@ -219,7 +219,7 @@ Visualize what happens during simulated "sleep" consolidation:
 ### Data to Expose
 
 ```python
-# /mnt/projects/ww/src/ww/visualization/dream_viewer.py
+# /mnt/projects/t4d/t4dm/src/t4dm/visualization/dream_viewer.py
 
 @dataclass
 class DreamViewerState:
@@ -491,7 +491,7 @@ Replay and visualize how memories are formed, showing:
 ### Data to Expose
 
 ```python
-# /mnt/projects/ww/src/ww/visualization/learning_replay.py
+# /mnt/projects/t4d/t4dm/src/t4dm/visualization/learning_replay.py
 
 @dataclass
 class LearningReplayState:
@@ -648,7 +648,7 @@ src/demos/learning-replay/
 ### Extended Connection Manager
 
 ```python
-# /mnt/projects/ww/src/ww/api/websocket_v2.py
+# /mnt/projects/t4d/t4dm/src/t4dm/api/websocket_v2.py
 
 class DemoConnectionManager(ConnectionManager):
     """Extended manager for demo WebSocket channels."""
@@ -704,8 +704,8 @@ class DemoEventAggregator:
 ## File Structure for New Code
 
 ```
-/mnt/projects/ww/
-├── src/ww/
+/mnt/projects/t4d/t4dm/
+├── src/t4dm/
 │   ├── visualization/
 │   │   ├── memory_explorer.py       # NEW: Explorer state aggregation
 │   │   ├── dream_viewer.py          # NEW: Dream state aggregation

@@ -2,7 +2,7 @@
 
 **Created**: 2025-12-06
 **Status**: Analysis Complete
-**Relates to**: `/mnt/projects/ww/docs/IMPLEMENTATION_PLAN_HSA.md`
+**Relates to**: `/mnt/projects/t4d/t4dm/docs/IMPLEMENTATION_PLAN_HSA.md`
 
 ## Executive Summary
 
@@ -228,18 +228,18 @@ class InjectionConfig:
 
 ## Files to Modify
 
-1. `/mnt/projects/ww/src/ww/memory/episodic.py`
+1. `/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic.py`
    - Import LearnedFusion, LearnedRetrievalScorer
    - Add `_compute_adaptive_weights()` method
    - Add `_rerank_results()` method
    - Wire into recall() flow
 
-2. `/mnt/projects/ww/src/ww/integrations/kymera/context_injector.py`
+2. `/mnt/projects/t4d/t4dm/src/t4dm/integrations/kymera/context_injector.py`
    - Import ToonJSON
    - Replace `_format_memory()` with compact encoding
    - Add adaptive sizing logic
 
-3. `/mnt/projects/ww/src/ww/learning/neuro_symbolic.py`
+3. `/mnt/projects/t4d/t4dm/src/t4dm/learning/neuro_symbolic.py`
    - Expose LearnedFusion for external use
    - Add retrieval outcome training method
 

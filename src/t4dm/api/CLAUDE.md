@@ -1,5 +1,5 @@
 # API Module
-**Path**: `/mnt/projects/t4d/t4dm/src/ww/api/`
+**Path**: `/mnt/projects/t4d/t4dm/src/t4dm/api/`
 
 ## What
 FastAPI-based REST API and WebSocket server for the tripartite memory system. Exposes CRUD operations for episodic, semantic, and procedural memory plus real-time event streaming, visualization endpoints, and demo APIs.

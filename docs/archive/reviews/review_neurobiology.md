@@ -2,8 +2,8 @@
 
 **Reviewer**: Neuroscience Specialist (Memory Systems & Synaptic Plasticity)
 **Documents Reviewed**:
-- `/mnt/projects/ww/docs/world_weaver_ieee.tex`
-- `/mnt/projects/ww/docs/world_weaver_journal_article.tex`
+- `/mnt/projects/t4d/t4dm/docs/world_weaver_ieee.tex`
+- `/mnt/projects/t4d/t4dm/docs/world_weaver_journal_article.tex`
 
 **Date**: 2025-12-04
 

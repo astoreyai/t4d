@@ -44,7 +44,7 @@ World Weaver demonstrates **strong biological grounding** across all major neuro
 
 ### 1.1 STDP (Spike-Timing-Dependent Plasticity)
 
-**File**: `/mnt/projects/ww/src/ww/learning/stdp.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/learning/stdp.py`
 **Biology Score**: 92/100
 
 #### Parameters Validated ✓
@@ -58,7 +58,7 @@ World Weaver demonstrates **strong biological grounding** across all major neuro
 
 **File:Line Evidence**:
 ```python
-# src/ww/learning/stdp.py:49-50
+# src/t4dm/learning/stdp.py:49-50
 tau_plus: float = 0.017   # LTP time window (~17ms)
 tau_minus: float = 0.034  # LTD time window (~34ms, asymmetric per literature)
 ```
@@ -78,7 +78,7 @@ tau_minus: float = 0.034  # LTD time window (~34ms, asymmetric per literature)
 
 2. Missing NMDA time constants in STDP computation
    - **Implemented in glutamate_signaling.py but not used in stdp.py**
-   - **File**: `src/ww/nca/glutamate_signaling.py:96-97`
+   - **File**: `src/t4dm/nca/glutamate_signaling.py:96-97`
    ```python
    tau_nmda_nr2a: float = 0.050  # NR2A decay ~50ms
    tau_nmda_nr2b: float = 0.150  # NR2B decay ~150ms
@@ -95,7 +95,7 @@ tau_minus: float = 0.034  # LTD time window (~34ms, asymmetric per literature)
 
 ### 1.2 Glutamate Signaling
 
-**File**: `/mnt/projects/ww/src/ww/nca/glutamate_signaling.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/nca/glutamate_signaling.py`
 **Biology Score**: 96/100
 
 #### Synaptic vs Extrasynaptic Separation ✓✓✓
@@ -174,7 +174,7 @@ tau_minus: float = 0.034  # LTD time window (~34ms, asymmetric per literature)
 
 ### 1.3 Hippocampal Circuit
 
-**File**: `/mnt/projects/ww/src/ww/nca/hippocampus.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/nca/hippocampus.py`
 **Biology Score**: 88/100
 
 #### Tripartite Architecture ✓✓
@@ -186,7 +186,7 @@ tau_minus: float = 0.034  # LTD time window (~34ms, asymmetric per literature)
 
 **CRITICAL ISSUE - DG Sparsity**:
 
-**File:Line**: `src/ww/nca/hippocampus.py:70`
+**File:Line**: `src/t4dm/nca/hippocampus.py:70`
 ```python
 dg_sparsity: float = 0.01  # ~1% activation (biological: ~0.5-2%)
 ```
@@ -202,7 +202,7 @@ dg_sparsity: float = 0.01  # ~1% activation (biological: ~0.5-2%)
 
 #### CA3 Pattern Completion ✓
 
-**File:Line**: `src/ww/nca/hippocampus.py:76-79`
+**File:Line**: `src/t4dm/nca/hippocampus.py:76-79`
 ```python
 ca3_beta: float = 8.0            # Hopfield inverse temperature
 ca3_max_patterns: int = 1000     # Maximum stored patterns
@@ -221,7 +221,7 @@ ca3_max_iterations: int = 10     # Convergence iterations
 
 #### CA1 Novelty Detection ✓
 
-**File:Line**: `src/ww/nca/hippocampus.py:82-83`
+**File:Line**: `src/t4dm/nca/hippocampus.py:82-83`
 ```python
 ca1_novelty_threshold: float = 0.3   # Mismatch threshold for novelty
 ca1_encoding_threshold: float = 0.5  # High novelty -> encoding mode
@@ -246,7 +246,7 @@ ca1_encoding_threshold: float = 0.5  # High novelty -> encoding mode
 
 ### 1.4 Sleep & Consolidation
 
-**File**: `/mnt/projects/ww/src/ww/consolidation/sleep.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/consolidation/sleep.py`
 **Biology Score**: 84/100
 
 #### Sleep Architecture ✓
@@ -265,7 +265,7 @@ class SleepPhase(Enum):
 
 #### Sharp-Wave Ripple (SWR) Implementation ✓
 
-**File:Line**: `src/ww/consolidation/sleep.py:124-161`
+**File:Line**: `src/t4dm/consolidation/sleep.py:124-161`
 ```python
 def __init__(
     self,
@@ -285,7 +285,7 @@ def __init__(
 - **Expected**: High-frequency oscillation at 150-250 Hz during SWR events
 - **Found**: Compression timing but no frequency component
 - **Impact**: HIGH - Ripple frequency is critical biological marker
-- **File to add**: `src/ww/nca/oscillators.py` (currently missing ripple band)
+- **File to add**: `src/t4dm/nca/oscillators.py` (currently missing ripple band)
 
 **Recommendation**: Add to oscillators.py:
 ```python
@@ -331,12 +331,12 @@ class ReplayEvent:
 
 ### 1.5 Glymphatic System
 
-**File**: `/mnt/projects/ww/src/ww/nca/glymphatic.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/nca/glymphatic.py`
 **Biology Score**: 94/100
 
 #### Clearance Rates ✓✓
 
-**File:Line**: `src/ww/nca/glymphatic.py:60-67`
+**File:Line**: `src/t4dm/nca/glymphatic.py:60-67`
 ```python
 clearance_nrem_deep: float = 0.7   # 70% during slow-wave sleep
 clearance_nrem_light: float = 0.5  # 50% during light sleep
@@ -355,7 +355,7 @@ clearance_rem: float = 0.05        # ~5% during REM
 
 #### NE Modulation ✓✓
 
-**File:Line**: `src/ww/nca/glymphatic.py:457-460`
+**File:Line**: `src/t4dm/nca/glymphatic.py:457-460`
 ```python
 # NE modulation: low NE = high clearance
 # Biological: NE contracts astrocytes, blocking interstitial flow
@@ -368,7 +368,7 @@ ne_factor = 1.0 - ne_level * self.config.ne_modulation
 
 #### ACh Modulation ✓
 
-**File:Line**: `src/ww/nca/glymphatic.py:462-464`
+**File:Line**: `src/t4dm/nca/glymphatic.py:462-464`
 ```python
 # ACh modulation: high ACh = low clearance
 # Biological: ACh blocks AQP4 water channels (Iliff 2012)
@@ -380,7 +380,7 @@ ach_factor = 1.0 - ach_level * self.config.ach_modulation
 
 #### Delta Oscillation Coupling ✓
 
-**File:Line**: `src/ww/nca/glymphatic.py:452-455`
+**File:Line**: `src/t4dm/nca/glymphatic.py:452-455`
 ```python
 # Delta up-state gating
 if self.config.clear_on_delta_upstate and not delta_up_state:
@@ -406,7 +406,7 @@ if self.config.clear_on_delta_upstate and not delta_up_state:
 
 ### 1.6 Neuromodulator Systems
 
-**Files**: `src/ww/nca/vta.py`, `raphe.py`, `locus_coeruleus.py`, `adenosine.py`
+**Files**: `src/t4dm/nca/vta.py`, `raphe.py`, `locus_coeruleus.py`, `adenosine.py`
 **Biology Score**: 91/100
 
 #### VTA Dopamine ✓✓
@@ -451,12 +451,12 @@ if self.config.clear_on_delta_upstate and not delta_up_state:
 
 ### 1.7 Reconsolidation
 
-**File**: `/mnt/projects/ww/src/ww/learning/reconsolidation.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/learning/reconsolidation.py`
 **Biology Score**: 78/100
 
 #### Lability Window ✓
 
-**File:Line**: `src/ww/learning/reconsolidation.py:124`
+**File:Line**: `src/t4dm/learning/reconsolidation.py:124`
 ```python
 lability_window_hours: float = 6.0  # Per Nader et al. (2000)
 ```
@@ -510,18 +510,18 @@ def can_update_memory(self, memory_id: UUID, current_time: datetime) -> bool:
 ### 2.1 Cross-File Parameter Consistency
 
 **STDP Parameters**:
-- `/src/ww/learning/stdp.py`: tau_plus=17ms, tau_minus=34ms ✓
-- `/src/ww/consolidation/stdp_integration.py`: Uses same STDPConfig ✓
+- `/src/t4dm/learning/stdp.py`: tau_plus=17ms, tau_minus=34ms ✓
+- `/src/t4dm/consolidation/stdp_integration.py`: Uses same STDPConfig ✓
 - `/docs/science/biological-parameters.md`: Documents 17ms/34ms ✓
 - **Status**: CONSISTENT ✓
 
 **Glutamate Parameters**:
-- `/src/ww/nca/glutamate_signaling.py`: NMDA tau NR2A=50ms, NR2B=150ms ✓
+- `/src/t4dm/nca/glutamate_signaling.py`: NMDA tau NR2A=50ms, NR2B=150ms ✓
 - `/docs/science/biological-parameters.md`: Matches exactly ✓
 - **Status**: CONSISTENT ✓
 
 **Glymphatic Parameters**:
-- `/src/ww/nca/glymphatic.py`: clearance_nrem_deep=0.7 ✓
+- `/src/t4dm/nca/glymphatic.py`: clearance_nrem_deep=0.7 ✓
 - `/docs/science/biological-parameters.md`: Shows 0.9 (OUTDATED)
 - **Status**: CODE CORRECT, DOCS NEED UPDATE
 

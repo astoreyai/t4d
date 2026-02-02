@@ -12,7 +12,7 @@ Implemented RPE (reward prediction error) generation from replay sequences durin
 
 ### 1. Modified Files
 
-#### `src/ww/consolidation/sleep.py`
+#### `src/t4dm/consolidation/sleep.py`
 - **Added**: `set_vta_circuit()` method to connect VTA for RPE generation
 - **Added**: `_generate_replay_rpe()` method to compute RPE from replay sequences
 - **Added**: `_estimate_value()` method to estimate episode value for RPE computation
@@ -251,9 +251,9 @@ print(f"Last RPE: {stats['vta_circuit']['last_rpe']:.3f}")
 
 ## Key Files
 
-- **Implementation**: `/mnt/projects/ww/src/ww/consolidation/sleep.py`
-- **Tests**: `/mnt/projects/ww/tests/consolidation/test_sleep_rpe.py`
-- **VTA Circuit**: `/mnt/projects/ww/src/ww/nca/vta.py`
+- **Implementation**: `/mnt/projects/t4d/t4dm/src/t4dm/consolidation/sleep.py`
+- **Tests**: `/mnt/projects/t4d/t4dm/tests/consolidation/test_sleep_rpe.py`
+- **VTA Circuit**: `/mnt/projects/t4d/t4dm/src/t4dm/nca/vta.py`
 
 ## Next Steps
 

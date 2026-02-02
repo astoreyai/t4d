@@ -1,6 +1,6 @@
 # Quality Assurance Report: World Weaver Journal Article
 
-**Document:** `/mnt/projects/ww/docs/world_weaver_journal_article.tex`
+**Document:** `/mnt/projects/t4d/t4dm/docs/world_weaver_journal_article.tex`
 **Review Date:** 2025-12-04
 **Reviewer:** Research Quality Assurance Agent
 **Overall Quality Score:** 82/100

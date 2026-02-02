@@ -35,9 +35,9 @@ assert 14.497948934736272 > 30
 - Expected: 30x+ speedup (simulated time / wall clock time)
 - Actual: 14.5x speedup
 - Issue: Performance regression in glutamate signaling NCA computation
-- File: `/mnt/projects/ww/tests/nca/test_glutamate_signaling.py` lines 666-685
+- File: `/mnt/projects/t4d/t4dm/tests/nca/test_glutamate_signaling.py` lines 666-685
 
-**Root Cause**: Likely optimization loss in `src/ww/nca/glutamate_signaling.py`
+**Root Cause**: Likely optimization loss in `src/t4dm/nca/glutamate_signaling.py`
 
 **Fix Priority**: CRITICAL (affects system responsiveness)
 
@@ -141,10 +141,10 @@ Session and lifecycle management completely untested:
 ### Priority 1 - CRITICAL (This Week)
 
 1. **Fix Glutamate Performance Regression** (2-4 hours)
-   - Profile `src/ww/nca/glutamate_signaling.py`
+   - Profile `src/t4dm/nca/glutamate_signaling.py`
    - Identify optimization loss
    - Restore speedup to 30x+
-   - File: `/mnt/projects/ww/tests/nca/test_glutamate_signaling.py:666-685`
+   - File: `/mnt/projects/t4d/t4dm/tests/nca/test_glutamate_signaling.py:666-685`
 
 2. **Add Visualization Module Tests** (40-60 hours)
    - Create 200+ tests for 19 visualization components
@@ -248,9 +248,9 @@ Session and lifecycle management completely untested:
 ## Files Modified
 
 Key files to review/modify:
-- `/mnt/projects/ww/src/ww/nca/glutamate_signaling.py` - Performance optimization
-- `/mnt/projects/ww/tests/conftest.py` - Add new fixtures for visualization/prediction
-- `/mnt/projects/ww/pyproject.toml` - Update coverage target thresholds
+- `/mnt/projects/t4d/t4dm/src/t4dm/nca/glutamate_signaling.py` - Performance optimization
+- `/mnt/projects/t4d/t4dm/tests/conftest.py` - Add new fixtures for visualization/prediction
+- `/mnt/projects/t4d/t4dm/pyproject.toml` - Update coverage target thresholds
 
 ## Next Steps
 
@@ -262,7 +262,7 @@ python -m cProfile -s cumtime -m pytest \
   tests/nca/test_glutamate_signaling.py::TestGlutamatePerformance::test_sustained_simulation
 
 # 2. Check recent changes
-git log -p --all -- src/ww/nca/glutamate_signaling.py | head -200
+git log -p --all -- src/t4dm/nca/glutamate_signaling.py | head -200
 
 # 3. Create test directories
 mkdir -p tests/visualization tests/prediction tests/temporal

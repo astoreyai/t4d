@@ -3,7 +3,7 @@
 ## Installation
 
 ```bash
-cd /mnt/projects/ww/frontend
+cd /mnt/projects/t4d/t4dm/frontend
 
 # Install dependencies
 npm install three @react-three/fiber @react-three/drei jotai
@@ -547,9 +547,9 @@ const FPSMonitor = () => {
 
 ## Reference Links
 
-- **Files**: `/mnt/projects/ww/frontend/app/view/memorygraph/`
-- **Integration Guide**: `/mnt/projects/ww/MEMORYGRAPH_INTEGRATION.md`
-- **Architecture**: `/mnt/projects/ww/MEMORYGRAPH_ARCHITECTURE.md`
+- **Files**: `/mnt/projects/t4d/t4dm/frontend/app/view/memorygraph/`
+- **Integration Guide**: `/mnt/projects/t4d/t4dm/MEMORYGRAPH_INTEGRATION.md`
+- **Architecture**: `/mnt/projects/t4d/t4dm/MEMORYGRAPH_ARCHITECTURE.md`
 - **Three.js Docs**: https://threejs.org/docs/
 - **React Three Fiber**: https://docs.pmnd.rs/react-three-fiber/
 - **Jotai Docs**: https://jotai.org/
@@ -559,7 +559,7 @@ const FPSMonitor = () => {
 
 ```bash
 # Start development server
-cd /mnt/projects/ww/frontend && npm run dev
+cd /mnt/projects/t4d/t4dm/frontend && npm run dev
 
 # Run tests
 npm test

@@ -102,7 +102,7 @@ Stores autobiographical events with temporal context:
 - **Storage**: Qdrant vectors + Neo4j metadata
 - **Retrieval**: Embedding similarity + temporal weighting
 - **Decay**: FSRS-based spaced repetition
-- **Key files**: `src/ww/memory/episodic.py`
+- **Key files**: `src/t4dm/memory/episodic.py`
 
 #### Semantic Memory
 
@@ -111,7 +111,7 @@ Knowledge graph with spreading activation:
 - **Storage**: Neo4j graph
 - **Retrieval**: ACT-R activation spreading
 - **Learning**: Hebbian co-access strengthening
-- **Key files**: `src/ww/memory/semantic.py`
+- **Key files**: `src/t4dm/memory/semantic.py`
 
 #### Procedural Memory
 
@@ -120,7 +120,7 @@ Skills with execution tracking:
 - **Storage**: Qdrant vectors + Neo4j metadata
 - **Retrieval**: Task-based matching
 - **Learning**: Success rate tracking
-- **Key files**: `src/ww/memory/procedural.py`
+- **Key files**: `src/t4dm/memory/procedural.py`
 
 ### Prediction Layer
 
@@ -216,7 +216,7 @@ flowchart TD
 ## Module Organization
 
 ```
-src/ww/
+src/t4dm/
 ├── api/           # REST API server
 ├── bridge/        # Memory-NCA integration
 ├── cli/           # Command-line interface

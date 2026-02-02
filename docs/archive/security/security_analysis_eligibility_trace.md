@@ -1,6 +1,6 @@
 # Security Assessment: Eligibility Trace System
 
-**File:** `/mnt/projects/ww/src/ww/learning/eligibility.py`
+**File:** `/mnt/projects/t4d/t4dm/src/t4dm/learning/eligibility.py`
 **Assessment Date:** 2025-12-06
 **Reviewer:** Claude Code - Research Code Review Specialist
 **Scope:** Security, resource exhaustion, input validation, thread safety
@@ -636,7 +636,7 @@ if activity > 10.0:
 
 ### Test Suite Additions
 
-Create `/mnt/projects/ww/tests/security/test_eligibility_security.py`:
+Create `/mnt/projects/t4d/t4dm/tests/security/test_eligibility_security.py`:
 
 ```python
 import pytest
@@ -828,4 +828,4 @@ The Eligibility Trace System requires immediate security hardening before produc
 ---
 
 **Report Generated:** 2025-12-06
-**File:** `/mnt/projects/ww/security_analysis_eligibility_trace.md`
+**File:** `/mnt/projects/t4d/t4dm/security_analysis_eligibility_trace.md`

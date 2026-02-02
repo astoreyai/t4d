@@ -1,5 +1,5 @@
 # Encoding Module
-**Path**: `/mnt/projects/t4d/t4dm/src/ww/encoding/`
+**Path**: `/mnt/projects/t4d/t4dm/src/t4dm/encoding/`
 
 ## What
 Biologically-inspired neural encoding implementing three hippocampal computations: sparse coding (dentate gyrus pattern separation), dendritic computation (L5 pyramidal prediction error), and associative memory (CA3 Hopfield pattern completion). Also includes a Forward-Forward encoder for local learning without backpropagation.

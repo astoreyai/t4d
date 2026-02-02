@@ -194,12 +194,12 @@ FAILED tests/test_memory.py::test_procedural_retrieve
 
 ## Files to Create
 
-1. `/mnt/projects/ww/tests/conftest.py` - Pytest configuration (provided)
-2. `/mnt/projects/ww/tests/unit/test_consolidation.py` - Consolidation tests (provided)
-3. `/mnt/projects/ww/tests/unit/test_mcp_gateway.py` - MCP tests (provided)
-4. `/mnt/projects/ww/tests/unit/test_observability.py` - Observability tests (provided)
-5. `/mnt/projects/ww/tests/unit/test_storage.py` - Storage tests (template provided)
-6. `/mnt/projects/ww/tests/unit/test_edge_cases.py` - Edge cases (template provided)
+1. `/mnt/projects/t4d/t4dm/tests/conftest.py` - Pytest configuration (provided)
+2. `/mnt/projects/t4d/t4dm/tests/unit/test_consolidation.py` - Consolidation tests (provided)
+3. `/mnt/projects/t4d/t4dm/tests/unit/test_mcp_gateway.py` - MCP tests (provided)
+4. `/mnt/projects/t4d/t4dm/tests/unit/test_observability.py` - Observability tests (provided)
+5. `/mnt/projects/t4d/t4dm/tests/unit/test_storage.py` - Storage tests (template provided)
+6. `/mnt/projects/t4d/t4dm/tests/unit/test_edge_cases.py` - Edge cases (template provided)
 
 ---
 
@@ -242,8 +242,8 @@ pytest -vv --tb=short
 
 ## References
 
-- **Full Analysis**: `/mnt/projects/ww/TEST_COVERAGE_ANALYSIS.md`
-- **Implementation Roadmap**: `/mnt/projects/ww/TEST_IMPLEMENTATION_ROADMAP.md`
+- **Full Analysis**: `/mnt/projects/t4d/t4dm/TEST_COVERAGE_ANALYSIS.md`
+- **Implementation Roadmap**: `/mnt/projects/t4d/t4dm/TEST_IMPLEMENTATION_ROADMAP.md`
 - **Test Code Examples**: Both documents contain complete test implementations
 
 ---
@@ -251,16 +251,16 @@ pytest -vv --tb=short
 ## Key Files
 
 **Source Code**:
-- `/mnt/projects/ww/src/ww/consolidation/service.py` - 18% coverage (PRIORITY)
-- `/mnt/projects/ww/src/ww/mcp/memory_gateway.py` - 18% coverage (PRIORITY)
-- `/mnt/projects/ww/src/ww/observability/` - 0% coverage (PRIORITY)
-- `/mnt/projects/ww/src/ww/storage/neo4j_store.py` - 41% coverage
-- `/mnt/projects/ww/src/ww/storage/qdrant_store.py` - 56% coverage
+- `/mnt/projects/t4d/t4dm/src/t4dm/consolidation/service.py` - 18% coverage (PRIORITY)
+- `/mnt/projects/t4d/t4dm/src/t4dm/mcp/memory_gateway.py` - 18% coverage (PRIORITY)
+- `/mnt/projects/t4d/t4dm/src/t4dm/observability/` - 0% coverage (PRIORITY)
+- `/mnt/projects/t4d/t4dm/src/t4dm/storage/neo4j_store.py` - 41% coverage
+- `/mnt/projects/t4d/t4dm/src/t4dm/storage/qdrant_store.py` - 56% coverage
 
 **Test Code**:
-- `/mnt/projects/ww/tests/unit/test_validation.py` - 100% coverage (use as template)
-- `/mnt/projects/ww/tests/unit/test_saga.py` - 96% coverage (use as template)
-- `/mnt/projects/ww/tests/integration/test_session_isolation.py` - Good integration tests
+- `/mnt/projects/t4d/t4dm/tests/unit/test_validation.py` - 100% coverage (use as template)
+- `/mnt/projects/t4d/t4dm/tests/unit/test_saga.py` - 96% coverage (use as template)
+- `/mnt/projects/t4d/t4dm/tests/integration/test_session_isolation.py` - Good integration tests
 
 ---
 

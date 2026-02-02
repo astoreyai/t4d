@@ -815,4 +815,4 @@ The bibliography is comprehensive, appropriately sourced, and demonstrates PhD-l
 **Verification Completed**: December 5, 2025
 **Verifier**: Citation Management Specialist Agent (Claude Code)
 **Standard**: PhD-level academic integrity
-**Files Verified**: /mnt/projects/ww/docs/papers/philosophy_of_ai_memory.tex
+**Files Verified**: /mnt/projects/t4d/t4dm/docs/papers/philosophy_of_ai_memory.tex

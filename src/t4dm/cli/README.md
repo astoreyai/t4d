@@ -89,17 +89,17 @@ ww recall "git workflow" --format json
 - `--k`: Number of results (default: 5)
 - `--format`: table | json (default: table)
 
-### `ww consolidate` - Memory Optimization
+### `t4dm consolidate` - Memory Optimization
 
 ```bash
 # Light consolidation (quick)
-ww consolidate
+t4dm consolidate
 
 # Deep consolidation (HDBSCAN clustering)
-ww consolidate --full
+t4dm consolidate --full
 
 # Preview without running
-ww consolidate --dry-run
+t4dm consolidate --dry-run
 ```
 
 ### `ww status` - System Health
@@ -123,27 +123,27 @@ World Weaver Status
 Memory services: Connected
 ```
 
-### `ww serve` - Start API Server
+### `t4dm serve` - Start API Server
 
 ```bash
 # Development with auto-reload
-ww serve --port 8765 --reload
+t4dm serve --port 8765 --reload
 
 # Production with workers
-ww serve --host 0.0.0.0 --port 8765 --workers 4
+t4dm serve --host 0.0.0.0 --port 8765 --workers 4
 ```
 
 ### `ww config` - Configuration
 
 ```bash
 # Show current config
-ww config --show
+t4dm config --show
 
 # Initialize config file
-ww config --init
+t4dm config --init
 
 # Custom path
-ww config --init --path ~/.ww/custom.yaml
+t4dm config --init --path ~/.t4dm/custom.yaml
 ```
 
 ## Memory Type Commands
@@ -204,7 +204,7 @@ ww recall "database queries"
 ww store "Learned FSRS algorithm" --importance 0.9 --tags learning
 
 # Consolidate nightly
-ww consolidate --full
+t4dm consolidate --full
 
 # Check recent
 ww episodic recent --limit 20

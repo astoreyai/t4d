@@ -811,7 +811,7 @@ test('clicking node selects it', () => {
 
 ## File Locations
 
-All files in: `/mnt/projects/ww/frontend/app/view/memorygraph/`
+All files in: `/mnt/projects/t4d/t4dm/frontend/app/view/memorygraph/`
 
 - **Types**: `memorygraph-types.ts` (900 lines)
 - **State**: `memorygraph-state.ts` (450 lines)

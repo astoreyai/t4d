@@ -1,7 +1,7 @@
 # Test Coverage Summary: /control API Routes
 
 ## File Location
-`/mnt/projects/ww/tests/api/test_routes_control.py`
+`/mnt/projects/t4d/t4dm/tests/api/test_routes_control.py`
 
 ## Overview
 Comprehensive test suite for admin control plane routes covering feature flags, emergency management, circuit breakers, and secrets status.
@@ -166,7 +166,7 @@ pytest tests/api/test_routes_control.py -v
 pytest tests/api/test_routes_control.py::TestFeatureFlagsEndpoints -v
 
 # Run with coverage
-pytest tests/api/test_routes_control.py --cov=src/ww/api/routes/control
+pytest tests/api/test_routes_control.py --cov=src/t4dm/api/routes/control
 
 # Run with detailed output
 pytest tests/api/test_routes_control.py -vv --tb=short

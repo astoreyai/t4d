@@ -1,5 +1,5 @@
 # SDK
-**Path**: `/mnt/projects/t4d/t4dm/src/ww/sdk/`
+**Path**: `/mnt/projects/t4d/t4dm/src/t4dm/sdk/`
 
 ## What
 Python SDK providing sync and async REST API clients for the T4DM memory system, plus a Claude Agent SDK integration for building learning agents.

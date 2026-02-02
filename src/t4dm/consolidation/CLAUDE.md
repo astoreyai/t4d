@@ -1,5 +1,5 @@
 # Consolidation Module
-**Path**: `/mnt/projects/t4d/t4dm/src/ww/consolidation/`
+**Path**: `/mnt/projects/t4d/t4dm/src/t4dm/consolidation/`
 
 ## What
 Biologically-inspired memory consolidation implementing sleep phases (NREM/REM/PRUNE), HDBSCAN clustering, STDP weight updates, lability windows, parallel execution, and automatic scheduling. Mirrors hippocampal-neocortical memory transfer.

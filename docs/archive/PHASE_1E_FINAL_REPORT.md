@@ -60,7 +60,7 @@ The only remaining failures (9 tests) are due to a shape mismatch in the VAEGene
 
 ### 1. Test Fixture Repairs
 
-**File**: `/mnt/projects/ww/tests/consolidation/test_vae_training_loop.py`
+**File**: `/mnt/projects/t4d/t4dm/tests/consolidation/test_vae_training_loop.py`
 
 **Issues Fixed**:
 - Parameter name mismatch: `episodic` → `episodic_memory`
@@ -72,7 +72,7 @@ The only remaining failures (9 tests) are due to a shape mismatch in the VAEGene
 
 ### 2. VAE Training Module Rewrite
 
-**File**: `/mnt/projects/ww/src/ww/learning/vae_training.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/learning/vae_training.py`
 
 **Changes**:
 - Complete rewrite of `VAEReplayTrainer` class
@@ -99,7 +99,7 @@ epoch_losses.append(loss)
 
 ### 3. VAE Generator Compatibility Fix
 
-**File**: `/mnt/projects/ww/src/ww/learning/vae_generator.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/learning/vae_generator.py`
 
 **Issue**: `train_step()` expected `list[np.ndarray]` but received `np.ndarray`
 - Unsafe check: `if not embeddings:` fails on arrays
@@ -155,9 +155,9 @@ def train_step(self, embeddings):
 
 | File | Coverage | Status |
 |------|----------|--------|
-| src/ww/learning/vae_training.py | 53% | New module, properly tested |
-| src/ww/learning/vae_generator.py | 84% | Fixed train_step, high coverage |
-| src/ww/consolidation/sleep.py | 52% | Integration coverage maintained |
+| src/t4dm/learning/vae_training.py | 53% | New module, properly tested |
+| src/t4dm/learning/vae_generator.py | 84% | Fixed train_step, high coverage |
+| src/t4dm/consolidation/sleep.py | 52% | Integration coverage maintained |
 
 ### Overall Coverage
 
@@ -219,8 +219,8 @@ def train_step(self, embeddings):
 ## Files Modified (Summary)
 
 ### Source Code
-- `src/ww/learning/vae_training.py` - Complete rewrite (435 lines)
-- `src/ww/learning/vae_generator.py` - train_step() compatibility fix
+- `src/t4dm/learning/vae_training.py` - Complete rewrite (435 lines)
+- `src/t4dm/learning/vae_generator.py` - train_step() compatibility fix
 - `tests/consolidation/test_vae_training_loop.py` - Fixture and assertion fixes
 
 ### Documentation

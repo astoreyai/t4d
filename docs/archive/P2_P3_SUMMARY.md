@@ -1,7 +1,7 @@
 # World Weaver P2/P3 Issues Summary
 
 **Generated**: 2025-12-09
-**Full Details**: See `/mnt/projects/ww/P2_P3_ISSUES_INVENTORY.md`
+**Full Details**: See `/mnt/projects/t4d/t4dm/P2_P3_ISSUES_INVENTORY.md`
 
 ---
 
@@ -189,21 +189,21 @@ If preparing for production deployment, focus on these HIGH PRIORITY items (19 h
 ## Quick Reference: File Locations
 
 ### Security Issues
-- `/mnt/projects/ww/src/ww/core/config.py` - Password validation, .env permissions
-- `/mnt/projects/ww/src/ww/api/deps.py` - Session validation, API key auth
-- `/mnt/projects/ww/src/ww/mcp/gateway.py` - Rate limiter
-- `/mnt/projects/ww/src/ww/api/server.py` - CSP headers, request size limits
-- `/mnt/projects/ww/Dockerfile` - Docker non-root user
+- `/mnt/projects/t4d/t4dm/src/t4dm/core/config.py` - Password validation, .env permissions
+- `/mnt/projects/t4d/t4dm/src/t4dm/api/deps.py` - Session validation, API key auth
+- `/mnt/projects/t4d/t4dm/src/t4dm/mcp/gateway.py` - Rate limiter
+- `/mnt/projects/t4d/t4dm/src/t4dm/api/server.py` - CSP headers, request size limits
+- `/mnt/projects/t4d/t4dm/Dockerfile` - Docker non-root user
 
 ### Performance Issues
-- `/mnt/projects/ww/src/ww/embedding/bge_m3.py` - Cache eviction
-- `/mnt/projects/ww/src/ww/storage/qdrant_store.py` - Session index, hybrid search, batch ops
-- `/mnt/projects/ww/src/ww/storage/neo4j_store.py` - Connection pool metrics
-- `/mnt/projects/ww/src/ww/memory/semantic.py` - Context cache, sorted processing
+- `/mnt/projects/t4d/t4dm/src/t4dm/embedding/bge_m3.py` - Cache eviction
+- `/mnt/projects/t4d/t4dm/src/t4dm/storage/qdrant_store.py` - Session index, hybrid search, batch ops
+- `/mnt/projects/t4d/t4dm/src/t4dm/storage/neo4j_store.py` - Connection pool metrics
+- `/mnt/projects/t4d/t4dm/src/t4dm/memory/semantic.py` - Context cache, sorted processing
 
 ### Code Quality Issues
-- `/mnt/projects/ww/src/ww/temporal/dynamics.py:350` - TODO
-- `/mnt/projects/ww/tests/security/test_eligibility_security.py` - Security TODOs
+- `/mnt/projects/t4d/t4dm/src/t4dm/temporal/dynamics.py:350` - TODO
+- `/mnt/projects/t4d/t4dm/tests/security/test_eligibility_security.py` - Security TODOs
 
 ---
 
@@ -225,17 +225,17 @@ If preparing for production deployment, focus on these HIGH PRIORITY items (19 h
 2. **Prioritize phases** based on deployment timeline
 3. **Start with Phase 1** (Quick Security Wins) - 6 hours
 4. **Run full test suite** after each phase: `pytest tests/ --cov=src/ww`
-5. **Update progress** in `/mnt/projects/ww/P2_P3_ISSUES_INVENTORY.md`
+5. **Update progress** in `/mnt/projects/t4d/t4dm/P2_P3_ISSUES_INVENTORY.md`
 
 ---
 
 ## References
 
-- Full Inventory: `/mnt/projects/ww/P2_P3_ISSUES_INVENTORY.md`
-- Bug Remediation Report: `/mnt/projects/ww/BUG_REMEDIATION_REPORT.md`
-- Security Audit: `/mnt/projects/ww/SECURITY_AUDIT_REPORT.md`
-- Optimization Analysis: `/mnt/projects/ww/OPTIMIZATION_ANALYSIS_REPORT.md`
-- Bug Remediation Plan: `/mnt/projects/ww/BUG_REMEDIATION_PLAN.md`
+- Full Inventory: `/mnt/projects/t4d/t4dm/P2_P3_ISSUES_INVENTORY.md`
+- Bug Remediation Report: `/mnt/projects/t4d/t4dm/BUG_REMEDIATION_REPORT.md`
+- Security Audit: `/mnt/projects/t4d/t4dm/SECURITY_AUDIT_REPORT.md`
+- Optimization Analysis: `/mnt/projects/t4d/t4dm/OPTIMIZATION_ANALYSIS_REPORT.md`
+- Bug Remediation Plan: `/mnt/projects/t4d/t4dm/BUG_REMEDIATION_PLAN.md`
 
 ---
 

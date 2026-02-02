@@ -6,7 +6,7 @@ A comprehensive lifecycle hooks system has been designed and implemented for Wor
 
 ## Deliverables
 
-### 1. Core Infrastructure (`src/ww/hooks/`)
+### 1. Core Infrastructure (`src/t4dm/hooks/`)
 
 #### `base.py` - Foundation Classes
 - **`Hook`**: Abstract base class for all hooks
@@ -398,8 +398,8 @@ The hooks system integrates with existing World Weaver patterns:
 ## File Structure
 
 ```
-/mnt/projects/ww/
-├── src/ww/hooks/
+/mnt/projects/t4d/t4dm/
+├── src/t4dm/hooks/
 │   ├── __init__.py              # Public API (425 lines)
 │   ├── base.py                  # Core infrastructure (551 lines)
 │   ├── core.py                  # Core lifecycle hooks (218 lines)
@@ -425,7 +425,7 @@ Total: ~5,653 lines of code, documentation, and tests
 
 1. **Add to Episodic Memory**
    ```python
-   # In src/ww/memory/episodic.py
+   # In src/t4dm/memory/episodic.py
    from ww.hooks import get_global_registry, with_hooks
    from ww.hooks.registry import REGISTRY_EPISODIC
 
@@ -438,7 +438,7 @@ Total: ~5,653 lines of code, documentation, and tests
 
 2. **Add to Storage Layers**
    ```python
-   # In src/ww/storage/neo4j_store.py
+   # In src/t4dm/storage/neo4j_store.py
    from ww.hooks import get_global_registry
    from ww.hooks.registry import REGISTRY_STORAGE_NEO4J
 
@@ -448,7 +448,7 @@ Total: ~5,653 lines of code, documentation, and tests
 
 3. **Add to MCP Gateway**
    ```python
-   # In src/ww/mcp/gateway.py
+   # In src/t4dm/mcp/gateway.py
    from ww.hooks import get_global_registry
    from ww.hooks.registry import REGISTRY_MCP
 

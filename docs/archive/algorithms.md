@@ -18,7 +18,7 @@ Where:
 - **S** = Stability (resistance to forgetting, increases with successful recalls)
 
 ### Implementation
-- **File**: `/mnt/projects/ww/src/ww/memory/episodic.py` (lines 305-309)
+- **File**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic.py` (lines 305-309)
 - **Used in**: Episode scoring during recall operations
 - **Deviation from standard**: Uses 0.9 factor (vs standard 1.0) for slightly slower decay
 
@@ -79,7 +79,7 @@ Where:
 - **fan** = Number of outgoing connections from j (fan effect)
 
 ### Implementation
-- **File**: `/mnt/projects/ww/src/ww/memory/semantic.py` (lines 268-318)
+- **File**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/semantic.py` (lines 268-318)
 - **Optimizations**: Batch relationship queries to eliminate N+1 pattern (lines 320-358)
 
 ### Normalization
@@ -113,7 +113,7 @@ Where:
 - **Co-retrieval**: Applied when entities are retrieved together in a single recall
 
 ### Implementation
-- **File**: `/mnt/projects/ww/src/ww/memory/semantic.py` (lines 385-447)
+- **File**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/semantic.py` (lines 385-447)
 - **Method**: `_strengthen_co_retrieval()`
 - **Optimization**: Parallel strengthening with batch relationship queries
 
@@ -151,7 +151,7 @@ Groups similar episodes or procedures for consolidation without requiring pre-sp
 | min_samples | 1 | Lenient to capture small patterns |
 
 ### Implementation
-- **File**: `/mnt/projects/ww/src/ww/consolidation/service.py`
+- **File**: `/mnt/projects/t4d/t4dm/src/t4dm/consolidation/service.py`
 - **Episodes**: Lines 428-507 (`_cluster_episodes`)
 - **Procedures**: Lines 509-585 (`_cluster_procedures`)
 
@@ -186,7 +186,7 @@ score = 0.4*semantic + 0.25*recency + 0.2*outcome + 0.15*importance
 - **Outcome** (20%): SUCCESS=1.0, PARTIAL=0.83, NEUTRAL=0.83, FAILURE=0.67
 - **Importance** (15%): Emotional valence [0, 1]
 
-**Implementation**: `/mnt/projects/ww/src/ww/memory/episodic.py` (lines 184-189)
+**Implementation**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic.py` (lines 184-189)
 
 ### Semantic Recall Scoring
 ```
@@ -198,7 +198,7 @@ score = 0.4*semantic + 0.35*activation + 0.25*retrievability
 - **Activation** (35%): Normalized ACT-R activation (sigmoid)
 - **Retrievability** (25%): FSRS decay (same as episodes)
 
-**Implementation**: `/mnt/projects/ww/src/ww/memory/semantic.py` (lines 243-247)
+**Implementation**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/semantic.py` (lines 243-247)
 
 ### Procedural Retrieval Scoring
 ```
@@ -210,7 +210,7 @@ score = 0.5*semantic + 0.3*success_rate + 0.2*recency
 - **Success Rate** (30%): `successful_executions / total_executions`
 - **Recency** (20%): `exp(-0.1 * days_since_last_use)`
 
-**Implementation**: `/mnt/projects/ww/src/ww/memory/procedural.py`
+**Implementation**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/procedural.py`
 
 ---
 
@@ -241,7 +241,7 @@ score = 0.5*semantic + 0.3*success_rate + 0.2*recency
 
 **Complexity**: O(n log n) for clustering + O(k²) for entity extraction (k = cluster size)
 
-**Implementation**: `/mnt/projects/ww/src/ww/consolidation/service.py` (lines 185-284)
+**Implementation**: `/mnt/projects/t4d/t4dm/src/t4dm/consolidation/service.py` (lines 185-284)
 
 ### Skill Consolidation
 **Purpose**: Merge similar procedures
@@ -257,7 +257,7 @@ score = 0.5*semantic + 0.3*success_rate + 0.2*recency
 
 **Complexity**: O(n log n) for clustering + O(k²) for merging (k = cluster size)
 
-**Implementation**: `/mnt/projects/ww/src/ww/consolidation/service.py` (lines 286-368)
+**Implementation**: `/mnt/projects/t4d/t4dm/src/t4dm/consolidation/service.py` (lines 286-368)
 
 ---
 
@@ -282,7 +282,7 @@ Track both when events occurred (reference time) and when they were recorded (sy
 - **Audit trails**: Track how understanding evolved
 - **Debugging**: Recover from incorrect updates
 
-**Implementation**: `/mnt/projects/ww/src/ww/memory/semantic.py` (lines 462-505)
+**Implementation**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/semantic.py` (lines 462-505)
 
 ---
 

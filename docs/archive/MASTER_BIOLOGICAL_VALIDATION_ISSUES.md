@@ -2,7 +2,7 @@
 
 **Generated**: 2026-01-04
 **Scope**: Complete biological validation audit of World Weaver biologically-inspired modules
-**Directories**: `src/ww/nca/`, `src/ww/learning/`, `src/ww/consolidation/`
+**Directories**: `src/t4dm/nca/`, `src/t4dm/learning/`, `src/t4dm/consolidation/`
 
 ---
 

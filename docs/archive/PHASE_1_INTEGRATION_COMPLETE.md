@@ -20,7 +20,7 @@ Phase 1 biological integration is **COMPLETE**. All critical neural subsystem co
 
 ### Phase 1A: Sleep → Reconsolidation ✓
 
-**Implementation**: `/mnt/projects/ww/src/ww/consolidation/sleep.py`
+**Implementation**: `/mnt/projects/t4d/t4dm/src/t4dm/consolidation/sleep.py`
 
 During NREM sleep, replayed episodes trigger reconsolidation:
 
@@ -46,7 +46,7 @@ async def _replay_episode(self, episode: Episode) -> None:
 
 ### Phase 1B: VTA → STDP Modulation ✓
 
-**Implementation**: `/mnt/projects/ww/src/ww/integration/stdp_vta_bridge.py`
+**Implementation**: `/mnt/projects/t4d/t4dm/src/t4dm/integration/stdp_vta_bridge.py`
 
 `STDPVTABridge` connects dopamine levels to synaptic plasticity:
 
@@ -77,7 +77,7 @@ class STDPVTABridge:
 
 ### Phase 1C: VAE Training Loop ✓
 
-**Implementation**: `/mnt/projects/ww/src/ww/learning/vae_training.py`
+**Implementation**: `/mnt/projects/t4d/t4dm/src/t4dm/learning/vae_training.py`
 
 Wake-sleep algorithm for generative replay:
 
@@ -105,7 +105,7 @@ async def train_vae_from_wake(self, session_id: str) -> TrainingMetrics:
 
 ### Phase 1D: VTA → Sleep RPE ✓
 
-**Implementation**: `/mnt/projects/ww/src/ww/consolidation/sleep.py`
+**Implementation**: `/mnt/projects/t4d/t4dm/src/t4dm/consolidation/sleep.py`
 
 Replay sequences generate reward prediction error:
 
@@ -139,7 +139,7 @@ async def _generate_replay_rpe(
 
 ### Phase 1E: Lability Window Enforcement ✓
 
-**Implementation**: `/mnt/projects/ww/src/ww/consolidation/lability.py`
+**Implementation**: `/mnt/projects/t4d/t4dm/src/t4dm/consolidation/lability.py`
 
 Protein synthesis gate enforces 6-hour window:
 
@@ -165,10 +165,10 @@ class LabilityGate:
 ### Phase 1F: Documentation ✓
 
 **Files Created**:
-1. `/mnt/projects/ww/docs/BIOLOGICAL_INTEGRATION.md` - Complete neural integration architecture
-2. `/mnt/projects/ww/docs/ARCHITECTURE_BIOLOGICAL.md` - Biological system design
-3. Updated `/mnt/projects/ww/README.md` - Added Phase 1 features
-4. Updated `/mnt/projects/ww/COMPREHENSIVE_CODEBASE_ANALYSIS.md` - Integration status
+1. `/mnt/projects/t4d/t4dm/docs/BIOLOGICAL_INTEGRATION.md` - Complete neural integration architecture
+2. `/mnt/projects/t4d/t4dm/docs/ARCHITECTURE_BIOLOGICAL.md` - Biological system design
+3. Updated `/mnt/projects/t4d/t4dm/README.md` - Added Phase 1 features
+4. Updated `/mnt/projects/t4d/t4dm/COMPREHENSIVE_CODEBASE_ANALYSIS.md` - Integration status
 
 **Content**:
 - All integration mechanisms documented

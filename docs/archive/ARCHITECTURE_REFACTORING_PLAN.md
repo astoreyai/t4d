@@ -10,7 +10,7 @@
 
 ## Executive Summary
 
-This plan addresses 7 critical architectural issues identified in the [Architecture Review](/mnt/projects/ww/docs/CODE_QUALITY_REVIEW.md) (Score: 7.7/10). The refactoring is structured into 3 phases that can partially overlap with ongoing CompBio and Hinton work.
+This plan addresses 7 critical architectural issues identified in the [Architecture Review](/mnt/projects/t4d/t4dm/docs/CODE_QUALITY_REVIEW.md) (Score: 7.7/10). The refactoring is structured into 3 phases that can partially overlap with ongoing CompBio and Hinton work.
 
 **Critical Issues**:
 1. God Object: `episodic.py` (3,616 lines, 34 methods)
@@ -45,7 +45,7 @@ This plan addresses 7 critical architectural issues identified in the [Architect
 
 ### Problem Analysis
 
-`/mnt/projects/ww/src/ww/memory/episodic.py` is a 3,616-line God Object with:
+`/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic.py` is a 3,616-line God Object with:
 - **EpisodicMemory** class (3,139 lines): Storage, retrieval, learning, fusion, reranking
 - **LearnedFusionWeights** class (185 lines): Query-dependent scoring
 - **LearnedReranker** class (226 lines): Post-retrieval re-ranking
@@ -56,7 +56,7 @@ This plan addresses 7 critical architectural issues identified in the [Architect
 Split into 6 focused modules using **Facade Pattern** to preserve existing API:
 
 ```
-src/ww/memory/
+src/t4dm/memory/
 ├── episodic.py              # 400 lines - Facade + backward compat
 ├── episodic_storage.py      # 800 lines - NEW: Storage operations
 ├── episodic_retrieval.py    # 1,200 lines - NEW: Search & recall
@@ -702,12 +702,12 @@ tests/memory/
 
 ### API Router Refactoring (config.py)
 
-**Problem**: `create_ww_router()` is 429 lines in `/mnt/projects/ww/src/ww/api/routes/config.py`
+**Problem**: `create_ww_router()` is 429 lines in `/mnt/projects/t4d/t4dm/src/t4dm/api/routes/config.py`
 
 **Solution**: Extract config model builders
 
 ```python
-# NEW: src/ww/api/models/config_models.py
+# NEW: src/t4dm/api/models/config_models.py
 """
 Configuration model builders.
 
@@ -740,7 +740,7 @@ class ConfigModelBuilder:
             ...
         )
 
-# REFACTORED: src/ww/api/routes/config.py (now ~150 lines)
+# REFACTORED: src/t4dm/api/routes/config.py (now ~150 lines)
 from ww.api.models.config_models import ConfigModelBuilder
 
 @router.get("", response_model=SystemConfigResponse)
@@ -798,7 +798,7 @@ async def get_config():
 
 #### 2.1 Redis Integration
 
-**New Module**: `/mnt/projects/ww/src/ww/storage/redis_cache.py`
+**New Module**: `/mnt/projects/t4d/t4dm/src/t4dm/storage/redis_cache.py`
 
 ```python
 """
@@ -982,7 +982,7 @@ def get_redis_cache() -> RedisCache:
 
 #### 2.2 Embedding Provider with Cache
 
-**Modified**: `/mnt/projects/ww/src/ww/embedding/bge_m3.py`
+**Modified**: `/mnt/projects/t4d/t4dm/src/t4dm/embedding/bge_m3.py`
 
 ```python
 class BGEM3EmbeddingProvider(EmbeddingProvider):
@@ -1038,7 +1038,7 @@ for episode_id in episode_ids:  # N iterations
 
 **Solution**: Use existing `get_relationships_batch()` method
 
-**Modified**: `/mnt/projects/ww/src/ww/memory/episodic_retrieval.py`
+**Modified**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic_retrieval.py`
 
 ```python
 async def _expand_graph_neighbors(
@@ -1098,7 +1098,7 @@ async def _expand_graph_neighbors(
 
 #### 2.4 API Rate Limiting
 
-**New Middleware**: `/mnt/projects/ww/src/ww/api/middleware/rate_limit.py`
+**New Middleware**: `/mnt/projects/t4d/t4dm/src/t4dm/api/middleware/rate_limit.py`
 
 ```python
 """
@@ -1238,7 +1238,7 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
 ```
 
 **Lines**: ~150
-**Integration**: Add to `/mnt/projects/ww/src/ww/api/server.py`:
+**Integration**: Add to `/mnt/projects/t4d/t4dm/src/t4dm/api/server.py`:
 
 ```python
 from ww.api.middleware.rate_limit import RateLimitMiddleware
@@ -1278,7 +1278,7 @@ app.add_middleware(RateLimitMiddleware)
 
 **Strategy**: Automated conversion with safety checks
 
-**Script**: `/mnt/projects/ww/scripts/convert_prints_to_logger.py`
+**Script**: `/mnt/projects/t4d/t4dm/scripts/convert_prints_to_logger.py`
 
 ```python
 """
@@ -1419,9 +1419,9 @@ grep -rn "print(" src/ww --include="*.py" | grep -v "# noqa" > prints.txt
 ```
 
 **Priority Files** (highest impact):
-1. `/mnt/projects/ww/src/ww/nca/*.py` (17 files with prints)
-2. `/mnt/projects/ww/src/ww/interfaces/*.py` (9 files - user-facing)
-3. `/mnt/projects/ww/src/ww/bridges/*.py` (3 files)
+1. `/mnt/projects/t4d/t4dm/src/t4dm/nca/*.py` (17 files with prints)
+2. `/mnt/projects/t4d/t4dm/src/t4dm/interfaces/*.py` (9 files - user-facing)
+3. `/mnt/projects/t4d/t4dm/src/t4dm/bridges/*.py` (3 files)
 
 **Effort**: ~20 hours (manual review + testing)
 
@@ -1465,12 +1465,12 @@ tests/bridges/
 
 **Files to Update**:
 
-1. `/mnt/projects/ww/docs/architecture.md` - Add refactoring section
-2. `/mnt/projects/ww/docs/API_WALKTHROUGH.md` - Update cache examples
-3. `/mnt/projects/ww/README.md` - Add Redis setup
-4. `/mnt/projects/ww/docs/ROADMAP.md` - Mark Phase 1-3 complete
-5. NEW: `/mnt/projects/ww/docs/CACHING_GUIDE.md` - Redis best practices
-6. NEW: `/mnt/projects/ww/docs/RATE_LIMITING.md` - API limits guide
+1. `/mnt/projects/t4d/t4dm/docs/architecture.md` - Add refactoring section
+2. `/mnt/projects/t4d/t4dm/docs/API_WALKTHROUGH.md` - Update cache examples
+3. `/mnt/projects/t4d/t4dm/README.md` - Add Redis setup
+4. `/mnt/projects/t4d/t4dm/docs/ROADMAP.md` - Mark Phase 1-3 complete
+5. NEW: `/mnt/projects/t4d/t4dm/docs/CACHING_GUIDE.md` - Redis best practices
+6. NEW: `/mnt/projects/t4d/t4dm/docs/RATE_LIMITING.md` - API limits guide
 
 ---
 
@@ -1535,7 +1535,7 @@ jobs:
 
 ### Performance Benchmarks
 
-**New Benchmarks**: `/mnt/projects/ww/tests/benchmarks/test_refactoring_performance.py`
+**New Benchmarks**: `/mnt/projects/t4d/t4dm/tests/benchmarks/test_refactoring_performance.py`
 
 ```python
 """
@@ -1669,7 +1669,7 @@ logger.debug(f"Processing {item}")
 
 ### Docker Compose Update
 
-**File**: `/mnt/projects/ww/docker-compose.yml`
+**File**: `/mnt/projects/t4d/t4dm/docker-compose.yml`
 
 ```yaml
 services:
@@ -1960,33 +1960,33 @@ This refactoring plan addresses all 7 critical architectural issues while mainta
 ### New Files Created
 
 **Phase 1**:
-- `/mnt/projects/ww/src/ww/memory/episodic_storage.py`
-- `/mnt/projects/ww/src/ww/memory/episodic_retrieval.py`
-- `/mnt/projects/ww/src/ww/memory/episodic_learning.py`
-- `/mnt/projects/ww/src/ww/memory/episodic_fusion.py`
-- `/mnt/projects/ww/src/ww/memory/episodic_saga.py`
-- `/mnt/projects/ww/src/ww/api/models/config_models.py`
+- `/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic_storage.py`
+- `/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic_retrieval.py`
+- `/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic_learning.py`
+- `/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic_fusion.py`
+- `/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic_saga.py`
+- `/mnt/projects/t4d/t4dm/src/t4dm/api/models/config_models.py`
 
 **Phase 2**:
-- `/mnt/projects/ww/src/ww/storage/redis_cache.py`
-- `/mnt/projects/ww/src/ww/api/middleware/rate_limit.py`
+- `/mnt/projects/t4d/t4dm/src/t4dm/storage/redis_cache.py`
+- `/mnt/projects/t4d/t4dm/src/t4dm/api/middleware/rate_limit.py`
 
 **Phase 3**:
-- `/mnt/projects/ww/scripts/convert_prints_to_logger.py`
-- `/mnt/projects/ww/tests/bridges/test_glymphatic_bridge.py`
-- `/mnt/projects/ww/tests/bridges/test_consolidation_bridge.py`
+- `/mnt/projects/t4d/t4dm/scripts/convert_prints_to_logger.py`
+- `/mnt/projects/t4d/t4dm/tests/bridges/test_glymphatic_bridge.py`
+- `/mnt/projects/t4d/t4dm/tests/bridges/test_consolidation_bridge.py`
 - (+ 13 more bridge test files)
 
 ### Modified Files
 
 **Phase 1**:
-- `/mnt/projects/ww/src/ww/memory/episodic.py` (3,616 → 400 lines)
-- `/mnt/projects/ww/src/ww/api/routes/config.py` (839 → 150 lines)
+- `/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic.py` (3,616 → 400 lines)
+- `/mnt/projects/t4d/t4dm/src/t4dm/api/routes/config.py` (839 → 150 lines)
 
 **Phase 2**:
-- `/mnt/projects/ww/src/ww/embedding/bge_m3.py` (add cache)
-- `/mnt/projects/ww/src/ww/api/server.py` (add middleware)
-- `/mnt/projects/ww/docker-compose.yml` (add Redis)
+- `/mnt/projects/t4d/t4dm/src/t4dm/embedding/bge_m3.py` (add cache)
+- `/mnt/projects/t4d/t4dm/src/t4dm/api/server.py` (add middleware)
+- `/mnt/projects/t4d/t4dm/docker-compose.yml` (add Redis)
 
 **Phase 3**:
 - 50+ files with print() statements converted to logger
@@ -1994,15 +1994,15 @@ This refactoring plan addresses all 7 critical architectural issues while mainta
 ### Test Files
 
 **Phase 1**:
-- `/mnt/projects/ww/tests/memory/test_episodic_storage.py` (NEW)
-- `/mnt/projects/ww/tests/memory/test_episodic_retrieval.py` (NEW)
-- `/mnt/projects/ww/tests/memory/test_episodic_learning.py` (NEW)
-- `/mnt/projects/ww/tests/memory/test_episodic_integration.py` (NEW)
+- `/mnt/projects/t4d/t4dm/tests/memory/test_episodic_storage.py` (NEW)
+- `/mnt/projects/t4d/t4dm/tests/memory/test_episodic_retrieval.py` (NEW)
+- `/mnt/projects/t4d/t4dm/tests/memory/test_episodic_learning.py` (NEW)
+- `/mnt/projects/t4d/t4dm/tests/memory/test_episodic_integration.py` (NEW)
 
 **Phase 2**:
-- `/mnt/projects/ww/tests/storage/test_redis_cache.py` (NEW)
-- `/mnt/projects/ww/tests/api/test_rate_limit.py` (NEW)
-- `/mnt/projects/ww/tests/benchmarks/test_refactoring_performance.py` (NEW)
+- `/mnt/projects/t4d/t4dm/tests/storage/test_redis_cache.py` (NEW)
+- `/mnt/projects/t4d/t4dm/tests/api/test_rate_limit.py` (NEW)
+- `/mnt/projects/t4d/t4dm/tests/benchmarks/test_refactoring_performance.py` (NEW)
 
 **Phase 3**:
 - 15 new bridge test files

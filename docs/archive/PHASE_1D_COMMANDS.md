@@ -11,7 +11,7 @@ python -m pytest tests/consolidation/test_sleep_rpe.py -v
 python -m pytest tests/consolidation/test_sleep_rpe.py::test_replay_generates_rpe -v
 
 # Run with coverage
-python -m pytest tests/consolidation/test_sleep_rpe.py --cov=src/ww/consolidation/sleep --cov-report=term-missing
+python -m pytest tests/consolidation/test_sleep_rpe.py --cov=src/t4dm/consolidation/sleep --cov-report=term-missing
 ```
 
 ## Test Categories
@@ -82,8 +82,8 @@ for event in history:
 
 ## Files Modified
 
-- `/mnt/projects/ww/src/ww/consolidation/sleep.py` - Main implementation
-- `/mnt/projects/ww/tests/consolidation/test_sleep_rpe.py` - Test suite
+- `/mnt/projects/t4d/t4dm/src/t4dm/consolidation/sleep.py` - Main implementation
+- `/mnt/projects/t4d/t4dm/tests/consolidation/test_sleep_rpe.py` - Test suite
 
 ## Success Criteria Checklist
 
@@ -102,7 +102,7 @@ for event in history:
 pytest tests/consolidation/test_sleep_rpe.py -v --tb=short
 
 # Check coverage
-pytest tests/consolidation/test_sleep_rpe.py --cov=src/ww/consolidation/sleep --cov-report=term-missing | grep "sleep.py"
+pytest tests/consolidation/test_sleep_rpe.py --cov=src/t4dm/consolidation/sleep --cov-report=term-missing | grep "sleep.py"
 
 # Run integration test
 pytest tests/consolidation/test_sleep_rpe.py::test_integration_full_sleep_cycle_with_vta -v

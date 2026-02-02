@@ -5,7 +5,7 @@ Implemented comprehensive input sanitization and authentication context for Worl
 
 ## Files Modified
 
-### 1. `/mnt/projects/ww/src/ww/mcp/validation.py`
+### 1. `/mnt/projects/t4d/t4dm/src/t4dm/mcp/validation.py`
 **Lines 7, 305-507**: Added Phase 3 security sanitization functions
 
 #### New Functions:
@@ -39,7 +39,7 @@ Implemented comprehensive input sanitization and authentication context for Worl
   - Caps list lengths at 100 items
   - Supports: str, int, float, bool, dict, list, None
 
-### 2. `/mnt/projects/ww/src/ww/mcp/memory_gateway.py`
+### 2. `/mnt/projects/t4d/t4dm/src/t4dm/mcp/memory_gateway.py`
 **Lines 16-18, 204-278**: Added authentication context and decorators
 
 #### New Imports:
@@ -65,7 +65,7 @@ Implemented comprehensive input sanitization and authentication context for Worl
   - Validates request has specific role
   - Returns forbidden error if role missing
 
-### 3. `/mnt/projects/ww/tests/unit/test_validation.py`
+### 3. `/mnt/projects/t4d/t4dm/tests/unit/test_validation.py`
 **Lines 20-39, 873-1233**: Added comprehensive tests for Phase 3 features
 
 #### New Test Classes:

@@ -73,7 +73,7 @@ Current dreaming operates in embedding space - generating latent trajectories fo
 #### 1.1 Memory Cluster Extraction
 
 ```python
-# File: src/ww/dreaming/narrative_extractor.py
+# File: src/t4dm/dreaming/narrative_extractor.py
 
 @dataclass
 class MemoryCluster:
@@ -167,7 +167,7 @@ class ClusterNarrativeExtractor:
 #### 1.2 LLM Prompt Assembly
 
 ```python
-# File: src/ww/dreaming/narrative_prompt.py
+# File: src/t4dm/dreaming/narrative_prompt.py
 
 NARRATIVE_SYSTEM_PROMPT = """
 You are a memory consolidation system that synthesizes coherent narratives from episodic memories.
@@ -256,7 +256,7 @@ class PromptAssembler:
 #### 1.3 Narrative Generation and Consolidation
 
 ```python
-# File: src/ww/dreaming/narrative_generator.py
+# File: src/t4dm/dreaming/narrative_generator.py
 
 @dataclass
 class GeneratedNarrative:
@@ -409,7 +409,7 @@ class NarrativeGenerator:
 #### 1.4 Integration with Sleep Consolidation
 
 ```python
-# File: src/ww/consolidation/narrative_integration.py
+# File: src/t4dm/consolidation/narrative_integration.py
 
 class NarrativeIntegration:
     """
@@ -545,7 +545,7 @@ Enable multiple agent instances to share, coordinate, and collaboratively consol
 #### 2.1 Agent Identity and Namespacing
 
 ```python
-# File: src/ww/multiagent/identity.py
+# File: src/t4dm/multiagent/identity.py
 
 @dataclass
 class AgentIdentity:
@@ -638,7 +638,7 @@ class AgentRegistry:
 #### 2.2 Shared Memory Protocol
 
 ```python
-# File: src/ww/multiagent/shared_memory.py
+# File: src/t4dm/multiagent/shared_memory.py
 
 @dataclass
 class MemoryPublication:
@@ -798,7 +798,7 @@ class CRDTResolver:
 #### 2.3 Collaborative Consolidation
 
 ```python
-# File: src/ww/multiagent/collaborative_consolidation.py
+# File: src/t4dm/multiagent/collaborative_consolidation.py
 
 class CollaborativeConsolidation:
     """
@@ -952,7 +952,7 @@ We need rigorous benchmarks to validate these mechanisms.
 #### 3.1 CLEAR Benchmark Integration
 
 ```python
-# File: src/ww/benchmarks/clear_benchmark.py
+# File: src/t4dm/benchmarks/clear_benchmark.py
 
 """
 CLEAR Benchmark (Continual LEArning on Real-World Imagery)
@@ -1109,7 +1109,7 @@ class CLEARBenchmark:
 #### 3.2 Split-MNIST/CIFAR Evaluation
 
 ```python
-# File: src/ww/benchmarks/split_benchmarks.py
+# File: src/t4dm/benchmarks/split_benchmarks.py
 
 """
 Split-MNIST and Split-CIFAR benchmarks.
@@ -1178,7 +1178,7 @@ class SplitBenchmark:
 #### 3.3 Catastrophic Forgetting Metrics
 
 ```python
-# File: src/ww/benchmarks/forgetting_metrics.py
+# File: src/t4dm/benchmarks/forgetting_metrics.py
 
 """
 Comprehensive forgetting metrics for memory system evaluation.
@@ -1346,7 +1346,7 @@ Current memories are purely symbolic/embedding-based. Embodied grounding would:
 ### Interface Specification
 
 ```python
-# File: src/ww/embodied/interfaces.py (STUB - Future Work)
+# File: src/t4dm/embodied/interfaces.py (STUB - Future Work)
 
 class EmbodiedInterface(Protocol):
     """Protocol for embodied grounding interfaces."""
@@ -1509,7 +1509,7 @@ class ActionGrounding:
 ### Phase 12 Files
 
 ```
-src/ww/
+src/t4dm/
 ├── benchmarks/
 │   ├── __init__.py
 │   ├── clear_benchmark.py          # CLEAR integration
@@ -1578,7 +1578,7 @@ tests/
 ## Appendix: LLM Provider Interface
 
 ```python
-# File: src/ww/llm/provider.py
+# File: src/t4dm/llm/provider.py
 
 class LLMProvider(Protocol):
     """Abstract interface for LLM providers."""

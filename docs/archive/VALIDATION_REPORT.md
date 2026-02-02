@@ -10,7 +10,7 @@
 
 The World Weaver codebase has a **critical file integrity issue** that prevents full execution:
 
-- **File**: `/mnt/projects/ww/src/ww/memory/episodic.py`
+- **File**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic.py`
 - **Issue**: File is truncated at line 151 (incomplete method definition)
 - **Severity**: CRITICAL - Blocks all imports and test execution
 - **Impact**: 2 test failures + import errors across entire test suite
@@ -46,19 +46,19 @@ Coverage:         78% (5797 statements)
 ### Test Coverage by Module
 | Module | Coverage | Status |
 |--------|----------|--------|
-| src/ww/core | 97-100% | Excellent |
-| src/ww/memory | 84-98% | Good |
-| src/ww/mcp/gateway | 100% | Excellent |
-| src/ww/consolidation | 74% | Fair |
-| src/ww/storage | 64-72% | Moderate |
-| src/ww/hooks | 22-84% | Needs work |
+| src/t4dm/core | 97-100% | Excellent |
+| src/t4dm/memory | 84-98% | Good |
+| src/t4dm/mcp/gateway | 100% | Excellent |
+| src/t4dm/consolidation | 74% | Fair |
+| src/t4dm/storage | 64-72% | Moderate |
+| src/t4dm/hooks | 22-84% | Needs work |
 
 ---
 
 ## CRITICAL ISSUE: File Truncation
 
 ### Location
-**File**: `/mnt/projects/ww/src/ww/memory/episodic.py`  
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic.py`  
 **Line**: 146-151  
 **Status**: INCOMPLETE
 
@@ -114,7 +114,7 @@ Security tests cannot be run (error on import)
 
 ### Syntax Error Details
 ```
-File "/mnt/projects/ww/src/ww/memory/episodic.py", line 146
+File "/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic.py", line 146
     async def recall(
                     ^
 SyntaxError: '(' was never closed
@@ -170,7 +170,7 @@ DeprecationWarning: retrieve is deprecated, use recall_skill instead
 ## Configuration Validation
 
 ### Environment File Status
-**File**: `/mnt/projects/ww/.env`
+**File**: `/mnt/projects/t4d/t4dm/.env`
 **Status**: VALID
 
 Required variables present:
@@ -295,7 +295,7 @@ The codebase has migrated to new naming scheme:
 ### PRIORITY 1: CRITICAL (BLOCKING)
 
 **P1-001: Restore episodic.py**
-- **File**: `/mnt/projects/ww/src/ww/memory/episodic.py`
+- **File**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic.py`
 - **Action**: Complete the truncated file
 - **Options**:
   1. Check syncthing backup on euclid (`ssh euclid`)
@@ -387,17 +387,17 @@ The codebase has migrated to new naming scheme:
 ## Files Affected
 
 ### Critical
-- `/mnt/projects/ww/src/ww/memory/episodic.py` - TRUNCATED
+- `/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic.py` - TRUNCATED
 
 ### High Priority  
-- `/mnt/projects/ww/src/ww/consolidation/service.py` - Unused imports
-- `/mnt/projects/ww/tests/unit/test_procedural.py` - Uses deprecated API
-- `/mnt/projects/ww/tests/test_integration.py` - Cannot import
-- `/mnt/projects/ww/tests/security/test_injection.py` - Cannot import
+- `/mnt/projects/t4d/t4dm/src/t4dm/consolidation/service.py` - Unused imports
+- `/mnt/projects/t4d/t4dm/tests/unit/test_procedural.py` - Uses deprecated API
+- `/mnt/projects/t4d/t4dm/tests/test_integration.py` - Cannot import
+- `/mnt/projects/t4d/t4dm/tests/security/test_injection.py` - Cannot import
 
 ### Medium Priority
-- `/mnt/projects/ww/pyproject.toml` - Deprecated linting config
-- `/mnt/projects/ww/src/ww/hooks/*.py` - Low test coverage (22-50%)
+- `/mnt/projects/t4d/t4dm/pyproject.toml` - Deprecated linting config
+- `/mnt/projects/t4d/t4dm/src/t4dm/hooks/*.py` - Low test coverage (22-50%)
 
 ---
 

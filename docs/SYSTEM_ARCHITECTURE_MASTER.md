@@ -646,4 +646,4 @@ mindmap
 
 ---
 
-*Generated from CLAUDE.md files across 25 modules in `/mnt/projects/t4d/t4dm/src/ww/`*
+*Generated from CLAUDE.md files across 25 modules in `/mnt/projects/t4d/t4dm/src/t4dm/`*

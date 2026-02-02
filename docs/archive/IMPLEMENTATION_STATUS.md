@@ -11,7 +11,7 @@
 
 | Task | Status | Files | Tests |
 |------|--------|-------|-------|
-| TASK-001: Project Structure | COMPLETE | `src/ww/encoding/` | - |
+| TASK-001: Project Structure | COMPLETE | `src/t4dm/encoding/` | - |
 | TASK-002: Dendritic Neuron | COMPLETE | `dendritic.py` | 13/13 passing |
 | TASK-003: Sparse Encoder | COMPLETE | `sparse.py` | 17/17 passing |
 | TASK-004: Attractor Network | COMPLETE | `attractor.py` | 20/20 passing |
@@ -20,7 +20,7 @@
 ### Files Created
 
 ```
-src/ww/encoding/
+src/t4dm/encoding/
 ├── __init__.py          # Module exports
 ├── dendritic.py         # Two-compartment neuron model
 ├── sparse.py            # k-WTA sparse encoder
@@ -37,7 +37,7 @@ tests/encoding/
 ### Files Modified
 
 ```
-src/ww/core/config.py    # Added BioinspiredConfig and sub-configs
+src/t4dm/core/config.py    # Added BioinspiredConfig and sub-configs
 ```
 
 ---
@@ -46,7 +46,7 @@ src/ww/core/config.py    # Added BioinspiredConfig and sub-configs
 
 ### 1. DendriticNeuron
 
-**Location**: `src/ww/encoding/dendritic.py`
+**Location**: `src/t4dm/encoding/dendritic.py`
 
 **Implementation**:
 - Two-compartment model (basal + apical)
@@ -63,7 +63,7 @@ src/ww/core/config.py    # Added BioinspiredConfig and sub-configs
 
 ### 2. SparseEncoder
 
-**Location**: `src/ww/encoding/sparse.py`
+**Location**: `src/t4dm/encoding/sparse.py`
 
 **Implementation**:
 - k-Winner-Take-All activation
@@ -82,7 +82,7 @@ src/ww/core/config.py    # Added BioinspiredConfig and sub-configs
 
 ### 3. AttractorNetwork
 
-**Location**: `src/ww/encoding/attractor.py`
+**Location**: `src/t4dm/encoding/attractor.py`
 
 **Implementation**:
 - Hebbian outer product learning
@@ -102,7 +102,7 @@ src/ww/core/config.py    # Added BioinspiredConfig and sub-configs
 
 ### 4. Configuration
 
-**Location**: `src/ww/core/config.py`
+**Location**: `src/t4dm/core/config.py`
 
 **New Config Classes**:
 - `BioinspiredConfig` - Top-level bioinspired config
@@ -197,10 +197,10 @@ Coverage: 100% for bioinspired modules
 ### Files Created (Cycle 2)
 
 ```
-src/ww/memory/
+src/t4dm/memory/
 └── fast_episodic.py       # Fast episodic store (10K capacity)
 
-src/ww/consolidation/
+src/t4dm/consolidation/
 └── fes_consolidator.py    # FES → Episodic → Semantic consolidation
 
 tests/memory/
@@ -236,7 +236,7 @@ tests/consolidation/
 ### Files Created (Cycle 3)
 
 ```
-src/ww/learning/
+src/t4dm/learning/
 └── eligibility.py         # Eligibility traces for temporal credit assignment
 
 tests/learning/
@@ -444,7 +444,7 @@ All previously identified exploits blocked:
 ### Files Modified
 
 ```
-src/ww/learning/eligibility.py    # Security hardening, thread safety
+src/t4dm/learning/eligibility.py    # Security hardening, thread safety
 tests/learning/test_eligibility.py # Added 40 security tests
 ```
 
@@ -470,7 +470,7 @@ tests/learning/test_eligibility.py # Added 40 security tests
 ### Files Created (Cycle 5)
 
 ```
-src/ww/mcp/tools/
+src/t4dm/mcp/tools/
 └── bioinspired.py         # 8 MCP tools for bioinspired components
 
 tests/mcp/
@@ -480,7 +480,7 @@ tests/mcp/
 ### Files Modified (Cycle 5)
 
 ```
-src/ww/mcp/validation.py   # Added validate_non_negative_float helper
+src/t4dm/mcp/validation.py   # Added validate_non_negative_float helper
 ```
 
 ### Test Results (Cycle 5)

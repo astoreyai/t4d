@@ -1,6 +1,6 @@
 # Systematic Literature Review: Adversarial Attacks on AI Agent Memory Systems
 
-**Paper Under Review:** `/mnt/projects/ww/docs/papers/adversarial_memory_attacks.tex`
+**Paper Under Review:** `/mnt/projects/t4d/t4dm/docs/papers/adversarial_memory_attacks.tex`
 
 **Review Date:** 2025-12-04
 

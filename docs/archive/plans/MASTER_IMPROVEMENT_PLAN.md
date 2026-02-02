@@ -53,7 +53,7 @@ Three specialized analyses identified **47 improvement areas** across neural arc
 
 ### P1.1 Implement Rate Limiting - [DONE]
 **Source**: Integration Analysis
-**Location**: `src/ww/mcp/gateway.py`, `src/ww/api/server.py`
+**Location**: `src/t4dm/mcp/gateway.py`, `src/t4dm/api/server.py`
 **Status**: COMPLETED 2025-12-06
 
 **Implementation Notes**:
@@ -74,7 +74,7 @@ Three specialized analyses identified **47 improvement areas** across neural arc
 
 ### P1.2 Fix CORS Configuration - [DONE]
 **Source**: Integration Analysis
-**Location**: `src/ww/api/server.py:77`
+**Location**: `src/t4dm/api/server.py:77`
 **Status**: COMPLETED 2025-12-06
 
 **Implementation Notes**:
@@ -93,7 +93,7 @@ Three specialized analyses identified **47 improvement areas** across neural arc
 
 ### P1.3 Complete Saga Compensation - [DONE]
 **Source**: Integration Analysis
-**Location**: `src/ww/storage/saga.py`
+**Location**: `src/t4dm/storage/saga.py`
 **Status**: COMPLETED 2025-12-06
 
 **Implementation Notes**:
@@ -112,7 +112,7 @@ Three specialized analyses identified **47 improvement areas** across neural arc
 
 ### P1.4 Add Circuit Breaker - [DONE]
 **Source**: Integration Analysis
-**Location**: `src/ww/storage/` (both stores)
+**Location**: `src/t4dm/storage/` (both stores)
 **Status**: COMPLETED 2025-12-06
 
 **Implementation Notes**:
@@ -135,7 +135,7 @@ Three specialized analyses identified **47 improvement areas** across neural arc
 
 ### P2.1 Reduce DG Sparsity - [DONE]
 **Source**: CompBio Analysis, Hinton Analysis
-**Location**: `src/ww/memory/pattern_separation.py:130`
+**Location**: `src/t4dm/memory/pattern_separation.py:130`
 **Status**: COMPLETED 2025-12-06
 
 **Implementation Notes**:
@@ -155,7 +155,7 @@ Three specialized analyses identified **47 improvement areas** across neural arc
 
 ### P2.2 Connect ACh to CA3 Completion - [DONE]
 **Source**: CompBio Analysis
-**Location**: `src/ww/memory/cluster_index.py`, `src/ww/memory/episodic.py`
+**Location**: `src/t4dm/memory/cluster_index.py`, `src/t4dm/memory/episodic.py`
 **Status**: COMPLETED 2026-01-01
 
 **Implementation Notes**:
@@ -178,7 +178,7 @@ Three specialized analyses identified **47 improvement areas** across neural arc
 
 ### P2.3 Implement Dopamine-Modulated Reconsolidation - [DONE]
 **Source**: Hinton Analysis
-**Location**: `src/ww/learning/reconsolidation.py`
+**Location**: `src/t4dm/learning/reconsolidation.py`
 **Status**: COMPLETED 2025-12-06
 
 **Implementation Notes**:
@@ -198,7 +198,7 @@ Three specialized analyses identified **47 improvement areas** across neural arc
 
 ### P2.4 Add Temporal Credit Assignment Decay - [DONE]
 **Source**: Hinton Analysis
-**Location**: `src/ww/learning/serotonin.py`
+**Location**: `src/t4dm/learning/serotonin.py`
 **Status**: COMPLETED 2026-01-01
 
 **Implementation Notes**:
@@ -219,7 +219,7 @@ Three specialized analyses identified **47 improvement areas** across neural arc
 
 ### P2.5 Fix Sleep Consolidation Timing - [DONE]
 **Source**: CompBio Analysis
-**Location**: `src/ww/consolidation/sleep.py`
+**Location**: `src/t4dm/consolidation/sleep.py`
 **Status**: COMPLETED 2026-01-01
 
 **Implementation Notes**:
@@ -239,7 +239,7 @@ Three specialized analyses identified **47 improvement areas** across neural arc
 
 ### P2.6 Add NE Gain to Pattern Separation - [DONE]
 **Source**: Hinton Analysis, CompBio Analysis
-**Location**: `src/ww/memory/pattern_separation.py`
+**Location**: `src/t4dm/memory/pattern_separation.py`
 **Status**: COMPLETED 2026-01-01
 
 **Implementation Notes**:
@@ -270,7 +270,7 @@ Three specialized analyses identified **47 improvement areas** across neural arc
 
 ### P3.1 Implement Learned Embedding Adapter ✅ COMPLETE
 **Source**: Hinton Analysis (Primary Recommendation)
-**Location**: `src/ww/embedding/lora_adapter.py`
+**Location**: `src/t4dm/embedding/lora_adapter.py`
 **Impact**: Task-specific representations
 **Completed**: 2025-12-31
 
@@ -299,7 +299,7 @@ adapter.train_on_outcomes(outcomes, epochs=10)
 ```
 
 **TODO**:
-- [x] Create `src/ww/embedding/lora_adapter.py`
+- [x] Create `src/t4dm/embedding/lora_adapter.py`
 - [x] Implement LoRAModule with low-rank adaptation
 - [x] Implement AsymmetricLoRA for query/memory separation
 - [x] Integrate with BGEM3Embedding via AdaptedBGEM3Provider
@@ -311,7 +311,7 @@ adapter.train_on_outcomes(outcomes, epochs=10)
 
 ### P3.2 Implement True Hopfield Pattern Completion ✅ COMPLETE
 **Source**: Hinton Analysis
-**Location**: `src/ww/memory/pattern_separation.py`
+**Location**: `src/t4dm/memory/pattern_separation.py`
 **Impact**: Exponential storage capacity O(d^(n-1)) vs classical O(d)
 **Completed**: 2025-12-31
 
@@ -356,7 +356,7 @@ print(f"Converged: {result.converged}, Entropy: {result.attention_entropy:.3f}")
 
 ### P3.3 Add Automatic Consolidation Triggering ✅ COMPLETE
 **Source**: Hinton Analysis
-**Location**: `src/ww/consolidation/service.py`
+**Location**: `src/t4dm/consolidation/service.py`
 **Impact**: No manual consolidation calls needed
 **Completed**: 2025-12-31
 
@@ -407,7 +407,7 @@ print(f"Memories since last: {stats['new_memory_count']}")
 
 ### P3.4 Implement Interleaved Replay ✅ COMPLETE
 **Source**: Hinton Analysis (CLS Theory)
-**Location**: `src/ww/consolidation/sleep.py`, `src/ww/memory/episodic.py`
+**Location**: `src/t4dm/consolidation/sleep.py`, `src/t4dm/memory/episodic.py`
 **Impact**: Prevent catastrophic forgetting
 **Completed**: 2025-12-31
 
@@ -458,7 +458,7 @@ events = await consolidator.nrem_phase("session_id")
 
 ### P3.5 Add Elastic Weight Consolidation (EWC) ✅ COMPLETED 2025-12-31
 **Source**: Hinton Analysis
-**Location**: `src/ww/learning/plasticity.py`
+**Location**: `src/t4dm/learning/plasticity.py`
 **Impact**: Protect important weights
 
 **Implementation**:
@@ -576,7 +576,7 @@ class EWCRegularizer:
 
 ### P4.3 Add Batch Embedding Support - [DONE]
 **Source**: Integration Analysis
-**Location**: `src/ww/embedding/bge_m3.py`
+**Location**: `src/t4dm/embedding/bge_m3.py`
 **Impact**: Reduce API calls
 **Status**: COMPLETED 2025-12-31
 
@@ -596,7 +596,7 @@ class EWCRegularizer:
 
 ### P4.4 Implement Cache Eviction - [DONE]
 **Source**: Integration Analysis
-**Location**: `src/ww/embedding/bge_m3.py` (TTLCache)
+**Location**: `src/t4dm/embedding/bge_m3.py` (TTLCache)
 **Impact**: Memory leak prevention
 **Status**: ALREADY IMPLEMENTED (verified 2025-12-31)
 
@@ -621,7 +621,7 @@ class EWCRegularizer:
 
 ### P5.1 Store Abstract Concepts from REM
 **Source**: Hinton Analysis
-**Location**: `src/ww/consolidation/sleep.py`
+**Location**: `src/t4dm/consolidation/sleep.py`
 
 ```python
 async def _create_abstraction(self, cluster_ids: List[UUID], centroid: np.ndarray):
@@ -644,7 +644,7 @@ async def _create_abstraction(self, cluster_ids: List[UUID], centroid: np.ndarra
 
 ### P5.2 Add Temporal Structure to Episodes
 **Source**: Hinton Analysis
-**Location**: `src/ww/core/types.py`
+**Location**: `src/t4dm/core/types.py`
 
 ```python
 class Episode(BaseModel):
@@ -664,7 +664,7 @@ class Episode(BaseModel):
 
 ### P5.3 Implement Synaptic Tagging
 **Source**: Hinton Analysis, CompBio Analysis
-**Location**: `src/ww/learning/plasticity.py`
+**Location**: `src/t4dm/learning/plasticity.py`
 
 ```python
 @dataclass
@@ -690,7 +690,7 @@ class TaggedSynapse:
 
 ### P5.4 Add Query-Memory Encoder Separation
 **Source**: Hinton Analysis
-**Location**: `src/ww/embedding/`
+**Location**: `src/t4dm/embedding/`
 
 ```python
 class AsymmetricEncoder:
@@ -718,7 +718,7 @@ class AsymmetricEncoder:
 
 ### P5.5 Implement STDP Plasticity
 **Source**: CompBio Analysis
-**Location**: New file `src/ww/learning/stdp.py`
+**Location**: New file `src/t4dm/learning/stdp.py`
 
 ```python
 class STDPRule:
@@ -740,7 +740,7 @@ class STDPRule:
 ```
 
 **TODO**:
-- [ ] Create `src/ww/learning/stdp.py`
+- [ ] Create `src/t4dm/learning/stdp.py`
 - [ ] Implement STDPRule class
 - [ ] Integrate with Hebbian weight updates
 - [ ] Add STDP to graph relationship learning

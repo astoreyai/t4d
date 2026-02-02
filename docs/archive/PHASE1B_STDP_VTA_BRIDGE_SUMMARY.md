@@ -13,7 +13,7 @@ Wire VTA dopamine signal to modulate STDP learning rates, enabling reward-based 
 
 ### Files Created
 
-1. **`src/ww/integration/stdp_vta_bridge.py`** (289 lines)
+1. **`src/t4dm/integration/stdp_vta_bridge.py`** (289 lines)
    - `STDPVTABridge`: Main bridge class connecting VTA to STDP
    - `STDPVTAConfig`: Configuration for modulation parameters
    - Dopamine modulation of A+ (LTP) and A- (LTD) learning rates
@@ -29,14 +29,14 @@ Wire VTA dopamine signal to modulate STDP learning rates, enabling reward-based 
 
 ### Files Modified
 
-1. **`src/ww/learning/stdp.py`**
+1. **`src/t4dm/learning/stdp.py`**
    - Added `da_level` parameter to `compute_stdp_delta()`
    - Added `_compute_da_modulated_rates()` internal method
    - Updated `compute_update()` to accept `da_level`
    - Updated all STDP variants (PairBased, Triplet)
    - Backward compatible: `da_level=None` uses base rates
 
-2. **`src/ww/integration/__init__.py`**
+2. **`src/t4dm/integration/__init__.py`**
    - Exported STDPVTABridge classes
    - Added Phase 1B documentation
    - Exported singleton functions

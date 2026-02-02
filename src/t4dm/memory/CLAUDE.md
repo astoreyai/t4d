@@ -1,5 +1,5 @@
 # Memory
-**Path**: `/mnt/projects/t4d/t4dm/src/ww/memory/`
+**Path**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/`
 
 ## What
 Tripartite memory system implementing episodic, semantic, and procedural memory types plus working memory, pattern separation (dentate gyrus), Modern Hopfield retrieval, active forgetting, and learned sparse indexing.

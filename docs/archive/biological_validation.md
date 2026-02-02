@@ -21,7 +21,7 @@ The World Weaver system implements **24 distinct biological modules** modeling n
 ## 1. NEUROMODULATOR SYSTEMS
 
 ### 1.1 VTA Dopamine Circuit
-**File**: `/mnt/projects/ww/src/ww/nca/vta.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/nca/vta.py`
 
 **Biological Structure**: Ventral Tegmental Area dopamine neurons projecting to nucleus accumbens and prefrontal cortex.
 
@@ -52,7 +52,7 @@ rpe_to_da_gain: 0.5            # RPE → DA conversion
 ---
 
 ### 1.2 Raphe Nucleus Serotonin
-**File**: `/mnt/projects/ww/src/ww/nca/raphe.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/nca/raphe.py`
 
 **Biological Structure**: Dorsal Raphe Nucleus (DRN) with 5-HT1A autoreceptors providing negative feedback.
 
@@ -94,7 +94,7 @@ temporal_horizon: 3-50 steps   # Planning horizon
 ---
 
 ### 1.3 Locus Coeruleus Norepinephrine
-**File**: `/mnt/projects/ww/src/ww/nca/locus_coeruleus.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/nca/locus_coeruleus.py`
 
 **Biological Structure**: LC-NE system with tonic/phasic firing modes and alpha-2 autoreceptors.
 
@@ -138,7 +138,7 @@ learning_rate_max: 0.3         # High surprise
 ---
 
 ### 1.4 Acetylcholine System
-**File**: `/mnt/projects/ww/learning/acetylcholine.py`
+**File**: `/mnt/projects/t4d/t4dm/learning/acetylcholine.py`
 
 **Biological Structure**: Basal forebrain cholinergic system modulating encoding vs retrieval.
 
@@ -168,7 +168,7 @@ adaptation_rate: 0.2           # Mode switching speed
 ## 2. HIPPOCAMPAL SYSTEM
 
 ### 2.1 Dentate Gyrus (Pattern Separation)
-**File**: `/mnt/projects/ww/nca/hippocampus.py` (DentateGyrusLayer)
+**File**: `/mnt/projects/t4d/t4dm/nca/hippocampus.py` (DentateGyrusLayer)
 
 **Biological Structure**: Granule cells with sparse activation providing pattern orthogonalization.
 
@@ -197,7 +197,7 @@ max_separation: 0.3            # Maximum orthogonalization
 ---
 
 ### 2.2 CA3 (Pattern Completion)
-**File**: `/mnt/projects/ww/nca/hippocampus.py` (CA3Layer)
+**File**: `/mnt/projects/t4d/t4dm/nca/hippocampus.py` (CA3Layer)
 
 **Biological Structure**: Autoassociative recurrent network using Modern Hopfield dynamics.
 
@@ -227,7 +227,7 @@ max_iterations: 10             # Convergence steps
 ---
 
 ### 2.3 CA1 (Novelty Detection)
-**File**: `/mnt/projects/ww/nca/hippocampus.py` (CA1Layer)
+**File**: `/mnt/projects/t4d/t4dm/nca/hippocampus.py` (CA1Layer)
 
 **Biological Structure**: Comparator receiving EC direct path and CA3 Schaffer collaterals.
 
@@ -253,7 +253,7 @@ encoding_threshold: 0.5        # High novelty → encoding mode
 ---
 
 ### 2.4 Spatial Cells (Place/Grid)
-**File**: `/mnt/projects/ww/nca/spatial_cells.py`
+**File**: `/mnt/projects/t4d/t4dm/nca/spatial_cells.py`
 
 **Biological Structure**: Place cells (hippocampus) and grid cells (entorhinal cortex).
 
@@ -288,7 +288,7 @@ gridness = min(corr_60,120) - max(corr_30,90,150)
 ## 3. SLEEP AND CONSOLIDATION
 
 ### 3.1 Adenosine Sleep Pressure
-**File**: `/mnt/projects/ww/nca/adenosine.py`
+**File**: `/mnt/projects/t4d/t4dm/nca/adenosine.py`
 
 **Biological Structure**: Adenosine accumulation during wake (Process S).
 
@@ -322,7 +322,7 @@ gaba_potentiation: 0.3         # Adenosine → ↑ GABA
 ---
 
 ### 3.2 Glymphatic Clearance
-**File**: `/mnt/projects/ww/nca/glymphatic.py`
+**File**: `/mnt/projects/t4d/t4dm/nca/glymphatic.py`
 
 **Biological Structure**: Waste clearance during sleep via glymphatic system.
 
@@ -351,7 +351,7 @@ ach_modulation: 0.4            # High ACh → low clearance (REM)
 ---
 
 ### 3.3 Sharp-Wave Ripples (SWR)
-**File**: `/mnt/projects/ww/nca/swr_coupling.py`
+**File**: `/mnt/projects/t4d/t4dm/nca/swr_coupling.py`
 
 **Biological Structure**: 150-250 Hz ripples in CA3/CA1 during NREM and quiet wake.
 
@@ -385,7 +385,7 @@ swr_prob_rem: 0.0              # Blocked during REM (high ACh)
 ---
 
 ### 3.4 Sleep Spindles
-**File**: `/mnt/projects/ww/nca/sleep_spindles.py`
+**File**: `/mnt/projects/t4d/t4dm/nca/sleep_spindles.py`
 
 **Biological Structure**: 11-16 Hz thalamocortical oscillations during NREM stage 2.
 
@@ -418,7 +418,7 @@ delta_coupling_strength: 0.8   # Coupling to delta up-states
 ## 4. NEURAL OSCILLATIONS
 
 ### 4.1 Theta Oscillator (4-8 Hz)
-**File**: `/mnt/projects/ww/nca/oscillators.py` (ThetaOscillator)
+**File**: `/mnt/projects/t4d/t4dm/nca/oscillators.py` (ThetaOscillator)
 
 **Biological Structure**: Medial septum cholinergic neurons driving hippocampal theta.
 
@@ -445,7 +445,7 @@ theta_ach_sensitivity: 0.5     # ACh increases theta power
 ---
 
 ### 4.2 Gamma Oscillator (30-100 Hz)
-**File**: `/mnt/projects/ww/nca/oscillators.py` (GammaOscillator)
+**File**: `/mnt/projects/t4d/t4dm/nca/oscillators.py` (GammaOscillator)
 
 **Biological Structure**: Fast-spiking GABAergic interneurons (PING model).
 
@@ -471,7 +471,7 @@ gamma_ei_sensitivity: 0.4      # E/I balance affects frequency
 ---
 
 ### 4.3 Alpha Oscillator (8-13 Hz)
-**File**: `/mnt/projects/ww/nca/oscillators.py` (AlphaOscillator)
+**File**: `/mnt/projects/t4d/t4dm/nca/oscillators.py` (AlphaOscillator)
 
 **Biological Structure**: Thalamocortical idling rhythm, suppressed by NE.
 
@@ -500,7 +500,7 @@ alpha_ne_sensitivity: -0.4     # NE SUPPRESSES alpha (negative)
 ---
 
 ### 4.4 Delta Oscillator (0.5-4 Hz)
-**File**: `/mnt/projects/ww/nca/oscillators.py` (DeltaOscillator)
+**File**: `/mnt/projects/t4d/t4dm/nca/oscillators.py` (DeltaOscillator)
 
 **Biological Structure**: Slow cortical oscillation during NREM sleep.
 
@@ -529,7 +529,7 @@ up_state_threshold: 0.3        # Up-state definition
 ---
 
 ### 4.5 Phase-Amplitude Coupling (PAC)
-**File**: `/mnt/projects/ww/nca/oscillators.py` (PhaseAmplitudeCoupling)
+**File**: `/mnt/projects/t4d/t4dm/nca/oscillators.py` (PhaseAmplitudeCoupling)
 
 **Biological Structure**: Theta phase modulates gamma amplitude.
 
@@ -563,7 +563,7 @@ pac_learning_rate: 0.01        # Learnable PAC
 ## 5. GLIA AND ASTROCYTES
 
 ### 5.1 Astrocyte System
-**File**: `/mnt/projects/ww/nca/astrocyte.py`
+**File**: `/mnt/projects/t4d/t4dm/nca/astrocyte.py`
 
 **Biological Structure**: Astrocytes regulating extracellular K+, Ca2+ waves, and neurotransmitter uptake.
 
@@ -585,7 +585,7 @@ ca_wave_threshold: 0.6         # IP3 threshold for wave
 ---
 
 ### 5.2 Glutamate Signaling
-**File**: `/mnt/projects/ww/nca/glutamate_signaling.py`
+**File**: `/mnt/projects/t4d/t4dm/nca/glutamate_signaling.py`
 
 **Biological Structure**: AMPA/NMDA receptor dynamics and astrocyte uptake.
 
@@ -608,7 +608,7 @@ mg_block_voltage: -70.0 mV     # NMDA voltage dependence
 ## 6. STRIATAL SYSTEM
 
 ### 6.1 Striatal Medium Spiny Neurons
-**File**: `/mnt/projects/ww/nca/striatal_msn.py`
+**File**: `/mnt/projects/t4d/t4dm/nca/striatal_msn.py`
 
 **Biological Structure**: D1 (direct pathway) and D2 (indirect pathway) MSNs.
 

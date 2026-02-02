@@ -2075,11 +2075,11 @@ curl -X POST http://localhost:8765/api/v1/entities/spread-activation \
 
 ## Additional Resources
 
-- **Architecture Documentation**: `/mnt/projects/ww/docs/architecture.md`
-- **SDK Documentation**: `/mnt/projects/ww/docs/SDK.md`
-- **Algorithm Details**: `/mnt/projects/ww/docs/algorithms.md`
-- **Testing Guide**: `/mnt/projects/ww/docs/archive/TESTING_GUIDE.md`
-- **Hooks System**: `/mnt/projects/ww/docs/hooks_quick_reference.md`
+- **Architecture Documentation**: `/mnt/projects/t4d/t4dm/docs/architecture.md`
+- **SDK Documentation**: `/mnt/projects/t4d/t4dm/docs/SDK.md`
+- **Algorithm Details**: `/mnt/projects/t4d/t4dm/docs/algorithms.md`
+- **Testing Guide**: `/mnt/projects/t4d/t4dm/docs/archive/TESTING_GUIDE.md`
+- **Hooks System**: `/mnt/projects/t4d/t4dm/docs/hooks_quick_reference.md`
 
 ---
 

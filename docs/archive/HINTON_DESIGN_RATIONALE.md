@@ -22,9 +22,9 @@ World Weaver implements a tripartite memory system directly inspired by Endel Tu
 
 | Memory Type | Brain Region | WW Implementation | Key File |
 |-------------|--------------|-------------------|----------|
-| Episodic | Hippocampus | `EpisodicMemory` | `/mnt/projects/ww/src/ww/memory/episodic.py` |
-| Semantic | Neocortex | `SemanticMemory` | `/mnt/projects/ww/src/ww/memory/semantic.py` |
-| Procedural | Cerebellum/Basal Ganglia | `ProceduralMemory` | `/mnt/projects/ww/src/ww/memory/procedural.py` |
+| Episodic | Hippocampus | `EpisodicMemory` | `/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic.py` |
+| Semantic | Neocortex | `SemanticMemory` | `/mnt/projects/t4d/t4dm/src/t4dm/memory/semantic.py` |
+| Procedural | Cerebellum/Basal Ganglia | `ProceduralMemory` | `/mnt/projects/t4d/t4dm/src/t4dm/memory/procedural.py` |
 
 This taxonomy is not arbitrary. In the brain:
 - **Episodic memory** stores autobiographical events with rich contextual detail (when, where, what happened)
@@ -33,7 +33,7 @@ This taxonomy is not arbitrary. In the brain:
 
 ### 1.2 Episodic Memory: The Hippocampal Analog
 
-**Location**: `/mnt/projects/ww/src/ww/memory/episodic.py`
+**Location**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic.py`
 
 The episodic memory system implements several biologically-inspired mechanisms:
 
@@ -69,7 +69,7 @@ This power-law decay is more biologically plausible than exponential decay. Huma
 
 #### 1.2.3 Pattern Separation: The Dentate Gyrus Model
 
-**Location**: `/mnt/projects/ww/src/ww/memory/pattern_separation.py`
+**Location**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/pattern_separation.py`
 
 One of the most neurobiologically sophisticated components is the `DentateGyrus` class:
 
@@ -147,7 +147,7 @@ def complete(self, partial_pattern: np.ndarray, mask: Optional[np.ndarray] = Non
 
 ### 1.3 Semantic Memory: The Cortical Analog
 
-**Location**: `/mnt/projects/ww/src/ww/memory/semantic.py`
+**Location**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/semantic.py`
 
 The semantic memory system differs fundamentally from episodic memory in its design:
 
@@ -217,7 +217,7 @@ This mirrors how activation spreads through semantic networks in the brain, enab
 
 ### 1.4 Procedural Memory: The Basal Ganglia Analog
 
-**Location**: `/mnt/projects/ww/src/ww/memory/procedural.py`
+**Location**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/procedural.py`
 
 The procedural memory system is less neurally-grounded than the others, but captures important functional properties:
 
@@ -251,7 +251,7 @@ This implements a form of skill extinction - unsuccessful procedures are eventua
 
 The most important principle in World Weaver's design is that **memory should be a learning system, not just a storage system**. This is the key insight that distinguishes it from simpler approaches.
 
-From `/mnt/projects/ww/docs/LEARNING_ARCHITECTURE.md`:
+From `/mnt/projects/t4d/t4dm/docs/LEARNING_ARCHITECTURE.md`:
 
 > "Your system has the *infrastructure* for learning but not the *objectives*. Let me be precise about what's missing: No contrastive signal, no credit assignment, no delayed reward handling, static scoring weights, passive decay not active forgetting."
 
@@ -259,7 +259,7 @@ This document (which I apparently wrote in an earlier review) correctly identifi
 
 ### 2.2 Learned Fusion Weights
 
-**Location**: `/mnt/projects/ww/src/ww/memory/episodic.py`, class `LearnedFusionWeights`
+**Location**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic.py`, class `LearnedFusionWeights`
 
 Instead of fixed retrieval weights (semantic=0.4, recency=0.3, etc.), the system now learns query-dependent weights:
 
@@ -287,7 +287,7 @@ class LearnedFusionWeights:
 
 ### 2.3 Learned Re-Ranking
 
-**Location**: `/mnt/projects/ww/src/ww/memory/episodic.py`, class `LearnedReranker`
+**Location**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic.py`, class `LearnedReranker`
 
 A second-pass scoring model that can capture cross-component interactions:
 
@@ -311,7 +311,7 @@ The residual connection is clever - it allows learning adjustments while preserv
 
 ### 2.4 Reconsolidation Engine
 
-**Location**: `/mnt/projects/ww/src/ww/learning/reconsolidation.py`
+**Location**: `/mnt/projects/t4d/t4dm/src/t4dm/learning/reconsolidation.py`
 
 This addresses a fundamental critique: **embeddings shouldn't be frozen after creation**.
 
@@ -340,7 +340,7 @@ In biological memory, retrieved memories become labile and can be modified durin
 
 ### 2.5 Memory Gating: Learning What to Remember
 
-**Location**: `/mnt/projects/ww/src/ww/core/learned_gate.py`
+**Location**: `/mnt/projects/t4d/t4dm/src/t4dm/core/learned_gate.py`
 
 Not all inputs should be stored. The brain has gating mechanisms that filter incoming information. World Weaver implements this:
 
@@ -367,7 +367,7 @@ This is the most neurobiologically sophisticated component of World Weaver.
 
 ### 3.1 The Orchestra Architecture
 
-**Location**: `/mnt/projects/ww/src/ww/learning/neuromodulators.py`
+**Location**: `/mnt/projects/t4d/t4dm/src/t4dm/learning/neuromodulators.py`
 
 ```python
 class NeuromodulatorOrchestra:
@@ -384,7 +384,7 @@ The key insight is that these systems don't operate independently - they form a 
 
 ### 3.2 Dopamine: Reward Prediction Error
 
-**Location**: `/mnt/projects/ww/src/ww/learning/dopamine.py`
+**Location**: `/mnt/projects/t4d/t4dm/src/t4dm/learning/dopamine.py`
 
 ```python
 class DopamineSystem:
@@ -411,7 +411,7 @@ def update_expectations(self, memory_id: UUID, actual_outcome: float) -> float:
 
 ### 3.3 Norepinephrine: Arousal and Novelty
 
-**Location**: `/mnt/projects/ww/src/ww/learning/norepinephrine.py`
+**Location**: `/mnt/projects/t4d/t4dm/src/t4dm/learning/norepinephrine.py`
 
 ```python
 class NorepinephrineSystem:
@@ -440,7 +440,7 @@ def modulate_retrieval_threshold(self, base_threshold: float) -> float:
 
 ### 3.4 Acetylcholine: Encoding vs Retrieval Mode
 
-**Location**: `/mnt/projects/ww/src/ww/learning/acetylcholine.py`
+**Location**: `/mnt/projects/t4d/t4dm/src/t4dm/learning/acetylcholine.py`
 
 ```python
 class AcetylcholineSystem:
@@ -473,7 +473,7 @@ def get_attention_weights(self, memory_sources: list[str]) -> dict[str, float]:
 
 ### 3.5 Serotonin: Long-Term Credit Assignment
 
-**Location**: `/mnt/projects/ww/src/ww/learning/serotonin.py`
+**Location**: `/mnt/projects/t4d/t4dm/src/t4dm/learning/serotonin.py`
 
 ```python
 class SerotoninSystem:
@@ -505,7 +505,7 @@ The eligibility traces decay exponentially, implementing the principle that rece
 
 ### 3.6 GABA: Inhibitory Dynamics
 
-**Location**: `/mnt/projects/ww/src/ww/learning/inhibition.py`
+**Location**: `/mnt/projects/t4d/t4dm/src/t4dm/learning/inhibition.py`
 
 ```python
 class InhibitoryNetwork:
@@ -541,7 +541,7 @@ def apply_inhibition(self, scores: dict[str, float], embeddings: Optional[dict] 
 
 ### 4.1 The Complementary Learning Systems Framework
 
-**Location**: `/mnt/projects/ww/src/ww/consolidation/service.py`
+**Location**: `/mnt/projects/t4d/t4dm/src/t4dm/consolidation/service.py`
 
 World Weaver implements the McClelland-McNaughton-O'Reilly complementary learning systems (CLS) theory:
 
@@ -583,7 +583,7 @@ clusterer = HDBSCAN(
 
 ### 4.3 Working Memory: The Buffer System
 
-**Location**: `/mnt/projects/ww/src/ww/memory/working_memory.py`
+**Location**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/working_memory.py`
 
 ```python
 class WorkingMemory:
@@ -614,7 +614,7 @@ async def load(self, content: T, priority: float = 0.5):
 
 ### 4.4 Buffer Manager: Evidence Accumulation
 
-**Location**: `/mnt/projects/ww/src/ww/memory/buffer_manager.py`
+**Location**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/buffer_manager.py`
 
 The `BufferManager` provides a crucial intermediary between the memory gate and long-term storage:
 

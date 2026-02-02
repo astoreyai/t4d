@@ -42,7 +42,7 @@ Week 14:    [Phase 9: Reanalysis]     Agent re-evaluation
 Split `memory/episodic.py` (3,616 lines) into focused modules:
 
 ```
-src/ww/memory/
+src/t4dm/memory/
 ├── episodic.py              # Facade (400 lines) - backward compatible
 ├── episodic_storage.py      # CRUD + saga (800 lines)
 ├── episodic_retrieval.py    # Search + scoring (1,200 lines)
@@ -52,14 +52,14 @@ src/ww/memory/
 ```
 
 **Files to Create**:
-- `src/ww/memory/episodic_storage.py`
-- `src/ww/memory/episodic_retrieval.py`
-- `src/ww/memory/episodic_learning.py`
-- `src/ww/memory/episodic_fusion.py`
-- `src/ww/memory/episodic_saga.py`
+- `src/t4dm/memory/episodic_storage.py`
+- `src/t4dm/memory/episodic_retrieval.py`
+- `src/t4dm/memory/episodic_learning.py`
+- `src/t4dm/memory/episodic_fusion.py`
+- `src/t4dm/memory/episodic_saga.py`
 
 **Files to Modify**:
-- `src/ww/memory/episodic.py` → Facade only
+- `src/t4dm/memory/episodic.py` → Facade only
 
 **Testing**:
 - All 7,970 existing tests must pass
@@ -74,7 +74,7 @@ src/ww/memory/
 
 **Fix 1: VTA Exponential Decay**
 ```python
-# src/ww/nca/vta.py - Replace linear with exponential
+# src/t4dm/nca/vta.py - Replace linear with exponential
 # Current (linear):
 da_level -= decay_rate * dt
 
@@ -85,7 +85,7 @@ da_level = da_target + (da_level - da_target) * np.exp(-dt / tau_decay)
 
 **Fix 2: TAN Pause Mechanism**
 ```python
-# src/ww/nca/striatal_msn.py - Add cholinergic interneuron pause
+# src/t4dm/nca/striatal_msn.py - Add cholinergic interneuron pause
 class TANPauseMechanism:
     """Tonically Active Neuron pause during unexpected rewards (Aosaki 1994)."""
     pause_duration: float = 0.2  # 200ms
@@ -98,9 +98,9 @@ class TANPauseMechanism:
 ```
 
 **Files to Modify**:
-- `src/ww/nca/vta.py` - Exponential decay
-- `src/ww/nca/striatal_msn.py` - TAN pause
-- `src/ww/nca/dopamine_integration.py` - Wire TAN to DA system
+- `src/t4dm/nca/vta.py` - Exponential decay
+- `src/t4dm/nca/striatal_msn.py` - TAN pause
+- `src/t4dm/nca/dopamine_integration.py` - Wire TAN to DA system
 
 **Testing**:
 - `tests/nca/test_vta_decay.py` - Verify exponential curve
@@ -117,7 +117,7 @@ class TANPauseMechanism:
 Establish the missing feedback loop from retrieval outcomes to embedding adaptation:
 
 ```python
-# src/ww/learning/retrieval_feedback.py (NEW)
+# src/t4dm/learning/retrieval_feedback.py (NEW)
 class RetrievalFeedbackCollector:
     """Collect implicit feedback from retrieval outcomes."""
 
@@ -139,11 +139,11 @@ class RetrievalFeedbackCollector:
 ```
 
 **Files to Create**:
-- `src/ww/learning/retrieval_feedback.py`
-- `src/ww/learning/feedback_signals.py`
+- `src/t4dm/learning/retrieval_feedback.py`
+- `src/t4dm/learning/feedback_signals.py`
 
 **Files to Modify**:
-- `src/ww/memory/episodic_retrieval.py` - Hook feedback collection
+- `src/t4dm/memory/episodic_retrieval.py` - Hook feedback collection
 
 **Testing**:
 - `tests/learning/test_retrieval_feedback.py` - 15+ tests
@@ -163,7 +163,7 @@ class RetrievalFeedbackCollector:
 
 **Fix 3: Multiplicative STDP**
 ```python
-# src/ww/learning/stdp.py - Add weight dependence
+# src/t4dm/learning/stdp.py - Add weight dependence
 def compute_weight_update(self, pre_time: float, post_time: float,
                           current_weight: float) -> float:
     dt = post_time - pre_time
@@ -176,7 +176,7 @@ def compute_weight_update(self, pre_time: float, post_time: float,
 
 **Fix 4: Astrocyte Gap Junctions**
 ```python
-# src/ww/nca/astrocyte.py - Add Ca2+ wave propagation
+# src/t4dm/nca/astrocyte.py - Add Ca2+ wave propagation
 class AstrocyteNetwork:
     """Gap junction-mediated Ca2+ waves (Scemes & Bhattacharji 2003)."""
     propagation_speed: float = 15.0  # μm/s
@@ -192,8 +192,8 @@ class AstrocyteNetwork:
 ```
 
 **Files to Modify**:
-- `src/ww/learning/stdp.py` - Multiplicative term
-- `src/ww/nca/astrocyte.py` - Gap junctions
+- `src/t4dm/learning/stdp.py` - Multiplicative term
+- `src/t4dm/nca/astrocyte.py` - Gap junctions
 
 **Testing**:
 - `tests/learning/test_stdp_multiplicative.py`
@@ -205,7 +205,7 @@ class AstrocyteNetwork:
 Split `create_ww_router()` (429 lines) into route groups:
 
 ```python
-# src/ww/api/routes/config.py - Refactored structure
+# src/t4dm/api/routes/config.py - Refactored structure
 def create_config_routes() -> APIRouter:
     """Config-specific routes."""
     router = APIRouter(prefix="/config", tags=["config"])
@@ -228,7 +228,7 @@ def create_ww_router() -> APIRouter:
 ```
 
 **Files to Modify**:
-- `src/ww/api/routes/config.py` - Split into groups
+- `src/t4dm/api/routes/config.py` - Split into groups
 
 **Testing**:
 - All API tests must pass unchanged
@@ -239,7 +239,7 @@ def create_ww_router() -> APIRouter:
 Implement LoRA adapter training from retrieval feedback:
 
 ```python
-# src/ww/encoding/online_adapter.py (NEW)
+# src/t4dm/encoding/online_adapter.py (NEW)
 class OnlineEmbeddingAdapter:
     """Train LoRA adapters from retrieval feedback."""
 
@@ -267,12 +267,12 @@ class OnlineEmbeddingAdapter:
 ```
 
 **Files to Create**:
-- `src/ww/encoding/online_adapter.py`
-- `src/ww/encoding/adapter_training.py`
+- `src/t4dm/encoding/online_adapter.py`
+- `src/t4dm/encoding/adapter_training.py`
 
 **Files to Modify**:
-- `src/ww/encoding/ff_encoder.py` - Integrate adapter
-- `src/ww/memory/episodic_retrieval.py` - Use adapted embeddings
+- `src/t4dm/encoding/ff_encoder.py` - Integrate adapter
+- `src/t4dm/memory/episodic_retrieval.py` - Use adapted embeddings
 
 **Testing**:
 - `tests/encoding/test_online_adapter.py` - 20+ tests
@@ -291,7 +291,7 @@ class OnlineEmbeddingAdapter:
 **Owner**: Architecture Agent | **Effort**: 32h
 
 ```python
-# src/ww/core/cache.py (NEW)
+# src/t4dm/core/cache.py (NEW)
 class RedisCache:
     """Multi-tier caching for embeddings and search results."""
 
@@ -314,18 +314,18 @@ class RedisCache:
 ```
 
 **Files to Create**:
-- `src/ww/core/cache.py`
-- `src/ww/core/cache_config.py`
+- `src/t4dm/core/cache.py`
+- `src/t4dm/core/cache_config.py`
 
 **Files to Modify**:
-- `src/ww/embedding/adapter.py` - Add cache checks
-- `src/ww/storage/qdrant_store.py` - Cache search results
+- `src/t4dm/embedding/adapter.py` - Add cache checks
+- `src/t4dm/storage/qdrant_store.py` - Cache search results
 
 ### 3B. API Rate Limiting
 **Owner**: Architecture Agent | **Effort**: 16h
 
 ```python
-# src/ww/api/middleware/rate_limit.py (NEW)
+# src/t4dm/api/middleware/rate_limit.py (NEW)
 class TokenBucketRateLimiter:
     """Rate limiting with token bucket algorithm."""
 
@@ -340,10 +340,10 @@ class TokenBucketRateLimiter:
 ```
 
 **Files to Create**:
-- `src/ww/api/middleware/rate_limit.py`
+- `src/t4dm/api/middleware/rate_limit.py`
 
 **Files to Modify**:
-- `src/ww/api/server.py` - Add middleware
+- `src/t4dm/api/server.py` - Add middleware
 
 **Testing**:
 - `tests/api/test_rate_limiting.py`
@@ -361,7 +361,7 @@ class TokenBucketRateLimiter:
 Address "frozen embeddings" with biologically-inspired neuron birth/death:
 
 ```python
-# src/ww/encoding/neurogenesis.py (NEW)
+# src/t4dm/encoding/neurogenesis.py (NEW)
 class NeurogenesisManager:
     """Activity-dependent neuron birth/death (Kempermann 2015)."""
 
@@ -384,11 +384,11 @@ class NeurogenesisManager:
 ```
 
 **Files to Create**:
-- `src/ww/encoding/neurogenesis.py`
+- `src/t4dm/encoding/neurogenesis.py`
 
 **Files to Modify**:
-- `src/ww/encoding/ff_encoder.py` - Integrate neurogenesis
-- `src/ww/nca/forward_forward.py` - Add/remove neuron methods
+- `src/t4dm/encoding/ff_encoder.py` - Integrate neurogenesis
+- `src/t4dm/nca/forward_forward.py` - Add/remove neuron methods
 
 **Testing**:
 - `tests/encoding/test_neurogenesis.py` - 15+ tests
@@ -400,7 +400,7 @@ class NeurogenesisManager:
 Make capsule poses emerge from routing agreement:
 
 ```python
-# src/ww/nca/pose_learner.py (NEW)
+# src/t4dm/nca/pose_learner.py (NEW)
 class PoseDimensionDiscovery:
     """Learn pose dimensions from routing patterns."""
 
@@ -428,11 +428,11 @@ class PoseDimensionDiscovery:
 ```
 
 **Files to Create**:
-- `src/ww/nca/pose_learner.py`
+- `src/t4dm/nca/pose_learner.py`
 
 **Files to Modify**:
-- `src/ww/nca/capsules.py` - Use learned poses
-- `src/ww/nca/pose.py` - Remove hard-coded setters
+- `src/t4dm/nca/capsules.py` - Use learned poses
+- `src/t4dm/nca/pose.py` - Remove hard-coded setters
 
 **Testing**:
 - `tests/nca/test_pose_learner.py` - 20+ tests
@@ -448,7 +448,7 @@ class PoseDimensionDiscovery:
 **Owner**: Hinton Agent | **Effort**: 48h
 
 ```python
-# src/ww/learning/vae_training.py (NEW)
+# src/t4dm/learning/vae_training.py (NEW)
 class VAEReplayTrainer:
     """Train VAE from wake experiences for generative replay."""
 
@@ -474,7 +474,7 @@ class VAEReplayTrainer:
 **Owner**: Hinton Agent | **Effort**: 32h
 
 ```python
-# src/ww/consolidation/sleep.py - Modify to use VAE replay
+# src/t4dm/consolidation/sleep.py - Modify to use VAE replay
 async def _run_nrem_phase(self):
     """NREM: Replay via VAE generation."""
     # Generate synthetic memories
@@ -491,8 +491,8 @@ async def _run_nrem_phase(self):
 ```
 
 **Files to Modify**:
-- `src/ww/consolidation/sleep.py` - VAE integration
-- `src/ww/learning/generative_replay.py` - Use VAE not stored patterns
+- `src/t4dm/consolidation/sleep.py` - VAE integration
+- `src/t4dm/learning/generative_replay.py` - Use VAE not stored patterns
 
 **Testing**:
 - `tests/consolidation/test_vae_replay.py` - 15+ tests
@@ -508,7 +508,7 @@ async def _run_nrem_phase(self):
 **Owner**: Hinton Agent | **Effort**: 40h
 
 ```python
-# src/ww/bridges/ff_capsule_bridge.py (NEW)
+# src/t4dm/bridges/ff_capsule_bridge.py (NEW)
 class FFCapsuleBridge:
     """Unify FF goodness with capsule routing."""
 
@@ -539,7 +539,7 @@ class FFCapsuleBridge:
 **Owner**: All Agents | **Effort**: 24h
 
 ```python
-# src/ww/learning/unified_signals.py (NEW)
+# src/t4dm/learning/unified_signals.py (NEW)
 class UnifiedLearningSignal:
     """Combine all learning signals into coherent update."""
 
@@ -757,23 +757,23 @@ Week    | CompBio        | Hinton           | Architecture
 
 ### New Files to Create (27)
 ```
-src/ww/memory/episodic_storage.py
-src/ww/memory/episodic_retrieval.py
-src/ww/memory/episodic_learning.py
-src/ww/memory/episodic_fusion.py
-src/ww/memory/episodic_saga.py
-src/ww/learning/retrieval_feedback.py
-src/ww/learning/feedback_signals.py
-src/ww/learning/vae_training.py
-src/ww/learning/unified_signals.py
-src/ww/encoding/online_adapter.py
-src/ww/encoding/adapter_training.py
-src/ww/encoding/neurogenesis.py
-src/ww/nca/pose_learner.py
-src/ww/bridges/ff_capsule_bridge.py
-src/ww/core/cache.py
-src/ww/core/cache_config.py
-src/ww/api/middleware/rate_limit.py
+src/t4dm/memory/episodic_storage.py
+src/t4dm/memory/episodic_retrieval.py
+src/t4dm/memory/episodic_learning.py
+src/t4dm/memory/episodic_fusion.py
+src/t4dm/memory/episodic_saga.py
+src/t4dm/learning/retrieval_feedback.py
+src/t4dm/learning/feedback_signals.py
+src/t4dm/learning/vae_training.py
+src/t4dm/learning/unified_signals.py
+src/t4dm/encoding/online_adapter.py
+src/t4dm/encoding/adapter_training.py
+src/t4dm/encoding/neurogenesis.py
+src/t4dm/nca/pose_learner.py
+src/t4dm/bridges/ff_capsule_bridge.py
+src/t4dm/core/cache.py
+src/t4dm/core/cache_config.py
+src/t4dm/api/middleware/rate_limit.py
 tests/learning/test_retrieval_feedback.py
 tests/learning/test_vae_training.py
 tests/encoding/test_online_adapter.py
@@ -790,22 +790,22 @@ docs/concepts/learning-loop.md
 
 ### Files to Modify (23)
 ```
-src/ww/memory/episodic.py
-src/ww/nca/vta.py
-src/ww/nca/striatal_msn.py
-src/ww/nca/dopamine_integration.py
-src/ww/nca/astrocyte.py
-src/ww/nca/capsules.py
-src/ww/nca/pose.py
-src/ww/nca/forward_forward.py
-src/ww/learning/stdp.py
-src/ww/learning/generative_replay.py
-src/ww/encoding/ff_encoder.py
-src/ww/encoding/adapter.py
-src/ww/consolidation/sleep.py
-src/ww/storage/qdrant_store.py
-src/ww/api/routes/config.py
-src/ww/api/server.py
+src/t4dm/memory/episodic.py
+src/t4dm/nca/vta.py
+src/t4dm/nca/striatal_msn.py
+src/t4dm/nca/dopamine_integration.py
+src/t4dm/nca/astrocyte.py
+src/t4dm/nca/capsules.py
+src/t4dm/nca/pose.py
+src/t4dm/nca/forward_forward.py
+src/t4dm/learning/stdp.py
+src/t4dm/learning/generative_replay.py
+src/t4dm/encoding/ff_encoder.py
+src/t4dm/encoding/adapter.py
+src/t4dm/consolidation/sleep.py
+src/t4dm/storage/qdrant_store.py
+src/t4dm/api/routes/config.py
+src/t4dm/api/server.py
 docs/architecture.md
 docs/science/biology-audit.md
 docs/reference/api.md

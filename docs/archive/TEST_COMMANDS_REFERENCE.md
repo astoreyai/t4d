@@ -37,8 +37,8 @@ pytest tests/nca/test_glutamate_signaling.py::TestGlutamatePerformance::test_sus
 pytest tests/ --cov=src/ww --cov-report=term-missing
 
 # Coverage for specific module
-pytest tests/ --cov=src/ww/visualization --cov-report=term-missing
-pytest tests/ --cov=src/ww/prediction --cov-report=term-missing
+pytest tests/ --cov=src/t4dm/visualization --cov-report=term-missing
+pytest tests/ --cov=src/t4dm/prediction --cov-report=term-missing
 
 # Generate HTML coverage report
 pytest tests/ --cov=src/ww --cov-report=html
@@ -150,13 +150,13 @@ pytest tests/ --junit-xml=junit.xml
 
 ```bash
 # API coverage only
-pytest tests/api/ --cov=src/ww/api --cov-report=term-missing | tail -80
+pytest tests/api/ --cov=src/t4dm/api --cov-report=term-missing | tail -80
 
 # Consolidation coverage
-pytest tests/consolidation/ --cov=src/ww/consolidation --cov-report=term-missing | tail -50
+pytest tests/consolidation/ --cov=src/t4dm/consolidation --cov-report=term-missing | tail -50
 
 # NCA coverage
-pytest tests/nca/ --cov=src/ww/nca --cov-report=term-missing | tail -50
+pytest tests/nca/ --cov=src/t4dm/nca --cov-report=term-missing | tail -50
 
 # Get list of untested files
 pytest tests/ --cov=src/ww --cov-report=term-missing 2>&1 | grep "0%"
@@ -170,7 +170,7 @@ python -m cProfile -s cumtime -m pytest \
   tests/nca/test_glutamate_signaling.py::TestGlutamatePerformance::test_sustained_simulation
 
 # 2. Check recent commits
-git log -p --all -- src/ww/nca/glutamate_signaling.py | head -300
+git log -p --all -- src/t4dm/nca/glutamate_signaling.py | head -300
 
 # 3. Run after fix
 pytest tests/nca/test_glutamate_signaling.py::TestGlutamatePerformance::test_sustained_simulation -v
@@ -243,7 +243,7 @@ pytest tests/ -x -q
 
 ## Resources
 
-- Full Analysis Report: `/mnt/projects/ww/TEST_ANALYSIS_REPORT.md`
-- Test Templates: `/mnt/projects/ww/TEST_TEMPLATES.md`
+- Full Analysis Report: `/mnt/projects/t4d/t4dm/TEST_ANALYSIS_REPORT.md`
+- Test Templates: `/mnt/projects/t4d/t4dm/TEST_TEMPLATES.md`
 - pytest Docs: https://docs.pytest.org/
 - Coverage Docs: https://coverage.readthedocs.io/

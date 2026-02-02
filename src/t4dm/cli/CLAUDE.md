@@ -1,5 +1,5 @@
 # CLI Module
-**Path**: `/mnt/projects/t4d/t4dm/src/ww/cli/`
+**Path**: `/mnt/projects/t4d/t4dm/src/t4dm/cli/`
 
 ## What
 Typer-based command-line interface providing the `ww` command for interacting with the tripartite memory system. Supports storing, recalling, consolidating memories, checking system status, and launching the API server.
@@ -30,5 +30,5 @@ CLI Command -> Typer parser -> run_async()
 
 ## Integration Points
 - **core**: `get_services()` for memory operations, `get_settings()` for config, types (Episode, Entity, Procedure)
-- **consolidation**: `get_consolidation_service()` for `ww consolidate`
-- **api**: `ww.api.server:app` launched by `ww serve` via uvicorn
+- **consolidation**: `get_consolidation_service()` for `t4dm consolidate`
+- **api**: `ww.api.server:app` launched by `t4dm serve` via uvicorn

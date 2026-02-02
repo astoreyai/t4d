@@ -1,5 +1,5 @@
 # Bridge Module (Deprecated)
-**Path**: `/mnt/projects/t4d/t4dm/src/ww/bridge/`
+**Path**: `/mnt/projects/t4d/t4dm/src/t4dm/bridge/`
 
 ## What
 DEPRECATED compatibility shim that re-exports from `ww.bridges.nca_bridge`. Contains the original Memory-NCA bridge connecting memory operations to Neural Cognitive Architecture (NCA) dynamics for state-dependent encoding and retrieval.

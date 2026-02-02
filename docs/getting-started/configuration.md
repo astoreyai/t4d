@@ -6,14 +6,14 @@ World Weaver supports YAML configuration files with environment variable overrid
 
 World Weaver searches for configuration in this order:
 
-1. `./ww.yaml` (current directory)
-2. `~/.ww/config.yaml` (user home)
-3. `/etc/ww/config.yaml` (system-wide)
+1. `./t4dm.yaml` (current directory)
+2. `~/.t4dm/config.yaml` (user home)
+3. `/etc/t4dm/config.yaml` (system-wide)
 
 ## Basic Configuration
 
 ```yaml
-# ww.yaml
+# t4dm.yaml
 session_id: my-project
 environment: development
 
@@ -181,11 +181,11 @@ reset_settings()
 
 ```bash
 # Show current configuration
-ww config --show
+t4dm config --show
 
 # Initialize default config file
-ww config --init
+t4dm config --init
 
 # Show config file path
-ww config --path
+t4dm config --path
 ```

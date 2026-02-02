@@ -47,7 +47,7 @@ This roadmap implements missing neuroscience mechanisms identified in the 2026-0
 - Born & Wilhelm (2012). "System consolidation of memory during sleep." *Psychological Research*
 - Ngo et al. (2013). "Auditory closed-loop stimulation of slow oscillations." *Neuron*
 
-**Implementation**: `/mnt/projects/ww/src/ww/nca/oscillators.py`
+**Implementation**: `/mnt/projects/t4d/t4dm/src/t4dm/nca/oscillators.py`
 
 ```python
 class DeltaOscillator:
@@ -180,7 +180,7 @@ class OscillatorConfig:
 - Rasch & Born (2013). "About sleep's role in memory." *Physiological Reviews*
 - Fernandez & Lüthi (2020). "Sleep spindles: mechanisms and functions." *Physiological Reviews*
 
-**Implementation**: `/mnt/projects/ww/src/ww/nca/oscillators.py`
+**Implementation**: `/mnt/projects/t4d/t4dm/src/t4dm/nca/oscillators.py`
 
 ```python
 @dataclass
@@ -374,7 +374,7 @@ class OscillatorConfig:
 
 ### 1.3 Integration with Sleep Consolidation
 
-**Implementation**: `/mnt/projects/ww/src/ww/consolidation/sleep.py`
+**Implementation**: `/mnt/projects/t4d/t4dm/src/t4dm/consolidation/sleep.py`
 
 ```python
 class SleepConsolidation:
@@ -477,7 +477,7 @@ class SleepConsolidation:
 
 ### 1.4 Validation Tests
 
-**File**: `/mnt/projects/ww/tests/nca/test_sleep_oscillations.py`
+**File**: `/mnt/projects/t4d/t4dm/tests/nca/test_sleep_oscillations.py`
 
 ```python
 def test_delta_frequency_range():
@@ -634,7 +634,7 @@ def test_consolidation_with_sleep_oscillations():
 - Dragoi & Buzsáki (2006). "Temporal encoding of place sequences by hippocampal cell assemblies." *Neuron*
 - Lisman & Redish (2009). "Prediction, sequences and the hippocampus." *Philosophical Transactions B*
 
-**Implementation**: `/mnt/projects/ww/src/ww/nca/spatial_cells.py`
+**Implementation**: `/mnt/projects/t4d/t4dm/src/t4dm/nca/spatial_cells.py`
 
 ```python
 @dataclass
@@ -831,7 +831,7 @@ class SpatialCellSystem:
 - Taube (1995). "Head direction cells recorded in the anterior thalamic nuclei of freely moving rats." *Journal of Neuroscience*
 - Sargolini et al. (2006). "Conjunctive representation of position, direction, and velocity." *Science*
 
-**Implementation**: `/mnt/projects/ww/src/ww/nca/spatial_cells.py`
+**Implementation**: `/mnt/projects/t4d/t4dm/src/t4dm/nca/spatial_cells.py`
 
 ```python
 @dataclass
@@ -970,7 +970,7 @@ class SpatialCellSystem:
 - Solstad et al. (2008). "Representation of geometric borders in the entorhinal cortex." *Science*
 - Lever et al. (2009). "Boundary vector cells in the subiculum." *Journal of Neuroscience*
 
-**Implementation**: `/mnt/projects/ww/src/ww/nca/spatial_cells.py`
+**Implementation**: `/mnt/projects/t4d/t4dm/src/t4dm/nca/spatial_cells.py`
 
 ```python
 @dataclass
@@ -1149,7 +1149,7 @@ class SpatialCellSystem:
 
 ### 2.4 Validation Tests
 
-**File**: `/mnt/projects/ww/tests/nca/test_spatial_navigation.py`
+**File**: `/mnt/projects/t4d/t4dm/tests/nca/test_spatial_navigation.py`
 
 ```python
 def test_phase_precession_slope():
@@ -1273,7 +1273,7 @@ def test_spatial_cell_integration():
 - Redondo & Morris (2011). "Making memories last: the synaptic tagging and capture hypothesis." *Nature Reviews Neuroscience*
 - Rogerson et al. (2014). "Synaptic tagging during memory allocation." *Nature Reviews Neuroscience*
 
-**Implementation**: `/mnt/projects/ww/src/ww/learning/plasticity.py`
+**Implementation**: `/mnt/projects/t4d/t4dm/src/t4dm/learning/plasticity.py`
 
 ```python
 from dataclasses import dataclass, field
@@ -1615,7 +1615,7 @@ class PlasticityManager:
 - Bittner et al. (2015). "Conjunctive input processing drives feature selectivity in hippocampal CA1 neurons." *Nature Neuroscience*
 - Bittner et al. (2017). "Behavioral time scale synaptic plasticity underlies CA1 place fields." *Science*
 
-**Implementation**: `/mnt/projects/ww/src/ww/learning/btsp.py`
+**Implementation**: `/mnt/projects/t4d/t4dm/src/t4dm/learning/btsp.py`
 
 ```python
 @dataclass
@@ -1732,7 +1732,7 @@ class BTSPLearner:
 
 ### 3.3 Validation Tests
 
-**File**: `/mnt/projects/ww/tests/learning/test_plasticity.py`
+**File**: `/mnt/projects/t4d/t4dm/tests/learning/test_plasticity.py`
 
 ```python
 def test_synaptic_tag_creation():
@@ -1889,7 +1889,7 @@ def test_btsp_vs_stdp_timing():
 - Diba & Buzsáki (2007). "Forward and reverse hippocampal place-cell sequences during ripples." *Nature Neuroscience*
 - Pfeiffer & Foster (2013). "Hippocampal place-cell sequences depict future paths." *Nature*
 
-**Enhancement**: `/mnt/projects/ww/src/ww/nca/swr_coupling.py`
+**Enhancement**: `/mnt/projects/t4d/t4dm/src/t4dm/nca/swr_coupling.py`
 
 ```python
 class SWRNeuralFieldCoupling:
@@ -2007,7 +2007,7 @@ class SWRNeuralFieldCoupling:
 - Canolty & Knight (2010). "The functional role of cross-frequency coupling." *Trends in Cognitive Sciences*
 - Tort et al. (2010). "Measuring phase-amplitude coupling between neuronal oscillations." *Journal of Neurophysiology*
 
-**Enhancement**: `/mnt/projects/ww/src/ww/nca/oscillators.py`
+**Enhancement**: `/mnt/projects/t4d/t4dm/src/t4dm/nca/oscillators.py`
 
 ```python
 class FrequencyBandGenerator:
@@ -2090,7 +2090,7 @@ class FrequencyBandGenerator:
 - Sahay et al. (2011). "Increasing adult hippocampal neurogenesis is sufficient to improve pattern separation." *Nature*
 - Aimone et al. (2014). "Resolving new memories: a critical look at the dentate gyrus, adult neurogenesis, and pattern separation." *Neuron*
 
-**Implementation**: `/mnt/projects/ww/src/ww/nca/hippocampus.py`
+**Implementation**: `/mnt/projects/t4d/t4dm/src/t4dm/nca/hippocampus.py`
 
 ```python
 class DentateGyrusLayer:
@@ -2257,28 +2257,28 @@ def test_biology_fidelity_score():
 ## Documentation Updates
 
 ### Files to Update
-1. `/mnt/projects/ww/docs/science/biology-audit-2026-01-03.md`
+1. `/mnt/projects/t4d/t4dm/docs/science/biology-audit-2026-01-03.md`
    - Update scores after each phase
    - Add new component assessments
 
-2. `/mnt/projects/ww/docs/architecture/nca.md`
+2. `/mnt/projects/t4d/t4dm/docs/architecture/nca.md`
    - Document new oscillators (delta, spindle)
    - Update integration diagrams
 
-3. `/mnt/projects/ww/docs/architecture/learning-theory.md`
+3. `/mnt/projects/t4d/t4dm/docs/architecture/learning-theory.md`
    - Add STC and BTSP sections
    - Update plasticity mechanisms
 
-4. `/mnt/projects/ww/README.md`
+4. `/mnt/projects/t4d/t4dm/README.md`
    - Update biology fidelity score
    - Add new features to highlights
 
 ### New Documentation
-1. `/mnt/projects/ww/docs/biology/sleep-oscillations.md`
+1. `/mnt/projects/t4d/t4dm/docs/biology/sleep-oscillations.md`
    - Delta and spindle mechanisms
    - Biological validation
 
-2. `/mnt/projects/ww/docs/biology/synaptic-plasticity.md`
+2. `/mnt/projects/t4d/t4dm/docs/biology/synaptic-plasticity.md`
    - STC mechanism
    - BTSP vs STDP comparison
 

@@ -38,9 +38,9 @@ User reports: "Neuromodulators not affecting learning"
 ```bash
 # Run all agents in parallel on core learning code
 paths=(
-  "src/ww/learning/"
-  "src/ww/memory/"
-  "src/ww/consolidation/"
+  "src/t4dm/learning/"
+  "src/t4dm/memory/"
+  "src/t4dm/consolidation/"
 )
 ```
 
@@ -50,9 +50,9 @@ paths=(
 ```bash
 # Focus on async and shared state
 paths=(
-  "src/ww/mcp/"
-  "src/ww/core/"
-  "src/ww/storage/"
+  "src/t4dm/mcp/"
+  "src/t4dm/core/"
+  "src/t4dm/storage/"
 )
 ```
 
@@ -62,9 +62,9 @@ paths=(
 ```bash
 # Focus on caching layers
 paths=(
-  "src/ww/indexes/"
-  "src/ww/storage/"
-  "src/ww/core/"
+  "src/t4dm/indexes/"
+  "src/t4dm/storage/"
+  "src/t4dm/core/"
 )
 ```
 
@@ -74,10 +74,10 @@ paths=(
 ```bash
 # Focus on temporal learning
 paths=(
-  "src/ww/learning/eligibility_traces.py"
-  "src/ww/learning/neuromodulators.py"
-  "src/ww/learning/hebbian.py"
-  "src/ww/core/learned_gate.py"
+  "src/t4dm/learning/eligibility_traces.py"
+  "src/t4dm/learning/neuromodulators.py"
+  "src/t4dm/learning/hebbian.py"
+  "src/t4dm/core/learned_gate.py"
 )
 ```
 
@@ -124,32 +124,32 @@ Add these to your agent definitions:
 ww-bio-auditor:
   description: "Audit biological memory implementations against neuroscience principles"
   tools: [Read, Grep, Glob, Write]
-  prompt_file: "/mnt/projects/ww/agents/bio-memory-auditor.md"
+  prompt_file: "/mnt/projects/t4d/t4dm/agents/bio-memory-auditor.md"
 
 ww-race-hunter:
   description: "Hunt race conditions and concurrency bugs in async code"
   tools: [Read, Grep, Glob, Write, Bash]
-  prompt_file: "/mnt/projects/ww/agents/race-condition-hunter.md"
+  prompt_file: "/mnt/projects/t4d/t4dm/agents/race-condition-hunter.md"
 
 ww-leak-hunter:
   description: "Find memory leaks and unbounded resource growth"
   tools: [Read, Grep, Glob, Write, Bash]
-  prompt_file: "/mnt/projects/ww/agents/memory-leak-hunter.md"
+  prompt_file: "/mnt/projects/t4d/t4dm/agents/memory-leak-hunter.md"
 
 ww-hinton-validator:
   description: "Validate learning against Hinton's principles"
   tools: [Read, Grep, Glob, Write]
-  prompt_file: "/mnt/projects/ww/agents/hinton-learning-validator.md"
+  prompt_file: "/mnt/projects/t4d/t4dm/agents/hinton-learning-validator.md"
 
 ww-cache-analyzer:
   description: "Analyze cache coherence and invalidation"
   tools: [Read, Grep, Glob, Write]
-  prompt_file: "/mnt/projects/ww/agents/cache-coherence-analyzer.md"
+  prompt_file: "/mnt/projects/t4d/t4dm/agents/cache-coherence-analyzer.md"
 
 ww-trace-debugger:
   description: "Debug eligibility trace implementations"
   tools: [Read, Grep, Glob, Write]
-  prompt_file: "/mnt/projects/ww/agents/eligibility-trace-debugger.md"
+  prompt_file: "/mnt/projects/t4d/t4dm/agents/eligibility-trace-debugger.md"
 ```
 
 ## Full System Audit Command
@@ -157,12 +157,12 @@ ww-trace-debugger:
 ```
 Conduct comprehensive WW bug audit using all specialized agents:
 
-1. Bio-Memory Auditor on src/ww/learning/, src/ww/memory/, src/ww/consolidation/
-2. Race Condition Hunter on src/ww/mcp/, src/ww/core/
+1. Bio-Memory Auditor on src/t4dm/learning/, src/t4dm/memory/, src/t4dm/consolidation/
+2. Race Condition Hunter on src/t4dm/mcp/, src/t4dm/core/
 3. Memory Leak Hunter on all Python files
-4. Hinton Learning Validator on src/ww/learning/
-5. Cache Coherence Analyzer on src/ww/indexes/, src/ww/storage/
-6. Eligibility Trace Debugger on src/ww/learning/eligibility_traces.py
+4. Hinton Learning Validator on src/t4dm/learning/
+5. Cache Coherence Analyzer on src/t4dm/indexes/, src/t4dm/storage/
+6. Eligibility Trace Debugger on src/t4dm/learning/eligibility_traces.py
 
 Generate reports to /home/aaron/mem/WW_AUDIT_{agent}_{timestamp}.md
 Consolidate findings to /home/aaron/mem/WW_MASTER_AUDIT.md
@@ -219,7 +219,7 @@ episodic_lr / semantic_lr ≥ 10 (typically 100x)
 
 ### Adding New Agents
 
-1. Create `/mnt/projects/ww/agents/{agent-name}.md`
+1. Create `/mnt/projects/t4d/t4dm/agents/{agent-name}.md`
 2. Follow template: Identity → Mission → Bug Patterns → Checklist → Audit Commands → Report Format
 3. Add to this registry
 4. Add Task agent type definition

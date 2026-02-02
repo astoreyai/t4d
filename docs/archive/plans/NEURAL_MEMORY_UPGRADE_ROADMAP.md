@@ -28,7 +28,7 @@ This roadmap integrates 6 cutting-edge neural memory components into World Weave
 
 ### Existing Components (Keep)
 ```
-/mnt/projects/ww/src/ww/
+/mnt/projects/t4d/t4dm/src/t4dm/
 ├── memory/
 │   ├── episodic.py              # 1800 lines - autobiographical events
 │   ├── semantic.py              # Hebbian knowledge graph
@@ -78,11 +78,11 @@ This roadmap integrates 6 cutting-edge neural memory components into World Weave
   - Identify unused learned components (LearnedFusion, LearnedRetrievalScorer)
   - Create dependency graph for existing learning systems
 - Files to Read:
-  - `/mnt/projects/ww/src/ww/core/learned_gate.py`
-  - `/mnt/projects/ww/src/ww/learning/neuromodulators.py`
-  - `/mnt/projects/ww/src/ww/learning/neuro_symbolic.py`
-  - `/mnt/projects/ww/src/ww/learning/scorer.py`
-- Deliverable: `/mnt/projects/ww/docs/NEURAL_COMPONENT_AUDIT.md`
+  - `/mnt/projects/t4d/t4dm/src/t4dm/core/learned_gate.py`
+  - `/mnt/projects/t4d/t4dm/src/t4dm/learning/neuromodulators.py`
+  - `/mnt/projects/t4d/t4dm/src/t4dm/learning/neuro_symbolic.py`
+  - `/mnt/projects/t4d/t4dm/src/t4dm/learning/scorer.py`
+- Deliverable: `/mnt/projects/t4d/t4dm/docs/NEURAL_COMPONENT_AUDIT.md`
 - Agent: ww-analysis-agent
 - Dependencies: None
 - Risk: Low - read-only analysis
@@ -97,11 +97,11 @@ This roadmap integrates 6 cutting-edge neural memory components into World Weave
   - Multi-timescale validation (verify layer-specific τ)
   - Eligibility trace tests (delayed credit assignment)
 - Files to Create:
-  - `/mnt/projects/ww/tests/neural/test_pattern_completion.py`
-  - `/mnt/projects/ww/tests/neural/test_sparse_retrieval.py`
-  - `/mnt/projects/ww/tests/neural/test_learning_convergence.py`
-  - `/mnt/projects/ww/tests/neural/test_multitimescale.py`
-  - `/mnt/projects/ww/tests/neural/conftest.py` (fixtures)
+  - `/mnt/projects/t4d/t4dm/tests/neural/test_pattern_completion.py`
+  - `/mnt/projects/t4d/t4dm/tests/neural/test_sparse_retrieval.py`
+  - `/mnt/projects/t4d/t4dm/tests/neural/test_learning_convergence.py`
+  - `/mnt/projects/t4d/t4dm/tests/neural/test_multitimescale.py`
+  - `/mnt/projects/t4d/t4dm/tests/neural/conftest.py` (fixtures)
 - Mathematical Formulations:
   ```python
   # Pattern completion accuracy
@@ -130,8 +130,8 @@ This roadmap integrates 6 cutting-edge neural memory components into World Weave
   - Memory footprint (model parameters + caches)
   - Throughput (queries/sec, stores/sec)
 - Files to Create:
-  - `/mnt/projects/ww/benchmarks/baseline_metrics.json`
-  - `/mnt/projects/ww/benchmarks/run_baseline.py`
+  - `/mnt/projects/t4d/t4dm/benchmarks/baseline_metrics.json`
+  - `/mnt/projects/t4d/t4dm/benchmarks/run_baseline.py`
 - Test Cases:
   ```python
   @pytest.mark.benchmark
@@ -157,10 +157,10 @@ This roadmap integrates 6 cutting-edge neural memory components into World Weave
   - Lazy computation (only extract needed features)
   - Cache common projections (content, context)
 - Files to Modify:
-  - `/mnt/projects/ww/src/ww/core/learned_gate.py` (lines 300-450)
-  - `/mnt/projects/ww/src/ww/memory/episodic.py` (lines 33-100, LearnedFusionWeights)
+  - `/mnt/projects/t4d/t4dm/src/t4dm/core/learned_gate.py` (lines 300-450)
+  - `/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic.py` (lines 33-100, LearnedFusionWeights)
 - Files to Create:
-  - `/mnt/projects/ww/src/ww/core/feature_extractor.py`
+  - `/mnt/projects/t4d/t4dm/src/t4dm/core/feature_extractor.py`
 - Mathematical Formulations:
   ```python
   class FeatureExtractor:
@@ -203,7 +203,7 @@ Forward-Forward (FF) replaces backpropagation with local "goodness" functions pe
   - Update rule: Δw ∝ (g⁺ - g⁻) · x (layer-local)
   - <5ms latency per layer forward pass
 - Files to Create:
-  - `/mnt/projects/ww/src/ww/learning/forward_forward.py`
+  - `/mnt/projects/t4d/t4dm/src/t4dm/learning/forward_forward.py`
 - Mathematical Formulations:
   ```python
   class ForwardForwardLayer:
@@ -263,7 +263,7 @@ Forward-Forward (FF) replaces backpropagation with local "goodness" functions pe
   - Method 3: Adversarial negatives (search for hardest examples)
   - Negatives pass basic sanity checks (not identical to positives)
 - Files to Modify:
-  - `/mnt/projects/ww/src/ww/learning/forward_forward.py`
+  - `/mnt/projects/t4d/t4dm/src/t4dm/learning/forward_forward.py`
 - Mathematical Formulations:
   ```python
   def generate_negatives(positive_embedding, method='corrupt'):
@@ -296,7 +296,7 @@ Forward-Forward (FF) replaces backpropagation with local "goodness" functions pe
   - FF updates happen asynchronously (non-blocking)
   - Learned representations improve retrieval quality (>5% P@5 gain)
 - Files to Modify:
-  - `/mnt/projects/ww/src/ww/memory/episodic.py` (lines 200-300, create())
+  - `/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic.py` (lines 200-300, create())
 - Integration Points:
   ```python
   class EpisodicMemory:
@@ -349,8 +349,8 @@ Forward-Forward (FF) replaces backpropagation with local "goodness" functions pe
   - Measure: retrieval quality, learning speed, stability
   - Document optimal settings in config
 - Files to Create:
-  - `/mnt/projects/ww/benchmarks/ff_hyperparameter_search.py`
-  - `/mnt/projects/ww/config/ff_optimal_params.json`
+  - `/mnt/projects/t4d/t4dm/benchmarks/ff_hyperparameter_search.py`
+  - `/mnt/projects/t4d/t4dm/config/ff_optimal_params.json`
 - Dependencies: TASK-103
 - Risk: Low
 - Expected Performance: 2-3% additional gain from tuning
@@ -377,7 +377,7 @@ Traditional Hopfield networks have O(n) capacity (n patterns → n neurons). Fen
   - Backward pass implemented for learning
   - <2ms for 10K-dim input
 - Files to Create:
-  - `/mnt/projects/ww/src/ww/learning/sparse_attention.py`
+  - `/mnt/projects/t4d/t4dm/src/t4dm/learning/sparse_attention.py`
 - Mathematical Formulations:
   ```python
   def entmax_alpha(z, alpha=1.5):
@@ -429,7 +429,7 @@ Traditional Hopfield networks have O(n) capacity (n patterns → n neurons). Fen
   - Convergence in <10 iterations
   - Retrieved pattern matches stored memory (cosine > 0.9)
 - Files to Create:
-  - `/mnt/projects/ww/src/ww/memory/hopfield_memory.py`
+  - `/mnt/projects/t4d/t4dm/src/t4dm/memory/hopfield_memory.py`
 - Mathematical Formulations:
   ```python
   class HopfieldMemory:
@@ -515,7 +515,7 @@ Traditional Hopfield networks have O(n) capacity (n patterns → n neurons). Fen
   - Final top-k selected from refined attention
   - Backward compatible (fallback to Qdrant-only if Hopfield disabled)
 - Files to Modify:
-  - `/mnt/projects/ww/src/ww/memory/episodic.py` (lines 450-650, recall())
+  - `/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic.py` (lines 450-650, recall())
 - Integration Pattern:
   ```python
   async def recall(self, query, limit=5, use_hopfield=True):
@@ -571,8 +571,8 @@ Traditional Hopfield networks have O(n) capacity (n patterns → n neurons). Fen
   - Validate exponential capacity (accuracy > 80% at 1M)
   - Document capacity limits in config
 - Files to Create:
-  - `/mnt/projects/ww/benchmarks/hopfield_capacity_test.py`
-  - `/mnt/projects/ww/docs/HOPFIELD_CAPACITY_ANALYSIS.md`
+  - `/mnt/projects/t4d/t4dm/benchmarks/hopfield_capacity_test.py`
+  - `/mnt/projects/t4d/t4dm/docs/HOPFIELD_CAPACITY_ANALYSIS.md`
 - Dependencies: TASK-203
 - Risk: Low
 - Expected Performance: 80%+ accuracy at 1M patterns (vs 50% for standard Hopfield)
@@ -596,7 +596,7 @@ Dendrites act as separate computational units. Mismatch between soma prediction 
   - Supports branch-specific plasticity
   - <0.1ms per neuron update
 - Files to Create:
-  - `/mnt/projects/ww/src/ww/learning/dendritic_neuron.py`
+  - `/mnt/projects/t4d/t4dm/src/t4dm/learning/dendritic_neuron.py`
 - Mathematical Formulations:
   ```python
   class DendriticNeuron:
@@ -672,9 +672,9 @@ Dendrites act as separate computational units. Mismatch between soma prediction 
   - Learning: context-gated plasticity (only when apical is active)
   - Improves context-dependent retrieval (>10% gain)
 - Files to Modify:
-  - `/mnt/projects/ww/src/ww/memory/episodic.py`
+  - `/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic.py`
 - Files to Create:
-  - `/mnt/projects/ww/src/ww/learning/dendritic_layer.py`
+  - `/mnt/projects/t4d/t4dm/src/t4dm/learning/dendritic_layer.py`
 - Integration Pattern:
   ```python
   class DendriticLayer:
@@ -761,7 +761,7 @@ Dendrites act as separate computational units. Mismatch between soma prediction 
   - Per-branch eligibility traces
   - Prune weak branches (weight magnitude < threshold)
 - Files to Modify:
-  - `/mnt/projects/ww/src/ww/learning/dendritic_neuron.py`
+  - `/mnt/projects/t4d/t4dm/src/t4dm/learning/dendritic_neuron.py`
 - Mathematical Formulations:
   ```python
   class DendriticNeuron:
@@ -811,7 +811,7 @@ Dendrites act as separate computational units. Mismatch between soma prediction 
   - Integration with DA, 5-HT signals
   - <1KB memory per 1K parameters
 - Files to Create:
-  - `/mnt/projects/ww/src/ww/learning/eligibility_trace.py`
+  - `/mnt/projects/t4d/t4dm/src/t4dm/learning/eligibility_trace.py`
 - Mathematical Formulations:
   ```python
   class EligibilityTrace:
@@ -847,9 +847,9 @@ Dendrites act as separate computational units. Mismatch between soma prediction 
   - Eligibility trace allows delayed factor 3
   - Works with all existing learning components
 - Files to Modify:
-  - `/mnt/projects/ww/src/ww/core/learned_gate.py`
-  - `/mnt/projects/ww/src/ww/learning/forward_forward.py`
-  - `/mnt/projects/ww/src/ww/learning/dendritic_neuron.py`
+  - `/mnt/projects/t4d/t4dm/src/t4dm/core/learned_gate.py`
+  - `/mnt/projects/t4d/t4dm/src/t4dm/learning/forward_forward.py`
+  - `/mnt/projects/t4d/t4dm/src/t4dm/learning/dendritic_neuron.py`
 - Mathematical Formulations:
   ```python
   class ThreeFactorLearner:
@@ -895,7 +895,7 @@ Dendrites act as separate computational units. Mismatch between soma prediction 
   - Slow trace: γ=0.98, captures session (hours)
   - Combined: weighted sum based on delay
 - Files to Modify:
-  - `/mnt/projects/ww/src/ww/learning/eligibility_trace.py`
+  - `/mnt/projects/t4d/t4dm/src/t4dm/learning/eligibility_trace.py`
 - Mathematical Formulations:
   ```python
   class CascadingEligibility:
@@ -935,8 +935,8 @@ Dendrites act as separate computational units. Mismatch between soma prediction 
   - Combined signal for three-factor learning
   - Backward compatible with existing orchestra
 - Files to Modify:
-  - `/mnt/projects/ww/src/ww/learning/neuromodulators.py`
-  - `/mnt/projects/ww/src/ww/core/learned_gate.py`
+  - `/mnt/projects/t4d/t4dm/src/t4dm/learning/neuromodulators.py`
+  - `/mnt/projects/t4d/t4dm/src/t4dm/core/learned_gate.py`
 - Integration Pattern:
   ```python
   class LearnedMemoryGate:
@@ -986,7 +986,7 @@ Dendrites act as separate computational units. Mismatch between soma prediction 
   - Continuous-time update: dx/dt = (input - x) / τ
   - Discrete approximation: x(t+Δt) = x(t) + Δt/τ · (input - x)
 - Files to Create:
-  - `/mnt/projects/ww/src/ww/learning/temporal_layer.py`
+  - `/mnt/projects/t4d/t4dm/src/t4dm/learning/temporal_layer.py`
 - Mathematical Formulations:
   ```python
   class TemporalLayer:
@@ -1046,7 +1046,7 @@ Dendrites act as separate computational units. Mismatch between soma prediction 
   - Output: multi-timescale representation
   - <5ms latency for 3 layers
 - Files to Create:
-  - `/mnt/projects/ww/src/ww/learning/temporal_hierarchy.py`
+  - `/mnt/projects/t4d/t4dm/src/t4dm/learning/temporal_hierarchy.py`
 - Mathematical Formulations:
   ```python
   class TemporalHierarchy:
@@ -1087,7 +1087,7 @@ Dendrites act as separate computational units. Mismatch between soma prediction 
   - Slow layer: stable memory representation
   - Improves sequential memory (>5% accuracy)
 - Files to Modify:
-  - `/mnt/projects/ww/src/ww/memory/episodic.py`
+  - `/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic.py`
 - Integration Pattern:
   ```python
   class EpisodicMemory:
@@ -1119,7 +1119,7 @@ Dendrites act as separate computational units. Mismatch between soma prediction 
   - Constrain: 10ms < τ < 10s
   - Converges to task-appropriate timescales
 - Files to Modify:
-  - `/mnt/projects/ww/src/ww/learning/temporal_layer.py`
+  - `/mnt/projects/t4d/t4dm/src/t4dm/learning/temporal_layer.py`
 - Mathematical Formulations:
   ```python
   class AdaptiveTemporalLayer(TemporalLayer):
@@ -1161,7 +1161,7 @@ Dendrites act as separate computational units. Mismatch between soma prediction 
   - Memory persists (no forgetting without decay)
   - <10ms forward pass
 - Files to Create:
-  - `/mnt/projects/ww/src/ww/memory/memory_mlp.py`
+  - `/mnt/projects/t4d/t4dm/src/t4dm/memory/memory_mlp.py`
 - Mathematical Formulations:
   ```python
   class MemoryMLP:
@@ -1272,7 +1272,7 @@ Dendrites act as separate computational units. Mismatch between soma prediction 
   - θ adapts to maintain target storage rate
   - Prevents memory overflow
 - Files to Modify:
-  - `/mnt/projects/ww/src/ww/memory/memory_mlp.py`
+  - `/mnt/projects/t4d/t4dm/src/t4dm/memory/memory_mlp.py`
 - Mathematical Formulations:
   ```python
   class SurpriseMemory(MemoryMLP):
@@ -1323,7 +1323,7 @@ Dendrites act as separate computational units. Mismatch between soma prediction 
   - Old memories fade unless refreshed
   - Configurable decay rate
 - Files to Modify:
-  - `/mnt/projects/ww/src/ww/memory/memory_mlp.py`
+  - `/mnt/projects/t4d/t4dm/src/t4dm/memory/memory_mlp.py`
 - Mathematical Formulations:
   ```python
   class MemoryMLP:
@@ -1355,7 +1355,7 @@ Dendrites act as separate computational units. Mismatch between soma prediction 
   - Recall via gradient descent on query
   - Scale to 2M+ tokens (test with 10K episodes)
 - Files to Modify:
-  - `/mnt/projects/ww/src/ww/memory/episodic.py`
+  - `/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic.py`
 - Integration Pattern:
   ```python
   class EpisodicMemory:
@@ -1426,55 +1426,55 @@ Dendrites act as separate computational units. Mismatch between soma prediction 
 ### New Files (34 total)
 
 #### Phase 0: Foundation
-1. `/mnt/projects/ww/docs/NEURAL_COMPONENT_AUDIT.md`
-2. `/mnt/projects/ww/tests/neural/test_pattern_completion.py`
-3. `/mnt/projects/ww/tests/neural/test_sparse_retrieval.py`
-4. `/mnt/projects/ww/tests/neural/test_learning_convergence.py`
-5. `/mnt/projects/ww/tests/neural/test_multitimescale.py`
-6. `/mnt/projects/ww/tests/neural/conftest.py`
-7. `/mnt/projects/ww/benchmarks/baseline_metrics.json`
-8. `/mnt/projects/ww/benchmarks/run_baseline.py`
-9. `/mnt/projects/ww/src/ww/core/feature_extractor.py`
+1. `/mnt/projects/t4d/t4dm/docs/NEURAL_COMPONENT_AUDIT.md`
+2. `/mnt/projects/t4d/t4dm/tests/neural/test_pattern_completion.py`
+3. `/mnt/projects/t4d/t4dm/tests/neural/test_sparse_retrieval.py`
+4. `/mnt/projects/t4d/t4dm/tests/neural/test_learning_convergence.py`
+5. `/mnt/projects/t4d/t4dm/tests/neural/test_multitimescale.py`
+6. `/mnt/projects/t4d/t4dm/tests/neural/conftest.py`
+7. `/mnt/projects/t4d/t4dm/benchmarks/baseline_metrics.json`
+8. `/mnt/projects/t4d/t4dm/benchmarks/run_baseline.py`
+9. `/mnt/projects/t4d/t4dm/src/t4dm/core/feature_extractor.py`
 
 #### Phase 1: Forward-Forward
-10. `/mnt/projects/ww/src/ww/learning/forward_forward.py`
-11. `/mnt/projects/ww/benchmarks/ff_hyperparameter_search.py`
-12. `/mnt/projects/ww/config/ff_optimal_params.json`
+10. `/mnt/projects/t4d/t4dm/src/t4dm/learning/forward_forward.py`
+11. `/mnt/projects/t4d/t4dm/benchmarks/ff_hyperparameter_search.py`
+12. `/mnt/projects/t4d/t4dm/config/ff_optimal_params.json`
 
 #### Phase 2: Hopfield Memory
-13. `/mnt/projects/ww/src/ww/learning/sparse_attention.py`
-14. `/mnt/projects/ww/src/ww/memory/hopfield_memory.py`
-15. `/mnt/projects/ww/benchmarks/hopfield_capacity_test.py`
-16. `/mnt/projects/ww/docs/HOPFIELD_CAPACITY_ANALYSIS.md`
+13. `/mnt/projects/t4d/t4dm/src/t4dm/learning/sparse_attention.py`
+14. `/mnt/projects/t4d/t4dm/src/t4dm/memory/hopfield_memory.py`
+15. `/mnt/projects/t4d/t4dm/benchmarks/hopfield_capacity_test.py`
+16. `/mnt/projects/t4d/t4dm/docs/HOPFIELD_CAPACITY_ANALYSIS.md`
 
 #### Phase 3: Dendritic Computation
-17. `/mnt/projects/ww/src/ww/learning/dendritic_neuron.py`
-18. `/mnt/projects/ww/src/ww/learning/dendritic_layer.py`
+17. `/mnt/projects/t4d/t4dm/src/t4dm/learning/dendritic_neuron.py`
+18. `/mnt/projects/t4d/t4dm/src/t4dm/learning/dendritic_layer.py`
 
 #### Phase 4: Enhanced Neuromodulation
-19. `/mnt/projects/ww/src/ww/learning/eligibility_trace.py`
+19. `/mnt/projects/t4d/t4dm/src/t4dm/learning/eligibility_trace.py`
 
 #### Phase 5: Multi-Timescale
-20. `/mnt/projects/ww/src/ww/learning/temporal_layer.py`
-21. `/mnt/projects/ww/src/ww/learning/temporal_hierarchy.py`
+20. `/mnt/projects/t4d/t4dm/src/t4dm/learning/temporal_layer.py`
+21. `/mnt/projects/t4d/t4dm/src/t4dm/learning/temporal_hierarchy.py`
 
 #### Phase 6: Titans Memory
-22. `/mnt/projects/ww/src/ww/memory/memory_mlp.py`
+22. `/mnt/projects/t4d/t4dm/src/t4dm/memory/memory_mlp.py`
 
 ### Modified Files (8 total)
 
 #### Core Learning
-1. `/mnt/projects/ww/src/ww/core/learned_gate.py` (Phases 0, 4)
-2. `/mnt/projects/ww/src/ww/learning/neuromodulators.py` (Phase 4)
+1. `/mnt/projects/t4d/t4dm/src/t4dm/core/learned_gate.py` (Phases 0, 4)
+2. `/mnt/projects/t4d/t4dm/src/t4dm/learning/neuromodulators.py` (Phase 4)
 
 #### Memory Systems
-3. `/mnt/projects/ww/src/ww/memory/episodic.py` (Phases 1, 2, 3, 5, 6)
+3. `/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic.py` (Phases 1, 2, 3, 5, 6)
 
 #### Learning Components
-4. `/mnt/projects/ww/src/ww/learning/forward_forward.py` (Phase 4)
-5. `/mnt/projects/ww/src/ww/learning/dendritic_neuron.py` (Phases 3, 4)
-6. `/mnt/projects/ww/src/ww/learning/temporal_layer.py` (Phase 5)
-7. `/mnt/projects/ww/src/ww/memory/memory_mlp.py` (Phase 6)
+4. `/mnt/projects/t4d/t4dm/src/t4dm/learning/forward_forward.py` (Phase 4)
+5. `/mnt/projects/t4d/t4dm/src/t4dm/learning/dendritic_neuron.py` (Phases 3, 4)
+6. `/mnt/projects/t4d/t4dm/src/t4dm/learning/temporal_layer.py` (Phase 5)
+7. `/mnt/projects/t4d/t4dm/src/t4dm/memory/memory_mlp.py` (Phase 6)
 
 ---
 
@@ -1740,9 +1740,9 @@ class NeuralConfig:
 6. **Titans Memory**: Granger et al. (2024) - arxiv:2501.00663
 
 ### Code References
-- World Weaver: `/mnt/projects/ww/`
-- Existing tests: `/mnt/projects/ww/tests/`
-- HSA implementation plan: `/mnt/projects/ww/docs/IMPLEMENTATION_PLAN_HSA.md`
+- World Weaver: `/mnt/projects/t4d/t4dm/`
+- Existing tests: `/mnt/projects/t4d/t4dm/tests/`
+- HSA implementation plan: `/mnt/projects/t4d/t4dm/docs/IMPLEMENTATION_PLAN_HSA.md`
 
 ---
 

@@ -164,7 +164,7 @@ nmap localhost -p 7687,6333 && echo "WARNING: Databases exposed"
 pip install bandit safety
 
 # Run static analysis
-bandit -r src/ww/ -f json -o security_report.json
+bandit -r src/t4dm/ -f json -o security_report.json
 
 # Check dependencies
 safety check --json

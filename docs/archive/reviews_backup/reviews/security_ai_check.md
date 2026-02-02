@@ -1,6 +1,6 @@
 # AI-Check Analysis: Adversarial Memory Attacks Paper
 
-**File**: `/mnt/projects/ww/docs/papers/adversarial_memory_attacks.tex`
+**File**: `/mnt/projects/t4d/t4dm/docs/papers/adversarial_memory_attacks.tex`
 **Date**: 2024-12-04
 **Total Words**: ~2,400
 

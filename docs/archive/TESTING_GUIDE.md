@@ -80,7 +80,7 @@ pytest tests/api/test_endpoints_comprehensive.py::TestEpisodeEndpoints::test_cre
 Generate coverage report:
 
 ```bash
-pytest tests/api/test_endpoints_comprehensive.py --cov=src/ww/api/routes --cov-report=html
+pytest tests/api/test_endpoints_comprehensive.py --cov=src/t4dm/api/routes --cov-report=html
 
 # View in browser
 open htmlcov/index.html
@@ -121,7 +121,7 @@ This includes:
 ## Test File Location
 
 ```
-/mnt/projects/ww/tests/api/test_endpoints_comprehensive.py
+/mnt/projects/t4d/t4dm/tests/api/test_endpoints_comprehensive.py
 ```
 
 **File size**: 1,020 lines
@@ -302,20 +302,20 @@ pytest tests/api/test_endpoints_comprehensive.py::TestEpisodeEndpoints::test_my_
 
 ## Related Files
 
-- **Routes**: `/mnt/projects/ww/src/ww/api/routes/*.py`
+- **Routes**: `/mnt/projects/t4d/t4dm/src/t4dm/api/routes/*.py`
   - `episodes.py` - Episode CRUD
   - `entities.py` - Entity CRUD & semantic operations
   - `skills.py` - Skill CRUD & execution
   - `config.py` - Configuration management
   - `visualization.py` - Neuromodulator visualization
 
-- **Models**: `/mnt/projects/ww/src/ww/core/types.py`
+- **Models**: `/mnt/projects/t4d/t4dm/src/t4dm/core/types.py`
   - Episode, Entity, Procedure, Domain, Outcome, etc.
 
-- **Dependencies**: `/mnt/projects/ww/src/ww/api/deps.py`
+- **Dependencies**: `/mnt/projects/t4d/t4dm/src/t4dm/api/deps.py`
   - Service injection, session management
 
-- **Error Handling**: `/mnt/projects/ww/src/ww/api/errors.py`
+- **Error Handling**: `/mnt/projects/t4d/t4dm/src/t4dm/api/errors.py`
   - Error sanitization, response formatting
 
 ---
@@ -332,7 +332,7 @@ test:
     - uses: actions/checkout@v2
     - name: Run API endpoint tests
       run: |
-        python -m pytest tests/api/test_endpoints_comprehensive.py -v --cov=src/ww/api/routes
+        python -m pytest tests/api/test_endpoints_comprehensive.py -v --cov=src/t4dm/api/routes
     - name: Upload coverage
       run: codecov
 ```

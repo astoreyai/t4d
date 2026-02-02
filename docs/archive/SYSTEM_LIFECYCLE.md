@@ -33,7 +33,7 @@ World Weaver is designed as an **always-on memory system** that survives crashes
 │  │         ▼                ▼                      ▼             │ │
 │  │  ┌─────────────────────────────────────────────────────────┐  │ │
 │  │  │              DURABLE STORAGE (disk)                      │  │ │
-│  │  │   /var/lib/ww/wal/       /var/lib/ww/checkpoints/        │  │ │
+│  │  │   /var/lib/t4dm/wal/       /var/lib/t4dm/checkpoints/        │  │ │
 │  │  └─────────────────────────────────────────────────────────┘  │ │
 │  └────────────────────────────────────────────────────────────────┘ │
 │                                                                      │

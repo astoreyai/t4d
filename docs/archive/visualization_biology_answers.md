@@ -442,7 +442,7 @@ Consolidation Metrics:
 ---
 
 **Files Created**:
-- `/mnt/projects/ww/docs/visualization_biology_spec.md` - Full specification (10,000+ words)
-- `/mnt/projects/ww/docs/visualization_biology_answers.md` - This summary (concise answers)
+- `/mnt/projects/t4d/t4dm/docs/visualization_biology_spec.md` - Full specification (10,000+ words)
+- `/mnt/projects/t4d/t4dm/docs/visualization_biology_answers.md` - This summary (concise answers)
 
 **Next Action**: Implement `NCATelemeter` class (Section VII.1 in spec) to unify data collection across VTA, Raphe, Hippocampus, Oscillator modules.

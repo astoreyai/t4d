@@ -2,7 +2,7 @@
 
 ## Quick Navigation
 
-### Location: `/mnt/projects/ww/tests/`
+### Location: `/mnt/projects/t4d/t4dm/tests/`
 
 ## Test Categories
 

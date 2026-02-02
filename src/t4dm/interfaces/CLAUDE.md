@@ -1,5 +1,5 @@
 # Interfaces
-**Path**: `/mnt/projects/t4d/t4dm/src/ww/interfaces/`
+**Path**: `/mnt/projects/t4d/t4dm/src/t4dm/interfaces/`
 
 ## What
 Rich terminal UI components for memory exploration, system monitoring, CRUD operations, and neural dynamics inspection. Built on the `rich` library.

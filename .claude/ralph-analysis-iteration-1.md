@@ -99,7 +99,7 @@ From `COMPREHENSIVE_CODEBASE_ANALYSIS.md`:
 
 The `FFCapsuleBridge` class exists and is well-designed, but it's **never instantiated** in production code paths:
 
-- File: `src/ww/bridges/ff_capsule_bridge.py` (27,929 bytes)
+- File: `src/t4dm/bridges/ff_capsule_bridge.py` (27,929 bytes)
 - **Issue**: Bridge class exists but never wired into `EpisodicMemory.__init__()` or `store()`
 
 ### Gap 4: Stub/Mock Components in Production Code
@@ -215,17 +215,17 @@ World Weaver achieves **96/100 biological accuracy** - this is **exceptional** a
 ### Immediate Priorities (Next Session)
 
 1. **Wire learning to embedding updates**
-   - File: `src/ww/memory/episodic.py`
+   - File: `src/t4dm/memory/episodic.py`
    - Action: Apply three-factor rule output to stored embeddings
    - Impact: Makes learning functional vs. simulated
 
 2. **Persist reconsolidated embeddings**
-   - File: `src/ww/consolidation/sleep.py:1763`
+   - File: `src/t4dm/consolidation/sleep.py:1763`
    - Action: Write updated embeddings back to Qdrant
    - Impact: Sleep consolidation has actual effect
 
 3. **Instantiate FFCapsuleBridge**
-   - File: `src/ww/memory/episodic.py`
+   - File: `src/t4dm/memory/episodic.py`
    - Action: Wire bridge into `__init__()` and `store()`
    - Impact: End-to-end representation learning
 

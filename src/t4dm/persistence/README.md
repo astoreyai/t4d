@@ -1,6 +1,6 @@
 # Persistence Module
 
-**Path**: `ww/persistence/` | **Files**: 6 | **Lines**: ~4,500
+**Path**: `t4dm/persistence/` | **Files**: 6 | **Lines**: ~4,500
 
 Crash-safe durability with Write-Ahead Logging, checkpointing, recovery, and graceful shutdown.
 
@@ -15,7 +15,7 @@ from ww.persistence import (
 )
 
 # Create manager
-config = PersistenceConfig(data_directory=Path("/var/lib/ww/data"))
+config = PersistenceConfig(data_directory=Path("/var/lib/t4dm/data"))
 persistence = PersistenceManager(config)
 
 # Register components for checkpointing
@@ -150,7 +150,7 @@ class WALOperation(IntEnum):
 from ww.persistence import WriteAheadLog, WALConfig
 
 wal = WriteAheadLog(WALConfig(
-    directory=Path("/var/lib/ww/wal"),
+    directory=Path("/var/lib/t4dm/wal"),
     segment_max_size=64*1024*1024,  # 64MB
     sync_mode="fsync",
 ))
@@ -211,7 +211,7 @@ class CheckpointableComponent(Protocol):
 
 ```python
 config = CheckpointConfig(
-    directory=Path("/var/lib/ww/checkpoints"),
+    directory=Path("/var/lib/t4dm/checkpoints"),
     interval_seconds=300.0,      # Every 5 minutes
     operation_threshold=1000,    # Or every 1000 ops
     max_checkpoints=5,           # Keep last 5
@@ -350,7 +350,7 @@ Unified interface combining all components:
 from ww.persistence import PersistenceManager, PersistenceConfig
 
 config = PersistenceConfig(
-    data_directory=Path("/var/lib/ww/data"),
+    data_directory=Path("/var/lib/t4dm/data"),
 
     # WAL
     wal_sync_mode="fsync",
@@ -408,7 +408,7 @@ config = PersistenceConfig(
 
 ```python
 config = PersistenceConfig(
-    data_directory=Path("/var/lib/ww/data"),
+    data_directory=Path("/var/lib/t4dm/data"),
     wal_sync_mode="fsync",
     wal_segment_max_size=256*1024*1024,
     checkpoint_interval_seconds=3600,

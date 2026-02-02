@@ -188,7 +188,7 @@ BGE-M3 (CPU):  450ms per query
 
 **Issue**: Advanced learned components exist but are NOT used
 
-**Evidence** (from `/mnt/projects/ww/docs/SESSION_STATE.md`):
+**Evidence** (from `/mnt/projects/t4d/t4dm/docs/SESSION_STATE.md`):
 ```
 LearnedFusionWeights - Implemented, NOT used in recall()
 LearnedRetrievalScorer - Implemented, NOT used for re-ranking
@@ -532,7 +532,7 @@ logger.info("Created episode", extra={"episode_id": episode.id})  # JSON
 | **Semantic Recall (10)** | 102ms | 178ms | 267ms | ACT-R activation expensive |
 | **Consolidation (100 ep)** | 1.8s | 2.3s | 3.1s | HDBSCAN clustering |
 
-**Source**: `/mnt/projects/ww/tests/performance/` benchmark suite (100 tests)
+**Source**: `/mnt/projects/t4d/t4dm/tests/performance/` benchmark suite (100 tests)
 
 **Bottlenecks**:
 1. **Embedding generation**: 45ms (67% of episode creation time)

@@ -2,8 +2,8 @@
 
 **Reviewer Perspective**: Geoffrey Hinton, "Godfather of AI"
 **Papers Reviewed**:
-- `/mnt/projects/ww/docs/world_weaver_ieee.tex` (IEEE Transactions submission)
-- `/mnt/projects/ww/docs/world_weaver_journal_article.tex` (Journal article)
+- `/mnt/projects/t4d/t4dm/docs/world_weaver_ieee.tex` (IEEE Transactions submission)
+- `/mnt/projects/t4d/t4dm/docs/world_weaver_journal_article.tex` (Journal article)
 
 **Date**: December 4, 2024
 

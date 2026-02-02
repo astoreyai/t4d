@@ -172,30 +172,30 @@ See [Production Plan](/home/aaron/.claude/plans/streamed-toasting-coral.md) for 
 ### Core Modules (Working)
 
 ```
-src/ww/nca/hippocampus.py      # DG/CA3/CA1 circuit
-src/ww/nca/vta.py              # Dopamine/VTA circuit
-src/ww/nca/forward_forward.py  # FF algorithm
-src/ww/nca/capsules.py         # Capsule networks
-src/ww/nca/glymphatic.py       # Waste clearance
-src/ww/nca/swr_coupling.py     # Sharp-wave ripples
-src/ww/learning/dopamine.py    # RPE computation
-src/ww/learning/eligibility.py # Trace management
-src/ww/learning/three_factor.py # Learning rule
-src/ww/consolidation/sleep.py  # Sleep cycles
+src/t4dm/nca/hippocampus.py      # DG/CA3/CA1 circuit
+src/t4dm/nca/vta.py              # Dopamine/VTA circuit
+src/t4dm/nca/forward_forward.py  # FF algorithm
+src/t4dm/nca/capsules.py         # Capsule networks
+src/t4dm/nca/glymphatic.py       # Waste clearance
+src/t4dm/nca/swr_coupling.py     # Sharp-wave ripples
+src/t4dm/learning/dopamine.py    # RPE computation
+src/t4dm/learning/eligibility.py # Trace management
+src/t4dm/learning/three_factor.py # Learning rule
+src/t4dm/consolidation/sleep.py  # Sleep cycles
 ```
 
 ### API Modules (Working)
 
 ```
-src/ww/api/server.py           # FastAPI app
-src/ww/api/routes/             # 112 endpoints
-src/ww/api/websocket.py        # Real-time updates
+src/t4dm/api/server.py           # FastAPI app
+src/t4dm/api/routes/             # 112 endpoints
+src/t4dm/api/websocket.py        # Real-time updates
 ```
 
 ### Needs Work
 
 ```
-src/ww/memory/episodic.py      # Needs storage backend
-src/ww/memory/semantic.py      # Needs storage backend
-src/ww/sdk/client.py           # Needs cleanup
+src/t4dm/memory/episodic.py      # Needs storage backend
+src/t4dm/memory/semantic.py      # Needs storage backend
+src/t4dm/sdk/client.py           # Needs cleanup
 ```

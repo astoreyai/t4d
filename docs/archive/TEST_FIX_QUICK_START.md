@@ -64,7 +64,7 @@ def auto_patch_storage(request, mock_neo4j_store, mock_qdrant_store, mock_embedd
 
 ## STEP 3: Fix Test Helper Functions (15 MINUTES)
 
-### File: `/mnt/projects/ww/tests/unit/test_consolidation.py`
+### File: `/mnt/projects/t4d/t4dm/tests/unit/test_consolidation.py`
 
 **Current** (lines 71-89):
 ```python
@@ -131,7 +131,7 @@ python -m pytest tests/ -v --tb=line 2>&1 | tail -5
 
 ### Files Affected
 
-#### A. `/mnt/projects/ww/tests/mcp/test_batch_operations.py`
+#### A. `/mnt/projects/t4d/t4dm/tests/mcp/test_batch_operations.py`
 
 **Search for**: `assert 'created' in result`
 **Replace with**: `assert 'count' in result`
@@ -157,11 +157,11 @@ grep -n "'created'" tests/mcp/test_batch_operations.py
 # Replace each with 'count'
 ```
 
-#### B. `/mnt/projects/ww/tests/mcp/test_cross_memory_search.py`
+#### B. `/mnt/projects/t4d/t4dm/tests/mcp/test_cross_memory_search.py`
 
 Same pattern - fix response field keys to match actual API.
 
-#### C. `/mnt/projects/ww/tests/unit/test_mcp_gateway.py`
+#### C. `/mnt/projects/t4d/t4dm/tests/unit/test_mcp_gateway.py`
 
 Fix response format assertions in gateway tests.
 
@@ -217,7 +217,7 @@ If you want to reach 99%+ pass rate:
 
 ### Issue: FSRS Decay Rate
 
-**File**: `src/ww/memory/episodic.py`
+**File**: `src/t4dm/memory/episodic.py`
 
 **Test failing**: `test_fsrs_retrievability_decay_over_time`
 
@@ -229,7 +229,7 @@ If you want to reach 99%+ pass rate:
 
 ### Issue: Hebbian Convergence
 
-**File**: `src/ww/memory/episodic.py`
+**File**: `src/t4dm/memory/episodic.py`
 
 **Test failing**: `test_repeated_strengthening_converges_to_one`
 
@@ -241,7 +241,7 @@ If you want to reach 99%+ pass rate:
 
 ### Fix Security Validation (1 HOUR)
 
-**File**: `src/ww/mcp/validation.py`
+**File**: `src/t4dm/mcp/validation.py`
 
 Add XSS and null byte protection:
 ```python

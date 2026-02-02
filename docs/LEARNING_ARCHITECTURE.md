@@ -13,13 +13,13 @@ The following components are now **implemented and wired**:
 
 | Component | File | Status |
 |-----------|------|--------|
-| Three-Factor Learning Rule | `src/ww/learning/three_factor.py` | ✅ Wired |
-| Eligibility Traces | `src/ww/learning/eligibility.py` | ✅ Marked on recall |
-| Reconsolidation Engine | `src/ww/learning/reconsolidation.py` | ✅ Uses three-factor |
-| Episode Feedback API | `src/ww/api/routes/episodes.py` | ✅ `/feedback` endpoint |
-| Entity Feedback API | `src/ww/api/routes/entities.py` | ✅ `/feedback` endpoint |
-| Learning Stats API | `src/ww/api/routes/episodes.py` | ✅ `/learning-stats` |
-| Hebbian Semantic Updates | `src/ww/memory/semantic.py` | ✅ `learn_from_outcome()` |
+| Three-Factor Learning Rule | `src/t4dm/learning/three_factor.py` | ✅ Wired |
+| Eligibility Traces | `src/t4dm/learning/eligibility.py` | ✅ Marked on recall |
+| Reconsolidation Engine | `src/t4dm/learning/reconsolidation.py` | ✅ Uses three-factor |
+| Episode Feedback API | `src/t4dm/api/routes/episodes.py` | ✅ `/feedback` endpoint |
+| Entity Feedback API | `src/t4dm/api/routes/entities.py` | ✅ `/feedback` endpoint |
+| Learning Stats API | `src/t4dm/api/routes/episodes.py` | ✅ `/learning-stats` |
+| Hebbian Semantic Updates | `src/t4dm/memory/semantic.py` | ✅ `learn_from_outcome()` |
 
 ### Learning Signal Flow (Implemented)
 
@@ -1901,7 +1901,7 @@ class LearningConfig:
 
     # Checkpointing
     checkpoint_interval: int = 1000  # Steps
-    checkpoint_path: Path = Path("~/.ww/checkpoints")
+    checkpoint_path: Path = Path("~/.t4dm/checkpoints")
 
     # Training schedule
     offline_training_interval: int = 3600  # Seconds
@@ -1919,7 +1919,7 @@ class LearningConfig:
 ### 6.3 Integration Hook
 
 ```python
-# Add to ww/hooks/learning.py
+# Add to t4dm/hooks/learning.py
 
 class LearningHook(Hook):
     """

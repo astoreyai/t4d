@@ -53,62 +53,62 @@
 1. **Adenosine Sleep-Wake System** (95/100)
    - Perfect Borbély two-process model
    - Correct caffeine pharmacokinetics
-   - File: `src/ww/nca/adenosine.py`
+   - File: `src/t4dm/nca/adenosine.py`
 
 2. **Astrocyte Tripartite Synapse** (92/100)
    - Michaelis-Menten transporters
    - Calcium dynamics with gliotransmission
-   - File: `src/ww/nca/astrocyte.py`
+   - File: `src/t4dm/nca/astrocyte.py`
 
 3. **Hippocampal Circuit** (87/100) ⭐ NEW
    - DG pattern separation (sparse coding)
    - CA3 autoassociative pattern completion
    - CA1 novelty detection (mismatch signals)
-   - File: `src/ww/nca/hippocampus.py`
+   - File: `src/t4dm/nca/hippocampus.py`
 
 4. **VTA Dopamine Circuit** (90/100) ⭐ NEW
    - TD-error based RPE computation
    - Tonic/phasic firing modes
    - NAc/PFC projection integration
-   - File: `src/ww/nca/vta.py`
+   - File: `src/t4dm/nca/vta.py`
 
 5. **Striatal D1/D2 MSN Populations** (90/100) ⭐ NEW
    - Opponent GO/NO-GO pathways
    - DA-modulated plasticity
    - Habit formation tracking
-   - File: `src/ww/nca/striatal_msn.py`
+   - File: `src/t4dm/nca/striatal_msn.py`
 
 6. **Raphe Nucleus Serotonin** (88/100) ⭐ NEW
    - 5-HT1A autoreceptor negative feedback
    - Homeostatic setpoint regulation
    - Desensitization dynamics (SSRI mechanism)
-   - File: `src/ww/nca/raphe.py`
+   - File: `src/t4dm/nca/raphe.py`
 
 7. **SWR-Neural Field Coupling** (90/100) ⭐ NEW
    - ACh/NE gating of ripples
    - Phase progression (QUIESCENT→RIPPLING→TERMINATING)
    - 10x replay compression
-   - File: `src/ww/nca/swr_coupling.py`
+   - File: `src/t4dm/nca/swr_coupling.py`
 
 8. **Locus Coeruleus Phasic/Tonic** (90/100) ⭐ NEW (Sprint 4)
    - Explicit tonic (0.5-5 Hz) and phasic (10-20 Hz) modes
    - Yerkes-Dodson inverted-U performance curve
    - Alpha-2 autoreceptor negative feedback
    - NE-mediated exploration/exploitation bias
-   - File: `src/ww/nca/locus_coeruleus.py`
+   - File: `src/t4dm/nca/locus_coeruleus.py`
 
 9. **Alpha Oscillations** (88/100) ⭐ NEW (Sprint 4)
    - 8-13 Hz thalamo-cortical rhythm
    - NE-suppressed (arousal reduces alpha)
    - Attention-gated inhibition
-   - File: `src/ww/nca/oscillators.py`
+   - File: `src/t4dm/nca/oscillators.py`
 
 10. **Synaptic/Extrasynaptic Glutamate** (90/100) ⭐ NEW (Sprint 4)
     - Separate synaptic (NR2A) vs extrasynaptic (NR2B) pools
     - LTP from synaptic NMDA, LTD from extrasynaptic
     - CREB/BDNF signaling, excitotoxicity detection
     - Hardingham & Bading (2010) model
-    - File: `src/ww/nca/glutamate_signaling.py`
+    - File: `src/t4dm/nca/glutamate_signaling.py`
 
 ---
 
@@ -258,16 +258,16 @@ class StriatalMSN:
 **Achievement**: Elevated from 72/100 to 92/100 biological plausibility (+20 points)
 
 **New Files Created**:
-- `src/ww/nca/hippocampus.py` (DG/CA3/CA1)
-- `src/ww/nca/vta.py` (VTA dopamine circuit)
-- `src/ww/nca/dopamine_integration.py` (VTA-striatum-PFC integration)
-- `src/ww/nca/raphe.py` (Raphe nucleus with autoreceptors)
-- `src/ww/nca/swr_coupling.py` (SWR-neural field coupling)
-- `src/ww/nca/striatal_msn.py` (D1/D2 MSN populations)
-- `src/ww/nca/locus_coeruleus.py` (LC phasic/tonic modes) ⭐ Sprint 4
-- `src/ww/nca/oscillators.py` (Alpha oscillations added) ⭐ Sprint 4
-- `src/ww/nca/glutamate_signaling.py` (Synaptic/extrasynaptic pools) ⭐ Sprint 4
-- `src/ww/nca/PARAMETERS.md` (Parameter reference documentation) ⭐ Sprint 4
+- `src/t4dm/nca/hippocampus.py` (DG/CA3/CA1)
+- `src/t4dm/nca/vta.py` (VTA dopamine circuit)
+- `src/t4dm/nca/dopamine_integration.py` (VTA-striatum-PFC integration)
+- `src/t4dm/nca/raphe.py` (Raphe nucleus with autoreceptors)
+- `src/t4dm/nca/swr_coupling.py` (SWR-neural field coupling)
+- `src/t4dm/nca/striatal_msn.py` (D1/D2 MSN populations)
+- `src/t4dm/nca/locus_coeruleus.py` (LC phasic/tonic modes) ⭐ Sprint 4
+- `src/t4dm/nca/oscillators.py` (Alpha oscillations added) ⭐ Sprint 4
+- `src/t4dm/nca/glutamate_signaling.py` (Synaptic/extrasynaptic pools) ⭐ Sprint 4
+- `src/t4dm/nca/PARAMETERS.md` (Parameter reference documentation) ⭐ Sprint 4
 
 ---
 

@@ -290,12 +290,12 @@ All notable changes to World Weaver are documented here.
   - `ww store` - Store content from command line
   - `ww recall` - Search memories
   - `ww status` - Show system status
-  - `ww serve` - Start REST API server
+  - `t4dm serve` - Start REST API server
   - `ww config` - Manage configuration
   - Subcommands: `ww episodic`, `ww semantic`, `ww procedural`
 
 - **YAML Configuration**: New config file support
-  - Searches `ww.yaml`, `~/.ww/config.yaml`, `/etc/ww/config.yaml`
+  - Searches `t4dm.yaml`, `~/.t4dm/config.yaml`, `/etc/t4dm/config.yaml`
   - Environment variable overrides (WW_* prefix)
   - `load_settings_from_yaml()` function
   - `reset_settings()` for cache clearing

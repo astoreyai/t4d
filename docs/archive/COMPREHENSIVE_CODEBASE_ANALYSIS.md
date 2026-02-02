@@ -119,7 +119,7 @@ World Weaver has completed **Phase 1 biological integration**, connecting Sleep�
 
 **✓ Issue 1 RESOLVED: STDP DA Modulation**
 - Status: COMPLETE
-- Implementation: `STDPVTABridge` class in `/mnt/projects/ww/src/ww/integration/stdp_vta_bridge.py`
+- Implementation: `STDPVTABridge` class in `/mnt/projects/t4d/t4dm/src/t4dm/integration/stdp_vta_bridge.py`
 - Impact: High DA → Enhanced LTP, reduced LTD
 
 **✓ Issue 2 RESOLVED: Sleep Replay → Reconsolidation**
@@ -239,25 +239,25 @@ World Weaver has completed **Phase 1 biological integration**, connecting Sleep�
 
 ### High Priority (Phase 11.1)
 ```
-src/ww/consolidation/sleep.py:1450-1500  # Add reconsolidation call
-src/ww/consolidation/sleep.py:556-600   # Fix VAE training trigger
-src/ww/nca/vta.py:372-402               # Connect to sleep replay
-src/ww/learning/stdp.py                 # Add DA modulation
+src/t4dm/consolidation/sleep.py:1450-1500  # Add reconsolidation call
+src/t4dm/consolidation/sleep.py:556-600   # Fix VAE training trigger
+src/t4dm/nca/vta.py:372-402               # Connect to sleep replay
+src/t4dm/learning/stdp.py                 # Add DA modulation
 ```
 
 ### Medium Priority (Phase 11.2)
 ```
-src/ww/memory/episodic.py               # Wire FFCapsuleBridge
-src/ww/bridges/ff_capsule_bridge.py     # Ensure instantiation
-src/ww/core/bridge_container.py         # Activate lazy init
-src/ww/learning/credit_flow.py          # Add NT modulation
+src/t4dm/memory/episodic.py               # Wire FFCapsuleBridge
+src/t4dm/bridges/ff_capsule_bridge.py     # Ensure instantiation
+src/t4dm/core/bridge_container.py         # Activate lazy init
+src/t4dm/learning/credit_flow.py          # Add NT modulation
 ```
 
 ### New Files Required
 ```
-src/ww/integration/biology_bridge.py    # Central integration point
-src/ww/integration/stdp_vta_bridge.py   # STDP ↔ VTA coupling
-src/ww/nca/rbm.py                       # Boltzmann machines
+src/t4dm/integration/biology_bridge.py    # Central integration point
+src/t4dm/integration/stdp_vta_bridge.py   # STDP ↔ VTA coupling
+src/t4dm/nca/rbm.py                       # Boltzmann machines
 tests/integration/test_biology.py       # Integration tests
 ```
 

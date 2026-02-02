@@ -209,32 +209,32 @@ Legend:  ─► = Data Flow    ◄─ = Modulation
 
 ### Sprint 7.1 (Bridges)
 ```
-MODIFY: src/ww/memory/episodic.py      → Add FF bridge call in encode()
-MODIFY: src/ww/memory/semantic.py      → Add Capsule bridge call in recall()
-MODIFY: src/ww/consolidation/service.py → Add Dopamine bridge
-MODIFY: src/ww/memory/unified.py       → Add NCA bridge
-CREATE: src/ww/core/bridge_container.py → Factory for all bridges
+MODIFY: src/t4dm/memory/episodic.py      → Add FF bridge call in encode()
+MODIFY: src/t4dm/memory/semantic.py      → Add Capsule bridge call in recall()
+MODIFY: src/t4dm/consolidation/service.py → Add Dopamine bridge
+MODIFY: src/t4dm/memory/unified.py       → Add NCA bridge
+CREATE: src/t4dm/core/bridge_container.py → Factory for all bridges
 ```
 
 ### Sprint 7.2 (Temporal)
 ```
-MODIFY: src/ww/memory/episodic.py      → Add session tracking
-MODIFY: src/ww/memory/unified.py       → Add session tracking
-MODIFY: src/ww/learning/three_factor.py → Add plasticity coordinator
-MODIFY: src/ww/consolidation/sleep.py  → Add temporal dynamics
+MODIFY: src/t4dm/memory/episodic.py      → Add session tracking
+MODIFY: src/t4dm/memory/unified.py       → Add session tracking
+MODIFY: src/t4dm/learning/three_factor.py → Add plasticity coordinator
+MODIFY: src/t4dm/consolidation/sleep.py  → Add temporal dynamics
 ```
 
 ### Sprint 7.3 (Dreaming)
 ```
-MODIFY: src/ww/consolidation/sleep.py  → Add dream consolidation call
-MODIFY: src/ww/consolidation/sleep.py  → Add dream quality evaluation
+MODIFY: src/t4dm/consolidation/sleep.py  → Add dream consolidation call
+MODIFY: src/t4dm/consolidation/sleep.py  → Add dream quality evaluation
 ```
 
 ### Sprint 7.4 (Energy)
 ```
-MODIFY: src/ww/learning/three_factor.py → Add coupling update call
-MODIFY: src/ww/nca/vta.py             → Route RPE to coupling
-MODIFY: src/ww/nca/coupling.py        → Accept learning signals
+MODIFY: src/t4dm/learning/three_factor.py → Add coupling update call
+MODIFY: src/t4dm/nca/vta.py             → Route RPE to coupling
+MODIFY: src/t4dm/nca/coupling.py        → Accept learning signals
 ```
 
 ---

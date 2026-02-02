@@ -47,63 +47,63 @@ This audit covers the entire T4DM (formerly World Weaver) codebase across six su
 
 ### C1. Pickle Deserialization in Checkpoint Recovery (RCE)
 
-- **File**: `/mnt/projects/t4d/t4dm/src/ww/persistence/checkpoint.py:180`
+- **File**: `/mnt/projects/t4d/t4dm/src/t4dm/persistence/checkpoint.py:180`
 - **Description**: Checkpoints use `pickle.loads()` for deserialization. While SHA-256 checksum verification exists (line 172), the checksum is stored alongside the data with no HMAC or signing key. The `verify` parameter can be set to `False` (line 142), bypassing even the checksum.
 - **Attack scenario**: An attacker with filesystem write access crafts a malicious pickle payload, computes its SHA-256, and embeds both in a valid checkpoint file. On recovery, arbitrary code execution occurs.
 - **Recommended fix**: Replace `pickle.loads()` with a safe format (JSON, msgpack) or add HMAC-based signing with a secret key separate from the checkpoint file.
 
 ### C2. No Provenance or Authentication on Any Hippocampal Operation
 
-- **File**: `/mnt/projects/t4d/t4dm/src/ww/nca/hippocampus.py` (entire file)
+- **File**: `/mnt/projects/t4d/t4dm/src/t4dm/nca/hippocampus.py` (entire file)
 - **Description**: The hippocampal circuit operates as a plain Python object with all methods publicly accessible. No concept of trusted vs untrusted input. Memory formation, neuromodulator levels, oscillator replacement, and pattern storage are all equally accessible.
 - **Attack scenario**: Any authenticated API user can manipulate the memory system arbitrarily -- inject false memories, force encoding/retrieval modes, or replace oscillators.
 - **Recommended fix**: Add an access control layer distinguishing internal (trusted) from external (untrusted) callers. Mark sensitive methods as private and expose only validated interfaces.
 
 ### C3. ACh/NE Levels Externally Settable Without Authentication
 
-- **File**: `/mnt/projects/t4d/t4dm/src/ww/nca/hippocampus.py:1096-1125`
+- **File**: `/mnt/projects/t4d/t4dm/src/t4dm/nca/hippocampus.py:1096-1125`
 - **Description**: `receive_ach()` and `receive_ne()` are public methods that directly set internal neuromodulator levels. Any code with a reference to the `HippocampalCircuit` object can force encoding or retrieval mode at will.
 - **Attack scenario**: (1) Set ACh high to force encoding mode, (2) inject a crafted pattern via `ca3.store()`, (3) set ACh low to force retrieval mode, (4) retrieve the injected pattern as a genuine memory.
 - **Recommended fix**: Neuromodulator levels should only be settable by registered, validated neuromodulator sources. Add caller authentication or restrict to internal-only interfaces.
 
 ### C4. PFC Modulation Permanently Mutates VTA Config
 
-- **File**: `/mnt/projects/t4d/t4dm/src/ww/nca/vta.py:672`
+- **File**: `/mnt/projects/t4d/t4dm/src/t4dm/nca/vta.py:672`
 - **Description**: `receive_pfc_modulation` with `context="goal"` mutates `self.config.tonic_da_level`. Repeated calls ratchet tonic_da_level upward toward 0.5, and `reset()` restores state but uses the corrupted config value.
 - **Attack scenario**: An adversary calling `receive_pfc_modulation(1.0, "goal")` repeatedly permanently elevates baseline DA. After `reset()`, the corruption persists because config was mutated, not state.
 - **Recommended fix**: Store tonic modulation in `VTAState`, not `VTAConfig`. Config should be immutable after construction.
 
 ### C5. False Reward Injection via `process_memory_outcome`
 
-- **File**: `/mnt/projects/t4d/t4dm/src/ww/nca/dopamine_integration.py:266`
+- **File**: `/mnt/projects/t4d/t4dm/src/t4dm/nca/dopamine_integration.py:266`
 - **Description**: `process_memory_outcome` accepts `actual_outcome` directly with no validation that the outcome is genuine. An adversary can call this with `actual_outcome=1.0` on any memory_id.
 - **Attack scenario**: Generates large positive RPEs, permanently biasing the DA system upward and corrupting value estimates for all memories.
 - **Recommended fix**: Require authenticated reward signals. At minimum, clamp and rate-limit outcome values. Add provenance tracking for reward sources.
 
 ### C6. Public `trigger_replay()` Allows Arbitrary Pattern Injection During SWR
 
-- **File**: `/mnt/projects/t4d/t4dm/src/ww/nca/swr_coupling.py:540`
+- **File**: `/mnt/projects/t4d/t4dm/src/t4dm/nca/swr_coupling.py:540`
 - **Description**: `trigger_replay(pattern, memory_id, memory_type)` is a public method with no authentication, caller validation, or integrity checking. The pattern is directly injected into `hippocampus.ca3.pattern_completion` (line 585-586).
 - **Attack scenario**: Any component with a reference to `SWRNeuralFieldCoupling` can inject arbitrary neural patterns treated as legitimate hippocampal replay, creating false memory associations.
 - **Recommended fix**: Validate that replay patterns originate from the memory store. Add caller authentication and pattern integrity checks.
 
 ### C7. `force_swr()` Bypasses All Biological Gating
 
-- **File**: `/mnt/projects/t4d/t4dm/src/ww/nca/swr_coupling.py:624-629`
+- **File**: `/mnt/projects/t4d/t4dm/src/t4dm/nca/swr_coupling.py:624-629`
 - **Description**: `force_swr()` bypasses all biological gating conditions (ACh threshold, NE threshold, hippocampal activity, refractory period, wake/sleep state gating). Only checks if currently quiescent.
 - **Attack scenario**: Combined with C6, an attacker can force SWR events at will and inject false memories at any time, regardless of sleep state.
 - **Recommended fix**: Remove `force_swr()` or restrict to debug/test builds. In production, all SWR events must pass biological gating.
 
 ### C8. No Integrity Checking on Memories Before/After Consolidation
 
-- **File**: `/mnt/projects/t4d/t4dm/src/ww/consolidation/sleep.py`, `service.py`, `fes_consolidator.py` (multiple methods)
+- **File**: `/mnt/projects/t4d/t4dm/src/t4dm/consolidation/sleep.py`, `service.py`, `fes_consolidator.py` (multiple methods)
 - **Description**: No checksums, hashes, signatures, or integrity verification on memory content before or after consolidation. Memory corruption propagates silently through consolidation.
 - **Attack scenario**: A corrupted or tampered memory passes through consolidation and creates corrupted semantic entities with no audit trail for detection.
 - **Recommended fix**: Add content hashing before/after consolidation. Verify embeddings are within expected distance bounds of source materials.
 
 ### C9. STDP Timing Manipulation for Pathway Strengthening
 
-- **File**: `/mnt/projects/t4d/t4dm/src/ww/learning/stdp.py` (`record_spike()`), `consolidation/stdp_integration.py` (`apply_stdp_to_sequence()`)
+- **File**: `/mnt/projects/t4d/t4dm/src/t4dm/learning/stdp.py` (`record_spike()`), `consolidation/stdp_integration.py` (`apply_stdp_to_sequence()`)
 - **Description**: `record_spike()` accepts arbitrary timestamps. An attacker who controls timing of spike events can ensure pre-before-post ordering for target pathways (forcing LTP) or post-before-pre for pathways to weaken (forcing LTD). The consolidation replay queue accepts unvalidated episode ID lists.
 - **Attack scenario**: Attacker fabricates spike events with controlled timing to selectively strengthen or weaken specific memory pathways.
 - **Recommended fix**: Validate that timestamps are plausible (not in future, not too far in past). Reject physiologically implausible inter-spike intervals. Add provenance to spike events.
@@ -114,68 +114,68 @@ This audit covers the entire T4DM (formerly World Weaver) codebase across six su
 
 ### H1. No Input Dimension Validation in DG
 
-- **File**: `src/ww/nca/hippocampus.py:196`
+- **File**: `src/t4dm/nca/hippocampus.py:196`
 - **Description**: `ec_input` is cast to float32 but shape is never checked against `config.ec_dim`. Mismatched input silently produces wrong-dimensional output or crashes.
 - **Attack scenario**: Oversized vector causes memory exhaustion during expansion step (1024x4096 matmul on unexpected input).
 - **Fix**: Validate input dimensions at every layer boundary.
 
 ### H2. Direct CA3 Pattern Injection (False Memory)
 
-- **File**: `src/ww/nca/hippocampus.py:341-374`
+- **File**: `src/t4dm/nca/hippocampus.py:341-374`
 - **Description**: `CA3Layer.store()` accepts any numpy array with no check that it came from DG processing. Direct false memory injection vector.
 - **Fix**: Mark patterns with provenance indicating DG processing origin.
 
 ### H3. No Runtime Invariant Checks in Hippocampus
 
-- **File**: `src/ww/nca/hippocampus.py` (throughout)
+- **File**: `src/t4dm/nca/hippocampus.py` (throughout)
 - **Description**: Expected invariants never verified: DG sparsity, CA3 normalization, CA1 novelty bounds, dimension matching, NaN/Inf absence.
 - **Fix**: Add assertion layer at each component boundary.
 
 ### H4. No Audit Trail for Memory Formation
 
-- **File**: `src/ww/nca/hippocampus.py`
+- **File**: `src/t4dm/nca/hippocampus.py`
 - **Description**: CA3 patterns have UUIDs but no provenance -- no record of whether formed through DG processing or injected directly.
 - **Fix**: Add provenance metadata distinguishing legitimate from direct-access patterns.
 
 ### H5. Silent Zero-Vector Degenerate State Propagation
 
-- **File**: `src/ww/nca/hippocampus.py` (throughout)
+- **File**: `src/t4dm/nca/hippocampus.py` (throughout)
 - **Description**: Zero-vector input produces zero through DG, returns unchanged from empty CA3, yields novelty=1.0 in CA1. Repeated zero inputs fill CA3 with zero patterns, degrading all retrieval.
 - **Fix**: Detect and reject zero/near-zero vectors at input.
 
 ### H6. No Bounds on CA1 Novelty Score Output
 
-- **File**: `src/ww/nca/hippocampus.py:596`
+- **File**: `src/t4dm/nca/hippocampus.py:596`
 - **Description**: If both projected vectors are zero, dot product is 0.0, giving novelty=1.0. Attacker can force encoding mode via zero vectors.
 - **Fix**: Add explicit bounds checking and zero-input detection.
 
 ### H7. ACh-DA Gating Direction Inverted
 
-- **File**: `src/ww/nca/neuromod_crosstalk.py:150`
+- **File**: `src/t4dm/nca/neuromod_crosstalk.py:150`
 - **Description**: Code implements high ACh = high DA gate. Threlfell et al. (2012) shows ACh interneuron pause enables DA release -- low ACh should enable DA. Direction is backwards.
 - **Fix**: Invert the ACh-DA gating sigmoid.
 
 ### H8. DA Delay Buffer Uses Wall-Clock Time
 
-- **File**: `src/ww/nca/dopamine_integration.py:59,141`
+- **File**: `src/t4dm/nca/dopamine_integration.py:59,141`
 - **Description**: Default delay of 1000ms (should be 150-300ms). Uses `datetime.now()` instead of simulation time. Creates timing side-channel and correctness issues.
 - **Fix**: Use simulation time; reduce default delay to 200ms.
 
 ### H9. State Diagram DA Decay Tau Mismatch
 
-- **File**: `docs/diagrams/33_state_neuromod.mmd` vs `src/ww/nca/vta.py:70`
+- **File**: `docs/diagrams/33_state_neuromod.mmd` vs `src/t4dm/nca/vta.py:70`
 - **Description**: Diagram shows tau=2s (burst) and tau=5s (dip). Code uses tau=0.2s for both. 10-25x discrepancy.
 - **Fix**: Reconcile diagram with code values.
 
 ### H10. Direct `_value_table` Write Bypasses VTA Encapsulation
 
-- **File**: `src/ww/nca/dopamine_integration.py:520`
+- **File**: `src/t4dm/nca/dopamine_integration.py:520`
 - **Description**: `sync_value_estimates` directly accesses VTA's private `_value_table` dict, bypassing validation. Allows silent corruption of VTA's value function.
 - **Fix**: Add accessor method to VTA for value table writes.
 
 ### H11. ACh Encoding Gate Bypass via Salience Injection
 
-- **File**: `src/ww/nca/nucleus_basalis.py:169`
+- **File**: `src/t4dm/nca/nucleus_basalis.py:169`
 - **Description**: No authentication on `process_salience()`. Any caller can inject salience=1.0 to force high ACh, forcing encoding mode.
 - **Fix**: Validate salience source; rate-limit phasic bursts.
 
@@ -187,73 +187,73 @@ This audit covers the entire T4DM (formerly World Weaver) codebase across six su
 
 ### H13. Reconsolidation Lability Window Exploitable
 
-- **File**: `src/ww/consolidation/lability.py`, `consolidation/sleep.py:1751`
+- **File**: `src/t4dm/consolidation/lability.py`, `consolidation/sleep.py:1751`
 - **Description**: Never-retrieved memories can be reconsolidated during sleep (bypasses biological requirement that retrieval precedes lability). No rate limiting on `on_retrieval`. Lability state is in-memory only, lost on restart.
 - **Fix**: Require prior retrieval before allowing reconsolidation. Add rate limiting. Persist lability state.
 
 ### H14. Consolidation Trigger Externally Forceable
 
-- **File**: `src/ww/consolidation/service.py:555`
+- **File**: `src/t4dm/consolidation/service.py:555`
 - **Description**: `consolidate()` accepts `consolidation_type` with no authorization. `set_adenosine()` allows injecting a fake adenosine system that always returns `should_sleep()=True`.
 - **Fix**: Add authorization checks; validate adenosine source.
 
 ### H15. Sleep Cycle Phase Manipulation
 
-- **File**: `src/ww/nca/swr_coupling.py:631-639`
+- **File**: `src/t4dm/nca/swr_coupling.py:631-639`
 - **Description**: `set_wake_sleep_mode()`, `set_ach_level()`, `set_ne_level()` are public methods directly manipulating gating state.
 - **Fix**: Make setters internal-only; validate caller identity.
 
 ### H16. Semantic Drift During Abstraction Undetectable
 
-- **File**: `src/ww/consolidation/sleep.py:1928`
+- **File**: `src/t4dm/consolidation/sleep.py:1928`
 - **Description**: Cluster centroids become new concept embeddings. The centroid can be semantically meaningless ("average face" problem). Only guard is confidence threshold 0.7, which is insufficient.
 - **Fix**: Add semantic coherence validation (e.g., minimum similarity of centroid to all cluster members).
 
 ### H17. Post-Consolidation Integrity Verification Missing
 
-- **File**: `src/ww/consolidation/` (all files)
+- **File**: `src/t4dm/consolidation/` (all files)
 - **Description**: No mechanism to verify memories were not corrupted during consolidation. No checksums, embedding distance bounds, or content hashing.
 - **Fix**: Add pre/post consolidation integrity verification.
 
 ### H18. Request Size Limit Bypass
 
-- **File**: `src/ww/api/server.py:213-233`
+- **File**: `src/t4dm/api/server.py:213-233`
 - **Description**: `RequestSizeLimitMiddleware` only checks `content-length` header. Absent header (chunked transfer) bypasses check entirely.
 - **Fix**: Also enforce limits by counting bytes during streaming reads.
 
 ### H19. WAL Uses Non-Cryptographic CRC32
 
-- **File**: `src/ww/persistence/wal.py:137-179`
+- **File**: `src/t4dm/persistence/wal.py:137-179`
 - **Description**: CRC32 is trivially vulnerable to collision attacks. Attacker with filesystem access can modify WAL entries while maintaining valid CRC32.
 - **Fix**: Use HMAC-SHA256 with a secret key.
 
 ### H20. No Data-at-Rest Encryption
 
-- **File**: `src/ww/persistence/` (WAL, checkpoints, fallback cache)
+- **File**: `src/t4dm/persistence/` (WAL, checkpoints, fallback cache)
 - **Description**: Sensitive memory content stored in plaintext on disk.
 - **Fix**: Add AES-256 encryption for persistent data.
 
 ### H21. No Mandatory Audit Trail for Memory Mutations
 
-- **File**: `src/ww/hooks/memory.py:298-323`
+- **File**: `src/t4dm/hooks/memory.py:298-323`
 - **Description**: `AuditTrailHook` is optional, example-only, in-memory. Not enabled by default. PUT `/episodes/{id}` can modify content with no record.
 - **Fix**: Make audit trail mandatory and persistent.
 
 ### H22. Client-Controlled Timestamps
 
-- **File**: `src/ww/api/routes/episodes.py:36`
+- **File**: `src/t4dm/api/routes/episodes.py:36`
 - **Description**: Clients supply arbitrary timestamps. No server-side `created_at` field records true ingestion time.
 - **Fix**: Add immutable server-side `ingested_at` timestamp.
 
 ### H23. Eligibility Trace Poisoning
 
-- **File**: `src/ww/nca/coupling.py:194`
+- **File**: `src/t4dm/nca/coupling.py:194`
 - **Description**: `accumulate_eligibility()` accumulates outer product of NT activations. Attacker controlling NT state loads desired correlations, then triggers reward signal to cement them. Partial reset (0.5 decay) means traces persist.
 - **Fix**: Cap trace magnitude; add anomaly detection on trace statistics.
 
 ### H24. No Authentication on Learning Update Methods
 
-- **File**: `src/ww/nca/coupling.py`, `learning/stdp.py`
+- **File**: `src/t4dm/nca/coupling.py`, `learning/stdp.py`
 - **Description**: Any caller can trigger weight changes with arbitrary parameters. No access control, audit logging, or rate limiting.
 - **Fix**: Add access control layer for all weight-modifying methods.
 
@@ -261,55 +261,55 @@ This audit covers the entire T4DM (formerly World Weaver) codebase across six su
 
 ### H25. Dale's Law Validation Warns But Does Not Enforce
 
-- **File**: `src/ww/nca/connectome.py`
+- **File**: `src/t4dm/nca/connectome.py`
 - **Description**: `validate_dales_law()` logs warnings but allows mixed-sign weights violating Dale's law.
 - **Fix**: Optionally raise on violation; enforce sign consistency per region.
 
 ### H26. Unbounded Persistent Chains in Energy Landscape
 
-- **File**: `src/ww/nca/energy.py`
+- **File**: `src/t4dm/nca/energy.py`
 - **Description**: `_persistent_chains` grows without limit during contrastive divergence. Long training causes memory exhaustion.
 - **Fix**: Add max chain count or LRU eviction.
 
 ### H27. Neural Field PDE Solver Has No NaN/Inf Detection
 
-- **File**: `src/ww/nca/neural_field.py`
+- **File**: `src/t4dm/nca/neural_field.py`
 - **Description**: If diffusion/reaction terms produce NaN, it propagates silently through the entire field before clamping catches symptoms.
 - **Fix**: Add explicit `np.isfinite()` checks after each integration step.
 
 ### H28. No Input Sanitization on External Memory IDs
 
-- **File**: `src/ww/nca/glymphatic_consolidation_bridge.py`
+- **File**: `src/t4dm/nca/glymphatic_consolidation_bridge.py`
 - **Description**: `tag_for_clearance`, `protect_memory` accept arbitrary string memory IDs. `tag_weak_memories` and `tag_stale_memories` accept arbitrary dicts without schema validation.
 - **Fix**: Validate memory ID format; add schema validation for input dicts.
 
 ### H29. FF Input Poisoning
 
-- **File**: `src/ww/nca/forward_forward.py`
+- **File**: `src/t4dm/nca/forward_forward.py`
 - **Description**: `train_positive()` and `train_negative()` accept any numpy array. No provenance, checksum, or sanitization. Attacker can teach network to classify malicious patterns as real.
 - **Fix**: Add input validation, provenance tracking, and anomaly detection.
 
 ### H30. Capsule Routing Manipulation
 
-- **File**: `src/ww/nca/capsules.py`
+- **File**: `src/t4dm/nca/capsules.py`
 - **Description**: Crafted inputs dominate routing since routing coefficients are purely data-driven. No defense against adversarial routing convergence.
 - **Fix**: Add routing agreement anomaly detection; cap routing coefficient magnitudes.
 
 ### H31. Transform Matrix Poisoning via Pose Learning
 
-- **File**: `src/ww/nca/capsules.py:602-698`
+- **File**: `src/t4dm/nca/capsules.py:602-698`
 - **Description**: `learn_pose_from_routing()` updates `_transform_matrices` based on agreement. Repeated crafted inputs shift transforms. No rate limiting or trust verification.
 - **Fix**: Rate-limit pose updates; monitor transform matrix drift.
 
 ### H32. No Input Sanitization on Spike Recording
 
-- **File**: `src/ww/learning/stdp.py`
+- **File**: `src/t4dm/learning/stdp.py`
 - **Description**: `record_spike()` accepts any string entity_id. No validation that entity exists, caller is authorized, or timestamp is plausible. Fabricated spikes are indistinguishable from legitimate ones.
 - **Fix**: Validate entity existence and timestamp plausibility.
 
 ### H33. Eligibility Trace Accumulation Unbounded
 
-- **File**: `src/ww/nca/coupling.py`
+- **File**: `src/t4dm/nca/coupling.py`
 - **Description**: `accumulate_eligibility()` adds to trace without maximum cap. High-frequency calls build very large traces; combined with large RPE, amplifies weight updates far beyond normal.
 - **Fix**: Add maximum cap on trace magnitude.
 

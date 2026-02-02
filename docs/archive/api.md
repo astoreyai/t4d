@@ -733,8 +733,8 @@ X-RateLimit-Reset: 1701092415
 ## OpenAPI Schema
 
 A full OpenAPI 3.0 specification is available at:
-- **JSON**: `/mnt/projects/ww/openapi.json`
-- **YAML**: `/mnt/projects/ww/openapi.yaml`
+- **JSON**: `/mnt/projects/t4d/t4dm/openapi.json`
+- **YAML**: `/mnt/projects/t4d/t4dm/openapi.yaml`
 
 Generate latest schema:
 ```bash

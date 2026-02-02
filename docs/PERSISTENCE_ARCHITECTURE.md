@@ -7,7 +7,7 @@ The persistence layer ensures World Weaver survives crashes and restarts without
 ## Components
 
 ### 1. Write-Ahead Log (WAL)
-**Location**: `src/ww/persistence/wal.py`
+**Location**: `src/t4dm/persistence/wal.py`
 
 Logs all state-changing operations BEFORE they're applied:
 
@@ -29,7 +29,7 @@ buffer.add(memory)
 - LSN (Log Sequence Number) tracking
 
 ### 2. Checkpoint Manager
-**Location**: `src/ww/persistence/checkpoint.py`
+**Location**: `src/t4dm/persistence/checkpoint.py`
 
 Periodic snapshots of all in-memory state:
 
@@ -50,7 +50,7 @@ checkpoint = Checkpoint(
 - Automatic cleanup of old checkpoints
 
 ### 3. Recovery Manager
-**Location**: `src/ww/persistence/recovery.py`
+**Location**: `src/t4dm/persistence/recovery.py`
 
 Handles cold and warm starts:
 
@@ -66,7 +66,7 @@ WARM START (checkpoint exists):
 ```
 
 ### 4. Shutdown Manager
-**Location**: `src/ww/persistence/shutdown.py`
+**Location**: `src/t4dm/persistence/shutdown.py`
 
 Graceful shutdown with data preservation:
 
@@ -86,7 +86,7 @@ SIGTERM received
 - Thread-safe shutdown flag
 
 ### 5. Persistence Manager
-**Location**: `src/ww/persistence/manager.py`
+**Location**: `src/t4dm/persistence/manager.py`
 
 Unified interface that coordinates all components:
 
@@ -195,7 +195,7 @@ PersistenceConfig(
 ### Systemd
 ```ini
 [Service]
-ExecStart=/opt/ww/venv/bin/python -m ww.mcp.persistent_server
+ExecStart=/opt/t4dm/venv/bin/python -m ww.mcp.persistent_server
 TimeoutStopSec=60
 Restart=always
 ```

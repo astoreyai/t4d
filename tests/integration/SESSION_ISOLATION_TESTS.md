@@ -10,7 +10,7 @@ Comprehensive integration test suite for session isolation across World Weaver's
 
 ## Test File
 
-**Location**: `/mnt/projects/ww/tests/integration/test_session_isolation.py`
+**Location**: `/mnt/projects/t4d/t4dm/tests/integration/test_session_isolation.py`
 
 ## Test Structure
 
@@ -99,35 +99,35 @@ All tests use mocked storage backends:
 
 ### Run All Tests
 ```bash
-PYTHONPATH=/mnt/projects/ww/src python -m pytest tests/integration/test_session_isolation.py -v
+PYTHONPATH=/mnt/projects/t4d/t4dm/src python -m pytest tests/integration/test_session_isolation.py -v
 ```
 
 ### Run Specific Test Class
 ```bash
 # Episodic tests
-PYTHONPATH=/mnt/projects/ww/src python -m pytest tests/integration/test_session_isolation.py::TestEpisodicSessionIsolation -v
+PYTHONPATH=/mnt/projects/t4d/t4dm/src python -m pytest tests/integration/test_session_isolation.py::TestEpisodicSessionIsolation -v
 
 # Semantic tests
-PYTHONPATH=/mnt/projects/ww/src python -m pytest tests/integration/test_session_isolation.py::TestSemanticSessionIsolation -v
+PYTHONPATH=/mnt/projects/t4d/t4dm/src python -m pytest tests/integration/test_session_isolation.py::TestSemanticSessionIsolation -v
 
 # Procedural tests
-PYTHONPATH=/mnt/projects/ww/src python -m pytest tests/integration/test_session_isolation.py::TestProceduralSessionIsolation -v
+PYTHONPATH=/mnt/projects/t4d/t4dm/src python -m pytest tests/integration/test_session_isolation.py::TestProceduralSessionIsolation -v
 
 # Cross-session tests
-PYTHONPATH=/mnt/projects/ww/src python -m pytest tests/integration/test_session_isolation.py::TestCrossSessionIntegration -v
+PYTHONPATH=/mnt/projects/t4d/t4dm/src python -m pytest tests/integration/test_session_isolation.py::TestCrossSessionIntegration -v
 
 # Payload structure tests
-PYTHONPATH=/mnt/projects/ww/src python -m pytest tests/integration/test_session_isolation.py::TestPayloadStructure -v
+PYTHONPATH=/mnt/projects/t4d/t4dm/src python -m pytest tests/integration/test_session_isolation.py::TestPayloadStructure -v
 ```
 
 ### Run Single Test
 ```bash
-PYTHONPATH=/mnt/projects/ww/src python -m pytest tests/integration/test_session_isolation.py::TestEpisodicSessionIsolation::test_episodic_create_stores_session_id -v
+PYTHONPATH=/mnt/projects/t4d/t4dm/src python -m pytest tests/integration/test_session_isolation.py::TestEpisodicSessionIsolation::test_episodic_create_stores_session_id -v
 ```
 
 ### With Coverage Report
 ```bash
-PYTHONPATH=/mnt/projects/ww/src python -m pytest tests/integration/test_session_isolation.py --cov=src/ww --cov-report=term-missing
+PYTHONPATH=/mnt/projects/t4d/t4dm/src python -m pytest tests/integration/test_session_isolation.py --cov=src/ww --cov-report=term-missing
 ```
 
 ## Test Results

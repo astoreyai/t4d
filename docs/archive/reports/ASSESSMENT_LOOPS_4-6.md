@@ -21,7 +21,7 @@ The implementation demonstrates strong neurocomputational alignment, clean archi
 
 ## Loop 4: State-Dependent Embeddings
 
-### `/mnt/projects/ww/src/ww/embedding/modulated.py` (352 lines, 4 classes)
+### `/mnt/projects/t4d/t4dm/src/t4dm/embedding/modulated.py` (352 lines, 4 classes)
 
 **Strengths:**
 - **Biologically Grounded Design**: Maps neuromodulators (ACh, DA, NE, 5-HT) to computational operations with clear biological inspiration
@@ -51,7 +51,7 @@ ModulatedEmbeddingAdapter → Composition over inheritance
 
 ---
 
-### `/mnt/projects/ww/src/ww/embedding/ensemble.py` (444 lines, 3 classes)
+### `/mnt/projects/t4d/t4dm/src/t4dm/embedding/ensemble.py` (444 lines, 3 classes)
 
 **Strengths:**
 - **Fault Tolerance**: Health-aware weighted voting across multiple embedding providers
@@ -82,7 +82,7 @@ _update_health_weights → Online adaptation
 
 ## Loop 5: Temporal Dynamics
 
-### `/mnt/projects/ww/src/ww/temporal/dynamics.py` (527 lines, 4 classes)
+### `/mnt/projects/t4d/t4dm/src/t4dm/temporal/dynamics.py` (527 lines, 4 classes)
 
 **Strengths:**
 - **Unified Coordination**: Single source of truth for temporal state across all subsystems
@@ -119,7 +119,7 @@ update → Phase transitions and decay
 
 ---
 
-### `/mnt/projects/ww/src/ww/temporal/session.py` (309 lines, 2 classes)
+### `/mnt/projects/t4d/t4dm/src/t4dm/temporal/session.py` (309 lines, 2 classes)
 
 **Strengths:**
 - **Clean API**: Context manager support for session lifecycle
@@ -149,7 +149,7 @@ ctx.set_outcome() → Credit assignment
 
 ---
 
-### `/mnt/projects/ww/src/ww/temporal/integration.py` (396 lines, 4 classes)
+### `/mnt/projects/t4d/t4dm/src/t4dm/temporal/integration.py` (396 lines, 4 classes)
 
 **Strengths:**
 - **Bridge Implementation**: Solves type mismatch between NeuromodulatorOrchestra and ModulatedAdapter
@@ -186,7 +186,7 @@ Information flows from what the system learns (gate weights) back to how embeddi
 
 ## Loop 6: Observability & Testing
 
-### `/mnt/projects/ww/src/ww/observability/prometheus.py` (596 lines, 4 classes)
+### `/mnt/projects/t4d/t4dm/src/t4dm/observability/prometheus.py` (596 lines, 4 classes)
 
 **Strengths:**
 - **Graceful Degradation**: Fallback to internal metrics when prometheus_client unavailable
@@ -224,7 +224,7 @@ _observe_histogram/_increment_counter → Type-agnostic helpers
 
 ---
 
-### `/mnt/projects/ww/src/ww/embedding/semantic_mock.py` (315 lines, 2 classes)
+### `/mnt/projects/t4d/t4dm/src/t4dm/embedding/semantic_mock.py` (315 lines, 2 classes)
 
 **Strengths:**
 - **Semantic Structure**: Concept clusters create meaningful similarity relationships

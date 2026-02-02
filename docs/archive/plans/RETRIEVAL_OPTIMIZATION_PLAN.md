@@ -260,9 +260,9 @@ Source: [github.com/MinishLab/semhash](https://github.com/MinishLab/semhash)
 **Goal**: Enable native hybrid search without new models.
 
 **Files Modified**:
-- `src/ww/embedding/bge_m3.py` - Enable sparse vectors
-- `src/ww/storage/qdrant_store.py` - Sparse vector storage + search
-- `src/ww/memory/episodic.py` - Hybrid recall integration
+- `src/t4dm/embedding/bge_m3.py` - Enable sparse vectors
+- `src/t4dm/storage/qdrant_store.py` - Sparse vector storage + search
+- `src/t4dm/memory/episodic.py` - Hybrid recall integration
 
 **Key Changes**:
 
@@ -343,8 +343,8 @@ async def search_hybrid(
 **Goal**: Handle long content without information loss.
 
 **New Files**:
-- `src/ww/chunking/__init__.py`
-- `src/ww/chunking/semantic_chunker.py`
+- `src/t4dm/chunking/__init__.py`
+- `src/t4dm/chunking/semantic_chunker.py`
 
 **Key Implementation**:
 
@@ -543,7 +543,7 @@ class EpisodeChunk(BaseModel):
 **Goal**: Self-contained entity extraction without external APIs.
 
 **New Files**:
-- `src/ww/extraction/gliner_extractor.py`
+- `src/t4dm/extraction/gliner_extractor.py`
 
 **Key Implementation**:
 
@@ -723,8 +723,8 @@ class GLiNERExtractor:
 **Goal**: Refine top-k results with cross-attention scoring.
 
 **New Files**:
-- `src/ww/retrieval/__init__.py`
-- `src/ww/retrieval/reranker.py`
+- `src/t4dm/retrieval/__init__.py`
+- `src/t4dm/retrieval/reranker.py`
 
 **Key Implementation**:
 
@@ -859,7 +859,7 @@ class CrossEncoderReranker:
 **Goal**: Combine multiple retrieval signals optimally.
 
 **New Files**:
-- `src/ww/retrieval/fusion.py`
+- `src/t4dm/retrieval/fusion.py`
 
 **Key Implementation**:
 
@@ -994,12 +994,12 @@ def weighted_score_fusion(
 **Goal**: Implement adaptive learning with evolving skillbook.
 
 **New Files**:
-- `src/ww/learning/__init__.py`
-- `src/ww/learning/skillbook.py`
-- `src/ww/learning/reflector.py`
-- `src/ww/learning/skill_manager.py`
-- `src/ww/learning/deduplicator.py`
-- `src/ww/learning/async_pipeline.py`
+- `src/t4dm/learning/__init__.py`
+- `src/t4dm/learning/skillbook.py`
+- `src/t4dm/learning/reflector.py`
+- `src/t4dm/learning/skill_manager.py`
+- `src/t4dm/learning/deduplicator.py`
+- `src/t4dm/learning/async_pipeline.py`
 
 #### 6.1 Skillbook Data Structure
 
@@ -1750,7 +1750,7 @@ full = [
 
 ## Configuration
 
-Add to `src/ww/core/config.py`:
+Add to `src/t4dm/core/config.py`:
 
 ```python
 class Settings(BaseSettings):

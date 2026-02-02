@@ -113,22 +113,22 @@ effective_lr = 1.0
 
 ## Files Modified
 
-1. `/mnt/projects/ww/src/ww/learning/neuromodulators.py`
+1. `/mnt/projects/t4d/t4dm/src/t4dm/learning/neuromodulators.py`
    - Added `LearningParams` dataclass
    - Updated `process_outcome()` to use multiplicative gating
    - Added `get_learning_params()` and `get_learning_params_with_outcome()` methods
    - Updated documentation
 
-2. `/mnt/projects/ww/src/ww/learning/reconsolidation.py`
+2. `/mnt/projects/t4d/t4dm/src/t4dm/learning/reconsolidation.py`
    - Added `NeuromodulatorIntegratedReconsolidation` class
    - Integrates orchestra with reconsolidation engine
 
-3. `/mnt/projects/ww/src/ww/learning/serotonin.py`
+3. `/mnt/projects/t4d/t4dm/src/t4dm/learning/serotonin.py`
    - Fixed exports (removed `EligibilityTrace` from `__all__`)
 
 ## Tests
 
-Created comprehensive test suite: `/mnt/projects/ww/tests/learning/test_multiplicative_gating.py`
+Created comprehensive test suite: `/mnt/projects/t4d/t4dm/tests/learning/test_multiplicative_gating.py`
 
 Test categories:
 1. **LearningParams** (4 tests)

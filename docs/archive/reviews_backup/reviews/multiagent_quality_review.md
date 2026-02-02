@@ -1,6 +1,6 @@
 # Quality Assurance Review: Collective Memory for Multi-Agent Systems
 
-**Paper**: `/mnt/projects/ww/docs/papers/collective_agent_memory.tex`
+**Paper**: `/mnt/projects/t4d/t4dm/docs/papers/collective_agent_memory.tex`
 **Review Date**: 2025-12-04
 **Reviewer**: Research Quality Assurance Agent
 **Target Venue**: AAMAS (Autonomous Agents and Multi-Agent Systems)
@@ -504,4 +504,4 @@ To make this acceptable for AAMAS:
 ---
 
 **Review completed**: 2025-12-04
-**Files generated**: `/mnt/projects/ww/docs/papers/reviews/multiagent_quality_review.md`
+**Files generated**: `/mnt/projects/t4d/t4dm/docs/papers/reviews/multiagent_quality_review.md`

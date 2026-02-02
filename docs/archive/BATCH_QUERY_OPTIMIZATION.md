@@ -6,7 +6,7 @@ Fixed the N+1 query problem in semantic memory's Hebbian strengthening and added
 
 ## Changes Made
 
-### 1. Neo4j Store - Batch Relationship Query (`src/ww/storage/neo4j_store.py`)
+### 1. Neo4j Store - Batch Relationship Query (`src/t4dm/storage/neo4j_store.py`)
 
 Added new method `get_relationships_batch()` at line 469-541:
 
@@ -30,7 +30,7 @@ async def get_relationships_batch(
 - Supports relationship type filtering and direction
 - Includes timeout protection and validation
 
-### 2. Semantic Memory - Optimized Hebbian Strengthening (`src/ww/memory/semantic.py`)
+### 2. Semantic Memory - Optimized Hebbian Strengthening (`src/t4dm/memory/semantic.py`)
 
 #### A. Updated `_strengthen_co_retrieval()` (lines 383-445)
 
@@ -161,10 +161,10 @@ Created comprehensive test suite (`test_batch_query.py`):
 
 ### Files Modified
 
-1. **`src/ww/storage/neo4j_store.py`**
+1. **`src/t4dm/storage/neo4j_store.py`**
    - Added: `get_relationships_batch()` method (73 lines)
 
-2. **`src/ww/memory/semantic.py`**
+2. **`src/t4dm/memory/semantic.py`**
    - Updated: `_strengthen_co_retrieval()` method (63 lines)
    - Updated: `_preload_context_relationships()` method (39 lines)
 

@@ -422,7 +422,7 @@ Energy
 ### 6.1 Python Module Structure
 
 ```
-ww/
+t4dm/
 ├── encoding/                     # NEW: CompBio encoding layer
 │   ├── __init__.py
 │   ├── dendritic.py             # DendriticProcessor class
@@ -711,7 +711,7 @@ ww/
 │                        IMPLEMENTATION TIMELINE                               │
 │                                                                              │
 │  Week 1-2: PHASE 0 - Foundation                                             │
-│  ├─ Create ww/encoding/ module                                              │
+│  ├─ Create t4dm/encoding/ module                                              │
 │  ├─ Implement DendriticProcessor                                            │
 │  ├─ Implement SparseEncoder                                                 │
 │  ├─ Implement AttractorNetwork                                              │

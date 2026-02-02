@@ -98,7 +98,7 @@
 **B1: Flat k-NN Search** (Priority: High) - ✅ RESOLVED
 - **Issue**: O(n) search didn't scale beyond 100K episodes
 - **Resolution**: ClusterIndex implemented with hierarchical two-stage search:
-  - `ClusterIndex` class in `/mnt/projects/ww/src/ww/memory/cluster_index.py` (584 lines)
+  - `ClusterIndex` class in `/mnt/projects/t4d/t4dm/src/t4dm/memory/cluster_index.py` (584 lines)
   - NE-modulated cluster selection (high arousal = more clusters)
   - ACh-mode affects exploration/exploitation balance
   - Per-cluster statistics enable learned routing
@@ -110,7 +110,7 @@
 **B2: Fixed Sparsity** (Priority: Medium) - ✅ RESOLVED
 - **Issue**: Hardcoded 10% sparsity in pattern completion
 - **Resolution**: LearnedSparseIndex implemented with adaptive addressing:
-  - `LearnedSparseIndex` class in `/mnt/projects/ww/src/ww/memory/learned_sparse_index.py` (474 lines)
+  - `LearnedSparseIndex` class in `/mnt/projects/t4d/t4dm/src/t4dm/memory/learned_sparse_index.py` (474 lines)
   - Query-dependent cluster attention, feature attention, sparsity level
   - Online gradient descent from retrieval outcomes
   - Neuromodulator guidance (NE, ACh)
@@ -186,8 +186,8 @@ All P0 critical gaps and B1/B2 performance bottlenecks have been resolved:
 - 27 tests passing
 
 **Files**:
-- `/mnt/projects/ww/src/ww/core/learned_gate.py`
-- `/mnt/projects/ww/tests/unit/test_learned_gate.py`
+- `/mnt/projects/t4d/t4dm/src/t4dm/core/learned_gate.py`
+- `/mnt/projects/t4d/t4dm/tests/unit/test_learned_gate.py`
 
 **Acceptance Criteria**:
 - ✓ Context strings have semantic embeddings
@@ -226,7 +226,7 @@ The following test coverage gaps remain:
 - `test_hierarchical_retrieval.py`: Pattern completion, clustering
 - `test_sparse_addressing.py`: Sparsity, interference resistance
 - `test_joint_optimization.py`: Gate-retrieval correlation
-- See: `/mnt/projects/ww/docs/HSA_TESTING_PROTOCOLS.md`
+- See: `/mnt/projects/t4d/t4dm/docs/HSA_TESTING_PROTOCOLS.md`
 
 #### Future Work
 
@@ -277,8 +277,8 @@ The following test coverage gaps remain:
 - ✅ Chunked processing for memory efficiency
 
 **Files**:
-- `/mnt/projects/ww/src/ww/consolidation/parallel.py` (350+ lines)
-- `/mnt/projects/ww/tests/unit/test_parallel_consolidation.py` (18 tests)
+- `/mnt/projects/t4d/t4dm/src/t4dm/consolidation/parallel.py` (350+ lines)
+- `/mnt/projects/t4d/t4dm/tests/unit/test_parallel_consolidation.py` (18 tests)
 
 ##### Task PO-2: Memory Compression ✅ COMPLETE
 
@@ -295,8 +295,8 @@ The following test coverage gaps remain:
 - ✅ Configurable retention policies
 
 **Files**:
-- `/mnt/projects/ww/src/ww/memory/forgetting.py` (450+ lines, 20 tests)
-- `/mnt/projects/ww/src/ww/storage/archive.py` (350+ lines, 10 tests)
+- `/mnt/projects/t4d/t4dm/src/t4dm/memory/forgetting.py` (450+ lines, 20 tests)
+- `/mnt/projects/t4d/t4dm/src/t4dm/storage/archive.py` (350+ lines, 10 tests)
 
 ##### Task PO-3: Distributed Deployment ✅ COMPLETE
 
@@ -311,7 +311,7 @@ The following test coverage gaps remain:
 - ✅ Rate limiting and CORS at ingress
 - ✅ Pod disruption budget for availability
 
-**Files** (in `/mnt/projects/ww/deploy/kubernetes/`):
+**Files** (in `/mnt/projects/t4d/t4dm/deploy/kubernetes/`):
 - `namespace.yaml`, `configmap.yaml`, `secrets.yaml`
 - `deployment.yaml` (health probes, anti-affinity)
 - `service.yaml` (ClusterIP + headless)
@@ -737,14 +737,14 @@ The following test coverage gaps remain:
 
 ## Appendix D: Related Documentation
 
-- **Architecture**: `/mnt/projects/ww/ARCHITECTURE.md`
-- **Memory Design**: `/mnt/projects/ww/MEMORY_ARCHITECTURE.md`
-- **Agents**: `/mnt/projects/ww/AGENTS_AND_SKILLS.md`
-- **HSA Implementation**: `/mnt/projects/ww/docs/IMPLEMENTATION_PLAN_HSA.md`
-- **Testing Protocols**: `/mnt/projects/ww/docs/HSA_TESTING_PROTOCOLS.md`
-- **Gap Analysis**: `/mnt/projects/ww/docs/RETRIEVAL_EXPRESSION_GAP_ANALYSIS.md`
-- **Session State**: `/mnt/projects/ww/docs/SESSION_STATE.md`
-- **Changelog**: `/mnt/projects/ww/CHANGELOG.md`
+- **Architecture**: `/mnt/projects/t4d/t4dm/ARCHITECTURE.md`
+- **Memory Design**: `/mnt/projects/t4d/t4dm/MEMORY_ARCHITECTURE.md`
+- **Agents**: `/mnt/projects/t4d/t4dm/AGENTS_AND_SKILLS.md`
+- **HSA Implementation**: `/mnt/projects/t4d/t4dm/docs/IMPLEMENTATION_PLAN_HSA.md`
+- **Testing Protocols**: `/mnt/projects/t4d/t4dm/docs/HSA_TESTING_PROTOCOLS.md`
+- **Gap Analysis**: `/mnt/projects/t4d/t4dm/docs/RETRIEVAL_EXPRESSION_GAP_ANALYSIS.md`
+- **Session State**: `/mnt/projects/t4d/t4dm/docs/SESSION_STATE.md`
+- **Changelog**: `/mnt/projects/t4d/t4dm/CHANGELOG.md`
 
 ---
 

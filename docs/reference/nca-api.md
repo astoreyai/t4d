@@ -5,7 +5,7 @@ Complete API reference for the Neural Cellular Automata (NCA) module.
 ## Module Structure
 
 ```
-ww/nca/
+t4dm/nca/
 ├── Core
 │   ├── neural_field.py      # 3D PDE solver
 │   ├── coupling.py          # Learnable coupling matrix

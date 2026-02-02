@@ -202,7 +202,7 @@ project/
 ├── requirements.txt
 ├── pyproject.toml
 ├── src/
-│   └── ww/
+│   └── t4dm/
 │       ├── __init__.py
 │       └── (modules based on features)
 ├── tests/

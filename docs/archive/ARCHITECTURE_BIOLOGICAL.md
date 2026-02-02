@@ -123,7 +123,7 @@ World Weaver implements a biologically-inspired memory system with comprehensive
 
 ### 1. STDP (Spike-Timing-Dependent Plasticity)
 
-**File**: `/mnt/projects/ww/src/ww/learning/stdp.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/learning/stdp.py`
 
 Implements biologically-accurate synaptic plasticity:
 - **τ+**: 17ms (LTP time window)
@@ -135,7 +135,7 @@ Implements biologically-accurate synaptic plasticity:
 
 ### 2. VTA Dopamine Circuit
 
-**File**: `/mnt/projects/ww/src/ww/nca/vta.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/nca/vta.py`
 
 Implements reward prediction error (RPE) computation:
 - **Tonic firing**: 4-5 Hz (baseline)
@@ -147,7 +147,7 @@ Implements reward prediction error (RPE) computation:
 
 ### 3. Sleep Consolidation
 
-**File**: `/mnt/projects/ww/src/ww/consolidation/sleep.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/consolidation/sleep.py`
 
 Implements NREM/REM sleep cycles:
 - **NREM**: 75% of sleep, sharp-wave ripple replay
@@ -159,7 +159,7 @@ Implements NREM/REM sleep cycles:
 
 ### 4. Reconsolidation Engine
 
-**File**: `/mnt/projects/ww/src/ww/learning/reconsolidation.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/learning/reconsolidation.py`
 
 Implements memory reconsolidation:
 - **Lability window**: 6 hours after retrieval
@@ -171,7 +171,7 @@ Implements memory reconsolidation:
 
 ### 5. VAE Generative Replay
 
-**File**: `/mnt/projects/ww/src/ww/learning/vae_training.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/learning/vae_training.py`
 
 Implements Hinton wake-sleep algorithm:
 - **Wake learning rate**: 0.01 (fast, hippocampal)
@@ -187,7 +187,7 @@ Implements Hinton wake-sleep algorithm:
 
 ### STDPVTABridge
 
-**File**: `/mnt/projects/ww/src/ww/integration/stdp_vta_bridge.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/integration/stdp_vta_bridge.py`
 
 Connects VTA dopamine to STDP learning rate modulation:
 
@@ -253,7 +253,7 @@ All parameters validated against peer-reviewed literature:
 
 ### Integration Tests
 
-**File**: `/mnt/projects/ww/tests/integration/test_biology_integration.py`
+**File**: `/mnt/projects/t4d/t4dm/tests/integration/test_biology_integration.py`
 
 Key test scenarios:
 1. Sleep consolidation triggers reconsolidation
@@ -329,7 +329,7 @@ pytest tests/learning/test_reconsolidation.py -v
 
 ## References
 
-Complete biological citations in [`/mnt/projects/ww/docs/BIOLOGICAL_INTEGRATION.md`]
+Complete biological citations in [`/mnt/projects/t4d/t4dm/docs/BIOLOGICAL_INTEGRATION.md`]
 
 Key papers:
 - Nader et al. (2000) - Nature: Reconsolidation

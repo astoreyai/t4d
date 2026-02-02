@@ -433,8 +433,8 @@ The paper makes solid contributions and is well-written, but validity threats an
 
 **Assessment Completed**: 2025-12-04
 **Documents Generated**:
-- /mnt/projects/ww/docs/papers/QUALITY_ASSESSMENT_REPORT.md (comprehensive analysis)
-- /mnt/projects/ww/docs/papers/REVISION_CHECKLIST.md (actionable checklist)
-- /mnt/projects/ww/docs/papers/SCORES_SUMMARY.md (this document)
+- /mnt/projects/t4d/t4dm/docs/papers/QUALITY_ASSESSMENT_REPORT.md (comprehensive analysis)
+- /mnt/projects/t4d/t4dm/docs/papers/REVISION_CHECKLIST.md (actionable checklist)
+- /mnt/projects/t4d/t4dm/docs/papers/SCORES_SUMMARY.md (this document)
 
 **Next Steps**: Review checklist, prioritize fixes, begin revisions

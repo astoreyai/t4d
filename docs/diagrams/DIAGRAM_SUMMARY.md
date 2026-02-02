@@ -158,23 +158,23 @@ Consistent across all diagrams:
 These diagrams complement:
 
 1. **Architecture Documents**
-   - `/mnt/projects/ww/ARCHITECTURE.md` - Original system design
-   - `/mnt/projects/ww/MEMORY_ARCHITECTURE.md` - Tripartite memory spec
-   - `/mnt/projects/ww/docs/FUNCTIONAL_ARCHITECTURE.md` - Functional overview
+   - `/mnt/projects/t4d/t4dm/ARCHITECTURE.md` - Original system design
+   - `/mnt/projects/t4d/t4dm/MEMORY_ARCHITECTURE.md` - Tripartite memory spec
+   - `/mnt/projects/t4d/t4dm/docs/FUNCTIONAL_ARCHITECTURE.md` - Functional overview
 
 2. **Specialized Documents**
-   - `/mnt/projects/ww/docs/LEARNING_ARCHITECTURE.md` - Learning system
-   - `/mnt/projects/ww/docs/NEUROTRANSMITTER_ARCHITECTURE.md` - Neuromodulators
-   - `/mnt/projects/ww/docs/BIOLOGICAL_PLAUSIBILITY_ANALYSIS.md` - Bio inspiration
+   - `/mnt/projects/t4d/t4dm/docs/LEARNING_ARCHITECTURE.md` - Learning system
+   - `/mnt/projects/t4d/t4dm/docs/NEUROTRANSMITTER_ARCHITECTURE.md` - Neuromodulators
+   - `/mnt/projects/t4d/t4dm/docs/BIOLOGICAL_PLAUSIBILITY_ANALYSIS.md` - Bio inspiration
 
 3. **API & SDK**
-   - `/mnt/projects/ww/docs/API.md` - REST API reference
-   - `/mnt/projects/ww/docs/SDK.md` - Python SDK guide
+   - `/mnt/projects/t4d/t4dm/docs/API.md` - REST API reference
+   - `/mnt/projects/t4d/t4dm/docs/SDK.md` - Python SDK guide
    - OpenAPI docs at `http://localhost:8765/docs`
 
 4. **Source Code**
-   - `/mnt/projects/ww/src/ww/` - Implementation
-   - `/mnt/projects/ww/tests/` - 1259 tests, 79% coverage
+   - `/mnt/projects/t4d/t4dm/src/t4dm/` - Implementation
+   - `/mnt/projects/t4d/t4dm/tests/` - 1259 tests, 79% coverage
 
 ## Maintenance
 
@@ -250,7 +250,7 @@ The diagrams are production-ready, render automatically in GitHub/GitLab, and se
 
 ---
 
-**Path**: `/mnt/projects/ww/docs/diagrams/`
+**Path**: `/mnt/projects/t4d/t4dm/docs/diagrams/`
 **Created**: 2025-12-06
 **Version**: 0.1.0
 **Status**: Complete

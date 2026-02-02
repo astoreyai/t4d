@@ -18,23 +18,23 @@ The key insight from neuroscience is that these systems don't operate in isolati
 
 ### What Exists
 
-1. **DopamineSystem** (`/mnt/projects/ww/src/ww/learning/dopamine.py`)
+1. **DopamineSystem** (`/mnt/projects/t4d/t4dm/src/t4dm/learning/dopamine.py`)
    - Computes reward prediction error: delta = actual - expected
    - Modulates learning rate by surprise magnitude
    - Maintains per-memory value estimates via EMA
    - Well-integrated with EpisodicMemory's reconsolidation
 
-2. **ReconsolidationEngine** (`/mnt/projects/ww/src/ww/learning/reconsolidation.py`)
+2. **ReconsolidationEngine** (`/mnt/projects/t4d/t4dm/src/t4dm/learning/reconsolidation.py`)
    - Updates embeddings based on retrieval outcomes
    - Importance-weighted learning rate adjustment
    - Dopamine-modulated via `lr_modulation` parameter
 
-3. **PatternSeparation/DentateGyrus** (`/mnt/projects/ww/src/ww/memory/pattern_separation.py`)
+3. **PatternSeparation/DentateGyrus** (`/mnt/projects/t4d/t4dm/src/t4dm/memory/pattern_separation.py`)
    - Orthogonalizes similar inputs to reduce interference
    - Adaptive separation strength based on similarity
    - Optional sparse coding
 
-4. **NeuroSymbolicReasoner** (`/mnt/projects/ww/src/ww/learning/neuro_symbolic.py`)
+4. **NeuroSymbolicReasoner** (`/mnt/projects/t4d/t4dm/src/t4dm/learning/neuro_symbolic.py`)
    - Learned fusion weights for multi-source scoring
    - Symbolic graph traversal for credit attribution
    - ListMLE training for ranking optimization
@@ -98,7 +98,7 @@ High NE should:
 ### Implementation Design
 
 ```python
-# /mnt/projects/ww/src/ww/learning/norepinephrine.py
+# /mnt/projects/t4d/t4dm/src/t4dm/learning/norepinephrine.py
 
 """
 Norepinephrine-like Arousal/Attention System for World Weaver.
@@ -516,7 +516,7 @@ The system should detect when to encode (novel, important) vs retrieve (familiar
 ### Implementation Design
 
 ```python
-# /mnt/projects/ww/src/ww/learning/acetylcholine.py
+# /mnt/projects/t4d/t4dm/src/t4dm/learning/acetylcholine.py
 
 """
 Acetylcholine-like Encoding/Retrieval Mode Switch for World Weaver.
@@ -920,7 +920,7 @@ Dopamine handles immediate RPE; serotonin handles "was this useful for the long-
 ### Implementation Design
 
 ```python
-# /mnt/projects/ww/src/ww/learning/serotonin.py
+# /mnt/projects/t4d/t4dm/src/t4dm/learning/serotonin.py
 
 """
 Serotonin-like Long-Term Credit Assignment for World Weaver.
@@ -1344,7 +1344,7 @@ This sharpens the retrieval output and reduces interference between similar memo
 ### Implementation Design
 
 ```python
-# /mnt/projects/ww/src/ww/learning/inhibition.py
+# /mnt/projects/t4d/t4dm/src/t4dm/learning/inhibition.py
 
 """
 GABA/Glutamate-like Inhibitory Dynamics for World Weaver.
@@ -1747,7 +1747,7 @@ __all__ = [
 The four systems should interact in a coordinated manner:
 
 ```python
-# /mnt/projects/ww/src/ww/learning/neuromodulators.py
+# /mnt/projects/t4d/t4dm/src/t4dm/learning/neuromodulators.py
 
 """
 Integrated Neuromodulator System for World Weaver.
@@ -2135,12 +2135,12 @@ __all__ = [
 
 ### File Locations
 
-- `/mnt/projects/ww/src/ww/learning/dopamine.py` (exists)
-- `/mnt/projects/ww/src/ww/learning/norepinephrine.py` (to create)
-- `/mnt/projects/ww/src/ww/learning/acetylcholine.py` (to create)
-- `/mnt/projects/ww/src/ww/learning/serotonin.py` (to create)
-- `/mnt/projects/ww/src/ww/learning/inhibition.py` (to create)
-- `/mnt/projects/ww/src/ww/learning/neuromodulators.py` (to create)
+- `/mnt/projects/t4d/t4dm/src/t4dm/learning/dopamine.py` (exists)
+- `/mnt/projects/t4d/t4dm/src/t4dm/learning/norepinephrine.py` (to create)
+- `/mnt/projects/t4d/t4dm/src/t4dm/learning/acetylcholine.py` (to create)
+- `/mnt/projects/t4d/t4dm/src/t4dm/learning/serotonin.py` (to create)
+- `/mnt/projects/t4d/t4dm/src/t4dm/learning/inhibition.py` (to create)
+- `/mnt/projects/t4d/t4dm/src/t4dm/learning/neuromodulators.py` (to create)
 
 ### Dependencies
 

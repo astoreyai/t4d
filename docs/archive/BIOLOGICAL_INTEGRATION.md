@@ -30,7 +30,7 @@ Sleep-dependent memory consolidation involves replay of recent experiences durin
 
 ### Implementation
 
-**File**: `/mnt/projects/ww/src/ww/consolidation/sleep.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/consolidation/sleep.py`
 
 During NREM sleep phases, replayed episodes trigger reconsolidation updates:
 
@@ -81,7 +81,7 @@ Dopamine-modulated STDP provides biologically plausible credit assignment:
 
 ### Implementation
 
-**File**: `/mnt/projects/ww/src/ww/integration/stdp_vta_bridge.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/integration/stdp_vta_bridge.py`
 
 The `STDPVTABridge` connects VTA dopamine levels to STDP learning rate modulation:
 
@@ -145,7 +145,7 @@ Fast hippocampal learning during wake, slow neocortical consolidation during sle
 
 ### Implementation
 
-**File**: `/mnt/projects/ww/src/ww/learning/vae_training.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/learning/vae_training.py`
 
 VAE training occurs in two phases:
 
@@ -209,7 +209,7 @@ VTA computes temporal difference (TD) error for credit assignment. Replay sequen
 
 ### Implementation
 
-**File**: `/mnt/projects/ww/src/ww/consolidation/sleep.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/consolidation/sleep.py`
 
 During NREM replay, VTA computes RPE from replayed sequences:
 
@@ -378,7 +378,7 @@ def _prioritize_replay(self, episodes: list[Episode]) -> list[Episode]:
 
 ### Integration Tests
 
-**File**: `/mnt/projects/ww/tests/integration/test_biology_integration.py`
+**File**: `/mnt/projects/t4d/t4dm/tests/integration/test_biology_integration.py`
 
 Key test cases:
 1. **Sleep → Reconsolidation Flow**: Verify replayed episodes trigger embedding updates

@@ -3,7 +3,7 @@
 **Date**: 2025-11-27
 **Auditor**: Claude Code (Research Code Review Specialist)
 **Codebase**: World Weaver v0.1.0
-**Location**: `/mnt/projects/ww/src/ww/`
+**Location**: `/mnt/projects/t4d/t4dm/src/t4dm/`
 
 ---
 
@@ -27,7 +27,7 @@ The World Weaver codebase demonstrates good security practices overall, with com
 
 #### M-1: Cypher Injection via Dynamic Label/Type Construction
 
-**Location**: `/mnt/projects/ww/src/ww/storage/neo4j_store.py:158-162, 187-196, 224-232, 289-298`
+**Location**: `/mnt/projects/t4d/t4dm/src/t4dm/storage/neo4j_store.py:158-162, 187-196, 224-232, 289-298`
 
 **Description**: Multiple Cypher queries use f-strings to construct node labels and relationship types from user-controllable input, creating potential injection vectors.
 
@@ -97,7 +97,7 @@ async def create_node(self, label: str, properties: dict[str, Any]) -> str:
 
 #### M-2: Session ID Spoofing - No Authentication/Authorization
 
-**Location**: `/mnt/projects/ww/src/ww/mcp/memory_gateway.py:63-99`
+**Location**: `/mnt/projects/t4d/t4dm/src/t4dm/mcp/memory_gateway.py:63-99`
 
 **Description**: Session IDs are used for memory isolation but have no authentication mechanism. Any client knowing or guessing a session ID can access that session's memories.
 
@@ -158,7 +158,7 @@ def create_session() -> str:
 
 #### M-3: Hardcoded Default Credentials in Config
 
-**Location**: `/mnt/projects/ww/src/ww/core/config.py:30-45`
+**Location**: `/mnt/projects/t4d/t4dm/src/t4dm/core/config.py:30-45`
 
 **Description**: Default database credentials are hardcoded in source code, creating security risks if deployed without configuration changes.
 
@@ -213,7 +213,7 @@ def __post_init__(self):
 
 #### M-4: Missing Rate Limiting on MCP Tools
 
-**Location**: `/mnt/projects/ww/src/ww/mcp/memory_gateway.py` (all tool handlers)
+**Location**: `/mnt/projects/t4d/t4dm/src/t4dm/mcp/memory_gateway.py` (all tool handlers)
 
 **Description**: No rate limiting or resource quotas on memory operations, enabling potential DoS attacks.
 
@@ -282,7 +282,7 @@ async def create_episode(...):
 
 #### L-1: Information Leakage in Error Messages
 
-**Location**: Multiple locations in `/mnt/projects/ww/src/ww/mcp/memory_gateway.py`
+**Location**: Multiple locations in `/mnt/projects/t4d/t4dm/src/t4dm/mcp/memory_gateway.py`
 
 **Description**: Generic exception handlers may expose internal details through error messages.
 
@@ -325,7 +325,7 @@ except Exception as e:
 
 #### L-2: No Input Sanitization for Content Fields
 
-**Location**: `/mnt/projects/ww/src/ww/mcp/validation.py:190-217`
+**Location**: `/mnt/projects/t4d/t4dm/src/t4dm/mcp/validation.py:190-217`
 
 **Description**: Content fields (`content`, `summary`, `details`) are validated for length but not sanitized for potentially malicious content.
 
@@ -376,7 +376,7 @@ def validate_non_empty_string(value: str, field: str, max_length: Optional[int] 
 
 #### L-3: Embedding Model Cache Directory Predictable
 
-**Location**: `/mnt/projects/ww/src/ww/core/config.py:94-97`
+**Location**: `/mnt/projects/t4d/t4dm/src/t4dm/core/config.py:94-97`
 
 **Description**: Default embedding model cache directory is predictable (`./models`), potentially allowing local privilege escalation.
 
@@ -427,7 +427,7 @@ def validate_cache_dir(self):
 
 #### I-1: No Query Complexity Limits
 
-**Location**: `/mnt/projects/ww/src/ww/storage/neo4j_store.py:460-495`
+**Location**: `/mnt/projects/t4d/t4dm/src/t4dm/storage/neo4j_store.py:460-495`
 
 **Description**: `find_path()` allows arbitrary `max_depth` values, enabling expensive graph traversals.
 
@@ -451,7 +451,7 @@ async def find_path(
 
 #### I-2: Qdrant API Key Optional
 
-**Location**: `/mnt/projects/ww/src/ww/core/config.py:52-55`
+**Location**: `/mnt/projects/t4d/t4dm/src/t4dm/core/config.py:52-55`
 
 **Description**: Qdrant API key is optional, allowing unauthenticated access.
 
@@ -486,7 +486,7 @@ async def delete_node(self, node_id: str, label: Optional[str] = None):
 
 #### I-4: Timeout Configuration Not Validated
 
-**Location**: `/mnt/projects/ww/src/ww/storage/neo4j_store.py:62`, `qdrant_store.py:59`
+**Location**: `/mnt/projects/t4d/t4dm/src/t4dm/storage/neo4j_store.py:62`, `qdrant_store.py:59`
 
 **Recommendation**: Validate timeout ranges:
 ```python
@@ -499,7 +499,7 @@ if not (1 <= self.timeout <= 600):
 
 #### I-5: JSON Deserialization Without Schema Validation
 
-**Location**: `/mnt/projects/ww/src/ww/storage/neo4j_store.py:633-648`
+**Location**: `/mnt/projects/t4d/t4dm/src/t4dm/storage/neo4j_store.py:633-648`
 
 **Description**: `_deserialize_props()` uses heuristic JSON parsing without schema validation.
 

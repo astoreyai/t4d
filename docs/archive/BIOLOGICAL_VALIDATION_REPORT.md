@@ -16,7 +16,7 @@ The World Weaver NCA system demonstrates strong biological grounding across all 
 
 ## B1: VTA Dopamine System
 
-**Files Validated**: `/mnt/projects/ww/src/ww/nca/vta.py`
+**Files Validated**: `/mnt/projects/t4d/t4dm/src/t4dm/nca/vta.py`
 
 ### Biology Fidelity Score: 92/100
 
@@ -72,7 +72,7 @@ The World Weaver NCA system demonstrates strong biological grounding across all 
 
 ## B2: Raphe Serotonin System
 
-**Files Validated**: `/mnt/projects/ww/src/ww/nca/raphe.py`
+**Files Validated**: `/mnt/projects/t4d/t4dm/src/t4dm/nca/raphe.py`
 
 ### Biology Fidelity Score: 89/100
 
@@ -128,7 +128,7 @@ The World Weaver NCA system demonstrates strong biological grounding across all 
 
 ## B3: Locus Coeruleus (LC-NE) System
 
-**Files Validated**: `/mnt/projects/ww/src/ww/nca/locus_coeruleus.py`
+**Files Validated**: `/mnt/projects/t4d/t4dm/src/t4dm/nca/locus_coeruleus.py`
 
 ### Biology Fidelity Score: 91/100
 
@@ -187,7 +187,7 @@ The World Weaver NCA system demonstrates strong biological grounding across all 
 
 ## B4: Hippocampus
 
-**Files Validated**: `/mnt/projects/ww/src/ww/nca/hippocampus.py`, `spatial_cells.py`
+**Files Validated**: `/mnt/projects/t4d/t4dm/src/t4dm/nca/hippocampus.py`, `spatial_cells.py`
 
 ### Biology Fidelity Score: 88/100
 
@@ -257,7 +257,7 @@ The World Weaver NCA system demonstrates strong biological grounding across all 
 
 ## B5: Striatum (D1/D2 MSNs)
 
-**Files Validated**: `/mnt/projects/ww/src/ww/nca/striatal_msn.py`
+**Files Validated**: `/mnt/projects/t4d/t4dm/src/t4dm/nca/striatal_msn.py`
 
 ### Biology Fidelity Score: 90/100
 
@@ -324,7 +324,7 @@ The World Weaver NCA system demonstrates strong biological grounding across all 
 
 ## B6: Neural Oscillations
 
-**Files Validated**: `/mnt/projects/ww/src/ww/nca/oscillators.py`, `sleep_spindles.py`
+**Files Validated**: `/mnt/projects/t4d/t4dm/src/t4dm/nca/oscillators.py`, `sleep_spindles.py`
 
 ### Biology Fidelity Score: 93/100
 
@@ -401,7 +401,7 @@ The World Weaver NCA system demonstrates strong biological grounding across all 
 
 ## B7: Sleep/Wake Homeostasis
 
-**Files Validated**: `/mnt/projects/ww/src/ww/nca/adenosine.py`, `swr_coupling.py`, `glymphatic.py`
+**Files Validated**: `/mnt/projects/t4d/t4dm/src/t4dm/nca/adenosine.py`, `swr_coupling.py`, `glymphatic.py`
 
 ### Biology Fidelity Score: 94/100
 
@@ -495,7 +495,7 @@ The World Weaver NCA system demonstrates strong biological grounding across all 
 
 ## B8: Glial Cells (Astrocytes)
 
-**Files Validated**: `/mnt/projects/ww/src/ww/nca/astrocyte.py`, `glutamate_signaling.py`
+**Files Validated**: `/mnt/projects/t4d/t4dm/src/t4dm/nca/astrocyte.py`, `glutamate_signaling.py`
 
 ### Biology Fidelity Score: 91/100
 

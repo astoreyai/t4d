@@ -106,7 +106,7 @@ Two expert evaluations (Hinton perspective on learning dynamics, CompBio perspec
 These are **MUST HAVE** for research validity.
 
 #### P0-1: Learning Weights Visualizer (Hinton Priority)
-**File**: `src/ww/visualization/learning_weights.py`
+**File**: `src/t4dm/visualization/learning_weights.py`
 
 ```python
 @dataclass
@@ -135,7 +135,7 @@ class LearningWeightsVisualizer:
 - Uncertainty reduction rate
 
 #### P0-2: Three-Factor Signal Dashboard (Hinton Priority)
-**File**: `src/ww/visualization/three_factor_dashboard.py`
+**File**: `src/t4dm/visualization/three_factor_dashboard.py`
 
 ```python
 @dataclass
@@ -160,7 +160,7 @@ class ThreeFactorVisualizer:
 **Key Insight**: This surfaces the biologically-plausible credit assignment that makes WW unique.
 
 #### P0-3: Retrieval Attribution (Hinton Priority)
-**File**: `src/ww/visualization/retrieval_attribution.py`
+**File**: `src/t4dm/visualization/retrieval_attribution.py`
 
 ```python
 @dataclass
@@ -181,7 +181,7 @@ class RetrievalAttributionVisualizer:
 ```
 
 #### P0-4: SWR Telemetry (CompBio Priority)
-**File**: `src/ww/visualization/swr_telemetry.py` (ALREADY WRITTEN)
+**File**: `src/t4dm/visualization/swr_telemetry.py` (ALREADY WRITTEN)
 
 **Metrics**:
 - Ripple frequency (150-250 Hz)
@@ -191,7 +191,7 @@ class RetrievalAttributionVisualizer:
 - Inter-event intervals
 
 #### P0-5: PAC Telemetry (CompBio Priority)
-**File**: `src/ww/visualization/pac_telemetry.py` (ALREADY WRITTEN)
+**File**: `src/t4dm/visualization/pac_telemetry.py` (ALREADY WRITTEN)
 
 **Metrics**:
 - Modulation index (Tort et al. 2010)
@@ -199,7 +199,7 @@ class RetrievalAttributionVisualizer:
 - Working memory capacity estimate (gamma/theta ratio)
 
 #### P0-6: Enhanced Anomaly Detection (Both)
-**Update**: `src/ww/visualization/stability_monitor.py`
+**Update**: `src/t4dm/visualization/stability_monitor.py`
 
 **New Methods**:
 - `detect_excitotoxicity()`: Glu > 0.85, E/I > 3.0, GABA < 0.2
@@ -211,7 +211,7 @@ class RetrievalAttributionVisualizer:
 ### Phase 1: High Priority (P1) - 5-6 weeks
 
 #### P1-1: Multi-Scale Telemetry Hub
-**File**: `src/ww/visualization/telemetry_hub.py`
+**File**: `src/t4dm/visualization/telemetry_hub.py`
 
 ```python
 class TelemetryHub:
@@ -232,7 +232,7 @@ class TelemetryHub:
 ```
 
 #### P1-2: Prediction Error Visualizer (Hinton)
-**File**: `src/ww/visualization/prediction_error.py`
+**File**: `src/t4dm/visualization/prediction_error.py`
 
 ```python
 class PredictionErrorVisualizer:
@@ -245,7 +245,7 @@ class PredictionErrorVisualizer:
 ```
 
 #### P1-3: DA Temporal Structure (CompBio)
-**File**: `src/ww/visualization/da_telemetry.py`
+**File**: `src/t4dm/visualization/da_telemetry.py`
 
 ```python
 class DATelemetry:
@@ -262,7 +262,7 @@ class DATelemetry:
 ```
 
 #### P1-4: Causal Inference Engine (CompBio)
-**File**: `src/ww/visualization/causal_inference.py`
+**File**: `src/t4dm/visualization/causal_inference.py`
 
 ```python
 class CausalInferenceEngine:
@@ -275,7 +275,7 @@ class CausalInferenceEngine:
 ```
 
 #### P1-5: Validation Framework (CompBio)
-**Directory**: `src/ww/validation/`
+**Directory**: `src/t4dm/validation/`
 
 ```python
 class NeuroscienceBenchmarks:
@@ -352,7 +352,7 @@ class NeuroscienceBenchmarks:
 ## File Structure
 
 ```
-src/ww/visualization/
+src/t4dm/visualization/
 ├── __init__.py                    # Updated exports
 │
 ├── # EXISTING (Phases 1-3)

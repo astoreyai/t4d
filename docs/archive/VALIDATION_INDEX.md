@@ -84,7 +84,7 @@ Executive summary including:
 
 ## Critical Issue Summary
 
-### File: `/mnt/projects/ww/src/ww/memory/episodic.py`
+### File: `/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic.py`
 
 **Problem**: File truncated at line 151 (incomplete method signature)
 
@@ -127,12 +127,12 @@ Duration:             45.71 seconds
 
 | Module | Coverage | Status |
 |--------|----------|--------|
-| src/ww/core | 97-100% | Excellent |
-| src/ww/memory | 84-98% | Good |
-| src/ww/mcp/gateway | 100% | Excellent |
-| src/ww/consolidation | 74% | Fair |
-| src/ww/storage | 64-72% | Moderate |
-| src/ww/hooks | 22-84% | Needs work |
+| src/t4dm/core | 97-100% | Excellent |
+| src/t4dm/memory | 84-98% | Good |
+| src/t4dm/mcp/gateway | 100% | Excellent |
+| src/t4dm/consolidation | 74% | Fair |
+| src/t4dm/storage | 64-72% | Moderate |
+| src/t4dm/hooks | 22-84% | Needs work |
 
 ---
 
@@ -230,15 +230,15 @@ Run security and type validation to complete validation suite.
 ## Files Requiring Attention
 
 ### CRITICAL
-- `/mnt/projects/ww/src/ww/memory/episodic.py` - File truncated
+- `/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic.py` - File truncated
 
 ### HIGH
-- `/mnt/projects/ww/src/ww/consolidation/service.py` - Unused imports
-- `/mnt/projects/ww/pyproject.toml` - Deprecated linting settings
+- `/mnt/projects/t4d/t4dm/src/t4dm/consolidation/service.py` - Unused imports
+- `/mnt/projects/t4d/t4dm/pyproject.toml` - Deprecated linting settings
 - Test files - Using deprecated method names
 
 ### MEDIUM
-- `/mnt/projects/ww/src/ww/hooks/*.py` - Low test coverage (22-50%)
+- `/mnt/projects/t4d/t4dm/src/t4dm/hooks/*.py` - Low test coverage (22-50%)
 
 ---
 

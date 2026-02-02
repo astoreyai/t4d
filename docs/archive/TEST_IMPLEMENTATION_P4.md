@@ -6,7 +6,7 @@ Implemented comprehensive unit tests for World Weaver service layer components t
 
 ## Files Created
 
-### 1. `/mnt/projects/ww/tests/unit/test_consolidation.py`
+### 1. `/mnt/projects/t4d/t4dm/tests/unit/test_consolidation.py`
 **Lines of Code**: 801
 **Test Cases**: 31
 **Target Coverage**: 80%
@@ -73,7 +73,7 @@ Implemented comprehensive unit tests for World Weaver service layer components t
 
 ---
 
-### 2. `/mnt/projects/ww/tests/unit/test_mcp_gateway.py`
+### 2. `/mnt/projects/t4d/t4dm/tests/unit/test_mcp_gateway.py`
 **Lines of Code**: 911
 **Test Cases**: 44
 **Target Coverage**: 80%
@@ -160,7 +160,7 @@ Implemented comprehensive unit tests for World Weaver service layer components t
 
 ---
 
-### 3. `/mnt/projects/ww/tests/unit/test_observability.py`
+### 3. `/mnt/projects/t4d/t4dm/tests/unit/test_observability.py`
 **Lines of Code**: 815
 **Test Cases**: 53
 **Target Coverage**: 90%
@@ -274,7 +274,7 @@ Implemented comprehensive unit tests for World Weaver service layer components t
 
 ### Coverage Breakdown
 
-#### Consolidation Service (`src/ww/consolidation/service.py` - 669 lines)
+#### Consolidation Service (`src/t4dm/consolidation/service.py` - 669 lines)
 
 **Covered Methods:**
 1. `consolidate()` - All 4 consolidation types + error handling + timing
@@ -293,7 +293,7 @@ Implemented comprehensive unit tests for World Weaver service layer components t
 
 **Expected Coverage**: 80%+ on consolidation module
 
-#### MCP Gateway (`src/ww/mcp/memory_gateway.py` - 1484 lines)
+#### MCP Gateway (`src/t4dm/mcp/memory_gateway.py` - 1484 lines)
 
 **Covered Components:**
 1. `RateLimiter` class - All methods (allow, reset, time_until_allowed)
@@ -310,7 +310,7 @@ Implemented comprehensive unit tests for World Weaver service layer components t
 
 **Expected Coverage**: 80%+ on MCP gateway module
 
-#### Observability Module (`src/ww/observability/*.py` - 260 lines total)
+#### Observability Module (`src/t4dm/observability/*.py` - 260 lines total)
 
 **Covered Components:**
 
@@ -366,9 +366,9 @@ pytest tests/unit/test_consolidation.py tests/unit/test_mcp_gateway.py tests/uni
 **With coverage:**
 ```bash
 pytest tests/unit/test_consolidation.py tests/unit/test_mcp_gateway.py tests/unit/test_observability.py \
-  --cov=src/ww/consolidation \
-  --cov=src/ww/mcp \
-  --cov=src/ww/observability \
+  --cov=src/t4dm/consolidation \
+  --cov=src/t4dm/mcp \
+  --cov=src/t4dm/observability \
   --cov-report=html
 ```
 
@@ -390,35 +390,35 @@ pytest tests/unit/test_consolidation.py::test_light_consolidation_duplicate_dete
 
 ### 1. Missing Dependency - hdbscan
 
-**File**: `/mnt/projects/ww/requirements.txt`
+**File**: `/mnt/projects/t4d/t4dm/requirements.txt`
 **Issue**: `hdbscan` library imported in `consolidation/service.py` but not listed in requirements
 **Impact**: Cannot import ConsolidationService without manual installation
 **Recommendation**: Add `hdbscan>=0.8.0` to requirements.txt
 
 ### 2. Potential Race Condition - _rate_limiter
 
-**File**: `/mnt/projects/ww/mcp/memory_gateway.py` (Line 134)
+**File**: `/mnt/projects/t4d/t4dm/mcp/memory_gateway.py` (Line 134)
 **Issue**: Global `_rate_limiter` instance created without lazy initialization guard
 **Impact**: Multiple imports could theoretically create multiple instances
 **Recommendation**: Use singleton pattern with lock (already done for other components)
 
 ### 3. Missing Error Handling - qdrant update_payload
 
-**File**: `/mnt/projects/ww/consolidation/service.py` (Lines 168-175)
+**File**: `/mnt/projects/t4d/t4dm/consolidation/service.py` (Lines 168-175)
 **Issue**: Storage update errors are logged but continue processing
 **Impact**: May create orphaned duplicate markers if storage fails
 **Recommendation**: Consider transaction/rollback pattern or explicit error propagation
 
 ### 4. Incomplete Decay Update Implementation
 
-**File**: `/mnt/projects/ww/consolidation/service.py` (Lines 370-386)
+**File**: `/mnt/projects/t4d/t4dm/consolidation/service.py` (Lines 370-386)
 **Issue**: `_update_decay()` is a stub implementation that doesn't actually update records
 **Impact**: "decay_updated" counts always zero
 **Recommendation**: Implement batch FSRS update for all memory types
 
 ### 5. Missing Type Hints on Helpers
 
-**File**: `/mnt/projects/ww/consolidation/service.py` (Lines 649-656)
+**File**: `/mnt/projects/t4d/t4dm/consolidation/service.py` (Lines 649-656)
 **Issue**: `_merge_procedure_steps()` lacks type hints, returns list but implementation is incomplete
 **Impact**: No consensus merging logic implemented
 **Recommendation**: Implement proper step merging with conflict resolution
@@ -456,10 +456,10 @@ pytest tests/unit/test_consolidation.py::test_light_consolidation_duplicate_dete
 ## Integration with Existing Test Suite
 
 These tests complement existing tests in:
-- `/mnt/projects/ww/tests/unit/test_saga.py` - Transaction testing
-- `/mnt/projects/ww/tests/unit/test_validation.py` - Input validation
-- `/mnt/projects/ww/tests/security/` - Security-specific tests
-- `/mnt/projects/ww/tests/integration/` - End-to-end testing
+- `/mnt/projects/t4d/t4dm/tests/unit/test_saga.py` - Transaction testing
+- `/mnt/projects/t4d/t4dm/tests/unit/test_validation.py` - Input validation
+- `/mnt/projects/t4d/t4dm/tests/security/` - Security-specific tests
+- `/mnt/projects/t4d/t4dm/tests/integration/` - End-to-end testing
 
 ### Test Isolation
 - Uses separate fixtures from conftest.py

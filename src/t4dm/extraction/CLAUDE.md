@@ -1,5 +1,5 @@
 # Extraction
-**Path**: `/mnt/projects/t4d/t4dm/src/ww/extraction/`
+**Path**: `/mnt/projects/t4d/t4dm/src/t4dm/extraction/`
 
 ## What
 Named entity extraction from episodic memory content. Identifies structured entities (people, organizations, technologies, URLs, dates, etc.) from free-text memory content using regex patterns and optional LLM-based semantic extraction.

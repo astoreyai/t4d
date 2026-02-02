@@ -18,7 +18,7 @@
 ## Generated Documents
 
 ### 1. Executive Summary
-**File:** `/mnt/projects/ww/SECURITY_ASSESSMENT_SUMMARY.md` (13 KB)
+**File:** `/mnt/projects/t4d/t4dm/SECURITY_ASSESSMENT_SUMMARY.md` (13 KB)
 **Audience:** Management, project leads
 **Content:**
 - Risk level and deployment status
@@ -32,7 +32,7 @@
 ---
 
 ### 2. Detailed Technical Analysis
-**File:** `/mnt/projects/ww/security_analysis_eligibility_trace.md` (23 KB)
+**File:** `/mnt/projects/t4d/t4dm/security_analysis_eligibility_trace.md` (23 KB)
 **Audience:** Security engineers, senior developers
 **Content:**
 - Complete vulnerability descriptions with CWE mappings
@@ -50,7 +50,7 @@
 ---
 
 ### 3. Developer Quick Reference
-**File:** `/mnt/projects/ww/SECURITY_QUICKREF.md` (9.2 KB)
+**File:** `/mnt/projects/t4d/t4dm/SECURITY_QUICKREF.md` (9.2 KB)
 **Audience:** All developers using the system
 **Content:**
 - Safe usage patterns vs unsafe patterns
@@ -64,7 +64,7 @@
 ---
 
 ### 4. Proof-of-Concept Exploits
-**File:** `/mnt/projects/ww/security_poc_eligibility.py` (12 KB)
+**File:** `/mnt/projects/t4d/t4dm/security_poc_eligibility.py` (12 KB)
 **Audience:** Security testers, QA engineers
 **Content:**
 - 6 working exploit demonstrations
@@ -88,7 +88,7 @@ python security_poc_eligibility.py
 ---
 
 ### 5. Attack Surface Visualization
-**File:** `/mnt/projects/ww/security_attack_surface.txt` (24 KB)
+**File:** `/mnt/projects/t4d/t4dm/security_attack_surface.txt` (24 KB)
 **Audience:** Security architects, threat modelers
 **Content:**
 - ASCII diagram of attack entry points
@@ -206,10 +206,10 @@ python security_poc_eligibility.py
 
 ## File Locations
 
-All security assessment files are in `/mnt/projects/ww/`:
+All security assessment files are in `/mnt/projects/t4d/t4dm/`:
 
 ```
-/mnt/projects/ww/
+/mnt/projects/t4d/t4dm/
 ├── SECURITY_INDEX.md                          (this file)
 ├── SECURITY_ASSESSMENT_SUMMARY.md             (executive summary)
 ├── security_analysis_eligibility_trace.md     (detailed analysis)
@@ -253,7 +253,7 @@ SUCCESS: All exploits blocked.
 
 ## Integration with Existing Tests
 
-Current test file: `/mnt/projects/ww/tests/learning/test_eligibility.py`
+Current test file: `/mnt/projects/t4d/t4dm/tests/learning/test_eligibility.py`
 
 **Coverage:**
 - Basic functionality: YES
@@ -261,7 +261,7 @@ Current test file: `/mnt/projects/ww/tests/learning/test_eligibility.py`
 - Concurrency: NO
 - Fuzzing: NO
 
-**Recommendation:** Create `/mnt/projects/ww/tests/security/test_eligibility_security.py`
+**Recommendation:** Create `/mnt/projects/t4d/t4dm/tests/security/test_eligibility_security.py`
 
 ---
 
@@ -306,7 +306,7 @@ Before deploying to production:
 **Re-Assessment:** Required after remediation
 
 **Additional Resources:**
-- World Weaver project: `/mnt/projects/ww/`
+- World Weaver project: `/mnt/projects/t4d/t4dm/`
 - Test coverage: 79% (overall), 0% (security)
 - Documentation: See project README
 

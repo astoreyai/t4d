@@ -356,10 +356,10 @@ For implementation details, see:
 - **Math**: `/mnt/projects/t4d/t4dm/docs/MATHEMATICAL_FOUNDATIONS.md`
 
 For code implementation:
-- **Memory**: `/mnt/projects/t4d/t4dm/src/ww/memory/`
-- **Learning**: `/mnt/projects/t4d/t4dm/src/ww/learning/`
-- **Consolidation**: `/mnt/projects/t4d/t4dm/src/ww/consolidation/`
-- **NCA**: `/mnt/projects/t4d/t4dm/src/ww/nca/`
+- **Memory**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/`
+- **Learning**: `/mnt/projects/t4d/t4dm/src/t4dm/learning/`
+- **Consolidation**: `/mnt/projects/t4d/t4dm/src/t4dm/consolidation/`
+- **NCA**: `/mnt/projects/t4d/t4dm/src/t4dm/nca/`
 
 ---
 

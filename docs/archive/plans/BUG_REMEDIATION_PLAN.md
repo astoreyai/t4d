@@ -307,4 +307,4 @@ Updated: 2025-12-08
 - LOGIC-007: neuromodulators.py double counting - Fixed process_outcome() to use get_long_term_value() and get_eligibility() separately instead of serotonin_credits (which included trace, causing trace² double counting)
 - LOGIC-008: collector.py wrong order - Changed get_retrievals_by_context() ORDER BY from DESC to ASC so newest retrieval's rewards take precedence
 - LOGIC-009: eligibility.py double decay - Fixed step() to update entry.last_update to prevent subsequent update() calls from re-applying decay
-- LOGIC-006: FSRS.py MISSING - Created full FSRS-4.5 implementation in src/ww/learning/fsrs.py (33 new tests): Rating enum, FSRSParameters, MemoryState, SchedulingInfo, FSRS scheduler, FSRSMemoryTracker. Fixed w6/w7 parameter swap in difficulty formula.
+- LOGIC-006: FSRS.py MISSING - Created full FSRS-4.5 implementation in src/t4dm/learning/fsrs.py (33 new tests): Rating enum, FSRSParameters, MemoryState, SchedulingInfo, FSRS scheduler, FSRSMemoryTracker. Fixed w6/w7 parameter swap in difficulty formula.

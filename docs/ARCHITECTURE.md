@@ -396,14 +396,14 @@ class InitializerAgent(BaseAgent):
 ## Directory Structure
 
 ```
-ww/
+t4dm/
 ├── ARCHITECTURE.md           # This document
 ├── ww-progress.json          # Progress tracking
 ├── ww-features.json          # Feature requirements
 ├── init.sh                   # Environment setup
 ├── pyproject.toml            # Project configuration
 ├── src/
-│   └── ww/
+│   └── t4dm/
 │       ├── __init__.py
 │       ├── core/
 │       │   ├── __init__.py

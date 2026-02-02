@@ -2,7 +2,7 @@
 
 **Assessment Date:** 2025-12-06
 **System:** World Weaver Memory System v0.1.0
-**Component:** `/mnt/projects/ww/src/ww/learning/eligibility.py`
+**Component:** `/mnt/projects/t4d/t4dm/src/t4dm/learning/eligibility.py`
 **Scope:** Input validation, resource limits, overflow protection, thread safety
 
 ---
@@ -426,9 +426,9 @@ The Eligibility Trace System requires immediate security hardening before produc
 
 ## Files Generated
 
-1. `/mnt/projects/ww/security_analysis_eligibility_trace.md` - Detailed technical analysis (31 KB)
-2. `/mnt/projects/ww/security_poc_eligibility.py` - Proof-of-concept exploits (11 KB)
-3. `/mnt/projects/ww/SECURITY_ASSESSMENT_SUMMARY.md` - This executive summary (12 KB)
+1. `/mnt/projects/t4d/t4dm/security_analysis_eligibility_trace.md` - Detailed technical analysis (31 KB)
+2. `/mnt/projects/t4d/t4dm/security_poc_eligibility.py` - Proof-of-concept exploits (11 KB)
+3. `/mnt/projects/t4d/t4dm/SECURITY_ASSESSMENT_SUMMARY.md` - This executive summary (12 KB)
 
 **Total Assessment:** 54 KB documentation + 6 proof-of-concept exploits
 

@@ -88,16 +88,16 @@ Comprehensive integration testing of the World Weaver memory system reveals **st
 
 | Route Module | Coverage | Status | Notes |
 |--------------|----------|--------|-------|
-| src/ww/api/routes/config.py | 99% | ✓ Excellent | Configuration management fully tested |
-| src/ww/api/routes/episodes.py | 75% | ✓ Good | Episode endpoints well-covered |
-| src/ww/api/routes/skills.py | 54% | ⚠ Weak | Skills endpoint has gap in create method |
-| src/ww/api/routes/entities.py | 51% | ⚠ Weak | Entity routes need more tests |
-| src/ww/api/routes/system.py | 62% | ✓ Fair | System endpoints reasonably covered |
-| src/ww/api/routes/persistence.py | 47% | ⚠ Weak | Persistence routes undercovered |
-| src/ww/api/routes/visualization.py | 61% | ✓ Fair | Visualization routes partially tested |
-| src/ww/api/errors.py | 96% | ✓ Excellent | Error handling well-tested |
-| src/ww/api/deps.py | 74% | ✓ Good | Dependencies mostly covered |
-| src/ww/api/websocket.py | 40% | ✗ Poor | WebSocket functionality poorly tested |
+| src/t4dm/api/routes/config.py | 99% | ✓ Excellent | Configuration management fully tested |
+| src/t4dm/api/routes/episodes.py | 75% | ✓ Good | Episode endpoints well-covered |
+| src/t4dm/api/routes/skills.py | 54% | ⚠ Weak | Skills endpoint has gap in create method |
+| src/t4dm/api/routes/entities.py | 51% | ⚠ Weak | Entity routes need more tests |
+| src/t4dm/api/routes/system.py | 62% | ✓ Fair | System endpoints reasonably covered |
+| src/t4dm/api/routes/persistence.py | 47% | ⚠ Weak | Persistence routes undercovered |
+| src/t4dm/api/routes/visualization.py | 61% | ✓ Fair | Visualization routes partially tested |
+| src/t4dm/api/errors.py | 96% | ✓ Excellent | Error handling well-tested |
+| src/t4dm/api/deps.py | 74% | ✓ Good | Dependencies mostly covered |
+| src/t4dm/api/websocket.py | 40% | ✗ Poor | WebSocket functionality poorly tested |
 
 ---
 
@@ -128,7 +128,7 @@ ValidationError: 5 validation errors for SkillResponse
 
 The test fixture `mock_procedural_service` is missing the `store_skill_direct` method mock:
 
-**Location**: `/mnt/projects/ww/tests/integration/test_api_flows.py:107-131`
+**Location**: `/mnt/projects/t4d/t4dm/tests/integration/test_api_flows.py:107-131`
 
 ```python
 @pytest.fixture
@@ -144,7 +144,7 @@ def mock_procedural_service(mock_skill):
     return service
 ```
 
-**Calling Code**: `/mnt/projects/ww/src/ww/api/routes/skills.py:140`
+**Calling Code**: `/mnt/projects/t4d/t4dm/src/t4dm/api/routes/skills.py:140`
 
 ```python
 stored = await procedural.store_skill_direct(
@@ -354,7 +354,7 @@ When `store_skill_direct` is called on the AsyncMock without a configured return
 
 **Total Skipped**: 7 tests (all in Hebbian strengthening integration)
 
-**Location**: `/mnt/projects/ww/tests/integration/test_hebbian_strengthening.py`
+**Location**: `/mnt/projects/t4d/t4dm/tests/integration/test_hebbian_strengthening.py`
 
 **Tests**:
 1. test_strengthen_relationship_method_exists
@@ -376,7 +376,7 @@ When `store_skill_direct` is called on the AsyncMock without a configured return
 ### Priority 1: CRITICAL
 
 #### Issue 1: Test Fixture Missing Mock Method
-- **File**: `/mnt/projects/ww/tests/integration/test_api_flows.py:107`
+- **File**: `/mnt/projects/t4d/t4dm/tests/integration/test_api_flows.py:107`
 - **Problem**: `mock_procedural_service` fixture missing `store_skill_direct` mock
 - **Impact**: Skill creation endpoint returns 500 errors
 - **Fix Effort**: 5 minutes
@@ -390,19 +390,19 @@ service.store_skill_direct = AsyncMock(return_value=mock_procedure)
 
 #### Issue 2: WebSocket Endpoint Testing
 - **Coverage**: 40% (66 lines untested)
-- **Files**: `/mnt/projects/ww/src/ww/api/websocket.py`
+- **Files**: `/mnt/projects/t4d/t4dm/src/t4dm/api/websocket.py`
 - **Impact**: Real-time updates not verified
 - **Recommendation**: Add WebSocket integration tests
 
 #### Issue 3: Storage Layer Testing
 - **Coverage**: 14-45% (Neo4j/Qdrant stores)
-- **Files**: `/mnt/projects/ww/src/ww/storage/*.py`
+- **Files**: `/mnt/projects/t4d/t4dm/src/t4dm/storage/*.py`
 - **Impact**: Data persistence not fully verified
 - **Recommendation**: Add storage backend integration tests
 
 #### Issue 4: Hebbian Strengthening Tests
 - **Status**: 6 tests skipped/xfailed
-- **File**: `/mnt/projects/ww/tests/integration/test_hebbian_strengthening.py`
+- **File**: `/mnt/projects/t4d/t4dm/tests/integration/test_hebbian_strengthening.py`
 - **Impact**: Relationship weight updates not tested
 - **Recommendation**: Investigate skip reasons and implement missing tests
 
@@ -410,19 +410,19 @@ service.store_skill_direct = AsyncMock(return_value=mock_procedure)
 
 #### Issue 5: Visualization Module Coverage
 - **Coverage**: 10-65% (visualization routes)
-- **Files**: `/mnt/projects/ww/src/ww/visualization/*.py`
+- **Files**: `/mnt/projects/t4d/t4dm/src/t4dm/visualization/*.py`
 - **Impact**: Visualization endpoints not tested
 - **Recommendation**: Add visualization endpoint tests
 
 #### Issue 6: Kymera Integration Tests
 - **Coverage**: 13-95% (action router at 17%)
-- **Files**: `/mnt/projects/ww/src/ww/integrations/kymera/*.py`
+- **Files**: `/mnt/projects/t4d/t4dm/src/t4dm/integrations/kymera/*.py`
 - **Impact**: Third-party integration reliability unknown
 - **Recommendation**: Add Kymera integration test suite
 
 #### Issue 7: Entity Route Testing
 - **Coverage**: 51%
-- **Files**: `/mnt/projects/ww/src/ww/api/routes/entities.py`
+- **Files**: `/mnt/projects/t4d/t4dm/src/t4dm/api/routes/entities.py`
 - **Impact**: Some entity operations not tested
 - **Recommendation**: Expand entity endpoint test coverage
 

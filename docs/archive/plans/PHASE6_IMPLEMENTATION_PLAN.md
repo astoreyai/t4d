@@ -37,7 +37,7 @@
 ## Phase 6: Critical Fixes (Hinton Priority)
 
 ### 6.1 Learned Fusion Weights
-**File**: `src/ww/learning/neuro_symbolic.py:548-587`
+**File**: `src/t4dm/learning/neuro_symbolic.py:548-587`
 **Issue**: Fixed 60/40 neural/symbolic split contradicts learning goals
 
 ```python
@@ -57,7 +57,7 @@ class LearnedFusion(nn.Module):
 ```
 
 ### 6.2 Event-Indexed TD-λ Decay
-**File**: `src/ww/learning/collector.py:470-510`
+**File**: `src/t4dm/learning/collector.py:470-510`
 **Issue**: Traces decay by wall-clock time, not learning events
 
 ```python
@@ -71,7 +71,7 @@ def decay_traces(self, event_index: int) -> int:
 ```
 
 ### 6.3 Memory Reconsolidation
-**New File**: `src/ww/learning/reconsolidation.py`
+**New File**: `src/t4dm/learning/reconsolidation.py`
 **Issue**: Embeddings frozen after creation - should update on retrieval outcomes
 
 ```python
@@ -95,7 +95,7 @@ def reconsolidate(
 ## Phase 7: Biological Mechanisms (CompBio Priority)
 
 ### 7.1 Long-Term Depression (LTD)
-**File**: `src/ww/memory/semantic.py`
+**File**: `src/t4dm/memory/semantic.py`
 **Issue**: Only LTP implemented - network weights can only grow
 
 ```python
@@ -131,7 +131,7 @@ async def apply_homeostatic_scaling(self, target_total: float = 10.0):
 ```
 
 ### 7.3 Pattern Separation (Dentate Gyrus)
-**New File**: `src/ww/memory/pattern_separation.py`
+**New File**: `src/t4dm/memory/pattern_separation.py`
 **Issue**: Similar inputs have similar embeddings, causing interference
 
 ```python
@@ -155,7 +155,7 @@ class DentateGyrus:
 ```
 
 ### 7.4 Sleep-Based Consolidation
-**New File**: `src/ww/consolidation/sleep.py`
+**New File**: `src/t4dm/consolidation/sleep.py`
 **Issue**: Consolidation is manual/scheduled, not replay-based
 
 ```python
@@ -189,7 +189,7 @@ class SleepConsolidation:
 ```
 
 ### 7.5 Working Memory Buffer
-**New File**: `src/ww/memory/working_memory.py`
+**New File**: `src/t4dm/memory/working_memory.py`
 **Issue**: All memories persist immediately - no transient buffer
 
 ```python

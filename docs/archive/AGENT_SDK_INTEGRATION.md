@@ -112,12 +112,12 @@ python -m ww.mcp.server
 
 | Component | Purpose | Location |
 |-----------|---------|----------|
-| `WWAgent` | Full agent wrapper with memory | `ww/sdk/agent.py` |
-| `AgentMemoryClient` | Direct memory access with learning | `ww/sdk/agent_client.py` |
-| `WorldWeaverMCPServer` | MCP server for Claude Code | `ww/mcp/server.py` |
-| `SessionStartHook` | Load context at session start | `ww/hooks/session_lifecycle.py` |
-| `SessionEndHook` | Persist and consolidate at end | `ww/hooks/session_lifecycle.py` |
-| `TaskOutcomeHook` | Learn from task outcomes | `ww/hooks/session_lifecycle.py` |
+| `WWAgent` | Full agent wrapper with memory | `t4dm/sdk/agent.py` |
+| `AgentMemoryClient` | Direct memory access with learning | `t4dm/sdk/agent_client.py` |
+| `WorldWeaverMCPServer` | MCP server for Claude Code | `t4dm/mcp/server.py` |
+| `SessionStartHook` | Load context at session start | `t4dm/hooks/session_lifecycle.py` |
+| `SessionEndHook` | Persist and consolidate at end | `t4dm/hooks/session_lifecycle.py` |
+| `TaskOutcomeHook` | Learn from task outcomes | `t4dm/hooks/session_lifecycle.py` |
 
 ---
 

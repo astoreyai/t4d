@@ -75,9 +75,9 @@ pytest tests/consolidation/test_vae_training_loop.py -v
 ```bash
 # Check coverage for modified files
 pytest tests/consolidation/ tests/integration/ \
-  --cov=src/ww/learning/vae_training \
-  --cov=src/ww/learning/vae_generator \
-  --cov=src/ww/consolidation/sleep \
+  --cov=src/t4dm/learning/vae_training \
+  --cov=src/t4dm/learning/vae_generator \
+  --cov=src/t4dm/consolidation/sleep \
   --cov-report=term-missing
 
 # Expected: 50%+ coverage on all modified files
@@ -87,9 +87,9 @@ pytest tests/consolidation/ tests/integration/ \
 
 ```bash
 # Verify type safety
-mypy src/ww/learning/vae_training.py \
-     src/ww/learning/vae_generator.py \
-     src/ww/consolidation/sleep.py
+mypy src/t4dm/learning/vae_training.py \
+     src/t4dm/learning/vae_generator.py \
+     src/t4dm/consolidation/sleep.py
 
 # Expected: 0 errors
 ```
@@ -112,7 +112,7 @@ mypy src/ww/learning/vae_training.py \
 pip install -e /mnt/projects/ww
 
 # Or set PYTHONPATH
-export PYTHONPATH=/mnt/projects/ww/src:$PYTHONPATH
+export PYTHONPATH=/mnt/projects/t4d/t4dm/src:$PYTHONPATH
 ```
 
 ### If Qdrant compatibility warning appears
@@ -148,13 +148,13 @@ After running tests, check these files for confirmation:
 
 ```bash
 # Verify VAEReplayTrainer implementation
-less /mnt/projects/ww/src/ww/learning/vae_training.py
+less /mnt/projects/t4d/t4dm/src/t4dm/learning/vae_training.py
 
 # Verify train_step fix
-grep -A 10 "def train_step" /mnt/projects/ww/src/ww/learning/vae_generator.py
+grep -A 10 "def train_step" /mnt/projects/t4d/t4dm/src/t4dm/learning/vae_generator.py
 
 # Verify test fixtures
-grep -A 5 "async def sleep_consolidation" /mnt/projects/ww/tests/consolidation/test_vae_training_loop.py
+grep -A 5 "async def sleep_consolidation" /mnt/projects/t4d/t4dm/tests/consolidation/test_vae_training_loop.py
 ```
 
 ---

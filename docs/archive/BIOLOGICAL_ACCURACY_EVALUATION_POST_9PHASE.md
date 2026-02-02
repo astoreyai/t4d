@@ -218,7 +218,7 @@ old_count = size - recent_count
 - Lactate supply for neural energy (Takahashi et al. 1995)
 
 **Recommendation**:
-1. Verify `src/ww/nca/astrocyte*.py` exists
+1. Verify `src/t4dm/nca/astrocyte*.py` exists
 2. If missing, consider low-priority addition (gap junction modulation of lateral inhibition)
 
 ### Gap 2: Protein Synthesis Gate (Phase 7: Lability Window)

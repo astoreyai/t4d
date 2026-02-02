@@ -161,7 +161,7 @@ This plan synthesizes findings from 7 specialized analysis agents (Hinton, CompB
 
 **Module Inventory** (24 directories):
 ```
-src/ww/
+src/t4dm/
 ├── api/           (server, routes, websocket)
 ├── bridge/        (memory-NCA integration)
 ├── cli/           (command-line interface)

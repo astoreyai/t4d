@@ -3,8 +3,8 @@
 **Reviewer**: Neuroscience and Cognitive Architecture Specialist
 **Date**: 2025-12-04
 **Documents Reviewed**:
-- `/mnt/projects/ww/docs/world_weaver_ieee.tex` (IEEE Transactions format)
-- `/mnt/projects/ww/docs/world_weaver_journal_article.tex` (Full journal article)
+- `/mnt/projects/t4d/t4dm/docs/world_weaver_ieee.tex` (IEEE Transactions format)
+- `/mnt/projects/t4d/t4dm/docs/world_weaver_journal_article.tex` (Full journal article)
 
 **Overall Neurocognitive Rigor: 7.5/10**
 

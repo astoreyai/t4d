@@ -62,7 +62,7 @@ SYSTEMS_CONSOLIDATION_DAYS = 30.0
 
 ## 2. Hierarchical Retrieval Tests
 
-**File**: `/mnt/projects/ww/tests/unit/test_hierarchical_retrieval.py`
+**File**: `/mnt/projects/t4d/t4dm/tests/unit/test_hierarchical_retrieval.py`
 
 ### 2.1 Pattern Completion (CA3-like)
 
@@ -159,7 +159,7 @@ assert p95_time_ms < CA1_INTEGRATION_WINDOW_MS + 50  # <200ms
 
 ## 3. Sparse Addressing Tests
 
-**File**: `/mnt/projects/ww/tests/unit/test_sparse_addressing.py`
+**File**: `/mnt/projects/t4d/t4dm/tests/unit/test_sparse_addressing.py`
 
 ### 3.1 Sparsity Levels
 
@@ -275,7 +275,7 @@ assert mean_similarity < 0.3
 
 ## 4. Joint Optimization Tests
 
-**File**: `/mnt/projects/ww/tests/unit/test_joint_optimization.py`
+**File**: `/mnt/projects/t4d/t4dm/tests/unit/test_joint_optimization.py`
 
 ### 4.1 Gate-Retrieval Correlation
 
@@ -401,7 +401,7 @@ assert memory_id not in pending_labels
 
 ## 5. Biological Validation Tests
 
-**File**: `/mnt/projects/ww/tests/unit/test_biological_validation.py`
+**File**: `/mnt/projects/t4d/t4dm/tests/unit/test_biological_validation.py`
 
 ### 5.1 DG Pattern Separation
 
@@ -808,7 +808,7 @@ jobs:
 ### Test File Locations
 
 ```
-/mnt/projects/ww/tests/unit/
+/mnt/projects/t4d/t4dm/tests/unit/
 ├── test_hierarchical_retrieval.py  # Pattern completion, clustering, latency
 ├── test_sparse_addressing.py       # Sparsity, addressing, interference
 ├── test_joint_optimization.py      # Gate-retrieval, credit assignment

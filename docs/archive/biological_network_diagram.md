@@ -528,7 +528,7 @@ PHASE-AMPLITUDE COUPLING (PAC):
 ## 10. INTEGRATION POINTS
 
 ### 10.1 WW-Knowledge Integration
-**File**: `/mnt/projects/ww/src/ww/integration/knowledge.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/integration/knowledge.py`
 
 **Flow**:
 ```
@@ -539,7 +539,7 @@ Spatial Cells → Spatial Embeddings
 ```
 
 ### 10.2 WW-Graph Integration
-**File**: `/mnt/projects/ww/src/ww/integration/graph.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/integration/graph.py`
 
 **Flow**:
 ```
@@ -549,7 +549,7 @@ LC NE → Salience Gating (surprise)
 ```
 
 ### 10.3 WW-Retriever Integration
-**File**: `/mnt/projects/ww/src/ww/integration/retriever.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/integration/retriever.py`
 
 **Flow**:
 ```

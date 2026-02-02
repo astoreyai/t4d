@@ -67,7 +67,7 @@ World Weaver has **strong security fundamentals**:
 
 **2. Database Errors Leak Sensitive Info** (H-2) ✅ FIXED
 - **Risk**: Stack traces expose Neo4j URIs, internal paths, schema
-- **Fix**: Created `src/ww/api/errors.py` with `sanitize_error()` utility
+- **Fix**: Created `src/t4dm/api/errors.py` with `sanitize_error()` utility
 - **Status**: All API routes use sanitized error messages
 
 **3. TLS Not Enforced** (H-3)
@@ -131,7 +131,7 @@ World Weaver has **strong security fundamentals**:
 
 **1. Block reserved session IDs** (5 minutes)
 ```python
-# In src/ww/api/deps.py:42
+# In src/t4dm/api/deps.py:42
 validated = validate_session_id(
     x_session_id,
     allow_none=True,
@@ -141,7 +141,7 @@ validated = validate_session_id(
 
 **2. Add CORS validation** (10 minutes)
 ```python
-# In src/ww/core/config.py, add validator:
+# In src/t4dm/core/config.py, add validator:
 @field_validator("cors_allowed_origins")
 @classmethod
 def validate_cors_origins(cls, v: list[str]) -> list[str]:
@@ -163,20 +163,20 @@ WW_API_WORKERS=1
 ## Files Requiring Changes
 
 ### Phase 1 (Critical Fixes)
-1. `src/ww/core/config.py` - Add validators for CORS, TLS, API key
-2. `src/ww/api/deps.py` - Add API key verification
-3. `src/ww/api/errors.py` - **NEW** - Error sanitization utilities
-4. `src/ww/api/routes/*.py` - Update error handling (6 files)
+1. `src/t4dm/core/config.py` - Add validators for CORS, TLS, API key
+2. `src/t4dm/api/deps.py` - Add API key verification
+3. `src/t4dm/api/errors.py` - **NEW** - Error sanitization utilities
+4. `src/t4dm/api/routes/*.py` - Update error handling (6 files)
 5. `.env.example` - Update with security guidance
 6. `docker-compose.production.yml` - **NEW** - TLS configuration
 
 ### Phase 2 (Security Hardening)
-7. `src/ww/api/middleware.py` - **NEW** - Security headers
-8. `src/ww/api/server.py` - Add middleware
+7. `src/t4dm/api/middleware.py` - **NEW** - Security headers
+8. `src/t4dm/api/server.py` - Add middleware
 9. `Dockerfile` - Add non-root user
 
 ### Phase 3 (Defense in Depth)
-10. `src/ww/observability/audit.py` - **NEW** - Audit logging
+10. `src/t4dm/observability/audit.py` - **NEW** - Audit logging
 11. `tests/security/` - **NEW** - Security test suite
 
 ---

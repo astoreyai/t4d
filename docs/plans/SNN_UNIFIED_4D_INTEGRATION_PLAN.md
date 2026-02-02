@@ -227,7 +227,7 @@ All line numbers verified from source code on 2026-01-30.
 **Description**: Implement temporal write strength modulation based on prediction error magnitude.
 
 **Files to Create**:
-- `/mnt/projects/t4d/t4dm/src/ww/core/temporal_control.py`
+- `/mnt/projects/t4d/t4dm/src/t4dm/core/temporal_control.py`
 
 **Implementation**:
 ```python
@@ -297,7 +297,7 @@ def compute_tau(
 **Description**: Multiply memory gate score by τ(t) to modulate write strength.
 
 **Files to Edit**:
-- `src/ww/core/memory_gate.py:115-145`
+- `src/t4dm/core/memory_gate.py:115-145`
 
 **Changes**:
 ```python
@@ -345,7 +345,7 @@ logger.debug(
 **Description**: Wrap Norse LIFCell for T4DM integration.
 
 **Files to Create**:
-- `/mnt/projects/t4d/t4dm/src/ww/nca/snn_backend.py`
+- `/mnt/projects/t4d/t4dm/src/t4dm/nca/snn_backend.py`
 
 **Implementation**:
 ```python
@@ -450,7 +450,7 @@ class NorseSpikeGenerator:
 **Description**: Compile STDP `compute_all_updates()` with Numba for 10-100x speedup.
 
 **Files to Edit**:
-- `src/ww/learning/stdp.py:498` (add Numba JIT variant)
+- `src/t4dm/learning/stdp.py:498` (add Numba JIT variant)
 
 **Changes**:
 ```python
@@ -565,7 +565,7 @@ def compute_all_updates(self, use_jit: bool = True) -> dict[tuple[str, str], flo
 **Description**: Create unified memory schema with κ consolidation field.
 
 **Files to Create**:
-- `/mnt/projects/t4d/t4dm/src/ww/core/unified_memory.py`
+- `/mnt/projects/t4d/t4dm/src/t4dm/core/unified_memory.py`
 
 **Implementation**:
 ```python
@@ -718,7 +718,7 @@ def query_procedural(items: list[MemoryItem]) -> list[MemoryItem]:
 **Description**: Backward-compatible addition of kappa field to Episode.
 
 **Files to Edit**:
-- `src/ww/core/types.py:106` (Episode class)
+- `src/t4dm/core/types.py:106` (Episode class)
 
 **Changes**:
 ```python
@@ -753,7 +753,7 @@ def query_procedural(items: list[MemoryItem]) -> list[MemoryItem]:
 **Description**: Add kappa field to Entity class.
 
 **Files to Edit**:
-- `src/ww/core/types.py` (Entity class, find via search)
+- `src/t4dm/core/types.py` (Entity class, find via search)
 
 **Changes**: Same as ATOM-P1-06 but for Entity class.
 
@@ -774,7 +774,7 @@ def query_procedural(items: list[MemoryItem]) -> list[MemoryItem]:
 **Description**: Add kappa field to Procedure class.
 
 **Files to Edit**:
-- `src/ww/core/types.py` (Procedure class, find via search)
+- `src/t4dm/core/types.py` (Procedure class, find via search)
 
 **Changes**: Same as ATOM-P1-06 but for Procedure class.
 
@@ -795,7 +795,7 @@ def query_procedural(items: list[MemoryItem]) -> list[MemoryItem]:
 **Description**: Port NeuralFieldSolver to PyTorch GPU for 10x speedup.
 
 **Files to Create**:
-- `/mnt/projects/t4d/t4dm/src/ww/nca/neural_field_gpu.py`
+- `/mnt/projects/t4d/t4dm/src/t4dm/nca/neural_field_gpu.py`
 
 **Implementation**:
 ```python
@@ -1078,7 +1078,7 @@ During sleep consolidation:
 **Description**: Implement storage backend for MemoryItem.
 
 **Files to Create**:
-- `/mnt/projects/t4d/t4dm/src/ww/storage/unified_store.py`
+- `/mnt/projects/t4d/t4dm/src/t4dm/storage/unified_store.py`
 
 **Implementation**:
 ```python
@@ -1247,7 +1247,7 @@ class UnifiedMemoryStore:
 **Description**: Filter κ < 0.3, sort by recency.
 
 **Files to Edit**:
-- `src/ww/storage/unified_store.py` (add query methods)
+- `src/t4dm/storage/unified_store.py` (add query methods)
 
 **Changes**:
 ```python
@@ -1314,7 +1314,7 @@ def query_episodic(
 **Description**: Filter κ > 0.7, graph traversal.
 
 **Files to Edit**:
-- `src/ww/storage/unified_store.py`
+- `src/t4dm/storage/unified_store.py`
 
 **Changes**:
 ```python
@@ -1364,7 +1364,7 @@ def query_semantic(
 **Description**: Filter type=PROCEDURAL, sort by success rate.
 
 **Files to Edit**:
-- `src/ww/storage/unified_store.py`
+- `src/t4dm/storage/unified_store.py`
 
 **Changes**:
 ```python
@@ -1425,7 +1425,7 @@ def query_procedural(
 **Description**: During NREM replay, increment κ by 0.05.
 
 **Files to Edit**:
-- `src/ww/consolidation/sleep.py:342-365` (replay loop)
+- `src/t4dm/consolidation/sleep.py:342-365` (replay loop)
 
 **Changes**:
 ```python
@@ -1473,7 +1473,7 @@ for memory in replay_batch:
 **Description**: During REM clustering, increment κ by 0.2.
 
 **Files to Edit**:
-- `src/ww/consolidation/sleep.py:345-389` (REM clustering)
+- `src/t4dm/consolidation/sleep.py:345-389` (REM clustering)
 
 **Changes**:
 ```python
@@ -1704,7 +1704,7 @@ Due to length constraints, I'll summarize remaining Phase 2 atoms:
 **Description**: Convert replayed embeddings to spike trains.
 
 **Files to Create**:
-- `/mnt/projects/t4d/t4dm/src/ww/nca/spike_reinjection.py`
+- `/mnt/projects/t4d/t4dm/src/t4dm/nca/spike_reinjection.py`
 
 **Implementation**: (See plan section 12, REINJ block in original document)
 
@@ -1728,7 +1728,7 @@ Due to length constraints, I'll summarize remaining Phase 2 atoms:
 **Description**: Feed replayed memories as spikes to SNN.
 
 **Files to Edit**:
-- `src/ww/consolidation/sleep.py:342-365`
+- `src/t4dm/consolidation/sleep.py:342-365`
 
 **Changes**:
 ```python
@@ -1881,7 +1881,7 @@ Remaining Phase 4 atoms:
 **Description**: 3D visualization of brain regions and pathways.
 
 **Files to Create**:
-- `/mnt/projects/t4d/t4dm/src/ww/visualization/brainrender_export.py`
+- `/mnt/projects/t4d/t4dm/src/t4dm/visualization/brainrender_export.py`
 
 **Implementation**: (See plan section 4.3 in original document)
 

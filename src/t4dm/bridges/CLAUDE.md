@@ -1,5 +1,5 @@
 # Bridges Module
-**Path**: `/mnt/projects/t4d/t4dm/src/ww/bridges/`
+**Path**: `/mnt/projects/t4d/t4dm/src/t4dm/bridges/`
 
 ## What
 Integration bridges connecting neural subsystems (NCA, Forward-Forward, Capsule Networks, Predictive Coding) to memory operations. Six bridge implementations providing state-dependent encoding, retrieval scoring, novelty detection, and learning signal routing.

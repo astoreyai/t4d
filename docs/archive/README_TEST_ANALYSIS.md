@@ -139,7 +139,7 @@ Estimated Effort:          40-50 hours
 ### Critical Issues (Fix Today)
 
 **Issue 1**: Neo4j password too weak
-- File: `/mnt/projects/ww/.env`
+- File: `/mnt/projects/t4d/t4dm/.env`
 - Current: `NEO4J_PASSWORD=wwpassword`
 - Fix: `NEO4J_PASSWORD=WwPass123!`
 - Impact: Unblocks 40+ failing tests
@@ -151,7 +151,7 @@ Estimated Effort:          40-50 hours
 - Effort: 10 minutes
 
 **Issue 3**: Mock fixtures incomplete
-- File: `/mnt/projects/ww/tests/conftest.py`
+- File: `/mnt/projects/t4d/t4dm/tests/conftest.py`
 - Impact: Fixes 16 MCP gateway tests
 - Effort: 2 hours
 
@@ -218,7 +218,7 @@ Estimated Effort:          40-50 hours
 
 ## File Locations
 
-All files are in `/mnt/projects/ww/`:
+All files are in `/mnt/projects/t4d/t4dm/`:
 
 ```
 Analysis Documents:
@@ -368,9 +368,9 @@ Complete remaining work
 - Coverage.py: https://coverage.readthedocs.io/
 
 ### Project Documentation
-- `/mnt/projects/ww/ARCHITECTURE.md` - System design
-- `/mnt/projects/ww/IMPLEMENTATION_PLAN.md` - Feature details
-- `/mnt/projects/ww/README.md` - Project overview
+- `/mnt/projects/t4d/t4dm/ARCHITECTURE.md` - System design
+- `/mnt/projects/t4d/t4dm/IMPLEMENTATION_PLAN.md` - Feature details
+- `/mnt/projects/t4d/t4dm/README.md` - Project overview
 
 ### Local Services
 - Neo4j: http://localhost:7474 (when running)

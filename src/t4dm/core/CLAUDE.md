@@ -1,5 +1,5 @@
 # Core Module
-**Path**: `/mnt/projects/t4d/t4dm/src/ww/core/`
+**Path**: `/mnt/projects/t4d/t4dm/src/t4dm/core/`
 
 ## What
 Central hub of the system providing domain types (Episode, Entity, Procedure, Relationship), configuration (80+ parameters), input validation, provider-agnostic protocols, service lifecycle, memory gating, action framework, privacy filtering, and production infrastructure (circuit breakers, feature flags, secrets management).

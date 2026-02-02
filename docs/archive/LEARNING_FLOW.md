@@ -294,9 +294,9 @@ print(f"Mean goodness: {stats['state']['mean_goodness']:.3f}")
 
 ## Key Files
 
-- `src/ww/encoding/ff_encoder.py` - FFEncoder implementation
-- `src/ww/learning/three_factor.py` - Three-factor learning rule
-- `src/ww/memory/episodic.py` - Integration in create/recall/learn
+- `src/t4dm/encoding/ff_encoder.py` - FFEncoder implementation
+- `src/t4dm/learning/three_factor.py` - Three-factor learning rule
+- `src/t4dm/memory/episodic.py` - Integration in create/recall/learn
 - `tests/encoding/test_ff_encoder.py` - Tests
 
 ---

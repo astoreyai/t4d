@@ -2,7 +2,7 @@
 ## World Weaver Journal Article
 
 **Generated:** 2024-12-04
-**Document:** /mnt/projects/ww/docs/world_weaver_journal_article.tex
+**Document:** /mnt/projects/t4d/t4dm/docs/world_weaver_journal_article.tex
 **Bibliography Style:** plainnat (natbib)
 **Total Citations in Bibliography:** 47
 **Total Citation Keys Used:** 33

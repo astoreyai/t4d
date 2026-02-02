@@ -2,7 +2,7 @@
 
 **Date**: 2025-12-09
 **Validated by**: CompBio Agent
-**Test Suite**: `/mnt/projects/ww/tests/learning/test_biological_validation.py`
+**Test Suite**: `/mnt/projects/t4d/t4dm/tests/learning/test_biological_validation.py`
 **Status**: ✓ **VALIDATED** - All critical biological constraints pass
 
 ---
@@ -371,5 +371,5 @@ The World Weaver memory system demonstrates **strong biological plausibility** a
 
 **Report Generated**: 2025-12-09
 **Validation Status**: ✓ **COMPLETE**
-**Test Suite**: `/mnt/projects/ww/tests/learning/test_biological_validation.py`
+**Test Suite**: `/mnt/projects/t4d/t4dm/tests/learning/test_biological_validation.py`
 **Total Tests**: 40 | **Passed**: 32 | **Critical Pass Rate**: 100%

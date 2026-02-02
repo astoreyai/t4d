@@ -592,7 +592,7 @@ scrape_configs:
 
 ### Grafana Dashboard
 
-Import template from `/mnt/projects/ww/monitoring/grafana-dashboard.json` (if exists), or create custom panels:
+Import template from `/mnt/projects/t4d/t4dm/monitoring/grafana-dashboard.json` (if exists), or create custom panels:
 
 **Key Panels**:
 1. **API Throughput**: Requests per second by endpoint
@@ -666,7 +666,7 @@ sudo ufw enable
 
 #### API Key Authentication (Production)
 
-Add to `/opt/world-weaver/ww/api/middleware.py`:
+Add to `/opt/world-weaver/t4dm/api/middleware.py`:
 ```python
 from fastapi import Security, HTTPException
 from fastapi.security import APIKeyHeader
@@ -1030,7 +1030,7 @@ WW_EMBEDDING_BATCH_SIZE=16
 
 ## Support Resources
 
-- **Documentation**: `/mnt/projects/ww/docs/`
+- **Documentation**: `/mnt/projects/t4d/t4dm/docs/`
 - **GitHub Issues**: https://github.com/astoreyai/world-weaver/issues
 - **Neo4j Docs**: https://neo4j.com/docs/
 - **Qdrant Docs**: https://qdrant.tech/documentation/

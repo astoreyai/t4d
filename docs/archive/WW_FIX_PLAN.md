@@ -104,7 +104,7 @@ Documentation complete:
 **Goal**: Fix runtime crashes and security vulnerabilities that block production deployment.
 
 ### TASK-P1-001: Missing asyncio import in semantic.py
-**File**: `src/ww/memory/semantic.py:7`
+**File**: `src/t4dm/memory/semantic.py:7`
 **Severity**: CRITICAL (Runtime crash)
 **Description**: `asyncio.gather` used at line 350 without import
 ```python
@@ -114,7 +114,7 @@ import asyncio
 **Validation**: `python -c "from ww.memory.semantic import SemanticMemory"`
 
 ### TASK-P1-002: Cypher injection via dynamic labels
-**File**: `src/ww/storage/neo4j_store.py:158+`
+**File**: `src/t4dm/storage/neo4j_store.py:158+`
 **Severity**: CRITICAL (Security)
 **Description**: User input passed directly to Cypher labels
 ```python
@@ -131,7 +131,7 @@ def validate_label(label: str) -> str:
 **Validation**: Test with label `"Entity) MATCH (n) DELETE n //"`
 
 ### TASK-P1-003: Session isolation broken in store singletons
-**File**: `src/ww/storage/qdrant_store.py`, `src/ww/storage/neo4j_store.py`
+**File**: `src/t4dm/storage/qdrant_store.py`, `src/t4dm/storage/neo4j_store.py`
 **Severity**: HIGH (Data leak)
 **Description**: Stores share single instance across all sessions
 ```python
@@ -158,7 +158,7 @@ def get_qdrant_store(session_id: str = "default") -> QdrantStore:
 **Validation**: Test 2 sessions can't see each other's data
 
 ### TASK-P1-004: Saga compensation errors silently ignored
-**File**: `src/ww/storage/saga.py:85-95`
+**File**: `src/t4dm/storage/saga.py:85-95`
 **Severity**: HIGH (Data integrity)
 **Description**: Compensation failures not propagated
 ```python
@@ -179,7 +179,7 @@ class CompensationError(Exception):
 **Validation**: Test compensation failure raises proper error
 
 ### TASK-P1-005: Race condition in async service initialization
-**File**: `src/ww/mcp/memory_gateway.py:30-54`
+**File**: `src/t4dm/mcp/memory_gateway.py:30-54`
 **Severity**: MEDIUM (Intermittent failures)
 **Description**: Multiple requests can trigger parallel initialization
 ```python
@@ -214,7 +214,7 @@ def event_loop():
 **Validation**: `pytest tests/ -v` all pass
 
 ### TASK-P1-007: Add missing Neo4j indexes
-**File**: `src/ww/storage/neo4j_store.py`
+**File**: `src/t4dm/storage/neo4j_store.py`
 **Severity**: MEDIUM (Performance)
 **Description**: Missing indexes on Entity.sessionId, Episode.sessionId
 ```python
@@ -232,7 +232,7 @@ CREATE INDEX procedure_session IF NOT EXISTS FOR (p:Procedure) ON (p.sessionId)
 **Goal**: Eliminate O(n²) algorithms and N+1 queries.
 
 ### TASK-P2-001: Replace O(n²) clustering with DBSCAN/HDBSCAN
-**File**: `src/ww/consolidation/service.py:425-462`
+**File**: `src/t4dm/consolidation/service.py:425-462`
 **Severity**: HIGH (Scaling blocker)
 **Current**: Pairwise cosine similarity - O(n²)
 **Target**: HDBSCAN clustering - O(n log n)
@@ -249,7 +249,7 @@ async def _cluster_episodes(self, episodes: list[Episode]) -> list[list[Episode]
 **Validation**: 10K episodes < 10s
 
 ### TASK-P2-002: Batch relationship queries (eliminate N+1)
-**File**: `src/ww/memory/semantic.py:382-414`
+**File**: `src/t4dm/memory/semantic.py:382-414`
 **Severity**: HIGH (Query explosion)
 **Current**: One query per entity in Hebbian strengthening
 **Target**: Single batch query
@@ -265,7 +265,7 @@ rels_map = await self.graph_store.get_relationships_batch(all_ids)
 **Validation**: Profile shows single query for 100 entities
 
 ### TASK-P2-003: Implement embedding cache
-**File**: `src/ww/embedding/bge_m3.py`
+**File**: `src/t4dm/embedding/bge_m3.py`
 **Severity**: MEDIUM (Latency)
 **Description**: Same texts re-embedded repeatedly
 ```python
@@ -285,7 +285,7 @@ class BGE_M3_Provider:
 **Validation**: Repeated embed calls return cached
 
 ### TASK-P2-004: Add Qdrant search prefiltering
-**File**: `src/ww/storage/qdrant_store.py`
+**File**: `src/t4dm/storage/qdrant_store.py`
 **Severity**: MEDIUM (Query efficiency)
 **Description**: Filter before vector similarity for session isolation
 ```python
@@ -302,7 +302,7 @@ filter=models.Filter(
 **Validation**: Query plans show filter first
 
 ### TASK-P2-005: Parallel Hebbian updates
-**File**: `src/ww/memory/semantic.py:382-414`
+**File**: `src/t4dm/memory/semantic.py:382-414`
 **Severity**: MEDIUM (Latency)
 **Description**: Sequential relationship updates
 ```python
@@ -319,7 +319,7 @@ await asyncio.gather(*[
 **Validation**: 10 co-retrievals < 100ms (was 500ms)
 
 ### TASK-P2-006: Lazy model loading
-**File**: `src/ww/embedding/bge_m3.py`
+**File**: `src/t4dm/embedding/bge_m3.py`
 **Severity**: LOW (Startup time)
 **Description**: Model loaded even when not needed
 ```python
@@ -335,7 +335,7 @@ class BGE_M3_Provider:
 **Validation**: Import without GPU allocation
 
 ### TASK-P2-007: Connection pooling for Neo4j
-**File**: `src/ww/storage/neo4j_store.py`
+**File**: `src/t4dm/storage/neo4j_store.py`
 **Severity**: LOW (Connection overhead)
 **Description**: Configure connection pool settings
 ```python
@@ -349,7 +349,7 @@ self._driver = AsyncGraphDatabase.driver(
 **Validation**: Concurrent queries reuse connections
 
 ### TASK-P2-008: Qdrant batch upsert optimization
-**File**: `src/ww/storage/qdrant_store.py`
+**File**: `src/t4dm/storage/qdrant_store.py`
 **Severity**: LOW (Bulk insert)
 **Description**: Use parallel upsert for batches > 100
 ```python
@@ -369,7 +369,7 @@ if len(points) > 100:
 **Goal**: Production-ready security posture.
 
 ### TASK-P3-001: Add rate limiting to MCP tools
-**File**: `src/ww/mcp/memory_gateway.py`
+**File**: `src/t4dm/mcp/memory_gateway.py`
 **Severity**: HIGH (DoS protection)
 ```python
 from collections import defaultdict
@@ -395,7 +395,7 @@ class RateLimiter:
 **Validation**: 101st request in 60s returns rate limit error
 
 ### TASK-P3-002: Input sanitization for all MCP tools
-**File**: `src/ww/mcp/validation.py`
+**File**: `src/t4dm/mcp/validation.py`
 **Severity**: HIGH (Injection prevention)
 ```python
 import re
@@ -417,7 +417,7 @@ def sanitize_identifier(value: str) -> str:
 **Validation**: Null bytes, unicode exploits blocked
 
 ### TASK-P3-003: Add authentication context
-**File**: `src/ww/mcp/memory_gateway.py`
+**File**: `src/t4dm/mcp/memory_gateway.py`
 **Severity**: MEDIUM (Access control)
 ```python
 from contextvars import ContextVar
@@ -436,7 +436,7 @@ def require_auth(func):
 **Validation**: Unauthenticated requests rejected
 
 ### TASK-P3-004: Secure configuration loading
-**File**: `src/ww/core/config.py`
+**File**: `src/t4dm/core/config.py`
 **Severity**: MEDIUM (Secret management)
 ```python
 import os
@@ -449,7 +449,7 @@ def load_config():
         logger.debug("Neo4j password: [REDACTED]")
 
     # Validate file permissions for config files
-    config_path = Path("~/.ww/config.yaml").expanduser()
+    config_path = Path("~/.t4dm/config.yaml").expanduser()
     if config_path.exists():
         mode = config_path.stat().st_mode
         if mode & 0o077:
@@ -458,7 +458,7 @@ def load_config():
 **Validation**: Secrets not in logs
 
 ### TASK-P3-005: Add request ID tracking
-**File**: `src/ww/mcp/memory_gateway.py`
+**File**: `src/t4dm/mcp/memory_gateway.py`
 **Severity**: LOW (Audit trail)
 ```python
 from uuid import uuid4
@@ -484,7 +484,7 @@ def with_request_id(func):
 **Validation**: All logs have request ID
 
 ### TASK-P3-006: Validate config weight bounds
-**File**: `src/ww/core/config.py`
+**File**: `src/t4dm/core/config.py`
 **Severity**: LOW (Configuration safety)
 ```python
 def validate_weights(config: dict):
@@ -625,12 +625,12 @@ def mock_neo4j():
 ### TASK-P5-001: Standardize method naming
 **Description**: `build` → `create`, `retrieve` → `recall`
 **Files**:
-- `src/ww/memory/procedural.py`: `build()` → `create_skill()`
-- `src/ww/memory/procedural.py`: `retrieve()` → `recall_skill()`
-- `src/ww/mcp/memory_gateway.py`: Update tool names
+- `src/t4dm/memory/procedural.py`: `build()` → `create_skill()`
+- `src/t4dm/memory/procedural.py`: `retrieve()` → `recall_skill()`
+- `src/t4dm/mcp/memory_gateway.py`: Update tool names
 
 ### TASK-P5-002: Add TypedDict for MCP responses
-**File**: `src/ww/mcp/types.py` (NEW)
+**File**: `src/t4dm/mcp/types.py` (NEW)
 ```python
 from typing import TypedDict, Optional
 
@@ -647,7 +647,7 @@ class ErrorResponse(TypedDict):
 ```
 
 ### TASK-P5-003: Consistent error codes
-**File**: `src/ww/mcp/errors.py` (NEW)
+**File**: `src/t4dm/mcp/errors.py` (NEW)
 ```python
 class ErrorCode:
     VALIDATION = "validation_error"
@@ -688,15 +688,15 @@ return {
 ### TASK-P5-006: Move Cypher to storage layer
 **Description**: Memory layer shouldn't construct Cypher
 **Files**:
-- `src/ww/storage/neo4j_store.py`: Add high-level methods
-- `src/ww/memory/*.py`: Use store methods instead of raw Cypher
+- `src/t4dm/storage/neo4j_store.py`: Add high-level methods
+- `src/t4dm/memory/*.py`: Use store methods instead of raw Cypher
 
 ### TASK-P5-007: Add OpenAPI schema
-**File**: `src/ww/mcp/schema.py` (NEW)
+**File**: `src/t4dm/mcp/schema.py` (NEW)
 **Description**: Generate schema from MCP tools
 
 ### TASK-P5-008: Deprecation warnings for old API
-**File**: `src/ww/mcp/memory_gateway.py`
+**File**: `src/t4dm/mcp/memory_gateway.py`
 ```python
 import warnings
 

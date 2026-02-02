@@ -7,12 +7,12 @@
 ## Phase 0: Fix Async Issues (1-2 hours) - CRITICAL
 
 ### Tasks
-- [ ] Create `/mnt/projects/ww/tests/conftest.py`
+- [ ] Create `/mnt/projects/t4d/t4dm/tests/conftest.py`
   - [ ] Add session-scoped event loop fixture
   - [ ] Add cleanup_memory_services fixture
   - [ ] Add mock fixtures (embedding, qdrant, neo4j)
   - [ ] Configure pytest markers
-- [ ] Update `/mnt/projects/ww/pyproject.toml`
+- [ ] Update `/mnt/projects/t4d/t4dm/pyproject.toml`
   - [ ] Set `asyncio_mode = "auto"`
   - [ ] Add pytest markers
 - [ ] Run tests: `pytest tests/ -v`
@@ -29,7 +29,7 @@ pytest tests/test_memory.py::test_episodic_memory_recall -v
 
 ## Phase 1: Consolidation Tests (8-10 hours) - CRITICAL
 
-### Create `/mnt/projects/ww/tests/unit/test_consolidation.py`
+### Create `/mnt/projects/t4d/t4dm/tests/unit/test_consolidation.py`
 
 #### Consolidation Service Tests
 - [ ] `TestLightConsolidation` class
@@ -70,7 +70,7 @@ pytest tests/unit/test_consolidation.py -v
 
 ## Phase 2: MCP Gateway Tests (10-12 hours) - CRITICAL
 
-### Create `/mnt/projects/ww/tests/unit/test_mcp_gateway.py`
+### Create `/mnt/projects/t4d/t4dm/tests/unit/test_mcp_gateway.py`
 
 #### Episodic Memory Tools
 - [ ] `TestEpisodicMemoryTools` class
@@ -125,7 +125,7 @@ pytest tests/unit/test_mcp_gateway.py -v
 
 ## Phase 3: Observability Tests (8-10 hours) - HIGH PRIORITY
 
-### Create `/mnt/projects/ww/tests/unit/test_observability.py`
+### Create `/mnt/projects/t4d/t4dm/tests/unit/test_observability.py`
 
 #### Logging Tests
 - [ ] `TestLogging` class
@@ -167,7 +167,7 @@ pytest tests/unit/test_observability.py -v
 
 ## Phase 4: Storage & Edge Cases (12-15 hours) - MEDIUM PRIORITY
 
-### Create `/mnt/projects/ww/tests/unit/test_storage.py`
+### Create `/mnt/projects/t4d/t4dm/tests/unit/test_storage.py`
 
 #### Neo4j Storage Tests
 - [ ] `TestNeo4jStore` class
@@ -192,7 +192,7 @@ pytest tests/unit/test_observability.py -v
   - [ ] `test_batch_operations()`
   - [ ] `test_collection_cleanup()`
 
-### Create `/mnt/projects/ww/tests/unit/test_edge_cases.py`
+### Create `/mnt/projects/t4d/t4dm/tests/unit/test_edge_cases.py`
 
 #### Memory Edge Cases
 - [ ] `TestMemoryEdgeCases` class
@@ -235,7 +235,7 @@ pytest tests/unit/test_storage.py tests/unit/test_edge_cases.py -v
 ## Phase 5: Integration & Documentation (6-8 hours) - MEDIUM PRIORITY
 
 ### Documentation
-- [ ] Update `/mnt/projects/ww/README.md` - Add test section
+- [ ] Update `/mnt/projects/t4d/t4dm/README.md` - Add test section
 - [ ] Create test execution guide
 - [ ] Document test markers and categories
 - [ ] Add coverage report instructions
@@ -376,17 +376,17 @@ Week 2:
 ## Resources
 
 **Analysis Documents**:
-- `/mnt/projects/ww/TEST_COVERAGE_ANALYSIS.md` - Detailed analysis
-- `/mnt/projects/ww/TEST_IMPLEMENTATION_ROADMAP.md` - Full roadmap with code
-- `/mnt/projects/ww/TEST_SUMMARY.md` - Executive summary
+- `/mnt/projects/t4d/t4dm/TEST_COVERAGE_ANALYSIS.md` - Detailed analysis
+- `/mnt/projects/t4d/t4dm/TEST_IMPLEMENTATION_ROADMAP.md` - Full roadmap with code
+- `/mnt/projects/t4d/t4dm/TEST_SUMMARY.md` - Executive summary
 
 **Test Templates**:
-- `/mnt/projects/ww/tests/unit/test_validation.py` - 100% coverage example
-- `/mnt/projects/ww/tests/unit/test_saga.py` - 96% coverage example
-- `/mnt/projects/ww/tests/integration/test_session_isolation.py` - Integration test example
+- `/mnt/projects/t4d/t4dm/tests/unit/test_validation.py` - 100% coverage example
+- `/mnt/projects/t4d/t4dm/tests/unit/test_saga.py` - 96% coverage example
+- `/mnt/projects/t4d/t4dm/tests/integration/test_session_isolation.py` - Integration test example
 
 **Configuration**:
-- `/mnt/projects/ww/pyproject.toml` - Pytest settings
+- `/mnt/projects/t4d/t4dm/pyproject.toml` - Pytest settings
 
 ---
 

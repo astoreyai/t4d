@@ -32,7 +32,7 @@ This plan addresses critical gaps in WW's memory system identified through HSA p
 
 ### P0a: Learned Content Projection (1024→128)
 
-**Location**: `/mnt/projects/ww/src/ww/core/learned_gate.py`
+**Location**: `/mnt/projects/t4d/t4dm/src/t4dm/core/learned_gate.py`
 
 **Current Problem** (line 321-322):
 ```python
@@ -61,7 +61,7 @@ class LearnedMemoryGate:
 
 ### P0b: Semantic Context Embedding
 
-**Location**: `/mnt/projects/ww/src/ww/core/learned_gate.py` lines 395-421
+**Location**: `/mnt/projects/t4d/t4dm/src/t4dm/core/learned_gate.py` lines 395-421
 
 **Current Problem**: Hash-based random projection (NO SEMANTICS):
 ```python
@@ -88,7 +88,7 @@ async def _embed_context_string(self, s: str, dim: int) -> np.ndarray:
 
 ### P0c: Learned Re-ranking
 
-**Location**: New file `/mnt/projects/ww/src/ww/memory/reranker.py`
+**Location**: New file `/mnt/projects/t4d/t4dm/src/t4dm/memory/reranker.py`
 
 **Design**: Lightweight MLP that re-ranks Qdrant results:
 ```python
@@ -110,7 +110,7 @@ class LearnedReranker:
 
 ## Phase 1: Hierarchical Episode Retrieval
 
-### New File: `/mnt/projects/ww/src/ww/memory/cluster_index.py`
+### New File: `/mnt/projects/t4d/t4dm/src/t4dm/memory/cluster_index.py`
 
 **Core Class**: `ClusterIndex` - CA3-like semantic grouping
 
@@ -146,7 +146,7 @@ Query → ClusterIndex.select_clusters(q, ne_gain, ach_mode)
 
 ## Phase 2: Learned Sparse Addressing
 
-### New File: `/mnt/projects/ww/src/ww/memory/learned_sparse_index.py`
+### New File: `/mnt/projects/t4d/t4dm/src/t4dm/memory/learned_sparse_index.py`
 
 **Core Class**: `LearnedSparseIndex` - Replaces fixed 10% sparsity
 
@@ -188,7 +188,7 @@ L_joint = L_gate + λ_r*L_retrieval + λ_c*L_consistency + λ_d*L_diversity
 3. `L_consistency` (NEW): Gate predictions ↔ retrieval scores alignment
 4. `L_diversity` (NEW): Entropy of gate decisions (prevents collapse)
 
-### New File: `/mnt/projects/ww/src/ww/memory/feature_aligner.py`
+### New File: `/mnt/projects/t4d/t4dm/src/t4dm/memory/feature_aligner.py`
 
 Projects gate features → retrieval space for consistency:
 ```python
@@ -268,20 +268,20 @@ def get_gate_learning_rate(base_lr, neuromod_state):
 
 ## Files to Create
 
-1. `/mnt/projects/ww/src/ww/memory/cluster_index.py` (~300 lines)
-2. `/mnt/projects/ww/src/ww/memory/learned_sparse_index.py` (~400 lines)
-3. `/mnt/projects/ww/src/ww/memory/feature_aligner.py` (~100 lines)
-4. `/mnt/projects/ww/src/ww/memory/reranker.py` (~150 lines)
-5. `/mnt/projects/ww/tests/unit/test_cluster_index.py` (~200 lines)
-6. `/mnt/projects/ww/tests/unit/test_sparse_index.py` (~200 lines)
-7. `/mnt/projects/ww/tests/unit/test_joint_optimization.py` (~150 lines)
+1. `/mnt/projects/t4d/t4dm/src/t4dm/memory/cluster_index.py` (~300 lines)
+2. `/mnt/projects/t4d/t4dm/src/t4dm/memory/learned_sparse_index.py` (~400 lines)
+3. `/mnt/projects/t4d/t4dm/src/t4dm/memory/feature_aligner.py` (~100 lines)
+4. `/mnt/projects/t4d/t4dm/src/t4dm/memory/reranker.py` (~150 lines)
+5. `/mnt/projects/t4d/t4dm/tests/unit/test_cluster_index.py` (~200 lines)
+6. `/mnt/projects/t4d/t4dm/tests/unit/test_sparse_index.py` (~200 lines)
+7. `/mnt/projects/t4d/t4dm/tests/unit/test_joint_optimization.py` (~150 lines)
 
 ## Files to Modify
 
-1. `/mnt/projects/ww/src/ww/core/learned_gate.py` - Add projection, modulated LR
-2. `/mnt/projects/ww/src/ww/memory/episodic.py` - Hierarchical recall, joint optimization
-3. `/mnt/projects/ww/src/ww/consolidation/sleep.py` - Register clusters
-4. `/mnt/projects/ww/src/ww/core/config.py` - New settings
+1. `/mnt/projects/t4d/t4dm/src/t4dm/core/learned_gate.py` - Add projection, modulated LR
+2. `/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic.py` - Hierarchical recall, joint optimization
+3. `/mnt/projects/t4d/t4dm/src/t4dm/consolidation/sleep.py` - Register clusters
+4. `/mnt/projects/t4d/t4dm/src/t4dm/core/config.py` - New settings
 
 ---
 

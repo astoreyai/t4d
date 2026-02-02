@@ -19,21 +19,21 @@
 ## CRITICAL GAPS (Blocking Production)
 
 ### 1. Protein Synthesis Gate (HIGH) - 3 days
-**File**: `src/ww/learning/reconsolidation.py`
+**File**: `src/t4dm/learning/reconsolidation.py`
 **Issue**: Reconsolidation missing PSI timing constraint
 **Biology**: Nader et al. (2000) - protein synthesis REQUIRED for reconsolidation
 **Fix**: Add 4-hour protein synthesis window check
 **Impact**: Core biological mechanism violated
 
 ### 2. Ripple Oscillator (HIGH) - 2 days
-**File**: `src/ww/nca/oscillators.py`
+**File**: `src/t4dm/nca/oscillators.py`
 **Issue**: Missing 150-250 Hz ripple frequency band
 **Biology**: Buzsaki (2015) - ripples are distinct SWR marker
 **Fix**: Add ripple oscillator to frequency bands
 **Impact**: Key consolidation marker missing
 
 ### 3. Replay Directionality (HIGH) - 3 days
-**File**: `src/ww/consolidation/sleep.py`
+**File**: `src/t4dm/consolidation/sleep.py`
 **Issue**: No forward/reverse replay distinction
 **Biology**: Foster & Wilson (2006) - 40% forward, 20% reverse
 **Fix**: Add direction enum to ReplayEvent
@@ -121,7 +121,7 @@
 ## KEY STRENGTHS (Production-Ready)
 
 ### Glutamate Signaling ✓✓✓ (96/100)
-**File**: `src/ww/nca/glutamate_signaling.py`
+**File**: `src/t4dm/nca/glutamate_signaling.py`
 
 - ✓ Synaptic vs extrasynaptic separation (Hardingham & Bading 2010)
 - ✓ NR2A (LTP) vs NR2B (LTD) differential plasticity
@@ -130,7 +130,7 @@
 - **Status**: Publication-quality neuroscience modeling
 
 ### Glymphatic System ✓✓ (94/100)
-**File**: `src/ww/nca/glymphatic.py`
+**File**: `src/t4dm/nca/glymphatic.py`
 
 - ✓ Sleep-state clearance (70% NREM vs 30% wake)
 - ✓ NE modulation (low NE → high clearance)
@@ -139,7 +139,7 @@
 - **Status**: Excellent implementation of Xie et al. (2013)
 
 ### STDP ✓ (92/100)
-**File**: `src/ww/learning/stdp.py`
+**File**: `src/t4dm/learning/stdp.py`
 
 - ✓ Correct tau_plus=17ms, tau_minus=34ms (Bi & Poo 1998)
 - ✓ Asymmetric time constants (Morrison 2008)
@@ -147,7 +147,7 @@
 - **Status**: Production-ready
 
 ### Neuromodulators ✓ (91/100)
-**Files**: `src/ww/nca/vta.py`, `raphe.py`, `locus_coeruleus.py`
+**Files**: `src/t4dm/nca/vta.py`, `raphe.py`, `locus_coeruleus.py`
 
 - ✓ VTA dopamine: Tonic/phasic, RPE encoding
 - ✓ Raphe 5-HT: Patience/discount rate modulation

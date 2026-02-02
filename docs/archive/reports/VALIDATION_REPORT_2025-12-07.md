@@ -148,69 +148,69 @@ All security tests PASSED:
 ### High Coverage Modules (>85%)
 
 ```
-src/ww/core/config.py                          231 stmts, 99% coverage
-src/ww/core/serialization.py                   69 stmts, 100% coverage
-src/ww/core/types.py                           161 stmts, 89% coverage
-src/ww/embedding/bge_m3.py                     206 stmts, 96% coverage
-src/ww/embedding/ensemble.py                   168 stmts, 93% coverage
-src/ww/embedding/modulated.py                  133 stmts, 99% coverage
-src/ww/embedding/semantic_mock.py              121 stmts, 99% coverage
-src/ww/extraction/entity_extractor.py          163 stmts, 93% coverage
-src/ww/learning/cold_start.py                  187 stmts, 94% coverage
-src/ww/learning/collector.py                   290 stmts, 99% coverage
-src/ww/learning/dopamine.py                    77 stmts, 84% coverage
-src/ww/learning/events.py                      263 stmts, 89% coverage
-src/ww/learning/homeostatic.py                 98 stmts, 98% coverage
-src/ww/learning/hooks.py                       92 stmts, 99% coverage
-src/ww/learning/neuro_symbolic.py              356 stmts, 98% coverage
-src/ww/learning/plasticity.py                  218 stmts, 97% coverage
-src/ww/learning/scorer.py                      215 stmts, 99% coverage
-src/ww/mcp/gateway.py                          166 stmts, 100% coverage
-src/ww/mcp/errors.py                           35 stmts, 100% coverage
-src/ww/mcp/validation.py                       216 stmts, 97% coverage
-src/ww/memory/buffer_manager.py                236 stmts, 89% coverage
-src/ww/memory/cluster_index.py                 206 stmts, 96% coverage
-src/ww/memory/feature_aligner.py               116 stmts, 97% coverage
-src/ww/memory/learned_sparse_index.py          192 stmts, 96% coverage
-src/ww/memory/pattern_separation.py            176 stmts, 93% coverage
-src/ww/memory/procedural.py                    220 stmts, 98% coverage
-src/ww/memory/semantic.py                      275 stmts, 97% coverage
-src/ww/memory/working_memory.py                227 stmts, 96% coverage
-src/ww/observability/tracing.py                158 stmts, 89% coverage
-src/ww/storage/neo4j_store.py                  390 stmts, 76% coverage
-src/ww/storage/qdrant_store.py                 329 stmts, 70% coverage
-src/ww/storage/resilience.py                   280 stmts, 92% coverage
-src/ww/storage/saga.py                         155 stmts, 93% coverage
-src/ww/temporal/dynamics.py                    211 stmts, 82% coverage
-src/ww/temporal/integration.py                 89 stmts, 99% coverage
-src/ww/temporal/session.py                     111 stmts, 95% coverage
+src/t4dm/core/config.py                          231 stmts, 99% coverage
+src/t4dm/core/serialization.py                   69 stmts, 100% coverage
+src/t4dm/core/types.py                           161 stmts, 89% coverage
+src/t4dm/embedding/bge_m3.py                     206 stmts, 96% coverage
+src/t4dm/embedding/ensemble.py                   168 stmts, 93% coverage
+src/t4dm/embedding/modulated.py                  133 stmts, 99% coverage
+src/t4dm/embedding/semantic_mock.py              121 stmts, 99% coverage
+src/t4dm/extraction/entity_extractor.py          163 stmts, 93% coverage
+src/t4dm/learning/cold_start.py                  187 stmts, 94% coverage
+src/t4dm/learning/collector.py                   290 stmts, 99% coverage
+src/t4dm/learning/dopamine.py                    77 stmts, 84% coverage
+src/t4dm/learning/events.py                      263 stmts, 89% coverage
+src/t4dm/learning/homeostatic.py                 98 stmts, 98% coverage
+src/t4dm/learning/hooks.py                       92 stmts, 99% coverage
+src/t4dm/learning/neuro_symbolic.py              356 stmts, 98% coverage
+src/t4dm/learning/plasticity.py                  218 stmts, 97% coverage
+src/t4dm/learning/scorer.py                      215 stmts, 99% coverage
+src/t4dm/mcp/gateway.py                          166 stmts, 100% coverage
+src/t4dm/mcp/errors.py                           35 stmts, 100% coverage
+src/t4dm/mcp/validation.py                       216 stmts, 97% coverage
+src/t4dm/memory/buffer_manager.py                236 stmts, 89% coverage
+src/t4dm/memory/cluster_index.py                 206 stmts, 96% coverage
+src/t4dm/memory/feature_aligner.py               116 stmts, 97% coverage
+src/t4dm/memory/learned_sparse_index.py          192 stmts, 96% coverage
+src/t4dm/memory/pattern_separation.py            176 stmts, 93% coverage
+src/t4dm/memory/procedural.py                    220 stmts, 98% coverage
+src/t4dm/memory/semantic.py                      275 stmts, 97% coverage
+src/t4dm/memory/working_memory.py                227 stmts, 96% coverage
+src/t4dm/observability/tracing.py                158 stmts, 89% coverage
+src/t4dm/storage/neo4j_store.py                  390 stmts, 76% coverage
+src/t4dm/storage/qdrant_store.py                 329 stmts, 70% coverage
+src/t4dm/storage/resilience.py                   280 stmts, 92% coverage
+src/t4dm/storage/saga.py                         155 stmts, 93% coverage
+src/t4dm/temporal/dynamics.py                    211 stmts, 82% coverage
+src/t4dm/temporal/integration.py                 89 stmts, 99% coverage
+src/t4dm/temporal/session.py                     111 stmts, 95% coverage
 ```
 
 ### Low Coverage Modules (<50%)
 
 ```
-src/ww/api/deps.py                             29 stmts, 66% coverage
-src/ww/api/routes/entities.py                  151 stmts, 51% coverage (PARTIAL)
-src/ww/api/routes/episodes.py                  137 stmts, 78% coverage (GOOD)
-src/ww/api/routes/skills.py                    140 stmts, 54% coverage (PARTIAL)
-src/ww/consolidation/service.py                409 stmts, 56% coverage
-src/ww/core/actions.py                         218 stmts, 56% coverage
-src/ww/core/learned_gate.py                    273 stmts, 89% coverage
-src/ww/core/memory_gate.py                     174 stmts, 64% coverage
-src/ww/core/personal_entities.py               334 stmts, 72% coverage
-src/ww/core/privacy_filter.py                  119 stmts, 37% coverage
-src/ww/embedding/adapter.py                    214 stmts, 81% coverage
-src/ww/hooks/* (all modules)                   Multiple, all <50% coverage
-src/ww/integration/ccapi_routes.py             224 stmts, 33% coverage
-src/ww/integrations/kymera/*                   Multiple, all <32% coverage
-src/ww/interfaces/* (all modules)              6 modules, ALL 0% coverage (UNTESTED)
-src/ww/mcp/compat.py                           57 stmts, 74% coverage
-src/ww/mcp/server.py                           68 stmts, 21% coverage
-src/ww/mcp/tools/episodic.py                   184 stmts, 77% coverage
-src/ww/mcp/tools/procedural.py                 131 stmts, 65% coverage
-src/ww/mcp/tools/semantic.py                   133 stmts, 57% coverage
-src/ww/mcp/tools/system.py                     139 stmts, 52% coverage
-src/ww/visualization/* (all modules)           6 modules, ALL 0% coverage (UNTESTED)
+src/t4dm/api/deps.py                             29 stmts, 66% coverage
+src/t4dm/api/routes/entities.py                  151 stmts, 51% coverage (PARTIAL)
+src/t4dm/api/routes/episodes.py                  137 stmts, 78% coverage (GOOD)
+src/t4dm/api/routes/skills.py                    140 stmts, 54% coverage (PARTIAL)
+src/t4dm/consolidation/service.py                409 stmts, 56% coverage
+src/t4dm/core/actions.py                         218 stmts, 56% coverage
+src/t4dm/core/learned_gate.py                    273 stmts, 89% coverage
+src/t4dm/core/memory_gate.py                     174 stmts, 64% coverage
+src/t4dm/core/personal_entities.py               334 stmts, 72% coverage
+src/t4dm/core/privacy_filter.py                  119 stmts, 37% coverage
+src/t4dm/embedding/adapter.py                    214 stmts, 81% coverage
+src/t4dm/hooks/* (all modules)                   Multiple, all <50% coverage
+src/t4dm/integration/ccapi_routes.py             224 stmts, 33% coverage
+src/t4dm/integrations/kymera/*                   Multiple, all <32% coverage
+src/t4dm/interfaces/* (all modules)              6 modules, ALL 0% coverage (UNTESTED)
+src/t4dm/mcp/compat.py                           57 stmts, 74% coverage
+src/t4dm/mcp/server.py                           68 stmts, 21% coverage
+src/t4dm/mcp/tools/episodic.py                   184 stmts, 77% coverage
+src/t4dm/mcp/tools/procedural.py                 131 stmts, 65% coverage
+src/t4dm/mcp/tools/semantic.py                   133 stmts, 57% coverage
+src/t4dm/mcp/tools/system.py                     139 stmts, 52% coverage
+src/t4dm/visualization/* (all modules)           6 modules, ALL 0% coverage (UNTESTED)
 ```
 
 **Overall Coverage by Category**:
@@ -287,7 +287,7 @@ src/ww/visualization/* (all modules)           6 modules, ALL 0% coverage (UNTES
 ### PRIORITY 1 (Breaking Production)
 
 #### Bug #1: Missing EpisodicMemory Methods
-- **Location**: `/mnt/projects/ww/src/ww/memory/episodic.py`
+- **Location**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic.py`
 - **Issue**: Missing methods referenced by API routes:
   - `recent()` - Used by GET /api/v1/episodes
   - Affecting: Episode listing functionality
@@ -295,7 +295,7 @@ src/ww/visualization/* (all modules)           6 modules, ALL 0% coverage (UNTES
 - **Status**: CRITICAL
 
 #### Bug #2: Missing SemanticMemory Methods
-- **Location**: `/mnt/projects/ww/src/ww/memory/semantic.py`
+- **Location**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/semantic.py`
 - **Issue**: Missing methods referenced by API routes:
   - `store_entity()` - Used by POST /api/v1/entities
   - `list_entities()` - Used by GET /api/v1/entities
@@ -303,7 +303,7 @@ src/ww/visualization/* (all modules)           6 modules, ALL 0% coverage (UNTES
 - **Status**: CRITICAL
 
 #### Bug #3: Pattern Separation Implementation Broken
-- **Location**: `/mnt/projects/ww/src/ww/memory/pattern_separation.py::DentateGyrus`
+- **Location**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/pattern_separation.py::DentateGyrus`
 - **Issue**: State not being properly tracked/returned:
   - `search_calls` list not populated (test expects 1, gets 0)
   - `separation_history` not maintained
@@ -313,7 +313,7 @@ src/ww/visualization/* (all modules)           6 modules, ALL 0% coverage (UNTES
 - **Status**: CRITICAL
 
 #### Bug #4: Inconsistent Loss Convergence in Joint Optimization
-- **Location**: `/mnt/projects/ww/src/ww/learning/` (optimization code)
+- **Location**: `/mnt/projects/t4d/t4dm/src/t4dm/learning/` (optimization code)
 - **Issue**: Consistency loss diverging instead of converging
   - Early loss: 0.4055 → Late loss: 0.5313 (DIVERGING)
   - Expected convergence: loss <= 1.2, Got: 1.3101
@@ -327,7 +327,7 @@ src/ww/visualization/* (all modules)           6 modules, ALL 0% coverage (UNTES
 - **Endpoints**: 
   - GET /api/v1/entities/search (405 Method Not Allowed)
   - GET /api/v1/skills/search (405 Method Not Allowed)
-- **Location**: `/mnt/projects/ww/src/ww/api/routes/entities.py`, `skills.py`
+- **Location**: `/mnt/projects/t4d/t4dm/src/t4dm/api/routes/entities.py`, `skills.py`
 - **Status**: NOT IMPLEMENTED
 
 #### Bug #6: Invalid Database Enum Values

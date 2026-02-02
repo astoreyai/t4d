@@ -22,7 +22,7 @@ World Weaver is a **well-architected tripartite memory system** with solid core 
 ## What Works
 
 ### 1. Storage Layer (Neo4j + Qdrant)
-**Location**: `src/ww/storage/`
+**Location**: `src/t4dm/storage/`
 
 | Component | Status | Coverage | Notes |
 |-----------|--------|----------|-------|
@@ -41,7 +41,7 @@ World Weaver is a **well-architected tripartite memory system** with solid core 
 - No embedded/in-memory fallback for testing
 
 ### 2. Memory Systems
-**Location**: `src/ww/memory/`
+**Location**: `src/t4dm/memory/`
 
 | Component | Status | Coverage | Notes |
 |-----------|--------|----------|-------|
@@ -57,7 +57,7 @@ World Weaver is a **well-architected tripartite memory system** with solid core 
 - Proper embedding integration
 
 ### 3. Embedding System
-**Location**: `src/ww/embedding/bge_m3.py`
+**Location**: `src/t4dm/embedding/bge_m3.py`
 
 | Feature | Status |
 |---------|--------|
@@ -72,7 +72,7 @@ World Weaver is a **well-architected tripartite memory system** with solid core 
 - Multiple backend support
 
 ### 4. Configuration
-**Location**: `src/ww/core/config.py`
+**Location**: `src/t4dm/core/config.py`
 
 **Strengths**:
 - 100+ configurable parameters
@@ -85,7 +85,7 @@ World Weaver is a **well-architected tripartite memory system** with solid core 
 ## What Doesn't Work
 
 ### 1. MCP Server
-**Location**: `src/ww/mcp/`
+**Location**: `src/t4dm/mcp/`
 
 **Problem**: Package imports fail
 ```
@@ -100,7 +100,7 @@ ModuleNotFoundError: No module named 'mcp.server'
 - 9 test files fail to import
 
 ### 2. Consolidation/Clustering
-**Location**: `src/ww/consolidation/`
+**Location**: `src/t4dm/consolidation/`
 
 **Problem**: HDBSCAN not installed
 ```
@@ -112,14 +112,14 @@ ImportError: HDBSCAN not found
 **Impact**: Memory consolidation (merging similar episodes into entities) doesn't work.
 
 ### 3. Entity Extraction
-**Location**: `src/ww/extraction/`
+**Location**: `src/t4dm/extraction/`
 
 **Problem**: Tests fail when LLM not configured
 
 **Impact**: Auto-extraction from episodes disabled without OpenAI key.
 
 ### 4. Unified Memory
-**Location**: `src/ww/memory/unified.py`
+**Location**: `src/t4dm/memory/unified.py`
 
 **Problem**: 0% test coverage, never exercised
 
@@ -225,10 +225,10 @@ Docker Compose:
 
 ### Phase 2: Add REST API (2-3 days)
 
-Create `src/ww/api/` with FastAPI:
+Create `src/t4dm/api/` with FastAPI:
 
 ```python
-# src/ww/api/server.py
+# src/t4dm/api/server.py
 from fastapi import FastAPI
 from ww.memory.episodic import get_episodic_memory
 from ww.memory.semantic import get_semantic_memory
@@ -254,7 +254,7 @@ async def search_episodes(query: str, limit: int = 10):
 ### Phase 3: Create Python SDK (1 day)
 
 ```python
-# src/ww/client.py
+# src/t4dm/client.py
 class WorldWeaverClient:
     """Standalone Python client for World Weaver."""
 
@@ -367,7 +367,7 @@ services:
 
 ### Phase 5: Add Health & Metrics (1 day)
 
-Already have `src/ww/observability/` but need to:
+Already have `src/t4dm/observability/` but need to:
 1. Add `/health` endpoint
 2. Add `/metrics` endpoint (Prometheus format)
 3. Enable OpenTelemetry by default

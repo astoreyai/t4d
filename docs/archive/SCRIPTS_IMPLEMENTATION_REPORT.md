@@ -2,7 +2,7 @@
 
 **Date**: 2025-11-27
 **Status**: COMPLETE
-**Location**: `/mnt/projects/ww/scripts/`
+**Location**: `/mnt/projects/t4d/t4dm/scripts/`
 
 ## Overview
 
@@ -28,7 +28,7 @@ Created production-ready operational scripts for World Weaver deployment, addres
 # Default: /var/backups/ww
 
 # Cron setup (daily at 2 AM)
-0 2 * * * /mnt/projects/ww/scripts/backup.sh >> /var/log/ww/backup.log 2>&1
+0 2 * * * /mnt/projects/t4d/t4dm/scripts/backup.sh >> /var/log/t4dm/backup.log 2>&1
 ```
 
 **Key Functions**:
@@ -54,7 +54,7 @@ Created production-ready operational scripts for World Weaver deployment, addres
 # Example: ./restore.sh 20251127_143022
 
 # List available backups
-ls -lh /var/backups/ww/
+ls -lh /var/backups/t4dm/
 
 # Restore from specific date
 ./restore.sh 20251127_143022
@@ -83,7 +83,7 @@ ls -lh /var/backups/ww/
 ./health_check.sh
 
 # Cron setup (every 5 minutes)
-*/5 * * * * /mnt/projects/ww/scripts/health_check.sh >> /var/log/ww/health.log 2>&1
+*/5 * * * * /mnt/projects/t4d/t4dm/scripts/health_check.sh >> /var/log/t4dm/health.log 2>&1
 
 # Use in monitoring systems
 HEALTHCHECK CMD /scripts/health_check.sh || exit 1
@@ -124,7 +124,7 @@ docker exec ww-neo4j cypher-shell -u neo4j -p "$NEO4J_PASSWORD" \
 
 **Migration Format**:
 - Files named: `001_description.cypher`, `002_description.cypher`, etc.
-- Executed in `/mnt/projects/ww/migrations/` directory
+- Executed in `/mnt/projects/t4d/t4dm/migrations/` directory
 - Version tracking via Neo4j nodes
 
 ### 5. scripts/README.md (5.3K, 262 lines)
@@ -217,7 +217,7 @@ All scripts implement:
 - Volume mounts compatible with existing setup
 
 ### Referenced in Documentation
-All scripts match references in `/mnt/projects/ww/docs/deployment.md`:
+All scripts match references in `/mnt/projects/t4d/t4dm/docs/deployment.md`:
 - Line 386-401: `scripts/health_check.sh` (implemented)
 - Line 432-451: `scripts/backup.sh` (implemented)
 - Line 459-474: Recovery procedure (restore.sh supports this)
@@ -238,7 +238,7 @@ All scripts match references in `/mnt/projects/ww/docs/deployment.md`:
 
 ## Production Checklist
 
-- [x] Scripts created in `/mnt/projects/ww/scripts/`
+- [x] Scripts created in `/mnt/projects/t4d/t4dm/scripts/`
 - [x] All scripts executable (chmod +x)
 - [x] Syntax validation passed
 - [x] Documentation created (scripts/README.md)
@@ -261,13 +261,13 @@ sudo apt-get install jq
 ### 2. Set Up Automated Backups
 ```bash
 # Add to crontab (crontab -e)
-0 2 * * * /mnt/projects/ww/scripts/backup.sh /var/backups/ww >> /var/log/ww/backup.log 2>&1
+0 2 * * * /mnt/projects/t4d/t4dm/scripts/backup.sh /var/backups/ww >> /var/log/t4dm/backup.log 2>&1
 ```
 
 ### 3. Set Up Health Monitoring
 ```bash
 # Add to crontab (crontab -e)
-*/5 * * * * /mnt/projects/ww/scripts/health_check.sh >> /var/log/ww/health.log 2>&1
+*/5 * * * * /mnt/projects/t4d/t4dm/scripts/health_check.sh >> /var/log/t4dm/health.log 2>&1
 ```
 
 ### 4. Test Backup/Restore Cycle
@@ -330,11 +330,11 @@ asyncio.run(init())
 All operational scripts have been successfully created and validated. The scripts are production-ready and match all references in the deployment documentation. They implement best practices for error handling, logging, and operational safety.
 
 **Key Files**:
-- `/mnt/projects/ww/scripts/backup.sh` - Automated backup system
-- `/mnt/projects/ww/scripts/restore.sh` - Disaster recovery
-- `/mnt/projects/ww/scripts/health_check.sh` - Service monitoring
-- `/mnt/projects/ww/scripts/migrate.sh` - Schema migrations
-- `/mnt/projects/ww/scripts/README.md` - Operational documentation
-- `/mnt/projects/ww/migrations/README.md` - Migration documentation
+- `/mnt/projects/t4d/t4dm/scripts/backup.sh` - Automated backup system
+- `/mnt/projects/t4d/t4dm/scripts/restore.sh` - Disaster recovery
+- `/mnt/projects/t4d/t4dm/scripts/health_check.sh` - Service monitoring
+- `/mnt/projects/t4d/t4dm/scripts/migrate.sh` - Schema migrations
+- `/mnt/projects/t4d/t4dm/scripts/README.md` - Operational documentation
+- `/mnt/projects/t4d/t4dm/migrations/README.md` - Migration documentation
 
 **Status**: READY FOR PRODUCTION USE

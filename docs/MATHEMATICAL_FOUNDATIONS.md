@@ -57,7 +57,7 @@ Where:
 S' = D × S^0.2 × (exp(0.1 × d) - 1)
 ```
 
-**Implementation**: `/mnt/projects/ww/src/ww/core/types.py` lines 128-144
+**Implementation**: `/mnt/projects/t4d/t4dm/src/t4dm/core/types.py` lines 128-144
 
 **Evidence**: FSRS shows 20-30% improvement over SM-2 algorithm ([Jarrett Ye et al., 2024](https://github.com/open-spaced-repetition/fsrs4anki))
 
@@ -87,7 +87,7 @@ w_{\text{recency}}(t) = e^{-\lambda t}
 - Day 7: `w = 0.497`
 - Day 30: `w = 0.050`
 
-**Implementation**: `/mnt/projects/ww/src/ww/memory/episodic.py` retrieval scoring
+**Implementation**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic.py` retrieval scoring
 
 ---
 
@@ -126,7 +126,7 @@ w_n = 1 - (1 - w_0)(1 - η)^n
 - Co-retrieval 20: `w = 0.79`
 - Limit: `w → 1.0`
 
-**Implementation**: `/mnt/projects/ww/src/ww/memory/semantic.py` lines 50-56
+**Implementation**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/semantic.py` lines 50-56
 
 ---
 
@@ -176,7 +176,7 @@ B_i = \ln\left(\sum_{j=1}^{n} t_j^{-d}\right)
 - Recent accesses weighted more (power law)
 - Log transform prevents extreme values
 
-**Implementation**: `/mnt/projects/ww/src/ww/memory/semantic.py` ACTRRetrieval class
+**Implementation**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/semantic.py` ACTRRetrieval class
 
 ---
 
@@ -233,7 +233,7 @@ P(retrieve) = 1 if A_i ≥ τ, else 0
 A_i = B_i + \sum_{j \in C} W_j S_{ji} + \varepsilon, \quad \varepsilon \sim \mathcal{N}(0, \sigma^2)
 ```
 
-**Implementation**: `/mnt/projects/ww/src/ww/memory/semantic.py` ACTRRetrieval class
+**Implementation**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/semantic.py` ACTRRetrieval class
 
 ---
 
@@ -265,7 +265,7 @@ s_importance = emotional_valence
 \text{score} = \alpha \cdot \text{sim}(q, e) + \beta \cdot e^{-\lambda t} + \gamma \cdot o + \delta \cdot v
 ```
 
-**Implementation**: `/mnt/projects/ww/src/ww/memory/episodic.py` recall method
+**Implementation**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic.py` recall method
 
 ---
 
@@ -292,7 +292,7 @@ s_importance = emotional_valence
 h = \text{ReLU}(W_1 \phi_q + b_1), \quad w = \text{softmax}(W_2 h + b_2)
 ```
 
-**Implementation**: `/mnt/projects/ww/src/ww/memory/episodic.py` LearnedFusionWeights class
+**Implementation**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic.py` LearnedFusionWeights class
 
 **Status**: ⚠️ **NOT INTEGRATED** - Exists but not called in recall()
 
@@ -323,7 +323,7 @@ RRF = 1/(60+1) + 1/(60+3) = 0.0164 + 0.0159 = 0.0323
 \text{RRF}(d) = \sum_{r \in R} \frac{1}{k + \text{rank}_r(d)}
 ```
 
-**Implementation**: `/mnt/projects/ww/src/ww/memory/semantic.py` semantic recall
+**Implementation**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/semantic.py` semantic recall
 
 ---
 
@@ -369,7 +369,7 @@ decision = p_sample ≥ θ_ACh
 w \sim \mathcal{N}(\mu, \Sigma'), \quad \Sigma' = \Sigma(1 + \gamma_{\text{NE}} \cdot \text{NE})
 ```
 
-**Implementation**: `/mnt/projects/ww/src/ww/learning/learned_gate.py`
+**Implementation**: `/mnt/projects/t4d/t4dm/src/t4dm/learning/learned_gate.py`
 
 ---
 
@@ -395,7 +395,7 @@ Where for binary outcome:
 \Sigma' = \Sigma - \eta \nabla \nabla^T
 ```
 
-**Implementation**: `/mnt/projects/ww/src/ww/learning/learned_gate.py` update() method
+**Implementation**: `/mnt/projects/t4d/t4dm/src/t4dm/learning/learned_gate.py` update() method
 
 ---
 
@@ -415,7 +415,7 @@ DA = utility - baseline
 
 **Effect**: Modulates learning rate in gate updates
 
-**Implementation**: `/mnt/projects/ww/src/ww/learning/neuromodulator_orchestra.py`
+**Implementation**: `/mnt/projects/t4d/t4dm/src/t4dm/learning/neuromodulator_orchestra.py`
 
 ---
 
@@ -448,7 +448,7 @@ ACh = -Σ_i p_i log p_i + novelty_boost
 
 **Effect**: Lowers threshold when attention high (stores more)
 
-**Implementation**: `/mnt/projects/ww/src/ww/learning/neuromodulator_orchestra.py`
+**Implementation**: `/mnt/projects/t4d/t4dm/src/t4dm/learning/neuromodulator_orchestra.py`
 
 ---
 
@@ -469,7 +469,7 @@ utility_combined = 0.7 × DA + 0.3 × 5-HT
 u_{\text{comb}} = 0.7 \cdot \text{DA} + 0.3 \cdot \text{5-HT}
 ```
 
-**Implementation**: `/mnt/projects/ww/src/ww/memory/episodic.py` learn_from_outcome()
+**Implementation**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic.py` learn_from_outcome()
 
 ---
 
@@ -496,7 +496,7 @@ d_cosine(u, v) = 1 - (u · v) / (||u|| ||v||)
 d_{\cos}(u, v) = 1 - \frac{u \cdot v}{\|u\| \|v\|}
 ```
 
-**Implementation**: `/mnt/projects/ww/src/ww/consolidation/episode_deduplication.py`
+**Implementation**: `/mnt/projects/t4d/t4dm/src/t4dm/consolidation/episode_deduplication.py`
 
 **Evidence**: HDBSCAN superior to k-means for non-spherical clusters ([McInnes et al., 2017](https://joss.theoj.org/papers/10.21105/joss.00205))
 

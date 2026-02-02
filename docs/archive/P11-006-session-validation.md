@@ -2,7 +2,7 @@
 
 **Status**: Implemented
 **Date**: 2025-11-27
-**Location**: `/mnt/projects/ww/src/ww/mcp/`
+**Location**: `/mnt/projects/t4d/t4dm/src/t4dm/mcp/`
 
 ## Summary
 
@@ -176,27 +176,27 @@ if clean_id is None:
 
 ## Files Modified
 
-- `/mnt/projects/ww/src/ww/mcp/validation.py`
+- `/mnt/projects/t4d/t4dm/src/t4dm/mcp/validation.py`
   - Added `validate_session_id()` function (114 lines)
   - Added `sanitize_session_id()` function (28 lines)
   - Added `SessionValidationError` exception class
   - Added `SESSION_ID_PATTERN` regex constant
   - Added `RESERVED_SESSION_IDS` frozenset
 
-- `/mnt/projects/ww/src/ww/mcp/gateway.py`
+- `/mnt/projects/t4d/t4dm/src/t4dm/mcp/gateway.py`
   - Added `with_session_validation()` decorator (35 lines)
   - Updated `get_services()` with validation (13 lines)
   - Added imports for validation functions
 
 ## Files Created
 
-- `/mnt/projects/ww/tests/mcp/test_session_validation.py` (373 lines)
+- `/mnt/projects/t4d/t4dm/tests/mcp/test_session_validation.py` (373 lines)
   - 38 unit tests for validation and sanitization
 
-- `/mnt/projects/ww/tests/mcp/test_session_validation_integration.py` (129 lines)
+- `/mnt/projects/t4d/t4dm/tests/mcp/test_session_validation_integration.py` (129 lines)
   - 10 integration tests for decorator
 
-- `/mnt/projects/ww/docs/P11-006-session-validation.md` (this file)
+- `/mnt/projects/t4d/t4dm/docs/P11-006-session-validation.md` (this file)
 
 ## Test Results
 

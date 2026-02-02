@@ -145,7 +145,7 @@ After installation, verify everything works:
 
     ```bash
     # Start server
-    ww serve &
+    t4dm serve &
 
     # Test health endpoint
     curl http://localhost:8765/api/v1/health
@@ -180,5 +180,5 @@ After installation, verify everything works:
 
 ### Getting Help
 
-- [GitHub Issues](https://github.com/astoreyai/ww/issues)
+- [GitHub Issues](https://github.com/astoreyai/t4d/issues)
 - [API Documentation](http://localhost:8765/docs) (when running)

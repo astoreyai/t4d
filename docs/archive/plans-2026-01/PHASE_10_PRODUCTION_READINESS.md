@@ -21,10 +21,10 @@ Phase 10 hardens World Weaver for production deployment across 5 dimensions:
 ### 1.1 Bridge Consolidation
 
 **Current State**:
-- `/src/ww/bridge/` (singular): `MemoryNCABridge` - NCA field coupling
-- `/src/ww/bridges/` (plural): Dopamine, Capsule, FF bridges
+- `/src/t4dm/bridge/` (singular): `MemoryNCABridge` - NCA field coupling
+- `/src/t4dm/bridges/` (plural): Dopamine, Capsule, FF bridges
 
-**Action**: Merge into `/src/ww/bridges/`
+**Action**: Merge into `/src/t4dm/bridges/`
 
 | Current File | New Location | Notes |
 |--------------|--------------|-------|
@@ -54,7 +54,7 @@ Phase 10 hardens World Weaver for production deployment across 5 dimensions:
 | `GET /api/v1/checkpoint/status` | `server.py` | Needs route file |
 | `/ws` WebSocket | `websocket.py` | Schema undefined |
 
-**Create**: `/src/ww/api/routes/persistence.py`
+**Create**: `/src/t4dm/api/routes/persistence.py`
 
 ### 2.2 SDK Enhancements
 
@@ -187,11 +187,11 @@ app.include_router(prometheus_router)
 ## File Changes Summary
 
 ### Source Files (29)
-- `/src/ww/bridge/` → DELETE (after migration)
-- `/src/ww/bridges/__init__.py` → Update exports
-- `/src/ww/api/server.py` → Add prometheus, SIGTERM
-- `/src/ww/api/routes/persistence.py` → CREATE
-- `/src/ww/sdk/client.py` → Add batch operations
+- `/src/t4dm/bridge/` → DELETE (after migration)
+- `/src/t4dm/bridges/__init__.py` → Update exports
+- `/src/t4dm/api/server.py` → Add prometheus, SIGTERM
+- `/src/t4dm/api/routes/persistence.py` → CREATE
+- `/src/t4dm/sdk/client.py` → Add batch operations
 
 ### Config/Deploy (9)
 - `/deploy/kubernetes/*.yaml` → 6 files

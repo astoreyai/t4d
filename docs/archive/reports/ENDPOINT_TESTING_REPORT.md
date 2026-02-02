@@ -1,7 +1,7 @@
 # World Weaver API Endpoint Testing Report
 
 **Date**: December 9, 2025
-**Test File**: `/mnt/projects/ww/tests/api/test_endpoints_comprehensive.py`
+**Test File**: `/mnt/projects/t4d/t4dm/tests/api/test_endpoints_comprehensive.py`
 **Test Count**: 71 comprehensive endpoint tests
 **Status**: All tests passing
 
@@ -289,7 +289,7 @@ python -m pytest tests/api/test_endpoints_comprehensive.py -v
 python -m pytest tests/api/test_endpoints_comprehensive.py::TestEpisodeEndpoints -v
 
 # Run with coverage:
-python -m pytest tests/api/test_endpoints_comprehensive.py --cov=src/ww/api/routes --cov-report=html
+python -m pytest tests/api/test_endpoints_comprehensive.py --cov=src/t4dm/api/routes --cov-report=html
 
 # Run all API tests:
 python -m pytest tests/api/ -v --tb=short
@@ -354,7 +354,7 @@ python -m pytest tests/api/ -v --tb=short
 ## Files Modified/Created
 
 **Created**:
-- `/mnt/projects/ww/tests/api/test_endpoints_comprehensive.py` (1,020 lines)
+- `/mnt/projects/t4d/t4dm/tests/api/test_endpoints_comprehensive.py` (1,020 lines)
 
 **Modified**: None
 

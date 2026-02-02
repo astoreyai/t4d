@@ -29,7 +29,7 @@
 ### Architecture Overview
 
 ```
-src/ww/
+src/t4dm/
 ├── core/           # Domain models, protocols, config (foundation layer)
 ├── storage/        # Neo4j, Qdrant persistence (data layer)
 ├── memory/         # Episodic, Semantic, Procedural subsystems (domain layer)

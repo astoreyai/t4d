@@ -1,6 +1,6 @@
 # World Weaver IEEE Paper: AI Detection Analysis
 
-**Document**: `/mnt/projects/ww/docs/world_weaver_ieee.tex`
+**Document**: `/mnt/projects/t4d/t4dm/docs/world_weaver_ieee.tex`
 **Analysis Date**: 2025-12-04
 **Overall AI Detection Risk Score**: **6.5/10** (Medium-High Risk)
 

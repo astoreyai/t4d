@@ -1,7 +1,7 @@
 # Quality Assurance Report: World Weaver IEEE Paper
 **IEEE Transactions on Artificial Intelligence Submission**
 
-**Document:** `/mnt/projects/ww/docs/world_weaver_final.tex`
+**Document:** `/mnt/projects/t4d/t4dm/docs/world_weaver_final.tex`
 **Review Date:** 2025-12-05
 **Reviewer Role:** Research Quality Assurance Specialist
 **Review Level:** PhD-level comprehensive analysis

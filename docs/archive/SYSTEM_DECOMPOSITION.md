@@ -6,7 +6,7 @@
 
 ---
 
-## 1. MEMORY SYSTEMS (`ww/memory/`)
+## 1. MEMORY SYSTEMS (`t4dm/memory/`)
 The core memory architecture implementing biologically-inspired memory types.
 
 ### 1.1 Episodic Memory
@@ -65,7 +65,7 @@ The core memory architecture implementing biologically-inspired memory types.
 
 ---
 
-## 2. LEARNING SYSTEMS (`ww/learning/`)
+## 2. LEARNING SYSTEMS (`t4dm/learning/`)
 Biologically-grounded learning and neuromodulation.
 
 ### 2.1 Neuromodulator Systems
@@ -167,7 +167,7 @@ Biologically-grounded learning and neuromodulation.
 
 ---
 
-## 3. CORE INFRASTRUCTURE (`ww/core/`)
+## 3. CORE INFRASTRUCTURE (`t4dm/core/`)
 Foundation classes, types, and configuration.
 
 ### 3.1 Memory Gating
@@ -248,7 +248,7 @@ Foundation classes, types, and configuration.
 
 ---
 
-## 4. STORAGE BACKENDS (`ww/storage/`)
+## 4. STORAGE BACKENDS (`t4dm/storage/`)
 Persistent storage implementations.
 
 ### 4.1 Vector Store (Qdrant)
@@ -275,7 +275,7 @@ Persistent storage implementations.
 
 ---
 
-## 5. CONSOLIDATION (`ww/consolidation/`)
+## 5. CONSOLIDATION (`t4dm/consolidation/`)
 Sleep-inspired memory consolidation.
 
 ### 5.1 Sleep Consolidation
@@ -295,7 +295,7 @@ Sleep-inspired memory consolidation.
 
 ---
 
-## 6. EMBEDDING (`ww/embedding/`)
+## 6. EMBEDDING (`t4dm/embedding/`)
 Neural embedding generation.
 
 ### 6.1 BGE-M3 Embeddings
@@ -306,7 +306,7 @@ Neural embedding generation.
 
 ---
 
-## 7. MCP SERVER (`ww/mcp/`)
+## 7. MCP SERVER (`t4dm/mcp/`)
 Model Context Protocol server for Claude integration.
 
 ### 7.1 Gateway
@@ -343,7 +343,7 @@ Model Context Protocol server for Claude integration.
 
 ---
 
-## 8. API SERVER (`ww/api/`)
+## 8. API SERVER (`t4dm/api/`)
 REST API for web/client access.
 
 ### 8.1 Route Handlers
@@ -387,7 +387,7 @@ REST API for web/client access.
 
 ---
 
-## 9. HOOKS SYSTEM (`ww/hooks/`)
+## 9. HOOKS SYSTEM (`t4dm/hooks/`)
 Event-driven extension points.
 
 ### 9.1 Base Framework
@@ -441,7 +441,7 @@ Event-driven extension points.
 
 ## 10. INTEGRATIONS
 
-### 10.1 Claude Code Integration (`ww/integration/`)
+### 10.1 Claude Code Integration (`t4dm/integration/`)
 **Files**: `ccapi_memory.py`, `ccapi_observer.py`, `ccapi_routes.py`
 - **Classes**:
   - `WWMemory` - Memory interface for Claude Code
@@ -450,7 +450,7 @@ Event-driven extension points.
   - `Event`, `EventType`, `Span` - Event tracking
   - Route models: `ContextRequest`, `ContextResponse`, `MemorySearchRequest`, etc.
 
-### 10.2 Kymera Voice Assistant (`ww/integrations/kymera/`)
+### 10.2 Kymera Voice Assistant (`t4dm/integrations/kymera/`)
 **Files**: Multiple (855 LOC in `advanced_features.py`)
 - **Classes**:
   - `VoiceMemoryBridge` - Bridge voice to memory
@@ -468,7 +468,7 @@ Event-driven extension points.
   - `PreferenceLearner`, `UserPreference` - Preference learning
   - `VoiceTriggerManager`, `VoiceTrigger` - Voice triggers
 
-### 10.3 Google Workspace (`ww/integrations/`)
+### 10.3 Google Workspace (`t4dm/integrations/`)
 **File**: `google_workspace.py`
 - **Classes**:
   - `GoogleWorkspaceSync` - Sync with Google services
@@ -476,7 +476,7 @@ Event-driven extension points.
 
 ---
 
-## 11. EXTRACTION (`ww/extraction/`)
+## 11. EXTRACTION (`t4dm/extraction/`)
 Entity and information extraction.
 
 **File**: `entity_extractor.py`
@@ -489,7 +489,7 @@ Entity and information extraction.
 
 ---
 
-## 12. OBSERVABILITY (`ww/observability/`)
+## 12. OBSERVABILITY (`t4dm/observability/`)
 Monitoring, logging, and tracing.
 
 ### 12.1 Health Checking
@@ -521,7 +521,7 @@ Monitoring, logging, and tracing.
 
 ---
 
-## 13. SDK (`ww/sdk/`)
+## 13. SDK (`t4dm/sdk/`)
 Client libraries for external consumers.
 
 **Files**: `client.py`, `models.py`

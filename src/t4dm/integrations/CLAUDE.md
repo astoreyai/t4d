@@ -1,5 +1,5 @@
 # Integrations
-**Path**: `/mnt/projects/t4d/t4dm/src/ww/integrations/`
+**Path**: `/mnt/projects/t4d/t4dm/src/t4dm/integrations/`
 
 ## What
 External service integrations that sync real-world data into WW memory. Contains Google Workspace sync and the Kymera voice assistant integration.

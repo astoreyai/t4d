@@ -725,13 +725,13 @@ WS   /api/v1/viz/neural-stream    <- Real-time neural updates
 ## Appendix C: Visualization File Inventory
 
 ```
-src/ww/visualization/    : 17 files (Python)
+src/t4dm/visualization/    : 17 files (Python)
   ├── Core dashboards    : 5 files
   ├── Telemetry         : 4 files
   ├── Analysis          : 6 files
   └── Utilities         : 2 files
 
-src/ww/interfaces/       : 6 files (Python Rich TUI)
+src/t4dm/interfaces/       : 6 files (Python Rich TUI)
   ├── Explorers         : 2 files
   ├── Managers          : 2 files
   └── Utilities         : 2 files

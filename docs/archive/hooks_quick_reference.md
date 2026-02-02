@@ -464,7 +464,7 @@ context.metadata["validation_failed"] = True
 ## File Locations
 
 ```
-src/ww/hooks/
+src/t4dm/hooks/
 ├── __init__.py              # Public API
 ├── base.py                  # Core classes
 ├── core.py                  # Core hooks
@@ -487,7 +487,7 @@ tests/
 
 ## Resources
 
-- **Design Document:** `/mnt/projects/ww/docs/hooks_design.md`
-- **Examples:** `/mnt/projects/ww/examples/hooks_examples.py`
-- **Tests:** `/mnt/projects/ww/tests/test_hooks.py`
-- **Source Code:** `/mnt/projects/ww/src/ww/hooks/`
+- **Design Document:** `/mnt/projects/t4d/t4dm/docs/hooks_design.md`
+- **Examples:** `/mnt/projects/t4d/t4dm/examples/hooks_examples.py`
+- **Tests:** `/mnt/projects/t4d/t4dm/tests/test_hooks.py`
+- **Source Code:** `/mnt/projects/t4d/t4dm/src/t4dm/hooks/`

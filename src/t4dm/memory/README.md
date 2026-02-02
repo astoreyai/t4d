@@ -1,6 +1,6 @@
 # Memory Module
 
-**Path**: `ww/memory/` | **Files**: 13 | **Lines**: ~10,870
+**Path**: `t4dm/memory/` | **Files**: 13 | **Lines**: ~10,870
 
 Tripartite memory system implementing episodic, semantic, and procedural memory with biologically-inspired algorithms.
 

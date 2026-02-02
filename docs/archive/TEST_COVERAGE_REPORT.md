@@ -77,7 +77,7 @@ Coverage %:          77%
 ## 2. CRITICAL COVERAGE GAPS
 
 ### Gap 1: Neo4j Database Layer (39% coverage)
-**File**: `/mnt/projects/ww/src/ww/storage/neo4j_store.py` (427 statements, 260 untested)
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/storage/neo4j_store.py` (427 statements, 260 untested)
 
 **Untested Critical Paths**:
 ```python
@@ -112,7 +112,7 @@ Coverage %:          77%
 ---
 
 ### Gap 2: Memory Unified Interface (18% coverage)
-**File**: `/mnt/projects/ww/src/ww/memory/unified.py` (116 statements, 95 untested)
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/unified.py` (116 statements, 95 untested)
 
 **Untested Code**:
 ```python
@@ -136,7 +136,7 @@ Coverage %:          77%
 ---
 
 ### Gap 3: MCP Tools (Batch Operations)
-**Directory**: `/mnt/projects/ww/src/ww/mcp/tools/`
+**Directory**: `/mnt/projects/t4d/t4dm/src/t4dm/mcp/tools/`
 
 #### episodic.py: 49% Coverage (176 statements, 90 untested)
 **Untested Sections**:
@@ -171,12 +171,12 @@ Coverage %:          77%
 - Error recovery (lines 147-182)
 - Statistics aggregation (lines 208-244)
 
-**Test File**: `/mnt/projects/ww/tests/mcp/test_batch_operations.py` (14 tests, 14 FAILING)
+**Test File**: `/mnt/projects/t4d/t4dm/tests/mcp/test_batch_operations.py` (14 tests, 14 FAILING)
 
 ---
 
 ### Gap 4: Qdrant Vector Store (62% coverage)
-**File**: `/mnt/projects/ww/src/ww/storage/qdrant_store.py` (263 statements, 100 untested)
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/storage/qdrant_store.py` (263 statements, 100 untested)
 
 **Critical Untested Areas**:
 ```python
@@ -196,7 +196,7 @@ Coverage %:          77%
 ---
 
 ### Gap 5: Consolidation Service (69% coverage)
-**File**: `/mnt/projects/ww/src/ww/consolidation/service.py` (402 statements, 123 untested)
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/consolidation/service.py` (402 statements, 123 untested)
 
 **Untested Features**:
 ```python
@@ -212,7 +212,7 @@ Coverage %:          77%
 921-931, 957-1086       # Advanced features (130+ lines)
 ```
 
-**Tests Failing**: 12 consolidation tests in `/mnt/projects/ww/tests/unit/test_consolidation.py`
+**Tests Failing**: 12 consolidation tests in `/mnt/projects/t4d/t4dm/tests/unit/test_consolidation.py`
 **Root Cause**: Import errors (missing hdbscan dependency in test environment)
 
 ---
@@ -247,7 +247,7 @@ Got: 'wwpassword'
 - Integration tests fail on Settings initialization
 - Affects ~40% of failing tests indirectly
 
-**Fix Location**: `/mnt/projects/ww/.env`
+**Fix Location**: `/mnt/projects/t4d/t4dm/.env`
 
 ---
 
@@ -475,7 +475,7 @@ Defined markers:
    - Add test environment override in conftest.py
    - Unblocks 40+ tests
 
-   **File**: `/mnt/projects/ww/.env`
+   **File**: `/mnt/projects/t4d/t4dm/.env`
    ```env
    # Change from:
    NEO4J_PASSWORD=wwpassword
@@ -497,7 +497,7 @@ Defined markers:
 3. **Fix MCP Gateway Test Mocks** (4-6 hours)
    - 16 tests failing with AttributeError
    - Update `tests/unit/test_mcp_gateway.py` mock returns
-   - File: `/mnt/projects/ww/tests/unit/test_mcp_gateway.py`
+   - File: `/mnt/projects/t4d/t4dm/tests/unit/test_mcp_gateway.py`
 
 4. **Add Database-Specific Tests for Neo4j** (6-8 hours)
    - Create `tests/storage/test_neo4j_detailed.py` with 20+ tests
@@ -525,7 +525,7 @@ Defined markers:
    - Cover session isolation
    - Cover consolidation routing
 
-   **File to Create**: `/mnt/projects/ww/tests/unit/test_unified_memory.py`
+   **File to Create**: `/mnt/projects/t4d/t4dm/tests/unit/test_unified_memory.py`
    **Target**: unified.py 18% → 85%
 
 7. **Add Qdrant Storage Tests** (4-6 hours)
@@ -651,20 +651,20 @@ pytest tests/unit/test_mcp_gateway.py -v      # Fix mocks
 ## 9. FILES TO UPDATE/CREATE
 
 ### Files Needing Updates
-1. `/mnt/projects/ww/.env` - Fix password complexity
-2. `/mnt/projects/ww/tests/conftest.py` - Add DB markers, error fixtures
-3. `/mnt/projects/ww/tests/unit/test_mcp_gateway.py` - Fix mock setup
-4. `/mnt/projects/ww/tests/unit/test_observability.py` - Fix 7 tests
-5. `/mnt/projects/ww/pyproject.toml` - Add test environment config
+1. `/mnt/projects/t4d/t4dm/.env` - Fix password complexity
+2. `/mnt/projects/t4d/t4dm/tests/conftest.py` - Add DB markers, error fixtures
+3. `/mnt/projects/t4d/t4dm/tests/unit/test_mcp_gateway.py` - Fix mock setup
+4. `/mnt/projects/t4d/t4dm/tests/unit/test_observability.py` - Fix 7 tests
+5. `/mnt/projects/t4d/t4dm/pyproject.toml` - Add test environment config
 
 ### Files to Create
-1. `/mnt/projects/ww/tests/storage/test_neo4j_detailed.py` - 25-30 tests
-2. `/mnt/projects/ww/tests/storage/test_qdrant_detailed.py` - 15-20 tests
-3. `/mnt/projects/ww/tests/unit/test_unified_memory.py` - 35-40 tests
-4. `/mnt/projects/ww/tests/mcp/test_tools_batch.py` - 50+ tests
-5. `/mnt/projects/ww/tests/chaos/test_resilience.py` - 15-20 tests
-6. `/mnt/projects/ww/tests/docker-compose-test.yml` - Service setup
-7. `/mnt/projects/ww/tests/README.md` - Test documentation
+1. `/mnt/projects/t4d/t4dm/tests/storage/test_neo4j_detailed.py` - 25-30 tests
+2. `/mnt/projects/t4d/t4dm/tests/storage/test_qdrant_detailed.py` - 15-20 tests
+3. `/mnt/projects/t4d/t4dm/tests/unit/test_unified_memory.py` - 35-40 tests
+4. `/mnt/projects/t4d/t4dm/tests/mcp/test_tools_batch.py` - 50+ tests
+5. `/mnt/projects/t4d/t4dm/tests/chaos/test_resilience.py` - 15-20 tests
+6. `/mnt/projects/t4d/t4dm/tests/docker-compose-test.yml` - Service setup
+7. `/mnt/projects/t4d/t4dm/tests/README.md` - Test documentation
 
 ---
 

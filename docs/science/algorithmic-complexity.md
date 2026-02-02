@@ -33,7 +33,7 @@ This document provides comprehensive algorithmic complexity analysis of World We
 ### 1.1 Memory Store Operations
 
 #### Episode Creation (`EpisodicMemory.create`)
-**File**: `/home/aaron/projects/ww/src/ww/memory/episodic.py:678-921`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic.py:678-921`
 
 ```
 Time Complexity:
@@ -53,7 +53,7 @@ Space Complexity:
 ```
 
 #### Episode Recall (`EpisodicMemory.recall`)
-**File**: `/home/aaron/projects/ww/src/ww/memory/episodic.py:1054-1433`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic.py:1054-1433`
 
 ```
 Time Complexity:
@@ -79,7 +79,7 @@ Space Complexity:
 ### 1.2 Embedding Computations
 
 #### BGE-M3 Embedding (`BGEM3Embedding.embed`)
-**File**: `/home/aaron/projects/ww/src/ww/embedding/bge_m3.py:287-332`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/embedding/bge_m3.py:287-332`
 
 ```
 Time Complexity:
@@ -94,7 +94,7 @@ Space Complexity:
 ```
 
 #### TTLCache Eviction
-**File**: `/home/aaron/projects/ww/src/ww/embedding/bge_m3.py:22-157`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/embedding/bge_m3.py:22-157`
 
 ```
 OPTIMIZED (P2-OPT-B1.1):
@@ -107,7 +107,7 @@ OPTIMIZED (P2-OPT-B1.1):
 ### 1.3 Consolidation Algorithms
 
 #### HDBSCAN Clustering (`ConsolidationService._cluster_episodes`)
-**File**: `/home/aaron/projects/ww/src/ww/consolidation/service.py:1033-1158`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/consolidation/service.py:1033-1158`
 
 ```
 Time Complexity:
@@ -128,7 +128,7 @@ Space Complexity:
 ```
 
 #### Duplicate Detection (`ConsolidationService._find_duplicates`)
-**File**: `/home/aaron/projects/ww/src/ww/consolidation/service.py:952-1031`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/consolidation/service.py:952-1031`
 
 ```
 OPTIMIZED (was O(n^2), now O(n * k)):
@@ -145,7 +145,7 @@ Space Complexity:
 ### 1.4 Prediction Forward Passes
 
 #### Latent Predictor (`LatentPredictor.predict`)
-**File**: `/home/aaron/projects/ww/src/ww/prediction/latent_predictor.py:204-258`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/prediction/latent_predictor.py:204-258`
 
 ```
 Time Complexity:
@@ -162,7 +162,7 @@ Space Complexity:
 ```
 
 #### Hierarchical Predictor (`HierarchicalPredictor.predict`)
-**File**: `/home/aaron/projects/ww/src/ww/prediction/hierarchical_predictor.py:149-183`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/prediction/hierarchical_predictor.py:149-183`
 
 ```
 Time Complexity:
@@ -187,7 +187,7 @@ Space Complexity:
 ### 2.1 Buffer Implementations
 
 #### Working Memory Buffer
-**File**: `/home/aaron/projects/ww/src/ww/memory/working_memory.py:112-639`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/working_memory.py:112-639`
 
 ```
 Structure: list[WorkingMemoryItem[T]]
@@ -205,7 +205,7 @@ Space: O(capacity * item_size) = O(4) constant
 ```
 
 #### Buffer Manager (CA1-like)
-**File**: `/home/aaron/projects/ww/src/ww/memory/buffer_manager.py:74-728`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/buffer_manager.py:74-728`
 
 ```
 Structure: dict[UUID, BufferedItem]
@@ -221,7 +221,7 @@ Space: O(B * (d + f)) where B = buffer size, d = embedding dim, f = features dim
 ```
 
 #### Prediction Queue
-**File**: `/home/aaron/projects/ww/src/ww/prediction/hierarchical_predictor.py:121-129`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/prediction/hierarchical_predictor.py:121-129`
 
 ```
 Structure: dict[str, list[tuple[step, target_step, Prediction]]]
@@ -238,7 +238,7 @@ Space: O(300 * prediction_size)
 ### 2.2 Graph Structures
 
 #### Causal Graph (Neo4j)
-**File**: `/home/aaron/projects/ww/src/ww/storage/neo4j_store.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/storage/neo4j_store.py`
 
 ```
 Structure: Property graph with Episode, Entity, Procedure nodes
@@ -260,7 +260,7 @@ Space: O(N + R) where N = nodes, R = relationships
 ```
 
 #### Semantic Cluster Graph
-**File**: `/home/aaron/projects/ww/src/ww/memory/cluster_index.py:78-661`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/cluster_index.py:78-661`
 
 ```
 Structure:
@@ -279,7 +279,7 @@ Space: O(K * (d + m)) where K = clusters, m = avg members per cluster
 ### 2.3 Index Structures
 
 #### Vector Index (Qdrant HNSW)
-**File**: `/home/aaron/projects/ww/src/ww/storage/qdrant_store.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/storage/qdrant_store.py`
 
 ```
 Structure: HNSW (Hierarchical Navigable Small World)
@@ -305,7 +305,7 @@ Note: Timestamp filtering uses payload range filter
 ```
 
 #### Learned Sparse Index
-**File**: `/home/aaron/projects/ww/src/ww/memory/learned_sparse_index.py:68-467`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/learned_sparse_index.py:68-467`
 
 ```
 Structure:
@@ -452,7 +452,7 @@ async with self._get_init_lock():
 | Predictor weights | JSON/dict | Checkpoint file | ~2MB per predictor |
 
 **WAL (Write-Ahead Log)**:
-- File: `/home/aaron/projects/ww/src/ww/persistence/wal.py`
+- File: `/mnt/projects/t4d/t4dm/src/t4dm/persistence/wal.py`
 - Entry size: O(operation_size)
 - Rotation: Configurable threshold
 
@@ -521,17 +521,17 @@ async with self._get_init_lock():
 
 | Component | Primary File |
 |-----------|--------------|
-| Episodic Memory | `/home/aaron/projects/ww/src/ww/memory/episodic.py` |
-| Working Memory | `/home/aaron/projects/ww/src/ww/memory/working_memory.py` |
-| Buffer Manager | `/home/aaron/projects/ww/src/ww/memory/buffer_manager.py` |
-| Cluster Index | `/home/aaron/projects/ww/src/ww/memory/cluster_index.py` |
-| Sparse Index | `/home/aaron/projects/ww/src/ww/memory/learned_sparse_index.py` |
-| Consolidation | `/home/aaron/projects/ww/src/ww/consolidation/service.py` |
-| Embeddings | `/home/aaron/projects/ww/src/ww/embedding/bge_m3.py` |
-| Prediction | `/home/aaron/projects/ww/src/ww/prediction/hierarchical_predictor.py` |
-| Vector Store | `/home/aaron/projects/ww/src/ww/storage/qdrant_store.py` |
-| Graph Store | `/home/aaron/projects/ww/src/ww/storage/neo4j_store.py` |
-| STDP Learning | `/home/aaron/projects/ww/src/ww/learning/stdp.py` |
+| Episodic Memory | `/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic.py` |
+| Working Memory | `/mnt/projects/t4d/t4dm/src/t4dm/memory/working_memory.py` |
+| Buffer Manager | `/mnt/projects/t4d/t4dm/src/t4dm/memory/buffer_manager.py` |
+| Cluster Index | `/mnt/projects/t4d/t4dm/src/t4dm/memory/cluster_index.py` |
+| Sparse Index | `/mnt/projects/t4d/t4dm/src/t4dm/memory/learned_sparse_index.py` |
+| Consolidation | `/mnt/projects/t4d/t4dm/src/t4dm/consolidation/service.py` |
+| Embeddings | `/mnt/projects/t4d/t4dm/src/t4dm/embedding/bge_m3.py` |
+| Prediction | `/mnt/projects/t4d/t4dm/src/t4dm/prediction/hierarchical_predictor.py` |
+| Vector Store | `/mnt/projects/t4d/t4dm/src/t4dm/storage/qdrant_store.py` |
+| Graph Store | `/mnt/projects/t4d/t4dm/src/t4dm/storage/neo4j_store.py` |
+| STDP Learning | `/mnt/projects/t4d/t4dm/src/t4dm/learning/stdp.py` |
 
 ---
 

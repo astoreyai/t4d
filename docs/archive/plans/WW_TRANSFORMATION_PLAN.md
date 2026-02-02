@@ -77,7 +77,7 @@ curl -X DELETE http://localhost:6333/collections/ww_episodes_hybrid
 
 #### 1.1 Event Data Structures
 ```python
-# src/ww/learning/events.py
+# src/t4dm/learning/events.py
 
 @dataclass
 class RetrievalEvent:
@@ -111,7 +111,7 @@ class FeedbackEvent:
 ```
 
 #### 1.2 Event Collection Hooks
-- [ ] Create `src/ww/learning/collector.py`
+- [ ] Create `src/t4dm/learning/collector.py`
 - [ ] Hook into `episodic.recall()` → emit RetrievalEvent
 - [ ] Hook into `semantic.recall()` → emit RetrievalEvent
 - [ ] Hook into `procedural.match_trigger()` → emit RetrievalEvent
@@ -152,7 +152,7 @@ def compute_context_hash(cwd: str, project: str, tool: str, query: str) -> str:
 
 #### 2.1 Baseline Tracker
 ```python
-# src/ww/learning/baseline.py
+# src/t4dm/learning/baseline.py
 
 class TaskBaselineTracker:
     """Track expected success rate per task type."""
@@ -172,7 +172,7 @@ class TaskBaselineTracker:
 
 #### 2.2 Retrieval Reward Computation
 ```python
-# src/ww/learning/rewards.py
+# src/t4dm/learning/rewards.py
 
 def compute_retrieval_reward(
     retrieval: RetrievalEvent,
@@ -203,7 +203,7 @@ def compute_retrieval_reward(
 
 #### 2.3 Eligibility Traces (TD-λ)
 ```python
-# src/ww/learning/traces.py
+# src/t4dm/learning/traces.py
 
 class EligibilityTraceManager:
     """
@@ -299,7 +299,7 @@ learning = [
 
 #### 3.2 Learnable Retrieval Scorer
 ```python
-# src/ww/learning/scorer.py
+# src/t4dm/learning/scorer.py
 
 import torch
 import torch.nn as nn
@@ -353,7 +353,7 @@ class LearnedRetrievalScorer(nn.Module):
 
 #### 3.3 Experience Replay Buffer
 ```python
-# src/ww/learning/replay.py
+# src/t4dm/learning/replay.py
 
 @dataclass
 class Experience:
@@ -409,7 +409,7 @@ class PrioritizedReplayBuffer:
 
 #### 3.4 Ranking Loss (ListMLE)
 ```python
-# src/ww/learning/losses.py
+# src/t4dm/learning/losses.py
 
 def list_mle_loss(scores: torch.Tensor, rewards: torch.Tensor) -> torch.Tensor:
     """
@@ -442,7 +442,7 @@ def list_mle_loss(scores: torch.Tensor, rewards: torch.Tensor) -> torch.Tensor:
 
 #### 3.5 Training Loop
 ```python
-# src/ww/learning/trainer.py
+# src/t4dm/learning/trainer.py
 
 class RetrievalScorerTrainer:
     def __init__(self, scorer: LearnedRetrievalScorer, lr: float = 1e-4):
@@ -592,7 +592,7 @@ if __name__ == "__main__":
 Add learning-aware wrappers to MCP tools:
 
 ```python
-# src/ww/mcp/tools/learning_wrappers.py
+# src/t4dm/mcp/tools/learning_wrappers.py
 
 class LearningAwareRecall:
     """Wraps recall to emit retrieval events."""
@@ -617,7 +617,7 @@ class LearningAwareRecall:
 #### 4.3 Implicit Feedback Detection
 
 ```python
-# src/ww/learning/feedback.py
+# src/t4dm/learning/feedback.py
 
 class ImplicitFeedbackDetector:
     """Detect feedback from user behavior patterns."""
@@ -730,7 +730,7 @@ Update `~/.claude/settings.json`:
 
 #### 5.1 Scheduled Training
 ```python
-# src/ww/learning/scheduler.py
+# src/t4dm/learning/scheduler.py
 
 class LearningScheduler:
     """Schedule offline training runs."""
@@ -772,7 +772,7 @@ class LearningScheduler:
 
 #### 5.2 Consolidation Quality Evaluation
 ```python
-# src/ww/learning/consolidation_eval.py
+# src/t4dm/learning/consolidation_eval.py
 
 class ConsolidationEvaluator:
     """Evaluate quality of consolidated entities/skills."""
@@ -805,7 +805,7 @@ class ConsolidationEvaluator:
 
 #### 5.3 Forgetting Regret Detection
 ```python
-# src/ww/learning/forgetting.py
+# src/t4dm/learning/forgetting.py
 
 class ForgettingRegretDetector:
     """Detect when we forgot something we shouldn't have."""
@@ -843,7 +843,7 @@ class ForgettingRegretDetector:
 
 #### 5.4 Adaptive Decay Training
 ```python
-# src/ww/learning/decay.py
+# src/t4dm/learning/decay.py
 
 class AdaptiveDecayTrainer:
     """Learn optimal decay rates per memory type/domain."""
@@ -898,7 +898,7 @@ class AdaptiveDecayTrainer:
 
 #### 6.1 Elastic Weight Consolidation (EWC)
 ```python
-# src/ww/learning/ewc.py
+# src/t4dm/learning/ewc.py
 
 class EWCRegularizer:
     """Prevent catastrophic forgetting of old tasks."""
@@ -938,7 +938,7 @@ class EWCRegularizer:
 
 #### 6.2 MAML for Domain Adaptation
 ```python
-# src/ww/learning/maml.py
+# src/t4dm/learning/maml.py
 
 class MAMLAdapter:
     """
@@ -984,7 +984,7 @@ class MAMLAdapter:
 
 #### 6.3 Differentiable Memory Retrieval
 ```python
-# src/ww/learning/differentiable.py
+# src/t4dm/learning/differentiable.py
 
 class DifferentiableRetrieval(nn.Module):
     """
@@ -1022,7 +1022,7 @@ class DifferentiableRetrieval(nn.Module):
 
 #### 6.4 Multi-Step Credit Graph
 ```python
-# src/ww/learning/credit_graph.py
+# src/t4dm/learning/credit_graph.py
 
 class MultiStepCreditGraph:
     """
@@ -1186,7 +1186,7 @@ Week 8:  Phase 8 (Documentation) + Release
 ## Key Files to Create
 
 ```
-src/ww/learning/
+src/t4dm/learning/
 ├── __init__.py
 ├── events.py          # Event data structures
 ├── collector.py       # Event collection hooks

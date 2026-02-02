@@ -2,7 +2,7 @@
 
 **Date**: 2026-01-29
 **Method**: 6 parallel agents analyzed every code file against every diagram
-**Scope**: All `.py` in `src/ww/` vs all `.mmd`/`.mermaid` in `docs/diagrams/`
+**Scope**: All `.py` in `src/t4dm/` vs all `.mmd`/`.mermaid` in `docs/diagrams/`
 
 ---
 

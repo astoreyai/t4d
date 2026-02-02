@@ -3,7 +3,7 @@
 
 **Reviewer**: Research Quality Assurance Agent
 **Date**: 2025-12-04
-**Paper**: /mnt/projects/ww/docs/papers/adversarial_memory_attacks.tex
+**Paper**: /mnt/projects/t4d/t4dm/docs/papers/adversarial_memory_attacks.tex
 **Target Venue**: IEEE Security Workshop (Conference Format)
 
 ---
@@ -687,4 +687,4 @@ This paper fits "early-stage taxonomy" category.
 
 **Review completed**: 2025-12-04
 **Reviewer**: Research QA Agent
-**Files generated**: /mnt/projects/ww/docs/papers/reviews/security_quality_review.md
+**Files generated**: /mnt/projects/t4d/t4dm/docs/papers/reviews/security_quality_review.md

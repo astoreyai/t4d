@@ -40,7 +40,7 @@ F = sum_l [0.5 * epsilon_l^T * Pi_l * epsilon_l + 0.5 * log|Sigma_l|]
 
 ### Files to Create
 
-#### `/mnt/projects/ww/src/ww/prediction/active_inference.py`
+#### `/mnt/projects/t4d/t4dm/src/t4dm/prediction/active_inference.py`
 
 ```python
 @dataclass
@@ -107,7 +107,7 @@ dc_ij/dt = eta * (agreement(P_i, T_ij * P_j) - c_ij)
 
 ### Files to Create
 
-#### `/mnt/projects/ww/src/ww/nca/neural_ode_capsules.py`
+#### `/mnt/projects/t4d/t4dm/src/t4dm/nca/neural_ode_capsules.py`
 
 ```python
 @dataclass
@@ -160,7 +160,7 @@ dW_lat/dt = -eta_lat * (y * y^T - I)  # Lateral: Anti-Hebbian
 
 ### Files to Create
 
-#### `/mnt/projects/ww/src/ww/learning/anti_hebbian.py`
+#### `/mnt/projects/t4d/t4dm/src/t4dm/learning/anti_hebbian.py`
 
 ```python
 @dataclass
@@ -214,7 +214,7 @@ Consolidation_i = Tag_i(t) * min(PRPs(t), capture_capacity)
 
 ### Files to Create
 
-#### `/mnt/projects/ww/src/ww/learning/bcm_metaplasticity.py`
+#### `/mnt/projects/t4d/t4dm/src/t4dm/learning/bcm_metaplasticity.py`
 
 ```python
 @dataclass

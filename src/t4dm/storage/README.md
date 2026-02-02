@@ -1,6 +1,6 @@
 # Storage Module
 
-**Path**: `ww/storage/` | **Files**: 6 | **Lines**: ~3,500
+**Path**: `t4dm/storage/` | **Files**: 6 | **Lines**: ~3,500
 
 Storage abstraction layer with Neo4j (graph), Qdrant (vector), resilience patterns, and saga transactions.
 
@@ -307,7 +307,7 @@ from ww.storage import ColdStorageManager, ArchiveConfig
 
 config = ArchiveConfig(
     backend="filesystem",  # or "s3", "postgres"
-    base_path="/var/lib/ww/archive",
+    base_path="/var/lib/t4dm/archive",
     compression=True,  # gzip
     archive_retention_days=365*5,  # 5 years
 )

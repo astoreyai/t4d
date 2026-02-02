@@ -1,5 +1,5 @@
 # NCA (Neural Cellular Automata)
-**Path**: `/mnt/projects/t4d/t4dm/src/ww/nca/`
+**Path**: `/mnt/projects/t4d/t4dm/src/t4dm/nca/`
 
 ## What
 Biologically-inspired neural field dynamics implementing brain-region simulations, neurotransmitter systems, oscillatory networks, Hinton architectures (Forward-Forward, Capsule Networks), and sleep/wake consolidation. The most neuroscience-heavy module (~40 files).

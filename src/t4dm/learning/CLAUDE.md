@@ -1,5 +1,5 @@
 # Learning
-**Path**: `/mnt/projects/t4d/t4dm/src/ww/learning/`
+**Path**: `/mnt/projects/t4d/t4dm/src/t4dm/learning/`
 
 ## What
 Biologically-inspired adaptive learning system implementing neuromodulator dynamics, three-factor learning rules, FSRS spaced repetition, causal discovery, and retrieval feedback loops. The largest module in WW (~35 files).

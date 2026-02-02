@@ -377,7 +377,7 @@ assert weight >= 0.8  # Lower threshold
 ### TASK-P14-001: Add Timeout to Saga Compensation
 
 **Files**:
-- `src/ww/storage/saga.py` (modify)
+- `src/t4dm/storage/saga.py` (modify)
 
 **Severity**: CRITICAL
 
@@ -448,9 +448,9 @@ async def _compensate(self, results, failed_step, error_msg) -> SagaResult:
 ### TASK-P14-002: Fix Session Isolation Bypass
 
 **Files**:
-- `src/ww/memory/episodic.py` (modify)
-- `src/ww/memory/semantic.py` (modify)
-- `src/ww/memory/procedural.py` (modify)
+- `src/t4dm/memory/episodic.py` (modify)
+- `src/t4dm/memory/semantic.py` (modify)
+- `src/t4dm/memory/procedural.py` (modify)
 
 **Severity**: HIGH
 
@@ -500,8 +500,8 @@ else:
 ### TASK-P14-003: Add Concurrency Limits to Hebbian Strengthening
 
 **Files**:
-- `src/ww/memory/semantic.py` (modify)
-- `src/ww/core/config.py` (verify `batch_max_concurrency` exists)
+- `src/t4dm/memory/semantic.py` (modify)
+- `src/t4dm/core/config.py` (verify `batch_max_concurrency` exists)
 
 **Severity**: HIGH
 
@@ -570,9 +570,9 @@ async def _strengthen_co_retrieval(self, results: list[ScoredResult]) -> None:
 ### TASK-P14-004: Fix Lambda Closure Captures in Saga Steps
 
 **Files**:
-- `src/ww/memory/episodic.py` (modify)
-- `src/ww/memory/semantic.py` (modify)
-- `src/ww/memory/procedural.py` (modify)
+- `src/t4dm/memory/episodic.py` (modify)
+- `src/t4dm/memory/semantic.py` (modify)
+- `src/t4dm/memory/procedural.py` (modify)
 
 **Severity**: MEDIUM
 
@@ -661,7 +661,7 @@ saga.add_step(
 ### TASK-P14-005: Add Saga State Enum for Compensation Failures
 
 **Files**:
-- `src/ww/storage/saga.py` (modify)
+- `src/t4dm/storage/saga.py` (modify)
 
 **Severity**: MEDIUM
 
@@ -721,7 +721,7 @@ class SagaResult:
 ### TASK-P15-001: Add Session Validation to Gap Tools
 
 **Files**:
-- `src/ww/mcp/tools/system.py` (modify)
+- `src/t4dm/mcp/tools/system.py` (modify)
 
 **Severity**: MEDIUM
 
@@ -772,7 +772,7 @@ async def apply_hebbian_decay(
 ### TASK-P15-002: Add Resource Input Validation
 
 **Files**:
-- `src/ww/mcp/resources.py` (modify)
+- `src/t4dm/mcp/resources.py` (modify)
 
 **Severity**: MEDIUM
 
@@ -831,10 +831,10 @@ async def resource_procedures(domain: str) -> str:
 ### TASK-P15-003: Activate Rate Limiting on Tools
 
 **Files**:
-- `src/ww/mcp/tools/episodic.py` (modify)
-- `src/ww/mcp/tools/semantic.py` (modify)
-- `src/ww/mcp/tools/procedural.py` (modify)
-- `src/ww/mcp/tools/system.py` (modify)
+- `src/t4dm/mcp/tools/episodic.py` (modify)
+- `src/t4dm/mcp/tools/semantic.py` (modify)
+- `src/t4dm/mcp/tools/procedural.py` (modify)
+- `src/t4dm/mcp/tools/system.py` (modify)
 
 **Severity**: LOW
 
@@ -870,7 +870,7 @@ async def create_episodes_batch(...) -> dict:
 ### TASK-P15-004: Add Request ID Tracking to All Tools
 
 **Files**:
-- `src/ww/mcp/tools/*.py` (modify)
+- `src/t4dm/mcp/tools/*.py` (modify)
 
 **Severity**: LOW
 
@@ -938,7 +938,7 @@ Sessions are isolated by `session_id`:
 ### TASK-P15-006: Add Tool Registration Validation
 
 **Files**:
-- `src/ww/mcp/server.py` (modify)
+- `src/t4dm/mcp/server.py` (modify)
 
 **Severity**: LOW
 
@@ -986,9 +986,9 @@ def main():
 ### TASK-P16-001: Create Hooks Infrastructure
 
 **Files**:
-- `src/ww/hooks/__init__.py` (verify exists)
-- `src/ww/hooks/base.py` (verify exists)
-- `src/ww/hooks/registry.py` (verify exists)
+- `src/t4dm/hooks/__init__.py` (verify exists)
+- `src/t4dm/hooks/base.py` (verify exists)
+- `src/t4dm/hooks/registry.py` (verify exists)
 
 **Severity**: HIGH
 
@@ -996,7 +996,7 @@ def main():
 
 **Verification**:
 ```bash
-ls -la src/ww/hooks/
+ls -la src/t4dm/hooks/
 # Should contain:
 # __init__.py, base.py, core.py, memory.py, storage.py, mcp.py, consolidation.py, registry.py
 ```
@@ -1012,9 +1012,9 @@ ls -la src/ww/hooks/
 ### TASK-P16-002: Integrate Hooks into Memory Modules
 
 **Files**:
-- `src/ww/memory/episodic.py` (modify)
-- `src/ww/memory/semantic.py` (modify)
-- `src/ww/memory/procedural.py` (modify)
+- `src/t4dm/memory/episodic.py` (modify)
+- `src/t4dm/memory/semantic.py` (modify)
+- `src/t4dm/memory/procedural.py` (modify)
 
 **Severity**: HIGH
 
@@ -1049,8 +1049,8 @@ class EpisodicMemory:
 ### TASK-P16-003: Integrate Hooks into Storage Layer
 
 **Files**:
-- `src/ww/storage/qdrant_store.py` (modify)
-- `src/ww/storage/neo4j_store.py` (modify)
+- `src/t4dm/storage/qdrant_store.py` (modify)
+- `src/t4dm/storage/neo4j_store.py` (modify)
 
 **Severity**: MEDIUM
 
@@ -1094,7 +1094,7 @@ class QdrantStore:
 ### TASK-P16-004: Integrate Hooks into MCP Gateway
 
 **Files**:
-- `src/ww/mcp/gateway.py` (modify)
+- `src/t4dm/mcp/gateway.py` (modify)
 
 **Severity**: MEDIUM
 
@@ -1144,7 +1144,7 @@ def with_mcp_hooks(func):
 ### TASK-P16-005: Add Default Hook Implementations
 
 **Files**:
-- `src/ww/hooks/defaults.py` (create)
+- `src/t4dm/hooks/defaults.py` (create)
 
 **Severity**: MEDIUM
 
@@ -1243,7 +1243,7 @@ def register_default_hooks():
 ### TASK-P17-001: Update Episodic Memory to Use Shared Serializers
 
 **Files**:
-- `src/ww/memory/episodic.py` (modify)
+- `src/t4dm/memory/episodic.py` (modify)
 
 **Severity**: MEDIUM
 
@@ -1289,7 +1289,7 @@ class EpisodicMemory:
 ### TASK-P17-002: Update Semantic Memory to Use Shared Serializers
 
 **Files**:
-- `src/ww/memory/semantic.py` (modify)
+- `src/t4dm/memory/semantic.py` (modify)
 
 **Same pattern as P17-001** for Entity serialization.
 
@@ -1302,7 +1302,7 @@ class EpisodicMemory:
 ### TASK-P17-003: Update Procedural Memory to Use Shared Serializers
 
 **Files**:
-- `src/ww/memory/procedural.py` (modify)
+- `src/t4dm/memory/procedural.py` (modify)
 
 **Same pattern as P17-001** for Procedure serialization.
 

@@ -10,7 +10,7 @@ Successfully implemented production-grade input validation and authentication co
 
 ## Files Modified
 
-### 1. `/mnt/projects/ww/src/ww/mcp/validation.py`
+### 1. `/mnt/projects/t4d/t4dm/src/t4dm/mcp/validation.py`
 
 **Total Lines**: 507 (was 302, added 205 lines)
 
@@ -47,7 +47,7 @@ Successfully implemented production-grade input validation and authentication co
    - List capping at 100 items
    - String sanitization on all values
 
-### 2. `/mnt/projects/ww/src/ww/mcp/memory_gateway.py`
+### 2. `/mnt/projects/t4d/t4dm/src/t4dm/mcp/memory_gateway.py`
 
 **Total Lines**: 1483 (was 1408, added 75 lines)
 
@@ -75,7 +75,7 @@ Successfully implemented production-grade input validation and authentication co
    - Enforces role-based access control
    - Returns {"error": "forbidden"} if role missing
 
-### 3. `/mnt/projects/ww/tests/unit/test_validation.py`
+### 3. `/mnt/projects/t4d/t4dm/tests/unit/test_validation.py`
 
 **Total Lines**: 1236 (was 869, added 367 lines)
 

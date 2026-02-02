@@ -173,13 +173,13 @@ asyncio.run(main())
 
 ```bash
 # Start with default settings
-ww serve
+t4dm serve
 
 # Or with custom port
-ww serve --port 8080
+t4dm serve --port 8080
 
 # Or with auto-reload for development
-ww serve --reload
+t4dm serve --reload
 ```
 
 ### API Endpoints

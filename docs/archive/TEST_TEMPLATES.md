@@ -656,7 +656,7 @@ pytest tests/storage/test_neo4j_advanced.py -v
 
 3. **Check coverage**:
 ```bash
-pytest tests/visualization/ --cov=src/ww/visualization --cov-report=term-missing
+pytest tests/visualization/ --cov=src/t4dm/visualization --cov-report=term-missing
 ```
 
 Use these templates to get started on filling the critical coverage gaps!

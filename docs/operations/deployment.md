@@ -101,7 +101,7 @@ WW_ENVIRONMENT=production
 
 ```bash
 helm repo add ww https://charts.astoreyai.com
-helm install ww ww/world-weaver
+helm install t4dm t4dm/world-weaver
 ```
 
 ### Manual Deployment

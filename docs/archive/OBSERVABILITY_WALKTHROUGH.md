@@ -34,7 +34,7 @@ The observability module provides five pillars of system insight:
 ### Module Location
 
 ```
-ww/observability/
+t4dm/observability/
 ├── __init__.py        # 33 public exports
 ├── logging.py         # Structured logging
 ├── metrics.py         # Metrics collection

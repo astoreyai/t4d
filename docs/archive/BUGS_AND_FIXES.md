@@ -8,7 +8,7 @@
 ## Bug #1: Missing EpisodicMemory.recent() Method
 
 **Severity**: CRITICAL  
-**File**: `/mnt/projects/ww/src/ww/memory/episodic.py`  
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic.py`  
 **Error Message**: `'EpisodicMemory' object has no attribute 'recent'`
 
 ### Where It Breaks
@@ -16,7 +16,7 @@
 - Test: Integration test for listing episodes
 
 ### Root Cause
-The API routes file (`src/ww/api/routes/episodes.py`) calls `episodic.recent()` but the method doesn't exist on the EpisodicMemory class.
+The API routes file (`src/t4dm/api/routes/episodes.py`) calls `episodic.recent()` but the method doesn't exist on the EpisodicMemory class.
 
 ### Fix Required
 Add the `recent()` method to EpisodicMemory class that returns recently accessed episodes, probably with some limit.
@@ -33,7 +33,7 @@ def recent(self, limit: int = 20) -> List[Episode]:
 ## Bug #2: Missing SemanticMemory Methods
 
 **Severity**: CRITICAL  
-**File**: `/mnt/projects/ww/src/ww/memory/semantic.py`  
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/semantic.py`  
 **Error Messages**:
 - `'SemanticMemory' object has no attribute 'store_entity'`
 - `'SemanticMemory' object has no attribute 'list_entities'`
@@ -44,7 +44,7 @@ def recent(self, limit: int = 20) -> List[Episode]:
 - Tests: Entity creation and listing tests
 
 ### Root Cause
-The API routes file (`src/ww/api/routes/entities.py`) calls:
+The API routes file (`src/t4dm/api/routes/entities.py`) calls:
 - `semantic.store_entity()` - doesn't exist
 - `semantic.list_entities()` - doesn't exist
 
@@ -66,7 +66,7 @@ def list_entities(self, session_id: Optional[str] = None) -> List[Entity]:
 ## Bug #3: Pattern Separation State Not Being Tracked
 
 **Severity**: CRITICAL  
-**File**: `/mnt/projects/ww/src/ww/memory/pattern_separation.py`  
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/pattern_separation.py`  
 **Class**: `DentateGyrus`
 
 ### Failing Tests (7 failures)
@@ -124,7 +124,7 @@ Review the DentateGyrus implementation and ensure:
 ## Bug #4: Joint Optimization Loss Diverging Instead of Converging
 
 **Severity**: CRITICAL  
-**File**: `/mnt/projects/ww/src/ww/learning/` (location TBD - likely in optimization/learning code)  
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/learning/` (location TBD - likely in optimization/learning code)  
 **Test**: `tests/unit/test_joint_optimization.py::TestConsistencyLoss::test_consistency_loss_convergence`
 
 ### What's Happening
@@ -155,7 +155,7 @@ The consistency loss between memory systems should decrease over time as they co
 ## Bug #5: Missing Search Endpoints
 
 **Severity**: MEDIUM  
-**File**: `/mnt/projects/ww/src/ww/api/routes/entities.py` and `skills.py`  
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/api/routes/entities.py` and `skills.py`  
 **Error**: 405 Method Not Allowed
 
 ### Missing Routes
@@ -205,7 +205,7 @@ Database contains at least one skill with `domain='testing'` which is not in the
 ## Bug #7: AsyncMock Serialization in Integration Tests
 
 **Severity**: MEDIUM  
-**File**: `/mnt/projects/ww/tests/integration/conftest.py`  
+**File**: `/mnt/projects/t4d/t4dm/tests/integration/conftest.py`  
 **Affected Tests**: 8 API integration tests
 
 ### Error Pattern

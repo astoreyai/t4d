@@ -17,7 +17,7 @@ Implemented comprehensive integration and performance test suites for World Weav
 
 ### 1. Integration Test Suite
 
-**File**: `/mnt/projects/ww/tests/integration/test_memory_lifecycle.py`
+**File**: `/mnt/projects/t4d/t4dm/tests/integration/test_memory_lifecycle.py`
 
 #### Test Scenarios (8 tests)
 
@@ -34,7 +34,7 @@ Implemented comprehensive integration and performance test suites for World Weav
 
 ### 2. Performance Benchmark Suite
 
-**File**: `/mnt/projects/ww/tests/performance/test_benchmarks.py`
+**File**: `/mnt/projects/t4d/t4dm/tests/performance/test_benchmarks.py`
 
 #### Benchmarks (8 tests)
 
@@ -51,7 +51,7 @@ Implemented comprehensive integration and performance test suites for World Weav
 
 ### 3. Test Configuration Updates
 
-**File**: `/mnt/projects/ww/pyproject.toml`
+**File**: `/mnt/projects/t4d/t4dm/pyproject.toml`
 
 #### Pytest Markers Added
 ```toml
@@ -81,7 +81,7 @@ dev = [
 
 #### Integration Test Fixtures
 
-**File**: `/mnt/projects/ww/tests/integration/conftest.py`
+**File**: `/mnt/projects/t4d/t4dm/tests/integration/conftest.py`
 
 Provides:
 - **Session Fixtures**: `integration_session_a`, `integration_session_b`
@@ -96,7 +96,7 @@ Provides:
 
 #### Performance Test Fixtures
 
-**File**: `/mnt/projects/ww/tests/performance/conftest.py`
+**File**: `/mnt/projects/t4d/t4dm/tests/performance/conftest.py`
 
 Provides:
 - **Timing**: `timing`, `benchmark_timer`
@@ -110,7 +110,7 @@ Provides:
 
 ### 5. Documentation
 
-**File**: `/mnt/projects/ww/TESTING_GUIDE.md`
+**File**: `/mnt/projects/t4d/t4dm/TESTING_GUIDE.md`
 
 Comprehensive guide covering:
 - Running tests (all, specific subsets)
@@ -283,12 +283,12 @@ pytest tests/ -v --cov=src/ww --cov-report=html
 
 | File | Lines | Purpose |
 |------|-------|---------|
-| `/mnt/projects/ww/tests/integration/test_memory_lifecycle.py` | 500+ | Integration tests for full workflows |
-| `/mnt/projects/ww/tests/integration/conftest.py` | 400+ | Fixtures for integration tests |
-| `/mnt/projects/ww/tests/performance/test_benchmarks.py` | 600+ | Performance benchmarks with thresholds |
-| `/mnt/projects/ww/tests/performance/conftest.py` | 400+ | Fixtures for performance tests |
-| `/mnt/projects/ww/TESTING_GUIDE.md` | 500+ | Comprehensive testing documentation |
-| `/mnt/projects/ww/pyproject.toml` | Updated | Added markers and dev dependencies |
+| `/mnt/projects/t4d/t4dm/tests/integration/test_memory_lifecycle.py` | 500+ | Integration tests for full workflows |
+| `/mnt/projects/t4d/t4dm/tests/integration/conftest.py` | 400+ | Fixtures for integration tests |
+| `/mnt/projects/t4d/t4dm/tests/performance/test_benchmarks.py` | 600+ | Performance benchmarks with thresholds |
+| `/mnt/projects/t4d/t4dm/tests/performance/conftest.py` | 400+ | Fixtures for performance tests |
+| `/mnt/projects/t4d/t4dm/TESTING_GUIDE.md` | 500+ | Comprehensive testing documentation |
+| `/mnt/projects/t4d/t4dm/pyproject.toml` | Updated | Added markers and dev dependencies |
 
 ## Test Execution Checklist
 

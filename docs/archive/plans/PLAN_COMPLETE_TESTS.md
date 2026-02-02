@@ -208,7 +208,7 @@ This test is already passing (xpassed). Simply remove the decorator.
 
 #### Step 2.2: Implement Sparse Coding Layer
 
-**File**: `src/ww/core/learned_gate.py`
+**File**: `src/t4dm/core/learned_gate.py`
 
 Add sparse encoding after content projection:
 
@@ -246,7 +246,7 @@ def _sparse_encode(self, content_features: np.ndarray) -> np.ndarray:
 
 #### Step 2.3: Implement Elastic Weight Consolidation (EWC)
 
-**File**: `src/ww/core/learned_gate.py`
+**File**: `src/t4dm/core/learned_gate.py`
 
 Add Fisher information tracking and EWC regularization:
 
@@ -313,7 +313,7 @@ def update(self, memory_id, utility, ...):
 
 #### Step 2.4: Expand Feature Dimensionality
 
-**File**: `src/ww/core/learned_gate.py`
+**File**: `src/t4dm/core/learned_gate.py`
 
 Change content projection dimensions:
 
@@ -331,7 +331,7 @@ CONTENT_INPUT_DIM = 1024
 
 #### Step 2.5: Add Orthogonalization Constraint
 
-**File**: `src/ww/core/learned_gate.py`
+**File**: `src/t4dm/core/learned_gate.py`
 
 Add orthogonalization to content projection training:
 
@@ -356,7 +356,7 @@ def _update_content_projection(self, ...):
 
 #### Step 2.6: Improve Addressing Capacity
 
-**File**: `src/ww/core/learned_gate.py`
+**File**: `src/t4dm/core/learned_gate.py`
 
 Add variance-aware content projection:
 
@@ -426,7 +426,7 @@ def _project_content(self, embedding: np.ndarray) -> np.ndarray:
 
 ### Modified Files
 - `tests/unit/test_joint_optimization.py` - Remove 1 xfail marker
-- `src/ww/core/learned_gate.py` - Add ~200 lines for EWC, sparse coding, orthogonalization
+- `src/t4dm/core/learned_gate.py` - Add ~200 lines for EWC, sparse coding, orthogonalization
 
 ### Constants Changes
 ```python

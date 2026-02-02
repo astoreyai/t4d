@@ -138,7 +138,7 @@ Input Content
 | `compute_learning_rate()` | `effective_learning_rate` property | **Replace**: Use CompBio's multiplicative formula |
 | `alpha_ne`, `rho_da` params | Config-based params | **Add**: To WW config system |
 
-**Integration Code Location**: `ww/learning/neuromodulators.py`
+**Integration Code Location**: `t4dm/learning/neuromodulators.py`
 
 ```python
 # Enhanced NeuromodulatorOrchestra
@@ -173,10 +173,10 @@ class NeuromodulatorOrchestra:
 
 | CompBio Component | WW Integration Point | File Location |
 |-------------------|---------------------|---------------|
-| `DendriticNeuron` | NEW: `ww/encoding/dendritic.py` | Pre-processing layer |
-| `SparseEncoder` | NEW: `ww/encoding/sparse.py` | Pattern separation |
-| `AttractorNetwork` | NEW: `ww/encoding/attractor.py` | Pattern completion |
-| `FastEpisodicStore` | NEW: `ww/memory/fast_episodic.py` | Parallel to episodic |
+| `DendriticNeuron` | NEW: `t4dm/encoding/dendritic.py` | Pre-processing layer |
+| `SparseEncoder` | NEW: `t4dm/encoding/sparse.py` | Pattern separation |
+| `AttractorNetwork` | NEW: `t4dm/encoding/attractor.py` | Pattern completion |
+| `FastEpisodicStore` | NEW: `t4dm/memory/fast_episodic.py` | Parallel to episodic |
 
 ### 2.3 Memory Store Mapping
 
@@ -216,7 +216,7 @@ class NeuromodulatorOrchestra:
 ### 3.1 New Configuration Sections
 
 ```python
-# ww/core/config.py - Extended
+# t4dm/core/config.py - Extended
 
 @dataclass
 class DendriticConfig:
@@ -323,7 +323,7 @@ class SystemConfig:
 ### 4.1 New MCP Tools
 
 ```python
-# ww/mcp/memory_gateway.py - New tools
+# t4dm/mcp/memory_gateway.py - New tools
 
 @mcp.tool()
 async def encode_with_sparse(
@@ -549,10 +549,10 @@ class TestBiologicalTargets:
 **Goal**: Core encoding layer components
 
 **Files to Create**:
-- `ww/encoding/__init__.py`
-- `ww/encoding/dendritic.py` - DendriticProcessor class
-- `ww/encoding/sparse.py` - SparseEncoder class
-- `ww/encoding/attractor.py` - AttractorNetwork class
+- `t4dm/encoding/__init__.py`
+- `t4dm/encoding/dendritic.py` - DendriticProcessor class
+- `t4dm/encoding/sparse.py` - SparseEncoder class
+- `t4dm/encoding/attractor.py` - AttractorNetwork class
 - `tests/encoding/` - Unit tests
 
 **Success Criteria**:
@@ -566,9 +566,9 @@ class TestBiologicalTargets:
 **Goal**: FastEpisodicStore with consolidation
 
 **Files to Create/Modify**:
-- `ww/memory/fast_episodic.py` - FastEpisodicStore class
-- `ww/consolidation/fes_consolidator.py` - FES → Episodic transfer
-- `ww/core/config.py` - Add BioinspiredConfig
+- `t4dm/memory/fast_episodic.py` - FastEpisodicStore class
+- `t4dm/consolidation/fes_consolidator.py` - FES → Episodic transfer
+- `t4dm/core/config.py` - Add BioinspiredConfig
 - `tests/memory/test_fast_episodic.py`
 
 **Success Criteria**:
@@ -582,9 +582,9 @@ class TestBiologicalTargets:
 **Goal**: Enhanced learning rate modulation
 
 **Files to Modify**:
-- `ww/learning/neuromodulators.py` - Add CompBio gain functions
-- `ww/learning/eligibility.py` - Add trace management
-- `ww/core/config.py` - Add rho parameters
+- `t4dm/learning/neuromodulators.py` - Add CompBio gain functions
+- `t4dm/learning/eligibility.py` - Add trace management
+- `t4dm/core/config.py` - Add rho parameters
 
 **Success Criteria**:
 - [ ] Multiplicative gain formula working
@@ -596,8 +596,8 @@ class TestBiologicalTargets:
 **Goal**: Complete integration with UI
 
 **Files to Create/Modify**:
-- `ww/mcp/memory_gateway.py` - New tools
-- `ww/api/routes/bioinspired.py` - REST endpoints
+- `t4dm/mcp/memory_gateway.py` - New tools
+- `t4dm/api/routes/bioinspired.py` - REST endpoints
 - `frontend/src/components/BioDashboard.tsx` - Enhanced
 - `frontend/src/components/ConfigPanel.tsx` - New sections
 

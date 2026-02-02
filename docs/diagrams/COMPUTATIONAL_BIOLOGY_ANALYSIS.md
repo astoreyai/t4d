@@ -31,7 +31,7 @@ World Weaver implements a biologically-inspired memory system with strong alignm
 ### 1.1 Hippocampal Pathway Modeling (DG → CA3 → CA1)
 
 **Status**: ✅ VALIDATED
-**Implementation**: `/mnt/projects/ww/src/ww/encoding/sparse.py`, `/mnt/projects/ww/src/ww/encoding/attractor.py`, `/mnt/projects/ww/src/ww/memory/pattern_separation.py`
+**Implementation**: `/mnt/projects/t4d/t4dm/src/t4dm/encoding/sparse.py`, `/mnt/projects/t4d/t4dm/src/t4dm/encoding/attractor.py`, `/mnt/projects/t4d/t4dm/src/t4dm/memory/pattern_separation.py`
 
 #### Dentate Gyrus (Pattern Separation)
 
@@ -73,7 +73,7 @@ if similar:
     orthogonal_emb = orthogonal_emb / np.linalg.norm(orthogonal_emb)
 ```
 
-**Tests**: `/mnt/projects/ww/tests/unit/test_pattern_separation.py` (677 lines, comprehensive coverage)
+**Tests**: `/mnt/projects/t4d/t4dm/tests/unit/test_pattern_separation.py` (677 lines, comprehensive coverage)
 
 #### CA3 Attractor Network (Pattern Completion)
 
@@ -150,7 +150,7 @@ new_state = torch.mv(patterns_tensor.t(), weights)
 ### 1.2 Neuromodulator Systems
 
 **Status**: ✅ VALIDATED
-**Implementation**: `/mnt/projects/ww/src/ww/learning/neuromodulators.py` + individual system modules
+**Implementation**: `/mnt/projects/t4d/t4dm/src/t4dm/learning/neuromodulators.py` + individual system modules
 
 #### Five Neuromodulatory Systems
 
@@ -260,7 +260,7 @@ def effective_learning_rate(self) -> float:
 ### 1.3 Memory Reconsolidation
 
 **Status**: ✅ VALIDATED
-**Implementation**: `/mnt/projects/ww/src/ww/learning/reconsolidation.py`
+**Implementation**: `/mnt/projects/t4d/t4dm/src/t4dm/learning/reconsolidation.py`
 
 **Biological Basis**: Retrieved memories become labile and can be updated during a reconsolidation window (Nader et al. 2000)
 
@@ -367,7 +367,7 @@ def update(self, memory_id, memory_embedding, query_embedding, outcome_score, im
 ### 1.4 Sharp-Wave Ripple Simulation
 
 **Status**: ✅ VALIDATED
-**Implementation**: `/mnt/projects/ww/src/ww/consolidation/sleep.py` lines 99-231
+**Implementation**: `/mnt/projects/t4d/t4dm/src/t4dm/consolidation/sleep.py` lines 99-231
 
 **Biological Basis**: SWRs are ~100ms high-frequency bursts in hippocampus that compress and replay recent experiences at ~10-20x speed during sleep (Buzsáki 2015)
 
@@ -486,7 +486,7 @@ for ripple_num in range(min(5, len(to_replay) // 3 + 1)):
 ### 1.5 Homeostatic Plasticity
 
 **Status**: ✅ VALIDATED
-**Implementation**: `/mnt/projects/ww/src/ww/learning/homeostatic.py`
+**Implementation**: `/mnt/projects/t4d/t4dm/src/t4dm/learning/homeostatic.py`
 
 **Biological Basis**: Synaptic scaling maintains average firing rates despite Hebbian learning, preventing runaway potentiation (Turrigiano & Nelson 2004)
 
@@ -585,7 +585,7 @@ def update_sliding_threshold(self, recent_activations: np.ndarray) -> float:
 ### 2.1 NREM/REM Sleep Consolidation
 
 **Status**: ⚠️ PARTIAL
-**Implementation**: `/mnt/projects/ww/src/ww/consolidation/sleep.py`
+**Implementation**: `/mnt/projects/t4d/t4dm/src/t4dm/consolidation/sleep.py`
 
 **What's Implemented**:
 
@@ -684,8 +684,8 @@ async def rem_phase(self, session_id: str):
 **Implementation**: Theoretical framework in documentation, not fully implemented
 
 **What Exists**:
-- Documentation: `/mnt/projects/ww/docs/biological_memory_analysis.md` lines 429-554
-- Fast episodic store: `/mnt/projects/ww/src/ww/memory/fast_episodic.py` (capacity-limited, but not working memory)
+- Documentation: `/mnt/projects/t4d/t4dm/docs/biological_memory_analysis.md` lines 429-554
+- Fast episodic store: `/mnt/projects/t4d/t4dm/src/t4dm/memory/fast_episodic.py` (capacity-limited, but not working memory)
 
 **What's Missing**:
 
@@ -1228,10 +1228,10 @@ The implementation prioritizes computational efficiency while maintaining biolog
 
 ### World Weaver Documentation
 
-1. `/mnt/projects/ww/docs/biological_memory_analysis.md` - Comprehensive neuroscience analysis
-2. `/mnt/projects/ww/docs/BIOINSPIRED_TESTING.md` - Testing strategy for biological validation
-3. `/mnt/projects/ww/docs/BIOLOGICAL_PLAUSIBILITY_ANALYSIS.md` - Detailed plausibility analysis
-4. `/mnt/projects/ww/docs/HINTON_DESIGN_RATIONALE.md` - Complementary Learning Systems implementation
+1. `/mnt/projects/t4d/t4dm/docs/biological_memory_analysis.md` - Comprehensive neuroscience analysis
+2. `/mnt/projects/t4d/t4dm/docs/BIOINSPIRED_TESTING.md` - Testing strategy for biological validation
+3. `/mnt/projects/t4d/t4dm/docs/BIOLOGICAL_PLAUSIBILITY_ANALYSIS.md` - Detailed plausibility analysis
+4. `/mnt/projects/t4d/t4dm/docs/HINTON_DESIGN_RATIONALE.md` - Complementary Learning Systems implementation
 
 ---
 

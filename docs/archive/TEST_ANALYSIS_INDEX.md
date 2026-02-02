@@ -383,10 +383,10 @@ Complete Phase 3-5 (observability + storage + docs)
 
 ## File Locations
 
-All analysis documents are in: `/mnt/projects/ww/`
+All analysis documents are in: `/mnt/projects/t4d/t4dm/`
 
 ```
-/mnt/projects/ww/
+/mnt/projects/t4d/t4dm/
 ├── TEST_ANALYSIS_INDEX.md              ← You are here
 ├── TEST_SUMMARY.md                     Executive summary
 ├── TEST_COVERAGE_ANALYSIS.md           Detailed analysis

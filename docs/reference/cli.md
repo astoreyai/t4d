@@ -115,7 +115,7 @@ Health: healthy
 Start the REST API server.
 
 ```bash
-ww serve [OPTIONS]
+t4dm serve [OPTIONS]
 ```
 
 **Options:**
@@ -131,16 +131,16 @@ ww serve [OPTIONS]
 
 ```bash
 # Default server
-ww serve
+t4dm serve
 
 # Custom port
-ww serve -p 8080
+t4dm serve -p 8080
 
 # Development with reload
-ww serve --reload
+t4dm serve --reload
 
 # Production with workers
-ww serve -w 4
+t4dm serve -w 4
 ```
 
 ### config
@@ -148,7 +148,7 @@ ww serve -w 4
 Manage configuration.
 
 ```bash
-ww config [OPTIONS]
+t4dm config [OPTIONS]
 ```
 
 **Options:**
@@ -163,13 +163,13 @@ ww config [OPTIONS]
 
 ```bash
 # Show current config
-ww config --show
+t4dm config --show
 
 # Create default config
-ww config --init
+t4dm config --init
 
 # Show config path
-ww config --path
+t4dm config --path
 ```
 
 ### consolidate
@@ -177,7 +177,7 @@ ww config --path
 Run memory consolidation.
 
 ```bash
-ww consolidate [OPTIONS]
+t4dm consolidate [OPTIONS]
 ```
 
 **Options:**
@@ -191,13 +191,13 @@ ww consolidate [OPTIONS]
 
 ```bash
 # Quick consolidation
-ww consolidate
+t4dm consolidate
 
 # Full consolidation
-ww consolidate --full
+t4dm consolidate --full
 
 # Preview changes
-ww consolidate --dry-run
+t4dm consolidate --dry-run
 ```
 
 ### version

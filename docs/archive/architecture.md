@@ -56,7 +56,7 @@
 
 ## Component Details
 
-### 1. MCP Gateway (`/mnt/projects/ww/src/ww/mcp/`)
+### 1. MCP Gateway (`/mnt/projects/t4d/t4dm/src/t4dm/mcp/`)
 
 **Purpose**: Expose World Weaver memory system to Claude Code via MCP protocol.
 
@@ -103,7 +103,7 @@
 
 ---
 
-### 2. Memory Layer (`/mnt/projects/ww/src/ww/memory/`)
+### 2. Memory Layer (`/mnt/projects/t4d/t4dm/src/t4dm/memory/`)
 
 #### Episodic Memory (`episodic.py`)
 **Responsibilities**:
@@ -169,7 +169,7 @@ Execution → Update stats → Recalculate success rate
 
 ---
 
-### 3. Storage Layer (`/mnt/projects/ww/src/ww/storage/`)
+### 3. Storage Layer (`/mnt/projects/t4d/t4dm/src/t4dm/storage/`)
 
 #### Qdrant (`qdrant_store.py`)
 **Purpose**: Vector similarity search for embeddings
@@ -226,7 +226,7 @@ Execution → Update stats → Recalculate success rate
 
 ---
 
-### 4. Consolidation Layer (`/mnt/projects/ww/src/ww/consolidation/`)
+### 4. Consolidation Layer (`/mnt/projects/t4d/t4dm/src/t4dm/consolidation/`)
 
 #### Consolidation Service (`service.py`)
 
@@ -412,7 +412,7 @@ Response: {consolidated_episodes: 15, new_entities_created: 3, entities_updated:
 
 ## Configuration
 
-**File**: `/mnt/projects/ww/src/ww/core/config.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/core/config.py`
 
 ### Key Settings
 ```python
@@ -509,7 +509,7 @@ python -m ww.mcp.memory_gateway
 
 ---
 
-### 5. Learning Systems (`/mnt/projects/ww/src/ww/learning/`)
+### 5. Learning Systems (`/mnt/projects/t4d/t4dm/src/t4dm/learning/`)
 
 #### Dopamine System (`dopamine.py`)
 **Purpose**: Reward prediction and surprise signals for reinforcement learning.
@@ -542,7 +542,7 @@ python -m ww.mcp.memory_gateway
 
 ---
 
-### 6. Hook System (`/mnt/projects/ww/src/ww/hooks/`)
+### 6. Hook System (`/mnt/projects/t4d/t4dm/src/t4dm/hooks/`)
 
 **Purpose**: Extensible pre/post/on hooks for memory operations.
 
@@ -564,7 +564,7 @@ python -m ww.mcp.memory_gateway
 
 ---
 
-### 7. Observability (`/mnt/projects/ww/src/ww/observability/`)
+### 7. Observability (`/mnt/projects/t4d/t4dm/src/t4dm/observability/`)
 
 **Purpose**: Tracing and monitoring for Claude Code integration.
 
@@ -585,7 +585,7 @@ OpenTelemetry-compatible observer for Claude Code ccapi events.
 
 ---
 
-### 8. Integrations (`/mnt/projects/ww/src/ww/integrations/`)
+### 8. Integrations (`/mnt/projects/t4d/t4dm/src/t4dm/integrations/`)
 
 #### Kymera Integration (`kymera/`)
 Native integration with Kymera AI orchestrator.

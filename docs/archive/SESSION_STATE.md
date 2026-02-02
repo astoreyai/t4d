@@ -5,7 +5,7 @@
 
 ## NEW: HSA-Inspired Improvements (This Session)
 
-**Implementation Plan**: `/mnt/projects/ww/docs/IMPLEMENTATION_PLAN_HSA.md`
+**Implementation Plan**: `/mnt/projects/t4d/t4dm/docs/IMPLEMENTATION_PLAN_HSA.md`
 
 ### Completed Analysis
 
@@ -27,9 +27,9 @@ WW's flat k-NN retrieval doesn't scale. HSA's hierarchical sparse attention achi
 
 ### Documentation Created
 
-1. `/mnt/projects/ww/docs/IMPLEMENTATION_PLAN_HSA.md` - Master implementation roadmap
-2. `/mnt/projects/ww/docs/HSA_TESTING_PROTOCOLS.md` - 848-line biologically-grounded test protocols
-3. `/mnt/projects/ww/docs/RETRIEVAL_EXPRESSION_GAP_ANALYSIS.md` - Retrieval + expression pipeline gaps
+1. `/mnt/projects/t4d/t4dm/docs/IMPLEMENTATION_PLAN_HSA.md` - Master implementation roadmap
+2. `/mnt/projects/t4d/t4dm/docs/HSA_TESTING_PROTOCOLS.md` - 848-line biologically-grounded test protocols
+3. `/mnt/projects/t4d/t4dm/docs/RETRIEVAL_EXPRESSION_GAP_ANALYSIS.md` - Retrieval + expression pipeline gaps
 
 ### Retrieval Pipeline Findings
 
@@ -42,14 +42,14 @@ WW's flat k-NN retrieval doesn't scale. HSA's hierarchical sparse attention achi
 
 ### New Files to Create
 
-1. `/mnt/projects/ww/src/ww/memory/cluster_index.py` - Hierarchical grouping
-2. `/mnt/projects/ww/src/ww/memory/learned_sparse_index.py` - Adaptive sparsity
-3. `/mnt/projects/ww/src/ww/memory/feature_aligner.py` - Gate↔retrieval alignment
-4. `/mnt/projects/ww/src/ww/memory/reranker.py` - Learned re-ranking
-5. `/mnt/projects/ww/tests/unit/test_hierarchical_retrieval.py` - Pattern completion tests
-6. `/mnt/projects/ww/tests/unit/test_sparse_addressing.py` - Sparsity tests
-7. `/mnt/projects/ww/tests/unit/test_joint_optimization.py` - Correlation tests
-8. `/mnt/projects/ww/tests/unit/test_biological_validation.py` - DG/CA3/CA1 benchmarks
+1. `/mnt/projects/t4d/t4dm/src/t4dm/memory/cluster_index.py` - Hierarchical grouping
+2. `/mnt/projects/t4d/t4dm/src/t4dm/memory/learned_sparse_index.py` - Adaptive sparsity
+3. `/mnt/projects/t4d/t4dm/src/t4dm/memory/feature_aligner.py` - Gate↔retrieval alignment
+4. `/mnt/projects/t4d/t4dm/src/t4dm/memory/reranker.py` - Learned re-ranking
+5. `/mnt/projects/t4d/t4dm/tests/unit/test_hierarchical_retrieval.py` - Pattern completion tests
+6. `/mnt/projects/t4d/t4dm/tests/unit/test_sparse_addressing.py` - Sparsity tests
+7. `/mnt/projects/t4d/t4dm/tests/unit/test_joint_optimization.py` - Correlation tests
+8. `/mnt/projects/t4d/t4dm/tests/unit/test_biological_validation.py` - DG/CA3/CA1 benchmarks
 
 ---
 
@@ -60,7 +60,7 @@ WW's flat k-NN retrieval doesn't scale. HSA's hierarchical sparse attention achi
 ### Completed This Session
 
 1. **BufferManager Implementation**: CA1-like temporary storage for BUFFER decisions
-   - `/mnt/projects/ww/src/ww/memory/buffer_manager.py` (new file, 600+ lines)
+   - `/mnt/projects/t4d/t4dm/src/t4dm/memory/buffer_manager.py` (new file, 600+ lines)
    - Evidence accumulation from retrieval probing
    - Neuromodulator-adjusted promotion thresholds
    - Gate training integration (promotion = positive, discard = soft negative)
@@ -74,14 +74,14 @@ WW's flat k-NN retrieval doesn't scale. HSA's hierarchical sparse attention achi
 
 ### Files Modified/Created This Session
 
-- `/mnt/projects/ww/src/ww/memory/buffer_manager.py` (NEW - 600+ lines) - CA1-like buffer
-- `/mnt/projects/ww/src/ww/memory/episodic.py` - BufferManager integration:
+- `/mnt/projects/t4d/t4dm/src/t4dm/memory/buffer_manager.py` (NEW - 600+ lines) - CA1-like buffer
+- `/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic.py` - BufferManager integration:
   - Lines 141-151: BufferManager initialization
   - Lines 262-286: BUFFER decision handling in create()
   - Lines 617-637: Buffer probing in recall()
   - Lines 1489-1516: Outcome propagation to buffer
   - Lines 1608-1763: tick_buffer(), _store_promoted_item(), get_buffer_stats()
-- `/mnt/projects/ww/tests/unit/test_buffer_manager.py` (NEW - 500+ lines) - 23 tests
+- `/mnt/projects/t4d/t4dm/tests/unit/test_buffer_manager.py` (NEW - 500+ lines) - 23 tests
 
 ### Test Status
 

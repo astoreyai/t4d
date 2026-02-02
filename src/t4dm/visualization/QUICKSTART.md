@@ -256,7 +256,7 @@ print(f"Updates: {len(tracer._updates)}")
 ## Next Steps
 
 - Run the full demo: `python examples/visualization_demo.py`
-- Read the detailed README: `/mnt/projects/ww/src/ww/visualization/README.md`
+- Read the detailed README: `/mnt/projects/t4d/t4dm/src/t4dm/visualization/README.md`
 - Explore integration with your components
 - Create custom visualizations by subclassing base classes
 

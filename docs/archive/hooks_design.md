@@ -624,7 +624,7 @@ For existing World Weaver code:
 ## File Locations
 
 ```
-src/ww/hooks/
+src/t4dm/hooks/
 ├── __init__.py              # Public API
 ├── base.py                  # Hook, HookRegistry, HookContext
 ├── core.py                  # Core lifecycle hooks

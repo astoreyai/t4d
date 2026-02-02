@@ -47,10 +47,10 @@ class NeuromodulatorTelemetry:
 ```
 
 **Data Sources**:
-- `/ww/nca/vta.py`: `VTAState.current_da`, `firing_mode`, `last_rpe`
-- `/ww/nca/raphe.py`: `RapheNucleusState.extracellular_5ht`, `firing_rate`, `autoreceptor_inhibition`
-- `/ww/nca/energy.py`: `EnergyLandscape.compute_arousal_beta()`, `_current_beta`
-- `/ww/nca/oscillators.py`: `AlphaOscillator.get_inhibition_level()`
+- `/t4dm/nca/vta.py`: `VTAState.current_da`, `firing_mode`, `last_rpe`
+- `/t4dm/nca/raphe.py`: `RapheNucleusState.extracellular_5ht`, `firing_rate`, `autoreceptor_inhibition`
+- `/t4dm/nca/energy.py`: `EnergyLandscape.compute_arousal_beta()`, `_current_beta`
+- `/t4dm/nca/oscillators.py`: `AlphaOscillator.get_inhibition_level()`
 
 **Visualization Requirements**:
 1. **6D State Trajectory**: PCA/UMAP projection showing NT evolution
@@ -98,9 +98,9 @@ class HippocampalTelemetry:
 ```
 
 **Data Sources**:
-- `/ww/nca/hippocampus.py`: `HippocampalState` (all fields), `_apply_theta_gating()`
-- `/ww/nca/oscillators.py`: `FrequencyBandGenerator.get_encoding_signal()`, `theta.freq`, `theta.amplitude`
-- `/ww/nca/vta.py`: `VTACircuit.connect_from_hippocampus()` (novelty signal)
+- `/t4dm/nca/hippocampus.py`: `HippocampalState` (all fields), `_apply_theta_gating()`
+- `/t4dm/nca/oscillators.py`: `FrequencyBandGenerator.get_encoding_signal()`, `theta.freq`, `theta.amplitude`
+- `/t4dm/nca/vta.py`: `VTACircuit.connect_from_hippocampus()` (novelty signal)
 
 **Visualization Requirements**:
 1. **DG Sparsity Histogram**: Before/after separation with biological 0.5% target line
@@ -146,7 +146,7 @@ class OscillationTelemetry:
 ```
 
 **Data Sources**:
-- `/ww/nca/oscillators.py`: All `FrequencyBandGenerator` methods
+- `/t4dm/nca/oscillators.py`: All `FrequencyBandGenerator` methods
 - `OscillatorState.to_dict()`
 - `PhaseAmplitudeCoupling.compute_modulation_index()`
 
@@ -335,8 +335,8 @@ class SWREvent:
 ```
 
 **Data Sources**:
-- `/ww/nca/hippocampus.py`: `CA3Layer._patterns`, `_pattern_ids`
-- `/ww/nca/energy.py`: `HopfieldIntegration.compute_energy()`
+- `/t4dm/nca/hippocampus.py`: `CA3Layer._patterns`, `_pattern_ids`
+- `/t4dm/nca/energy.py`: `HopfieldIntegration.compute_energy()`
 - Needs new SWR generation logic (not yet implemented)
 
 **Visualization Requirements**:
@@ -426,7 +426,7 @@ def detect_sleep_phase(state: NeuromodulatorTelemetry) -> str:
 - Trajectory: NT state evolution (line with time-colored gradient)
 - Arrows: Energy gradient field
 
-**Data Source**: `/ww/nca/attractors.py` + `/ww/nca/energy.py`
+**Data Source**: `/t4dm/nca/attractors.py` + `/t4dm/nca/energy.py`
 
 ---
 
@@ -662,15 +662,15 @@ def test_consolidation_mode():
 8. **Sharp-wave ripples**: Buzsáki (2015) - Memory consolidation
 
 ### World Weaver Source Files
-- `/ww/nca/vta.py` - VTA dopamine circuit
-- `/ww/nca/raphe.py` - Raphe serotonin circuit
-- `/ww/nca/hippocampus.py` - DG/CA3/CA1 subregions
-- `/ww/nca/oscillators.py` - Theta/alpha/beta/gamma rhythms
-- `/ww/nca/energy.py` - Hopfield integration, arousal-beta coupling
-- `/ww/visualization/neuromodulator_state.py` - Current NT viz (35% coverage)
-- `/ww/visualization/pattern_separation.py` - DG viz (68% coverage)
-- `/ww/visualization/plasticity_traces.py` - LTP/LTD viz (37% coverage)
-- `/ww/visualization/consolidation_replay.py` - SWR viz (39% coverage)
+- `/t4dm/nca/vta.py` - VTA dopamine circuit
+- `/t4dm/nca/raphe.py` - Raphe serotonin circuit
+- `/t4dm/nca/hippocampus.py` - DG/CA3/CA1 subregions
+- `/t4dm/nca/oscillators.py` - Theta/alpha/beta/gamma rhythms
+- `/t4dm/nca/energy.py` - Hopfield integration, arousal-beta coupling
+- `/t4dm/visualization/neuromodulator_state.py` - Current NT viz (35% coverage)
+- `/t4dm/visualization/pattern_separation.py` - DG viz (68% coverage)
+- `/t4dm/visualization/plasticity_traces.py` - LTP/LTD viz (37% coverage)
+- `/t4dm/visualization/consolidation_replay.py` - SWR viz (39% coverage)
 
 ---
 

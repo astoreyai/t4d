@@ -20,7 +20,7 @@
 - **Impact**: Clear separation of concerns, proper layering, no circular dependencies
 
 ### Phase 2B: Router Refactoring ✓
-- **File**: `/mnt/projects/ww/src/ww/api/routes/config.py`
+- **File**: `/mnt/projects/t4d/t4dm/src/t4dm/api/routes/config.py`
 - **Fix**: `RACE-CONDITION-FIX` - `asyncio.Lock` for `_runtime_config` access
 - **Status**: Thread-safe config mutations in async context
 

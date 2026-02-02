@@ -2,9 +2,9 @@
 
 ## Executive Summary
 
-Comprehensive test suite for `/mnt/projects/ww/src/ww/api/routes/nt_dashboard.py` with **95% code coverage** and **77 passing tests**.
+Comprehensive test suite for `/mnt/projects/t4d/t4dm/src/t4dm/api/routes/nt_dashboard.py` with **95% code coverage** and **77 passing tests**.
 
-**File**: `/mnt/projects/ww/tests/api/test_routes_nt_dashboard.py`
+**File**: `/mnt/projects/t4d/t4dm/tests/api/test_routes_nt_dashboard.py`
 
 ### Test Results
 - **Total Tests**: 77
@@ -338,7 +338,7 @@ pytest tests/api/test_routes_nt_dashboard.py::TestNTStateManagerCognitiveMode -v
 Generate coverage report:
 ```bash
 pytest tests/api/test_routes_nt_dashboard.py \
-  --cov=src/ww/api/routes/nt_dashboard \
+  --cov=src/t4dm/api/routes/nt_dashboard \
   --cov-report=term-missing
 ```
 
@@ -346,8 +346,8 @@ pytest tests/api/test_routes_nt_dashboard.py \
 
 ## Files
 
-- **Test File**: `/mnt/projects/ww/tests/api/test_routes_nt_dashboard.py` (998 lines)
-- **Module Under Test**: `/mnt/projects/ww/src/ww/api/routes/nt_dashboard.py` (188 lines, 95% covered)
+- **Test File**: `/mnt/projects/t4d/t4dm/tests/api/test_routes_nt_dashboard.py` (998 lines)
+- **Module Under Test**: `/mnt/projects/t4d/t4dm/src/t4dm/api/routes/nt_dashboard.py` (188 lines, 95% covered)
 
 ---
 

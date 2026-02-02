@@ -25,7 +25,7 @@
 ### Files to KEEP:
 | Category | Path | Notes |
 |----------|------|-------|
-| Source | `src/ww/` | 29,020 lines core implementation |
+| Source | `src/t4dm/` | 29,020 lines core implementation |
 | Tests | `tests/` | 1,259 tests |
 | Papers | `docs/world_weaver_final.tex`, `docs/papers/philosophy_of_ai_memory.tex` | PRIMARY |
 | Config | `pyproject.toml`, `requirements.txt`, `.env.example` | Build files |
@@ -114,8 +114,8 @@ Same verification protocol.
 ### After Each Phase:
 ```bash
 # Compile papers
-cd /mnt/projects/ww/docs && pdflatex -interaction=nonstopmode world_weaver_final.tex
-cd /mnt/projects/ww/docs/papers && pdflatex philosophy_of_ai_memory.tex
+cd /mnt/projects/t4d/t4dm/docs && pdflatex -interaction=nonstopmode world_weaver_final.tex
+cd /mnt/projects/t4d/t4dm/docs/papers && pdflatex philosophy_of_ai_memory.tex
 
 # Run tests
 cd /mnt/projects/ww && pytest tests/ -v --tb=short

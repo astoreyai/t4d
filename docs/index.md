@@ -2,7 +2,7 @@
 
 **Biologically-inspired memory for AI**
 
-[![Version](https://img.shields.io/badge/version-0.4.0-blue)](https://github.com/astoreyai/ww/releases)
+[![Version](https://img.shields.io/badge/version-0.4.0-blue)](https://github.com/astoreyai/t4d/releases)
 [![Tests](https://img.shields.io/badge/tests-6%2C540%2B%20passing-green)](https://github.com/astoreyai/ww)
 [![Coverage](https://img.shields.io/badge/coverage-80%25-green)](https://github.com/astoreyai/ww)
 
@@ -151,4 +151,4 @@ graph TB
 
 ## License
 
-MIT License - see [LICENSE](https://github.com/astoreyai/ww/blob/master/LICENSE) for details.
+MIT License - see [LICENSE](https://github.com/astoreyai/t4d/blob/master/LICENSE) for details.

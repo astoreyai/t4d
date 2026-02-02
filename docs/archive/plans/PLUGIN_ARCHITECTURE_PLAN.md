@@ -544,7 +544,7 @@ def enhanced_session_end():
 {
   "mcpServers": {
     "ww-memory": {
-      "command": "/mnt/projects/ww/.venv/bin/python",
+      "command": "/mnt/projects/t4d/t4dm/.venv/bin/python",
       "args": ["-m", "ww.mcp.server"],
       "env": {
         "WW_SESSION_ID": "default",

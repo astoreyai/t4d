@@ -139,17 +139,17 @@ pytest tests/unit/test_episodic.py -x
 - Module-level functions still available
 
 ## Files Created
-1. `/mnt/projects/ww/src/ww/memory/episodic_fusion.py`
-2. `/mnt/projects/ww/src/ww/memory/episodic_saga.py`
-3. `/mnt/projects/ww/src/ww/memory/episodic_storage.py`
-4. `/mnt/projects/ww/src/ww/memory/episodic_learning.py`
-5. `/mnt/projects/ww/src/ww/memory/episodic_retrieval.py`
+1. `/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic_fusion.py`
+2. `/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic_saga.py`
+3. `/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic_storage.py`
+4. `/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic_learning.py`
+5. `/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic_retrieval.py`
 
 ## Files Modified
-1. `/mnt/projects/ww/src/ww/memory/episodic.py` (-411 lines, +module imports)
+1. `/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic.py` (-411 lines, +module imports)
 
 ## Backup Created
-- `/mnt/projects/ww/src/ww/memory/episodic_ORIGINAL_BACKUP.py` (3,616 lines)
+- `/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic_ORIGINAL_BACKUP.py` (3,616 lines)
 
 ## Benefits
 

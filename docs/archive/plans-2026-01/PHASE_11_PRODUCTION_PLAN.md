@@ -52,7 +52,7 @@ The system has excellent learning machinery, but the loops are not closed:
 
 ### Task 11A.1: Fix FFEncoder Learning Target (Critical)
 
-**File**: `src/ww/memory/episodic.py:2946-2961`
+**File**: `src/t4dm/memory/episodic.py:2946-2961`
 
 **Current (WRONG)**:
 ```python
@@ -88,7 +88,7 @@ for eid in episode_ids:
 
 ### Task 11A.2: Persist Reconsolidated Embeddings (Critical)
 
-**File**: `src/ww/learning/credit_flow.py:186-193`
+**File**: `src/t4dm/learning/credit_flow.py:186-193`
 
 **Current (DISCARDED)**:
 ```python
@@ -137,7 +137,7 @@ async def _persist_reconsolidated_embeddings(
 
 ### Task 11A.3: Add Eligibility Marking in Recall (Critical)
 
-**File**: `src/ww/memory/episodic.py:1231-1380` (recall method)
+**File**: `src/t4dm/memory/episodic.py:1231-1380` (recall method)
 
 **Current**: Retrieval doesn't mark memories as eligible for credit
 
@@ -165,7 +165,7 @@ async def recall(self, query: str, limit: int = 10, ...) -> list[Episode]:
 
 ### Task 11A.4: Batch Three-Factor Computation (Important)
 
-**File**: `src/ww/memory/episodic.py:2946-2954`
+**File**: `src/t4dm/memory/episodic.py:2946-2954`
 
 **Current (SINGLE)**:
 ```python
@@ -233,7 +233,7 @@ Three gaps are blocking production deployment:
 
 ### Task 11B.1: Add Protein Synthesis Gate (B37)
 
-**File**: `src/ww/learning/reconsolidation.py:124`
+**File**: `src/t4dm/learning/reconsolidation.py:124`
 
 **Current**: Only lability window, no protein synthesis constraint
 
@@ -277,7 +277,7 @@ class ReconsolidationEngine:
 
 ### Task 11B.2: Add Ripple Oscillator (B40)
 
-**File**: `src/ww/nca/oscillators.py`
+**File**: `src/t4dm/nca/oscillators.py`
 
 **Current**: Missing 150-250 Hz ripple frequency band
 
@@ -334,7 +334,7 @@ class RippleOscillator:
 
 ### Task 11B.3: Add Replay Directionality (B41)
 
-**File**: `src/ww/consolidation/sleep.py`
+**File**: `src/t4dm/consolidation/sleep.py`
 
 **Current**: All replay treated identically
 
@@ -487,11 +487,11 @@ CMD ["ww-api"]
 ### Task 11C.2: Sync Version Numbers
 
 **Files**:
-- `src/ww/__init__.py:__version__` → "0.5.0"
+- `src/t4dm/__init__.py:__version__` → "0.5.0"
 - `pyproject.toml:version` → "0.5.0"
 
 ```python
-# src/ww/__init__.py
+# src/t4dm/__init__.py
 __version__ = "0.5.0"  # Was "0.2.0"
 ```
 
@@ -549,12 +549,12 @@ Add Phase 11 changes:
 
 ### Task 11D.1: Archive Deprecated Bridge Module
 
-**Current**: `src/ww/bridge/` deprecated, superseded by `bridges/`
+**Current**: `src/t4dm/bridge/` deprecated, superseded by `bridges/`
 
 **Actions**:
-1. Move `src/ww/bridge/` → `docs/archive/deprecated-bridge/`
+1. Move `src/t4dm/bridge/` → `docs/archive/deprecated-bridge/`
 2. Update `tests/bridge/test_memory_nca.py` to use `bridges/`
-3. Remove bridge import from `src/ww/__init__.py`
+3. Remove bridge import from `src/t4dm/__init__.py`
 
 **Effort**: 2 hours
 
@@ -566,7 +566,7 @@ Add Phase 11 changes:
 
 **Target**: Single canonical definition
 
-**Create**: `src/ww/core/contexts.py`
+**Create**: `src/t4dm/core/contexts.py`
 
 ```python
 """Canonical context dataclasses for cross-module communication."""
@@ -612,12 +612,12 @@ class EncodingContext:
 
 ### Task 11D.3: Rename Integration Module
 
-**Current**: `src/ww/integration/` (CC-API) conflicts with `integrations/`
+**Current**: `src/t4dm/integration/` (CC-API) conflicts with `integrations/`
 
-**Target**: `src/ww/cc_api/` for clarity
+**Target**: `src/t4dm/cc_api/` for clarity
 
 **Actions**:
-1. `mv src/ww/integration src/ww/cc_api`
+1. `mv src/t4dm/integration src/t4dm/cc_api`
 2. Update all imports (grep for `from ww.integration`)
 3. Update `__init__.py` exports
 

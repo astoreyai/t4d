@@ -791,11 +791,11 @@ World Weaver achieves **strong biological plausibility** across neurotransmitter
 
 **Report prepared by**: World Weaver CompBio Agent
 **Files analyzed**:
-- `/mnt/projects/ww/src/ww/nca/vta.py`
-- `/mnt/projects/ww/src/ww/nca/locus_coeruleus.py`
-- `/mnt/projects/ww/src/ww/nca/attractors.py`
-- `/mnt/projects/ww/src/ww/nca/neural_field.py`
-- `/mnt/projects/ww/src/ww/nca/hippocampus.py`
-- `/mnt/projects/ww/src/ww/learning/stdp.py`
-- `/mnt/projects/ww/src/ww/learning/plasticity.py`
-- `/mnt/projects/ww/src/ww/consolidation/sleep.py`
+- `/mnt/projects/t4d/t4dm/src/t4dm/nca/vta.py`
+- `/mnt/projects/t4d/t4dm/src/t4dm/nca/locus_coeruleus.py`
+- `/mnt/projects/t4d/t4dm/src/t4dm/nca/attractors.py`
+- `/mnt/projects/t4d/t4dm/src/t4dm/nca/neural_field.py`
+- `/mnt/projects/t4d/t4dm/src/t4dm/nca/hippocampus.py`
+- `/mnt/projects/t4d/t4dm/src/t4dm/learning/stdp.py`
+- `/mnt/projects/t4d/t4dm/src/t4dm/learning/plasticity.py`
+- `/mnt/projects/t4d/t4dm/src/t4dm/consolidation/sleep.py`

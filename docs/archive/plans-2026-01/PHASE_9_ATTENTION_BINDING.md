@@ -34,7 +34,7 @@ A_transformer[i,j] = (q_i @ k_j) / sqrt(d_k)
 A_combined = alpha * A_capsule + (1 - alpha) * A_transformer
 ```
 
-### File: `/mnt/projects/ww/src/ww/nca/unified_attention.py`
+### File: `/mnt/projects/t4d/t4dm/src/t4dm/nca/unified_attention.py`
 
 ```python
 @dataclass
@@ -77,7 +77,7 @@ PE_theta(pos, theta_cycle, gamma_slot) =
 A[i,j] = (q_i @ k_j + q_i @ r_{i-j}) / sqrt(d_k)
 ```
 
-### File: `/mnt/projects/ww/src/ww/nca/temporal_attention.py`
+### File: `/mnt/projects/t4d/t4dm/src/t4dm/nca/temporal_attention.py`
 
 ```python
 @dataclass
@@ -124,7 +124,7 @@ Bound = gamma_sync * (A_semantic @ V_semantic + A_procedural @ V_procedural)
 gamma_sync = PLV(gamma_phase_episodic, gamma_phase_semantic)
 ```
 
-### File: `/mnt/projects/ww/src/ww/nca/cross_modal_binding.py`
+### File: `/mnt/projects/t4d/t4dm/src/t4dm/nca/cross_modal_binding.py`
 
 ```python
 @dataclass
@@ -176,7 +176,7 @@ activation(t+1) = activation(t) * decay + G_rehearse * attention
 G_rehearse = (1 - alpha_inhibition) * gamma_amplitude
 ```
 
-### File: `/mnt/projects/ww/src/ww/nca/wm_gating.py`
+### File: `/mnt/projects/t4d/t4dm/src/t4dm/nca/wm_gating.py`
 
 ```python
 @dataclass
@@ -227,9 +227,9 @@ class WorkingMemoryGating:
 
 ### Files to Modify
 
-1. **`/mnt/projects/ww/src/ww/nca/__init__.py`**: Export new classes
-2. **`/mnt/projects/ww/src/ww/memory/episodic.py`**: Add cross-modal binding support
-3. **`/mnt/projects/ww/src/ww/memory/working_memory.py`**: Add gating integration
+1. **`/mnt/projects/t4d/t4dm/src/t4dm/nca/__init__.py`**: Export new classes
+2. **`/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic.py`**: Add cross-modal binding support
+3. **`/mnt/projects/t4d/t4dm/src/t4dm/memory/working_memory.py`**: Add gating integration
 
 ---
 

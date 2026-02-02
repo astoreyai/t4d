@@ -34,7 +34,7 @@ This roadmap addresses the 4 minor biological issues identified in the validatio
 **Score Impact**: 92 → 95/100 for B1
 
 #### Files to Modify
-- `/mnt/projects/ww/src/ww/nca/vta.py`
+- `/mnt/projects/t4d/t4dm/src/t4dm/nca/vta.py`
 
 #### Current Implementation (Lines 67, 407-412)
 ```python
@@ -80,7 +80,7 @@ def _to_tonic_mode(self, dt: float) -> None:
 
 #### Testing Requirements
 
-**Unit Test**: `/mnt/projects/ww/tests/nca/test_vta.py`
+**Unit Test**: `/mnt/projects/t4d/t4dm/tests/nca/test_vta.py`
 ```python
 def test_vta_exponential_decay():
     """Validate exponential decay matches biological tau."""
@@ -128,9 +128,9 @@ def test_vta_burst_pause_dynamics():
 ```
 
 #### Documentation Updates
-- Update `/mnt/projects/ww/src/ww/nca/README.md` with exponential decay formula
+- Update `/mnt/projects/t4d/t4dm/src/t4dm/nca/README.md` with exponential decay formula
 - Add reference to Grace & Bunney (1984) in VTA docstring
-- Update `/mnt/projects/ww/docs/biological_validation.md` with fix confirmation
+- Update `/mnt/projects/t4d/t4dm/docs/biological_validation.md` with fix confirmation
 
 ---
 
@@ -139,8 +139,8 @@ def test_vta_burst_pause_dynamics():
 **Score Impact**: 90 → 94/100 for B5
 
 #### Files to Modify
-- `/mnt/projects/ww/src/ww/nca/striatal_msn.py` (new TAN class)
-- `/mnt/projects/ww/src/ww/nca/dopamine_integration.py` (TAN integration)
+- `/mnt/projects/t4d/t4dm/src/t4dm/nca/striatal_msn.py` (new TAN class)
+- `/mnt/projects/t4d/t4dm/src/t4dm/nca/dopamine_integration.py` (TAN integration)
 
 #### Biological Background
 - **TANs** (Tonically Active Neurons): Cholinergic interneurons in striatum
@@ -150,7 +150,7 @@ def test_vta_burst_pause_dynamics():
 
 #### Implementation
 
-**New Class**: `/mnt/projects/ww/src/ww/nca/striatal_msn.py` (add at end)
+**New Class**: `/mnt/projects/t4d/t4dm/src/t4dm/nca/striatal_msn.py` (add at end)
 
 ```python
 from enum import Enum
@@ -329,7 +329,7 @@ class TANLayer:
         self.state = TANLayerState(current_rate=self.config.tonic_rate)
 ```
 
-**Integration**: Add to `/mnt/projects/ww/src/ww/nca/striatal_msn.py`
+**Integration**: Add to `/mnt/projects/t4d/t4dm/src/t4dm/nca/striatal_msn.py`
 
 ```python
 # In StriatumCircuit class, add TAN layer
@@ -427,8 +427,8 @@ def test_tan_timing_precision():
 **Score Impact**: Sleep/Wake B7: 94 → 96/100
 
 #### Files to Modify
-- `/mnt/projects/ww/src/ww/consolidation/stdp_integration.py`
-- `/mnt/projects/ww/src/ww/learning/stdp.py` (if not already implemented)
+- `/mnt/projects/t4d/t4dm/src/t4dm/consolidation/stdp_integration.py`
+- `/mnt/projects/t4d/t4dm/src/t4dm/learning/stdp.py` (if not already implemented)
 
 #### Biological Background
 - **Issue**: Current STDP uses additive weight updates
@@ -475,7 +475,7 @@ update = self.stdp.compute_update(
 )
 ```
 
-**In `/mnt/projects/ww/src/ww/learning/stdp.py`** (add weight dependence):
+**In `/mnt/projects/t4d/t4dm/src/t4dm/learning/stdp.py`** (add weight dependence):
 
 ```python
 def compute_update(
@@ -563,7 +563,7 @@ def test_stdp_ltd_weight_dependence():
 **Score Impact**: 91 → 95/100 for B8
 
 #### Files to Modify
-- `/mnt/projects/ww/src/ww/nca/astrocyte.py`
+- `/mnt/projects/t4d/t4dm/src/t4dm/nca/astrocyte.py`
 
 #### Biological Background
 - **Gap Junctions**: Connexin channels between astrocytes
@@ -756,7 +756,7 @@ Input → FF Encoder (FROZEN) → Episodic/Semantic/Procedural Memory
 **Mechanism**: Simulate neurogenesis by adding/removing encoder neurons based on consolidation feedback
 
 ```python
-# New file: /mnt/projects/ww/src/ww/encoding/neurogenesis.py
+# New file: /mnt/projects/t4d/t4dm/src/t4dm/encoding/neurogenesis.py
 
 @dataclass
 class NeurogenesisConfig:
@@ -998,7 +998,7 @@ class NeurogenicEncoder:
 #### Integration with Consolidation
 
 ```python
-# In /mnt/projects/ww/src/ww/consolidation/service.py
+# In /mnt/projects/t4d/t4dm/src/t4dm/consolidation/service.py
 
 from ww.encoding.neurogenesis import NeurogenicEncoder
 

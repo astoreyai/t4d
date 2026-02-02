@@ -279,7 +279,7 @@ async def test_example(mock_semantic_memory, mock_search_result):
 ## File Organization
 
 ```
-/mnt/projects/ww/
+/mnt/projects/t4d/t4dm/
 ├── tests/
 │   ├── conftest.py                          # Extended fixtures
 │   ├── README.md                            # Test documentation

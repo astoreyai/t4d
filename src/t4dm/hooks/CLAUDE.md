@@ -1,5 +1,5 @@
 # Hooks
-**Path**: `/mnt/projects/t4d/t4dm/src/ww/hooks/`
+**Path**: `/mnt/projects/t4d/t4dm/src/t4dm/hooks/`
 
 ## What
 Extensible lifecycle hook system for all WW modules. Provides pre/post/on/error phase execution with priority ordering, error isolation, and async support.

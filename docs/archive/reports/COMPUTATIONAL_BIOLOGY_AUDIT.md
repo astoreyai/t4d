@@ -32,7 +32,7 @@ The World Weaver NCA (Neuro-Cognitive Architecture) demonstrates **strong biolog
 ### 1.1 Neuromodulator Systems
 
 #### Dopamine (DA) ✓ GOOD
-**Location**: `/mnt/projects/ww/src/ww/nca/neural_field.py:125-126`
+**Location**: `/mnt/projects/t4d/t4dm/src/t4dm/nca/neural_field.py:125-126`
 
 ```python
 alpha_da: float = 10.0    # DA: ~100ms timescale (1/0.1)
@@ -53,7 +53,7 @@ The decay rate correctly models fast dopamine reuptake via DAT (dopamine transpo
 No explicit RPE computation in the neural field. While `learning/neuro_symbolic.py` has dopamine signals, they're not coupled to VTA dynamics. Real DA neurons fire based on prediction errors, not just rewards.
 
 #### Serotonin (5-HT) ⚠️ NEEDS WORK
-**Location**: `/mnt/projects/ww/src/ww/nca/neural_field.py:126`
+**Location**: `/mnt/projects/t4d/t4dm/src/t4dm/nca/neural_field.py:126`
 
 ```python
 alpha_5ht: float = 2.0    # 5-HT: ~500ms timescale (1/0.5)
@@ -79,7 +79,7 @@ Serotonin is treated as passive neuromodulator. In reality:
 This feedback loop is completely missing. The system can't self-regulate serotonin levels.
 
 #### Acetylcholine (ACh) ✓ EXCELLENT
-**Location**: `/mnt/projects/ww/src/ww/nca/neural_field.py:127`
+**Location**: `/mnt/projects/t4d/t4dm/src/t4dm/nca/neural_field.py:127`
 
 ```python
 alpha_ach: float = 20.0   # ACh: ~50ms timescale (1/0.05)
@@ -112,7 +112,7 @@ effect_on_ach = self._k_da_to_ach * scale * delayed_da
 This implements the 2025 Nature Neuroscience finding of anticorrelated DA-ACh traveling waves with ~100ms phase lag.
 
 #### Norepinephrine (NE) ✓ GOOD
-**Location**: `/mnt/projects/ww/src/ww/nca/neural_field.py:128`
+**Location**: `/mnt/projects/t4d/t4dm/src/t4dm/nca/neural_field.py:128`
 
 ```python
 alpha_ne: float = 5.0     # NE: ~200ms timescale (1/0.2)
@@ -136,7 +136,7 @@ Locus coeruleus has distinct modes:
 These modes aren't represented. Real LC neurons fire ~1-3 Hz baseline with bursts to 8-10 Hz on salient stimuli.
 
 #### GABA ✓ EXCELLENT
-**Location**: `/mnt/projects/ww/src/ww/nca/neural_field.py:129`
+**Location**: `/mnt/projects/t4d/t4dm/src/t4dm/nca/neural_field.py:129`
 
 ```python
 alpha_gaba: float = 100.0 # GABA: ~10ms timescale (1/0.01)
@@ -164,7 +164,7 @@ This is **textbook biology**. GAT-3 transporters on astrocytes clear ~50% of syn
 The E/I balance constraint (`coupling.py:246-253`) enforces GABA-Glutamate mutual inhibition, preventing runaway excitation.
 
 #### Glutamate (Glu) ✓ EXCELLENT
-**Location**: `/mnt/projects/ww/src/ww/nca/neural_field.py:130`
+**Location**: `/mnt/projects/t4d/t4dm/src/t4dm/nca/neural_field.py:130`
 
 ```python
 alpha_glu: float = 200.0  # Glu: ~5ms timescale (1/0.005), prevent excitotoxicity
@@ -204,7 +204,7 @@ This is critical. Excess glutamate causes neuronal death (stroke, epilepsy, ALS)
 
 #### Current Implementation: ⚠️ OVERSIMPLIFIED
 
-**Location**: `/mnt/projects/ww/src/ww/consolidation/sleep.py`
+**Location**: `/mnt/projects/t4d/t4dm/src/t4dm/consolidation/sleep.py`
 
 **What's Done Right**:
 1. **Sharp-wave ripple (SWR) generation** (`sleep.py:99-231`):
@@ -306,7 +306,7 @@ class CA3:
 
 #### ✓ EXCELLENT - Best Part of the System
 
-**Location**: `/mnt/projects/ww/src/ww/nca/adenosine.py`
+**Location**: `/mnt/projects/t4d/t4dm/src/t4dm/nca/adenosine.py`
 
 **What's Done Right**:
 
@@ -381,7 +381,7 @@ class CA3:
 
 #### ✓ EXCELLENT - Tripartite Synapse Model
 
-**Location**: `/mnt/projects/ww/src/ww/nca/astrocyte.py`
+**Location**: `/mnt/projects/t4d/t4dm/src/t4dm/nca/astrocyte.py`
 
 **What's Done Right**:
 
@@ -451,7 +451,7 @@ class CA3:
 
 #### ✓ GOOD with Gaps
 
-**Location**: `/mnt/projects/ww/src/ww/nca/striatal_coupling.py`
+**Location**: `/mnt/projects/t4d/t4dm/src/t4dm/nca/striatal_coupling.py`
 
 **What's Done Right**:
 
@@ -792,7 +792,7 @@ class StriatalMSN:
 
 #### Fix 1: Add Hippocampal Subregions
 
-**File**: `ww/memory/hippocampus.py` (NEW)
+**File**: `t4dm/memory/hippocampus.py` (NEW)
 
 **Implementation**:
 ```python
@@ -882,7 +882,7 @@ class EpisodicMemoryService:
 
 #### Fix 2: Implement VTA-Striatum-PFC Loop
 
-**File**: `ww/nca/dopamine_circuit.py` (NEW)
+**File**: `t4dm/nca/dopamine_circuit.py` (NEW)
 
 **Implementation**:
 ```python
@@ -970,7 +970,7 @@ class NeuralFieldSolver:
 
 #### Fix 3: Add Serotonin Feedback Loop
 
-**File**: `ww/nca/serotonin_circuit.py` (NEW)
+**File**: `t4dm/nca/serotonin_circuit.py` (NEW)
 
 **Implementation**:
 ```python
@@ -1030,7 +1030,7 @@ class SerotoninCircuit:
 
 #### Fix 4: Couple SWRs to Neural Field
 
-**File**: `ww/consolidation/hippocampal_replay.py` (NEW)
+**File**: `t4dm/consolidation/hippocampal_replay.py` (NEW)
 
 **Implementation**:
 ```python
@@ -1115,7 +1115,7 @@ class SleepConsolidation:
 
 #### Fix 5: Add D1/D2 Receptor Dynamics
 
-**File**: Modify `ww/nca/striatal_coupling.py`
+**File**: Modify `t4dm/nca/striatal_coupling.py`
 
 **Implementation**:
 ```python
@@ -1170,7 +1170,7 @@ class StriabalCircuit:
 
 #### Fix 6: Refine Glutamate Timescales
 
-**File**: Modify `ww/nca/neural_field.py`
+**File**: Modify `t4dm/nca/neural_field.py`
 
 **Implementation**:
 ```python
@@ -1283,7 +1283,7 @@ def _init_fields(self):
 
 ### Biological Benchmarks
 
-Create `/mnt/projects/ww/tests/biology/` with:
+Create `/mnt/projects/t4d/t4dm/tests/biology/` with:
 
 1. **`test_hippocampal_separation.py`**:
    ```python

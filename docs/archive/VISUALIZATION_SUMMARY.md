@@ -9,7 +9,7 @@ Complete visualization suite for the World Weaver neurocomputational memory syst
 ### 1. Package Structure
 
 ```
-/mnt/projects/ww/src/ww/visualization/
+/mnt/projects/t4d/t4dm/src/t4dm/visualization/
 ├── __init__.py                    # Package exports (75 lines)
 ├── activation_heatmap.py          # Memory activation patterns (338 lines)
 ├── plasticity_traces.py           # Synaptic plasticity dynamics (505 lines)
@@ -93,7 +93,7 @@ Total: 2,435 lines of production code
 
 ### 4. Example Application
 
-Created `/mnt/projects/ww/examples/visualization_demo.py`:
+Created `/mnt/projects/t4d/t4dm/examples/visualization_demo.py`:
 - Demonstrates all 6 visualization modules
 - Generates synthetic data for testing
 - Shows both matplotlib and plotly modes
@@ -218,7 +218,7 @@ python examples/visualization_demo.py
 Test imports:
 
 ```bash
-PYTHONPATH=/mnt/projects/ww/src python -c "
+PYTHONPATH=/mnt/projects/t4d/t4dm/src python -c "
 from ww.visualization import (
     ActivationHeatmap,
     PlasticityTracer,

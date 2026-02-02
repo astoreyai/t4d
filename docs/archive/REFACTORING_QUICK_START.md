@@ -1,6 +1,6 @@
 # Architecture Refactoring Quick Start
 
-**Full Plan**: [ARCHITECTURE_REFACTORING_PLAN.md](/mnt/projects/ww/docs/ARCHITECTURE_REFACTORING_PLAN.md)
+**Full Plan**: [ARCHITECTURE_REFACTORING_PLAN.md](/mnt/projects/t4d/t4dm/docs/ARCHITECTURE_REFACTORING_PLAN.md)
 
 ---
 
@@ -37,7 +37,7 @@ Fix 7 critical architecture issues in 3 phases (5 weeks):
 ### New Module Structure
 
 ```
-src/ww/memory/
+src/t4dm/memory/
 ├── episodic.py              # 400 lines - Facade (backward compat)
 ├── episodic_storage.py      # 800 lines - Storage operations
 ├── episodic_retrieval.py    # 1,200 lines - Search & recall
@@ -53,7 +53,7 @@ src/ww/memory/
 git checkout -b refactor/phase1-episodic
 
 # 2. Create new modules (templates provided in plan)
-touch src/ww/memory/episodic_{storage,retrieval,learning,fusion,saga}.py
+touch src/t4dm/memory/episodic_{storage,retrieval,learning,fusion,saga}.py
 
 # 3. Extract classes (copy from episodic.py lines specified in plan)
 # - episodic_fusion.py: Lines 64-474 (LearnedFusionWeights, LearnedReranker)
@@ -87,12 +87,12 @@ pytest tests/memory/test_episodic_{storage,retrieval,learning,integration}.py -v
 
 ### Components
 
-1. **Redis Cache** (`src/ww/storage/redis_cache.py`)
+1. **Redis Cache** (`src/t4dm/storage/redis_cache.py`)
    - Embedding cache: 1h TTL, 70-80% hit rate
    - Search results: 5m TTL
    - Graph relationships: 10m TTL
 
-2. **Rate Limiting** (`src/ww/api/middleware/rate_limit.py`)
+2. **Rate Limiting** (`src/t4dm/api/middleware/rate_limit.py`)
    - Authenticated: 1000 req/min
    - Anonymous: 100 req/min
    - Admin: 50 req/min
@@ -108,17 +108,17 @@ docker-compose up -d redis
 
 # 2. Create cache module
 cp docs/ARCHITECTURE_REFACTORING_PLAN.md cache_template.py  # Extract code
-vim src/ww/storage/redis_cache.py
+vim src/t4dm/storage/redis_cache.py
 
 # 3. Integrate with embedding provider
-vim src/ww/embedding/bge_m3.py  # Add cache-aside pattern
+vim src/t4dm/embedding/bge_m3.py  # Add cache-aside pattern
 
 # 4. Add rate limiting middleware
-vim src/ww/api/middleware/rate_limit.py
-vim src/ww/api/server.py  # app.add_middleware(RateLimitMiddleware)
+vim src/t4dm/api/middleware/rate_limit.py
+vim src/t4dm/api/server.py  # app.add_middleware(RateLimitMiddleware)
 
 # 5. Optimize graph queries
-vim src/ww/memory/episodic_retrieval.py  # Use batch queries
+vim src/t4dm/memory/episodic_retrieval.py  # Use batch queries
 
 # 6. Test performance
 pytest tests/benchmarks/test_refactoring_performance.py -v
@@ -150,9 +150,9 @@ pytest tests/benchmarks/test_refactoring_performance.py -v
    python scripts/convert_prints_to_logger.py --apply  # Convert
 
    # Priority files:
-   # - src/ww/nca/*.py (17 files)
-   # - src/ww/interfaces/*.py (9 files)
-   # - src/ww/bridges/*.py (3 files)
+   # - src/t4dm/nca/*.py (17 files)
+   # - src/t4dm/interfaces/*.py (9 files)
+   # - src/t4dm/bridges/*.py (3 files)
    ```
 
 2. **Bridge Tests** (5 → 20+ files)
@@ -164,7 +164,7 @@ pytest tests/benchmarks/test_refactoring_performance.py -v
    touch test_{buffer_manager,three_factor,end_to_end_learning}.py
 
    # Run coverage
-   pytest tests/bridges/ -v --cov=src/ww/bridges --cov-report=html
+   pytest tests/bridges/ -v --cov=src/t4dm/bridges --cov-report=html
    # Target: 85% coverage
    ```
 
@@ -377,7 +377,7 @@ git revert $(git log --oneline | grep "Phase 3" | awk '{print $1}')
 
 ## Next Steps
 
-1. **Review Plan**: Read full [ARCHITECTURE_REFACTORING_PLAN.md](/mnt/projects/ww/docs/ARCHITECTURE_REFACTORING_PLAN.md)
+1. **Review Plan**: Read full [ARCHITECTURE_REFACTORING_PLAN.md](/mnt/projects/t4d/t4dm/docs/ARCHITECTURE_REFACTORING_PLAN.md)
 2. **Create Branch**: `git checkout -b refactor/phase1-episodic`
 3. **Start Phase 1**: Extract episodic modules
 4. **Run Tests**: Continuous validation
@@ -387,9 +387,9 @@ git revert $(git log --oneline | grep "Phase 3" | awk '{print $1}')
 
 ## Questions?
 
-- **Full details**: `/mnt/projects/ww/docs/ARCHITECTURE_REFACTORING_PLAN.md`
-- **Architecture review**: `/mnt/projects/ww/docs/CODE_QUALITY_REVIEW.md`
-- **Current roadmap**: `/mnt/projects/ww/docs/ROADMAP.md`
+- **Full details**: `/mnt/projects/t4d/t4dm/docs/ARCHITECTURE_REFACTORING_PLAN.md`
+- **Architecture review**: `/mnt/projects/t4d/t4dm/docs/CODE_QUALITY_REVIEW.md`
+- **Current roadmap**: `/mnt/projects/t4d/t4dm/docs/ROADMAP.md`
 
 ---
 

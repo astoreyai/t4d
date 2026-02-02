@@ -43,8 +43,8 @@
 agent_type: ww-compbio
 description: Wire sleep replay to actually update embeddings
 files:
-  - src/ww/consolidation/sleep.py (lines 1450-1500)
-  - src/ww/learning/reconsolidation.py
+  - src/t4dm/consolidation/sleep.py (lines 1450-1500)
+  - src/t4dm/learning/reconsolidation.py
 tasks:
   - Add ReconsolidationEngine.batch_reconsolidate() call in _replay_episode()
   - Pass replayed episode IDs to reconsolidation
@@ -61,9 +61,9 @@ tests:
 agent_type: ww-compbio
 description: Connect VTA dopamine to STDP learning rates
 files:
-  - src/ww/nca/vta.py
-  - src/ww/learning/stdp.py
-  - NEW: src/ww/integration/stdp_vta_bridge.py
+  - src/t4dm/nca/vta.py
+  - src/t4dm/learning/stdp.py
+  - NEW: src/t4dm/integration/stdp_vta_bridge.py
 tasks:
   - Create STDPVTABridge class
   - Add dopamine_level parameter to STDPLearner.compute_update()
@@ -80,8 +80,8 @@ tests:
 agent_type: ww-compbio
 description: Fix VAE wake-sleep training trigger
 files:
-  - src/ww/consolidation/sleep.py (lines 556-600)
-  - src/ww/hooks/session_lifecycle.py
+  - src/t4dm/consolidation/sleep.py (lines 556-600)
+  - src/t4dm/hooks/session_lifecycle.py
 tasks:
   - Add periodic train_vae_from_wake() calls
   - Trigger VAE training in pre-consolidation hook
@@ -98,8 +98,8 @@ tests:
 agent_type: ww-compbio
 description: Generate RPE from replay sequences during consolidation
 files:
-  - src/ww/consolidation/sleep.py
-  - src/ww/nca/vta.py
+  - src/t4dm/consolidation/sleep.py
+  - src/t4dm/nca/vta.py
 tasks:
   - Pass replay sequences to VTA.process_sequence()
   - Generate TD errors from temporal predictions
@@ -155,9 +155,9 @@ tasks:
 agent_type: ww-hinton
 description: Wire Forward-Forward + Capsule bridge into episodic memory
 files:
-  - src/ww/memory/episodic.py
-  - src/ww/bridges/ff_capsule_bridge.py
-  - src/ww/core/bridge_container.py
+  - src/t4dm/memory/episodic.py
+  - src/t4dm/bridges/ff_capsule_bridge.py
+  - src/t4dm/core/bridge_container.py
 tasks:
   - Instantiate FFCapsuleBridge in EpisodicMemory.__init__()
   - Call bridge.forward() in store() method
@@ -174,9 +174,9 @@ tests:
 agent_type: boris
 description: Activate lazy-initialized bridge container
 files:
-  - src/ww/core/bridge_container.py
-  - src/ww/memory/episodic.py
-  - src/ww/api/deps.py
+  - src/t4dm/core/bridge_container.py
+  - src/t4dm/memory/episodic.py
+  - src/t4dm/api/deps.py
 tasks:
   - Trigger bridge container init in session creation
   - Pass required components (FF layer, capsule layer, VTA)
@@ -193,9 +193,9 @@ tests:
 agent_type: ww-hinton
 description: Store capsule pose matrices in vector database
 files:
-  - src/ww/storage/qdrant_store.py
-  - src/ww/memory/episodic.py
-  - src/ww/nca/capsules.py
+  - src/t4dm/storage/qdrant_store.py
+  - src/t4dm/memory/episodic.py
+  - src/t4dm/nca/capsules.py
 tasks:
   - Add pose_matrices field to Qdrant payload schema
   - Store capsule activations alongside embeddings
@@ -248,8 +248,8 @@ tasks:
 agent_type: ww-compbio
 description: Wire neuromodulators to credit assignment
 files:
-  - src/ww/learning/credit_flow.py
-  - src/ww/nca/neural_field.py
+  - src/t4dm/learning/credit_flow.py
+  - src/t4dm/nca/neural_field.py
 tasks:
   - Add get_neuromodulator_context() reading NeuralFieldSolver
   - Modulate learning rate: lr *= (1 + DA - 0.5*5HT)
@@ -267,8 +267,8 @@ tests:
 agent_type: ww-compbio
 description: Enhance three-factor learning with full NT context
 files:
-  - src/ww/learning/three_factor.py
-  - src/ww/learning/eligibility.py
+  - src/t4dm/learning/three_factor.py
+  - src/t4dm/learning/eligibility.py
 tasks:
   - Add full NT state to eligibility trace computation
   - Implement protein synthesis gate (lability window)
@@ -285,8 +285,8 @@ tests:
 agent_type: ww-compbio
 description: Wire neuromodulators to neurogenesis
 files:
-  - src/ww/encoding/neurogenesis.py
-  - src/ww/nca/vta.py
+  - src/t4dm/encoding/neurogenesis.py
+  - src/t4dm/nca/vta.py
 tasks:
   - Add DA modulation to birth rate: birth_rate *= (1 + DA)
   - Add ACh modulation to maturation speed
@@ -339,9 +339,9 @@ tasks:
 agent_type: ww-hinton
 description: Implement RBM/DBN for Hinton-aligned generative modeling
 files:
-  - NEW: src/ww/nca/rbm.py
-  - NEW: src/ww/nca/dbn.py
-  - src/ww/consolidation/sleep.py
+  - NEW: src/t4dm/nca/rbm.py
+  - NEW: src/t4dm/nca/dbn.py
+  - src/t4dm/consolidation/sleep.py
 tasks:
   - Create RestrictedBoltzmannMachine class
   - Implement contrastive divergence training
@@ -359,9 +359,9 @@ tests:
 agent_type: ww-hinton
 description: Route retrievals through energy minimization
 files:
-  - src/ww/nca/energy.py
-  - src/ww/memory/episodic.py
-  - src/ww/encoding/attractor.py
+  - src/t4dm/nca/energy.py
+  - src/t4dm/memory/episodic.py
+  - src/t4dm/encoding/attractor.py
 tasks:
   - Add HopfieldRetrieval mode to episodic memory
   - Use attractor dynamics for retrieval
@@ -378,9 +378,9 @@ tests:
 agent_type: ww-hinton
 description: Build hierarchical memory structure with capsules
 files:
-  - src/ww/nca/capsules.py
-  - src/ww/memory/episodic.py
-  - NEW: src/ww/memory/hierarchical.py
+  - src/t4dm/nca/capsules.py
+  - src/t4dm/memory/episodic.py
+  - NEW: src/t4dm/memory/hierarchical.py
 tasks:
   - Create MemoryCapsuleLayer (entity, relation, context)
   - Build episode → concept → schema hierarchy

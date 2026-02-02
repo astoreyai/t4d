@@ -105,7 +105,7 @@ import umap  # Optional, falls back to t-SNE
 
 ## 2. Activation Heatmap
 
-**Module**: `/mnt/projects/ww/src/ww/visualization/activation_heatmap.py`
+**Module**: `/mnt/projects/t4d/t4dm/src/t4dm/visualization/activation_heatmap.py`
 
 Visualizes activation patterns across memory types (episodic, semantic) over time, integrated with neuromodulator dynamics.
 
@@ -245,7 +245,7 @@ plot_activation_timeline(tracker, interactive=True)
 
 ## 3. Plasticity Traces
 
-**Module**: `/mnt/projects/ww/src/ww/visualization/plasticity_traces.py`
+**Module**: `/mnt/projects/t4d/t4dm/src/t4dm/visualization/plasticity_traces.py`
 
 Visualizes synaptic weight changes following BCM (Bienenstock-Cooper-Munro) and homeostatic plasticity rules.
 
@@ -401,7 +401,7 @@ plot_ltp_ltd_distribution(tracer, interactive=True)
 
 ## 4. Neuromodulator State
 
-**Module**: `/mnt/projects/ww/src/ww/visualization/neuromodulator_state.py`
+**Module**: `/mnt/projects/t4d/t4dm/src/t4dm/visualization/neuromodulator_state.py`
 
 Comprehensive dashboard for neuromodulator dynamics across five systems:
 - **Dopamine (DA)**: Reward prediction error
@@ -545,7 +545,7 @@ print(f"Mean dopamine RPE: {stats['dopamine']['mean']:.3f}")
 
 ## 5. Pattern Separation
 
-**Module**: `/mnt/projects/ww/src/ww/visualization/pattern_separation.py`
+**Module**: `/mnt/projects/t4d/t4dm/src/t4dm/visualization/pattern_separation.py`
 
 Visualizes the effects of dentate gyrus-style pattern separation: orthogonalization of similar inputs.
 
@@ -697,7 +697,7 @@ stats = vis.analyze_separation(
 
 ## 6. Consolidation Replay
 
-**Module**: `/mnt/projects/ww/src/ww/visualization/consolidation_replay.py`
+**Module**: `/mnt/projects/t4d/t4dm/src/t4dm/visualization/consolidation_replay.py`
 
 Visualizes sleep-based memory consolidation: sharp-wave ripple (SWR) sequences and replay priorities.
 
@@ -819,7 +819,7 @@ plot_replay_priority(visualizer, interactive=True)
 
 ## 7. Embedding Projections
 
-**Module**: `/mnt/projects/ww/src/ww/visualization/embedding_projections.py`
+**Module**: `/mnt/projects/t4d/t4dm/src/t4dm/visualization/embedding_projections.py`
 
 Projects high-dimensional memory embeddings to 2D/3D using dimensionality reduction techniques.
 
@@ -988,7 +988,7 @@ print(f"PCA projection shape: {pca_proj.shape}")
 
 ## 8. Persistence State
 
-**Module**: `/mnt/projects/ww/src/ww/visualization/persistence_state.py`
+**Module**: `/mnt/projects/t4d/t4dm/src/t4dm/visualization/persistence_state.py`
 
 Visualizes WAL (Write-Ahead Log), checkpoints, and durability metrics for the persistence layer.
 
@@ -1599,7 +1599,7 @@ plot_tsne_projection(embeddings, colors=colors)
 
 ## Complete Example Script
 
-See `/mnt/projects/ww/examples/visualization_demo.py` for a comprehensive demonstration of all visualization modules.
+See `/mnt/projects/t4d/t4dm/examples/visualization_demo.py` for a comprehensive demonstration of all visualization modules.
 
 Run the demo:
 ```bash

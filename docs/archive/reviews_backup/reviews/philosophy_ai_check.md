@@ -1,6 +1,6 @@
 # AI-Check Analysis: Philosophy of AI Memory Paper
 
-**File**: `/mnt/projects/ww/docs/papers/philosophy_of_ai_memory.tex`
+**File**: `/mnt/projects/t4d/t4dm/docs/papers/philosophy_of_ai_memory.tex`
 **Date**: 2024-12-04
 **Total Words**: ~3,200
 

@@ -9,7 +9,7 @@ Optimize World Weaver for your workload.
 The embedding cache reduces redundant model calls:
 
 ```yaml
-# ww.yaml
+# t4dm.yaml
 embedding_cache_size: 10000  # Increase from default 1000
 embedding_cache_ttl: 3600    # 1 hour TTL
 ```
@@ -30,7 +30,7 @@ await memory.store_batch(contents)  # Fast
 ### 3. Enable Connection Pooling
 
 ```yaml
-# ww.yaml
+# t4dm.yaml
 neo4j_pool_size: 50     # Default is 50
 qdrant_pool_size: 10    # Default is 10
 ```
@@ -77,7 +77,7 @@ Performance impact:
 ### GPU Acceleration
 
 ```yaml
-# ww.yaml
+# t4dm.yaml
 embedding_device: cuda      # Use GPU
 embedding_batch_size: 64    # Larger batches
 embedding_fp16: true        # Half precision
@@ -86,7 +86,7 @@ embedding_fp16: true        # Half precision
 ### CPU Fallback
 
 ```yaml
-# ww.yaml
+# t4dm.yaml
 embedding_device: cpu
 embedding_batch_size: 8     # Smaller batches
 embedding_threads: 4        # Parallel threads
@@ -97,7 +97,7 @@ embedding_threads: 4        # Parallel threads
 ### Qdrant Settings
 
 ```yaml
-# ww.yaml
+# t4dm.yaml
 qdrant_timeout: 30          # Connection timeout
 qdrant_grpc: true           # Use gRPC (faster)
 qdrant_prefer_grpc: true
@@ -106,7 +106,7 @@ qdrant_prefer_grpc: true
 ### Neo4j Settings
 
 ```yaml
-# ww.yaml
+# t4dm.yaml
 neo4j_pool_size: 100        # More connections
 neo4j_max_transaction_retry: 3
 neo4j_acquisition_timeout: 30
@@ -117,7 +117,7 @@ neo4j_acquisition_timeout: 30
 ### HDBSCAN Parameters
 
 ```yaml
-# ww.yaml
+# t4dm.yaml
 consolidation_min_cluster_size: 5
 consolidation_min_samples: 3
 consolidation_max_samples: 2000  # Cap for O(n²) mitigation
@@ -126,7 +126,7 @@ consolidation_max_samples: 2000  # Cap for O(n²) mitigation
 ### Scheduling
 
 ```yaml
-# ww.yaml
+# t4dm.yaml
 consolidation_interval: 3600    # Every hour
 consolidation_batch_size: 500   # Episodes per batch
 ```

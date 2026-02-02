@@ -240,9 +240,9 @@ elif ACh_mode == "retrieval":
 ## Implementation Files
 
 ### Core Algorithm
-- **Design**: `/mnt/projects/ww/docs/LEARNED_MEMORY_GATE_DESIGN.md`
-- **Implementation**: `/mnt/projects/ww/src/ww/core/learned_gate.py`
-- **Tests**: `/mnt/projects/ww/tests/unit/test_learned_gate.py`
+- **Design**: `/mnt/projects/t4d/t4dm/docs/LEARNED_MEMORY_GATE_DESIGN.md`
+- **Implementation**: `/mnt/projects/t4d/t4dm/src/t4dm/core/learned_gate.py`
+- **Tests**: `/mnt/projects/t4d/t4dm/tests/unit/test_learned_gate.py`
 
 ### Key Classes
 

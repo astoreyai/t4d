@@ -22,7 +22,7 @@ World Weaver implements a sophisticated tripartite neural memory system with str
 
 ## 1. Embedding Performance Analysis
 
-### Current Implementation (`src/ww/embedding/bge_m3.py`)
+### Current Implementation (`src/t4dm/embedding/bge_m3.py`)
 
 **Model**: BGE-M3 (BAAI/bge-m3)
 **Dimensions**: 1024-dim dense + sparse (lexical weights)
@@ -148,7 +148,7 @@ def _compute_optimal_batch_size(self, texts: list[str]) -> int:
 
 ## 2. Vector Search Optimization (Qdrant)
 
-### Current Implementation (`src/ww/storage/qdrant_store.py`)
+### Current Implementation (`src/t4dm/storage/qdrant_store.py`)
 
 **Backend**: Qdrant 1.7.0+
 **HNSW Configuration**: Default (M=16, ef_construct=100)
@@ -287,7 +287,7 @@ vectors_config=models.VectorParams(
 
 ## 3. Graph Query Optimization (Neo4j)
 
-### Current Implementation (`src/ww/storage/neo4j_store.py`)
+### Current Implementation (`src/t4dm/storage/neo4j_store.py`)
 
 **Backend**: Neo4j 5.0+
 **Connection Pool**: 50 connections, 30s timeout, 3600s lifetime
@@ -597,7 +597,7 @@ async def encode_batch(self, contents: list[str]) -> list[np.ndarray]:
 
 ## 5. API Performance
 
-### Current Implementation (`src/ww/api/server.py`)
+### Current Implementation (`src/t4dm/api/server.py`)
 
 **Framework**: FastAPI + Uvicorn
 **Workers**: 1 (default), configurable
@@ -819,7 +819,7 @@ jobs:
 ### Key Metrics to Track
 
 ```python
-# src/ww/observability/metrics.py (new)
+# src/t4dm/observability/metrics.py (new)
 
 from prometheus_client import Counter, Histogram, Gauge
 

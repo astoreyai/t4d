@@ -25,7 +25,7 @@ The codebase demonstrates solid architecture with well-implemented memory patter
 ## Critical Issues (Must Fix)
 
 ### CRITICAL-1: SQL Injection Risk in Neo4j Cypher Queries
-**File:** `/mnt/projects/ww/src/ww/storage/neo4j_store.py`
+**File:** `/mnt/projects/t4d/t4dm/src/t4dm/storage/neo4j_store.py`
 **Lines:** 237-240, 318-324, 395-404
 **Severity:** CRITICAL
 **Category:** Security - Injection Vulnerability
@@ -64,7 +64,7 @@ cypher = "CREATE (n $props) SET n :label"
 ---
 
 ### CRITICAL-2: Race Condition in Singleton Initialization
-**File:** `/mnt/projects/ww/src/ww/storage/neo4j_store.py`, `/mnt/projects/ww/src/ww/storage/qdrant_store.py`
+**File:** `/mnt/projects/t4d/t4dm/src/t4dm/storage/neo4j_store.py`, `/mnt/projects/t4d/t4dm/src/t4dm/storage/qdrant_store.py`
 **Lines:** neo4j:1258-1274, qdrant:573-589
 **Severity:** CRITICAL
 **Category:** Concurrency - Race Condition
@@ -111,7 +111,7 @@ async def get_neo4j_store(session_id: str = "default") -> Neo4jStore:
 ## High Issues (Should Fix)
 
 ### HIGH-1: N+1 Query Pattern in Duplicate Detection
-**File:** `/mnt/projects/ww/src/ww/consolidation/service.py`
+**File:** `/mnt/projects/t4d/t4dm/src/t4dm/consolidation/service.py`
 **Lines:** 392-428
 **Severity:** HIGH
 **Category:** Performance - N+1 Queries
@@ -147,7 +147,7 @@ embeddings = {r[0]: r[1] for r in results}
 ---
 
 ### HIGH-2: Missing Error Context in Exception Handling
-**File:** `/mnt/projects/ww/memory/episodic.py`, `/mnt/projects/ww/memory/semantic.py`, `/mnt/projects/ww/memory/procedural.py`
+**File:** `/mnt/projects/t4d/t4dm/memory/episodic.py`, `/mnt/projects/t4d/t4dm/memory/semantic.py`, `/mnt/projects/t4d/t4dm/memory/procedural.py`
 **Lines:** episodic:None, semantic:411-413, procedural:None
 **Severity:** HIGH
 **Category:** Error Handling
@@ -181,7 +181,7 @@ except Exception as e:
 ---
 
 ### HIGH-3: Hardcoded Magic Numbers
-**File:** `/mnt/projects/ww/memory/episodic.py`
+**File:** `/mnt/projects/t4d/t4dm/memory/episodic.py`
 **Lines:** 169-171, 176-182
 **Severity:** HIGH
 **Category:** Code Smell - Magic Numbers
@@ -207,7 +207,7 @@ recency_score = math.exp(-FSRS_DECAY_FACTOR * days_elapsed)
 ---
 
 ### HIGH-4: God Class - ConsolidationService
-**File:** `/mnt/projects/ww/src/ww/consolidation/service.py`
+**File:** `/mnt/projects/t4d/t4dm/src/t4dm/consolidation/service.py`
 **Lines:** 41-675
 **Severity:** HIGH
 **Category:** SOLID Violation - Single Responsibility Principle
@@ -240,7 +240,7 @@ ConsolidationOrchestrator
 ---
 
 ### HIGH-5: Potential Memory Leak in Embedding Cache
-**File:** `/mnt/projects/ww/memory/semantic.py`
+**File:** `/mnt/projects/t4d/t4dm/memory/semantic.py`
 **Lines:** 213-215
 **Severity:** HIGH
 **Category:** Performance - Memory Leak
@@ -274,7 +274,7 @@ Or implement TTL-based cache clearing.
 ---
 
 ### HIGH-6: Blocking Sync Client in Async Context
-**File:** `/mnt/projects/ww/src/ww/storage/qdrant_store.py`
+**File:** `/mnt/projects/t4d/t4dm/src/t4dm/storage/qdrant_store.py`
 **Lines:** 87-94
 **Severity:** HIGH
 **Category:** Async/Concurrency
@@ -309,7 +309,7 @@ async def _ensure_collection(self, client: AsyncQdrantClient, name: str):
 ---
 
 ### HIGH-7: Mutable Default Arguments
-**File:** `/mnt/projects/ww/mcp/memory_gateway.py`
+**File:** `/mnt/projects/t4d/t4dm/mcp/memory_gateway.py`
 **Lines:** 217, 231
 **Severity:** HIGH
 **Category:** Python Anti-pattern
@@ -339,7 +339,7 @@ def set_auth_context(
 ---
 
 ### HIGH-8: Missing Input Validation in Config
-**File:** `/mnt/projects/ww/src/ww/core/config.py`
+**File:** `/mnt/projects/t4d/t4dm/src/t4dm/core/config.py`
 **Lines:** 143-154
 **Severity:** HIGH
 **Category:** Security - Input Validation
@@ -386,7 +386,7 @@ def validate_timeout(cls, v: float) -> float:
 ## Medium Issues
 
 ### MEDIUM-1: Inefficient Cosine Similarity Calculation
-**File:** `/mnt/projects/ww/src/ww/consolidation/service.py`
+**File:** `/mnt/projects/t4d/t4dm/src/t4dm/consolidation/service.py`
 **Lines:** 593-600
 **Severity:** MEDIUM
 **Category:** Performance
@@ -411,7 +411,7 @@ def _cosine_similarity(self, vec1: np.ndarray, vec2: np.ndarray) -> float:
 ---
 
 ### MEDIUM-2: Duplicate Code in Clustering Methods
-**File:** `/mnt/projects/ww/src/ww/consolidation/service.py`
+**File:** `/mnt/projects/t4d/t4dm/src/t4dm/consolidation/service.py`
 **Lines:** 430-513, 515-591
 **Severity:** MEDIUM
 **Category:** Code Smell - Duplication
@@ -434,7 +434,7 @@ async def _cluster_items(
 ---
 
 ### MEDIUM-3: Implicit Session Filtering Logic
-**File:** `/mnt/projects/ww/memory/episodic.py`
+**File:** `/mnt/projects/t4d/t4dm/memory/episodic.py`
 **Lines:** 136-141
 **Severity:** MEDIUM
 **Category:** Logic Error Risk
@@ -467,7 +467,7 @@ else:
 ---
 
 ### MEDIUM-4: Long Method - `recall()`
-**File:** `/mnt/projects/ww/memory/episodic.py`
+**File:** `/mnt/projects/t4d/t4dm/memory/episodic.py`
 **Lines:** 108-214 (107 lines)
 **Severity:** MEDIUM
 **Category:** Code Smell - Long Method
@@ -495,7 +495,7 @@ async def recall(self, query: str, limit: int = 10, ...) -> list[ScoredResult]:
 ---
 
 ### MEDIUM-5: Inconsistent Error Response Format
-**File:** `/mnt/projects/ww/mcp/memory_gateway.py`
+**File:** `/mnt/projects/t4d/t4dm/mcp/memory_gateway.py`
 **Lines:** 382-388, 441-446
 **Severity:** MEDIUM
 **Category:** API Design
@@ -518,7 +518,7 @@ Replace all `_make_error_response()` calls with `ww.mcp.errors.make_error()`.
 ---
 
 ### MEDIUM-6: Missing Batch Size Limits
-**File:** `/mnt/projects/ww/src/ww/storage/qdrant_store.py`
+**File:** `/mnt/projects/t4d/t4dm/src/t4dm/storage/qdrant_store.py`
 **Lines:** 162-233
 **Severity:** MEDIUM
 **Category:** Performance/Security
@@ -551,7 +551,7 @@ if len(ids) > MAX_TOTAL_BATCH_SIZE:
 ---
 
 ### MEDIUM-7: Deprecated Methods Not Removed
-**File:** `/mnt/projects/ww/memory/procedural.py`
+**File:** `/mnt/projects/t4d/t4dm/memory/procedural.py`
 **Lines:** 476-484
 **Severity:** MEDIUM
 **Category:** Technical Debt
@@ -573,7 +573,7 @@ Remove after 1-2 release cycles with deprecation warnings.
 ---
 
 ### MEDIUM-8: Import Side Effects
-**File:** `/mnt/projects/ww/storage/neo4j_store.py`, `/mnt/projects/ww/storage/qdrant_store.py`
+**File:** `/mnt/projects/t4d/t4dm/storage/neo4j_store.py`, `/mnt/projects/t4d/t4dm/storage/qdrant_store.py`
 **Lines:** neo4j:1242-1243, qdrant:557-558
 **Severity:** MEDIUM
 **Category:** Code Organization
@@ -593,7 +593,7 @@ Consolidate all imports at module top.
 ---
 
 ### MEDIUM-9: Missing Type Annotations
-**File:** `/mnt/projects/ww/src/ww/consolidation/service.py`
+**File:** `/mnt/projects/t4d/t4dm/src/t4dm/consolidation/service.py`
 **Lines:** 655
 **Severity:** MEDIUM
 **Category:** Type Safety
@@ -615,7 +615,7 @@ def _merge_procedure_steps(self, procedures: list[Procedure]) -> list[ProcedureS
 ---
 
 ### MEDIUM-10: Potential Divide-by-Zero
-**File:** `/mnt/projects/ww/memory/semantic.py`
+**File:** `/mnt/projects/t4d/t4dm/memory/semantic.py`
 **Lines:** 293-294
 **Severity:** MEDIUM
 **Category:** Edge Case Bug
@@ -639,7 +639,7 @@ base = math.log(access_count) - self.decay * math.log(max(elapsed, 1) / 3600)
 ---
 
 ### MEDIUM-11: Inefficient List Concatenation
-**File:** `/mnt/projects/ww/mcp/memory_gateway.py`
+**File:** `/mnt/projects/t4d/t4dm/mcp/memory_gateway.py`
 **Lines:** 486-496
 **Severity:** MEDIUM
 **Category:** Performance
@@ -666,7 +666,7 @@ results = await episodic.recall(query=query, limit=limit, offset=offset)
 ---
 
 ### MEDIUM-12: Missing Timeout on Batch Operations
-**File:** `/mnt/projects/ww/src/ww/storage/qdrant_store.py`
+**File:** `/mnt/projects/t4d/t4dm/src/t4dm/storage/qdrant_store.py`
 **Lines:** 442-483
 **Severity:** MEDIUM
 **Category:** Reliability
@@ -712,7 +712,7 @@ Establish logging guidelines:
 ---
 
 ### MEDIUM-14: Weak Password Default
-**File:** `/mnt/projects/ww/src/ww/core/config.py`
+**File:** `/mnt/projects/t4d/t4dm/src/t4dm/core/config.py`
 **Lines:** 135-138
 **Severity:** MEDIUM
 **Category:** Security
@@ -746,7 +746,7 @@ def validate_password(cls, v: Optional[str]) -> str:
 ## Low Issues
 
 ### LOW-1: Unused Import
-**File:** `/mnt/projects/ww/mcp/memory_gateway.py`
+**File:** `/mnt/projects/t4d/t4dm/mcp/memory_gateway.py`
 **Lines:** 11
 **Severity:** LOW
 **Category:** Code Cleanliness
@@ -761,7 +761,7 @@ import warnings  # Line 11, but warnings module imported
 ---
 
 ### LOW-2: Redundant Type Conversion
-**File:** `/mnt/projects/ww/memory/episodic.py`
+**File:** `/mnt/projects/t4d/t4dm/memory/episodic.py`
 **Lines:** 254
 **Severity:** LOW
 **Category:** Code Efficiency
@@ -775,7 +775,7 @@ ids=[str(episode_id)],  # episode_id is already str from caller
 ---
 
 ### LOW-3: Inconsistent Naming Convention
-**File:** `/mnt/projects/ww/storage/neo4j_store.py`
+**File:** `/mnt/projects/t4d/t4dm/storage/neo4j_store.py`
 **Lines:** 73-79
 **Severity:** LOW
 **Category:** Style
@@ -791,7 +791,7 @@ Mix of PascalCase (class) and snake_case (variables) is standard, but error mess
 ---
 
 ### LOW-4: Magic String for Collection Names
-**File:** `/mnt/projects/ww/src/ww/storage/qdrant_store.py`
+**File:** `/mnt/projects/t4d/t4dm/src/t4dm/storage/qdrant_store.py`
 **Lines:** 62-64
 **Severity:** LOW
 **Category:** Code Smell
@@ -808,7 +808,7 @@ These could be class-level constants for easier refactoring.
 ---
 
 ### LOW-5: Unclear Variable Name
-**File:** `/mnt/projects/ww/memory/semantic.py`
+**File:** `/mnt/projects/t4d/t4dm/memory/semantic.py`
 **Lines:** 302
 **Severity:** LOW
 **Category:** Readability
@@ -823,7 +823,7 @@ Should be `attention_weight` for clarity.
 ---
 
 ### LOW-6: Excessive Nesting
-**File:** `/mnt/projects/ww/storage/neo4j_store.py`
+**File:** `/mnt/projects/t4d/t4dm/storage/neo4j_store.py`
 **Lines:** 814-883
 **Severity:** LOW
 **Category:** Complexity
@@ -837,7 +837,7 @@ Extract transaction logic to helper method.
 ---
 
 ### LOW-7: Incomplete Docstring
-**File:** `/mnt/projects/ww/memory/procedural.py`
+**File:** `/mnt/projects/t4d/t4dm/memory/procedural.py`
 **Lines:** 78-152
 **Severity:** LOW
 **Category:** Documentation
@@ -875,7 +875,7 @@ Convert TODOs to GitHub issues for tracking.
 ---
 
 ### LOW-9: Inconsistent Return Types
-**File:** `/mnt/projects/ww/memory/procedural.py`
+**File:** `/mnt/projects/t4d/t4dm/memory/procedural.py`
 **Lines:** 99
 **Severity:** LOW
 **Category:** Type Safety
@@ -892,7 +892,7 @@ Returns `None` for invalid input instead of raising exception. Inconsistent with
 ---
 
 ### LOW-10: Hardcoded Retry Logic Missing
-**File:** `/mnt/projects/ww/storage/neo4j_store.py`, `/mnt/projects/ww/storage/qdrant_store.py`
+**File:** `/mnt/projects/t4d/t4dm/storage/neo4j_store.py`, `/mnt/projects/t4d/t4dm/storage/qdrant_store.py`
 **Lines:** N/A
 **Severity:** LOW
 **Category:** Reliability
@@ -915,7 +915,7 @@ async def _execute_with_retry(self, operation):
 ---
 
 ### LOW-11: Missing Enum for Error Codes
-**File:** `/mnt/projects/ww/mcp/memory_gateway.py`
+**File:** `/mnt/projects/t4d/t4dm/mcp/memory_gateway.py`
 **Lines:** 446, 524, 582
 **Severity:** LOW
 **Category:** Type Safety
@@ -1115,7 +1115,7 @@ async def health_check() -> dict:
 - Singleton pattern for storage connections
 - Hebbian learning for relationship strengthening
 - HDBSCAN clustering (better than K-means for unknown cluster count)
-- Validation decorators (ww/mcp/validation.py)
+- Validation decorators (t4dm/mcp/validation.py)
 - Structured error responses
 
 ---

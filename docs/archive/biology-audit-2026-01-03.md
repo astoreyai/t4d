@@ -31,7 +31,7 @@ World Weaver demonstrates **strong biological plausibility** across neurotransmi
 
 ### 1.1 PDE Dynamics (Score: 92/100, +4 from 88)
 
-**Implementation** (`/mnt/projects/ww/src/ww/nca/neural_field.py`)
+**Implementation** (`/mnt/projects/t4d/t4dm/src/t4dm/nca/neural_field.py`)
 
 The neural field equation is correctly implemented:
 ```
@@ -73,7 +73,7 @@ The neural field equation is correctly implemented:
 
 ### 1.2 Coupling Matrix (Score: 88/100)
 
-**Implementation** (`/mnt/projects/ww/src/ww/nca/coupling.py`)
+**Implementation** (`/mnt/projects/t4d/t4dm/src/t4dm/nca/coupling.py`)
 
 Learnable coupling matrix K enables cross-NT interactions:
 - ✅ 6×6 matrix with learnable weights
@@ -95,7 +95,7 @@ Learnable coupling matrix K enables cross-NT interactions:
 
 ### 2.1 STDP Implementation (Score: 85/100, +10 from 75)
 
-**CRITICAL CLARIFICATION**: The STDP tau values in `/mnt/projects/ww/src/ww/learning/stdp.py` are **20.0 seconds**, not milliseconds. This is **intentional** for memory-level operations.
+**CRITICAL CLARIFICATION**: The STDP tau values in `/mnt/projects/t4d/t4dm/src/t4dm/learning/stdp.py` are **20.0 seconds**, not milliseconds. This is **intentional** for memory-level operations.
 
 **Code Implementation:**
 ```python
@@ -133,7 +133,7 @@ tau_minus: float = 20.0   # LTD time window (SECONDS)
 
 ### 2.2 Dopamine RPE (Score: 90/100)
 
-**Implementation** (`/mnt/projects/ww/src/ww/learning/dopamine.py`)
+**Implementation** (`/mnt/projects/t4d/t4dm/src/t4dm/learning/dopamine.py`)
 
 **TD Error Computation** (Line 629):
 ```python
@@ -161,7 +161,7 @@ This matches the canonical Schultz (1997) formulation:
 
 ### 2.3 Three-Factor Learning (Score: 82/100)
 
-**Implementation** (`/mnt/projects/ww/learning/three_factor.py`)
+**Implementation** (`/mnt/projects/t4d/t4dm/learning/three_factor.py`)
 
 Hebbian-modulated eligibility traces:
 ```
@@ -182,7 +182,7 @@ Hebbian-modulated eligibility traces:
 
 ### 3.1 NREM/REM Phases (Score: 90/100, +10 from 80) ✅ PHASE 2 COMPLETE
 
-**Implementation** (`/mnt/projects/ww/consolidation/service.py`, `ww.nca`)
+**Implementation** (`/mnt/projects/t4d/t4dm/consolidation/service.py`, `ww.nca`)
 
 **Current Features (Phase 1+2):**
 - ✅ HDBSCAN clustering (biologically plausible pattern separation)
@@ -213,7 +213,7 @@ Hebbian-modulated eligibility traces:
 
 ### 3.2 Synaptic Homeostasis (Score: 75/100)
 
-**Implementation** (`/mnt/projects/ww/learning/stdp.py`, lines 343-363)
+**Implementation** (`/mnt/projects/t4d/t4dm/learning/stdp.py`, lines 343-363)
 
 **Current:**
 ```python
@@ -235,7 +235,7 @@ def apply_weight_decay(self, baseline: float = 0.5) -> dict:
 
 ### 4.1 Place Cells (Score: 88/100)
 
-**Implementation** (`/mnt/projects/ww/src/ww/nca/spatial_cells.py`, lines 52-62)
+**Implementation** (`/mnt/projects/t4d/t4dm/src/t4dm/nca/spatial_cells.py`, lines 52-62)
 
 **Gaussian Receptive Fields:**
 ```python
@@ -258,7 +258,7 @@ activation = exp(-(dist**2) / (2 * sigma**2))
 
 ### 4.2 Grid Cells (Score: 90/100)
 
-**Implementation** (`/mnt/projects/ww/src/ww/nca/spatial_cells.py`, lines 71-87)
+**Implementation** (`/mnt/projects/t4d/t4dm/src/t4dm/nca/spatial_cells.py`, lines 71-87)
 
 **Hexagonal Grid Pattern:**
 ```python
@@ -287,7 +287,7 @@ response = (cos(k*rx) + cos(k*(rx*0.5 + ry*√3/2)) + cos(k*(rx*0.5 - ry*√3/2)
 
 ### 5.1 Theta-Gamma Coupling (Score: 88/100)
 
-**Implementation** (`/mnt/projects/ww/nca/theta_gamma_integration.py`, `/mnt/projects/ww/src/ww/nca/oscillators.py`)
+**Implementation** (`/mnt/projects/t4d/t4dm/nca/theta_gamma_integration.py`, `/mnt/projects/t4d/t4dm/src/t4dm/nca/oscillators.py`)
 
 **Phase-Amplitude Coupling:**
 ```python
@@ -315,7 +315,7 @@ Recent studies confirm theta-gamma coupling in hippocampal CA1:
 
 ### 5.2 Alpha Oscillations (Score: 70/100)
 
-**Implementation** (`/mnt/projects/ww/src/ww/nca/oscillators.py`)
+**Implementation** (`/mnt/projects/t4d/t4dm/src/t4dm/nca/oscillators.py`)
 
 **Current:**
 - ✅ Alpha: 8-12 Hz implemented

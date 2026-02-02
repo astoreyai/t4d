@@ -1,6 +1,6 @@
 # Quality Assurance Review: "What Does It Mean for an AI to Remember?"
 
-**Paper**: /mnt/projects/ww/docs/papers/philosophy_of_ai_memory.tex
+**Paper**: /mnt/projects/t4d/t4dm/docs/papers/philosophy_of_ai_memory.tex
 **Review Date**: 2024-12-04
 **Target Journal**: Minds & Machines
 **Reviewer**: Research Quality Assurance Agent

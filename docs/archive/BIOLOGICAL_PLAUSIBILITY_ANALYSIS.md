@@ -34,7 +34,7 @@ World Weaver implements a biologically-inspired memory architecture with hippoca
 
 ### 1.1 Dentate Gyrus (DG) Pattern Separation
 
-**File**: `/mnt/projects/ww/src/ww/memory/pattern_separation.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/pattern_separation.py`
 
 #### CORRECT IMPLEMENTATIONS
 
@@ -100,8 +100,8 @@ orthogonalized = np.where(np.abs(orthogonalized) > threshold, orthogonalized, 0)
 
 ### 1.2 CA3 Pattern Completion
 
-**File**: `/mnt/projects/ww/src/ww/memory/pattern_separation.py` (Lines 402-541)
-**File**: `/mnt/projects/ww/src/ww/memory/cluster_index.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/pattern_separation.py` (Lines 402-541)
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/cluster_index.py`
 
 #### CORRECT IMPLEMENTATIONS
 
@@ -203,7 +203,7 @@ class CA1Layer:
 
 ### 2.1 Dopamine (DA) - Reward Prediction Error
 
-**File**: `/mnt/projects/ww/src/ww/learning/dopamine.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/learning/dopamine.py`
 
 #### CORRECT IMPLEMENTATIONS
 
@@ -264,7 +264,7 @@ class DopamineSystem:
 
 ### 2.2 Norepinephrine (NE) - Arousal and Gain
 
-**File**: `/mnt/projects/ww/src/ww/learning/norepinephrine.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/learning/norepinephrine.py`
 
 #### CORRECT IMPLEMENTATIONS
 
@@ -330,7 +330,7 @@ def update(self, query_embedding, time_since_last_update_ms: float = 1000):
 
 ### 2.3 Serotonin (5-HT) - Temporal Discounting
 
-**File**: `/mnt/projects/ww/src/ww/learning/serotonin.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/learning/serotonin.py`
 
 #### CORRECT IMPLEMENTATIONS
 
@@ -386,7 +386,7 @@ def weight_reward(self, reward: float, delay_steps: int) -> float:
 
 ### 2.4 Acetylcholine (ACh) - Encoding/Retrieval Mode
 
-**File**: `/mnt/projects/ww/src/ww/learning/acetylcholine.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/learning/acetylcholine.py`
 
 #### CORRECT IMPLEMENTATIONS
 
@@ -472,7 +472,7 @@ def set_sleep_phase(self, phase: SleepPhase):
 
 ## 3. Synaptic Plasticity
 
-**File**: `/mnt/projects/ww/src/ww/learning/plasticity.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/learning/plasticity.py`
 
 ### 3.1 Long-Term Potentiation (LTP)
 
@@ -507,7 +507,7 @@ class STDPRule:
 
 ### 3.2 Long-Term Depression (LTD)
 
-**File**: `/mnt/projects/ww/src/ww/learning/plasticity.py` (Lines 95-197)
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/learning/plasticity.py` (Lines 95-197)
 
 #### CORRECT IMPLEMENTATIONS
 
@@ -552,7 +552,7 @@ class BCMThreshold:
 
 ### 3.3 Homeostatic Plasticity
 
-**File**: `/mnt/projects/ww/src/ww/learning/plasticity.py` (Lines 199-341)
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/learning/plasticity.py` (Lines 199-341)
 
 #### CORRECT IMPLEMENTATIONS
 
@@ -596,7 +596,7 @@ def scale_node(self, entity_id: str, recent_activation_rate: float):
 
 ### 3.4 Metaplasticity
 
-**File**: `/mnt/projects/ww/src/ww/learning/plasticity.py` (Lines 343-458)
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/learning/plasticity.py` (Lines 343-458)
 
 #### CORRECT IMPLEMENTATIONS
 
@@ -636,7 +636,7 @@ new_ema = (1 - self.adaptation_rate) * current_ema + self.adaptation_rate * acti
 
 ### 3.5 Synaptic Tagging
 
-**File**: `/mnt/projects/ww/src/ww/learning/plasticity.py` (Lines 460-613)
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/learning/plasticity.py` (Lines 460-613)
 
 #### CORRECT IMPLEMENTATIONS
 
@@ -695,7 +695,7 @@ def tag_neighboring_synapses(self, source_id: str, neighbors: list[str]):
 
 ## 4. Inhibitory Circuits
 
-**File**: `/mnt/projects/ww/src/ww/learning/inhibition.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/learning/inhibition.py`
 
 ### 4.1 Lateral Inhibition
 
@@ -764,7 +764,7 @@ class InterneuronNetwork:
 
 ### 4.2 Sparse Retrieval
 
-**File**: `/mnt/projects/ww/src/ww/learning/inhibition.py` (Lines 357-446)
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/learning/inhibition.py` (Lines 357-446)
 
 #### CORRECT IMPLEMENTATIONS
 
@@ -786,7 +786,7 @@ class SparseRetrieval:
 
 ## 5. Sleep Consolidation
 
-**File**: `/mnt/projects/ww/src/ww/consolidation/sleep.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/consolidation/sleep.py`
 
 ### 5.1 NREM (Slow-Wave Sleep)
 

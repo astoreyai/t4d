@@ -1,5 +1,5 @@
 # MCP
-**Path**: `/mnt/projects/t4d/t4dm/src/ww/mcp/`
+**Path**: `/mnt/projects/t4d/t4dm/src/t4dm/mcp/`
 
 ## What
 Model Context Protocol (MCP) server exposing WW memory as tools for Claude Code and Claude Desktop. Provides store, recall, learn, consolidate, context, and entity operations.

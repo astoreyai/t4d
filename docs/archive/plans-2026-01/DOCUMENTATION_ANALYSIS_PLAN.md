@@ -64,8 +64,8 @@ The output will be updated documentation, new diagrams, and a unified knowledge 
 #### Task H1: Forward-Forward Analysis
 ```yaml
 files:
-  - src/ww/nca/forward_forward.py
-  - src/ww/nca/forward_forward_nca_coupling.py
+  - src/t4dm/nca/forward_forward.py
+  - src/t4dm/nca/forward_forward_nca_coupling.py
 output:
   - docs/concepts/forward-forward.md (update)
   - Goodness function diagram
@@ -79,9 +79,9 @@ questions:
 #### Task H2: Capsule Network Analysis
 ```yaml
 files:
-  - src/ww/nca/capsules.py
-  - src/ww/nca/pose.py
-  - src/ww/nca/capsule_nca_coupling.py
+  - src/t4dm/nca/capsules.py
+  - src/t4dm/nca/pose.py
+  - src/t4dm/nca/capsule_nca_coupling.py
 output:
   - docs/concepts/capsules.md (update)
   - Routing by agreement diagram
@@ -95,9 +95,9 @@ questions:
 #### Task H3: Energy Landscape & Attractors
 ```yaml
 files:
-  - src/ww/nca/energy.py
-  - src/ww/nca/attractors.py
-  - src/ww/nca/neural_field.py
+  - src/t4dm/nca/energy.py
+  - src/t4dm/nca/attractors.py
+  - src/t4dm/nca/neural_field.py
 output:
   - docs/concepts/nca.md (update energy section)
   - Attractor basin visualization
@@ -111,9 +111,9 @@ questions:
 #### Task H4: Credit Assignment & Eligibility
 ```yaml
 files:
-  - src/ww/learning/eligibility.py
-  - src/ww/learning/credit_flow.py
-  - src/ww/learning/causal_discovery.py
+  - src/t4dm/learning/eligibility.py
+  - src/t4dm/learning/credit_flow.py
+  - src/t4dm/learning/causal_discovery.py
 output:
   - docs/science/learning-theory.md (update)
   - Credit flow diagram
@@ -127,10 +127,10 @@ questions:
 #### Task H5: Memory Architecture Review
 ```yaml
 files:
-  - src/ww/memory/episodic.py
-  - src/ww/memory/fast_episodic.py
-  - src/ww/memory/buffer_manager.py
-  - src/ww/memory/unified.py
+  - src/t4dm/memory/episodic.py
+  - src/t4dm/memory/fast_episodic.py
+  - src/t4dm/memory/buffer_manager.py
+  - src/t4dm/memory/unified.py
 output:
   - docs/concepts/memory-types.md (update)
   - Memory flow diagram
@@ -144,9 +144,9 @@ questions:
 #### Task H6: Retrieval & Indexing
 ```yaml
 files:
-  - src/ww/memory/cluster_index.py
-  - src/ww/memory/learned_sparse_index.py
-  - src/ww/memory/pattern_separation.py
+  - src/t4dm/memory/cluster_index.py
+  - src/t4dm/memory/learned_sparse_index.py
+  - src/t4dm/memory/pattern_separation.py
 output:
   - docs/reference/retrieval.md (new)
   - Hierarchical retrieval diagram
@@ -164,9 +164,9 @@ questions:
 #### Task B1: VTA Dopamine Circuit
 ```yaml
 files:
-  - src/ww/nca/vta.py
-  - src/ww/learning/dopamine.py
-  - src/ww/nca/dopamine_integration.py
+  - src/t4dm/nca/vta.py
+  - src/t4dm/learning/dopamine.py
+  - src/t4dm/nca/dopamine_integration.py
 output:
   - docs/science/biology-audit.md (update VTA section)
   - VTA circuit diagram (update)
@@ -180,8 +180,8 @@ validation:
 #### Task B2: Raphe Serotonin System
 ```yaml
 files:
-  - src/ww/nca/raphe.py
-  - src/ww/learning/serotonin.py
+  - src/t4dm/nca/raphe.py
+  - src/t4dm/learning/serotonin.py
 output:
   - docs/science/biology-audit.md (update Raphe section)
   - Patience model diagram
@@ -195,8 +195,8 @@ validation:
 #### Task B3: Locus Coeruleus NE System
 ```yaml
 files:
-  - src/ww/nca/locus_coeruleus.py
-  - src/ww/learning/norepinephrine.py
+  - src/t4dm/nca/locus_coeruleus.py
+  - src/t4dm/learning/norepinephrine.py
 output:
   - docs/science/biology-audit.md (update LC section)
   - Surprise model diagram
@@ -210,9 +210,9 @@ validation:
 #### Task B4: Hippocampal System
 ```yaml
 files:
-  - src/ww/nca/hippocampus.py
-  - src/ww/nca/spatial_cells.py
-  - src/ww/memory/pattern_separation.py
+  - src/t4dm/nca/hippocampus.py
+  - src/t4dm/nca/spatial_cells.py
+  - src/t4dm/memory/pattern_separation.py
 output:
   - docs/science/biology-audit.md (update Hippocampus section)
   - DG/CA3/CA1 circuit diagram
@@ -226,8 +226,8 @@ validation:
 #### Task B5: Striatal GO/NO-GO
 ```yaml
 files:
-  - src/ww/nca/striatal_msn.py
-  - src/ww/nca/striatal_coupling.py
+  - src/t4dm/nca/striatal_msn.py
+  - src/t4dm/nca/striatal_coupling.py
 output:
   - docs/science/biology-audit.md (update Striatal section)
   - D1/D2 pathway diagram
@@ -241,9 +241,9 @@ validation:
 #### Task B6: Neural Oscillations
 ```yaml
 files:
-  - src/ww/nca/oscillators.py
-  - src/ww/nca/sleep_spindles.py
-  - src/ww/nca/theta_gamma_integration.py
+  - src/t4dm/nca/oscillators.py
+  - src/t4dm/nca/sleep_spindles.py
+  - src/t4dm/nca/theta_gamma_integration.py
 output:
   - docs/science/biology-audit.md (update Oscillations section)
   - Frequency band diagram
@@ -258,10 +258,10 @@ validation:
 #### Task B7: Sleep/Wake System
 ```yaml
 files:
-  - src/ww/nca/adenosine.py
-  - src/ww/nca/glymphatic.py
-  - src/ww/nca/swr_coupling.py
-  - src/ww/nca/glymphatic_consolidation_bridge.py
+  - src/t4dm/nca/adenosine.py
+  - src/t4dm/nca/glymphatic.py
+  - src/t4dm/nca/swr_coupling.py
+  - src/t4dm/nca/glymphatic_consolidation_bridge.py
 output:
   - docs/science/biology-audit.md (update Sleep section)
   - Two-process model diagram
@@ -275,8 +275,8 @@ validation:
 #### Task B8: Glial Systems
 ```yaml
 files:
-  - src/ww/nca/astrocyte.py
-  - src/ww/nca/glutamate_signaling.py
+  - src/t4dm/nca/astrocyte.py
+  - src/t4dm/nca/glutamate_signaling.py
 output:
   - docs/science/biology-audit.md (update Glia section)
   - Tripartite synapse diagram
@@ -440,7 +440,7 @@ For each module, provide:
 ### NCA Module Files (30)
 
 ```
-src/ww/nca/
+src/t4dm/nca/
 ├── __init__.py
 ├── adenosine.py              # Sleep pressure (compbio)
 ├── astrocyte.py              # Tripartite synapse (compbio)
@@ -476,7 +476,7 @@ src/ww/nca/
 ### Learning Module Files (24)
 
 ```
-src/ww/learning/
+src/t4dm/learning/
 ├── __init__.py
 ├── acetylcholine.py          # ACh modulation (compbio)
 ├── causal_discovery.py       # Causal inference (hinton)
@@ -506,7 +506,7 @@ src/ww/learning/
 ### Memory Module Files (13)
 
 ```
-src/ww/memory/
+src/t4dm/memory/
 ├── __init__.py
 ├── buffer_manager.py         # CA1-like buffer (hinton)
 ├── cluster_index.py          # Hierarchical index (hinton)

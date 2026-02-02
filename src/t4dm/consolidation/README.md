@@ -1,6 +1,6 @@
 # Consolidation Module
 
-**Path**: `ww/consolidation/` | **Files**: 6 | **Lines**: ~4,500
+**Path**: `t4dm/consolidation/` | **Files**: 6 | **Lines**: ~4,500
 
 Biologically-inspired memory consolidation with sleep phases (NREM/REM/PRUNE), STDP integration, and parallel execution.
 

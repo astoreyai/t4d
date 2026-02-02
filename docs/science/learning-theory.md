@@ -203,7 +203,7 @@ graph TB
     POST -->|Δt < 0| LTD --> DOWN
 ```
 
-**Implementation** (`src/ww/learning/stdp.py`):
+**Implementation** (`src/t4dm/learning/stdp.py`):
 
 ```python
 if delta_t > 0:  # Pre before post
@@ -324,7 +324,7 @@ adapted = adapter.forward(embeddings)
 
 #### 2. Forward-Forward Algorithm ✅ IMPLEMENTED (Phase 3)
 
-**Status**: Now implemented via `ForwardForwardLayer` and `ForwardForwardNetwork` in `src/ww/nca/forward_forward.py`.
+**Status**: Now implemented via `ForwardForwardLayer` and `ForwardForwardNetwork` in `src/t4dm/nca/forward_forward.py`.
 
 **Implementation**:
 - Goodness function G(h) = Σ h_i²
@@ -358,7 +358,7 @@ is_positive, confidence = network.infer(test_input)
 
 #### 3. Contrastive Learning ✅ IMPLEMENTED (Phase 1)
 
-**Status**: Now implemented via `ContrastiveAdapter` in `src/ww/embedding/contrastive_trainer.py`.
+**Status**: Now implemented via `ContrastiveAdapter` in `src/t4dm/embedding/contrastive_trainer.py`.
 
 **Implementation**:
 - InfoNCE loss with temperature scaling

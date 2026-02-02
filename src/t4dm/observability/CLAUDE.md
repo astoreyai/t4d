@@ -1,5 +1,5 @@
 # Observability
-**Path**: `/mnt/projects/t4d/t4dm/src/ww/observability/`
+**Path**: `/mnt/projects/t4d/t4dm/src/t4dm/observability/`
 
 ## What
 Structured logging, metrics collection, health checks, distributed tracing, and Prometheus integration for the T4DM memory system.

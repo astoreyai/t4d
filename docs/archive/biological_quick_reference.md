@@ -207,21 +207,21 @@ assert ca1.projects_to(vta)  # Novelty signal
 
 | Module | File Path |
 |--------|-----------|
-| VTA | `/mnt/projects/ww/src/ww/nca/vta.py` |
-| Raphe | `/mnt/projects/ww/src/ww/nca/raphe.py` |
-| LC | `/mnt/projects/ww/src/ww/nca/locus_coeruleus.py` |
-| ACh | `/mnt/projects/ww/learning/acetylcholine.py` |
-| Hippocampus | `/mnt/projects/ww/src/ww/nca/hippocampus.py` |
-| Spatial Cells | `/mnt/projects/ww/src/ww/nca/spatial_cells.py` |
-| Pattern Separation | `/mnt/projects/ww/src/ww/memory/pattern_separation.py` |
-| Oscillators | `/mnt/projects/ww/src/ww/nca/oscillators.py` |
-| SWR Coupling | `/mnt/projects/ww/src/ww/nca/swr_coupling.py` |
-| Sleep Spindles | `/mnt/projects/ww/src/ww/nca/sleep_spindles.py` |
-| Adenosine | `/mnt/projects/ww/src/ww/nca/adenosine.py` |
-| Glymphatic | `/mnt/projects/ww/src/ww/nca/glymphatic.py` |
-| Astrocyte | `/mnt/projects/ww/src/ww/nca/astrocyte.py` |
-| Glutamate | `/mnt/projects/ww/src/ww/nca/glutamate_signaling.py` |
-| Striatal MSN | `/mnt/projects/ww/src/ww/nca/striatal_msn.py` |
+| VTA | `/mnt/projects/t4d/t4dm/src/t4dm/nca/vta.py` |
+| Raphe | `/mnt/projects/t4d/t4dm/src/t4dm/nca/raphe.py` |
+| LC | `/mnt/projects/t4d/t4dm/src/t4dm/nca/locus_coeruleus.py` |
+| ACh | `/mnt/projects/t4d/t4dm/learning/acetylcholine.py` |
+| Hippocampus | `/mnt/projects/t4d/t4dm/src/t4dm/nca/hippocampus.py` |
+| Spatial Cells | `/mnt/projects/t4d/t4dm/src/t4dm/nca/spatial_cells.py` |
+| Pattern Separation | `/mnt/projects/t4d/t4dm/src/t4dm/memory/pattern_separation.py` |
+| Oscillators | `/mnt/projects/t4d/t4dm/src/t4dm/nca/oscillators.py` |
+| SWR Coupling | `/mnt/projects/t4d/t4dm/src/t4dm/nca/swr_coupling.py` |
+| Sleep Spindles | `/mnt/projects/t4d/t4dm/src/t4dm/nca/sleep_spindles.py` |
+| Adenosine | `/mnt/projects/t4d/t4dm/src/t4dm/nca/adenosine.py` |
+| Glymphatic | `/mnt/projects/t4d/t4dm/src/t4dm/nca/glymphatic.py` |
+| Astrocyte | `/mnt/projects/t4d/t4dm/src/t4dm/nca/astrocyte.py` |
+| Glutamate | `/mnt/projects/t4d/t4dm/src/t4dm/nca/glutamate_signaling.py` |
+| Striatal MSN | `/mnt/projects/t4d/t4dm/src/t4dm/nca/striatal_msn.py` |
 
 ---
 

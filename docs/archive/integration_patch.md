@@ -3,7 +3,7 @@
 
 ### Task 1: Integrate DendriticNeuron into Episodic Recall
 
-**File**: `/mnt/projects/ww/src/ww/memory/episodic.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic.py`
 
 **Change 1a: Add import (after line 14)**
 ```python
@@ -110,7 +110,7 @@ Replace with:
 
 ### Task 2: Connect Procedural to Dopamine
 
-**File**: `/mnt/projects/ww/src/ww/memory/procedural.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/procedural.py`
 
 **Change 2a: Add import (after line 22)**
 ```python
@@ -198,7 +198,7 @@ Add after the `if not procedure:` check:
 
 ### Task 3: Add SparseEncoder to Hybrid Search
 
-**File**: `/mnt/projects/ww/src/ww/memory/episodic.py`
+**File**: `/mnt/projects/t4d/t4dm/src/t4dm/memory/episodic.py`
 
 **Change 3a: Add import (after line 27)**
 ```python

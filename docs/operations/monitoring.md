@@ -172,7 +172,7 @@ scrape_configs:
           - localhost
         labels:
           job: world-weaver
-          __path__: /var/log/ww/*.log
+          __path__: /var/log/t4dm/*.log
 ```
 
 ## Alerting
@@ -273,7 +273,7 @@ readinessProbe:
 
 ```bash
 # Download dashboard JSON
-curl -O https://raw.githubusercontent.com/astoreyai/ww/master/dashboards/ww-overview.json
+curl -O https://raw.githubusercontent.com/astoreyai/t4d/master/dashboards/ww-overview.json
 
 # Import via API
 curl -X POST http://grafana:3000/api/dashboards/db \

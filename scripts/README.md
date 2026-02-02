@@ -89,7 +89,7 @@ Creates authenticated backups of Neo4j and Qdrant data.
 ./backup.sh /opt/backups/ww
 
 # Set up daily backups (cron)
-0 2 * * * /mnt/projects/ww/scripts/backup.sh >> /var/log/ww/backup.log 2>&1
+0 2 * * * /mnt/projects/t4d/t4dm/scripts/backup.sh >> /var/log/t4dm/backup.log 2>&1
 ```
 
 ### restore.sh
@@ -110,7 +110,7 @@ Restores from a specific backup.
 **Example**:
 ```bash
 # List available backups
-ls -lh /var/backups/ww/
+ls -lh /var/backups/t4dm/
 
 # Restore from specific date
 ./restore.sh 20251127_143022
@@ -143,7 +143,7 @@ Checks health of all services with authentication.
 ./health_check.sh
 
 # Set up monitoring (cron)
-*/5 * * * * /mnt/projects/ww/scripts/health_check.sh >> /var/log/ww/health.log 2>&1
+*/5 * * * * /mnt/projects/t4d/t4dm/scripts/health_check.sh >> /var/log/t4dm/health.log 2>&1
 
 # Use in Docker healthchecks
 HEALTHCHECK CMD /scripts/health_check.sh || exit 1
@@ -237,14 +237,14 @@ chmod +x scripts/*.sh
 
 ```bash
 # Add to crontab (crontab -e)
-0 2 * * * /mnt/projects/ww/scripts/backup.sh /var/backups/ww >> /var/log/ww/backup.log 2>&1
+0 2 * * * /mnt/projects/t4d/t4dm/scripts/backup.sh /var/backups/ww >> /var/log/t4dm/backup.log 2>&1
 ```
 
 ### 4. Set Up Health Monitoring
 
 ```bash
 # Add to crontab (crontab -e)
-*/5 * * * * /mnt/projects/ww/scripts/health_check.sh >> /var/log/ww/health.log 2>&1
+*/5 * * * * /mnt/projects/t4d/t4dm/scripts/health_check.sh >> /var/log/t4dm/health.log 2>&1
 ```
 
 ### 5. Test Restore Procedure
@@ -338,7 +338,7 @@ export NEO4J_PASSWORD=your-secure-password
 
 ```bash
 # Use health_check.sh as Nagios plugin
-command[check_ww]=/mnt/projects/ww/scripts/health_check.sh
+command[check_ww]=/mnt/projects/t4d/t4dm/scripts/health_check.sh
 ```
 
 ### Slack/Email Alerts

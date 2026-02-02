@@ -79,4 +79,4 @@ When updating after execution:
 3. If failure: analyze and potentially revise
 4. Check for deprecation threshold
 
-Refer to `/mnt/projects/ww/skills/memory/ww-procedural/SKILL.md` for complete specification.
+Refer to `/mnt/projects/t4d/t4dm/skills/memory/ww-procedural/SKILL.md` for complete specification.

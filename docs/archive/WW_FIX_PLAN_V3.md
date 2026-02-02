@@ -51,7 +51,7 @@ Integration hardening complete:
 **Goal**: Eliminate data corruption risks and enable production debugging.
 
 ### TASK-P7-001: Integrate Saga into Memory Services
-**Files**: `src/ww/memory/episodic.py`, `semantic.py`, `procedural.py`
+**Files**: `src/t4dm/memory/episodic.py`, `semantic.py`, `procedural.py`
 **Severity**: CRITICAL
 **Description**: Wrap all create/update/delete operations in saga transactions
 
@@ -80,7 +80,7 @@ async def create(self, content: str, ...) -> Episode:
 **Validation**: Test partial failure recovery
 
 ### TASK-P7-002: Add OpenTelemetry Tracing
-**Files**: `src/ww/observability/tracing.py` (NEW), all memory services
+**Files**: `src/t4dm/observability/tracing.py` (NEW), all memory services
 **Severity**: HIGH
 **Description**: Propagate request context through entire call stack
 
@@ -111,12 +111,12 @@ def traced(name: str):
 **Validation**: Traces visible in Jaeger/Zipkin
 
 ### TASK-P7-003: Refactor Gateway into Modules
-**Files**: `src/ww/mcp/memory_gateway.py` → split into modules
+**Files**: `src/t4dm/mcp/memory_gateway.py` → split into modules
 **Severity**: HIGH
 **Description**: Split 1,582-line file into focused modules
 
 ```
-src/ww/mcp/
+src/t4dm/mcp/
 ├── __init__.py
 ├── gateway.py           # Main MCP app, shared decorators (200 lines)
 ├── tools/
@@ -162,7 +162,7 @@ curl -X POST "http://localhost:6333/collections/episodes/snapshots"
 **Goal**: Complete cognitive algorithm implementations.
 
 ### TASK-P8-001: Implement Hebbian Decay
-**File**: `src/ww/memory/semantic.py`
+**File**: `src/t4dm/memory/semantic.py`
 **Description**: Add decay for unused relationships (currently only strengthening)
 
 ```python
@@ -179,7 +179,7 @@ async def _apply_hebbian_decay(self, decay_rate: float = 0.01):
 ```
 
 ### TASK-P8-002: Expose Algorithm Parameters to Config
-**File**: `src/ww/core/config.py`
+**File**: `src/t4dm/core/config.py`
 **Description**: Move hardcoded algorithm parameters to Settings
 
 ```python
@@ -201,7 +201,7 @@ class Settings(BaseSettings):
 ```
 
 ### TASK-P8-003: Add LLM-based Trigger Matching
-**File**: `src/ww/memory/procedural.py`
+**File**: `src/t4dm/memory/procedural.py`
 **Description**: Replace TODO with semantic trigger matching
 
 ```python
@@ -227,7 +227,7 @@ async def _match_trigger_semantic(self, query: str, procedures: list[Procedure])
 **Goal**: Add missing features for production usability.
 
 ### TASK-P9-001: Batch MCP Operations
-**File**: `src/ww/mcp/tools/episodic.py`
+**File**: `src/t4dm/mcp/tools/episodic.py`
 **Description**: Add batch create/recall operations
 
 ```python
@@ -249,7 +249,7 @@ async def create_episodes_batch(
 ```
 
 ### TASK-P9-002: Cross-Memory Search
-**File**: `src/ww/mcp/tools/system.py`
+**File**: `src/t4dm/mcp/tools/system.py`
 **Description**: Search across all memory types in one query
 
 ```python
@@ -274,7 +274,7 @@ async def search_all_memories(
 ```
 
 ### TASK-P9-003: Auto Entity Extraction
-**File**: `src/ww/consolidation/service.py`
+**File**: `src/t4dm/consolidation/service.py`
 **Description**: Automatically extract entities from new episodes
 
 ```python

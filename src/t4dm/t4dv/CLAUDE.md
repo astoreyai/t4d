@@ -1,5 +1,5 @@
 # T4DV — Observation Bus & Visualization Engine
-**Path**: `/mnt/projects/t4d/t4dm/src/ww/t4dv/`
+**Path**: `/mnt/projects/t4d/t4dm/src/t4dm/t4dv/`
 
 ## What
 In-process observation bus with async ring buffers, event emitters for spiking/storage/consolidation/neuromod components, Python renderer adapters (matplotlib + plotly), a FastAPI WebSocket server, a React 2D dashboard, and a Three.js 3D memory space viewer.

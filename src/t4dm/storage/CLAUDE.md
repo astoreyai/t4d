@@ -1,5 +1,5 @@
 # Storage
-**Path**: `/mnt/projects/t4d/t4dm/src/ww/storage/`
+**Path**: `/mnt/projects/t4d/t4dm/src/t4dm/storage/`
 
 ## What
 Dual-store backend providing Neo4j (graph relationships) and Qdrant (vector similarity) with saga-pattern cross-store transactions and circuit breaker resilience.

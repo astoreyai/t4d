@@ -349,7 +349,7 @@ dbms.jvm.additional=-XX:+UseG1GC
 
 **Connection pooling** (already configured in World Weaver):
 ```python
-# src/ww/storage/neo4j_store.py
+# src/t4dm/storage/neo4j_store.py
 max_connection_pool_size=100
 connection_acquisition_timeout=60.0
 connection_timeout=30.0
@@ -378,7 +378,7 @@ storage:
 # In .env
 WW_LOG_LEVEL=INFO
 WW_LOG_FORMAT=json
-WW_LOG_FILE=/var/log/ww/memory_gateway.log
+WW_LOG_FILE=/var/log/t4dm/memory_gateway.log
 ```
 
 #### 2. Health Checks
@@ -403,7 +403,7 @@ echo "All services healthy"
 **Cron job**:
 ```bash
 # Run every 5 minutes
-*/5 * * * * /opt/ww/scripts/health_check.sh >> /var/log/ww/health.log 2>&1
+*/5 * * * * /opt/t4dm/scripts/health_check.sh >> /var/log/t4dm/health.log 2>&1
 ```
 
 #### 3. Metrics Export
@@ -432,7 +432,7 @@ scrape_configs:
 **Script**: `scripts/backup.sh`
 ```bash
 #!/bin/bash
-BACKUP_DIR="/var/backups/ww/$(date +%Y-%m-%d)"
+BACKUP_DIR="/var/backups/t4dm/$(date +%Y-%m-%d)"
 mkdir -p "$BACKUP_DIR"
 
 # Backup Neo4j
@@ -452,7 +452,7 @@ echo "Backup completed: $BACKUP_DIR"
 
 **Cron job** (daily at 2 AM):
 ```bash
-0 2 * * * /opt/ww/scripts/backup.sh >> /var/log/ww/backup.log 2>&1
+0 2 * * * /opt/t4dm/scripts/backup.sh >> /var/log/t4dm/backup.log 2>&1
 ```
 
 #### Recovery
@@ -720,11 +720,11 @@ docker-compose restart
 
 ## Support & Resources
 
-- **Documentation**: `/mnt/projects/ww/docs/`
+- **Documentation**: `/mnt/projects/t4d/t4dm/docs/`
 - **Issues**: https://github.com/astoreyai/world-weaver/issues
-- **API Reference**: `/mnt/projects/ww/docs/api.md`
-- **Architecture**: `/mnt/projects/ww/ARCHITECTURE.md`
-- **Memory System**: `/mnt/projects/ww/MEMORY_ARCHITECTURE.md`
+- **API Reference**: `/mnt/projects/t4d/t4dm/docs/api.md`
+- **Architecture**: `/mnt/projects/t4d/t4dm/ARCHITECTURE.md`
+- **Memory System**: `/mnt/projects/t4d/t4dm/MEMORY_ARCHITECTURE.md`
 
 ---
 

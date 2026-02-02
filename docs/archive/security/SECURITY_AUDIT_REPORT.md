@@ -31,7 +31,7 @@ None identified.
 
 ### H-1: CORS Wildcard in Default Configuration
 
-**File**: `src/ww/core/config.py:645-647`
+**File**: `src/t4dm/core/config.py:645-647`
 **Severity**: HIGH
 **Risk**: Cross-origin attacks if wildcard CORS is used in production
 
@@ -80,7 +80,7 @@ def validate_cors_origins(cls, v: list[str]) -> list[str]:
 
 ### H-2: Database Error Message Leakage
 
-**File**: `src/ww/api/routes/episodes.py:127-131` (and similar in all routes)
+**File**: `src/t4dm/api/routes/episodes.py:127-131` (and similar in all routes)
 **Severity**: HIGH
 **Risk**: Database schema, connection details, and internal paths exposed
 
@@ -134,16 +134,16 @@ raise HTTPException(
 ```
 
 **Affected Files**:
-- `src/ww/api/routes/episodes.py`: Lines 127-131, 169-173, 196-200, 254-257, 315-319, 365-369
-- `src/ww/api/routes/entities.py`: Lines 139-144, 181-185, 225-229, 279-283, 325-329, 388-392, 443-447
-- `src/ww/api/routes/skills.py`: Similar pattern throughout
-- `src/ww/api/routes/visualization.py`: Similar pattern throughout
+- `src/t4dm/api/routes/episodes.py`: Lines 127-131, 169-173, 196-200, 254-257, 315-319, 365-369
+- `src/t4dm/api/routes/entities.py`: Lines 139-144, 181-185, 225-229, 279-283, 325-329, 388-392, 443-447
+- `src/t4dm/api/routes/skills.py`: Similar pattern throughout
+- `src/t4dm/api/routes/visualization.py`: Similar pattern throughout
 
 ---
 
 ### H-3: Production TLS Not Enforced
 
-**File**: `docker-compose.yml:25-26`, `src/ww/core/config.py:549-551`
+**File**: `docker-compose.yml:25-26`, `src/t4dm/core/config.py:549-551`
 **Severity**: HIGH
 **Risk**: Credentials and memory data transmitted in plaintext
 
@@ -220,7 +220,7 @@ services:
 
 ### M-1: Weak Password Validation Insufficient for Strong Passwords
 
-**File**: `src/ww/core/config.py:32-80`
+**File**: `src/t4dm/core/config.py:32-80`
 **Severity**: MEDIUM
 **Risk**: Passwords that pass validation may still be weak
 
@@ -285,7 +285,7 @@ def validate_password_strength(password: str, field_name: str = "password") -> s
 
 ### M-2: Session ID Validation Not Applied to All API Routes
 
-**File**: `src/ww/api/deps.py:23-49`
+**File**: `src/t4dm/api/deps.py:23-49`
 **Severity**: MEDIUM
 **Risk**: Inconsistent session validation could allow bypass
 
@@ -335,7 +335,7 @@ def validate_api_session_id(session_id: Optional[str]) -> Optional[str]:
 
 ### M-3: Rate Limiter Uses In-Memory Storage (Not Distributed)
 
-**File**: `src/ww/mcp/gateway.py:36-114`
+**File**: `src/t4dm/mcp/gateway.py:36-114`
 **Severity**: MEDIUM
 **Risk**: Rate limiting ineffective in multi-worker deployments
 
@@ -396,7 +396,7 @@ WW_API_WORKERS=1
 
 ### M-4: No API Key Authentication for API Endpoints
 
-**File**: `src/ww/api/server.py`, `src/ww/api/deps.py`
+**File**: `src/t4dm/api/server.py`, `src/t4dm/api/deps.py`
 **Severity**: MEDIUM
 **Risk**: Unauthorized access if deployed on public network
 
@@ -505,7 +505,7 @@ Audit `docker-compose.full.yml` and ensure all database ports are localhost-boun
 
 ### M-6: No Content Security Policy (CSP) Headers
 
-**File**: `src/ww/api/server.py`
+**File**: `src/t4dm/api/server.py`
 **Severity**: MEDIUM
 **Risk**: XSS attacks if API serves HTML (e.g., error pages, docs)
 
@@ -544,7 +544,7 @@ app.add_middleware(TrustedHostMiddleware, allowed_hosts=["localhost", "127.0.0.1
 
 ### L-1: .env File Permissions Check Not Enforced
 
-**File**: `src/ww/core/config.py:99-117`
+**File**: `src/t4dm/core/config.py:99-117`
 **Severity**: LOW
 **Risk**: Secrets readable by other users if permissions too permissive
 
@@ -585,7 +585,7 @@ if mode & 0o077:
 
 ### L-2: No SQL Injection Protection in Direct Cypher Queries
 
-**File**: `src/ww/storage/neo4j_store.py:281-302`
+**File**: `src/t4dm/storage/neo4j_store.py:281-302`
 **Severity**: LOW (mitigated by validation)
 **Risk**: Cypher injection if label/type validation bypassed
 
@@ -625,7 +625,7 @@ def validate_label(label: str) -> str:
 
 ### L-3: XSS Sanitization Only Removes Patterns (Not HTML Entity Encoding)
 
-**File**: `src/ww/mcp/validation.py:265-299`
+**File**: `src/t4dm/mcp/validation.py:265-299`
 **Severity**: LOW
 **Risk**: XSS if content rendered in HTML without escaping
 
@@ -657,7 +657,7 @@ Returns:
 
 ### L-4: Embedding Cache Has No Size/Memory Limits
 
-**File**: `src/ww/embedding/service.py` (inferred from config)
+**File**: `src/t4dm/embedding/service.py` (inferred from config)
 **Severity**: LOW
 **Risk**: Memory exhaustion if cache grows unbounded
 
@@ -668,7 +668,7 @@ embedding_cache_size: int = Field(default=1000, ge=100, le=100000)
 embedding_cache_ttl: int = Field(default=3600, ge=60, le=86400)
 ```
 
-But without inspecting `src/ww/embedding/service.py`, cannot verify if LRU eviction is implemented.
+But without inspecting `src/t4dm/embedding/service.py`, cannot verify if LRU eviction is implemented.
 
 **Remediation**:
 Verify `EmbeddingService` implements cache with:
@@ -680,7 +680,7 @@ Verify `EmbeddingService` implements cache with:
 
 ### L-5: No Audit Logging for Sensitive Operations
 
-**File**: `src/ww/observability/logging.py`
+**File**: `src/t4dm/observability/logging.py`
 **Severity**: LOW
 **Risk**: Insufficient forensics after security incident
 
@@ -758,7 +758,7 @@ CMD ["python", "-m", "ww.api.server"]
 
 ### L-7: No Request Size Limits
 
-**File**: `src/ww/api/server.py`
+**File**: `src/t4dm/api/server.py`
 **Severity**: LOW
 **Risk**: DoS via large payloads
 
@@ -791,7 +791,7 @@ app.add_middleware(RequestSizeLimitMiddleware, max_body_size=5 * 1024 * 1024)  #
 
 ### L-8: No Timeout on External LLM Calls
 
-**File**: `src/ww/extraction/entity_extractor.py` (inferred from config)
+**File**: `src/t4dm/extraction/entity_extractor.py` (inferred from config)
 **Severity**: LOW
 **Risk**: Hang on slow/malicious LLM endpoint
 
@@ -812,7 +812,7 @@ client = AsyncOpenAI(timeout=settings.extraction_llm_timeout)
 
 ### I-1: Password Validation Test Mode Bypass
 
-**File**: `src/ww/core/config.py:664-668`
+**File**: `src/t4dm/core/config.py:664-668`
 **Severity**: INFO
 **Risk**: None (test mode only)
 
@@ -842,7 +842,7 @@ if test_mode:
 
 ### I-2: Hardcoded Rate Limits
 
-**File**: `src/ww/api/deps.py:20`, `src/ww/mcp/gateway.py:118`
+**File**: `src/t4dm/api/deps.py:20`, `src/t4dm/mcp/gateway.py:118`
 **Severity**: INFO
 
 **Observation**:
@@ -881,7 +881,7 @@ Restrict to needed procedures:
 
 ### I-4: Session ID Length Limit (128 chars) May Be Insufficient for JWTs
 
-**File**: `src/ww/mcp/validation.py:519`
+**File**: `src/t4dm/mcp/validation.py:519`
 **Severity**: INFO
 
 **Observation**:
@@ -895,7 +895,7 @@ if len(session_id) > 512:  # Allow JWTs
 
 ### I-5: No Prometheus /metrics Endpoint Security
 
-**File**: `src/ww/observability/prometheus.py`
+**File**: `src/t4dm/observability/prometheus.py`
 **Severity**: INFO
 
 **Observation**:

@@ -12,7 +12,7 @@ Implemented multi-tier Redis caching layer for World Weaver with graceful degrad
 
 ## Components Created
 
-### 1. Core Cache Module (`src/ww/core/cache.py`)
+### 1. Core Cache Module (`src/t4dm/core/cache.py`)
 
 **Multi-tier Redis Cache with Fallback**
 
@@ -39,7 +39,7 @@ Key Functions:
 - `close_cache()`: Close global cache instance
 - `reset_cache()`: Reset cache (for testing)
 
-### 2. Cache Configuration (`src/ww/core/cache_config.py`)
+### 2. Cache Configuration (`src/t4dm/core/cache_config.py`)
 
 **Environment-based Configuration**
 
@@ -62,7 +62,7 @@ Environment Variables:
 - `WW_CACHE_SEARCH_TTL`: Search cache TTL in seconds (default: 300)
 - `WW_CACHE_GRAPH_TTL`: Graph cache TTL in seconds (default: 600)
 
-### 3. Embedding Adapter Integration (`src/ww/embedding/adapter.py`)
+### 3. Embedding Adapter Integration (`src/t4dm/embedding/adapter.py`)
 
 **Modified BGEM3Adapter.embed_query()**
 
@@ -78,7 +78,7 @@ Cache Flow:
 3. On hit: Return cached embedding (0.5ms latency)
 4. On miss: Compute embedding, cache result, return
 
-### 4. Core Module Exports (`src/ww/core/__init__.py`)
+### 4. Core Module Exports (`src/t4dm/core/__init__.py`)
 
 Added exports:
 - `CacheStats`
@@ -281,13 +281,13 @@ cache.clear_stats()
 ## Integration Points
 
 ### Modified Files
-1. `src/ww/core/__init__.py` - Added cache exports
-2. `src/ww/embedding/adapter.py` - Integrated cache in BGEM3Adapter
+1. `src/t4dm/core/__init__.py` - Added cache exports
+2. `src/t4dm/embedding/adapter.py` - Integrated cache in BGEM3Adapter
 3. `pyproject.toml` - Added redis dependency
 
 ### New Files
-1. `src/ww/core/cache.py` - Cache implementation
-2. `src/ww/core/cache_config.py` - Configuration
+1. `src/t4dm/core/cache.py` - Cache implementation
+2. `src/t4dm/core/cache_config.py` - Configuration
 3. `tests/core/test_cache.py` - Comprehensive tests
 
 ### No Breaking Changes

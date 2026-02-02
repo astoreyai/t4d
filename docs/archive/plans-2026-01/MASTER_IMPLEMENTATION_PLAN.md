@@ -36,7 +36,7 @@ World Weaver is a biologically-inspired neural memory system implementing Hinton
 
 **Implementation**:
 ```python
-# File: src/ww/learning/temporal_difference.py (NEW)
+# File: src/t4dm/learning/temporal_difference.py (NEW)
 
 @dataclass
 class TDConfig:
@@ -85,9 +85,9 @@ class TemporalDifferenceEngine:
 ```
 
 **Integration Points**:
-- `src/ww/learning/dopamine.py`: Replace simple RPE with TD(λ)
-- `src/ww/learning/eligibility.py`: Add trace decay
-- `src/ww/learning/three_factor.py`: Use TD error as third factor
+- `src/t4dm/learning/dopamine.py`: Replace simple RPE with TD(λ)
+- `src/t4dm/learning/eligibility.py`: Add trace decay
+- `src/t4dm/learning/three_factor.py`: Use TD error as third factor
 
 **Tests Required**:
 - `tests/learning/test_td_lambda.py`: 20+ tests
@@ -104,7 +104,7 @@ class TemporalDifferenceEngine:
 
 **Implementation**:
 ```python
-# File: src/ww/consolidation/ff_sleep_integration.py (NEW)
+# File: src/t4dm/consolidation/ff_sleep_integration.py (NEW)
 
 class FFSleepIntegration:
     """Integrate Forward-Forward with sleep consolidation."""
@@ -150,9 +150,9 @@ class FFSleepIntegration:
 ```
 
 **Integration Points**:
-- `src/ww/consolidation/sleep.py`: Add FF phase to consolidation loop
-- `src/ww/nca/forward_forward.py`: Add batch training methods
-- `src/ww/nca/swr_coupling.py`: Coordinate with SWR events
+- `src/t4dm/consolidation/sleep.py`: Add FF phase to consolidation loop
+- `src/t4dm/nca/forward_forward.py`: Add batch training methods
+- `src/t4dm/nca/swr_coupling.py`: Coordinate with SWR events
 
 ---
 
@@ -163,7 +163,7 @@ class FFSleepIntegration:
 
 **Implementation**:
 ```python
-# File: src/ww/nca/em_routing.py (NEW)
+# File: src/t4dm/nca/em_routing.py (NEW)
 
 class EMRoutingLayer:
     """EM routing for capsule networks (Hinton 2018)."""
@@ -201,7 +201,7 @@ class EMRoutingLayer:
 
 **Implementation**:
 ```python
-# File: src/ww/nca/hippocampus.py (MODIFY)
+# File: src/t4dm/nca/hippocampus.py (MODIFY)
 
 class CA1Layer:
     """CA1 novelty detection via expectation mismatch."""
@@ -246,9 +246,9 @@ class CA1Layer:
 ```
 
 **Integration Points**:
-- `src/ww/nca/hippocampus.py`: Add CA1Layer to HippocampalCircuit
-- `src/ww/memory/episodic.py`: Use novelty for encoding decisions
-- `src/ww/learning/dopamine.py`: Connect to DA release
+- `src/t4dm/nca/hippocampus.py`: Add CA1Layer to HippocampalCircuit
+- `src/t4dm/memory/episodic.py`: Use novelty for encoding decisions
+- `src/t4dm/learning/dopamine.py`: Connect to DA release
 
 ---
 
@@ -259,7 +259,7 @@ class CA1Layer:
 
 **Implementation**:
 ```python
-# File: src/ww/learning/stdp.py (NEW - expand existing stub)
+# File: src/t4dm/learning/stdp.py (NEW - expand existing stub)
 
 @dataclass
 class STDPConfig:
@@ -313,7 +313,7 @@ class STDPRule:
 
 **Implementation**:
 ```python
-# File: src/ww/nca/grid_cells.py (NEW)
+# File: src/t4dm/nca/grid_cells.py (NEW)
 
 class GridCellModule:
     """Entorhinal cortex grid cell simulation."""
@@ -370,7 +370,7 @@ class GridCellModule:
 
 **Implementation**:
 ```python
-# File: src/ww/hooks/claude_code.py (NEW)
+# File: src/t4dm/hooks/claude_code.py (NEW)
 
 class SessionStartHook:
     """Load context on Claude Code session start."""
@@ -472,7 +472,7 @@ class SessionEndHook:
 
 **Implementation**:
 ```python
-# File: src/ww/api/routes/batch.py (NEW)
+# File: src/t4dm/api/routes/batch.py (NEW)
 
 router = APIRouter(prefix="/api/v1/batch", tags=["Batch Operations"])
 
@@ -512,7 +512,7 @@ async def batch_create_entities(
 
 **Implementation**:
 ```python
-# File: src/ww/core/session_store.py (NEW)
+# File: src/t4dm/core/session_store.py (NEW)
 
 class RedisSessionStore:
     """Persistent session storage with Redis."""
@@ -553,7 +553,7 @@ class RedisSessionStore:
 
 **Implementation**:
 ```python
-# File: src/ww/memory/learned_scorer.py (ENHANCE existing)
+# File: src/t4dm/memory/learned_scorer.py (ENHANCE existing)
 
 class LearnedRetrievalScorer:
     """Online-trainable retrieval scoring."""
@@ -610,15 +610,15 @@ class LearnedRetrievalScorer:
 **Problem**: Duplicate modules (`bridge` vs `bridges`, `integration` vs `integrations`)
 
 **Actions**:
-1. Merge `src/ww/bridge/` into `src/ww/bridges/`
-2. Merge `src/ww/integration/` into `src/ww/integrations/`
+1. Merge `src/t4dm/bridge/` into `src/t4dm/bridges/`
+2. Merge `src/t4dm/integration/` into `src/t4dm/integrations/`
 3. Update all imports
 4. Add deprecation warnings for old paths
 
 ```bash
 # Migration script
-git mv src/ww/bridge/memory_nca.py src/ww/bridges/memory_nca_bridge.py
-git mv src/ww/integration/*.py src/ww/integrations/ccapi/
+git mv src/t4dm/bridge/memory_nca.py src/t4dm/bridges/memory_nca_bridge.py
+git mv src/t4dm/integration/*.py src/t4dm/integrations/ccapi/
 ```
 
 ---
@@ -696,7 +696,7 @@ git mv src/ww/integration/*.py src/ww/integrations/ccapi/
 
 ```bash
 # Week 1-2: Hinton + Tests in parallel
-claude --agent ww-hinton "Implement TD(λ) in src/ww/learning/temporal_difference.py"
+claude --agent ww-hinton "Implement TD(λ) in src/t4dm/learning/temporal_difference.py"
 claude --agent ww-validator "Add tests for TD(λ) implementation"
 
 # Week 2-3: Biology + Integration in parallel
@@ -750,24 +750,24 @@ claude --agent boris "Analyze and clean up codebase"
 ## Appendix: File Locations
 
 ### New Files to Create
-- `src/ww/learning/temporal_difference.py`
-- `src/ww/consolidation/ff_sleep_integration.py`
-- `src/ww/nca/em_routing.py`
-- `src/ww/nca/grid_cells.py`
-- `src/ww/hooks/claude_code.py`
-- `src/ww/api/routes/batch.py`
-- `src/ww/core/session_store.py`
+- `src/t4dm/learning/temporal_difference.py`
+- `src/t4dm/consolidation/ff_sleep_integration.py`
+- `src/t4dm/nca/em_routing.py`
+- `src/t4dm/nca/grid_cells.py`
+- `src/t4dm/hooks/claude_code.py`
+- `src/t4dm/api/routes/batch.py`
+- `src/t4dm/core/session_store.py`
 
 ### Files to Modify
-- `src/ww/nca/hippocampus.py` - Add CA1Layer
-- `src/ww/learning/stdp.py` - Expand stub
-- `src/ww/learning/dopamine.py` - Integrate TD(λ)
-- `src/ww/consolidation/sleep.py` - Add FF phase
-- `src/ww/memory/learned_scorer.py` - Enhance
+- `src/t4dm/nca/hippocampus.py` - Add CA1Layer
+- `src/t4dm/learning/stdp.py` - Expand stub
+- `src/t4dm/learning/dopamine.py` - Integrate TD(λ)
+- `src/t4dm/consolidation/sleep.py` - Add FF phase
+- `src/t4dm/memory/learned_scorer.py` - Enhance
 
 ### Files to Delete/Merge
-- `src/ww/bridge/` → merge into `src/ww/bridges/`
-- `src/ww/integration/` → merge into `src/ww/integrations/`
+- `src/t4dm/bridge/` → merge into `src/t4dm/bridges/`
+- `src/t4dm/integration/` → merge into `src/t4dm/integrations/`
 - Outdated archive docs
 
 ---

@@ -11,10 +11,10 @@
 ### 1. Fix Password Validation (3 tests)
 ```bash
 # Edit .env file
-sed -i 's/NEO4J_PASSWORD=wwpassword/NEO4J_PASSWORD=WwPass123!/g' /mnt/projects/ww/.env
+sed -i 's/NEO4J_PASSWORD=wwpassword/NEO4J_PASSWORD=WwPass123!/g' /mnt/projects/t4d/t4dm/.env
 
 # Verify
-grep NEO4J_PASSWORD /mnt/projects/ww/.env
+grep NEO4J_PASSWORD /mnt/projects/t4d/t4dm/.env
 ```
 **Impact**: Unblocks 40+ indirect tests
 

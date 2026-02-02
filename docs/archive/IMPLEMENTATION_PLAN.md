@@ -34,11 +34,11 @@ Establish foundational encoding layer with dendritic neurons, sparse encoder, an
 
 **Files to Create**:
 ```
-ww/encoding/__init__.py
-ww/encoding/dendritic.py
-ww/encoding/sparse.py
-ww/encoding/attractor.py
-ww/encoding/utils.py
+t4dm/encoding/__init__.py
+t4dm/encoding/dendritic.py
+t4dm/encoding/sparse.py
+t4dm/encoding/attractor.py
+t4dm/encoding/utils.py
 tests/encoding/__init__.py
 tests/encoding/test_dendritic.py
 tests/encoding/test_sparse.py
@@ -47,7 +47,7 @@ tests/encoding/test_attractor.py
 
 **Files to Modify**:
 ```
-ww/core/config.py          # Add BioinspiredConfig
+t4dm/core/config.py          # Add BioinspiredConfig
 pyproject.toml             # Add torch dependency if needed
 ```
 
@@ -72,7 +72,7 @@ pyproject.toml             # Add torch dependency if needed
 
 **Files to Create/Modify**:
 ```
-ww/encoding/dendritic.py   # DendriticNeuron, DendriticProcessor classes
+t4dm/encoding/dendritic.py   # DendriticNeuron, DendriticProcessor classes
 tests/encoding/test_dendritic.py
 ```
 
@@ -157,7 +157,7 @@ class DendriticNeuron(nn.Module):
 
 **Files to Create/Modify**:
 ```
-ww/encoding/sparse.py      # SparseEncoder, kWTA function
+t4dm/encoding/sparse.py      # SparseEncoder, kWTA function
 tests/encoding/test_sparse.py
 ```
 
@@ -238,7 +238,7 @@ class SparseEncoder(nn.Module):
 
 **Files to Create/Modify**:
 ```
-ww/encoding/attractor.py   # AttractorNetwork, HopfieldDynamics
+t4dm/encoding/attractor.py   # AttractorNetwork, HopfieldDynamics
 tests/encoding/test_attractor.py
 ```
 
@@ -421,7 +421,7 @@ Implement Fast Episodic Store (FES) and consolidation pipeline to standard WW ep
 
 **Files to Create**:
 ```
-ww/memory/fast_episodic.py
+t4dm/memory/fast_episodic.py
 tests/memory/test_fast_episodic.py
 ```
 
@@ -567,7 +567,7 @@ class FastEpisodicStore:
 
 **Files to Create**:
 ```
-ww/consolidation/fes_consolidator.py
+t4dm/consolidation/fes_consolidator.py
 tests/consolidation/test_fes_consolidation.py
 ```
 
@@ -656,7 +656,7 @@ class FESConsolidator:
 
 **Files to Modify**:
 ```
-ww/core/config.py
+t4dm/core/config.py
 ```
 
 **Config Schema**:
@@ -718,7 +718,7 @@ Enhance NeuromodulatorOrchestra with CompBio gain functions and implement eligib
 
 **Files to Modify**:
 ```
-ww/learning/neuromodulators.py
+t4dm/learning/neuromodulators.py
 tests/learning/test_neuromodulators.py
 ```
 
@@ -784,7 +784,7 @@ class NeuromodulatorOrchestra:
 
 **Files to Create**:
 ```
-ww/learning/eligibility.py
+t4dm/learning/eligibility.py
 tests/learning/test_eligibility.py
 ```
 
@@ -863,7 +863,7 @@ class EligibilityTrace:
 
 **Files to Modify**:
 ```
-ww/learning/pipeline.py
+t4dm/learning/pipeline.py
 tests/integration/test_learning_pipeline.py
 ```
 
@@ -905,8 +905,8 @@ Connect bioinspired components to existing WW memory layer and MCP gateway.
 
 **Files to Modify**:
 ```
-ww/memory/memory_layer.py
-ww/mcp/memory_gateway.py
+t4dm/memory/memory_layer.py
+t4dm/mcp/memory_gateway.py
 tests/integration/test_memory_layer.py
 ```
 
@@ -936,7 +936,7 @@ tests/integration/test_memory_layer.py
 
 **Files to Create/Modify**:
 ```
-ww/mcp/bioinspired_tools.py
+t4dm/mcp/bioinspired_tools.py
 tests/mcp/test_bioinspired_tools.py
 ```
 
@@ -966,7 +966,7 @@ tests/mcp/test_bioinspired_tools.py
 
 **Files to Create/Modify**:
 ```
-ww/core/migration.py
+t4dm/core/migration.py
 tests/regression/test_backward_compat.py
 ```
 
@@ -1037,8 +1037,8 @@ frontend/src/components/AttractorDynamicsPanel.tsx
 
 **Files to Create**:
 ```
-ww/monitoring/metrics.py
-ww/monitoring/alerts.py
+t4dm/monitoring/metrics.py
+t4dm/monitoring/alerts.py
 monitoring/alerts/bioinspired.yml
 ```
 
@@ -1127,7 +1127,7 @@ Comprehensive testing, biological validation, and documentation.
 **Files to Create**:
 ```
 tests/validation/test_biological_targets.py
-ww/validation/biological_validator.py
+t4dm/validation/biological_validator.py
 ```
 
 **Validation Checks**:
@@ -1499,8 +1499,8 @@ graph TD
 5. Amaral, D. G., Scharfman, H. E., & Lavenex, P. (2007). The dentate gyrus: fundamental neuroanatomical organization. *Progress in Brain Research*, 163, 3-790.
 
 ### Technical Documentation
-1. World Weaver Architecture: `/mnt/projects/ww/docs/architecture.md`
-2. Learning Architecture: `/mnt/projects/ww/docs/LEARNING_ARCHITECTURE.md`
+1. World Weaver Architecture: `/mnt/projects/t4d/t4dm/docs/architecture.md`
+2. Learning Architecture: `/mnt/projects/t4d/t4dm/docs/LEARNING_ARCHITECTURE.md`
 3. CompBio Architecture: `~/mem/bio_memory_architecture.md`
 4. CompBio Implementation Starter: `~/mem/implementation_starter.py`
 
@@ -1560,24 +1560,24 @@ graph TD
 
 ### New Files (70+ files)
 ```
-ww/encoding/__init__.py
-ww/encoding/dendritic.py
-ww/encoding/sparse.py
-ww/encoding/attractor.py
-ww/encoding/utils.py
+t4dm/encoding/__init__.py
+t4dm/encoding/dendritic.py
+t4dm/encoding/sparse.py
+t4dm/encoding/attractor.py
+t4dm/encoding/utils.py
 
-ww/memory/fast_episodic.py
+t4dm/memory/fast_episodic.py
 
-ww/consolidation/fes_consolidator.py
+t4dm/consolidation/fes_consolidator.py
 
-ww/learning/eligibility.py
+t4dm/learning/eligibility.py
 
-ww/mcp/bioinspired_tools.py
+t4dm/mcp/bioinspired_tools.py
 
-ww/monitoring/metrics.py
-ww/monitoring/alerts.py
+t4dm/monitoring/metrics.py
+t4dm/monitoring/alerts.py
 
-ww/validation/biological_validator.py
+t4dm/validation/biological_validator.py
 
 frontend/src/components/BiologicalMetricsPanel.tsx
 frontend/src/components/SparsityVisualization.tsx
@@ -1608,11 +1608,11 @@ monitoring/alerts/bioinspired.yml
 
 ### Modified Files (10+ files)
 ```
-ww/core/config.py
-ww/learning/neuromodulators.py
-ww/memory/memory_layer.py
-ww/mcp/memory_gateway.py
-ww/learning/pipeline.py
+t4dm/core/config.py
+t4dm/learning/neuromodulators.py
+t4dm/memory/memory_layer.py
+t4dm/mcp/memory_gateway.py
+t4dm/learning/pipeline.py
 
 frontend/src/components/ConfigPanel.tsx
 

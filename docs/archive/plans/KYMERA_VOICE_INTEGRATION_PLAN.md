@@ -115,7 +115,7 @@ Integrate World Weaver's tripartite memory system with Kymera Voice to create a 
 
 ### 1.1 Create Integration Package
 
-Create `~/ww/src/ww/integrations/kymera/` with:
+Create `~/t4dm/src/t4dm/integrations/kymera/` with:
 
 ```
 kymera/

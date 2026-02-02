@@ -1,6 +1,6 @@
 # World Weaver (WW)
 
-[![Release](https://img.shields.io/badge/release-v1.0.0-blue.svg)](https://github.com/astoreyai/ww/releases/tag/v1.0.0)
+[![Release](https://img.shields.io/badge/release-v1.0.0-blue.svg)](https://github.com/astoreyai/t4d/releases/tag/v1.0.0)
 [![Tests](https://img.shields.io/badge/tests-8%2C905%20passed-brightgreen.svg)](https://github.com/astoreyai/ww)
 [![Coverage](https://img.shields.io/badge/coverage-81%25-green.svg)](https://github.com/astoreyai/ww)
 [![Python](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://python.org)
@@ -110,7 +110,7 @@ ww episodic recent --limit 10
 ww status
 
 # Start REST API server
-ww serve --port 8765
+t4dm serve --port 8765
 ```
 
 ### Docker (Recommended for Infrastructure)
@@ -155,7 +155,7 @@ pytest tests/ -v
 World Weaver supports YAML configuration with environment variable overrides:
 
 ```yaml
-# ww.yaml (in project root or ~/.ww/config.yaml)
+# t4dm.yaml (in project root or ~/.t4dm/config.yaml)
 session_id: my-project
 environment: development
 
@@ -273,8 +273,8 @@ Five attractor basins in NT concentration space:
 ## Project Structure
 
 ```
-ww/
-├── src/ww/                 # Main source code
+t4dm/
+├── src/t4dm/                 # Main source code
 │   ├── api/                # REST API server (112 endpoints)
 │   ├── bridge/             # Memory-NCA integration
 │   ├── cli/                # Command-line interface
@@ -370,7 +370,7 @@ MIT License - see [LICENSE](LICENSE) for details.
 - [Biological Architecture](docs/ARCHITECTURE_BIOLOGICAL.md) - Biological integration design
 - [Biological Integration](docs/BIOLOGICAL_INTEGRATION.md) - Neural mechanisms and citations
 - [Memory Architecture](docs/MEMORY_ARCHITECTURE.md) - Tripartite memory specification
-- [NCA Module](src/ww/nca/README.md) - Neuro Cognitive Architecture dynamics
+- [NCA Module](src/t4dm/nca/README.md) - Neuro Cognitive Architecture dynamics
 - [Testing Guide](docs/TESTING_GUIDE.md) - Test suite documentation
 
 ## Contributing
