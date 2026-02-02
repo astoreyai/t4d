@@ -1,5 +1,5 @@
 """
-Comprehensive unit tests for World Weaver observability module.
+Comprehensive unit tests for T4DM observability module.
 
 Tests structured logging, metrics collection, health checks, and timers
 with 90%+ target coverage.

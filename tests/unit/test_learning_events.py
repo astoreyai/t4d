@@ -1,5 +1,5 @@
 """
-Unit tests for World Weaver learning events.
+Unit tests for T4DM learning events.
 
 Tests RetrievalEvent, OutcomeEvent, Experience, and representation formats.
 """

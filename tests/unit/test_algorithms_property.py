@@ -1,5 +1,5 @@
 """
-Property-based tests for World Weaver core algorithms.
+Property-based tests for T4DM core algorithms.
 
 Uses hypothesis for generative testing of FSRS, Hebbian, and ACT-R algorithms
 to verify invariants across wide input ranges.

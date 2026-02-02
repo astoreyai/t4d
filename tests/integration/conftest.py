@@ -2,7 +2,7 @@
 Pytest configuration for integration tests.
 
 Provides fixtures for setting up real or realistic mock stores
-for end-to-end testing of World Weaver memory system.
+for end-to-end testing of T4DM memory system.
 """
 
 import asyncio

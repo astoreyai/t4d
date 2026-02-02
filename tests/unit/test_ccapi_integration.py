@@ -1,5 +1,5 @@
 """
-Unit tests for World Weaver ccapi integration.
+Unit tests for T4DM ccapi integration.
 
 Tests WWMemory, WWObserver, and API routes.
 """

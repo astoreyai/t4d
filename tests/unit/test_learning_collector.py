@@ -1,5 +1,5 @@
 """
-Unit tests for World Weaver learning collector.
+Unit tests for T4DM learning collector.
 
 Tests EventStore, EventCollector, eligibility traces, and credit assignment.
 """

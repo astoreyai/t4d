@@ -1,5 +1,5 @@
 """
-API Integration Tests for World Weaver REST API.
+API Integration Tests for T4DM REST API.
 
 Tests full CRUD flows for episodes, entities, and skills with FastAPI TestClient.
 """

@@ -1,5 +1,5 @@
 """
-Performance benchmark tests for World Weaver memory system.
+Performance benchmark tests for T4DM memory system.
 
 Tests performance thresholds and catches regressions:
 - Episode creation throughput

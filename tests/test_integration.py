@@ -1,5 +1,5 @@
 """
-INT-001: Integration tests for World Weaver memory system.
+INT-001: Integration tests for T4DM memory system.
 
 Tests the complete workflow:
 1. Create episodes from interactions

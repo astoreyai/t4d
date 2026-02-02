@@ -1,5 +1,5 @@
 """
-Integration tests for World Weaver memory system lifecycle.
+Integration tests for T4DM memory system lifecycle.
 
 Tests complete end-to-end workflows across episodic, semantic, and procedural memory:
 1. Full episode lifecycle with decay and consolidation

@@ -1,5 +1,5 @@
 """
-Unit tests for World Weaver working memory module.
+Unit tests for T4DM working memory module.
 
 Tests WorkingMemory buffer with capacity limits and attention-based eviction.
 """

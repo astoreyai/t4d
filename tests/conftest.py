@@ -1,5 +1,5 @@
 """
-Pytest Configuration for World Weaver Tests.
+Pytest Configuration for T4DM Tests.
 
 Provides fixtures and configuration for async tests, database mocking,
 and test isolation.

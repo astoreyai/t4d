@@ -1,10 +1,10 @@
 #!/bin/bash
-# E2E test for World Weaver learning pipeline
+# E2E test for T4DM learning pipeline
 # Tests: Retrieval → Outcome → Credit Assignment → Scorer Training
 
 set -e
 
-echo "=== World Weaver E2E Learning Pipeline Test ==="
+echo "=== T4DM E2E Learning Pipeline Test ==="
 cd "$(dirname "$0")/../.."
 source ../projects/venv/bin/activate 2>/dev/null || source ~/projects/venv/bin/activate
 

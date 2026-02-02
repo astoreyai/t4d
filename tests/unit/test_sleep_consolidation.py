@@ -1,5 +1,5 @@
 """
-Unit tests for World Weaver sleep consolidation module.
+Unit tests for T4DM sleep consolidation module.
 
 Tests SleepConsolidation with NREM, REM, and prune phases.
 """

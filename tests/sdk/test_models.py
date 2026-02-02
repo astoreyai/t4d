@@ -1,4 +1,4 @@
-"""Tests for World Weaver SDK models."""
+"""Tests for T4DM SDK models."""
 
 import pytest
 from datetime import datetime

@@ -1,5 +1,5 @@
 """
-Unit tests for World Weaver embedding adapter module.
+Unit tests for T4DM embedding adapter module.
 
 Tests MockEmbeddingAdapter, CachedEmbeddingAdapter, and utility functions.
 """

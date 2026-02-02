@@ -1,5 +1,5 @@
 """
-Unit tests for World Weaver neuro-symbolic module.
+Unit tests for T4DM neuro-symbolic module.
 
 Tests Triple, TripleSet, NeuroSymbolicMemory, extractors, and reasoner.
 """

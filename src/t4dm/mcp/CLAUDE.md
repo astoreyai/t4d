@@ -2,20 +2,21 @@
 **Path**: `/mnt/projects/t4d/t4dm/src/t4dm/mcp/`
 
 ## What
-Model Context Protocol (MCP) server exposing WW memory as tools for Claude Code and Claude Desktop. Provides store, recall, learn, consolidate, context, and entity operations.
+Model Context Protocol (MCP) server exposing T4DM memory as tools for Claude Code and Claude Desktop. Provides store, recall, learn, consolidate, context, and entity operations.
 
 ## How
-- **WorldWeaverMCPServer** (`server.py`): MCP server implementation using stdio transport. Connects to WW API via `AgentMemoryClient`. Handles tool execution requests from Claude, dispatching to appropriate memory operations. Configurable via environment variables (`WW_API_URL`, `WW_SESSION_ID`, `WW_API_KEY`).
+- **WorldWeaverMCPServer** (`server.py`): MCP server implementation using stdio transport. Connects to T4DM API via `AgentMemoryClient`. Handles tool execution requests from Claude, dispatching to appropriate memory operations. Configurable via environment variables (`T4DM_API_URL`, `T4DM_SESSION_ID`, `T4DM_API_KEY`).
 - **MEMORY_TOOLS** (`tools.py`): Tool definitions in MCP JSON schema format:
-  - `ww_store`: Store content in episodic memory with outcome/importance/tags
-  - `ww_recall`: Semantic search for relevant memories with project/time filtering
-  - `ww_learn_outcome`: Report task success/failure for learning system
-  - `ww_consolidate`: Trigger memory consolidation
-  - `ww_get_context`: Get project/session context
-  - `ww_entity`: Create/retrieve semantic entities
+  - `t4dm_store`: Store content in episodic memory with outcome/importance/tags
+  - `t4dm_search`: Semantic search for relevant memories with project/time filtering
+  - `t4dm_learn`: Report task success/failure for learning system
+  - `t4dm_consolidate`: Trigger memory consolidation
+  - `t4dm_context`: Get project/session context
+  - `t4dm_entity`: Create/retrieve semantic entities
+  - `t4dm_skill`: Create/retrieve procedural skills
 
 ## Why
-MCP is the standard protocol for extending Claude with external tools. This server makes WW's memory system available to any MCP-compatible client, enabling persistent memory across Claude sessions.
+MCP is the standard protocol for extending Claude with external tools. This server makes T4DM's memory system available to any MCP-compatible client, enabling persistent memory across Claude sessions.
 
 ## Key Files
 | File | Purpose |
@@ -26,8 +27,8 @@ MCP is the standard protocol for extending Claude with external tools. This serv
 ## Data Flow
 ```
 Claude Code/Desktop -> MCP stdio -> WorldWeaverMCPServer
-    -> AgentMemoryClient -> WW API (FastAPI)
-    -> Memory operations (store/recall/consolidate)
+    -> AgentMemoryClient -> T4DM API (FastAPI)
+    -> Memory operations (store/search/consolidate)
     -> Response -> MCP -> Claude
 ```
 

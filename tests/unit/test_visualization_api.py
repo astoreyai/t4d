@@ -1,5 +1,5 @@
 """
-Unit tests for World Weaver visualization API routes.
+Unit tests for T4DM visualization API routes.
 
 Tests graph, embeddings, timeline, activity, and export endpoints.
 """

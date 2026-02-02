@@ -4,7 +4,7 @@
 **Version**: 2.1
 **Hardware**: i9-24core, 24GB VRAM, 128GB RAM, 4TB disk
 
-> **Status Update (2026-02-02)**: All 58 atoms in Phases P1-P7 are COMPLETED. Neo4j/Qdrant removed. T4DX embedded engine operational. 9,022 tests passing. See Appendix A for optimization phases (A-G) from OPTIMIZATION_PLAN.md.
+> **Status Update (2026-02-02)**: All 58 atoms in Phases P1-P7 are COMPLETED. All 70 optimization atoms (Phases A-G) are COMPLETED. 9,600+ tests. Neo4j/Qdrant fully removed. T4DX sole storage backend. See Appendix A for optimization phases (A-G) from OPTIMIZATION_PLAN.md.
 
 ## Overview
 
@@ -283,7 +283,7 @@ No external services. No Docker for storage. Embedded, runs in-process.
 
 ## Gap Analysis: What's Built vs Planned
 
-> **All 58 atoms COMPLETED as of 2026-02-02.** Sprint 1 (P1-P7 core implementation) and Sprint 2 (Neo4j/Qdrant removal, T4DX migration) are done. 9,022 tests passing.
+> **All 58 atoms COMPLETED as of 2026-02-02.** Sprint 1 (P1-P7 core implementation) and Sprint 2 (Neo4j/Qdrant removal, T4DX migration) are done. 9,600+ tests passing.
 
 ### Phase 1: Foundation (12 atoms) -- COMPLETED
 
@@ -393,9 +393,11 @@ No external services. No Docker for storage. Embedded, runs in-process.
 
 ### Sprint Completion Notes
 
-**Sprint 1** (P1-P7 core): All spiking blocks, T4DX engine, Qwen integration, consolidation pipeline, persistence, diagrams, and validation implemented. 9,022 tests passing.
+**Sprint 1** (P1-P7 core): All spiking blocks, T4DX engine, Qwen integration, consolidation pipeline, persistence, diagrams, and validation implemented. 9,600+ tests passing.
 
 **Sprint 2** (Migration): Neo4j, Qdrant, and Saga pattern fully removed. T4DX is sole storage backend. All legacy store imports eliminated.
+
+**Optimization Sprints 1-4** (A-G): All 70 optimization atoms completed. See OPTIMIZATION_PLAN.md for details.
 
 ---
 
@@ -1088,36 +1090,36 @@ src/t4dm/
 
 ## Appendix A: Optimization & Production Readiness Phases (Post-P7)
 
-After completing the 58 core atoms, the following optimization phases were identified in `OPTIMIZATION_PLAN.md`. These represent the next wave of work.
+After completing the 58 core atoms, the following optimization phases were identified in `OPTIMIZATION_PLAN.md`. All 70 atoms have been COMPLETED.
 
 | Phase | Atoms | Description | Status |
 |-------|-------|-------------|--------|
-| A: Code Cleanup | 12 | Dead code, bugs, naming, WAL unification | Pending |
-| B: T4DX Storage Completion | 7 | HNSW, CSR, kappa index, bitemporal, provenance | Pending |
-| C: Diagram Overhaul | 22 | Architecture, biological fixes, Neo4j removal, new diagrams | Pending |
-| D: Visualization Suite | 7 | Kappa, T4DX, spiking, Qwen, neuromod, oscillator viz | Pending |
-| E: Plugin & Framework Adapters | 8 | LangChain, LlamaIndex, AutoGen, CrewAI, Mem0, MCP | Pending |
-| F: Documentation & Taxonomy | 8 | Taxonomy, competitive analysis, integration guide | In Progress |
-| G: Production Hardening | 6 | Benchmarks, concurrency, cerebellum | Pending |
-| **Total** | **70** | | |
+| A: Code Cleanup | 12 | Dead code, bugs, naming, WAL unification | COMPLETED (Sprint 1) |
+| B: T4DX Storage Completion | 7 | HNSW, CSR, kappa index, bitemporal, provenance | COMPLETED (Sprint 2) |
+| C: Diagram Overhaul | 22 | Architecture, biological fixes, Neo4j removal, new diagrams | COMPLETED (Sprints 1-2) |
+| D: Visualization Suite | 7 | Kappa, T4DX, spiking, Qwen, neuromod, oscillator viz | COMPLETED (Sprint 4) |
+| E: Plugin & Framework Adapters | 8 | LangChain, LlamaIndex, AutoGen, CrewAI, Mem0, MCP | COMPLETED (Sprint 3) |
+| F: Documentation & Taxonomy | 8 | Taxonomy, competitive analysis, integration guide | COMPLETED (Sprint 3) |
+| G: Production Hardening | 6 | Benchmarks, concurrency, cerebellum | COMPLETED (Sprint 4) |
+| **Total** | **70** | | **ALL COMPLETED** |
 
-### Key Phase A Items
-- Remove legacy storage file references from CLAUDE.md docs
-- Fix GraphStore.query() Cypher parameter (legacy)
-- Unify dual WAL systems
-- Clean "World Weaver" / "ww" naming remnants
+### Sprint Breakdown (Optimization Phases)
 
-### Key Phase B Items
-- HNSW vector index in segments (replace brute-force)
-- CSR graph structure for edge traversal
-- Kappa secondary index for range queries
-- Bitemporal query planner
-- Provenance forward/backward trace
+**Sprint 1** (21 atoms): A-01 through A-12, C-01 through C-09
+- Code cleanup, dead code removal, naming fixes
+- Critical architecture diagrams
+- Critical biological corrections
 
-### Key Phase G Items
-- LongMemEval benchmark runner
-- Concurrent access tests for T4DX
-- Performance benchmarks at 10K/100K/1M items
-- Cerebellar module (timing, error-driven learning) -- critical neuroscience gap
+**Sprint 2** (29 atoms): B-01 through B-07, C-10 through C-22
+- T4DX storage completion (HNSW, CSR, kappa, bitemporal, provenance)
+- Remaining diagram updates and new diagrams
 
-See `docs/plans/OPTIMIZATION_PLAN.md` for full atom specifications.
+**Sprint 3** (16 atoms): E-01 through E-08, F-01 through F-08
+- Framework adapters (LangChain, LlamaIndex, AutoGen, CrewAI)
+- Documentation and taxonomy
+
+**Sprint 4** (13 atoms): D-01 through D-07, G-01 through G-06
+- Visualization suite expansion
+- Production hardening (benchmarks, concurrency, cerebellum)
+
+See `docs/plans/OPTIMIZATION_PLAN.md` for full atom specifications and completion details.

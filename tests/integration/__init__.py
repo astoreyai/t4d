@@ -1,1 +1,1 @@
-"""Integration tests for World Weaver memory services."""
+"""Integration tests for T4DM memory services."""

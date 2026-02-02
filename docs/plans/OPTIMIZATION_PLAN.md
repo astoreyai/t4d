@@ -8,9 +8,9 @@
 
 ## Executive Summary
 
-T4DM is a 155,724-line Python codebase with 334 source files, 9,022 passing tests, and 81% coverage. It implements a biologically-inspired memory system that is architecturally unique in the AI memory market — no competitor combines spiking neural adapters, continuous κ-gradient consolidation, custom LSM storage, and neuromodulator dynamics.
+T4DM is a 155,724-line Python codebase with 334 source files, 9,600+ passing tests, and 81% coverage. It implements a biologically-inspired memory system that is architecturally unique in the AI memory market — no competitor combines spiking neural adapters, continuous κ-gradient consolidation, custom LSM storage, and neuromodulator dynamics.
 
-**Current State**: All 58 plan atoms (P1-P7) implemented. Neo4j/Qdrant removed. T4DX embedded engine operational. 9,022 tests passing.
+**Current State**: All 58 plan atoms (P1-P7) implemented. All 70 optimization atoms (A-G) implemented. Neo4j/Qdrant/Saga removed. T4DX embedded engine operational. 9,600+ tests passing.
 
 **Key Findings**:
 - 48 of ~57 diagrams are outdated (Neo4j/Qdrant refs, biological errors, parameter mismatches)
@@ -21,6 +21,90 @@ T4DM is a 155,724-line Python codebase with 334 source files, 9,022 passing test
 - Dual WAL systems (T4DX simple + legacy binary) not unified
 - Cerebellum is the largest neuroscience gap
 - NCA module name is misleading (it's brain region simulation, not cellular automata)
+
+---
+
+## Completion Status
+
+All 70 optimization atoms across phases A-G have been COMPLETED in 4 sprints:
+
+### Sprint 1 (commit 46f78c6) - 21 atoms
+- **A-01**: Remove legacy storage file references
+- **A-02**: Fix GraphStore.query() Cypher parameter
+- **A-03**: Fix archive.py datetime.timedelta bug
+- **A-04**: Unify dual WAL systems
+- **A-05**: Update package docstring "World Weaver" → "T4DM"
+- **A-06**: Fix VectorAdapter stubs (scroll, count)
+- **A-07**: Add threading locks to T4DXEngine
+- **A-08**: Fix visualization.py Neo4j comment
+- **A-09**: Update observability/CLAUDE.md references
+- **A-10**: Update src/t4dm/CLAUDE.md references
+- **A-11**: Update storage/CLAUDE.md for T4DX
+- **A-12**: Clean remaining "World Weaver" / "ww" references
+- **C-01**: Create 01_system_architecture
+- **C-02**: Create 05_storage_architecture
+- **C-03**: Create 14_storage_subsystem
+- **C-04**: Create 23_class_storage
+- **C-05**: Render all D2 diagrams to PNG/SVG
+- **C-06**: Fix GP→Thalamus GABA correction
+- **C-07**: Fix hippocampal_circuit biological errors
+- **C-08**: Fix ff_nca_coupling per-layer goodness
+- **C-09**: Fix spindle_ripple_coupling causality
+
+### Sprint 2 (commit 635a885) - 29 atoms
+- **B-01**: Implement HNSW vector index
+- **B-02**: Implement CSR graph structure
+- **B-03**: Implement kappa_index.py
+- **B-04**: Implement bitemporal.py
+- **B-05**: Implement provenance.py
+- **B-06**: Add WAL group commit
+- **B-07**: Add bloom filters to segments
+- **C-10**: Fix hpc_trisynaptic (BLA, mossy cells)
+- **C-11**: Fix swr_replay parameters
+- **C-12**: Fix vta_circuit burst frequency
+- **C-13**: Rewrite system_architecture.md (T4DX)
+- **C-14**: Rewrite storage_resilience.md (no Saga)
+- **C-15**: Update 41_seq_store_memory.mmd
+- **C-16**: Update persistence diagrams
+- **C-17**: Update README.md (remove Neo4j/Qdrant)
+- **C-18**: Create kappa_gradient_consolidation diagram
+- **C-19**: Create tau_temporal_gate diagram
+- **C-20**: Create sdk_client_architecture diagram
+- **C-21**: Create plugin_integration_map diagram
+- **C-22**: Update DIAGRAM_SUMMARY.md
+
+### Sprint 3 (commit 7c06887) - 16 atoms
+- **E-01**: Simple 3-line API (sdk/simple.py)
+- **E-02**: LangChain BaseMemory adapter
+- **E-03**: LlamaIndex VectorStore adapter
+- **E-04**: AutoGen Memory protocol adapter
+- **E-05**: CrewAI Memory adapter
+- **E-06**: Mem0-compatible REST API shim
+- **E-07**: OpenAI function tool schemas
+- **E-08**: Rename MCP tools (ww→t4dm)
+- **F-01**: Update BRAIN_REGION_MAPPING.md
+- **F-02**: Add Frankland & Bontempi 2005 citation
+- **F-03**: Create NEUROSCIENCE_TAXONOMY.md
+- **F-04**: Create COMPETITIVE_ANALYSIS.md
+- **F-05**: Create INTEGRATION_GUIDE.md
+- **F-06**: Document biological fidelity levels
+- **F-07**: Rename NCA module references
+- **F-08**: Update FULL_SYSTEM_PLAN.md
+
+### Sprint 4 (commit 97c0360) - 13 atoms
+- **D-01**: Kappa gradient visualizer
+- **D-02**: T4DX storage metrics
+- **D-03**: Spiking neuron dashboard
+- **D-04**: Qwen adapter metrics
+- **D-05**: Neuromod bus per-layer viz
+- **D-06**: Oscillator bias viz
+- **D-07**: Update persistence_state.py
+- **G-01**: Add LongMemEval benchmark runner
+- **G-02**: Add concurrent access tests for T4DX
+- **G-03**: Add performance benchmarks
+- **G-04**: Add checkpoint_v3 and recovery_v2 tests
+- **G-05**: Implement WebSocket streaming
+- **G-06**: Add cerebellar module
 
 ---
 
@@ -249,13 +333,13 @@ T4DM is a 155,724-line Python codebase with 334 source files, 9,022 passing test
 
 ## Totals
 
-| Phase | Atoms | Description |
-|-------|-------|-------------|
-| A: Code Cleanup | 12 | Dead code, bugs, naming, WAL unification |
-| B: T4DX Storage | 7 | HNSW, CSR, kappa index, bitemporal, provenance |
-| C: Diagrams | 22 | Architecture, biological fixes, Neo4j removal, new |
-| D: Visualization | 7 | Kappa, T4DX, spiking, Qwen, neuromod, oscillator |
-| E: Adapters | 8 | LangChain, LlamaIndex, AutoGen, CrewAI, Mem0, MCP |
-| F: Documentation | 8 | Taxonomy, competitive analysis, integration guide |
-| G: Production | 6 | Benchmarks, concurrency, cerebellum |
-| **Total** | **70** | |
+| Phase | Atoms | Description | Status |
+|-------|-------|-------------|--------|
+| A: Code Cleanup | 12 | Dead code, bugs, naming, WAL unification | COMPLETED (Sprint 1) |
+| B: T4DX Storage | 7 | HNSW, CSR, kappa index, bitemporal, provenance | COMPLETED (Sprint 2) |
+| C: Diagrams | 22 | Architecture, biological fixes, Neo4j removal, new | COMPLETED (Sprints 1-2) |
+| D: Visualization | 7 | Kappa, T4DX, spiking, Qwen, neuromod, oscillator | COMPLETED (Sprint 4) |
+| E: Adapters | 8 | LangChain, LlamaIndex, AutoGen, CrewAI, Mem0, MCP | COMPLETED (Sprint 3) |
+| F: Documentation | 8 | Taxonomy, competitive analysis, integration guide | COMPLETED (Sprint 3) |
+| G: Production | 6 | Benchmarks, concurrency, cerebellum | COMPLETED (Sprint 4) |
+| **Total** | **70** | | **ALL COMPLETED** |

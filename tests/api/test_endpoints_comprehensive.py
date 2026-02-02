@@ -1,5 +1,5 @@
 """
-Comprehensive endpoint testing for World Weaver API.
+Comprehensive endpoint testing for T4DM API.
 
 Tests ALL endpoint categories with focus on:
 - Auth requirements (X-Admin-Key header)

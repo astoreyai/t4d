@@ -1,5 +1,5 @@
 """
-Unit tests for World Weaver neural retrieval scorer.
+Unit tests for T4DM neural retrieval scorer.
 
 Tests LearnedRetrievalScorer, PrioritizedReplayBuffer, ListMLELoss, and ScorerTrainer.
 """

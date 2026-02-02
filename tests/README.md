@@ -1,6 +1,6 @@
-# World Weaver Test Suite
+# T4DM Test Suite
 
-Comprehensive test infrastructure for the World Weaver tripartite memory system (episodic, semantic, procedural).
+Comprehensive test infrastructure for the T4DM tripartite memory system (episodic, semantic, procedural).
 
 ## Overview
 

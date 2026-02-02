@@ -2,7 +2,7 @@
 
 ## Overview
 
-Comprehensive integration test suite for session isolation across World Weaver's tripartite memory system. These tests verify that session_id isolation is properly enforced in:
+Comprehensive integration test suite for session isolation across T4DM's tripartite memory system. These tests verify that session_id isolation is properly enforced in:
 
 - **Episodic Memory**: Autobiographical events stored in Qdrant
 - **Semantic Memory**: Knowledge entities and relationships

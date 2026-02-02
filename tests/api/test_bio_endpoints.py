@@ -1,5 +1,5 @@
 """
-Comprehensive tests for World Weaver Bio-inspired API endpoints.
+Comprehensive tests for T4DM Bio-inspired API endpoints.
 
 Tests the neural architecture correctness, biological plausibility, and
 API contract compliance for:

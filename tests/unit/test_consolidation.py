@@ -1,5 +1,5 @@
 """
-Comprehensive unit tests for World Weaver consolidation service.
+Comprehensive unit tests for T4DM consolidation service.
 
 Covers light consolidation, deep consolidation, skill consolidation,
 and error handling with 80%+ target coverage.

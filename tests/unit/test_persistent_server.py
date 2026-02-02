@@ -1,5 +1,5 @@
 """
-Unit tests for World Weaver MCP Persistent Server.
+Unit tests for T4DM MCP Persistent Server.
 
 Tests initialization, persistence management, WAL replay handlers,
 and graceful shutdown procedures.

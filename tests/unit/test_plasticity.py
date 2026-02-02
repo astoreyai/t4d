@@ -1,5 +1,5 @@
 """
-Unit tests for World Weaver biological plasticity module.
+Unit tests for T4DM biological plasticity module.
 
 Tests LTD, homeostatic scaling, metaplasticity, and synaptic tagging.
 """

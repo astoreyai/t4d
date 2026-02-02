@@ -163,7 +163,7 @@ REST API for T4DM's tripartite neural memory system.
 
 Pass session ID via `X-Session-ID` header. Defaults to configured session if not provided.
     """,
-    version="0.5.0",
+    version="2.0.0",
     lifespan=lifespan,
     docs_url="/docs",
     redoc_url="/redoc",

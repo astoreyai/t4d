@@ -1,5 +1,5 @@
 """
-Unit tests for World Weaver memory reconsolidation module.
+Unit tests for T4DM memory reconsolidation module.
 
 Tests the ReconsolidationEngine and related utilities.
 """

@@ -1,1 +1,1 @@
-"""Tests for World Weaver hooks module."""
+"""Tests for T4DM hooks module."""

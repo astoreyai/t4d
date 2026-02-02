@@ -1,5 +1,5 @@
 """
-Unit tests for World Weaver learning hooks.
+Unit tests for T4DM learning hooks.
 
 Tests emit_retrieval_event, emit_unified_retrieval_event, learning_retrieval decorator,
 and RetrievalHookMixin.

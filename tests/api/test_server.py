@@ -11,12 +11,12 @@ class TestAppConfiguration:
         """App is created successfully."""
         from t4dm.api.server import app
         assert app is not None
-        assert app.title == "World Weaver Memory API"
+        assert app.title == "T4DM Memory API"
 
     def test_app_version(self):
         """App has correct version."""
         from t4dm.api.server import app
-        assert app.version == "0.5.0"
+        assert app.version == "2.0.0"
 
     def test_docs_enabled(self):
         """API docs endpoints are configured."""

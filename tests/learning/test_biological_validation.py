@@ -1,5 +1,5 @@
 """
-Comprehensive Biological Validation Tests for World Weaver Memory System.
+Comprehensive Biological Validation Tests for T4DM Memory System.
 
 Tests biological plausibility of parameter ranges, constraints, and behaviors
 across all neuromodulator systems, learning mechanisms, and memory consolidation.
@@ -807,7 +807,7 @@ def test_generate_biological_validation_report(tmp_path):
     from datetime import datetime
 
     report_lines = [
-        "# World Weaver Biological Validation Report",
+        "# T4DM Biological Validation Report",
         f"\n**Generated**: {datetime.now().isoformat()}",
         "\n**Purpose**: Validate biological plausibility of neural memory system parameters",
         "\n---\n",

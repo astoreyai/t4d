@@ -1,5 +1,5 @@
 """
-Integration tests for session isolation in World Weaver memory services.
+Integration tests for session isolation in T4DM memory services.
 
 Tests that session_id isolation is properly enforced across:
 - Episodic Memory (stored in Qdrant payloads)

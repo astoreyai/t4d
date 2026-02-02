@@ -1,5 +1,5 @@
 """
-Tests for World Weaver hooks system.
+Tests for T4DM hooks system.
 
 Tests:
 - Hook registration and execution

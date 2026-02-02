@@ -1,5 +1,5 @@
 """
-Unit tests for World Weaver storage resilience module.
+Unit tests for T4DM storage resilience module.
 
 Tests CircuitBreaker, InMemoryFallback, GracefulDegradation, and PendingOperation.
 """

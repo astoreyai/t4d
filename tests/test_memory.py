@@ -1,7 +1,7 @@
 """
 TMEM-001: Test episodic memory creation and retrieval.
 
-Tests the core memory functionality of World Weaver.
+Tests the core memory functionality of T4DM.
 
 NOTE: These tests require running Neo4j and Qdrant instances.
 """
@@ -193,7 +193,7 @@ async def test_procedural_retrieve():
 async def run_all_tests():
     """Run all memory tests."""
     print("=" * 60)
-    print("TMEM-001: World Weaver Memory System Tests")
+    print("TMEM-001: T4DM Memory System Tests")
     print("=" * 60)
 
     print("\n1. Testing episodic memory creation...")

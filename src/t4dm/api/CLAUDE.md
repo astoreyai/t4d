@@ -27,6 +27,8 @@ Provides programmatic and real-time access to memory operations. Decouples the m
 | `routes/system.py` | Health check, stats (6 endpoints) |
 | `routes/visualization.py` | 3D graph + bio mechanism endpoints (40+) |
 | `routes/persistence.py` | WAL + checkpoint status (7 endpoints) |
+| `routes/compat.py` | Mem0-compatible REST API endpoints |
+| `routes/ws_viz.py` | WebSocket visualization streaming |
 | `middleware/rate_limit.py` | Token bucket rate limiting (100 req/min) |
 
 ## Data Flow

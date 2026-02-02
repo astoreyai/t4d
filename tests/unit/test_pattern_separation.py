@@ -1,5 +1,5 @@
 """
-Unit tests for World Weaver pattern separation module.
+Unit tests for T4DM pattern separation module.
 
 Tests DentateGyrus pattern separator and PatternCompletion.
 """

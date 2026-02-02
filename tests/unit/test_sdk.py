@@ -1,5 +1,5 @@
 """
-Unit tests for World Weaver SDK.
+Unit tests for T4DM SDK.
 
 Tests SDK models, async client, sync client, and error handling.
 """
