@@ -65,7 +65,7 @@ async def lifespan(app: FastAPI):
     try:
         from t4dm.persistence import PersistenceConfig, PersistenceManager
 
-        data_dir = Path(os.environ.get("T4DM_DATA_DIR", "/var/lib/world-weaver"))
+        data_dir = Path(os.environ.get("T4DM_DATA_DIR", ".data"))
         data_dir.mkdir(parents=True, exist_ok=True)
 
         config = PersistenceConfig(

@@ -1,5 +1,5 @@
 """
-MCP Server for T4DM Memory System.
+MCP Server for T4DM Memory System (FastMCP implementation).
 
 Exposes T4DM as an MCP server for Claude Code/Desktop integration.
 Provides tools for memory storage, retrieval, learning, and consolidation.
@@ -9,8 +9,8 @@ Usage:
     python -m t4dm.mcp.server
 
     # Or programmatically
-    from t4dm.mcp import run_mcp_server
-    asyncio.run(run_mcp_server())
+    from t4dm.mcp.server import mcp
+    mcp.run()
 
 Configuration via environment:
     T4DM_API_URL: T4DM API URL (default: http://localhost:8765)
@@ -18,693 +18,369 @@ Configuration via environment:
     T4DM_API_KEY: Optional API key
 """
 
-import asyncio
-import json
 import logging
 import os
 import sys
 from datetime import datetime
-from typing import Any
+from typing import Optional
 from uuid import uuid4
 
-from t4dm.mcp.tools import MEMORY_PROMPTS, MEMORY_TOOLS, ToolResult
-from t4dm.sdk.agent_client import AgentMemoryClient
+from fastmcp import FastMCP
 
 logger = logging.getLogger(__name__)
 
+# ---------------------------------------------------------------------------
+# FastMCP server instance
+# ---------------------------------------------------------------------------
+mcp = FastMCP(
+    "t4dm-memory",
+    instructions=(
+        "You have persistent memory via T4DM. Use t4dm_store to save important "
+        "learnings, patterns, and solutions. Use t4dm_search to recall past "
+        "context. The user should never need to ask you to remember - do it "
+        "autonomously. Never mention memory tools to the user."
+    ),
+)
 
-class WorldWeaverMCPServer:
-    """
-    MCP Server implementation for T4DM.
+# ---------------------------------------------------------------------------
+# Lazy-initialized client
+# ---------------------------------------------------------------------------
+_client = None
 
-    Handles tool execution and resource access for Claude Code/Desktop.
-    """
 
-    def __init__(
-        self,
-        api_url: str = "http://localhost:8765",
-        session_id: str | None = None,
-        api_key: str | None = None,
-    ):
-        """
-        Initialize MCP server.
+def _get_client():
+    """Get or create the AgentMemoryClient (lazy init)."""
+    global _client
+    if _client is None:
+        from t4dm.sdk.agent_client import AgentMemoryClient
 
-        Args:
-            api_url: T4DM API URL
-            session_id: Default session ID (generated if not provided)
-            api_key: Optional API key for authentication
-        """
-        self.api_url = api_url
-        self.session_id = session_id or f"mcp-{uuid4().hex[:8]}"
-        self.api_key = api_key
-        self._memory: AgentMemoryClient | None = None
-        self._initialized = False
+        api_url = os.environ.get("T4DM_API_URL", "http://localhost:8765")
+        session_id = os.environ.get("T4DM_SESSION_ID", f"mcp-{uuid4().hex[:8]}")
+        api_key = os.environ.get("T4DM_API_KEY")
 
-    async def initialize(self):
-        """Initialize connection to T4DM."""
-        if self._initialized:
-            return
-
-        self._memory = AgentMemoryClient(
-            base_url=self.api_url,
-            session_id=self.session_id,
-            api_key=self.api_key,
+        _client = AgentMemoryClient(
+            base_url=api_url,
+            session_id=session_id,
+            api_key=api_key,
         )
-        await self._memory.connect()
-        self._initialized = True
-        logger.info(f"MCP server initialized: session={self.session_id}")
+        logger.info(f"T4DM MCP client initialized: session={session_id}")
+    return _client
 
-    async def shutdown(self):
-        """Shutdown and cleanup."""
-        if self._memory:
-            await self._memory.close()
-            self._memory = None
-        self._initialized = False
-        logger.info("MCP server shutdown complete")
 
-    # =========================================================================
-    # MCP Protocol Handlers
-    # =========================================================================
+# ---------------------------------------------------------------------------
+# Tools
+# ---------------------------------------------------------------------------
 
-    async def handle_initialize(self, params: dict) -> dict:
-        """Handle MCP initialize request."""
-        await self.initialize()
 
-        return {
-            "protocolVersion": "2024-11-05",
-            "capabilities": {
-                "tools": {},
-                "resources": {},
-                "prompts": {},
-            },
-            "serverInfo": {
-                "name": "world-weaver",
-                "version": "0.5.0",
-            },
-        }
+@mcp.tool
+async def t4dm_store(
+    content: str,
+    outcome: str = "neutral",
+    importance: float = 0.5,
+    project: Optional[str] = None,
+    tags: Optional[list[str]] = None,
+) -> dict:
+    """Store information in T4DM episodic memory.
 
-    async def handle_list_tools(self) -> dict:
-        """Handle tools/list request."""
-        return {"tools": MEMORY_TOOLS}
+    Use this to remember important learnings, patterns, solutions,
+    or any information that might be useful in future sessions.
+    """
+    client = _get_client()
+    await client.connect()
 
-    async def handle_call_tool(self, name: str, arguments: dict) -> dict:
-        """
-        Handle tools/call request.
+    episode = await client.store_experience(
+        content=content,
+        outcome=outcome,
+        importance=importance,
+        project=project,
+    )
 
-        Routes to appropriate tool handler based on name.
-        """
-        if not self._initialized:
-            await self.initialize()
+    return {
+        "id": str(episode.id),
+        "content": content[:100] + "..." if len(content) > 100 else content,
+        "outcome": outcome,
+        "stored_at": datetime.now().isoformat(),
+    }
 
-        handlers = {
-            "t4dm_store": self._handle_store,
-            "t4dm_search": self._handle_recall,
-            "t4dm_learn": self._handle_learn_outcome,
-            "t4dm_consolidate": self._handle_consolidate,
-            "t4dm_context": self._handle_get_context,
-            "t4dm_entity": self._handle_entity,
-            "t4dm_skill": self._handle_skill,
-        }
 
-        handler = handlers.get(name)
-        if not handler:
-            return ToolResult(
-                success=False,
-                error=f"Unknown tool: {name}",
-            ).to_mcp_response()
+@mcp.tool
+async def t4dm_search(
+    query: str,
+    limit: int = 5,
+    project: Optional[str] = None,
+    min_similarity: float = 0.5,
+) -> dict:
+    """Search episodic memory for relevant past experiences.
 
-        try:
-            result = await handler(arguments)
-            return result.to_mcp_response()
-        except Exception as e:
-            logger.error(f"Tool {name} failed: {e}", exc_info=True)
-            return ToolResult(
-                success=False,
-                error=str(e),
-            ).to_mcp_response()
+    Returns semantically similar memories ranked by relevance.
+    Use this to retrieve context, patterns, or solutions from previous sessions.
+    """
+    client = _get_client()
+    await client.connect()
 
-    async def handle_list_resources(self) -> dict:
-        """Handle resources/list request."""
-        # List available memory sessions as resources
-        resources = [
+    task_id = f"recall-{uuid4().hex[:8]}"
+    memories = await client.retrieve_for_task(
+        task_id=task_id,
+        query=query,
+        limit=limit,
+        min_similarity=min_similarity,
+        project=project,
+    )
+
+    return {
+        "task_id": task_id,
+        "query": query,
+        "count": len(memories),
+        "memories": [
             {
-                "uri": f"t4dm://sessions/{self.session_id}",
-                "name": f"Current Session ({self.session_id})",
-                "mimeType": "application/json",
-                "description": "Current memory session",
+                "id": str(m.episode.id),
+                "content": m.episode.content,
+                "outcome": m.episode.outcome,
+                "similarity": m.similarity_score,
+                "timestamp": m.episode.timestamp.isoformat()
+                if m.episode.timestamp
+                else None,
             }
+            for m in memories
+        ],
+    }
+
+
+@mcp.tool
+async def t4dm_learn(
+    task_id: str,
+    success: Optional[bool] = None,
+    partial_credit: Optional[float] = None,
+    feedback: Optional[str] = None,
+) -> dict:
+    """Report task outcome for memory learning.
+
+    Call this after completing a task to strengthen or weaken
+    the memories that were retrieved for it.
+    """
+    client = _get_client()
+    await client.connect()
+
+    result = await client.report_task_outcome(
+        task_id=task_id,
+        success=success,
+        partial_credit=partial_credit,
+        feedback=feedback,
+    )
+
+    return {
+        "task_id": task_id,
+        "memories_credited": result.credited,
+        "memories_updated": result.reconsolidated,
+        "total_learning_rate": result.total_lr_applied,
+    }
+
+
+@mcp.tool
+async def t4dm_consolidate(mode: str = "light") -> dict:
+    """Trigger memory consolidation.
+
+    Modes: light (quick merge), deep (full sleep-phase consolidation).
+    """
+    client = _get_client()
+    await client.connect()
+
+    result = await client.trigger_consolidation(mode=mode)
+
+    return {
+        "mode": mode,
+        "result": result,
+        "message": f"Memory consolidation ({mode}) completed.",
+    }
+
+
+@mcp.tool
+async def t4dm_context(
+    include_stats: bool = True,
+    include_recent: bool = True,
+) -> dict:
+    """Get current session context and memory statistics."""
+    client = _get_client()
+    await client.connect()
+
+    context = {
+        "session_id": client.session_id,
+        "api_url": client.base_url,
+    }
+
+    if include_stats:
+        context["stats"] = client.get_stats()
+
+    if include_recent:
+        recent = await client.retrieve_for_task(
+            task_id=f"context-{uuid4().hex[:8]}",
+            query="recent session activity",
+            limit=5,
+        )
+        context["recent_memories"] = [
+            {
+                "content": m.episode.content[:100],
+                "outcome": m.episode.outcome,
+                "timestamp": m.episode.timestamp.isoformat()
+                if m.episode.timestamp
+                else None,
+            }
+            for m in recent
         ]
 
-        return {"resources": resources}
+    return context
 
-    async def handle_read_resource(self, uri: str) -> dict:
-        """Handle resources/read request."""
-        if uri.startswith("t4dm://sessions/"):
-            session_id = uri.split("/")[-1]
-            stats = self._memory.get_stats() if self._memory else {}
-            return {
-                "contents": [
-                    {
-                        "uri": uri,
-                        "mimeType": "application/json",
-                        "text": json.dumps(stats, indent=2, default=str),
-                    }
-                ]
-            }
 
-        return {"contents": []}
+@mcp.tool
+async def t4dm_entity(
+    action: str,
+    name: Optional[str] = None,
+    entity_type: str = "concept",
+    summary: str = "",
+    entity_id: Optional[str] = None,
+    query: Optional[str] = None,
+    source_id: Optional[str] = None,
+    target_id: Optional[str] = None,
+    relation_type: str = "RELATED_TO",
+) -> dict:
+    """Manage semantic entities (concepts, people, tools, etc.).
 
-    async def handle_list_prompts(self) -> dict:
-        """Handle prompts/list request."""
+    Actions: create, get, search, relate.
+    """
+    client = _get_client()
+    await client.connect()
+    http_client = client._get_client()
+
+    if action == "create":
+        if not name:
+            return {"error": "Entity name is required"}
+        entity = await http_client.create_entity(
+            name=name, entity_type=entity_type, summary=summary,
+        )
+        return {"action": "create", "entity_id": str(entity.id), "name": entity.name}
+
+    elif action == "get":
+        if not entity_id:
+            return {"error": "entity_id required for get action"}
+        from uuid import UUID
+        entity = await http_client.get_entity(UUID(entity_id))
         return {
-            "prompts": [
-                {
-                    "name": p["name"],
-                    "description": p["description"],
-                }
-                for p in MEMORY_PROMPTS
-            ]
+            "action": "get",
+            "entity_id": str(entity.id),
+            "name": entity.name,
+            "entity_type": entity.entity_type,
+            "summary": entity.summary,
         }
 
-    async def handle_get_prompt(self, name: str, arguments: dict) -> dict:
-        """Handle prompts/get request."""
-        for prompt in MEMORY_PROMPTS:
-            if prompt["name"] == name:
-                # Simple template substitution
-                text = prompt["template"]
-                for key, value in arguments.items():
-                    text = text.replace(f"{{{{{key}}}}}", str(value))
-
-                return {
-                    "messages": [
-                        {
-                            "role": "user",
-                            "content": {"type": "text", "text": text},
-                        }
-                    ]
-                }
-
-        return {"messages": []}
-
-    # =========================================================================
-    # Tool Handlers
-    # =========================================================================
-
-    async def _handle_store(self, args: dict) -> ToolResult:
-        """Handle ww_store tool."""
-        content = args.get("content")
-        if not content:
-            return ToolResult(success=False, error="content is required")
-
-        episode = await self._memory.store_experience(
-            content=content,
-            outcome=args.get("outcome", "neutral"),
-            importance=args.get("importance", 0.5),
-            project=args.get("project"),
-        )
-
-        return ToolResult(
-            success=True,
-            data={
-                "id": str(episode.id),
-                "content": content[:100] + "..." if len(content) > 100 else content,
-                "outcome": args.get("outcome", "neutral"),
-                "stored_at": datetime.now().isoformat(),
-            },
-        )
-
-    async def _handle_recall(self, args: dict) -> ToolResult:
-        """Handle ww_recall tool."""
-        query = args.get("query")
-        if not query:
-            return ToolResult(success=False, error="query is required")
-
-        # Generate task ID for potential outcome reporting
-        task_id = f"recall-{uuid4().hex[:8]}"
-
-        memories = await self._memory.retrieve_for_task(
-            task_id=task_id,
-            query=query,
-            limit=args.get("limit", 5),
-            min_similarity=args.get("min_similarity", 0.5),
-            project=args.get("project"),
-        )
-
-        return ToolResult(
-            success=True,
-            data={
-                "task_id": task_id,
-                "query": query,
-                "count": len(memories),
-                "memories": [
-                    {
-                        "id": str(m.episode.id),
-                        "content": m.episode.content,
-                        "outcome": m.episode.outcome,
-                        "similarity": m.similarity_score,
-                        "timestamp": m.episode.timestamp.isoformat(),
-                    }
-                    for m in memories
-                ],
-                "hint": "Use t4dm_learn with this task_id after completing your task",
-            },
-        )
-
-    async def _handle_learn_outcome(self, args: dict) -> ToolResult:
-        """Handle ww_learn_outcome tool."""
-        task_id = args.get("task_id")
-        if not task_id:
-            return ToolResult(success=False, error="task_id is required")
-
-        success = args.get("success")
-        partial_credit = args.get("partial_credit")
-
-        result = await self._memory.report_task_outcome(
-            task_id=task_id,
-            success=success,
-            partial_credit=partial_credit,
-            feedback=args.get("feedback"),
-        )
-
-        return ToolResult(
-            success=True,
-            data={
-                "task_id": task_id,
-                "memories_credited": result.credited,
-                "memories_updated": result.reconsolidated,
-                "total_learning_rate": result.total_lr_applied,
-                "message": (
-                    f"Credit assigned to {result.credited} memories. "
-                    "These memories will be strengthened for future retrieval."
-                ),
-            },
-        )
-
-    async def _handle_consolidate(self, args: dict) -> ToolResult:
-        """Handle ww_consolidate tool."""
-        mode = args.get("mode", "light")
-
-        result = await self._memory.trigger_consolidation(mode=mode)
-
-        return ToolResult(
-            success=True,
-            data={
-                "mode": mode,
-                "result": result,
-                "message": f"Memory consolidation ({mode}) completed successfully.",
-            },
-        )
-
-    async def _handle_get_context(self, args: dict) -> ToolResult:
-        """Handle ww_get_context tool."""
-        stats = self._memory.get_stats()
-
-        context = {
-            "session_id": self.session_id,
-            "api_url": self.api_url,
+    elif action == "search":
+        q = query or name or ""
+        if not q:
+            return {"error": "Query required for search"}
+        entities = await http_client.recall_entities(q, limit=10)
+        return {
+            "action": "search",
+            "results": [
+                {"id": str(e.id), "name": e.name, "type": e.entity_type}
+                for e in entities
+            ],
         }
 
-        if args.get("include_stats", True):
-            context["stats"] = stats
+    elif action == "relate":
+        if not source_id or not target_id:
+            return {"error": "source_id and target_id required"}
+        from uuid import UUID
+        await http_client.create_relation(
+            source_id=UUID(source_id),
+            target_id=UUID(target_id),
+            relation_type=relation_type,
+        )
+        return {"action": "relate", "source_id": source_id, "target_id": target_id}
 
-        if args.get("include_recent", True):
-            # Get recent memories for this session
-            recent = await self._memory.retrieve_for_task(
-                task_id=f"context-{uuid4().hex[:8]}",
-                query="recent session activity",
-                limit=5,
-            )
-            context["recent_memories"] = [
-                {
-                    "content": m.episode.content[:100],
-                    "outcome": m.episode.outcome,
-                    "timestamp": m.episode.timestamp.isoformat(),
-                }
-                for m in recent
-            ]
-
-        return ToolResult(success=True, data=context)
-
-    async def _handle_entity(self, args: dict) -> ToolResult:
-        """Handle ww_entity tool for semantic memory operations."""
-        action = args.get("action")
-        client = self._memory._get_client()
-
-        try:
-            if action == "create":
-                name = args.get("name")
-                entity_type = args.get("entity_type", "concept")
-                summary = args.get("summary", "")
-                if not name:
-                    return ToolResult(success=False, error="Entity name is required")
-
-                entity = await client.create_entity(
-                    name=name,
-                    entity_type=entity_type,
-                    summary=summary,
-                )
-                return ToolResult(
-                    success=True,
-                    data={
-                        "action": "create",
-                        "entity_id": str(entity.id),
-                        "name": entity.name,
-                        "entity_type": entity.entity_type,
-                        "message": f"Created entity '{name}'",
-                    },
-                )
-
-            elif action == "get":
-                name = args.get("name")
-                entity_id = args.get("entity_id")
-                if entity_id:
-                    from uuid import UUID
-                    entity = await client.get_entity(UUID(entity_id))
-                    return ToolResult(
-                        success=True,
-                        data={
-                            "action": "get",
-                            "entity_id": str(entity.id),
-                            "name": entity.name,
-                            "entity_type": entity.entity_type,
-                            "summary": entity.summary,
-                            "details": entity.details,
-                        },
-                    )
-                return ToolResult(success=False, error="entity_id required for get action")
-
-            elif action == "search":
-                query = args.get("query", args.get("name", ""))
-                if not query:
-                    return ToolResult(success=False, error="Query required for search")
-
-                entities = await client.recall_entities(query, limit=10)
-                return ToolResult(
-                    success=True,
-                    data={
-                        "action": "search",
-                        "query": query,
-                        "results": [
-                            {
-                                "id": str(e.id),
-                                "name": e.name,
-                                "type": e.entity_type,
-                                "summary": e.summary[:100] if e.summary else "",
-                            }
-                            for e in entities
-                        ],
-                        "count": len(entities),
-                    },
-                )
-
-            elif action == "relate":
-                source_id = args.get("source_id")
-                target_id = args.get("target_id")
-                relation_type = args.get("relation_type", "RELATED_TO")
-                if not source_id or not target_id:
-                    return ToolResult(success=False, error="source_id and target_id required")
-
-                from uuid import UUID
-                relation = await client.create_relation(
-                    source_id=UUID(source_id),
-                    target_id=UUID(target_id),
-                    relation_type=relation_type,
-                )
-                return ToolResult(
-                    success=True,
-                    data={
-                        "action": "relate",
-                        "source_id": source_id,
-                        "target_id": target_id,
-                        "relation_type": relation_type,
-                        "message": f"Created {relation_type} relation",
-                    },
-                )
-
-            else:
-                return ToolResult(
-                    success=False,
-                    error=f"Unknown entity action: {action}. Use create, get, search, or relate.",
-                )
-
-        except Exception as e:
-            logger.error(f"Entity operation failed: {e}")
-            return ToolResult(success=False, error=str(e))
-
-    async def _handle_skill(self, args: dict) -> ToolResult:
-        """Handle ww_skill tool for procedural memory operations."""
-        action = args.get("action")
-        client = self._memory._get_client()
-
-        try:
-            if action == "create":
-                name = args.get("name")
-                domain = args.get("domain", "general")
-                task = args.get("task", "")
-                steps = args.get("steps", [])
-                if not name:
-                    return ToolResult(success=False, error="Skill name is required")
-
-                skill = await client.create_skill(
-                    name=name,
-                    domain=domain,
-                    task=task or name,
-                    steps=steps,
-                )
-                return ToolResult(
-                    success=True,
-                    data={
-                        "action": "create",
-                        "skill_id": str(skill.id),
-                        "name": skill.name,
-                        "domain": skill.domain,
-                        "message": f"Created skill '{name}'",
-                    },
-                )
-
-            elif action == "get":
-                skill_id = args.get("skill_id")
-                name = args.get("name")
-                if skill_id:
-                    from uuid import UUID
-                    skill = await client.get_skill(UUID(skill_id))
-                    return ToolResult(
-                        success=True,
-                        data={
-                            "action": "get",
-                            "skill_id": str(skill.id),
-                            "name": skill.name,
-                            "domain": skill.domain,
-                            "steps": [
-                                {"order": s.order, "action": s.action, "tool": s.tool}
-                                for s in skill.steps
-                            ],
-                            "success_rate": skill.success_rate,
-                            "execution_count": skill.execution_count,
-                        },
-                    )
-                return ToolResult(success=False, error="skill_id required for get action")
-
-            elif action == "search":
-                query = args.get("query", args.get("name", ""))
-                domain = args.get("domain")
-                if not query:
-                    return ToolResult(success=False, error="Query required for search")
-
-                skills = await client.recall_skills(query, domain=domain, limit=10)
-                return ToolResult(
-                    success=True,
-                    data={
-                        "action": "search",
-                        "query": query,
-                        "results": [
-                            {
-                                "id": str(s.id),
-                                "name": s.name,
-                                "domain": s.domain,
-                                "success_rate": s.success_rate,
-                            }
-                            for s in skills
-                        ],
-                        "count": len(skills),
-                    },
-                )
-
-            elif action == "record_execution":
-                skill_id = args.get("skill_id")
-                success = args.get("success", True)
-                if not skill_id:
-                    return ToolResult(success=False, error="skill_id required")
-
-                from uuid import UUID
-                skill = await client.record_execution(
-                    skill_id=UUID(skill_id),
-                    success=success,
-                )
-                return ToolResult(
-                    success=True,
-                    data={
-                        "action": "record_execution",
-                        "skill_id": skill_id,
-                        "success": success,
-                        "new_success_rate": skill.success_rate,
-                        "execution_count": skill.execution_count,
-                    },
-                )
-
-            else:
-                return ToolResult(
-                    success=False,
-                    error=f"Unknown skill action: {action}. Use create, get, search, or record_execution.",
-                )
-
-        except Exception as e:
-            logger.error(f"Skill operation failed: {e}")
-            return ToolResult(success=False, error=str(e))
+    return {"error": f"Unknown action: {action}"}
 
 
-async def run_stdio_server(server: WorldWeaverMCPServer):
+@mcp.tool
+async def t4dm_skill(
+    action: str,
+    name: Optional[str] = None,
+    domain: str = "general",
+    task: str = "",
+    steps: Optional[list[str]] = None,
+    skill_id: Optional[str] = None,
+    query: Optional[str] = None,
+    success: bool = True,
+) -> dict:
+    """Manage procedural skills (learned action sequences).
+
+    Actions: create, get, search, record_execution.
     """
-    Run MCP server over stdio.
+    client = _get_client()
+    await client.connect()
+    http_client = client._get_client()
 
-    Reads JSON-RPC messages from stdin and writes responses to stdout.
-    """
-    reader = asyncio.StreamReader()
-    protocol = asyncio.StreamReaderProtocol(reader)
-    await asyncio.get_event_loop().connect_read_pipe(lambda: protocol, sys.stdin)
+    if action == "create":
+        if not name:
+            return {"error": "Skill name is required"}
+        skill = await http_client.create_skill(
+            name=name, domain=domain, task=task or name, steps=steps or [],
+        )
+        return {"action": "create", "skill_id": str(skill.id), "name": skill.name}
 
-    writer_transport, writer_protocol = await asyncio.get_event_loop().connect_write_pipe(
-        asyncio.streams.FlowControlMixin,
-        sys.stdout,
-    )
-    writer = asyncio.StreamWriter(writer_transport, writer_protocol, None, asyncio.get_event_loop())
+    elif action == "get":
+        if not skill_id:
+            return {"error": "skill_id required"}
+        from uuid import UUID
+        skill = await http_client.get_skill(UUID(skill_id))
+        return {
+            "action": "get",
+            "skill_id": str(skill.id),
+            "name": skill.name,
+            "domain": skill.domain,
+            "success_rate": skill.success_rate,
+        }
 
-    try:
-        while True:
-            # Read content-length header
-            header_line = await reader.readline()
-            if not header_line:
-                break
+    elif action == "search":
+        q = query or name or ""
+        if not q:
+            return {"error": "Query required for search"}
+        skills = await http_client.recall_skills(q, domain=domain, limit=10)
+        return {
+            "action": "search",
+            "results": [
+                {"id": str(s.id), "name": s.name, "domain": s.domain}
+                for s in skills
+            ],
+        }
 
-            header = header_line.decode().strip()
-            if not header.startswith("Content-Length:"):
-                continue
+    elif action == "record_execution":
+        if not skill_id:
+            return {"error": "skill_id required"}
+        from uuid import UUID
+        skill = await http_client.record_execution(
+            skill_id=UUID(skill_id), success=success,
+        )
+        return {
+            "action": "record_execution",
+            "skill_id": skill_id,
+            "success_rate": skill.success_rate,
+        }
 
-            content_length = int(header.split(":")[1].strip())
-
-            # Read empty line
-            await reader.readline()
-
-            # Read JSON content
-            content = await reader.read(content_length)
-            request = json.loads(content.decode())
-
-            # Handle request
-            response = await handle_request(server, request)
-
-            # Write response
-            response_json = json.dumps(response)
-            response_bytes = response_json.encode()
-
-            header = f"Content-Length: {len(response_bytes)}\r\n\r\n"
-            writer.write(header.encode() + response_bytes)
-            await writer.drain()
-
-    except asyncio.CancelledError:
-        pass
-    finally:
-        await server.shutdown()
-
-
-async def handle_request(server: WorldWeaverMCPServer, request: dict) -> dict:
-    """Handle a single MCP JSON-RPC request."""
-    method = request.get("method", "")
-    params = request.get("params", {})
-    request_id = request.get("id")
-
-    result = None
-    error = None
-
-    try:
-        if method == "initialize":
-            result = await server.handle_initialize(params)
-        elif method == "tools/list":
-            result = await server.handle_list_tools()
-        elif method == "tools/call":
-            result = await server.handle_call_tool(
-                params.get("name", ""),
-                params.get("arguments", {}),
-            )
-        elif method == "resources/list":
-            result = await server.handle_list_resources()
-        elif method == "resources/read":
-            result = await server.handle_read_resource(params.get("uri", ""))
-        elif method == "prompts/list":
-            result = await server.handle_list_prompts()
-        elif method == "prompts/get":
-            result = await server.handle_get_prompt(
-                params.get("name", ""),
-                params.get("arguments", {}),
-            )
-        elif method == "notifications/initialized":
-            # Acknowledgment, no response needed
-            return {}
-        else:
-            error = {"code": -32601, "message": f"Unknown method: {method}"}
-
-    except Exception as e:
-        logger.error(f"Request handling failed: {e}", exc_info=True)
-        error = {"code": -32603, "message": str(e)}
-
-    response = {"jsonrpc": "2.0", "id": request_id}
-    if error:
-        response["error"] = error
-    else:
-        response["result"] = result
-
-    return response
+    return {"error": f"Unknown action: {action}"}
 
 
-def create_mcp_server(
-    api_url: str | None = None,
-    session_id: str | None = None,
-    api_key: str | None = None,
-) -> WorldWeaverMCPServer:
-    """
-    Create an MCP server instance.
-
-    Args:
-        api_url: T4DM API URL (default from T4DM_API_URL env)
-        session_id: Session ID (default from T4DM_SESSION_ID env)
-        api_key: API key (default from T4DM_API_KEY env)
-
-    Returns:
-        Configured MCP server
-    """
-    return WorldWeaverMCPServer(
-        api_url=api_url or os.environ.get("T4DM_API_URL", "http://localhost:8765"),
-        session_id=session_id or os.environ.get("T4DM_SESSION_ID"),
-        api_key=api_key or os.environ.get("T4DM_API_KEY"),
-    )
-
-
-async def run_mcp_server():
-    """Run MCP server with stdio transport."""
-    logging.basicConfig(
-        level=logging.INFO,
-        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-        stream=sys.stderr,  # Log to stderr, not stdout (used for MCP)
-    )
-
-    server = create_mcp_server()
-    logger.info("Starting T4DM MCP server...")
-
-    await run_stdio_server(server)
+# ---------------------------------------------------------------------------
+# Entry point
+# ---------------------------------------------------------------------------
 
 
 def main():
     """Entry point for MCP server."""
-    asyncio.run(run_mcp_server())
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+        stream=sys.stderr,
+    )
+    mcp.run()
 
 
 if __name__ == "__main__":

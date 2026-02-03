@@ -82,6 +82,20 @@ class UnifiedModel(nn.Module):
                 return base.model.model.norm
         raise AttributeError("Cannot locate final norm")
 
+    def _get_rotary_emb(self, hidden: Tensor, position_ids: Tensor) -> tuple[Tensor, Tensor] | None:
+        """Get (cos, sin) position embeddings from the Qwen rotary embedding.
+
+        Returns None if not available (e.g. mock/test models).
+        """
+        if hasattr(self.qwen, "model") and hasattr(self.qwen.model, "rotary_emb"):
+            return self.qwen.model.rotary_emb(hidden, position_ids)
+        if hasattr(self.qwen, "base_model"):
+            base = self.qwen.base_model
+            if hasattr(base, "model") and hasattr(base.model, "model"):
+                if hasattr(base.model.model, "rotary_emb"):
+                    return base.model.model.rotary_emb(hidden, position_ids)
+        return None
+
     def _get_lm_head(self) -> nn.Module:
         if hasattr(self.qwen, "lm_head"):
             return self.qwen.lm_head
@@ -111,29 +125,61 @@ class UnifiedModel(nn.Module):
         # Embedding
         hidden = embed(input_ids)
 
+        # Compute rotary position embeddings once for all layers
+        seq_len = hidden.shape[1]
+        position_ids = torch.arange(
+            seq_len, device=hidden.device, dtype=torch.long,
+        ).unsqueeze(0).expand(hidden.shape[0], -1)
+        position_embeddings = self._get_rotary_emb(hidden, position_ids)
+
+        # Build causal attention mask compatible with SDPA
+        # None works for full-sequence forward (SDPA uses causal by default)
+        causal_mask = None
+        if attention_mask is not None and attention_mask.dim() == 2:
+            # Convert [B, S] padding mask to [B, 1, S, S] float mask
+            bsz = attention_mask.shape[0]
+            causal_mask = torch.full(
+                (bsz, 1, seq_len, seq_len), float("-inf"),
+                device=hidden.device, dtype=hidden.dtype,
+            )
+            causal_mask = causal_mask.triu(diagonal=1)  # causal
+            # Apply padding: mask out padded positions
+            pad_mask = (1 - attention_mask[:, None, None, :].to(hidden.dtype)) * float("-inf")
+            causal_mask = causal_mask + pad_mask
+
+        # Build layer kwargs (only pass position_embeddings if available)
+        layer_kw: dict[str, Any] = {"attention_mask": causal_mask}
+        if position_embeddings is not None:
+            layer_kw["position_embeddings"] = position_embeddings
+
         # Qwen layers [0, split_layer) — lower half
         for i in range(self.split_layer):
-            layer_out = layers[i](hidden, attention_mask=attention_mask)
+            layer_out = layers[i](hidden, **layer_kw)
             hidden = layer_out[0] if isinstance(layer_out, tuple) else layer_out
 
         hidden_mid = hidden  # save for skip connection
 
         # Project to memory dim → spiking adapter → project back
-        mem_encoded = self.projection.encode(hidden)
+        # Spiking blocks use float32 internally (LIF neurons need precision)
+        compute_dtype = hidden.dtype
+        mem_encoded = self.projection.encode(hidden.float()).float()
         spiking_out, new_states, spiking_metrics = self.spiking(
             mem_encoded, context=None,
             neuromod_state=neuromod_state,
             states=spiking_states,
         )
-        mem_decoded = self.projection.decode(spiking_out)
+        mem_decoded = self.projection.decode(spiking_out).to(compute_dtype)
+
+        # Clamp spiking output to prevent NaN propagation from untrained adapter
+        mem_decoded = torch.clamp(mem_decoded, -100.0, 100.0)
 
         # Gated residual: α * spiking_decoded + (1-α) * skip
-        alpha = self.gate(hidden_mid)
+        alpha = self.gate(hidden_mid.float()).to(compute_dtype)
         hidden = alpha * mem_decoded + (1 - alpha) * hidden_mid
 
         # Qwen layers [split_layer, N) — upper half
         for i in range(self.split_layer, len(layers)):
-            layer_out = layers[i](hidden, attention_mask=attention_mask)
+            layer_out = layers[i](hidden, **layer_kw)
             hidden = layer_out[0] if isinstance(layer_out, tuple) else layer_out
 
         hidden = norm(hidden)

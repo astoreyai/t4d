@@ -115,6 +115,9 @@ class InferencePipeline:
         if not self.cfg.do_sample:
             return logits.argmax(dim=-1, keepdim=True)
 
+        # Replace NaN/inf with 0 (untrained spiking adapter can produce these)
+        logits = torch.nan_to_num(logits, nan=0.0, posinf=0.0, neginf=float("-inf"))
+
         logits = logits / max(self.cfg.temperature, 1e-8)
 
         # Top-k filtering
@@ -134,6 +137,9 @@ class InferencePipeline:
             logits = sorted_logits.scatter(1, sorted_idx, sorted_logits)
 
         probs = logits.softmax(dim=-1)
+        # Safety: if all probs are 0/NaN (from extreme logits), use uniform
+        if probs.isnan().any() or probs.sum() == 0:
+            probs = torch.ones_like(probs) / probs.size(-1)
         return torch.multinomial(probs, num_samples=1)
 
     def reset_state(self) -> None:

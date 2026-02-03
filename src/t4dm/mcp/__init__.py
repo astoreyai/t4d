@@ -1,14 +1,12 @@
 """
-T4DM MCP Server.
+T4DM MCP Server (FastMCP).
 
 Exposes T4DM memory system as an MCP server for Claude Code/Desktop.
 """
 
-from t4dm.mcp.server import create_mcp_server, run_mcp_server
-from t4dm.mcp.tools import MEMORY_TOOLS
+from t4dm.mcp.server import mcp, main
 
 __all__ = [
-    "MEMORY_TOOLS",
-    "create_mcp_server",
-    "run_mcp_server",
+    "mcp",
+    "main",
 ]

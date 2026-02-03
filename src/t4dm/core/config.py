@@ -328,6 +328,12 @@ class Settings(BaseSettings):
         description="Environment: development, staging, production, test",
     )
 
+    # Data directory for T4DX storage
+    data_dir: str = Field(
+        default=".data",
+        description="Base directory for T4DX persistent storage",
+    )
+
     # Session
     session_id: str = Field(
         default="default",
@@ -848,6 +854,28 @@ class Settings(BaseSettings):
     bioinspired: BioinspiredConfig = Field(
         default_factory=BioinspiredConfig,
         description="Bioinspired neural memory configuration (experimental)",
+    )
+
+    # Untrained adaptation layers (disable until trained)
+    ff_encoder_enabled: bool = Field(
+        default=False,
+        description="Enable Forward-Forward encoder (requires training)",
+    )
+    pattern_separation_enabled: bool = Field(
+        default=False,
+        description="Enable dentate gyrus pattern separation (requires training)",
+    )
+    capsule_layer_enabled: bool = Field(
+        default=False,
+        description="Enable capsule layer encoding (requires training)",
+    )
+    query_memory_separation_enabled: bool = Field(
+        default=False,
+        description="Enable asymmetric query/memory projections (requires training)",
+    )
+    neuromodulation_enabled: bool = Field(
+        default=False,
+        description="Enable neuromodulator dynamics",
     )
 
     # API Server Configuration

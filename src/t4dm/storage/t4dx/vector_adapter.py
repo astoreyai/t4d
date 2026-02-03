@@ -24,6 +24,7 @@ class T4DXVectorStore:
         self.episodes_collection = "episodes"
         self.entities_collection = "entities"
         self.skills_collection = "skills"
+        self.procedures_collection = "procedures"
 
     async def initialize(self) -> None:
         """No-op: T4DX engine is already started."""
@@ -66,7 +67,7 @@ class T4DXVectorStore:
                 content=payload.get("content", ""),
                 access_count=payload.get("access_count", 0),
                 session_id=payload.get("session_id"),
-                metadata=payload.get("metadata", {}),
+                metadata=payload,  # Store full payload for reconstruction
             )
             self._engine.insert(rec)
 
@@ -76,6 +77,8 @@ class T4DXVectorStore:
         vector: list[float],
         limit: int = 10,
         filter: dict[str, Any] | None = None,
+        score_threshold: float | None = None,
+        **kwargs: Any,
     ) -> list[tuple[str, float, dict[str, Any]]]:
         kw: dict[str, Any] = {"item_type": collection}
         if filter:
@@ -88,19 +91,26 @@ class T4DXVectorStore:
             if "time_max" in filter:
                 kw["time_max"] = filter["time_max"]
 
+        # Ensure vector is a plain list (not numpy array)
+        if hasattr(vector, 'tolist'):
+            vector = vector.tolist()
+
         raw = self._engine.search(vector, k=limit, **kw)
         results = []
         for rid, score in raw:
+            if score_threshold is not None and score < score_threshold:
+                continue
             rec = self._engine.get(rid)
             if rec is None:
                 continue
-            payload = {
+            # Return full stored payload (metadata contains the original payload)
+            payload = dict(rec.metadata) if rec.metadata else {}
+            payload.update({
                 "content": rec.content,
                 "kappa": rec.kappa,
                 "importance": rec.importance,
                 "item_type": rec.item_type,
-                "metadata": rec.metadata,
-            }
+            })
             results.append((ItemRecord.bytes_to_uuid(rid).__str__(), score, payload))
         return results
 
@@ -123,13 +133,13 @@ class T4DXVectorStore:
             uid = UUID(id_str)
             rec = self._engine.get(uid.bytes)
             if rec is not None:
-                payload = {
+                payload = dict(rec.metadata) if rec.metadata else {}
+                payload.update({
                     "content": rec.content,
                     "kappa": rec.kappa,
                     "importance": rec.importance,
                     "item_type": rec.item_type,
-                    "metadata": rec.metadata,
-                }
+                })
                 results.append((id_str, payload))
         return results
 
@@ -237,13 +247,13 @@ class T4DXVectorStore:
         results = []
         for rec in page:
             uid = ItemRecord.bytes_to_uuid(rec.id).__str__()
-            payload = {
+            payload = dict(rec.metadata) if rec.metadata else {}
+            payload.update({
                 "content": rec.content,
                 "kappa": rec.kappa,
                 "importance": rec.importance,
                 "item_type": rec.item_type,
-                "metadata": rec.metadata,
-            }
+            })
             results.append((uid, payload))
         return results
 
@@ -272,12 +282,12 @@ class T4DXVectorStore:
             uid = UUID(id_str)
             rec = self._engine.get(uid.bytes)
             if rec is not None:
-                payload = {
+                payload = dict(rec.metadata) if rec.metadata else {}
+                payload.update({
                     "content": rec.content,
                     "kappa": rec.kappa,
                     "importance": rec.importance,
                     "item_type": rec.item_type,
-                    "metadata": rec.metadata,
-                }
+                })
                 results.append((id_str, rec.vector, payload))
         return results
