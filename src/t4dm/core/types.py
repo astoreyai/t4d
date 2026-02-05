@@ -121,6 +121,10 @@ class Episode(BaseModel):
     content: str = Field(..., min_length=1, description="Full interaction text")
     embedding: list[float] | None = Field(default=None, description="1024-dim BGE-M3 vector")
 
+    # P1-06: κ (kappa) consolidation gradient [0,1]
+    # κ=0.0: Raw episodic, κ~0.15: Replayed, κ~0.4: Transitional, κ~0.85: Semantic
+    kappa: float = Field(default=0.0, ge=0.0, le=1.0, description="Consolidation level [0,1]")
+
     # Bi-temporal
     timestamp: datetime = Field(default_factory=datetime.now, description="Event time (T_ref)")
     ingested_at: datetime = Field(default_factory=datetime.now, description="System time (T_sys)")
@@ -182,6 +186,10 @@ class Entity(BaseModel):
     summary: str = Field(..., min_length=1, description="Short description")
     details: str | None = Field(default=None, description="Expanded context")
     embedding: list[float] | None = Field(default=None, description="1024-dim BGE-M3 vector")
+
+    # P1-07: κ (kappa) consolidation gradient [0,1]
+    # Entities typically start at higher κ (0.7-0.85) as abstracted knowledge
+    kappa: float = Field(default=0.85, ge=0.0, le=1.0, description="Consolidation level [0,1]")
 
     # Provenance
     source: str | None = Field(default=None, description="episode_id or 'user_provided'")
@@ -279,6 +287,10 @@ class Procedure(BaseModel):
     name: str = Field(..., min_length=1, description="Procedure identifier")
     domain: Domain = Field(...)
     trigger_pattern: str | None = Field(default=None, description="When to invoke")
+
+    # P1-08: κ (kappa) consolidation gradient [0,1]
+    # Procedures typically start at medium κ (0.5) and increase with successful execution
+    kappa: float = Field(default=0.5, ge=0.0, le=1.0, description="Consolidation level [0,1]")
 
     # Dual format storage
     steps: list[ProcedureStep] = Field(default_factory=list, description="Fine-grained actions")

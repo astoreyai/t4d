@@ -3,7 +3,17 @@ Memory Gate - Decides what gets stored in T4DM.
 
 Implements signal detection to filter noise from voice/text interactions,
 ensuring only meaningful episodes reach long-term memory.
+
+P1-02: Integrates τ(t) temporal control signal for neural-gated memory writes.
+The temporal gate modulates storage decisions based on:
+- Prediction error
+- Novelty
+- Reward signals
+- Dopamine modulation
+- Theta phase (encoding vs retrieval)
 """
+
+from __future__ import annotations
 
 import logging
 import re
@@ -11,6 +21,11 @@ from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
 from hashlib import md5
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from t4dm.core.temporal_control import TemporalControlSignal, TemporalControlState
+    from t4dm.learning.neuromodulators import NeuromodulatorState
 
 logger = logging.getLogger(__name__)
 
@@ -35,6 +50,12 @@ class GateContext:
     current_task: str | None = None
     is_voice: bool = False
 
+    # P1-02: Temporal control context
+    prediction_error: float = 0.0  # |δ| from dopamine system
+    novelty_signal: float = 0.0  # External novelty score
+    reward_signal: float = 0.0  # Reward from outcome
+    theta_phase: float = 0.0  # Current theta oscillation phase [0, 2π]
+
 
 @dataclass
 class GateResult:
@@ -44,6 +65,10 @@ class GateResult:
     reasons: list[str]
     suggested_importance: float
     batch_key: str | None = None  # For temporal batching
+
+    # P1-02: Temporal control outputs
+    tau_value: float = 0.5  # τ(t) gate value [0, 1]
+    plasticity_gain: float = 1.0  # Multiplier for learning rate
 
 
 class MemoryGate:
@@ -109,6 +134,8 @@ class MemoryGate:
         min_store_interval: timedelta = timedelta(seconds=30),
         max_messages_without_store: int = 20,
         voice_mode_adjustments: bool = True,
+        use_temporal_control: bool = True,
+        tau_weight: float = 0.3,
     ):
         """
         Initialize memory gate.
@@ -119,12 +146,16 @@ class MemoryGate:
             min_store_interval: Minimum time between stores
             max_messages_without_store: Force store after N messages
             voice_mode_adjustments: Apply voice-specific heuristics
+            use_temporal_control: P1-02: Enable τ(t) neural gating
+            tau_weight: Weight of τ(t) in final score (0-1)
         """
         self.store_threshold = store_threshold
         self.buffer_threshold = buffer_threshold
         self.min_store_interval = min_store_interval
         self.max_messages_without_store = max_messages_without_store
         self.voice_mode_adjustments = voice_mode_adjustments
+        self.use_temporal_control = use_temporal_control
+        self.tau_weight = tau_weight
 
         # Compile patterns
         self._always_store = [re.compile(p, re.IGNORECASE) for p in self.ALWAYS_STORE_PATTERNS]
@@ -136,7 +167,27 @@ class MemoryGate:
         self._recent_hashes: set[str] = set()
         self._recent_hash_limit = 100
 
-        logger.info(f"MemoryGate initialized (threshold={store_threshold})")
+        # P1-02: Initialize temporal control signal
+        self._temporal_control: TemporalControlSignal | None = None
+        if use_temporal_control:
+            self._init_temporal_control()
+
+        logger.info(f"MemoryGate initialized (threshold={store_threshold}, tau={use_temporal_control})")
+
+    def _init_temporal_control(self) -> None:
+        """Initialize the τ(t) temporal control signal."""
+        try:
+            from t4dm.core.temporal_control import TemporalControlSignal
+            self._temporal_control = TemporalControlSignal()
+            logger.info("Temporal control signal initialized")
+        except ImportError:
+            logger.warning("TemporalControlSignal not available, disabling temporal control")
+            self.use_temporal_control = False
+
+    def set_temporal_control(self, control: TemporalControlSignal) -> None:
+        """Set an external temporal control signal instance."""
+        self._temporal_control = control
+        self.use_temporal_control = True
 
     def evaluate(self, content: str, context: GateContext) -> GateResult:
         """
@@ -196,13 +247,28 @@ class MemoryGate:
                 weights["novelty"] = 0.15
                 weights["time"] = 0.25
 
-        score = (
+        heuristic_score = (
             weights["novelty"] * novelty +
             weights["outcome"] * outcome +
             weights["entity"] * entity_density +
             weights["action"] * action_sig +
             weights["time"] * time_pressure
         )
+
+        # P1-02: Compute τ(t) temporal control signal
+        tau_value = 0.5  # Default neutral
+        plasticity_gain = 1.0
+        if self.use_temporal_control and self._temporal_control is not None:
+            tau_state = self._compute_tau(context, novelty)
+            tau_value = tau_state.tau
+            plasticity_gain = tau_state.plasticity_gain
+
+            # Blend heuristic score with τ(t)
+            score = (1.0 - self.tau_weight) * heuristic_score + self.tau_weight * tau_value
+
+            reasons.append(f"τ(t)={tau_value:.2f}, plasticity={plasticity_gain:.2f}")
+        else:
+            score = heuristic_score
 
         reasons.append(f"novelty={novelty:.2f}, outcome={outcome:.2f}, "
                       f"entity={entity_density:.2f}, action={action_sig:.2f}, "
@@ -228,6 +294,48 @@ class MemoryGate:
             reasons=reasons,
             suggested_importance=importance,
             batch_key=batch_key if decision == StorageDecision.BUFFER else None,
+            tau_value=tau_value,
+            plasticity_gain=plasticity_gain,
+        )
+
+    def _compute_tau(self, context: GateContext, novelty_heuristic: float) -> TemporalControlState:
+        """
+        P1-02: Compute τ(t) temporal control state.
+
+        Combines context signals with the temporal control neural network
+        to produce a biologically-plausible gating signal.
+
+        Args:
+            context: Gate context with neural signals
+            novelty_heuristic: Novelty score from heuristic analysis
+
+        Returns:
+            TemporalControlState with tau value and derived signals
+        """
+        import torch
+        from t4dm.core.temporal_control import TemporalControlMode
+
+        # Use context signals if available, else derive from heuristics
+        prediction_error = context.prediction_error if context.prediction_error > 0 else novelty_heuristic * 0.5
+        novelty = context.novelty_signal if context.novelty_signal > 0 else novelty_heuristic
+        reward = context.reward_signal  # 0 if not set
+
+        # Determine mode based on message count
+        # More messages = more likely in encoding mode
+        if context.message_count_since_store < 3:
+            mode = TemporalControlMode.RETRIEVAL
+        elif context.message_count_since_store > 10:
+            mode = TemporalControlMode.ENCODING
+        else:
+            mode = TemporalControlMode.MAINTENANCE
+
+        return self._temporal_control.compute_state(
+            prediction_error=torch.tensor(prediction_error),
+            novelty=torch.tensor(novelty),
+            reward=torch.tensor(reward),
+            dopamine=torch.tensor(context.prediction_error),  # Use PE as dopamine proxy
+            theta_phase=torch.tensor(context.theta_phase),
+            mode=mode,
         )
 
     def _novelty_score(self, content: str) -> float:
