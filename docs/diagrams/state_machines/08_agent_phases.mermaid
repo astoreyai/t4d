@@ -1,0 +1,25 @@
+---
+title: Agent Phase State Machine
+---
+stateDiagram-v2
+    direction TB
+
+    [*] --> IDLE: Agent init
+
+    IDLE: Between tasks, light consolidation
+    ENCODING: Active task, high ACh
+    RETRIEVAL: Gathering context, low ACh
+    EXECUTING: Running tools, eligibility active
+    CONSOLIDATING: Sleep cycle, offline
+
+    IDLE --> RETRIEVAL: Task assigned
+    RETRIEVAL --> ENCODING: Context loaded
+    ENCODING --> EXECUTING: Execute action
+    EXECUTING --> ENCODING: Action complete
+    ENCODING --> RETRIEVAL: Need more context
+
+    EXECUTING --> IDLE: Task complete
+    ENCODING --> IDLE: Task abandoned
+
+    IDLE --> CONSOLIDATING: Idle > 5min
+    CONSOLIDATING --> IDLE: Consolidation complete

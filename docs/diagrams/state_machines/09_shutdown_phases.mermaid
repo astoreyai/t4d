@@ -1,0 +1,21 @@
+---
+title: Graceful Shutdown State Machine
+---
+stateDiagram-v2
+    direction LR
+
+    [*] --> RUNNING: Process start
+
+    RUNNING: Normal operation
+    DRAINING: No new requests (30s timeout)
+    CHECKPOINTING: Create snapshot (60s timeout)
+    CLEANING: Run callbacks LIFO (30s timeout)
+    CLOSED: Exit(0)
+
+    RUNNING --> DRAINING: SIGTERM/SIGINT
+    DRAINING --> CHECKPOINTING: Drained or timeout
+    CHECKPOINTING --> CLEANING: Checkpoint done
+    CLEANING --> CLOSED: Cleanup done
+    CLOSED --> [*]: Process exit
+
+    RUNNING --> CLOSED: Double SIGINT (force)

@@ -1,0 +1,24 @@
+---
+title: Hippocampal Mode State Machine (NCA)
+---
+stateDiagram-v2
+    direction TB
+
+    [*] --> ENCODING: Default on input
+
+    ENCODING: DG/CA3 active, pattern separation, high ACh
+    RETRIEVAL: CA1 active, pattern completion, low ACh
+    CONSOLIDATION: SWR replay, hippocampal-cortical transfer
+    SLEEP: Offline mode, NREM/REM cycling
+
+    ENCODING --> RETRIEVAL: Query received, ACh drops
+    RETRIEVAL --> ENCODING: Novel input, ACh rises
+
+    ENCODING --> CONSOLIDATION: Idle period, SWR triggered
+    RETRIEVAL --> CONSOLIDATION: Match found, reinforcement
+
+    CONSOLIDATION --> ENCODING: New input, interruption
+    CONSOLIDATION --> RETRIEVAL: Cue detected
+
+    CONSOLIDATION --> SLEEP: Extended idle, full cycle
+    SLEEP --> ENCODING: Wake signal, resumed

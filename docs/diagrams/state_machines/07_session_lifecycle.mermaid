@@ -1,0 +1,26 @@
+---
+title: Session Lifecycle State Machine
+---
+stateDiagram-v2
+    direction TB
+
+    [*] --> Active: session.start()
+
+    Active: is_active=True, tracking metrics
+    Idle: No activity > 5min
+    Consolidating: Offline processing
+    Closed: is_active=False, outcome recorded
+
+    Active --> Active: encode() / retrieve()
+    Active --> Idle: No activity > 5 minutes
+
+    Idle --> Active: New request
+    Idle --> Consolidating: Trigger consolidation
+
+    Consolidating --> Active: Consolidation complete
+
+    Active --> Closed: session.end()
+    Idle --> Closed: session.end()
+    Consolidating --> Closed: session.end()
+
+    Closed --> [*]: Session finalized

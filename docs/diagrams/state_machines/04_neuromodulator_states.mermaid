@@ -1,0 +1,30 @@
+---
+title: Neuromodulator Cognitive Mode States
+---
+stateDiagram-v2
+    direction TB
+
+    [*] --> Balanced: Initialize
+
+    Balanced: ACh=0.5, DA=0.5, NE=0.5, 5-HT=0.5
+    Encoding: ACh=0.9 (high), DG/CA3 input mode
+    Retrieval: ACh=0.2 (low), CA1 output mode
+    Exploration: NE=0.9 (high), novelty seeking
+    Consolidation: Offline processing, sleep-like
+
+    Balanced --> Encoding: New input, high novelty
+    Balanced --> Retrieval: Query received
+    Balanced --> Exploration: Low match, uncertain
+
+    Encoding --> Balanced: Input complete
+    Encoding --> Retrieval: After 10+ encodes
+
+    Retrieval --> Balanced: Results returned
+    Retrieval --> Encoding: Need more context
+    Retrieval --> Exploration: No matches
+
+    Exploration --> Encoding: Novel pattern found
+    Exploration --> Balanced: Exploration timeout
+
+    Balanced --> Consolidation: Idle > 5min
+    Consolidation --> Balanced: Consolidation complete

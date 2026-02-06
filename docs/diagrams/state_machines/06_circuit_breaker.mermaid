@@ -1,0 +1,19 @@
+---
+title: Circuit Breaker State Machine
+---
+stateDiagram-v2
+    direction LR
+
+    [*] --> CLOSED: Initialize
+
+    CLOSED: Normal operation, requests flow
+    OPEN: Backend failing, fast-fail (60s wait)
+    HALF_OPEN: Testing recovery (1 request)
+
+    CLOSED --> CLOSED: Success (reset count)
+    CLOSED --> OPEN: 5 consecutive failures
+
+    OPEN --> HALF_OPEN: 60s timeout expired
+
+    HALF_OPEN --> CLOSED: 2 consecutive successes
+    HALF_OPEN --> OPEN: 1 failure (restart timer)

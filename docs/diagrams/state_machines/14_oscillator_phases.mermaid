@@ -1,0 +1,39 @@
+---
+title: Neural Oscillator Phase States
+---
+stateDiagram-v2
+    direction TB
+
+    state CognitivePhases {
+        direction LR
+        THETA: 4-12 Hz (encoding, exploration)
+        GAMMA: 30-100 Hz (local computation)
+        ALPHA: 8-12 Hz (idling, inhibition)
+        DELTA: 0.5-4 Hz (deep sleep, SWR)
+
+        THETA --> GAMMA: Focus engagement
+        GAMMA --> THETA: Broaden attention
+        THETA --> ALPHA: Disengage idle
+        ALPHA --> THETA: Re-engage input
+        ALPHA --> DELTA: Sleep onset
+        DELTA --> ALPHA: Lightening
+    }
+
+    state SleepOscillations {
+        direction LR
+        WA: Awake alpha
+        SS: Sleep spindles (N2)
+        SW: Slow waves (N3)
+        RT: REM theta
+
+        WA --> SS: Sleep onset
+        SS --> SW: Deepening
+        SW --> RT: REM entry
+        RT --> SS: New cycle
+        SS --> WA: Wake
+    }
+
+    TGC: Theta-Gamma Coupling (memory encoding)
+
+    CognitivePhases --> TGC: Active encoding
+    TGC --> CognitivePhases: Retrieval mode

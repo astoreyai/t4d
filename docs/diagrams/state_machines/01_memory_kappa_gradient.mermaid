@@ -1,0 +1,25 @@
+---
+title: Memory Item κ-Gradient State Machine
+---
+stateDiagram-v2
+    direction LR
+
+    [*] --> Raw: encode()
+
+    Raw: κ = 0.0 (Just encoded, high volatility)
+    Replayed: κ ~ 0.15 (NREM strengthened)
+    Transitional: κ ~ 0.4 (Being abstracted)
+    Semantic: κ ~ 0.85 (Prototype created)
+    Stable: κ = 1.0 (Permanent knowledge)
+    Decayed: κ < 0.05 (Candidate for GC)
+
+    Raw --> Replayed: NREM phase<br/>κ += 0.05/cycle
+    Replayed --> Transitional: NREM continues<br/>κ > 0.3
+    Transitional --> Semantic: REM clustering<br/>prototype creation
+    Semantic --> Stable: Repeated access<br/>κ → 1.0
+
+    Raw --> Decayed: No access<br/>time decay
+    Replayed --> Decayed: Low importance<br/>no retrieval
+    Decayed --> [*]: PRUNE phase<br/>delete()
+
+    Semantic --> Transitional: Reconsolidation<br/>new evidence

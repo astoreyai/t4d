@@ -1,0 +1,34 @@
+---
+title: Sleep Stage State Machine (Adenosine)
+---
+stateDiagram-v2
+    direction TB
+
+    [*] --> AWAKE: System active
+
+    AWAKE: Active processing, adenosine low
+    TRANSITION: State change, drowsiness
+
+    state NREM {
+        direction LR
+        N1: Light sleep (drowsy)
+        N2: Sleep spindles
+        N3: Deep sleep (slow waves)
+
+        N1 --> N2: Deeper
+        N2 --> N3: Delta waves
+        N3 --> N2: Lightening
+        N2 --> N1: Near wake
+    }
+
+    REM: Paradoxical sleep, theta, dreams
+
+    AWAKE --> TRANSITION: Adenosine high, idle
+    TRANSITION --> NREM: Sleep onset
+
+    N3 --> REM: After deep NREM (~90 min)
+    REM --> N2: REM complete, new cycle
+
+    N1 --> AWAKE: Wake signal
+    REM --> AWAKE: Natural wake
+    TRANSITION --> AWAKE: Abort sleep

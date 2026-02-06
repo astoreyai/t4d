@@ -1,0 +1,43 @@
+---
+title: T4DX Storage Engine State Machine
+---
+stateDiagram-v2
+    direction TB
+
+    state WritePath {
+        direction LR
+        WAL: Append-only log
+        MemTable: In-memory (1000 items)
+        Seg0: Segment 0 (immutable)
+
+        [*] --> WAL: INSERT/UPDATE
+        WAL --> MemTable: Apply
+        MemTable --> Seg0: Flush when full
+    }
+
+    state Compaction {
+        direction LR
+        NREM_C: κ boost + STDP
+        REM_C: Cluster + prototype
+        PRUNE_C: Delete weak + scale
+        GEN_C: Balance + optimize
+
+        [*] --> NREM_C
+        NREM_C --> REM_C
+        REM_C --> PRUNE_C
+        PRUNE_C --> GEN_C
+        GEN_C --> [*]
+    }
+
+    state SegmentHierarchy {
+        direction LR
+        S0: Segment 0 (hot)
+        S1: Segment 1
+        SN: Segment N (cold)
+
+        S0 --> S1: Compact
+        S1 --> SN: Compact
+    }
+
+    WritePath --> SegmentHierarchy: Flush
+    Compaction --> SegmentHierarchy: Merge

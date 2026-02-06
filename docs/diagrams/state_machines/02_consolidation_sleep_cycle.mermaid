@@ -1,0 +1,36 @@
+---
+title: Consolidation Sleep Cycle State Machine
+---
+stateDiagram-v2
+    direction TB
+
+    [*] --> WAKE: System start
+
+    WAKE: Normal operation, encoding/retrieval active
+
+    state NREM {
+        direction LR
+        N_Scan --> N_Replay: Items selected
+        N_Replay --> N_Update: 3 replay passes
+        N_Update --> N_Compact: κ boosted
+    }
+
+    state REM {
+        direction LR
+        R_Scan --> R_Cluster: Transitional items
+        R_Cluster --> R_Proto: HDBSCAN clusters
+        R_Proto --> R_Compact: Prototypes created
+    }
+
+    state PRUNE {
+        direction LR
+        P_Scan --> P_Delete: Weak edges
+        P_Delete --> P_Scale: Edges removed
+        P_Scale --> P_Compact: Homeostatic scaling
+    }
+
+    WAKE --> NREM: Trigger (8hr/100+ items/manual)
+    NREM --> REM: NREM complete (4 cycles)
+    REM --> PRUNE: REM complete
+    PRUNE --> WAKE: Consolidation complete
+    NREM --> NREM: Repeat cycle (up to 4)

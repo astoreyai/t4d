@@ -1,0 +1,24 @@
+---
+title: Cognitive Attractor State Machine
+---
+stateDiagram-v2
+    direction LR
+
+    [*] --> FLEXIBLE: Default state
+
+    FOCUSED: Stable attractor, deep well, low noise
+    FLEXIBLE: Shallow attractors, easy switching
+    CHAOTIC: No stable attractor, high noise, exploration
+    CONSOLIDATING: Sleep-like, offline integration
+
+    FLEXIBLE --> FOCUSED: Task engagement
+    FOCUSED --> FLEXIBLE: Task complete
+
+    FLEXIBLE --> CHAOTIC: High uncertainty
+    CHAOTIC --> FLEXIBLE: Pattern found
+
+    FLEXIBLE --> CONSOLIDATING: Idle timeout
+    FOCUSED --> CONSOLIDATING: Natural break
+    CHAOTIC --> CONSOLIDATING: Exhaustion
+
+    CONSOLIDATING --> FLEXIBLE: Wake signal

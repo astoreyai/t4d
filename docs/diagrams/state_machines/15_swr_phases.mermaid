@@ -1,0 +1,20 @@
+---
+title: Sharp-Wave Ripple (SWR) Phase States
+---
+stateDiagram-v2
+    direction LR
+
+    [*] --> OFF: Default
+
+    OFF: Between ripples, ready state
+    PRE: Prediction, CA3 ramping
+    ON: SWR active, 150-250 Hz, 10x compression
+    POST: Integration, STDP window
+
+    OFF --> PRE: Activity buildup
+    PRE --> ON: Threshold crossed
+    ON --> POST: Ripple complete
+    POST --> OFF: Integration done
+
+    POST --> PRE: Rapid re-trigger
+    ON --> OFF: Interrupted (new input)

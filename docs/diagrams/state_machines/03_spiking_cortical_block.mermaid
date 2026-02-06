@@ -1,0 +1,23 @@
+---
+title: Spiking Cortical Block 6-Stage Pipeline
+---
+stateDiagram-v2
+    direction LR
+
+    [*] --> ThalamicGate: input x
+
+    ThalamicGate: ① ACh-modulated masking
+    LIF: ② Integrate-and-fire (u_t > v_thresh → spike)
+    SpikeAttn: ③ STDP-weighted attention
+    Apical: ④ PE + FF goodness modulation
+    RWKV: ⑤ Linear RNN recurrence O(N)
+    OutputLIF: ⑥ Final spikes + residual
+
+    ThalamicGate --> LIF: gated input
+    LIF --> SpikeAttn: spikes
+    SpikeAttn --> Apical: attention output
+    Apical --> RWKV: modulated signal
+    RWKV --> OutputLIF: recurrent state
+    OutputLIF --> [*]: output spikes
+
+    LIF --> OutputLIF: residual (RMP-SNN skip)

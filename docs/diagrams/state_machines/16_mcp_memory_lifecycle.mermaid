@@ -1,0 +1,56 @@
+---
+title: MCP Automatic Memory Lifecycle
+---
+stateDiagram-v2
+    direction TB
+
+    [*] --> SessionStart: Claude Code starts
+
+    state SessionStart {
+        direction LR
+        LoadHot: Load hot cache 10 items
+        LoadProject: Load project context
+        LoadRecent: Load recent 5 items
+        Inject: Inject context resource
+
+        LoadHot --> LoadProject
+        LoadProject --> LoadRecent
+        LoadRecent --> Inject
+    }
+
+    state ActiveSession {
+        direction LR
+        Query: User query
+        Context: Pre loaded 0ms
+        Response: Generate answer
+        Capture: Auto observe patterns
+
+        Query --> Context
+        Context --> Response
+        Response --> Capture
+        Capture --> Query
+    }
+
+    Remember: Explicit t4dm_remember high importance
+
+    state SessionEnd {
+        direction LR
+        Summarize: Key decisions
+        Store: importance 0.8
+        Consolidate: Light consolidation
+        UpdateCache: Promotion counts
+    }
+
+    state Background {
+        direction LR
+        Usage: Track access
+        Promote: 3 plus uses to hot
+        Demote: 14 days to archive
+    }
+
+    SessionStart --> ActiveSession: Context ready
+    ActiveSession --> Remember: User says remember
+    Remember --> ActiveSession: Stored
+    ActiveSession --> SessionEnd: Session close
+    ActiveSession --> Background: Access counts
+    Background --> ActiveSession: Cache updates

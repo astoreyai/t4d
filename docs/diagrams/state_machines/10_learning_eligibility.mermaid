@@ -1,0 +1,35 @@
+---
+title: Learning Eligibility Three-Factor Rule
+---
+stateDiagram-v2
+    direction TB
+
+    state EligibilityTrace {
+        direction LR
+        Fresh: eligibility = 0
+        Tagged: eligibility > 0, synaptic tag
+        Decaying: eligibility *= decay
+        Captured: Δw applied
+
+        Fresh --> Tagged: Hebbian coactivity
+        Tagged --> Decaying: Time passes
+        Decaying --> Tagged: More coactivity
+        Decaying --> Fresh: Decay to zero
+        Tagged --> Captured: Neuromod arrives
+        Decaying --> Captured: Neuromod arrives
+    }
+
+    state NeuromodSources {
+        direction LR
+        DA: Dopamine (RPE)
+        NE: Norepinephrine (arousal)
+        ACh: Acetylcholine (mode)
+        SHT: Serotonin (patience)
+    }
+
+    state ThreeFactor {
+        Update: Δw = lr × eligibility × neuromod × surprise
+    }
+
+    EligibilityTrace --> ThreeFactor: eligibility_trace
+    NeuromodSources --> ThreeFactor: neuromod_gate
