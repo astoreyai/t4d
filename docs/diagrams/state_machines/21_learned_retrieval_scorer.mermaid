@@ -1,0 +1,75 @@
+---
+title: Learned Retrieval Scorer (Graves W1-05)
+---
+stateDiagram-v2
+    direction TB
+
+    [*] --> Idle: Initialize scorer
+
+    state Idle {
+        direction LR
+        Ready: Scorer ready
+        Cached: Cache populated
+    }
+
+    state Scoring {
+        direction TB
+        FeatureExtract: Extract features
+        Forward: Neural network forward
+        Score: Compute relevance scores
+    }
+
+    state Training {
+        direction TB
+        CollectExperience: Store (query, memories, outcomes)
+        SampleBatch: Sample from replay buffer
+        ComputeLoss: ListMLE ranking loss
+        UpdateWeights: Gradient descent
+    }
+
+    state FFIntegration {
+        direction LR
+        Goodness: Compute FF goodness
+        Confidence: Goodness to confidence
+        Boost: Learn retrieval boost
+    }
+
+    Idle --> Scoring: score_candidate()
+
+    Scoring --> FeatureExtract: Input batch
+    FeatureExtract --> Forward: [batch, memories, features]
+    Forward --> Score: Hidden layers
+    Score --> Idle: Return scores
+
+    Idle --> Training: train_step()
+
+    Training --> CollectExperience: Outcome received
+    CollectExperience --> SampleBatch: Buffer full
+    SampleBatch --> ComputeLoss: Prioritized sampling
+    ComputeLoss --> UpdateWeights: Backprop
+    UpdateWeights --> Idle: Parameters updated
+
+    Idle --> FFIntegration: FF scorer available
+
+    FFIntegration --> Goodness: Candidate embedding
+    Goodness --> Confidence: Above threshold
+    Confidence --> Boost: Learn modulation
+    Boost --> Idle: Return RetrievalScore
+
+    note right of Scoring
+        Graves (2016)
+        Differentiable memory
+        Neural attention scoring
+    end note
+
+    note right of Training
+        ListMLE Loss
+        Prioritized replay
+        Online learning
+    end note
+
+    note right of FFIntegration
+        Forward-Forward
+        Goodness as confidence
+        Novelty detection
+    end note
