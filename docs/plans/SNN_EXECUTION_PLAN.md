@@ -605,11 +605,11 @@ P1-03 (Norse)
 - [x] P3-03: Connect SNN to STDP ✓ cortical blocks have STDP attention
 - [x] P3-04: STDP weight update ✓ `src/t4dm/learning/stdp.py`
 - [x] P3-05: Weight → memory loop ✓ consolidation pipeline
-- [ ] P3-06: Verify replay closure — needs E2E test
+- [x] P3-06: Verify replay closure ✓ `tests/e2e/test_replay_closure.py`
 - [x] P3-07: GPU PDE production ✓ `src/t4dm/nca/neural_field_gpu.py`
 - [x] P3-08: Norse + oscillators ✓ `src/t4dm/nca/oscillators.py`
-- [ ] P3-09: Phase 3 integration test — needs dedicated test
-- [ ] P3-10: Performance benchmark — needs spike pipeline bench
+- [x] P3-09: Phase 3 integration test ✓ `tests/integration/test_spike_pipeline.py`
+- [x] P3-10: Performance benchmark ✓ `tests/performance/benchmark_spike_pipeline.py`
 
 ### Phase 4: Validation
 - [x] P4-01: MNE oscillation validation ✓ `tests/biology/test_oscillation_validation.py`
@@ -622,11 +622,11 @@ P1-03 (Norse)
 - [x] P4-08: Validation report ✓ `docs/VALIDATION_REPORT.md`
 
 ### Phase 5: Polish
-- [ ] P5-01: BrainRender export — optional visualization
+- [x] P5-01: BrainRender export ✓ `src/t4dm/visualization/brainrender_export.py`
 - [x] P5-02: Update Mermaid diagrams ✓ `docs/diagrams/` updated
 - [x] P5-03: Update documentation ✓ CLAUDE.md files current
 - [x] P5-04: Performance report ✓ benchmarks in tests/performance/
-- [x] P5-05: Final integration test ✓ 9,514 tests passing, 81% coverage
+- [x] P5-05: Final integration test ✓ 9,500+ tests passing, 81% coverage
 
 ---
 
