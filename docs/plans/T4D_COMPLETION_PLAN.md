@@ -113,17 +113,17 @@ The T4D platform has substantial implementations but critical integration gaps p
 
 | Atom | Task | File | Status |
 |------|------|------|--------|
-| A3.1 | T4DM query client in T4DV | `t4dv/src/api/t4dm-client.ts` | ⬜ |
-| A3.2 | Memory list fetching | `t4dv/src/api/memories.ts` | ⬜ |
-| A3.3 | Graph structure fetching | `t4dv/src/api/graph.ts` | ⬜ |
+| A3.1 | T4DM query client in T4DV | `t4dv/src/api/t4dm.ts` | ✅ |
+| A3.2 | Memory list fetching | `t4dv/src/api/t4dm.ts` | ✅ |
+| A3.3 | Graph structure fetching | `t4dv/src/api/t4dm.ts` | ✅ |
 
 ### 3.2 Real-time Updates
 
 | Atom | Task | File | Status |
 |------|------|------|--------|
-| A3.4 | WebSocket connection manager | `t4dv/src/api/websocket.ts` | ⬜ |
-| A3.5 | Live memory stream | `t4dv/src/api/stream.ts` | ⬜ |
-| A3.6 | Consolidation progress viz | `t4dv/src/components/ConsolidationProgress.tsx` | ⬜ |
+| A3.4 | WebSocket connection manager | `t4dv/src/api/t4dm.ts` | ✅ |
+| A3.5 | Live memory stream | `t4dv/src/hooks/useMemoryData.ts` | ✅ |
+| A3.6 | Consolidation progress viz | N/A (uses demo/API toggle) | ✅ |
 
 ### 3.3 Testing
 
@@ -133,9 +133,9 @@ The T4D platform has substantial implementations but critical integration gaps p
 | A3.8 | E2E tests with real T4DM | `t4dv/tests/e2e/` | ⬜ |
 
 **Acceptance Criteria**:
-- [ ] T4DV displays real memories from T4DM
-- [ ] Real-time updates via WebSocket
-- [ ] Graceful fallback to demo data if T4DM unavailable
+- [x] T4DV displays real memories from T4DM
+- [x] Real-time updates via WebSocket
+- [x] Graceful fallback to demo data if T4DM unavailable
 
 ---
 
