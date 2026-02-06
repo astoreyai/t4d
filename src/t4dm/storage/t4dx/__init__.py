@@ -9,6 +9,10 @@ from t4dm.storage.t4dx.uncertainty import (
     UncertaintyConfig,
     UncertaintyEstimator,
 )
+from t4dm.storage.t4dx.markov_retrieval import (
+    MarkovBlanketConfig,
+    MarkovBlanketRetriever,
+)
 
 __all__ = [
     "T4DXEngine",
@@ -19,4 +23,7 @@ __all__ = [
     "UncertaintyAwareSearch",
     "UncertaintyConfig",
     "UncertaintyEstimator",
+    # W3-01: Markov Blanket Retrieval (Pearl/Friston)
+    "MarkovBlanketConfig",
+    "MarkovBlanketRetriever",
 ]

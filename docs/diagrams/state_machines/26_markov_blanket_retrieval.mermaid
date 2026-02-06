@@ -1,0 +1,44 @@
+---
+title: Markov Blanket Retrieval (Pearl W3-01)
+---
+stateDiagram-v2
+    direction TB
+
+    [*] --> Ready: Initialize retriever
+
+    Ready: Retriever with engine
+    GetParents: Get parent nodes
+    GetChildren: Get child nodes
+    GetSpouses: Get co-parents
+    BuildMB: Combine MB set
+    SearchMB: Search within MB
+    SearchGlobal: Global exploration
+    Merge: Merge results
+
+    Ready --> GetParents: query concept provided
+    GetParents --> GetChildren: incoming edges
+    GetChildren --> GetSpouses: outgoing edges
+    GetSpouses --> BuildMB: co-parents found
+    BuildMB --> SearchMB: MB non-empty
+    SearchMB --> SearchGlobal: exploitation done
+    SearchGlobal --> Merge: exploration done
+    Merge --> Ready: return results
+
+    Ready --> SearchGlobal: no query concept
+    SearchGlobal --> Ready: return global results
+
+    note right of BuildMB
+        Pearl 1988
+        MB = parents + children + spouses
+        Statistical insulation
+    end note
+
+    note right of SearchMB
+        1 - exploration_ratio
+        Prioritize local context
+    end note
+
+    note right of SearchGlobal
+        exploration_ratio
+        Maintain diversity
+    end note
