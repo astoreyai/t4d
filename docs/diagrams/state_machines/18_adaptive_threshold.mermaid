@@ -1,0 +1,65 @@
+---
+title: Adaptive Threshold Dynamics (Hinton W1-02)
+---
+stateDiagram-v2
+    direction TB
+
+    [*] --> Initialize: Create threshold
+
+    state Initialize {
+        direction LR
+        Config: Load AdaptiveThresholdConfig
+        Theta: Set theta equals 1.0
+        History: Init firing history
+        Config --> Theta
+        Theta --> History
+    }
+
+    state Observation {
+        direction LR
+        Goodness: Receive goodness batch
+        FiringRate: Count above theta
+        Record: Add to history window
+        Goodness --> FiringRate
+        FiringRate --> Record
+    }
+
+    state Adaptation {
+        direction LR
+        Compare: avg rate vs target
+        HighFiring: rate greater than target
+        LowFiring: rate less than target
+        AtTarget: rate near target
+    }
+
+    state ThetaUpdate {
+        direction LR
+        Increase: theta times ratio up
+        Decrease: theta times ratio down
+        Maintain: theta unchanged
+        Clamp: Apply min max bounds
+    }
+
+    Initialize --> Observation: Start training
+    Observation --> Adaptation: Window full
+    Adaptation --> ThetaUpdate: Compute update
+
+    Adaptation --> HighFiring: rate greater than target
+    Adaptation --> LowFiring: rate less than target
+    Adaptation --> AtTarget: abs diff less than 0.01
+
+    HighFiring --> Increase: Harder to fire
+    LowFiring --> Decrease: Easier to fire
+    AtTarget --> Maintain: Homeostasis
+
+    Increase --> Clamp
+    Decrease --> Clamp
+    Maintain --> Clamp
+
+    Clamp --> Observation: Next batch
+
+    note right of Adaptation
+        Target: 15% firing rate
+        Window: 100 samples
+        Rate: 1% per update
+    end note

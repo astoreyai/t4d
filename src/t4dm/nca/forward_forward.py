@@ -42,12 +42,12 @@ import logging
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum, auto
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 import numpy as np
 
 if TYPE_CHECKING:
-    pass
+    from t4dm.nca.adaptive_threshold import AdaptiveThreshold, AdaptiveThresholdConfig
 
 logger = logging.getLogger(__name__)
 
@@ -138,6 +138,10 @@ class ForwardForwardConfig:
 
     # History tracking (bounded - MEM-007 pattern)
     max_history: int = 1000
+
+    # Adaptive threshold (W1-02: Hinton extension)
+    use_adaptive_threshold: bool = False
+    adaptive_threshold_config: "AdaptiveThresholdConfig | None" = None
 
     def __post_init__(self) -> None:
         """Validate configuration parameters."""
@@ -285,9 +289,19 @@ class ForwardForwardLayer:
         self._weight_momentum = np.zeros_like(self.W)
         self._bias_momentum = np.zeros_like(self.b)
 
+        # Adaptive threshold (W1-02: Hinton extension)
+        self.adaptive_threshold: Optional["AdaptiveThreshold"] = None
+        if self.config.use_adaptive_threshold:
+            from t4dm.nca.adaptive_threshold import AdaptiveThreshold
+
+            self.adaptive_threshold = AdaptiveThreshold(
+                self.config.adaptive_threshold_config
+            )
+
         logger.debug(
             f"ForwardForwardLayer[{layer_idx}] initialized: "
             f"{self.config.input_dim} -> {self.config.hidden_dim}"
+            f"{' (adaptive threshold)' if self.adaptive_threshold else ''}"
         )
 
     def _init_weights(self) -> None:

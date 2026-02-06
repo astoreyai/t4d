@@ -103,6 +103,11 @@ from t4dm.nca.forward_forward import (
     create_ff_layer,
     create_ff_network,
 )
+from t4dm.nca.adaptive_threshold import (
+    AdaptiveThreshold,
+    AdaptiveThresholdConfig,
+    AdaptiveThresholdManager,
+)
 from t4dm.nca.glutamate_signaling import (
     GlutamateConfig,
     GlutamatePool,
@@ -407,6 +412,10 @@ __all__ = [
     "FFPhase",
     "create_ff_layer",
     "create_ff_network",
+    # W1-02: Adaptive Threshold (Hinton extension)
+    "AdaptiveThreshold",
+    "AdaptiveThresholdConfig",
+    "AdaptiveThresholdManager",
     # Phase 4: Pose Matrix (H9)
     "PoseConfig",
     "PoseState",
