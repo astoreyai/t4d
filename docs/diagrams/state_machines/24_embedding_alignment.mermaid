@@ -1,0 +1,40 @@
+---
+title: Learned Embedding Alignment (Graves W2-03)
+---
+stateDiagram-v2
+    direction TB
+
+    [*] --> Ready: Initialize
+
+    Ready: Alignment ready
+    Pool: Mean pool sequence
+    Project: Linear projection
+    ScaleDim: Dimension importance
+    Normalize: L2 normalize
+    GetQwen: Qwen hidden states
+    GetBGE: BGE embeddings
+    Loss: MSE loss
+    Backprop: Backward pass
+
+    Ready --> Pool: forward call
+    Pool --> Project: pooled
+    Project --> ScaleDim: projected
+    ScaleDim --> Normalize: scaled
+    Normalize --> Ready: return
+
+    Ready --> GetQwen: train step
+    GetQwen --> GetBGE: encode texts
+    GetBGE --> Loss: compare
+    Loss --> Backprop: gradients
+    Backprop --> Ready: updated
+
+    note right of Pool
+        Graves 2014
+        Learnable projection
+        Dimension importance
+    end note
+
+    note right of Loss
+        MSE loss
+        AdamW optimizer
+    end note
