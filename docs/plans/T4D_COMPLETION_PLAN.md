@@ -77,17 +77,17 @@ The T4D platform has substantial implementations but critical integration gaps p
 
 | Atom | Task | File | Status |
 |------|------|------|--------|
-| A2.1 | T4DM client in T4DA | `t4da/clients/t4dm.py` | ⬜ |
-| A2.2 | Connection pooling + retry | `t4da/clients/t4dm.py` | ⬜ |
-| A2.3 | Health check integration | `t4da/api/routes/health.py` | ⬜ |
+| A2.1 | T4DM client in T4DA | `t4da/clients/t4dm.py` | ✅ |
+| A2.2 | Connection pooling + retry | `t4da/clients/t4dm.py` | ✅ |
+| A2.3 | Health check integration | `t4da/api/routes/health.py` | ✅ |
 
 ### 2.2 Route Wiring
 
 | Atom | Task | File | Status |
 |------|------|------|--------|
-| A2.4 | Wire memory routes to T4DM | `t4da/api/routes/memory.py` | ⬜ |
-| A2.5 | Wire index routes to T4DM | `t4da/api/routes/index.py` | ⬜ |
-| A2.6 | Wire viz routes to T4DM | `t4da/api/routes/viz.py` | ⬜ |
+| A2.4 | Wire memory routes to T4DM | `t4da/api/routes/memory.py` | ✅ |
+| A2.5 | Wire index routes to T4DM | `t4da/api/routes/index.py` | ✅ |
+| A2.6 | Wire viz routes to T4DM | `t4da/api/routes/viz.py` | ✅ |
 
 ### 2.3 SDK Updates
 
@@ -99,9 +99,9 @@ The T4D platform has substantial implementations but critical integration gaps p
 | A2.10 | SDK documentation | `docs/sdk/` | ⬜ |
 
 **Acceptance Criteria**:
-- [ ] T4DA tests pass (currently failing on import)
+- [x] T4DA tests pass (19/19)
 - [ ] E2E: SDK → T4DA → T4DM → T4DX → response
-- [ ] Health endpoint shows T4DM status
+- [x] Health endpoint shows T4DM status
 
 ---
 
