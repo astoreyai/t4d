@@ -1,6 +1,69 @@
 # Changelog
 
-All notable changes to World Weaver are documented here.
+All notable changes to T4DM are documented here.
+
+## [2.1.0] - 2026-02-06
+
+### Remediation Plan (Phases 1-4)
+
+**Target**: Improve usability, validation, and documentation based on adversarial persona analysis
+
+#### Added
+
+- **SimpleBaseline** (`src/t4dm/lite.py`)
+  - Minimal 3-method API for quick prototyping: `store()`, `search()`, `delete()`
+  - In-memory only, zero dependencies beyond numpy
+  - Hash-based mock embedding for testing
+
+- **Decision Tracing** (`src/t4dm/observability/decision_trace.py`)
+  - `@traced_decision` decorator for bio-inspired component logging
+  - `DecisionTracer` with ring buffer and JSON output
+  - Filtering by component, decision type, and confidence
+
+- **Persistence Checksums** (`src/t4dm/persistence/integrity.py`)
+  - SHA-256 checksums for data integrity verification
+  - `ChecksumMixin` for segment writers
+  - `IntegrityError` exception with detailed mismatch info
+
+- **Benchmark Test Suite** (`tests/benchmarks/`)
+  - `test_bioplausibility.py`: 16 tests for neuroscience compliance
+  - `test_longmemeval.py`: 17 tests for long-term memory performance
+  - `test_dmr.py`: 18 tests for dense memory retrieval
+  - Pytest markers: `@pytest.mark.benchmark`, `bioplausibility`, `memory`, `retrieval`
+
+- **Core Layer Tests**
+  - `tests/unit/core/test_types.py`: 75 tests, 100% coverage
+  - `tests/unit/core/test_memory_gate.py`: 62 tests, 92% coverage
+  - `tests/unit/core/test_config.py`: 42 tests, 65% coverage
+  - `tests/unit/core/test_protocols.py`: 38 tests, 72% coverage
+
+- **Debugging Runbooks** (`docs/runbooks/`)
+  - `DEBUGGING_MEMORY.md`: Memory operation troubleshooting
+  - `DEBUGGING_STORAGE.md`: T4DX storage engine issues
+  - `DEBUGGING_SPIKING.md`: Spiking block dynamics
+  - `DEBUGGING_PERFORMANCE.md`: Performance optimization
+
+- **Validation Documentation**
+  - `docs/BENCHMARK_RESULTS.md`: 51/51 tests passing (100%)
+  - `docs/COMPARISON.md`: SimpleBaseline vs Full T4DM comparison
+  - `docs/guides/ABLATION_STUDY.md`: Component contribution methodology
+  - Updated `docs/VALIDATION_REPORT.md` with Phase 3 results
+  - Updated `docs/LIMITATIONS.md` with Phase 1-3 completion
+
+- **CI/CD Integration**
+  - Added benchmark-tests job to `.github/workflows/test.yml`
+  - Added Makefile targets: `make benchmark`, `benchmark-bio`, `benchmark-dmr`, `benchmark-longmem`
+
+#### Changed
+
+- **Terminology**: Renamed `ConsciousnessMetrics` to `IntegrationMetrics`
+  - Backward compatibility aliases maintained
+  - Metrics measure computational integration, not consciousness claims
+
+- **Documentation**: Added terminology clarification to `dreaming/` module
+  - "Dreaming" refers to DreamerV3-style generative replay, not subjective experience
+
+---
 
 ## [0.5.0] - 2026-01-04
 

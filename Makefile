@@ -261,6 +261,19 @@ test-cov:
 test-integration:
 	$(PYTHON) -m pytest tests/integration/ -v
 
+# Benchmark suite
+benchmark:
+	$(PYTHON) -m pytest tests/benchmarks/ -v -m benchmark
+
+benchmark-bio:
+	$(PYTHON) -m pytest tests/benchmarks/test_bioplausibility.py -v
+
+benchmark-dmr:
+	$(PYTHON) -m pytest tests/benchmarks/test_dmr.py -v
+
+benchmark-longmem:
+	$(PYTHON) -m pytest tests/benchmarks/test_longmemeval.py -v
+
 # Linting and formatting
 lint:
 	$(PYTHON) -m ruff check src/t4dm tests/

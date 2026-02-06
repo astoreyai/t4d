@@ -21,10 +21,15 @@ Documents the bio-inspired memory system's design rationale, maps software compo
 | `LEARNING_ARCHITECTURE.md` | Hebbian, STDP, Forward-Forward |
 | `MATHEMATICAL_FOUNDATIONS.md` | Core equations and proofs |
 | `NEUROTRANSMITTER_ARCHITECTURE.md` | Neuromodulator dynamics |
+| `LIMITATIONS.md` | Honest capability disclosure and validation status |
+| `COMPARISON.md` | SimpleBaseline vs Full T4DM guide |
+| `BENCHMARK_RESULTS.md` | Benchmark test results (51 tests) |
+| `VALIDATION_REPORT.md` | Biological validation evidence |
 | `concepts/` | Architecture, bio-inspired, capsules, NCA, Forward-Forward |
-| `guides/` | Hooks, performance, testing guides |
+| `guides/` | Hooks, performance, testing guides, ablation study |
 | `reference/` | API docs (REST, SDK, CLI, capsule, FF, NCA, glymphatic) |
 | `operations/` | Operational runbooks |
+| `runbooks/` | Debugging guides (memory, storage, spiking, performance) |
 | `science/` | Research papers and references |
 | `plans/` | Roadmaps and planning docs |
 
