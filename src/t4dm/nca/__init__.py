@@ -94,6 +94,12 @@ from t4dm.nca.energy import (
     HopfieldIntegration,
     LearningPhase,
 )
+from t4dm.nca.energy_validation import (
+    BatchEnergyValidator,
+    EnergyLandscapeValidator,
+    EnergyValidationConfig,
+    EnergyValidationResult,
+)
 from t4dm.nca.forward_forward import (
     FFPhase,
     ForwardForwardConfig,
@@ -270,6 +276,11 @@ __all__ = [
     "EnergyBasedLearner",
     "LearningPhase",
     "ContrastiveState",
+    # W1-03: Energy Validation (Bengio)
+    "EnergyLandscapeValidator",
+    "EnergyValidationConfig",
+    "EnergyValidationResult",
+    "BatchEnergyValidator",
     # Striatal Coupling
     "DAACHCoupling",
     "DAACHCouplingConfig",

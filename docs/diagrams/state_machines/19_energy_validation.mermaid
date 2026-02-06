@@ -1,0 +1,79 @@
+---
+title: Energy Landscape Validation (Bengio W1-03)
+---
+stateDiagram-v2
+    direction TB
+
+    [*] --> Initialize: Create validator
+
+    state Initialize {
+        direction LR
+        Config: Load EnergyValidationConfig
+        EnergyFn: Store energy function
+        History: Init E history
+        Config --> EnergyFn
+        EnergyFn --> History
+    }
+
+    state RunDynamics {
+        direction LR
+        ComputeE: E = energy_fn state
+        RecordE: Append to history
+        GradStep: state -= lr * grad E
+        CheckNaN: NaN guard
+
+        ComputeE --> RecordE
+        RecordE --> GradStep
+        GradStep --> CheckNaN
+        CheckNaN --> ComputeE
+    }
+
+    state WakeValidation {
+        direction LR
+        Slope: Compute dE dt
+        Decreasing: slope less than 0
+        NotDecreasing: slope greater than 0
+
+        Slope --> Decreasing: valid
+        Slope --> NotDecreasing: invalid
+    }
+
+    state SleepValidation {
+        direction LR
+        Variance: Compute late Var E
+        Stable: var less than 0.01
+        Unstable: var greater than 0.01
+
+        Variance --> Stable: valid
+        Variance --> Unstable: invalid
+    }
+
+    state Result {
+        direction LR
+        AttractorDepth: Final energy
+        ConvergenceTime: Steps to stable
+        Valid: is_valid flag
+    }
+
+    Initialize --> RunDynamics: Start validation
+    RunDynamics --> WakeValidation: phase equals wake
+    RunDynamics --> SleepValidation: phase equals sleep
+    WakeValidation --> Result: Build result
+    SleepValidation --> Result: Build result
+    Result --> [*]: Return validation
+
+    note right of RunDynamics
+        Gradient descent dynamics
+        dstate dt = -grad E
+        500 steps default
+    end note
+
+    note right of WakeValidation
+        Energy should decrease
+        during active processing
+    end note
+
+    note right of SleepValidation
+        Energy should stabilize
+        in attractor basin
+    end note
