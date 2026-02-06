@@ -4,15 +4,19 @@ import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
-from t4dm.api.routes.compat import router, _memories
+from t4dm.api.routes.compat import router, InMemoryBackend, _backend
 
 
 @pytest.fixture(autouse=True)
-def clear_memories():
-    """Clear in-memory store before each test."""
-    _memories.clear()
+def reset_backend():
+    """Reset to in-memory backend before each test."""
+    import t4dm.api.routes.compat as compat_module
+    # Use fresh in-memory backend for tests
+    compat_module._backend = InMemoryBackend()
     yield
-    _memories.clear()
+    # Clear after test
+    if hasattr(compat_module._backend, '_memories'):
+        compat_module._backend._memories.clear()
 
 
 @pytest.fixture
