@@ -29,6 +29,9 @@ from t4dm.api.routes.visualization import router as visualization_router
 # Mem0-compatible API
 from t4dm.api.routes.compat import router as compat_router
 
+# Phase 5: Visualization module routes
+from t4dm.api.routes.viz_modules import router as viz_modules_router
+
 __all__ = [
     "agents_router",
     "config_router",
@@ -46,4 +49,6 @@ __all__ = [
     "nt_router",
     "learning_router",
     "compat_router",
+    # Phase 5: Visualization modules
+    "viz_modules_router",
 ]

@@ -381,6 +381,8 @@ from t4dm.api.routes import (
     system_router,
     visualization_router,
     diagrams_router,
+    # Phase 5: Visualization module routes
+    viz_modules_router,
 )
 
 app.include_router(episodes_router, prefix="/api/v1/episodes", tags=["Episodic Memory"])
@@ -400,6 +402,9 @@ app.include_router(learning_router, prefix="/api/v1/demo/learning", tags=["Demo:
 
 # Mem0-compatible API
 app.include_router(compat_router, tags=["Mem0 Compatibility"])
+
+# Phase 5: Visualization module routes (kappa, t4dx, spiking, qwen, oscillator, energy, consolidation)
+app.include_router(viz_modules_router, prefix="/api/v1", tags=["Visualization Modules"])
 
 # Include WebSocket routes
 try:
