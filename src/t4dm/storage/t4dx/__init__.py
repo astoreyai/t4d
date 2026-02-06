@@ -13,6 +13,11 @@ from t4dm.storage.t4dx.markov_retrieval import (
     MarkovBlanketConfig,
     MarkovBlanketRetriever,
 )
+from t4dm.storage.t4dx.learned_edges import (
+    EdgeImportanceTrainer,
+    LearnedEdgeImportance,
+    TraversalWithLearnedEdges,
+)
 
 __all__ = [
     "T4DXEngine",
@@ -26,4 +31,8 @@ __all__ = [
     # W3-01: Markov Blanket Retrieval (Pearl/Friston)
     "MarkovBlanketConfig",
     "MarkovBlanketRetriever",
+    # W3-02: Learned Edge Importance (Graves)
+    "EdgeImportanceTrainer",
+    "LearnedEdgeImportance",
+    "TraversalWithLearnedEdges",
 ]

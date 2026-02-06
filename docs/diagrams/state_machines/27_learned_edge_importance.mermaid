@@ -1,0 +1,45 @@
+---
+title: Learned Edge Importance (Graves W3-02)
+---
+stateDiagram-v2
+    direction TB
+
+    [*] --> Ready: Initialize importance
+
+    Ready: Edge weights uniform
+    GetWeight: Lookup edge type
+    Forward: Batch embedding
+    TrainStep: Update weights
+    Traverse: BFS with weights
+
+    Ready --> GetWeight: get_weight call
+    GetWeight --> Ready: return exp(w)
+
+    Ready --> Forward: batch indices
+    Forward --> Ready: return weights
+
+    Ready --> TrainStep: feedback received
+    TrainStep --> Ready: weights updated
+
+    Ready --> Traverse: start traversal
+    Traverse --> GetWeight: each edge
+    GetWeight --> Traverse: apply weight
+    Traverse --> Ready: sorted results
+
+    note right of GetWeight
+        Graves 2014
+        exp ensures positive
+        O(1) lookup
+    end note
+
+    note right of TrainStep
+        MSE loss
+        Relevant edges up
+        Irrelevant down
+    end note
+
+    note right of Traverse
+        acc_weight * edge_importance
+        Filter by min_weight
+        Sort by score
+    end note
