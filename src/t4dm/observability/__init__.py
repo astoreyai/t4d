@@ -51,9 +51,20 @@ from t4dm.observability.tracing import (
     traced,
     traced_sync,
 )
-from t4dm.observability.consciousness_metrics import (
-    ConsciousnessMetrics,
+from t4dm.observability.integration_metrics import (
+    ConsciousnessMetrics,  # Backward compat alias
     IITMetricsComputer,
+    IntegrationMetrics,
+)
+from t4dm.observability.decision_trace import (
+    DecisionTrace,
+    DecisionTracer,
+    disable_decision_tracing,
+    enable_decision_tracing,
+    get_decision_tracer,
+    is_decision_tracing_enabled,
+    reset_decision_tracer,
+    traced_decision,
 )
 
 __all__ = [
@@ -97,7 +108,17 @@ __all__ = [
     "InternalCounter",
     "InternalGauge",
     "InternalHistogram",
-    # W3-04: IIT Consciousness Metrics (Tononi/Bengio)
-    "ConsciousnessMetrics",
+    # IIT-inspired Integration Metrics (renamed from ConsciousnessMetrics)
+    "IntegrationMetrics",
+    "ConsciousnessMetrics",  # Backward compat alias
     "IITMetricsComputer",
+    # Decision Tracing for Bio-Inspired Components
+    "DecisionTrace",
+    "DecisionTracer",
+    "traced_decision",
+    "get_decision_tracer",
+    "enable_decision_tracing",
+    "disable_decision_tracing",
+    "is_decision_tracing_enabled",
+    "reset_decision_tracer",
 ]

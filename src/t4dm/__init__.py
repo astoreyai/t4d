@@ -49,6 +49,10 @@ from t4dm.memory_api import (
     store_skill,
 )
 
+# Import lite API for quick prototyping
+from t4dm import lite
+from t4dm.lite import Memory as LiteMemory
+
 __all__ = [
     # Core types
     "Domain",
@@ -74,4 +78,7 @@ __all__ = [
     "recall_entities",
     "recall_skills",
     "get_recent",
+    # Lite API (quick prototyping)
+    "lite",
+    "LiteMemory",
 ]

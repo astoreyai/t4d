@@ -15,6 +15,16 @@ import numpy as np
 
 logger = logging.getLogger(__name__)
 
+# =============================================================================
+# Constants
+# =============================================================================
+
+# Maximum content length for memory content validation
+MAX_CONTENT_LENGTH = 100000
+
+# Maximum embedding dimension for vector validation
+MAX_EMBEDDING_DIM = 4096
+
 T = TypeVar("T", bound=Enum)
 
 
@@ -587,6 +597,133 @@ def sanitize_identifier(value: str, field: str = "identifier") -> str:
 
 
 # =============================================================================
+# Memory Content Validation
+# =============================================================================
+
+
+def validate_memory_content(
+    content: str,
+    max_length: int = MAX_CONTENT_LENGTH,
+    min_length: int = 1,
+    field: str = "content",
+) -> str:
+    """
+    Sanitize and validate memory content text input.
+
+    Performs comprehensive validation:
+    - Type check (must be string)
+    - Length constraints (min/max)
+    - Null byte removal
+    - Control character removal (preserves newlines, tabs)
+    - XSS pattern sanitization
+    - Whitespace normalization
+
+    Args:
+        content: Text content to validate
+        max_length: Maximum allowed length (default: MAX_CONTENT_LENGTH)
+        min_length: Minimum required length (default: 1)
+        field: Field name for error messages
+
+    Returns:
+        Sanitized and validated content string
+
+    Raises:
+        ValidationError: If validation fails
+    """
+    if content is None:
+        raise ValidationError(field, "Content cannot be None")
+
+    if not isinstance(content, str):
+        raise ValidationError(
+            field, f"Expected string, got {type(content).__name__}"
+        )
+
+    # Check for null bytes (security critical - reject early)
+    if "\x00" in content:
+        raise ValidationError(field, "Content contains null bytes")
+
+    # Remove dangerous control characters (keep \n, \r, \t)
+    sanitized = re.sub(r"[\x01-\x08\x0b\x0c\x0e-\x1f]", "", content)
+
+    # Apply XSS sanitization
+    sanitized = _sanitize_xss(sanitized)
+
+    # Check length after sanitization
+    if len(sanitized) > max_length:
+        raise ValidationError(
+            field,
+            f"Content exceeds maximum length of {max_length} characters "
+            f"(got {len(sanitized)})"
+        )
+
+    # Strip leading/trailing whitespace for length check
+    stripped = sanitized.strip()
+    if len(stripped) < min_length:
+        if min_length == 1:
+            raise ValidationError(field, "Content cannot be empty")
+        raise ValidationError(
+            field,
+            f"Content must be at least {min_length} characters (got {len(stripped)})"
+        )
+
+    return sanitized
+
+
+# =============================================================================
+# Kappa Validation
+# =============================================================================
+
+
+def validate_kappa(kappa: float, field: str = "kappa") -> float:
+    """
+    Validate kappa consolidation level is in valid range [0, 1].
+
+    Kappa represents memory consolidation progress:
+    - 0.0: Raw episodic (just encoded)
+    - ~0.15: Replayed (NREM strengthened)
+    - ~0.4: Transitional (being abstracted)
+    - ~0.85: Semantic concept (REM prototype)
+    - 1.0: Stable knowledge (fully consolidated)
+
+    Args:
+        kappa: Consolidation level to validate
+        field: Field name for error messages
+
+    Returns:
+        Validated kappa value as float
+
+    Raises:
+        ValidationError: If kappa is not in [0, 1] or not a number
+    """
+    if kappa is None:
+        raise ValidationError(field, "Kappa cannot be None")
+
+    if not isinstance(kappa, (int, float)):
+        raise ValidationError(
+            field, f"Expected number, got {type(kappa).__name__}"
+        )
+
+    # Check for NaN/Inf
+    if not np.isfinite(kappa):
+        raise ValidationError(field, "Kappa must be finite (not NaN or Inf)")
+
+    # Convert to float
+    kappa_float = float(kappa)
+
+    # Check bounds
+    if kappa_float < 0.0:
+        raise ValidationError(
+            field, f"Kappa must be >= 0, got {kappa_float}"
+        )
+    if kappa_float > 1.0:
+        raise ValidationError(
+            field, f"Kappa must be <= 1, got {kappa_float}"
+        )
+
+    return kappa_float
+
+
+# =============================================================================
 # Enum Validation
 # =============================================================================
 
@@ -814,6 +951,92 @@ def validate_embedding(vec, *, dim: int, name: str):
         ValidationError: If validation fails
     """
     validate_array(vec, expected_dim=dim, name=name, allow_zero=False)
+
+
+def validate_embedding_vector(
+    embedding: np.ndarray,
+    expected_dim: int,
+    field: str = "embedding",
+) -> np.ndarray:
+    """
+    Validate embedding vector with comprehensive checks.
+
+    Validates:
+    - Type (must be numpy array)
+    - Shape (must be 1D with expected dimension)
+    - No NaN or Inf values
+    - Dimension within MAX_EMBEDDING_DIM limit
+    - Floating point dtype
+
+    Args:
+        embedding: Embedding vector to validate
+        expected_dim: Expected dimensionality of the embedding
+        field: Field name for error messages
+
+    Returns:
+        Validated embedding array (may be converted to float32)
+
+    Raises:
+        ValidationError: If validation fails
+    """
+    if embedding is None:
+        raise ValidationError(field, "Embedding cannot be None")
+
+    if not isinstance(embedding, np.ndarray):
+        raise ValidationError(
+            field, f"Expected numpy array, got {type(embedding).__name__}"
+        )
+
+    # Check dimension limit
+    if expected_dim > MAX_EMBEDDING_DIM:
+        raise ValidationError(
+            field,
+            f"Expected dimension {expected_dim} exceeds maximum of {MAX_EMBEDDING_DIM}"
+        )
+
+    # Check shape
+    if embedding.ndim != 1:
+        raise ValidationError(
+            field,
+            f"Expected 1D array, got {embedding.ndim}D array with shape {embedding.shape}"
+        )
+
+    if embedding.shape[0] != expected_dim:
+        raise ValidationError(
+            field,
+            f"Expected dimension {expected_dim}, got {embedding.shape[0]}"
+        )
+
+    # Check for empty embedding
+    if embedding.size == 0:
+        raise ValidationError(field, "Embedding cannot be empty")
+
+    # Check for NaN/Inf values
+    if not np.all(np.isfinite(embedding)):
+        nan_count = np.sum(np.isnan(embedding))
+        inf_count = np.sum(np.isinf(embedding))
+        if nan_count > 0 and inf_count > 0:
+            raise ValidationError(
+                field, f"Embedding contains {nan_count} NaN and {inf_count} Inf values"
+            )
+        elif nan_count > 0:
+            raise ValidationError(field, f"Embedding contains {nan_count} NaN values")
+        else:
+            raise ValidationError(field, f"Embedding contains {inf_count} Inf values")
+
+    # Convert to float32 if needed for consistency
+    if not np.issubdtype(embedding.dtype, np.floating):
+        try:
+            embedding = embedding.astype(np.float32)
+        except (ValueError, TypeError) as e:
+            raise ValidationError(
+                field, f"Cannot convert embedding to float: {e}"
+            ) from e
+    elif embedding.dtype != np.float32:
+        # Convert float64 to float32 for memory efficiency
+        embedding = embedding.astype(np.float32)
+
+    return embedding
 
 
 def validate_timestamp(ts, *, max_future_s: float = 5.0, max_past_s: float = 86400 * 365):

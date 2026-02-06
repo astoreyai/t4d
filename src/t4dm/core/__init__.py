@@ -65,11 +65,17 @@ from t4dm.core.types import (
     RelationType,
 )
 from t4dm.core.validation import (
+    MAX_CONTENT_LENGTH,
+    MAX_EMBEDDING_DIM,
     SessionValidationError,
     ValidationError,
     sanitize_session_id,
     sanitize_string,
+    validate_embedding_vector,
+    validate_kappa,
+    validate_memory_content,
     validate_session_id,
+    validate_uuid,
 )
 
 __all__ = [
@@ -133,9 +139,15 @@ __all__ = [
     "get_services",
     "reset_services",
     # Validation
+    "MAX_CONTENT_LENGTH",
+    "MAX_EMBEDDING_DIM",
     "SessionValidationError",
     "ValidationError",
     "sanitize_session_id",
     "sanitize_string",
+    "validate_embedding_vector",
+    "validate_kappa",
+    "validate_memory_content",
     "validate_session_id",
+    "validate_uuid",
 ]

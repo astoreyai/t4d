@@ -111,6 +111,15 @@ from .wal import (
     WALOperation,
     WriteAheadLog,
 )
+from .integrity import (
+    ChecksumMixin,
+    Checksumable,
+    IntegrityError,
+    compute_checksum,
+    compute_file_checksum,
+    verify_checksum,
+    verify_file_checksum,
+)
 
 __all__ = [
     # WAL
@@ -135,4 +144,12 @@ __all__ = [
     "PersistenceConfig",
     "get_persistence",
     "set_persistence",
+    # Integrity
+    "IntegrityError",
+    "ChecksumMixin",
+    "Checksumable",
+    "compute_checksum",
+    "verify_checksum",
+    "compute_file_checksum",
+    "verify_file_checksum",
 ]
