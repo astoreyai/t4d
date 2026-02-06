@@ -1,8 +1,10 @@
 # T4DM - Integration Points
 
-**Version**: 0.2.0
-**Last Updated**: 2025-12-06
+**Version**: 2.0.0
+**Last Updated**: 2026-02-05
 **Purpose**: Complete guide to integrating T4DM into your applications
+
+> **Note**: T4DM now uses an embedded T4DX storage engine. No external databases (Neo4j, Qdrant) are required.
 
 ---
 
@@ -11,10 +13,10 @@
 1. [MCP Server (Claude Code/Desktop)](#1-mcp-server-claude-codedesktop)
 2. [REST API (Any HTTP Client)](#2-rest-api-any-http-client)
 3. [Python SDK](#3-python-sdk)
-4. [Hook System](#4-hook-system)
-5. [Custom Memory Types](#5-custom-memory-types)
-6. [Embedding Providers](#6-embedding-providers)
-7. [Storage Backends](#7-storage-backends)
+4. [Framework Adapters](#4-framework-adapters)
+5. [Hook System](#5-hook-system)
+6. [Custom Memory Types](#6-custom-memory-types)
+7. [Embedding Providers](#7-embedding-providers)
 
 ---
 
@@ -36,17 +38,13 @@ Edit `~/.claude/claude_desktop_config.json`:
 ```json
 {
   "mcpServers": {
-    "ww-memory": {
-      "command": "python",
-      "args": ["-m", "t4dm.mcp.server"],
+    "t4dm": {
+      "command": "t4dm",
+      "args": ["mcp", "server"],
       "env": {
-        "NEO4J_URI": "bolt://localhost:7687",
-        "NEO4J_USER": "neo4j",
-        "NEO4J_PASSWORD": "${NEO4J_PASSWORD}",
-        "QDRANT_URL": "http://localhost:6333",
         "T4DM_SESSION_ID": "claude-desktop",
-        "T4DM_EMBEDDING_DEVICE": "cuda:0",
-        "PYTHONPATH": "/path/to/t4dm"
+        "T4DM_STORAGE_PATH": "/var/lib/t4dm/data",
+        "T4DM_EMBEDDING_DEVICE": "cuda:0"
       }
     }
   }
@@ -58,9 +56,9 @@ Edit `~/.claude/claude_desktop_config.json`:
 ```bash
 # Add to ~/.claude/mcp_servers.json
 {
-  "ww-memory": {
-    "command": "/path/to/t4dm/.venv/bin/python",
-    "args": ["-m", "t4dm.mcp.server"],
+  "t4dm": {
+    "command": "t4dm",
+    "args": ["mcp", "server"],
     "env": {
       "T4DM_SESSION_ID": "${INSTANCE_ID}"
     }

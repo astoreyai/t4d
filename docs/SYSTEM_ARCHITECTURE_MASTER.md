@@ -67,9 +67,9 @@ graph TB
 | Memory | `prediction/` | JEPA, active inference | Latent prediction, predictive coding |
 | Learning | `learning/` | ~35 files | Neuromodulators, STDP, Hebbian, three-factor, FSRS |
 | Learning | `nca/` | ~40 files | Neural field PDE, brain regions, oscillators, Hinton architectures |
-| Learning | `bridges/` | Neo4j+Qdrant memory ops | High-level dual-store memory operations |
+| Learning | `bridges/` | T4DX memory operations | High-level memory bridge operations |
 | Learning | `temporal/` | Dynamics, lifecycle, sessions | Multi-timescale temporal coordination |
-| Storage | `storage/` | Neo4j, Qdrant, saga, circuit breaker | Dual-store backend with saga transactions |
+| Storage | `storage/` | T4DX embedded engine | LSM storage with HNSW + CSR graph |
 | Storage | `persistence/` | WAL, checkpoints, recovery | Write-ahead log, crash recovery, graceful shutdown |
 | Storage | `extraction/` | Entity/relationship extraction | NLP extraction from text content |
 | Interface | `api/` | FastAPI routes | REST API endpoints |
@@ -154,9 +154,7 @@ sequenceDiagram
     participant Emb as embedding
     participant Mem as memory/episodic
     participant Ext as extraction
-    participant Saga as storage/saga
-    participant Qdrant as storage/qdrant
-    participant Neo4j as storage/neo4j
+    participant T4DX as storage/t4dx
     participant WAL as persistence/wal
 
     Client->>API: POST /api/v1/episodes
@@ -165,11 +163,10 @@ sequenceDiagram
     Core->>Emb: embed(content + temporal)
     Core->>Ext: extract_entities(content)
     Core->>Mem: create_episode(embedding, entities)
-    Mem->>Saga: begin_saga()
-    Saga->>WAL: log(operation)
-    Saga->>Qdrant: upsert(vector, payload)
-    Saga->>Neo4j: create(Episode node + edges)
-    Saga-->>Mem: saga_complete
+    Mem->>WAL: log(operation)
+    Mem->>T4DX: insert(ItemRecord)
+    T4DX->>T4DX: memtable_insert + hnsw_add
+    T4DX-->>Mem: item_id
     Mem-->>API: episode_id
     API-->>Client: 201 Created
 ```
@@ -184,8 +181,7 @@ sequenceDiagram
     participant Emb as embedding
     participant Mem as memory/episodic
     participant Sem as memory/semantic
-    participant Qdrant as storage/qdrant
-    participant Neo4j as storage/neo4j
+    participant T4DX as storage/t4dx
     participant Learn as learning/scorer
     participant NM as learning/neuromodulators
 
@@ -194,9 +190,8 @@ sequenceDiagram
     Core->>Emb: embed_query(query)
     Core->>NM: process_query(embedding)
     NM-->>Core: arousal_state, cognitive_mode
-    Core->>Qdrant: vector_search(embedding, threshold)
-    Qdrant-->>Core: candidates
-    Core->>Neo4j: enrich(relationships, context)
+    Core->>T4DX: search(embedding, k, kappa_range)
+    T4DX-->>Core: candidates (items + edges)
     Core->>Mem: score(candidates, ACT-R activation)
     Core->>Sem: spreading_activation(context_entities)
     Core->>Learn: re_rank(scores, neuromod_state)
@@ -276,14 +271,12 @@ flowchart TB
         memory[memory/]
     end
 
-    subgraph Transaction["Transaction Layer"]
-        saga[Saga Coordinator<br/>saga.py]
-        cb[Circuit Breaker<br/>resilience.py]
-    end
-
-    subgraph Stores["Storage Backends"]
-        neo4j[(Neo4j<br/>Graph Store<br/>Entities, Relationships<br/>Episode Metadata)]
-        qdrant[(Qdrant<br/>Vector Store<br/>Embeddings<br/>Similarity Search)]
+    subgraph T4DX["T4DX Embedded Storage"]
+        engine[T4DXEngine<br/>engine.py]
+        memtable[MemTable<br/>In-memory buffer]
+        segments[LSM Segments<br/>Persistent storage]
+        hnsw[HNSW Index<br/>Vector search]
+        csr[CSR Graph<br/>Edge traversal]
     end
 
     subgraph Durability["Durability Layer"]
@@ -293,40 +286,36 @@ flowchart TB
         archive[Cold Archive<br/>storage/archive.py]
     end
 
-    subgraph Cache["Cache Layer"]
-        redis[Redis<br/>Session state<br/>Hot memory cache]
-    end
-
-    Clients --> saga
-    saga --> cb
-    cb --> neo4j
-    cb --> qdrant
-    saga --> wal
+    Clients --> engine
+    engine --> memtable
+    memtable --> wal
+    memtable --> segments
+    segments --> hnsw
+    segments --> csr
     wal --> checkpoint
     checkpoint --> recovery
-    neo4j --> archive
-    qdrant --> archive
-    Clients --> redis
+    segments --> archive
 ```
 
-### Transaction Flow
+### Storage Flow
 
-1. **Saga Coordinator** receives a dual-store mutation request
-2. **WAL** logs the intended operation before execution
-3. **Step 1**: Qdrant upsert (vector + payload)
-4. **Step 2**: Neo4j create (node + edges)
-5. **On failure**: Saga runs compensation (rollback step 1)
-6. **Circuit Breaker** monitors backend health; opens on repeated failures to prevent cascading outages
+1. **T4DXEngine** receives a mutation request
+2. **WAL** logs the operation before execution
+3. **MemTable** stores item in memory (HNSW index updated)
+4. **Flush**: When MemTable fills, creates immutable segment
+5. **Compaction**: Segments merged during NREM/REM phases (= consolidation)
+6. **Archive**: Aged items moved to cold storage
 
-### Data Partitioning
+### Data Organization
 
-| Store | Data | Query Pattern |
-|-------|------|---------------|
-| Neo4j | Entity nodes, relationships, episode metadata, Hebbian weights | Graph traversal, spreading activation, path queries |
-| Qdrant | Embedding vectors with metadata payloads | k-NN similarity search, filtered vector queries |
-| Redis | Session state, hot memory cache, rate limiting | Key-value lookup, TTL-based expiry |
+| Component | Data | Query Pattern |
+|-----------|------|---------------|
+| MemTable | Recent items (unflushed) | Fast insert, mutable |
+| Segments | Immutable item batches | Sequential scan, HNSW search |
+| HNSW Index | 4D vectors (space + time) | k-NN similarity search |
+| CSR Graph | Edges (TEMPORAL, SEMANTIC, etc.) | Edge traversal, path queries |
 | WAL | Mutation log for crash recovery | Sequential replay on startup |
-| Archive | Aged-out memories below retrievability threshold | Cold retrieval on cache miss |
+| Archive | Aged-out memories below κ threshold | Cold retrieval on cache miss |
 
 ---
 

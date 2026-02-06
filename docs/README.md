@@ -1,67 +1,52 @@
 # T4DM Documentation
 
-**Version**: 3.1.0 | **Last Updated**: 2025-12-09 | **Tests**: 4043 passed, 79% coverage
+**Version**: 2.0.0 | **Last Updated**: 2026-02-05 | **Tests**: 9,771 passed, 26% coverage
 
-Welcome to the T4DM documentation. This directory contains comprehensive guides for using, deploying, and developing with the T4DM tripartite memory system.
+Welcome to the T4DM documentation. This directory contains comprehensive guides for using, deploying, and developing with the T4DM biologically-inspired memory system.
 
 ## Quick Navigation
 
 ### For Users
 
-- **[API Reference](API.md)** - Complete reference for all 17 MCP tools
-  - Episodic memory (4 tools)
-  - Semantic memory (5 tools)
-  - Procedural memory (4 tools)
-  - Consolidation & metadata (2 tools)
-  - Utilities (2 tools)
+- **[API Reference](API.md)** - Complete REST API reference
+  - Episodic memory endpoints
+  - Semantic memory endpoints
+  - Procedural memory endpoints
+  - Visualization endpoints (22 modules)
+  - Consolidation & system endpoints
+
+- **[SDK Guide](SDK.md)** - Python SDK reference
+- **[SDK Quickstart](sdk/QUICKSTART.md)** - Get started in 5 minutes
 
 ### For Operators
 
-- **[Deployment Guide](DEPLOYMENT.md)** - Production deployment and operations
-  - Quick start with Docker Compose
-  - Security hardening
+- **[Self-Hosted Guide](SELF_HOSTED_GUIDE.md)** - Production deployment
+  - Single-binary deployment (no external DBs)
   - Resource optimization
   - Monitoring & logging
   - Backup & recovery
-  - Troubleshooting
 
 ### For Developers
 
-- **[Architecture](architecture.md)** - System design and cognitive science foundations
-  - Tripartite memory model
-  - ACT-R activation
-  - FSRS retrievability
-  - Hebbian learning
-  - Bi-temporal versioning
-
-- **[Algorithms](algorithms.md)** - Core algorithms and implementation details
-  - Scoring functions
-  - Consolidation strategies
-  - Graph traversal
-  - Embedding techniques
+- **[System Architecture Master](SYSTEM_ARCHITECTURE_MASTER.md)** - Complete system design
+- **[Integration Guide](integration/README.md)** - Framework adapters (LangChain, LlamaIndex, etc.)
+- **[Mathematical Foundations](MATHEMATICAL_FOUNDATIONS.md)** - Core equations
+- **[Brain Region Mapping](BRAIN_REGION_MAPPING.md)** - Neuroscience foundations
 
 ### Deep Dive Walkthroughs
 
-- **[System Walkthrough](SYSTEM_WALKTHROUGH.md)** - Complete system overview, 136 files across 19 modules
-- **[Memory Store/Recall Flow](MEMORY_STORE_RECALL_FLOW.md)** - Step-by-step data flow traces
-- **[Neuromodulation Walkthrough](NEUROMODULATION_WALKTHROUGH.md)** - 5-factor neuromodulator system
-- **[Learning System Walkthrough](LEARNING_SYSTEM_WALKTHROUGH.md)** - Plasticity and credit assignment
-- **[API Walkthrough](API_WALKTHROUGH.md)** - REST API and MCP interface deep dive
-- **[Visualization Walkthrough](VISUALIZATION_WALKTHROUGH.md)** - Neural dynamics visualization
 - **[Persistence Architecture](PERSISTENCE_ARCHITECTURE.md)** - WAL, checkpoints, crash recovery
-- **[Observability Walkthrough](OBSERVABILITY_WALKTHROUGH.md)** - Logging, metrics, health, tracing
+- **[Neuroscience Taxonomy](NEUROSCIENCE_TAXONOMY.md)** - Biological mapping
+- **[Competitive Analysis](COMPETITIVE_ANALYSIS.md)** - T4DM vs other memory systems
 
 ## Getting Started
 
-### Installation (5 minutes)
+### Installation (2 minutes)
 
 ```bash
 # Clone repository
 git clone https://github.com/astoreyai/t4dm.git
 cd t4dm
-
-# Start infrastructure
-docker-compose up -d
 
 # Install Python package
 python3 -m venv venv
@@ -69,8 +54,10 @@ source venv/bin/activate
 pip install -e ".[dev]"
 
 # Verify installation
-pytest tests/ -v
+pytest tests/unit/ -v
 ```
+
+**Note**: T4DM uses an embedded T4DX storage engine - no external databases required.
 
 ### Configuration
 
@@ -78,25 +65,36 @@ Edit `.env` with your settings:
 
 ```bash
 T4DM_SESSION_ID=my-session
-T4DM_NEO4J_PASSWORD=your-secure-password
-T4DM_QDRANT_URL=http://localhost:6333
+T4DM_STORAGE_PATH=/var/lib/t4dm/data
+T4DM_EMBEDDING_MODEL=sentence-transformers/all-MiniLM-L6-v2
 ```
 
 ### Usage
 
-Configure Claude Code to use T4DM MCP server:
+**Python SDK**:
+```python
+from t4dm.sdk import T4DMClient
 
-**`~/.config/claude-code/mcp_servers.json`**:
+with T4DMClient(session_id="my-session") as client:
+    # Store a memory
+    episode = client.create_episode(
+        content="User completed onboarding",
+        context={"flow": "onboarding"},
+        outcome="success"
+    )
+
+    # Recall memories
+    results = client.recall_episodes("onboarding")
+```
+
+**MCP Server** (for Claude Code/Desktop):
 ```json
 {
   "mcpServers": {
     "t4dm": {
-      "command": "python",
-      "args": ["-m", "t4dm.mcp.memory_gateway"],
-      "cwd": "/path/to/t4dm",
-      "env": {
-        "T4DM_SESSION_ID": "my-session"
-      }
+      "command": "t4dm",
+      "args": ["mcp", "server"],
+      "env": {"T4DM_SESSION_ID": "my-session"}
     }
   }
 }
@@ -106,204 +104,107 @@ Configure Claude Code to use T4DM MCP server:
 
 | Document | Purpose | Audience |
 |----------|---------|----------|
-| [API.md](API.md) | Tool reference with examples | Users, integrators |
-| [DEPLOYMENT.md](DEPLOYMENT.md) | Production deployment | Operators, sysadmins |
-| [architecture.md](architecture.md) | System design | Developers, architects |
-| [algorithms.md](algorithms.md) | Implementation details | Developers |
-| [SYSTEM_WALKTHROUGH.md](SYSTEM_WALKTHROUGH.md) | System architecture deep dive | Developers, architects |
-| [MEMORY_STORE_RECALL_FLOW.md](MEMORY_STORE_RECALL_FLOW.md) | Data flow traces | Developers |
-| [NEUROMODULATION_WALKTHROUGH.md](NEUROMODULATION_WALKTHROUGH.md) | Neuromodulator systems | Researchers, developers |
-| [LEARNING_SYSTEM_WALKTHROUGH.md](LEARNING_SYSTEM_WALKTHROUGH.md) | Plasticity mechanisms | Researchers, developers |
-| [PERSISTENCE_ARCHITECTURE.md](PERSISTENCE_ARCHITECTURE.md) | Crash recovery | Operators, developers |
-| [OBSERVABILITY_WALKTHROUGH.md](OBSERVABILITY_WALKTHROUGH.md) | Monitoring & metrics | Operators, developers |
-
-## Key Features
-
-### Episodic Memory
-- Autobiographical events with temporal-spatial context
-- ACT-R activation decay
-- FSRS retrievability modeling
-- Bi-temporal queries ("what did we know at time T?")
-
-### Semantic Memory
-- Hebbian-weighted knowledge graph
-- Entity types: CONCEPT, PERSON, PROJECT, TOOL, TECHNIQUE, FACT
-- Spreading activation through relationships
-- Bi-temporal versioning for facts
-
-### Procedural Memory
-- Learns from successful trajectories (>= 0.7 success threshold)
-- Memp (Memory for Procedures) implementation
-- Domain-specific skills: coding, research, trading, devops, writing
-- Automatic deprecation of failing procedures
-
-### Consolidation
-- Light: Deduplication and cleanup
-- Deep: Semantic extraction from episodes
-- Skill: Procedure optimization and merging
-- Provenance tracking from episodes to entities
-
-## Tool Count Summary
-
-| Category | Tools | Status |
-|----------|-------|--------|
-| Episodic | 4 | Production |
-| Semantic | 5 | Production |
-| Procedural | 4 | Production |
-| Consolidation | 2 | Production |
-| Utility | 2 | Production |
-| **Total** | **17** | **Stable** |
+| [API.md](API.md) | REST API reference | Users, integrators |
+| [SDK.md](SDK.md) | Python SDK reference | Developers |
+| [integration/README.md](integration/README.md) | Framework adapters | Integrators |
+| [SYSTEM_ARCHITECTURE_MASTER.md](SYSTEM_ARCHITECTURE_MASTER.md) | System design | Developers, architects |
+| [PERSISTENCE_ARCHITECTURE.md](PERSISTENCE_ARCHITECTURE.md) | Storage & recovery | Operators, developers |
 
 ## Architecture Overview
 
 ```
-┌─────────────────────────────────────────────────────────┐
-│              API / Gateway Layer                         │
-│     REST API  │  MCP Gateway (17 tools)  │  Python SDK  │
-├─────────────────────────────────────────────────────────┤
-│              Hook Layer (Pre/On/Post)                    │
-│   Caching │ Validation │ Audit │ Hebbian Learning       │
-├─────────────────────────────────────────────────────────┤
-│                   Memory Systems                         │
-│  ┌──────────────┐ ┌──────────────┐ ┌─────────────────┐ │
-│  │  Episodic    │ │  Semantic    │ │  Procedural     │ │
-│  │  (FSRS)      │ │  (ACT-R)     │ │  (skills)       │ │
-│  └──────────────┘ └──────────────┘ └─────────────────┘ │
-├─────────────────────────────────────────────────────────┤
-│                   Learning Layer                         │
-│      Dopamine (reward)  │  Serotonin (credit)           │
-├─────────────────────────────────────────────────────────┤
-│                   Storage Layer                          │
-│  ┌────────────────────┐    ┌──────────────────────────┐ │
-│  │  Qdrant            │    │  Neo4j Graph DB          │ │
-│  │  Vector embeddings │    │  Entities & relations    │ │
-│  └────────────────────┘    └──────────────────────────┘ │
-├─────────────────────────────────────────────────────────┤
-│                   Observability Layer                    │
-│     WWObserver  │  Tracing  │  Citation Extraction      │
-└─────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────┐
+│                    API / Gateway Layer                       │
+│     REST API  │  MCP Server  │  Python SDK  │  Adapters     │
+├─────────────────────────────────────────────────────────────┤
+│                    Qwen 2.5-3B (4-bit)                       │
+│  Layers 0-17 (frozen + QLoRA) │ Layers 18-35 (frozen + QLoRA)│
+├─────────────────────────────────────────────────────────────┤
+│              Spiking Cortical Stack (×6 blocks)              │
+│  LIF │ Thalamic Gate │ Spike Attention │ Apical │ RWKV      │
+├─────────────────────────────────────────────────────────────┤
+│                    Memory Systems                            │
+│  ┌──────────────┐ ┌──────────────┐ ┌─────────────────┐      │
+│  │  Episodic    │ │  Semantic    │ │  Procedural     │      │
+│  │  (κ < 0.3)   │ │  (κ > 0.6)   │ │  (skills)       │      │
+│  └──────────────┘ └──────────────┘ └─────────────────┘      │
+├─────────────────────────────────────────────────────────────┤
+│                    Learning Layer                            │
+│  Neuromodulators (DA, NE, ACh, 5-HT) │ STDP │ Hebbian      │
+├─────────────────────────────────────────────────────────────┤
+│                  T4DX Storage Engine                         │
+│  ┌─────────────────────────────────────────────────────┐    │
+│  │  WAL │ MemTable │ LSM Segments │ HNSW │ CSR Graph   │    │
+│  │  κ-Index │ Bitemporal │ Provenance │ Compaction     │    │
+│  └─────────────────────────────────────────────────────┘    │
+├─────────────────────────────────────────────────────────────┤
+│                   Observability Layer                        │
+│     Prometheus  │  OpenTelemetry  │  22 Viz Modules         │
+└─────────────────────────────────────────────────────────────┘
 ```
 
-## Cognitive Science Foundations
+## Core Concepts
 
-T4DM implements multiple cognitive architecture theories:
+### κ (Kappa) Gradient
 
-1. **Tripartite Memory** (Tulving 1972)
-   - Episodic: Personal experiences
-   - Semantic: General knowledge
-   - Procedural: Skills and procedures
+Continuous consolidation level [0,1] replacing discrete memory stores:
 
-2. **ACT-R** (Anderson 1993)
-   - Activation-based retrieval
-   - Base-level activation + spreading
-   - Decay over time
+| κ Range | State | Description |
+|---------|-------|-------------|
+| 0.0-0.1 | Raw | Just encoded, volatile |
+| 0.1-0.3 | Replayed | NREM-strengthened |
+| 0.3-0.6 | Transitional | Being abstracted |
+| 0.6-0.9 | Semantic | Consolidated concept |
+| 0.9-1.0 | Stable | Permanent knowledge |
 
-3. **FSRS** (Supermemo algorithm)
-   - Spaced repetition scheduling
-   - Retrievability modeling
-   - Stability updates
+### T4DX Storage Engine
 
-4. **Hebbian Learning** (Hebb 1949)
-   - "Neurons that fire together, wire together"
-   - Relationship weight strengthening
-   - Co-activation tracking
+Embedded LSM-style storage with:
+- **9 primitives**: INSERT, GET, SEARCH, UPDATE_FIELDS, UPDATE_EDGE_WEIGHT, TRAVERSE, SCAN, DELETE, BATCH_SCALE_WEIGHTS
+- **HNSW index**: 4D vector similarity (space + time)
+- **CSR graph**: Compressed sparse row for edges
+- **WAL**: Write-ahead log for crash recovery
+- **Compaction**: Memory consolidation = LSM compaction
 
-5. **Bi-temporal Modeling** (Snodgrass 2000)
-   - Valid time vs. transaction time
-   - Historical queries
-   - Fact versioning
+### Neuromodulator Orchestra
 
-6. **Neuromodulator Systems** (Schultz 1997, Daw 2002)
-   - **Dopamine**: Reward prediction errors, surprise signals, TD learning
-   - **Serotonin**: Long-term credit assignment, eligibility traces, mood adaptation
+| Neuromodulator | Effect | Software Mapping |
+|----------------|--------|------------------|
+| Dopamine (DA) | Reward gating | Outcome-based learning |
+| Norepinephrine (NE) | Attention boost | Salience weighting |
+| Acetylcholine (ACh) | Learning rate | Encoding/retrieval mode |
+| Serotonin (5-HT) | Mood baseline | Temporal credit assignment |
 
-7. **Eligibility Traces** (Sutton & Barto 2018)
-   - Temporal credit assignment across delays
-   - Decaying activation traces
-   - Bridging temporal gaps in learning
+## Diagrams
 
-## Example Workflows
+See [diagrams/DIAGRAM_SUMMARY.md](diagrams/DIAGRAM_SUMMARY.md) for the complete diagram inventory:
 
-### Learning from Interaction
+- **9 D2 diagrams**: System architecture, data flow, spiking blocks
+- **51 Mermaid diagrams**: State machines, sequences, classes
+- **13 Markdown docs**: Embedded diagrams with explanations
+- **173 rendered outputs**: SVG and PNG
 
-```python
-# 1. Claude Code helps user with a task
-# 2. Episode is created automatically
-episode = create_episode(
-    content="User requested FastAPI deployment guide",
-    outcome="success",
-    valence=0.9
-)
-
-# 3. Semantic entities extracted during consolidation
-consolidate_now(consolidation_type="deep")
-# Creates: FastAPI (TOOL), Deployment (TECHNIQUE), etc.
-
-# 4. Relationships learned
-create_relation(
-    source_id=fastapi_entity,
-    target_id=uvicorn_entity,
-    relation_type="REQUIRES"
-)
-```
-
-### Skill Acquisition
-
-```python
-# 1. User completes successful workflow
-trajectory = [
-    {"tool": "run_tests", "result": "passed"},
-    {"tool": "build_image", "result": "success"},
-    {"tool": "push_image", "result": "success"}
-]
-
-# 2. Procedure learned (high success score)
-create_skill(
-    trajectory=trajectory,
-    outcome_score=0.95,
-    domain="devops",
-    trigger_pattern="containerize application"
-)
-
-# 3. Later: Claude Code recalls the skill
-skills = recall_skill(task="deploy Docker container")
-# Returns learned procedure with steps
-```
+Key diagrams:
+- `t4dm_full_system.d2` - Complete system architecture
+- `t4dx_storage_engine.d2` - T4DX internals
+- `t4dm_spiking_block.d2` - 6-stage cortical block
 
 ## Performance Characteristics
 
-### Latency (p95)
+### Latency (P95)
 
 | Operation | Latency | Notes |
 |-----------|---------|-------|
-| create_episode | <50ms | Vector embedding + Qdrant insert |
-| recall_episodes | <200ms | Hybrid search with 4-component scoring |
-| create_entity | <30ms | Neo4j insert |
-| semantic_recall | <300ms | Vector + graph + spreading activation |
-| spread_activation | <500ms | Multi-hop graph traversal |
-| create_skill | <100ms | Trajectory parsing + storage |
-| recall_skill | <150ms | Similarity + statistics scoring |
-| consolidate_now (light) | <5s | Deduplication |
-| consolidate_now (deep) | 30-300s | Depends on episode count |
-
-### Throughput
-
-- **Episodes**: 1000/sec sustained
-- **Entities**: 500/sec sustained
-- **Recalls**: 200/sec sustained (with caching)
-- **Consolidation**: 10,000 episodes/min
+| create_episode | <50ms | Embedding + T4DX insert |
+| recall_episodes | <100ms | HNSW search + reranking |
+| consolidate (NREM) | <5s | LSM compaction |
+| consolidate (REM) | 30-300s | Semantic prototype creation |
 
 ### Storage
 
-- **Episode**: ~2KB (vector: 1024-dim float32 = 4KB)
-- **Entity**: ~1KB (Neo4j node + properties)
-- **Relationship**: ~200B (Neo4j edge + weight)
-- **Procedure**: ~5KB (steps + metadata)
-
-**Scaling**:
-- 100K episodes ≈ 200MB (vectors) + 50MB (metadata)
-- 10K entities ≈ 10MB (nodes) + 2MB (relationships)
-- 1K procedures ≈ 5MB
+- **Episode**: ~2KB (vector: 32-dim float32)
+- **T4DX segment**: 64MB (configurable)
+- **100K episodes**: ~200MB total
 
 ## API Versioning
 
@@ -313,26 +214,16 @@ T4DM follows semantic versioning:
 - **Minor**: New features, backward compatible
 - **Patch**: Bug fixes
 
-**Current**: v3.0.0
-
-**Deprecation Policy**:
-- Deprecated tools supported for 2 minor versions
-- Warnings emitted for deprecated features
-- Migration guides provided
+**Current**: v2.0.0
 
 ## Support
 
 - **GitHub Issues**: https://github.com/astoreyai/t4dm/issues
 - **Documentation**: https://github.com/astoreyai/t4dm/tree/main/docs
-- **Email**: support@worldweaver.ai (if configured)
-
-## Contributing
-
-See `CONTRIBUTING.md` in the repository root.
 
 ## License
 
-T4DM is released under the MIT License. See `LICENSE` file in repository root.
+T4DM is released under the MIT License.
 
 ---
 

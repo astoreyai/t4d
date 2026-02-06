@@ -37,10 +37,10 @@ This memory system implements Tulving's (1972) tripartite model with neural path
 │  ┌─────────────────────────────┴─────────────────────────────┐            │
 │  │                    EPISODIC MEMORY                        │            │
 │  │  ┌─────────────────────────────────────────────────────┐  │            │
-│  │  │  Neo4j Temporal Graph                               │  │            │
+│  │  │  T4DX Storage (κ < 0.3)                             │  │            │
 │  │  │  • Session-bound episodes                           │  │            │
 │  │  │  • Bi-temporal versioning (T_ref, T_sys)            │  │            │
-│  │  │  • Vector embeddings (BGE-M3)                       │  │            │
+│  │  │  • Vector embeddings (HNSW index)                   │  │            │
 │  │  │  • FSRS stability tracking                          │  │            │
 │  │  └─────────────────────────────────────────────────────┘  │            │
 │  └───────────────────────────────────────────────────────────┘            │
@@ -48,9 +48,9 @@ This memory system implements Tulving's (1972) tripartite model with neural path
 │  ┌───────────────────────────────────────────────────────────┐            │
 │  │                    SEMANTIC MEMORY                        │            │
 │  │  ┌─────────────────────────────────────────────────────┐  │            │
-│  │  │  Neo4j Knowledge Graph                              │  │            │
+│  │  │  T4DX Storage (κ > 0.6)                             │  │            │
 │  │  │  • Entity nodes with decay properties               │  │            │
-│  │  │  • Hebbian-weighted relationships                   │  │            │
+│  │  │  • Hebbian-weighted relationships (CSR graph)       │  │            │
 │  │  │  • ACT-R activation-based retrieval                 │  │            │
 │  │  │  • Spreading activation                             │  │            │
 │  │  └─────────────────────────────────────────────────────┘  │            │
@@ -90,7 +90,7 @@ This memory system implements Tulving's (1972) tripartite model with neural path
 
 **Total Allocation**: ~20GB RAM system, ~6GB VRAM
 
-> **Migration Note**: Neo4j and Qdrant have been replaced by T4DX, a custom embedded LSM-style spatiotemporal database where vectors, edges, metadata, and temporal indices are co-located. See `docs/plans/FULL_SYSTEM_PLAN.md` for details.
+> **Note**: T4DM 2.0 uses T4DX, a custom embedded LSM-style spatiotemporal database where vectors, edges, metadata, and temporal indices are co-located. κ (kappa) determines memory type: κ < 0.3 = episodic, κ > 0.6 = semantic.
 
 ---
 
@@ -100,7 +100,7 @@ This memory system implements Tulving's (1972) tripartite model with neural path
 
 Store autobiographical events - specific interactions, decisions, and outcomes bound to temporal-spatial context. Preserves particularity: "We discussed X on Tuesday" not "X exists."
 
-### Neo4j Schema
+### T4DX ItemRecord Schema
 
 ```cypher
 CREATE (e:Episode {

@@ -360,7 +360,7 @@ Common status codes:
 ### Error Sanitization
 
 Error messages are sanitized to prevent information leakage:
-- Database connection strings (Neo4j URIs, credentials) are removed
+- Internal storage paths and credentials are removed
 - Internal file paths are masked
 - API keys/tokens are redacted
 - Stack traces are logged server-side but not returned to clients

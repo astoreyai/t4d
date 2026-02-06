@@ -1,57 +1,117 @@
 # T4DM Deployment Guide
 
+**Version**: 2.0.0
+**Last Updated**: 2026-02-05
+
+> **Note**: T4DM 2.0 uses an embedded T4DX storage engine. No external databases required.
+
 ## Prerequisites
 
-- Docker 20.10+ and Docker Compose
-- 4GB+ RAM (8GB recommended for embedding model)
+- Python 3.11+
+- 4GB+ RAM (8GB recommended for embedding model + Qwen)
 - 10GB+ disk space
+- CUDA-capable GPU (optional, for faster inference)
 
 ## Quick Start (Development)
 
-1. **Clone and configure**
+1. **Clone and install**
 ```bash
 git clone https://github.com/astoreyai/t4dm
 cd t4dm
-cp .env.example .env
-./scripts/setup-env.sh  # Generates secure passwords
+python -m venv venv
+source venv/bin/activate
+pip install -e ".[dev]"
 ```
 
-2. **Start infrastructure only**
+2. **Run API server**
 ```bash
-docker-compose up -d
+t4dm serve
+# Or: python -m t4dm.api.server
 ```
 
-3. **Run API locally** (for development)
-```bash
-pip install -e ".[api]"
-python -m t4dm.api.server
-```
-
-4. **Access API**
+3. **Access API**
 - API: http://localhost:8765
 - Docs: http://localhost:8765/docs
-- Neo4j Browser: http://localhost:7474
+- Health: http://localhost:8765/api/v1/health
 
-## Full Stack Deployment
+## Production Deployment
 
-1. **Configure environment**
+### Single Binary (Recommended)
+
+T4DM runs as a self-contained service with embedded storage:
+
 ```bash
-cp .env.example .env
-# Edit .env with production values
+# Install
+pip install t4dm
+
+# Configure
+export T4DM_STORAGE_PATH=/var/lib/t4dm/data
+export T4DM_SESSION_ID=production
+export T4DM_HOST=0.0.0.0
+export T4DM_PORT=8765
+
+# Run
+t4dm serve --workers 4
 ```
 
-2. **Build and start all services**
-```bash
-docker-compose -f docker-compose.full.yml up -d --build
+### Docker Deployment
+
+```dockerfile
+FROM python:3.11-slim
+
+WORKDIR /app
+COPY . .
+
+RUN pip install -e .
+
+ENV T4DM_STORAGE_PATH=/data
+ENV T4DM_HOST=0.0.0.0
+
+EXPOSE 8765
+VOLUME /data
+
+CMD ["t4dm", "serve"]
 ```
 
-3. **Verify deployment**
-```bash
-# Check health
-curl http://localhost:8765/api/v1/health
+```yaml
+# docker-compose.yml
+version: '3.8'
+services:
+  t4dm:
+    build: .
+    ports:
+      - "8765:8765"
+    volumes:
+      - t4dm_data:/data
+    environment:
+      - T4DM_SESSION_ID=production
+      - T4DM_EMBEDDING_DEVICE=cpu
 
-# Check logs
-docker-compose -f docker-compose.full.yml logs -f ww-api
+volumes:
+  t4dm_data:
+```
+
+### Systemd Service
+
+```ini
+# /etc/systemd/system/t4dm.service
+[Unit]
+Description=T4DM Memory Service
+After=network.target
+
+[Service]
+Type=simple
+User=t4dm
+Group=t4dm
+WorkingDirectory=/opt/t4dm
+Environment="T4DM_STORAGE_PATH=/var/lib/t4dm/data"
+Environment="T4DM_SESSION_ID=production"
+ExecStart=/opt/t4dm/venv/bin/t4dm serve --host 0.0.0.0 --port 8765
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
 ```
 
 ## Environment Configuration
@@ -59,436 +119,198 @@ docker-compose -f docker-compose.full.yml logs -f ww-api
 ### Required Variables
 
 ```bash
-# Neo4j credentials
-NEO4J_USER=neo4j
-NEO4J_PASSWORD=<secure-password>
+# Storage location (must be writable)
+T4DM_STORAGE_PATH=/var/lib/t4dm/data
 
-# Must match Neo4j
-T4DM_NEO4J_URI=bolt://localhost:7687
-T4DM_NEO4J_USER=neo4j
-T4DM_NEO4J_PASSWORD=<same-password>
+# Session isolation
+T4DM_SESSION_ID=production
 ```
 
 ### Optional Variables
 
 ```bash
-# Session isolation
-T4DM_SESSION_ID=production
-
-# Qdrant (vector storage)
-T4DM_QDRANT_URL=http://localhost:6333
+# Server settings
+T4DM_HOST=0.0.0.0
+T4DM_PORT=8765
+T4DM_WORKERS=4
 
 # Embedding model
-T4DM_EMBEDDING_MODEL=BAAI/bge-m3
-T4DM_EMBEDDING_DIMENSION=1024
-T4DM_EMBEDDING_DEVICE=cuda:0  # or 'cpu'
+T4DM_EMBEDDING_MODEL=sentence-transformers/all-MiniLM-L6-v2
+T4DM_EMBEDDING_DEVICE=cuda:0  # or "cpu"
 
-# API settings
-T4DM_API_HOST=0.0.0.0
-T4DM_API_PORT=8765
-T4DM_API_WORKERS=4
+# Rate limiting
+T4DM_RATE_LIMIT=100  # requests per minute per session
 
-# Memory parameters
-T4DM_FSRS_DEFAULT_STABILITY=1.0
-T4DM_FSRS_RETENTION_TARGET=0.9
-T4DM_HEBBIAN_LEARNING_RATE=0.1
+# Logging
+T4DM_LOG_LEVEL=INFO  # DEBUG, INFO, WARNING, ERROR
 
-# Observability
-T4DM_OTEL_ENABLED=true
-T4DM_OTEL_ENDPOINT=http://jaeger:4317
+# WAL settings
+T4DM_WAL_FSYNC_INTERVAL=1.0  # seconds
+T4DM_SEGMENT_SIZE=67108864   # 64MB default
 ```
 
-## Production Checklist
+## Resource Requirements
 
-### Security
+### Minimum (Development)
+- CPU: 2 cores
+- RAM: 4GB
+- Disk: 10GB
 
-- [ ] Strong passwords in `.env` (min 16 chars)
-- [ ] Change Neo4j default credentials
-- [ ] Enable Qdrant API key: `QDRANT__SERVICE__API_KEY=<key>`
-- [ ] **Enable API key authentication** (required for production):
-  ```bash
-  T4DM_API_KEY=$(openssl rand -hex 32)
-  # API key auto-required when T4DM_ENVIRONMENT=production and T4DM_API_KEY is set
-  # Pass via X-API-Key header on all requests
-  ```
-  - Exempt endpoints: `/`, `/api/v1/health`, `/docs`, `/redoc`, `/openapi.json`
-- [ ] Configure CORS: `T4DM_API_CORS_ORIGINS=https://yourdomain.com`
-  - **Note**: Wildcards (`*`) are rejected in production (`T4DM_ENVIRONMENT=production`)
-  - Allowed headers: `Authorization`, `Content-Type`, `X-Session-ID`, `X-Request-ID`, `X-API-Key`, `X-Admin-Key`
-- [ ] Run behind reverse proxy (nginx/traefik) with TLS
-- [ ] Bind ports to 127.0.0.1 (not 0.0.0.0) when using reverse proxy
-- [ ] Set `T4DM_ENVIRONMENT=production` to enable security validators
+### Recommended (Production)
+- CPU: 4+ cores
+- RAM: 16GB (8GB for Qwen + 8GB for T4DX)
+- Disk: 100GB+ SSD
+- GPU: NVIDIA GPU with 8GB+ VRAM (optional)
 
-### Performance
+### Storage Sizing
 
-- [ ] Use GPU for embeddings: `T4DM_EMBEDDING_DEVICE=cuda:0`
-- [ ] Configure API workers appropriately (see Worker Configuration section below)
-- [ ] Tune Neo4j memory in docker-compose:
-  ```yaml
-  NEO4J_dbms_memory_heap_max__size=4G
-  NEO4J_dbms_memory_pagecache_size=2G
-  ```
+| Items | T4DX Size | Notes |
+|-------|-----------|-------|
+| 10K | ~50MB | Small deployment |
+| 100K | ~500MB | Medium deployment |
+| 1M | ~5GB | Large deployment |
+| 10M | ~50GB | Very large deployment |
 
-### Persistence
+## Monitoring
 
-- [ ] Use named volumes (default configuration)
-- [ ] Set up volume backups:
-  ```bash
-  # Neo4j backup
-  docker exec ww-neo4j neo4j-admin dump --database=neo4j --to=/backups/neo4j.dump
-
-  # Qdrant snapshot
-  curl -X POST http://localhost:6333/snapshots
-  ```
-
-### Monitoring
-
-- [ ] Enable OpenTelemetry: `T4DM_OTEL_ENABLED=true`
-- [ ] Configure health check alerts
-- [ ] Set up log aggregation
-
-## Architecture
-
-```
-                    ┌─────────────────┐
-                    │   Client Apps   │
-                    │  (SDK / HTTP)   │
-                    └────────┬────────┘
-                             │
-                    ┌────────▼────────┐
-                    │   WW REST API   │
-                    │  (FastAPI)      │
-                    │  Port: 8765     │
-                    └────────┬────────┘
-                             │
-         ┌───────────────────┼───────────────────┐
-         │                   │                   │
-┌────────▼────────┐ ┌────────▼────────┐ ┌────────▼────────┐
-│  Neo4j Graph    │ │  Qdrant Vector  │ │  BGE-M3 Model   │
-│  (Entities,     │ │  (Embeddings)   │ │  (Embeddings)   │
-│   Relations)    │ │  Port: 6333     │ │                 │
-│  Port: 7687     │ └─────────────────┘ └─────────────────┘
-└─────────────────┘
-```
-
-## Worker Configuration
-
-### Overview
-
-The `T4DM_API_WORKERS` setting controls how many Uvicorn worker processes handle requests.
-Each worker is a separate Python process with its own memory space.
-
-**Default**: 1 worker (recommended for development and small deployments)
-**Maximum**: 32 workers
-
-### Recommended Settings
-
-| Deployment | CPU Cores | Memory | Workers | Notes |
-|------------|-----------|--------|---------|-------|
-| Development | Any | 4GB | 1 | Simpler debugging |
-| Small Production | 2-4 | 8GB | 2-4 | `workers = cores - 1` |
-| Medium Production | 4-8 | 16GB | 4-8 | `workers = cores` |
-| Large Production | 8+ | 32GB+ | 8-16 | `workers = 2 * cores` |
-
-### Formula
+### Health Check
 
 ```bash
-# For CPU-bound workloads (embedding generation)
-T4DM_API_WORKERS=$(($(nproc) - 1))
-
-# For I/O-bound workloads (database queries)
-T4DM_API_WORKERS=$(($(nproc) * 2))
+curl http://localhost:8765/api/v1/health
 ```
 
-### Memory Considerations
-
-Each worker allocates:
-- ~500MB base Python runtime
-- ~2GB for BGE-M3 embedding model (shared via copy-on-write if using same model)
-- Variable heap for request processing
-
-**Example calculation for 16GB RAM**:
-```
-Available: 16GB
-- Neo4j heap: 4GB
-- Neo4j pagecache: 2GB
-- Qdrant: 2GB
-- OS/buffers: 2GB
-- Remaining: 6GB for API workers
-- Max workers: 6GB / 1GB per worker = 6 workers
+Response:
+```json
+{
+  "status": "healthy",
+  "timestamp": "2026-02-05T12:00:00Z",
+  "version": "2.0.0",
+  "storage": {
+    "segments": 5,
+    "total_items": 10000,
+    "memtable_size": 1024
+  }
+}
 ```
 
-### Rate Limiting Considerations
+### Prometheus Metrics
 
-**IMPORTANT**: The built-in rate limiter is **per-worker, not distributed**.
+Metrics available at `/metrics`:
 
-With `T4DM_API_WORKERS=4` and rate limit of 100 req/min:
-- Each worker allows 100 req/min independently
-- Effective limit: 400 req/min (4 × 100)
+- `t4dm_requests_total` - Total API requests
+- `t4dm_request_duration_seconds` - Request latency histogram
+- `t4dm_storage_items_total` - Total stored items
+- `t4dm_consolidation_runs_total` - Consolidation executions
+- `t4dm_kappa_distribution` - κ value distribution
 
-**For strict rate limiting in multi-worker deployments**:
+### Visualization Endpoints
 
-1. **Option A: Keep single worker** (simplest)
-   ```bash
-   T4DM_API_WORKERS=1  # Built-in rate limiter works correctly
-   ```
+Access live metrics via REST:
+- `/api/v1/viz/realtime/metrics` - Aggregated metrics
+- `/api/v1/viz/kappa/distribution` - κ distribution
+- `/api/v1/viz/t4dx/storage` - Storage statistics
 
-2. **Option B: Use nginx rate limiting** (recommended for production)
-   ```nginx
-   # nginx.conf
-   limit_req_zone $binary_remote_addr zone=api:10m rate=100r/m;
-
-   location /api/ {
-       limit_req zone=api burst=20 nodelay;
-       proxy_pass http://ww-api:8765;
-   }
-   ```
-
-3. **Option C: Use Redis-based rate limiter** (for distributed deployments)
-   ```bash
-   # Future enhancement - not yet implemented
-   T4DM_RATE_LIMITER_BACKEND=redis
-   T4DM_REDIS_URL=redis://localhost:6379
-   ```
-
-### Configuration Example
-
-```bash
-# .env for 8-core, 32GB production server
-T4DM_API_WORKERS=8
-T4DM_API_HOST=127.0.0.1  # Behind reverse proxy
-T4DM_API_PORT=8765
-
-# Neo4j tuning for 8 workers
-T4DM_NEO4J_POOL_SIZE=100  # 100 connections shared across workers
-
-# Embedding cache (per-worker)
-T4DM_EMBEDDING_CACHE_SIZE=500  # Reduce if memory constrained
-```
-
-## Scaling
-
-### Horizontal Scaling
-
-For high availability, run multiple API instances behind a load balancer:
-
-```yaml
-# docker-compose.prod.yml
-services:
-  ww-api:
-    deploy:
-      replicas: 3
-    # ... rest of config
-```
-
-### Resource Limits
-
-```yaml
-services:
-  ww-api:
-    deploy:
-      resources:
-        limits:
-          cpus: '2'
-          memory: 4G
-        reservations:
-          cpus: '1'
-          memory: 2G
-```
-
-## Troubleshooting
-
-### API Won't Start
-
-1. Check storage services are healthy:
-```bash
-docker-compose ps
-curl http://localhost:6333/readyz  # Qdrant
-curl http://localhost:7474         # Neo4j
-```
-
-2. Check logs:
-```bash
-docker-compose logs ww-api
-```
-
-3. Verify environment:
-```bash
-docker exec ww-api env | grep T4DM_
-```
-
-### Slow Embedding
-
-1. Use GPU if available: `T4DM_EMBEDDING_DEVICE=cuda:0`
-2. Reduce batch size: `T4DM_EMBEDDING_BATCH_SIZE=16`
-3. First request loads model (~30s), subsequent requests are fast
-
-### Memory Issues
-
-1. Reduce Neo4j heap: `NEO4J_dbms_memory_heap_max__size=1G`
-2. Use FP16 embeddings: `T4DM_EMBEDDING_USE_FP16=true`
-3. Limit concurrent requests via API workers
-
-### Connection Refused
-
-1. Check if services are on same Docker network
-2. Use internal hostnames in docker-compose (e.g., `bolt://neo4j:7687`)
-3. Verify firewall rules
-
-## Maintenance
+## Backup & Recovery
 
 ### Backup
 
 ```bash
-#!/bin/bash
-# backup.sh
-DATE=$(date +%Y%m%d)
+# Stop writes (optional, for consistency)
+curl -X POST http://localhost:8765/api/v1/control/pause
 
-# Stop services
-docker-compose stop ww-api
+# Backup storage directory
+tar -czf t4dm-backup-$(date +%Y%m%d).tar.gz /var/lib/t4dm/data
 
-# Neo4j dump
-docker exec ww-neo4j neo4j-admin database dump neo4j --to-path=/backups
-docker cp ww-neo4j:/backups/neo4j.dump ./backups/neo4j-$DATE.dump
-
-# Qdrant snapshot
-curl -X POST http://localhost:6333/snapshots
-docker cp ww-qdrant:/qdrant/snapshots ./backups/qdrant-$DATE/
-
-# Restart
-docker-compose start ww-api
+# Resume writes
+curl -X POST http://localhost:8765/api/v1/control/resume
 ```
 
-### Restore
+### Recovery
 
 ```bash
-# Neo4j
-docker cp ./backups/neo4j-$DATE.dump ww-neo4j:/backups/
-docker exec ww-neo4j neo4j-admin database load neo4j --from-path=/backups --overwrite-destination
+# Stop service
+systemctl stop t4dm
 
-# Qdrant - copy snapshot to storage directory
+# Restore backup
+rm -rf /var/lib/t4dm/data
+tar -xzf t4dm-backup-20260205.tar.gz -C /
+
+# Start service (WAL replay happens automatically)
+systemctl start t4dm
 ```
 
-### Upgrade
+### Point-in-Time Recovery
+
+T4DX uses write-ahead logging (WAL) for crash recovery:
+1. WAL is replayed on startup
+2. Uncommitted transactions are recovered
+3. Corrupted segments are skipped with warnings
+
+## Security
+
+### API Key Authentication
 
 ```bash
-# Pull latest
-git pull origin main
+# Set API key
+export T4DM_API_KEY=your-secret-key
 
-# Rebuild
-docker-compose -f docker-compose.full.yml build
-
-# Rolling restart
-docker-compose -f docker-compose.full.yml up -d --no-deps ww-api
+# Clients must provide header
+curl -H "X-API-Key: your-secret-key" http://localhost:8765/api/v1/health
 ```
+
+### Rate Limiting
+
+Default: 100 requests/minute per session
+
+```bash
+# Override
+T4DM_RATE_LIMIT=500
+```
+
+### Network Security
+
+- Run behind reverse proxy (nginx, Caddy) in production
+- Use TLS termination at proxy level
+- Restrict access to trusted networks
+
+## Troubleshooting
+
+### Common Issues
+
+| Issue | Cause | Solution |
+|-------|-------|----------|
+| Slow startup | Large WAL replay | Normal on first start after crash |
+| OOM errors | Insufficient RAM | Increase RAM or reduce batch sizes |
+| 429 errors | Rate limiting | Increase T4DM_RATE_LIMIT |
+| Connection refused | Service not running | Check `systemctl status t4dm` |
+
+### Debug Mode
+
+```bash
+T4DM_LOG_LEVEL=DEBUG t4dm serve
+```
+
+### Log Locations
+
+- stdout/stderr (Docker, systemd)
+- `/var/log/t4dm/` (if configured)
+
+## Upgrading
+
+### Minor Version (2.0.x → 2.0.y)
+
+```bash
+pip install --upgrade t4dm
+systemctl restart t4dm
+```
+
+### Major Version (1.x → 2.x)
+
+See migration guide in release notes. Major versions may require:
+1. Data export from old version
+2. Schema migration
+3. Data import to new version
 
 ---
 
-## Phase 9: Production Infrastructure
-
-### Kubernetes Deployment
-
-**Kustomize overlays** for dev/staging/prod:
-
-```bash
-# Development (single replica, reduced resources)
-kubectl apply -k deploy/kubernetes/overlays/dev
-
-# Staging (moderate replicas)
-kubectl apply -k deploy/kubernetes/overlays/staging
-
-# Production (HA with PDB)
-kubectl apply -k deploy/kubernetes/overlays/prod
-```
-
-### Helm Chart
-
-```bash
-# Add dependencies
-helm dependency update deploy/helm/t4dm
-
-# Install with secrets
-helm install ww deploy/helm/t4dm \
-  --namespace t4dm \
-  --create-namespace \
-  --set secrets.jwtSecret="$(openssl rand -base64 32)" \
-  --set secrets.databasePassword="$(openssl rand -base64 16)" \
-  --set secrets.neo4jPassword="$(openssl rand -base64 16)"
-
-# Upgrade
-helm upgrade ww deploy/helm/t4dm --reuse-values
-```
-
-### Control Plane API (Phase 9)
-
-Admin endpoints for runtime control:
-
-**Feature Flags**:
-```bash
-# List all flags
-curl -H "Authorization: Bearer $TOKEN" \
-  http://localhost:8765/api/v1/control/flags
-
-# Toggle a flag
-curl -X PATCH \
-  -H "Authorization: Bearer $TOKEN" \
-  -d '{"enabled": false}' \
-  http://localhost:8765/api/v1/control/flags/telemetry
-```
-
-**Emergency Controls**:
-```bash
-# Trigger panic mode (LIMITED = read-only)
-curl -X POST \
-  -H "Authorization: Bearer $TOKEN" \
-  -d '{"level": "LIMITED", "reason": "Maintenance"}' \
-  http://localhost:8765/api/v1/control/emergency/panic
-
-# Recover
-curl -X POST \
-  -H "Authorization: Bearer $TOKEN" \
-  -d '{"level": "NONE"}' \
-  http://localhost:8765/api/v1/control/emergency/recover
-```
-
-**Circuit Breakers**:
-```bash
-# List all circuit breakers
-curl -H "Authorization: Bearer $TOKEN" \
-  http://localhost:8765/api/v1/control/circuits
-
-# Reset a tripped circuit
-curl -X POST \
-  -H "Authorization: Bearer $TOKEN" \
-  -d '{"action": "reset"}' \
-  http://localhost:8765/api/v1/control/circuits/database
-```
-
-### Secrets Management (Phase 9)
-
-The system auto-detects the secrets backend:
-
-| Backend | Description | Use Case |
-|---------|-------------|----------|
-| `auto` | Auto-detect (default) | All environments |
-| `env` | Environment variables | Development |
-| `file` | File-based (`/run/secrets/`) | Docker/K8s secrets |
-| `chained` | File fallback to env | Production |
-
-Override with `T4DM_SECRETS_BACKEND=<backend>`.
-
-### Feature Flags (Phase 9)
-
-Control subsystems at runtime without restart:
-
-| Flag | Description | Default |
-|------|-------------|---------|
-| `ff_encoder` | Learnable FF encoding | `true` |
-| `capsule_encoding` | Capsule representations | `true` |
-| `lability_window` | Protein synthesis gate | `true` |
-| `three_factor_learning` | Neuromodulated learning | `true` |
-| `api_rate_limiting` | Request rate limits | `true` |
-| `read_only_mode` | Block all writes | `false` |
-| `maintenance_mode` | Block all requests | `false` |
-
-Set via environment: `T4DM_FLAG_<NAME>=true|false`
+For additional support, see [GitHub Issues](https://github.com/astoreyai/t4dm/issues).
