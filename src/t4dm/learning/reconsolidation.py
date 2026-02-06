@@ -967,3 +967,193 @@ def reconsolidate(
         new_embedding = new_embedding / new_norm
 
     return new_embedding
+
+
+# =============================================================================
+# W2-02: Reconsolidation Lability (O'Reilly)
+# =============================================================================
+# Following Nader et al. (2000) "Fear memories require protein synthesis"
+# When consolidated memories are reactivated with mismatch, they become
+# labile (modifiable) for a window before restabilizing.
+# =============================================================================
+
+
+def compute_mismatch(v1: np.ndarray, v2: np.ndarray) -> float:
+    """Compute mismatch as cosine distance between vectors.
+
+    Args:
+        v1: First vector (will be normalized).
+        v2: Second vector (will be normalized).
+
+    Returns:
+        Mismatch score: 0 = identical, 1 = orthogonal, 2 = opposite.
+    """
+    # Normalize
+    v1_norm = v1 / (np.linalg.norm(v1) + 1e-8)
+    v2_norm = v2 / (np.linalg.norm(v2) + 1e-8)
+
+    # Cosine similarity
+    cos_sim = np.dot(v1_norm, v2_norm)
+
+    # Convert to distance: 1 - cos_sim
+    return 1.0 - cos_sim
+
+
+@dataclass
+class ReconsolidationConfig:
+    """Configuration for memory reconsolidation lability.
+
+    Based on Nader et al. (2000) findings that retrieved memories
+    become labile and require protein synthesis to restabilize.
+
+    Attributes:
+        lability_window_seconds: Duration of lability window (default 300s = 5min).
+        kappa_drop_threshold: Only affect memories with κ above this (default 0.7).
+        kappa_drop_amount: How much to reduce κ when labile (default 0.4).
+        mismatch_threshold: Cosine distance threshold for mismatch (default 0.3).
+    """
+
+    lability_window_seconds: float = 300.0
+    kappa_drop_threshold: float = 0.7
+    kappa_drop_amount: float = 0.4
+    mismatch_threshold: float = 0.3
+
+
+@dataclass
+class ReconsolidationResult:
+    """Result of reconsolidation check on reactivation.
+
+    Attributes:
+        triggered: Whether reconsolidation was triggered.
+        reason: Why reconsolidation was/wasn't triggered.
+        mismatch_score: Computed mismatch (if applicable).
+        new_kappa: New κ value after drop (if applicable).
+        lability_expires: When lability window expires (if applicable).
+    """
+
+    triggered: bool
+    reason: str
+    mismatch_score: float | None = None
+    new_kappa: float | None = None
+    lability_expires: float | None = None
+
+
+class ReconsolidationManager:
+    """Manages memory reconsolidation with lability windows.
+
+    When a consolidated memory (κ > threshold) is reactivated and there's
+    a mismatch with current context, the memory becomes labile:
+    - κ drops temporarily
+    - Memory can be updated during lability window
+    - If not updated, κ is restored when window closes
+
+    Evidence Base: Nader et al. (2000) "Fear memories require protein synthesis"
+
+    Example:
+        >>> manager = ReconsolidationManager(config, engine)
+        >>> result = manager.on_reactivation(memory_id, context_embedding)
+        >>> if result.triggered:
+        ...     print(f"Memory is labile until {result.lability_expires}")
+    """
+
+    def __init__(self, config: ReconsolidationConfig, engine: Any):
+        """Initialize reconsolidation manager.
+
+        Args:
+            config: Reconsolidation configuration.
+            engine: Storage engine with get() and update_fields() methods.
+        """
+        self.config = config
+        self.engine = engine
+        self.labile_memories: dict[UUID, float] = {}  # id → lability_expires_at
+
+    def on_reactivation(
+        self,
+        memory_id: UUID,
+        current_context_embedding: np.ndarray,
+    ) -> ReconsolidationResult:
+        """Check if reactivation should trigger reconsolidation.
+
+        Called when a memory is retrieved/reactivated. Checks for mismatch
+        between stored memory and current context.
+
+        Args:
+            memory_id: Memory being reactivated.
+            current_context_embedding: Current context embedding.
+
+        Returns:
+            ReconsolidationResult indicating whether lability was triggered.
+        """
+        import time
+
+        memory = self.engine.get(memory_id)
+
+        # Only affect consolidated memories
+        if memory.kappa < self.config.kappa_drop_threshold:
+            return ReconsolidationResult(
+                triggered=False,
+                reason="not_consolidated",
+            )
+
+        # Check mismatch
+        mismatch = compute_mismatch(memory.vector, current_context_embedding)
+
+        if mismatch > self.config.mismatch_threshold:
+            # Open lability window
+            expires_at = time.time() + self.config.lability_window_seconds
+            self.labile_memories[memory_id] = expires_at
+
+            # Temporarily reduce κ
+            new_kappa = memory.kappa - self.config.kappa_drop_amount
+            self.engine.update_fields(memory_id, {
+                "kappa": new_kappa,
+                "labile": True,
+            })
+
+            logger.info(
+                f"Reconsolidation triggered for {memory_id}: "
+                f"mismatch={mismatch:.3f} > {self.config.mismatch_threshold}, "
+                f"κ: {memory.kappa:.2f} → {new_kappa:.2f}"
+            )
+
+            return ReconsolidationResult(
+                triggered=True,
+                reason="mismatch_detected",
+                mismatch_score=mismatch,
+                new_kappa=new_kappa,
+                lability_expires=expires_at,
+            )
+
+        return ReconsolidationResult(
+            triggered=False,
+            reason="no_mismatch",
+            mismatch_score=mismatch,
+        )
+
+    def close_lability_windows(self) -> None:
+        """Close expired lability windows, restore κ if not updated.
+
+        Should be called periodically to clean up expired windows.
+        """
+        import time
+
+        now = time.time()
+        expired = [mid for mid, exp in self.labile_memories.items() if exp < now]
+
+        for memory_id in expired:
+            memory = self.engine.get(memory_id)
+
+            if memory.labile:
+                # Lability window closed without update → restore κ
+                restored_kappa = memory.kappa + self.config.kappa_drop_amount
+                self.engine.update_fields(memory_id, {
+                    "kappa": restored_kappa,
+                    "labile": False,
+                })
+
+                logger.debug(
+                    f"Lability window closed for {memory_id}: "
+                    f"κ restored to {restored_kappa:.2f}"
+                )
+
+            del self.labile_memories[memory_id]

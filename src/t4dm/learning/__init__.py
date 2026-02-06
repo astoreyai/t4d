@@ -180,6 +180,11 @@ from t4dm.learning.reconsolidation import (
     ReconsolidationEngine,
     ReconsolidationUpdate,
     reconsolidate,
+    # W2-02: Reconsolidation Lability (O'Reilly)
+    ReconsolidationConfig,
+    ReconsolidationResult,
+    ReconsolidationManager,
+    compute_mismatch,
 )
 from t4dm.learning.retrieval_feedback import (
     RetrievalFeedback,
@@ -316,6 +321,11 @@ __all__ = [
     "ReconsolidationEngine",
     "DopamineModulatedReconsolidation",
     "reconsolidate",
+    # W2-02: Reconsolidation Lability (O'Reilly)
+    "ReconsolidationConfig",
+    "ReconsolidationResult",
+    "ReconsolidationManager",
+    "compute_mismatch",
     # Homeostatic Plasticity
     "HomeostaticState",
     "HomeostaticPlasticity",

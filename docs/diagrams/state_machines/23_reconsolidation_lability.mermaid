@@ -1,0 +1,76 @@
+---
+title: Reconsolidation Lability (O'Reilly W2-02)
+---
+stateDiagram-v2
+    direction TB
+
+    [*] --> Stable: Memory consolidated
+
+    state Stable {
+        direction LR
+        HighKappa: kappa greater than 0.7
+        NotLabile: labile = false
+    }
+
+    state Reactivation {
+        direction TB
+        GetMemory: Retrieve memory
+        CheckKappa: kappa greater than threshold?
+        ComputeMismatch: cosine_distance(vector, context)
+        CheckMismatch: mismatch greater than 0.3?
+    }
+
+    state Labile {
+        direction LR
+        KappaDropped: kappa -= 0.4
+        WindowOpen: expires_at = now + 300s
+        Modifiable: Memory can be updated
+    }
+
+    state WindowClose {
+        direction TB
+        CheckExpiry: now greater than expires_at?
+        WasUpdated: Check if updated
+        RestoreKappa: kappa += 0.4
+    }
+
+    Stable --> Reactivation: on_reactivation()
+
+    Reactivation --> GetMemory: Start
+    GetMemory --> CheckKappa: Have memory
+    CheckKappa --> Stable: Low kappa (not consolidated)
+    CheckKappa --> ComputeMismatch: High kappa
+    ComputeMismatch --> CheckMismatch: Computed
+    CheckMismatch --> Stable: No mismatch
+    CheckMismatch --> Labile: Mismatch detected
+
+    Labile --> KappaDropped: Open window
+    KappaDropped --> WindowOpen: Record expiry
+    WindowOpen --> Modifiable: Can update
+
+    Modifiable --> WindowClose: close_lability_windows()
+
+    WindowClose --> CheckExpiry: Periodic check
+    CheckExpiry --> Modifiable: Not expired
+    CheckExpiry --> WasUpdated: Expired
+    WasUpdated --> Stable: Was updated (keep kappa)
+    WasUpdated --> RestoreKappa: Not updated
+    RestoreKappa --> Stable: Kappa restored
+
+    note right of Reactivation
+        Nader et al. (2000)
+        Protein synthesis
+        required for restabilization
+    end note
+
+    note right of Labile
+        5-minute window
+        Memory modifiable
+        kappa temporarily reduced
+    end note
+
+    note right of WindowClose
+        Restabilization
+        Restore kappa if
+        not updated
+    end note
