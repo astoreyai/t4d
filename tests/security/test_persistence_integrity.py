@@ -143,8 +143,13 @@ class TestWALIntegrity:
         operation = WALOperation.BUFFER_ADD
         payload = {"test": "v1_data"}
 
-        import json
-        payload_bytes = json.dumps(payload).encode("utf-8")
+        # Use msgpack if available (same as deserialize logic)
+        try:
+            import msgpack
+            payload_bytes = msgpack.packb(payload, use_bin_type=True)
+        except ImportError:
+            import json
+            payload_bytes = json.dumps(payload).encode("utf-8")
 
         # Pack header
         header = struct.pack(

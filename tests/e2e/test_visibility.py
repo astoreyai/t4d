@@ -121,6 +121,9 @@ class TestSpikingBlockVisibility:
 
     def test_full_stack_gradient_flow(self):
         """Gradients should flow through all blocks."""
+        # Set seed for reproducible weight initialization
+        torch.manual_seed(42)
+
         stack = CorticalStack(DIM, num_blocks=3, num_heads=4)
         x = torch.randn(1, 4, DIM, requires_grad=True)
         out, _, _ = stack(x)

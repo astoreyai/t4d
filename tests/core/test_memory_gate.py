@@ -217,14 +217,18 @@ class TestMemoryGate:
             recent_entities=["UserService", "AuthModule"],
         )
         result = gate.evaluate("Updated the UserService authentication flow", context)
-        # Should have entity score contribution
-        assert "entity=" in result.reasons[0]
+        # Should have entity score contribution in reasons
+        # Reasons may have τ(t) first if temporal control is enabled, then breakdown
+        reasons_str = " ".join(result.reasons)
+        assert "entity=" in reasons_str
 
     def test_time_pressure_no_previous_store(self, gate, context):
         """Test time pressure without previous store."""
         # No last_store_time should add pressure
         result = gate.evaluate("Working on a feature", context)
-        assert "time=" in result.reasons[0]
+        # Reasons may have τ(t) first if temporal control is enabled, then breakdown
+        reasons_str = " ".join(result.reasons)
+        assert "time=" in reasons_str
 
     def test_time_pressure_long_time_since_store(self, gate):
         """Test time pressure with long gap since last store."""
