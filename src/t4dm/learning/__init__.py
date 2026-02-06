@@ -132,8 +132,15 @@ from t4dm.learning.generative_replay import (
     GenerativeReplaySystem,
     ReplayPhase,
     ReplayStats,
-    create_generative_replay,
 )
+from t4dm.learning.dream_negatives import (
+    DreamNegativeConfig,
+)
+from t4dm.learning.dream_negatives import (
+    DreamNegativeConfig,
+    DreamNegativeGenerator,
+)
+from t4dm.learning.generative_replay import create_generative_replay
 from t4dm.learning.homeostatic import (
     HomeostaticPlasticity,
     HomeostaticState,
@@ -369,6 +376,9 @@ __all__ = [
     "ReplayStats",
     "GenerativeReplaySystem",
     "create_generative_replay",
+    # W2-04: Dream-Based Negative Samples (Hinton)
+    "DreamNegativeConfig",
+    "DreamNegativeGenerator",
     # P6.1: VAE Generator
     "VAEConfig",
     "VAEState",

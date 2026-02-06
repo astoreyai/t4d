@@ -1,0 +1,39 @@
+---
+title: Dream-Based Negative Samples (Hinton W2-04)
+---
+stateDiagram-v2
+    direction TB
+
+    [*] --> Ready: Initialize generator
+
+    Ready: Generator with VAE
+    Encode: VAE encode
+    Sample: Sample latent
+    Decode: VAE decode
+    Corrupt: Add corruption
+    Shuffle: Permute batch
+    Mix: Hybrid mixing
+
+    Ready --> Encode: vae_sample method
+    Encode --> Sample: mu, logvar
+    Sample --> Decode: z with noise
+    Decode --> Corrupt: raw output
+    Corrupt --> Ready: return negative
+
+    Ready --> Shuffle: shuffle method
+    Shuffle --> Ready: return permuted
+
+    Ready --> Mix: hybrid method
+    Mix --> Ready: return mixed
+
+    note right of Sample
+        Hinton 2022
+        Higher latent variance
+        More dreaming
+    end note
+
+    note right of Corrupt
+        Corruption rate 0.3
+        Ensures negativity
+        Hard negatives
+    end note
