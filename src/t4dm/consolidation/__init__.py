@@ -52,6 +52,13 @@ from t4dm.consolidation.generalization import (
     GeneralizationQualityScorer,
     GeneralizationResult,
 )
+from t4dm.consolidation.variational import (
+    ClusterAssignment,
+    ClusterPrototype,
+    VariationalConsolidation,
+    VariationalState,
+    VariationalStep,
+)
 
 __all__ = [
     "HDBSCAN_AVAILABLE",
@@ -99,4 +106,10 @@ __all__ = [
     "Cluster",
     "GeneralizationQualityScorer",
     "GeneralizationResult",
+    # W4-01: Variational Consolidation Framing (Friston)
+    "ClusterAssignment",
+    "ClusterPrototype",
+    "VariationalConsolidation",
+    "VariationalState",
+    "VariationalStep",
 ]

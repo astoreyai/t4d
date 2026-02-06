@@ -1,0 +1,45 @@
+---
+title: Variational Consolidation (Friston W4-01)
+---
+stateDiagram-v2
+    direction TB
+
+    [*] --> Ready: Initialize EM
+
+    Ready: Variational EM controller
+    EStep: NREM = E-step
+    MStep: REM = M-step
+    Regularization: PRUNE = reg
+    ComputeState: Track convergence
+
+    Ready --> EStep: begin cycle
+    EStep --> MStep: assignments computed
+    MStep --> Regularization: prototypes updated
+    Regularization --> ComputeState: pruning done
+    ComputeState --> Ready: state updated
+
+    ComputeState --> EStep: not converged
+
+    note right of EStep
+        Friston FEP
+        Infer q(z|x)
+        Soft cluster assignments
+    end note
+
+    note right of MStep
+        Update p(x|z)
+        Weighted mean/variance
+        Prototype creation
+    end note
+
+    note right of Regularization
+        Remove low-posterior
+        Free energy minimization
+        Sparsity prior
+    end note
+
+    note right of ComputeState
+        F = -ELBO
+        ELBO = loglik - KL
+        Track convergence
+    end note
