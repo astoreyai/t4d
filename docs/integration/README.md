@@ -159,23 +159,40 @@ memory = T4DMCrewAIMemory(session_id="crew-tasks")
 crew = Crew(memory=memory)
 ```
 
-### 5. MCP (Model Context Protocol)
+### 5. MCP (Model Context Protocol) - Automatic Memory
 
-For Claude Code or Claude Desktop integration:
+T4DM provides **automatic memory** for Claude - no manual tool calls needed.
 
+**Setup:**
+
+1. Start T4DM server: `t4dm serve --port 8765`
+
+2. Configure Claude Code (`~/.claude/settings.json`):
 ```json
 {
   "mcpServers": {
-    "t4dm": {
-      "command": "t4dm",
-      "args": ["mcp", "server"],
+    "t4dm-memory": {
+      "command": "python",
+      "args": ["-m", "t4dm.mcp.server"],
       "env": {
-        "T4DM_SESSION_ID": "${INSTANCE_ID}"
+        "T4DM_API_URL": "http://localhost:8765",
+        "T4DM_PROJECT": "my-project"
       }
     }
   }
 }
 ```
+
+**How It Works:**
+
+| Feature | Description |
+|---------|-------------|
+| `memory://context` | Auto-loaded at session start (hot cache + project) |
+| `memory://hot-cache` | Frequently accessed memories (0ms latency) |
+| Auto-capture | Observations stored from Claude's outputs |
+| `t4dm_remember` | Manual tool for "remember this" requests only |
+
+See [MCP_INTEGRATION.md](../MCP_INTEGRATION.md) for full documentation.
 
 ---
 

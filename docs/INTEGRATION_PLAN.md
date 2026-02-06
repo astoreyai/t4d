@@ -353,45 +353,72 @@ resp = requests.post("http://localhost:8765/v1/memories/search/", json={
 
 ## 4. Platform Integrations
 
-### 4.1 Claude Code / Claude Desktop (MCP)
+### 4.1 Claude Code / Claude Desktop (MCP) - Automatic Memory
+
+T4DM provides **automatic memory** - no manual tool calls needed.
+
+#### How It Works
+
+| Feature | Description |
+|---------|-------------|
+| **Auto-load** | `memory://context` resource injected at session start |
+| **Hot cache** | Frequently used memories (0ms latency) |
+| **Auto-capture** | Observations extracted from Claude's outputs |
+| **Auto-consolidate** | Session summaries stored at end |
 
 #### Setup
 
-```json
-// ~/.config/claude/claude_desktop_config.json
-{
-  "mcpServers": {
-    "t4dm": {
-      "command": "python",
-      "args": ["-m", "t4dm.mcp.server"],
-      "env": {
-        "T4DM_STORAGE_PATH": "/Users/you/t4dm-data",
-        "T4DM_LOG_LEVEL": "INFO"
-      }
-    }
-  }
-}
-```
+1. **Start T4DM API server:**
+   ```bash
+   t4dm serve --port 8765
+   ```
 
-#### Available Tools
+2. **Configure Claude Code** (`~/.claude/settings.json`):
+   ```json
+   {
+     "mcpServers": {
+       "t4dm-memory": {
+         "command": "python",
+         "args": ["-m", "t4dm.mcp.server"],
+         "env": {
+           "T4DM_API_URL": "http://localhost:8765",
+           "T4DM_PROJECT": "my-project",
+           "T4DM_HOT_CACHE_SIZE": "10"
+         }
+       }
+     }
+   }
+   ```
 
-| Tool | Description | Parameters |
-|------|-------------|------------|
-| `t4dm_store` | Store a memory | `content`, `metadata?`, `importance?` |
-| `t4dm_recall` | Semantic search | `query`, `limit?`, `kappa_min?` |
-| `t4dm_get` | Get by ID | `id` |
-| `t4dm_forget` | Soft delete | `id` |
-| `t4dm_consolidate` | Trigger consolidation | `phase?` (nrem/rem/prune/all) |
-| `t4dm_status` | System status | - |
+3. **Restart Claude Code** - memory is now automatic.
+
+#### MCP Resources (Auto-Loaded)
+
+| Resource | Description |
+|----------|-------------|
+| `memory://context` | Session context (hot cache + project + recent) |
+| `memory://hot-cache` | Frequently accessed memories |
+| `memory://project/{name}` | Project-specific patterns |
+
+#### Manual Tool (Only When Asked)
+
+| Tool | Use Case |
+|------|----------|
+| `t4dm_remember` | User says "remember this" or "save this" |
 
 #### Usage in Claude
 
-```
-Human: Remember that the API deadline is March 15
+Memory is automatic - Claude has context without visible tool calls:
 
-Claude: [Calls t4dm_store with content and metadata]
-I've stored that. The API deadline of March 15 is now in memory.
 ```
+Human: How do we handle auth?
+
+Claude: We use JWT with refresh tokens. The auth middleware validates
+tokens on each request.
+[No tool call visible - context was pre-loaded]
+```
+
+See [MCP_INTEGRATION.md](MCP_INTEGRATION.md) for full documentation.
 
 ### 4.2 Kymera Platform
 

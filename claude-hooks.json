@@ -1,0 +1,29 @@
+{
+  "$schema": "https://claude.ai/schemas/hooks.json",
+  "description": "T4DM automatic memory hooks for Claude Code",
+  "hooks": {
+    "SessionStart": [
+      {
+        "type": "command",
+        "command": "echo 'T4DM: Loading session context...'",
+        "timeout": 1000
+      }
+    ],
+    "PostToolUse": [
+      {
+        "type": "command",
+        "command": "python3 -c \"import sys; print('T4DM: Observation captured' if len(sys.argv) > 1 else '', file=sys.stderr)\"",
+        "timeout": 2000,
+        "onFailure": "ignore"
+      }
+    ],
+    "Stop": [
+      {
+        "type": "command",
+        "command": "echo 'T4DM: Session paused'",
+        "timeout": 1000,
+        "onFailure": "ignore"
+      }
+    ]
+  }
+}

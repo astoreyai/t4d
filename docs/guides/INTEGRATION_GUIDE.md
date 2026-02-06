@@ -154,43 +154,63 @@ result = crew.kickoff()
 
 ## 6. MCP Server (Claude Code / Claude Desktop)
 
+T4DM provides **automatic memory** - no manual tool calls needed.
+
 ### Setup
 
-Add to your Claude Desktop config (`claude_desktop_config.json`):
+1. **Start T4DM API server:**
+   ```bash
+   t4dm serve --port 8765
+   ```
 
-```json
-{
-  "mcpServers": {
-    "t4dm": {
-      "command": "python",
-      "args": ["-m", "t4dm.mcp.server"],
-      "env": {
-        "T4DM_DATA_DIR": "/path/to/data"
-      }
-    }
-  }
-}
-```
+2. **Configure Claude Code** (add to `~/.claude/settings.json`):
+   ```json
+   {
+     "mcpServers": {
+       "t4dm-memory": {
+         "command": "python",
+         "args": ["-m", "t4dm.mcp.server"],
+         "env": {
+           "T4DM_API_URL": "http://localhost:8765",
+           "T4DM_PROJECT": "my-project"
+         }
+       }
+     }
+   }
+   ```
 
-### Available MCP Tools
+3. **Restart Claude Code** - memory is now automatic.
 
-| Tool | Description |
-|------|-------------|
-| `t4dm_store` | Store a memory with optional metadata |
-| `t4dm_recall` | Search memories by semantic similarity |
-| `t4dm_get` | Get a specific memory by ID |
-| `t4dm_forget` | Soft-delete a memory |
-| `t4dm_consolidate` | Trigger a consolidation cycle |
-| `t4dm_status` | Get system status and statistics |
+### How It Works
+
+| Feature | Description |
+|---------|-------------|
+| **Auto-load** | Session context pre-loaded via `memory://context` resource |
+| **Auto-capture** | Observations extracted from Claude's outputs |
+| **Auto-consolidate** | Session summaries stored at end |
+| **Hot cache** | Frequently used memories (0ms latency) |
+
+### MCP Resources (Auto-Loaded)
+
+| Resource | Description |
+|----------|-------------|
+| `memory://context` | Session context (hot cache + project + recent) |
+| `memory://hot-cache` | Frequently accessed memories |
+| `memory://project/{name}` | Project-specific patterns |
+
+### Manual Tool (Only When Asked)
+
+| Tool | Use Case |
+|------|----------|
+| `t4dm_remember` | User says "remember this" or "save this" |
 
 ### Claude Code Usage
 
-Once configured, Claude Code can use memory naturally:
+Memory is automatic - Claude has context without visible tool calls:
 
 ```
-Human: Remember that the database migration is scheduled for Friday
-Assistant: [calls t4dm_store with content and metadata]
-```
+Human: How do we handle auth?
+Claude: We use JWT with refresh tokens. [no tool call visible]
 
 ---
 

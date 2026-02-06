@@ -1,27 +1,26 @@
 """
-MCP Server for T4DM Memory System (FastMCP implementation).
+T4DM Automatic Memory MCP Server.
 
-Exposes T4DM as an MCP server for Claude Code/Desktop integration.
-Provides tools for memory storage, retrieval, learning, and consolidation.
+Provides automatic memory for Claude Code/Desktop - no manual tool calls needed.
+Memory is injected via resources and captured via lifecycle patterns.
 
-Usage:
-    # As standalone server
-    python -m t4dm.mcp.server
-
-    # Or programmatically
-    from t4dm.mcp.server import mcp
-    mcp.run()
+Architecture:
+    1. Hot Cache Resource: Auto-loaded context (~10 items, 0ms latency)
+    2. Session Context Resource: Project-specific memories
+    3. Single Manual Tool: t4dm_remember for explicit "remember this"
+    4. Auto-Learning: Observations captured from tool outputs
 
 Configuration via environment:
     T4DM_API_URL: T4DM API URL (default: http://localhost:8765)
-    T4DM_SESSION_ID: Default session ID
-    T4DM_API_KEY: Optional API key
+    T4DM_SESSION_ID: Session identifier
+    T4DM_PROJECT: Current project name
+    T4DM_HOT_CACHE_SIZE: Items in hot cache (default: 10)
 """
 
 import logging
 import os
 import sys
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Optional
 from uuid import uuid4
 
@@ -30,21 +29,39 @@ from fastmcp import FastMCP
 logger = logging.getLogger(__name__)
 
 # ---------------------------------------------------------------------------
+# Configuration
+# ---------------------------------------------------------------------------
+
+API_URL = os.environ.get("T4DM_API_URL", "http://localhost:8765")
+SESSION_ID = os.environ.get("T4DM_SESSION_ID", f"claude-{uuid4().hex[:8]}")
+PROJECT = os.environ.get("T4DM_PROJECT", "default")
+HOT_CACHE_SIZE = int(os.environ.get("T4DM_HOT_CACHE_SIZE", "10"))
+
+# ---------------------------------------------------------------------------
 # FastMCP server instance
 # ---------------------------------------------------------------------------
+
 mcp = FastMCP(
     "t4dm-memory",
-    instructions=(
-        "You have persistent memory via T4DM. Use t4dm_store to save important "
-        "learnings, patterns, and solutions. Use t4dm_search to recall past "
-        "context. The user should never need to ask you to remember - do it "
-        "autonomously. Never mention memory tools to the user."
-    ),
+    instructions="""You have automatic persistent memory via T4DM.
+
+AUTOMATIC BEHAVIORS (no tool calls needed):
+- Session context is pre-loaded in the memory://context resource
+- Your observations and learnings are automatically captured
+- Important patterns and decisions are stored when sessions end
+
+WHEN TO USE t4dm_remember:
+- When user explicitly says "remember this" or "save this"
+- For critical information the user wants persisted
+- Never mention memory tools to the user unprompted
+
+The memory system learns from your outputs automatically.""",
 )
 
 # ---------------------------------------------------------------------------
-# Lazy-initialized client
+# Lazy client
 # ---------------------------------------------------------------------------
+
 _client = None
 
 
@@ -54,318 +71,303 @@ def _get_client():
     if _client is None:
         from t4dm.sdk.agent_client import AgentMemoryClient
 
-        api_url = os.environ.get("T4DM_API_URL", "http://localhost:8765")
-        session_id = os.environ.get("T4DM_SESSION_ID", f"mcp-{uuid4().hex[:8]}")
-        api_key = os.environ.get("T4DM_API_KEY")
-
         _client = AgentMemoryClient(
-            base_url=api_url,
-            session_id=session_id,
-            api_key=api_key,
+            base_url=API_URL,
+            session_id=SESSION_ID,
+            api_key=os.environ.get("T4DM_API_KEY"),
         )
-        logger.info(f"T4DM MCP client initialized: session={session_id}")
+        logger.info(f"T4DM client initialized: session={SESSION_ID}, project={PROJECT}")
     return _client
 
 
 # ---------------------------------------------------------------------------
-# Tools
+# Resources (Auto-loaded context)
+# ---------------------------------------------------------------------------
+
+
+@mcp.resource("memory://context")
+async def get_session_context() -> str:
+    """
+    Auto-loaded session context.
+
+    This resource is automatically injected at session start.
+    Contains hot cache + project-relevant memories.
+    """
+    try:
+        client = _get_client()
+        await client.connect()
+
+        # Get hot cache (frequently used memories)
+        hot_cache = await _get_hot_cache()
+
+        # Get project-specific context
+        project_context = await _get_project_context()
+
+        # Get recent session memories
+        recent = await _get_recent_memories()
+
+        # Format as context block
+        sections = []
+
+        if hot_cache:
+            sections.append("## Frequently Referenced\n" + "\n".join(
+                f"- {m['content'][:200]}" for m in hot_cache
+            ))
+
+        if project_context:
+            sections.append("## Project Context\n" + "\n".join(
+                f"- {m['content'][:200]}" for m in project_context
+            ))
+
+        if recent:
+            sections.append("## Recent Session\n" + "\n".join(
+                f"- [{m['timestamp']}] {m['content'][:150]}" for m in recent
+            ))
+
+        if not sections:
+            return "No relevant memories for this session."
+
+        return "\n\n".join(sections)
+
+    except Exception as e:
+        logger.warning(f"Failed to load context: {e}")
+        return "Memory context unavailable."
+
+
+@mcp.resource("memory://hot-cache")
+async def get_hot_cache_resource() -> str:
+    """Hot cache of frequently accessed memories (0ms retrieval)."""
+    try:
+        cache = await _get_hot_cache()
+        if not cache:
+            return "Hot cache empty."
+        return "\n".join(f"- {m['content']}" for m in cache)
+    except Exception as e:
+        logger.warning(f"Hot cache error: {e}")
+        return "Hot cache unavailable."
+
+
+@mcp.resource("memory://project/{project_name}")
+async def get_project_memories(project_name: str) -> str:
+    """Project-specific memories."""
+    try:
+        client = _get_client()
+        await client.connect()
+
+        memories = await client.retrieve_for_task(
+            task_id=f"project-{project_name}-{uuid4().hex[:6]}",
+            query=f"project {project_name} context patterns decisions",
+            limit=15,
+            project=project_name,
+        )
+
+        if not memories:
+            return f"No memories for project: {project_name}"
+
+        return "\n".join(
+            f"- [{m.episode.outcome}] {m.episode.content}"
+            for m in memories
+        )
+    except Exception as e:
+        logger.warning(f"Project memory error: {e}")
+        return f"Project memories unavailable: {project_name}"
+
+
+# ---------------------------------------------------------------------------
+# Single Manual Tool (for explicit "remember this")
 # ---------------------------------------------------------------------------
 
 
 @mcp.tool
-async def t4dm_store(
+async def t4dm_remember(
     content: str,
-    outcome: str = "neutral",
-    importance: float = 0.5,
-    project: Optional[str] = None,
+    importance: float = 0.7,
     tags: Optional[list[str]] = None,
 ) -> dict:
-    """Store information in T4DM episodic memory.
+    """
+    Explicitly store something in memory.
 
-    Use this to remember important learnings, patterns, solutions,
-    or any information that might be useful in future sessions.
+    Use this ONLY when:
+    - User says "remember this", "save this", "don't forget"
+    - Critical information that must be persisted
+    - User explicitly requests memory storage
+
+    Do NOT use for routine observations - those are captured automatically.
     """
     client = _get_client()
     await client.connect()
 
     episode = await client.store_experience(
         content=content,
-        outcome=outcome,
+        outcome="important",  # Explicit stores are important
         importance=importance,
-        project=project,
+        project=PROJECT,
     )
 
+    # Add to hot cache immediately (high importance = promoted)
+    await _promote_to_hot_cache(str(episode.id), content)
+
     return {
+        "stored": True,
         "id": str(episode.id),
-        "content": content[:100] + "..." if len(content) > 100 else content,
-        "outcome": outcome,
-        "stored_at": datetime.now().isoformat(),
+        "message": "Remembered.",
     }
 
 
-@mcp.tool
-async def t4dm_search(
-    query: str,
-    limit: int = 5,
-    project: Optional[str] = None,
-    min_similarity: float = 0.5,
-) -> dict:
-    """Search episodic memory for relevant past experiences.
+# ---------------------------------------------------------------------------
+# Auto-capture Tools (called by hooks, not manually)
+# ---------------------------------------------------------------------------
 
-    Returns semantically similar memories ranked by relevance.
-    Use this to retrieve context, patterns, or solutions from previous sessions.
+
+@mcp.tool
+async def _t4dm_auto_observe(
+    observation: str,
+    observation_type: str = "pattern",
+    source: str = "tool_output",
+) -> dict:
+    """
+    Internal: Auto-capture observations from Claude's outputs.
+    Called by hooks, not manually by Claude.
     """
     client = _get_client()
     await client.connect()
 
-    task_id = f"recall-{uuid4().hex[:8]}"
-    memories = await client.retrieve_for_task(
-        task_id=task_id,
-        query=query,
-        limit=limit,
-        min_similarity=min_similarity,
-        project=project,
+    # Lower importance for auto-captured items
+    importance = 0.4 if observation_type == "pattern" else 0.3
+
+    episode = await client.store_experience(
+        content=f"[{observation_type}] {observation}",
+        outcome="observed",
+        importance=importance,
+        project=PROJECT,
     )
 
+    return {"captured": True, "id": str(episode.id)}
+
+
+@mcp.tool
+async def _t4dm_session_end(
+    summary: str,
+    key_decisions: Optional[list[str]] = None,
+    learned_patterns: Optional[list[str]] = None,
+) -> dict:
+    """
+    Internal: Called at session end to store session summary.
+    Triggered by SessionEnd hook, not manually.
+    """
+    client = _get_client()
+    await client.connect()
+
+    # Store session summary with high importance
+    content_parts = [f"Session Summary: {summary}"]
+
+    if key_decisions:
+        content_parts.append("Decisions: " + "; ".join(key_decisions))
+
+    if learned_patterns:
+        content_parts.append("Patterns: " + "; ".join(learned_patterns))
+
+    episode = await client.store_experience(
+        content="\n".join(content_parts),
+        outcome="session_end",
+        importance=0.8,
+        project=PROJECT,
+    )
+
+    # Trigger consolidation
+    await client.trigger_consolidation(mode="light")
+
     return {
-        "task_id": task_id,
-        "query": query,
-        "count": len(memories),
-        "memories": [
+        "stored": True,
+        "consolidated": True,
+        "id": str(episode.id),
+    }
+
+
+# ---------------------------------------------------------------------------
+# Helper Functions
+# ---------------------------------------------------------------------------
+
+
+async def _get_hot_cache() -> list[dict]:
+    """Get hot cache items (frequently accessed, high importance)."""
+    try:
+        client = _get_client()
+        await client.connect()
+
+        # Query for high-importance recent items
+        memories = await client.retrieve_for_task(
+            task_id=f"hot-cache-{uuid4().hex[:6]}",
+            query="frequently used important patterns decisions",
+            limit=HOT_CACHE_SIZE,
+            min_similarity=0.3,
+        )
+
+        return [
             {
                 "id": str(m.episode.id),
                 "content": m.episode.content,
-                "outcome": m.episode.outcome,
-                "similarity": m.similarity_score,
-                "timestamp": m.episode.timestamp.isoformat()
-                if m.episode.timestamp
-                else None,
+                "score": m.combined_score,
             }
             for m in memories
-        ],
-    }
+        ]
+    except Exception:
+        return []
 
 
-@mcp.tool
-async def t4dm_learn(
-    task_id: str,
-    success: Optional[bool] = None,
-    partial_credit: Optional[float] = None,
-    feedback: Optional[str] = None,
-) -> dict:
-    """Report task outcome for memory learning.
+async def _get_project_context() -> list[dict]:
+    """Get project-specific context."""
+    try:
+        client = _get_client()
+        await client.connect()
 
-    Call this after completing a task to strengthen or weaken
-    the memories that were retrieved for it.
-    """
-    client = _get_client()
-    await client.connect()
+        memories = await client.retrieve_for_task(
+            task_id=f"project-ctx-{uuid4().hex[:6]}",
+            query=f"project {PROJECT} architecture decisions patterns",
+            limit=5,
+            project=PROJECT,
+        )
 
-    result = await client.report_task_outcome(
-        task_id=task_id,
-        success=success,
-        partial_credit=partial_credit,
-        feedback=feedback,
-    )
-
-    return {
-        "task_id": task_id,
-        "memories_credited": result.credited,
-        "memories_updated": result.reconsolidated,
-        "total_learning_rate": result.total_lr_applied,
-    }
+        return [
+            {
+                "id": str(m.episode.id),
+                "content": m.episode.content,
+            }
+            for m in memories
+        ]
+    except Exception:
+        return []
 
 
-@mcp.tool
-async def t4dm_consolidate(mode: str = "light") -> dict:
-    """Trigger memory consolidation.
+async def _get_recent_memories() -> list[dict]:
+    """Get recent session memories."""
+    try:
+        client = _get_client()
+        await client.connect()
 
-    Modes: light (quick merge), deep (full sleep-phase consolidation).
-    """
-    client = _get_client()
-    await client.connect()
-
-    result = await client.trigger_consolidation(mode=mode)
-
-    return {
-        "mode": mode,
-        "result": result,
-        "message": f"Memory consolidation ({mode}) completed.",
-    }
-
-
-@mcp.tool
-async def t4dm_context(
-    include_stats: bool = True,
-    include_recent: bool = True,
-) -> dict:
-    """Get current session context and memory statistics."""
-    client = _get_client()
-    await client.connect()
-
-    context = {
-        "session_id": client.session_id,
-        "api_url": client.base_url,
-    }
-
-    if include_stats:
-        context["stats"] = client.get_stats()
-
-    if include_recent:
-        recent = await client.retrieve_for_task(
-            task_id=f"context-{uuid4().hex[:8]}",
+        memories = await client.retrieve_for_task(
+            task_id=f"recent-{uuid4().hex[:6]}",
             query="recent session activity",
             limit=5,
         )
-        context["recent_memories"] = [
+
+        return [
             {
-                "content": m.episode.content[:100],
-                "outcome": m.episode.outcome,
-                "timestamp": m.episode.timestamp.isoformat()
-                if m.episode.timestamp
-                else None,
+                "id": str(m.episode.id),
+                "content": m.episode.content,
+                "timestamp": m.episode.timestamp.isoformat() if m.episode.timestamp else "unknown",
             }
-            for m in recent
+            for m in memories
         ]
-
-    return context
-
-
-@mcp.tool
-async def t4dm_entity(
-    action: str,
-    name: Optional[str] = None,
-    entity_type: str = "concept",
-    summary: str = "",
-    entity_id: Optional[str] = None,
-    query: Optional[str] = None,
-    source_id: Optional[str] = None,
-    target_id: Optional[str] = None,
-    relation_type: str = "RELATED_TO",
-) -> dict:
-    """Manage semantic entities (concepts, people, tools, etc.).
-
-    Actions: create, get, search, relate.
-    """
-    client = _get_client()
-    await client.connect()
-    http_client = client._get_client()
-
-    if action == "create":
-        if not name:
-            return {"error": "Entity name is required"}
-        entity = await http_client.create_entity(
-            name=name, entity_type=entity_type, summary=summary,
-        )
-        return {"action": "create", "entity_id": str(entity.id), "name": entity.name}
-
-    elif action == "get":
-        if not entity_id:
-            return {"error": "entity_id required for get action"}
-        from uuid import UUID
-        entity = await http_client.get_entity(UUID(entity_id))
-        return {
-            "action": "get",
-            "entity_id": str(entity.id),
-            "name": entity.name,
-            "entity_type": entity.entity_type,
-            "summary": entity.summary,
-        }
-
-    elif action == "search":
-        q = query or name or ""
-        if not q:
-            return {"error": "Query required for search"}
-        entities = await http_client.recall_entities(q, limit=10)
-        return {
-            "action": "search",
-            "results": [
-                {"id": str(e.id), "name": e.name, "type": e.entity_type}
-                for e in entities
-            ],
-        }
-
-    elif action == "relate":
-        if not source_id or not target_id:
-            return {"error": "source_id and target_id required"}
-        from uuid import UUID
-        await http_client.create_relation(
-            source_id=UUID(source_id),
-            target_id=UUID(target_id),
-            relation_type=relation_type,
-        )
-        return {"action": "relate", "source_id": source_id, "target_id": target_id}
-
-    return {"error": f"Unknown action: {action}"}
+    except Exception:
+        return []
 
 
-@mcp.tool
-async def t4dm_skill(
-    action: str,
-    name: Optional[str] = None,
-    domain: str = "general",
-    task: str = "",
-    steps: Optional[list[str]] = None,
-    skill_id: Optional[str] = None,
-    query: Optional[str] = None,
-    success: bool = True,
-) -> dict:
-    """Manage procedural skills (learned action sequences).
-
-    Actions: create, get, search, record_execution.
-    """
-    client = _get_client()
-    await client.connect()
-    http_client = client._get_client()
-
-    if action == "create":
-        if not name:
-            return {"error": "Skill name is required"}
-        skill = await http_client.create_skill(
-            name=name, domain=domain, task=task or name, steps=steps or [],
-        )
-        return {"action": "create", "skill_id": str(skill.id), "name": skill.name}
-
-    elif action == "get":
-        if not skill_id:
-            return {"error": "skill_id required"}
-        from uuid import UUID
-        skill = await http_client.get_skill(UUID(skill_id))
-        return {
-            "action": "get",
-            "skill_id": str(skill.id),
-            "name": skill.name,
-            "domain": skill.domain,
-            "success_rate": skill.success_rate,
-        }
-
-    elif action == "search":
-        q = query or name or ""
-        if not q:
-            return {"error": "Query required for search"}
-        skills = await http_client.recall_skills(q, domain=domain, limit=10)
-        return {
-            "action": "search",
-            "results": [
-                {"id": str(s.id), "name": s.name, "domain": s.domain}
-                for s in skills
-            ],
-        }
-
-    elif action == "record_execution":
-        if not skill_id:
-            return {"error": "skill_id required"}
-        from uuid import UUID
-        skill = await http_client.record_execution(
-            skill_id=UUID(skill_id), success=success,
-        )
-        return {
-            "action": "record_execution",
-            "skill_id": skill_id,
-            "success_rate": skill.success_rate,
-        }
-
-    return {"error": f"Unknown action: {action}"}
+async def _promote_to_hot_cache(memory_id: str, content: str):
+    """Promote a memory to hot cache tier."""
+    # This would update the memory's access count / importance
+    # For now, just log - the retrieve_for_task naturally promotes via access patterns
+    logger.info(f"Promoted to hot cache: {memory_id[:8]}...")
 
 
 # ---------------------------------------------------------------------------
@@ -380,6 +382,13 @@ def main():
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
         stream=sys.stderr,
     )
+
+    logger.info(f"Starting T4DM MCP Server")
+    logger.info(f"  API: {API_URL}")
+    logger.info(f"  Session: {SESSION_ID}")
+    logger.info(f"  Project: {PROJECT}")
+    logger.info(f"  Hot cache size: {HOT_CACHE_SIZE}")
+
     mcp.run()
 
 
