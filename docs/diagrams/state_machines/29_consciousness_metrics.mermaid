@@ -1,0 +1,41 @@
+---
+title: IIT Consciousness Metrics (Tononi W3-04)
+---
+stateDiagram-v2
+    direction TB
+
+    [*] --> Ready: Initialize computer
+
+    Ready: Computer with energy_fn
+    ComputeEnergy: Evaluate energy
+    ComputeSurprise: Compare to previous
+    ComputeIntegration: Mutual info
+    ComputeDifferentiation: Entropy
+    ComputePhi: Integration * Diff
+    ReturnMetrics: Package results
+
+    Ready --> ComputeEnergy: compute call
+    ComputeEnergy --> ComputeSurprise: current energy
+    ComputeSurprise --> ComputeIntegration: surprise value
+    ComputeIntegration --> ComputeDifferentiation: MI computed
+    ComputeDifferentiation --> ComputePhi: entropy computed
+    ComputePhi --> ReturnMetrics: phi computed
+    ReturnMetrics --> Ready: ConsciousnessMetrics
+
+    note right of ComputeIntegration
+        Tononi IIT
+        Correlation proxy for MI
+        Spiking-memory coupling
+    end note
+
+    note right of ComputeDifferentiation
+        Shannon entropy
+        Pattern diversity
+        100-bin histogram
+    end note
+
+    note right of ComputePhi
+        Simplified: I * D
+        True IIT intractable
+        Approximation
+    end note

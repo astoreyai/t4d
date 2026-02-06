@@ -51,6 +51,10 @@ from t4dm.observability.tracing import (
     traced,
     traced_sync,
 )
+from t4dm.observability.consciousness_metrics import (
+    ConsciousnessMetrics,
+    IITMetricsComputer,
+)
 
 __all__ = [
     # Logging
@@ -93,4 +97,7 @@ __all__ = [
     "InternalCounter",
     "InternalGauge",
     "InternalHistogram",
+    # W3-04: IIT Consciousness Metrics (Tononi/Bengio)
+    "ConsciousnessMetrics",
+    "IITMetricsComputer",
 ]
