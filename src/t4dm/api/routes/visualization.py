@@ -277,9 +277,17 @@ class MemoryNodeResponse(BaseModel):
     """Memory node for 3D visualization."""
     id: str
     type: MemoryType
+    item_type: str = ""  # T4DV expects item_type
     content: str
     metadata: NodeMetadata
     position: Position3D | None = None
+    # T4DV expects these at top level
+    kappa: float = 0.0
+    importance: float = 0.5
+    access_count: int = 0
+    event_time: float = 0.0
+    record_time: float = 0.0
+    embedding: list[float] | None = None
 
 
 class EdgeMetadata(BaseModel):
@@ -572,12 +580,21 @@ async def get_memory_graph(
         # Build response
         node_responses = []
         for node in nodes:
+            node_meta = node["metadata"]
             node_responses.append(MemoryNodeResponse(
                 id=node["id"],
                 type=MemoryType(node["type"]),
+                item_type=node["type"],  # T4DV expects item_type
                 content=node["content"],
-                metadata=NodeMetadata(**node["metadata"]),
+                metadata=NodeMetadata(**node_meta),
                 position=positions.get(node["id"]),
+                # T4DV expects these at top level
+                kappa=node.get("kappa", 0.0),
+                importance=node_meta.get("importance", 0.5),
+                access_count=node_meta.get("access_count", 0),
+                event_time=node_meta.get("created_at", 0.0),
+                record_time=node_meta.get("last_accessed", node_meta.get("created_at", 0.0)),
+                embedding=node.get("embedding"),
             ))
 
         edge_responses = []
