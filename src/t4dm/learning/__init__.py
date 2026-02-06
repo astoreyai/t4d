@@ -227,6 +227,12 @@ from t4dm.learning.vae_generator import (
     VAEState,
     create_vae_generator,
 )
+from t4dm.learning.free_energy import (
+    FreeEnergyConfig,
+    FreeEnergyMinimizer,
+    FreeEnergyResult,
+    FreeEnergyTracker,
+)
 
 __all__ = [
     # Events
@@ -368,4 +374,9 @@ __all__ = [
     "SignalSource",
     "create_unified_signal",
     "create_fully_integrated_signal",
+    # W1-01: Free Energy Objective (Friston)
+    "FreeEnergyConfig",
+    "FreeEnergyMinimizer",
+    "FreeEnergyResult",
+    "FreeEnergyTracker",
 ]

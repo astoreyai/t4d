@@ -1,0 +1,59 @@
+---
+title: Free Energy Minimization Dynamics
+---
+stateDiagram-v2
+    direction TB
+
+    [*] --> Initialize: Create minimizer
+
+    state Initialize {
+        direction LR
+        Config: Load FreeEnergyConfig
+        Prior: Set prior p s
+        History: Init F history
+        Config --> Prior
+        Prior --> History
+    }
+
+    state WakePhase {
+        direction LR
+        Predict: Generate prediction
+        Reconstruct: Compute reconstruction error
+        KLDiv: Compute KL divergence
+        Combine: F equals recon plus beta KL
+        Scale: Compute LR scale from dF dt
+
+        Predict --> Reconstruct
+        Reconstruct --> KLDiv
+        KLDiv --> Combine
+        Combine --> Scale
+    }
+
+    state LearningDynamics {
+        direction LR
+        Decreasing: F decreasing LR up
+        Stable: F stable LR normal
+        Increasing: F increasing LR down
+
+        Decreasing --> Stable: slope near 0
+        Stable --> Decreasing: slope negative
+        Stable --> Increasing: slope positive
+        Increasing --> Stable: slope near 0
+    }
+
+    state Convergence {
+        direction LR
+        Check: Variance less than 0.1
+        Slope: Slope less than 0.01
+        Done: Converged
+
+        Check --> Slope
+        Slope --> Done
+    }
+
+    Initialize --> WakePhase: Start optimization
+    WakePhase --> LearningDynamics: Update params
+    LearningDynamics --> WakePhase: Next step
+    LearningDynamics --> Convergence: Check convergence
+    Convergence --> WakePhase: Not converged
+    Convergence --> [*]: Converged
