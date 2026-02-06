@@ -1,0 +1,73 @@
+---
+title: Uncertainty-Aware Memory Storage (Friston W2-01)
+---
+stateDiagram-v2
+    direction TB
+
+    [*] --> Ready: Initialize estimator
+
+    state Ready {
+        direction LR
+        ModelReady: Embedding model loaded
+        ConfigSet: MC Dropout configured
+    }
+
+    state MCDropout {
+        direction TB
+        EnableDropout: model.train()
+        Sample: Draw n samples
+        Aggregate: Compute mean/var
+        DisableDropout: model.eval()
+    }
+
+    state UncertaintyItem {
+        direction LR
+        VectorMean: Embedding mean
+        VectorCov: Diagonal covariance
+        Confidence: 1 / (1 + uncertainty)
+    }
+
+    state Search {
+        direction TB
+        QueryEngine: Get base results
+        RankConfidence: Weight by confidence
+        ReturnResults: Return ranked list
+    }
+
+    Ready --> MCDropout: embed_with_uncertainty()
+
+    MCDropout --> EnableDropout: Start sampling
+    EnableDropout --> Sample: Dropout active
+    Sample --> Aggregate: n samples collected
+    Aggregate --> DisableDropout: mean + var computed
+    DisableDropout --> UncertaintyItem: Create item
+
+    UncertaintyItem --> VectorMean: Store mean
+    VectorMean --> VectorCov: Store variance
+    VectorCov --> Confidence: Compute confidence
+    Confidence --> Ready: Item ready
+
+    Ready --> Search: search_with_confidence()
+
+    Search --> QueryEngine: Query vector
+    QueryEngine --> RankConfidence: Apply weight
+    RankConfidence --> ReturnResults: Sorted results
+    ReturnResults --> Ready: Return to caller
+
+    note right of MCDropout
+        Friston FEP
+        Epistemic uncertainty
+        via MC Dropout
+    end note
+
+    note right of UncertaintyItem
+        O(d) storage
+        Diagonal covariance
+        Under 2x overhead
+    end note
+
+    note right of Search
+        Confidence-weighted
+        High confidence first
+        Reduces false positives
+    end note
