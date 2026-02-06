@@ -42,6 +42,11 @@ from t4dm.consolidation.sleep import (
     SleepPhase,
     run_sleep_cycle,
 )
+from t4dm.consolidation.adaptive_trigger import (
+    AdaptiveConsolidationConfig,
+    AdaptiveConsolidationTrigger,
+    ConsolidationTriggerResult,
+)
 
 __all__ = [
     "HDBSCAN_AVAILABLE",
@@ -63,6 +68,10 @@ __all__ = [
     "ConsolidationTrigger",
     "SchedulerState",
     "TriggerReason",
+    # W1-04: Adaptive Consolidation Trigger (CLS-based)
+    "AdaptiveConsolidationConfig",
+    "AdaptiveConsolidationTrigger",
+    "ConsolidationTriggerResult",
     # PO-1: Parallel consolidation
     "ParallelConfig",
     "ParallelExecutor",

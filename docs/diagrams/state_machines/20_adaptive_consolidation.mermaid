@@ -1,0 +1,88 @@
+---
+title: Adaptive Consolidation Trigger (O'Reilly W1-04)
+---
+stateDiagram-v2
+    direction TB
+
+    [*] --> Monitoring: Initialize trigger
+
+    state Monitoring {
+        direction LR
+        TrackEncode: Record encodings
+        TrackTime: Track last consolidation
+        TrackMem: Monitor MemTable
+    }
+
+    state CheckInterval {
+        direction LR
+        Elapsed: seconds since last
+        MinCheck: greater than 300s
+        TooSoon: less than 300s
+    }
+
+    state CheckSaturation {
+        direction LR
+        GetSize: memtable_size
+        Ratio: size div max_size
+        High: ratio greater than 0.7
+        Low: ratio less than 0.7
+    }
+
+    state CheckRate {
+        direction LR
+        Window: Last 100 encodings
+        Compute: count div minutes
+        Fast: rate greater than 10 per min
+        Normal: rate less than 10 per min
+    }
+
+    state CheckAdenosine {
+        direction LR
+        Pressure: Get sleep pressure
+        HighPressure: greater than 0.6
+        LowPressure: less than 0.6
+    }
+
+    state TriggerNREM {
+        Saturation: memtable_saturation
+        Rate: high_encoding_rate
+    }
+
+    state TriggerFull {
+        Adenosine: adenosine_pressure
+    }
+
+    NoTrigger: Return None
+
+    Monitoring --> CheckInterval: should_trigger called
+    CheckInterval --> NoTrigger: TooSoon
+    CheckInterval --> CheckSaturation: MinCheck passed
+
+    CheckSaturation --> TriggerNREM: High saturation
+    CheckSaturation --> CheckRate: Low saturation
+
+    CheckRate --> TriggerNREM: Fast rate
+    CheckRate --> CheckAdenosine: Normal rate
+
+    CheckAdenosine --> TriggerFull: HighPressure
+    CheckAdenosine --> NoTrigger: LowPressure
+
+    TriggerNREM --> [*]: NREM consolidation
+    TriggerFull --> [*]: Full sleep cycle
+    NoTrigger --> Monitoring: Continue monitoring
+
+    note right of CheckSaturation
+        CLS Principle
+        Fast learner capacity
+        triggers transfer
+    end note
+
+    note right of TriggerNREM
+        Urgent consolidation
+        NREM only phase
+    end note
+
+    note right of TriggerFull
+        Normal consolidation
+        Full sleep cycle
+    end note
