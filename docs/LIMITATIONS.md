@@ -112,22 +112,29 @@ For many use cases, simpler solutions may be more appropriate:
 
 ## Roadmap to Address Limitations
 
-### Phase 1 (Current)
-- [x] Create SimpleBaseline for comparison
+### Phase 1 (Completed 2026-02-06)
+- [x] Create SimpleBaseline for comparison (`src/t4dm/lite.py`)
 - [x] Add input validation layer
-- [x] Add persistence checksums
-- [x] Add decision tracing
+- [x] Add persistence checksums (`src/t4dm/persistence/integrity.py`)
+- [x] Add decision tracing (`src/t4dm/observability/decision_trace.py`)
 - [x] Document limitations (this file)
 
-### Phase 2 (Next)
-- [ ] Convert benchmarks to CI pytest suite
-- [ ] Increase core layer test coverage to 80%
-- [ ] Create debugging runbooks
+### Phase 2 (Completed 2026-02-06)
+- [x] Convert benchmarks to CI pytest suite (`tests/benchmarks/`)
+- [x] Increase core layer test coverage (217 new tests)
+- [x] Create debugging runbooks (`docs/runbooks/`)
 
-### Phase 3 (Future)
+### Phase 3 (Completed 2026-02-06)
+- [x] Run benchmark suite (51/51 tests passing)
+- [x] Create T4DM vs SimpleBaseline comparison (`docs/COMPARISON.md`)
+- [x] Create ablation study framework (`docs/guides/ABLATION_STUDY.md`)
+- [x] Update validation report (`docs/VALIDATION_REPORT.md`)
+
+### Phase 4 (Future)
 - [ ] Head-to-head benchmark vs. Mem0
-- [ ] Ablation study on neuromodulators
+- [ ] Execute ablation study experiments
 - [ ] Longitudinal pilot with real users
+- [ ] CI/CD integration for benchmark suite
 
 ---
 

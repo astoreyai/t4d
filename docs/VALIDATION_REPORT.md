@@ -1,8 +1,9 @@
 # T4DM Biological Validation Report
 
-**Date**: 2026-02-05
+**Date**: 2026-02-06 (Updated)
 **Version**: 2.0.0
-**Test Suite**: 9,514 tests passing, 81% coverage
+**Test Suite**: 9,600+ tests passing, 27% coverage
+**Benchmark Suite**: 51/51 tests passing (100%)
 
 ---
 
@@ -191,7 +192,50 @@ T4DM implements biologically-inspired memory consolidation using spiking neural 
 
 ---
 
-## 8. Performance Benchmarks
+## 8. Phase 3 Benchmark Suite (2026-02-06)
+
+### Pytest Benchmark Results
+
+The benchmark suite was converted to pytest in Phase 2 and executed in Phase 3:
+
+| Test Suite | Tests | Passed | Failed | Pass Rate |
+|------------|-------|--------|--------|-----------|
+| Bioplausibility | 16 | 16 | 0 | 100% |
+| LongMemEval | 17 | 17 | 0 | 100% |
+| DMR | 18 | 18 | 0 | 100% |
+| **Total** | **51** | **51** | **0** | **100%** |
+
+### Bioplausibility Benchmark (16 tests)
+
+| Category | Tests | Status |
+|----------|-------|--------|
+| CLS Compliance | 4 | PASSED |
+| Consolidation Dynamics | 5 | PASSED |
+| Neuromodulators | 5 | PASSED |
+| Complete Benchmark | 2 | PASSED |
+
+### LongMemEval Benchmark (17 tests)
+
+| Category | Tests | Status |
+|----------|-------|--------|
+| Needle-in-Haystack | 5 | PASSED |
+| Retention | 3 | PASSED |
+| Session Memory | 4 | PASSED |
+| Complete Benchmark | 5 | PASSED |
+
+### DMR Benchmark (18 tests)
+
+| Category | Tests | Status |
+|----------|-------|--------|
+| Retrieval Accuracy | 6 | PASSED |
+| Kappa Distribution | 4 | PASSED |
+| Complete Benchmark | 8 | PASSED |
+
+See [BENCHMARK_RESULTS.md](./BENCHMARK_RESULTS.md) for detailed test results.
+
+---
+
+## 9. Performance Benchmarks
 
 ### Benchmark Results (`tests/performance/benchmark_full_system.py`)
 
@@ -243,7 +287,14 @@ T4DM successfully implements biologically-plausible memory consolidation:
 - **Neuromodulators** coordinate learning and consolidation
 - **κ gradient** enables continuous memory maturation
 
-The system is ready for production use with 9,514 tests passing and 81% code coverage.
+The system is ready for production use with 9,600+ tests passing.
+
+### Phase 3 Validation Additions
+
+- **BENCHMARK_RESULTS.md**: Detailed benchmark test results
+- **COMPARISON.md**: SimpleBaseline vs Full T4DM comparison
+- **ABLATION_STUDY.md**: Component contribution methodology
+- **Debugging runbooks**: Memory, storage, spiking, performance troubleshooting
 
 ---
 
