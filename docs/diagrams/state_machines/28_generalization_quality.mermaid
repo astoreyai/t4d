@@ -1,0 +1,42 @@
+---
+title: Generalization Quality Scoring (O'Reilly W3-03)
+---
+stateDiagram-v2
+    direction TB
+
+    [*] --> Ready: Initialize scorer
+
+    Ready: Scorer with threshold
+    FindIndices: Locate cluster vectors
+    ComputeLabels: Create binary labels
+    Silhouette: Compute silhouette
+    Evaluate: Check threshold
+    Filter: Filter clusters
+
+    Ready --> FindIndices: score_cluster call
+    FindIndices --> ComputeLabels: indices found
+    ComputeLabels --> Silhouette: labels assigned
+    Silhouette --> Evaluate: score computed
+    Evaluate --> Ready: return result
+
+    Ready --> Filter: filter_clusters call
+    Filter --> FindIndices: each cluster
+    Filter --> Ready: suitable clusters
+
+    note right of Silhouette
+        O'Reilly CLS
+        +1 perfect separation
+        0 overlapping
+        -1 wrong assignment
+    end note
+
+    note right of Evaluate
+        quality >= min_quality
+        Default threshold 0.3
+        Only generalize good
+    end note
+
+    note right of Filter
+        Log rejected clusters
+        Set quality on kept
+    end note

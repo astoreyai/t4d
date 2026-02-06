@@ -47,6 +47,11 @@ from t4dm.consolidation.adaptive_trigger import (
     AdaptiveConsolidationTrigger,
     ConsolidationTriggerResult,
 )
+from t4dm.consolidation.generalization import (
+    Cluster,
+    GeneralizationQualityScorer,
+    GeneralizationResult,
+)
 
 __all__ = [
     "HDBSCAN_AVAILABLE",
@@ -90,4 +95,8 @@ __all__ = [
     "get_consolidation_service",
     "reset_consolidation_scheduler",
     "run_sleep_cycle",
+    # W3-03: Generalization Quality Scoring (O'Reilly)
+    "Cluster",
+    "GeneralizationQualityScorer",
+    "GeneralizationResult",
 ]
