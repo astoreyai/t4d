@@ -160,7 +160,7 @@ def episodic_retrieval(query: str, current_time: datetime, limit: int = 10):
 
 Store generalized knowledge abstracted from episodic experiences. Transform context-bound episodes into context-free knowledge through semanticization.
 
-### Neo4j Schema
+### T4DX Schema
 
 ```cypher
 // Entity node with decay properties
@@ -256,7 +256,7 @@ Store "how-to" knowledge - learned skills, workflows, and action sequences. Impl
 | Fine-grained steps | Verbatim action sequences with full context |
 | Script abstractions | Distilled procedures capturing essential patterns |
 
-### Neo4j Schema
+### T4DX Schema
 
 ```cypher
 CREATE (p:Procedure {
@@ -462,8 +462,7 @@ def merge_entities(local: EntityCRDT, remote: EntityCRDT) -> EntityCRDT:
 ## Implementation Phases
 
 ### Phase 1: Foundation (Week 1-2)
-- [ ] Neo4j deployment with vector indexes
-- [ ] Qdrant deployment
+- [x] T4DX embedded storage (no external databases needed)
 - [ ] BGE-M3 embedding service (local GPU)
 - [ ] Basic MCP server skeleton
 
@@ -549,7 +548,7 @@ This eliminates the need for cross-store transactions (the former Saga pattern).
 
 ### Key Advantage Over Discrete Stores
 
-In the previous architecture (Neo4j + Qdrant + Saga), moving a memory from episodic to semantic required:
+In the old architecture (Neo4j + Qdrant + Saga), moving a memory from episodic to semantic required:
 1. Read from episodic store
 2. Delete from episodic store
 3. Insert into semantic store

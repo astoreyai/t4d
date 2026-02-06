@@ -422,7 +422,7 @@ Parameters marked **MISSING** in this document can be added without breaking cha
 
 ## 9. STORAGE & VISUALIZATION
 
-### 9.1 Neo4j Storage (storage/t4dx_graph_adapter.py)
+### 9.1 T4DX Graph Storage (storage/t4dx/graph_adapter.py)
 
 | Parameter | Default | Range | API | Description |
 |-----------|---------|-------|-----|-------------|

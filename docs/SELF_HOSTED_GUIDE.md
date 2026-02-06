@@ -1,14 +1,16 @@
 # T4DM - Self-Hosted Deployment Guide
 
-**Version**: 0.2.0
-**Last Updated**: 2025-12-06
+**Version**: 2.0.0
+**Last Updated**: 2026-02-05
 **Target Audience**: DevOps engineers, system administrators, self-hosters
+
+> **Note**: T4DM 2.0 uses an embedded T4DX storage engine. No external databases required.
 
 ---
 
 ## Table of Contents
 
-1. [Quick Start (Docker)](#1-quick-start-docker)
+1. [Quick Start](#1-quick-start)
 2. [Manual Installation](#2-manual-installation)
 3. [Configuration](#3-configuration)
 4. [MCP Server Integration](#4-mcp-server-integration)
@@ -20,49 +22,63 @@
 
 ---
 
-## 1. Quick Start (Docker)
+## 1. Quick Start
 
 ### Prerequisites
 
-- Docker 20.10+
-- Docker Compose 2.0+
-- 16GB RAM minimum (32GB recommended)
-- 50GB disk space
-- (Optional) NVIDIA GPU with CUDA 11.8+ for embedding acceleration
+- Python 3.11+
+- 8GB RAM minimum (16GB recommended)
+- 20GB disk space
+- (Optional) NVIDIA GPU with CUDA 12+ for faster inference
 
-### Full Stack Deployment
+### Installation
 
 ```bash
 # Clone repository
 git clone https://github.com/astoreyai/t4dm.git
 cd t4dm
 
-# Create environment file
-cp .env.example .env
+# Create virtual environment
+python3.11 -m venv venv
+source venv/bin/activate
 
-# Generate secure passwords
-./scripts/setup-env.sh
+# Install with all extras
+pip install -e ".[dev,api]"
 
-# Start all services (Neo4j + Qdrant + API)
-docker-compose -f docker-compose.full.yml up -d
+# Verify installation
+t4dm --version
+pytest tests/unit/ -x -q
+```
+
+### Run Server
+
+```bash
+# Start API server
+t4dm serve
+
+# Or with options
+t4dm serve --host 0.0.0.0 --port 8765 --workers 4
 
 # Verify health
 curl http://localhost:8765/api/v1/health
-
-# Access API documentation
-open http://localhost:8765/docs
 ```
 
-### Infrastructure Only (No API)
+### Docker Deployment
 
 ```bash
-# Start just Neo4j and Qdrant
-docker-compose up -d
+# Build image
+docker build -t t4dm:latest .
 
-# Verify services
-docker-compose ps
-curl http://localhost:6333/readyz  # Qdrant
-curl http://localhost:7474         # Neo4j browser
+# Run container
+docker run -d \
+  -p 8765:8765 \
+  -v t4dm_data:/data \
+  -e T4DM_STORAGE_PATH=/data \
+  -e T4DM_SESSION_ID=production \
+  t4dm:latest
+
+# Check logs
+docker logs -f $(docker ps -q -f ancestor=t4dm:latest)
 ```
 
 ---
@@ -73,428 +89,207 @@ curl http://localhost:7474         # Neo4j browser
 
 **Minimum**:
 - CPU: 4 cores
-- RAM: 16GB
-- Disk: 50GB SSD
-- OS: Ubuntu 22.04 LTS, Debian 12, or macOS 13+
+- RAM: 8GB
+- Disk: 20GB SSD
+- OS: Ubuntu 22.04 LTS, Debian 12, macOS 14+, Windows 11
 
 **Recommended**:
 - CPU: 8+ cores
-- RAM: 32GB
+- RAM: 24GB
 - Disk: 100GB NVMe SSD
-- GPU: NVIDIA RTX 3060+ (12GB VRAM) for embedding acceleration
+- GPU: NVIDIA RTX 3060+ (12GB VRAM)
 
-### Step 1: Install Dependencies
+### Step 1: Install Python
 
-#### Ubuntu/Debian
 ```bash
-# System packages
+# Ubuntu/Debian
 sudo apt update
-sudo apt install -y python3.11 python3.11-venv python3-pip git curl
+sudo apt install -y python3.11 python3.11-venv python3-pip git
 
-# Neo4j (Community Edition)
-wget -O - https://debian.neo4j.com/neotechnology.gpg.key | sudo apt-key add -
-echo 'deb https://debian.neo4j.com stable latest' | sudo tee /etc/apt/sources.list.d/neo4j.list
-sudo apt update
-sudo apt install neo4j=1:5.15.0
+# macOS
+brew install python@3.11
 
-# Qdrant (binary release)
-wget https://github.com/qdrant/qdrant/releases/download/v1.12.1/qdrant-x86_64-unknown-linux-gnu.tar.gz
-tar xzf qdrant-x86_64-unknown-linux-gnu.tar.gz
-sudo mv qdrant /usr/local/bin/
+# Windows (use Python installer from python.org)
 ```
 
-#### macOS
-```bash
-# Homebrew
-brew install python@3.11 neo4j
-
-# Qdrant
-brew install qdrant
-```
-
-### Step 2: Configure Neo4j
+### Step 2: Install T4DM
 
 ```bash
-# Edit /etc/neo4j/neo4j.conf (or $(brew --prefix)/etc/neo4j/neo4j.conf on macOS)
-sudo nano /etc/neo4j/neo4j.conf
+# Create directory
+mkdir -p /opt/t4dm
+cd /opt/t4dm
+
+# Clone and setup
+git clone https://github.com/astoreyai/t4dm.git .
+python3.11 -m venv venv
+source venv/bin/activate
+pip install -e ".[api]"
 ```
 
-Key settings:
-```conf
-# Memory allocation
-dbms.memory.heap.initial_size=512m
-dbms.memory.heap.max_size=2G
-dbms.memory.pagecache.size=1G
-
-# Security
-dbms.security.auth_enabled=true
-
-# APOC plugin
-dbms.security.procedures.unrestricted=apoc.*
-dbms.security.procedures.allowlist=apoc.*
-
-# Network (localhost only for security)
-server.bolt.listen_address=127.0.0.1:7687
-server.http.listen_address=127.0.0.1:7474
-```
-
-Download APOC plugin:
-```bash
-cd /var/lib/neo4j/plugins  # or $(brew --prefix)/var/neo4j/plugins
-wget https://github.com/neo4j/apoc/releases/download/5.15.0/apoc-5.15.0-core.jar
-```
-
-Start Neo4j:
-```bash
-sudo systemctl enable neo4j
-sudo systemctl start neo4j
-
-# Set initial password
-cypher-shell -u neo4j -p neo4j
-ALTER CURRENT USER SET PASSWORD FROM 'neo4j' TO 'YourSecurePassword123!';
-```
-
-### Step 3: Configure Qdrant
-
-Create config file `/etc/qdrant/config.yaml`:
-```yaml
-service:
-  grpc_port: 6334
-  http_port: 6333
-  enable_tls: false  # Enable in production with certificates
-
-storage:
-  storage_path: /var/lib/qdrant/storage
-  snapshots_path: /var/lib/qdrant/snapshots
-  on_disk_payload: true
-
-log_level: INFO
-```
-
-Create directories:
-```bash
-sudo mkdir -p /var/lib/qdrant/{storage,snapshots}
-sudo chown -R $USER:$USER /var/lib/qdrant
-```
-
-Start Qdrant:
-```bash
-# Using systemd
-sudo tee /etc/systemd/system/qdrant.service << EOF
-[Unit]
-Description=Qdrant Vector Database
-After=network.target
-
-[Service]
-Type=simple
-User=qdrant
-Group=qdrant
-ExecStart=/usr/local/bin/qdrant --config-path /etc/qdrant/config.yaml
-Restart=on-failure
-
-[Install]
-WantedBy=multi-user.target
-EOF
-
-sudo systemctl enable qdrant
-sudo systemctl start qdrant
-```
-
-### Step 4: Install T4DM
+### Step 3: Configure Storage
 
 ```bash
-# Clone repository
-cd /opt
-sudo git clone https://github.com/astoreyai/t4dm.git
-cd t4dm
+# Create data directory
+sudo mkdir -p /var/lib/t4dm/data
+sudo chown $USER:$USER /var/lib/t4dm/data
 
-# Create virtual environment
-python3.11 -m venv .venv
-source .venv/bin/activate
-
-# Install with all features
-pip install -e ".[api,consolidation,dev]"
-
-# Download embedding model (4GB download)
-python -c "from FlagEmbedding import BGEM3FlagModel; BGEM3FlagModel('BAAI/bge-m3', use_fp16=True)"
-```
-
-### Step 5: Configure Environment
-
-```bash
-cp .env.example .env
-nano .env
-```
-
-Critical settings:
-```bash
-# Neo4j
-NEO4J_USER=neo4j
-NEO4J_PASSWORD=YourSecurePassword123!
-NEO4J_URI=bolt://localhost:7687
-
-# Qdrant
-QDRANT_URL=http://localhost:6333
-
-# Embedding (use 'cuda:0' if you have GPU)
-T4DM_EMBEDDING_DEVICE=cpu
-T4DM_EMBEDDING_USE_FP16=true
-```
-
-### Step 6: Initialize Database
-
-```bash
-# Create indexes
-python -m t4dm.scripts.init_database
-
-# Verify
-python -c "
-from t4dm.storage.t4dx_graph_adapter import get_t4dx_graph_adapter
-from t4dm.storage.t4dx_vector_adapter import get_t4dx_vector_adapter
-import asyncio
-
-async def verify():
-    neo4j = get_t4dx_graph_adapter()
-    qdrant = get_t4dx_vector_adapter()
-    await neo4j.initialize()
-    await qdrant.initialize()
-    print('✓ Databases initialized')
-
-asyncio.run(verify())
-"
+# Set environment
+export T4DM_STORAGE_PATH=/var/lib/t4dm/data
 ```
 
 ---
 
 ## 3. Configuration
 
-### Environment Variables Reference
+### Environment Variables
 
-#### Session Management
 ```bash
-T4DM_SESSION_ID=default               # Instance namespace
+# Required
+T4DM_STORAGE_PATH=/var/lib/t4dm/data    # Storage location
+T4DM_SESSION_ID=production               # Session namespace
+
+# Server
+T4DM_HOST=0.0.0.0                        # Bind address
+T4DM_PORT=8765                           # Port
+T4DM_WORKERS=4                           # Uvicorn workers
+
+# Embedding
+T4DM_EMBEDDING_MODEL=sentence-transformers/all-MiniLM-L6-v2
+T4DM_EMBEDDING_DEVICE=cuda:0             # or "cpu"
+
+# Rate Limiting
+T4DM_RATE_LIMIT=100                      # Requests/minute/session
+
+# Logging
+T4DM_LOG_LEVEL=INFO                      # DEBUG, INFO, WARNING, ERROR
+
+# WAL Settings
+T4DM_WAL_FSYNC_INTERVAL=1.0             # Fsync interval (seconds)
+T4DM_SEGMENT_SIZE=67108864               # 64MB segment size
 ```
 
-#### Neo4j Connection
-```bash
-T4DM_NEO4J_URI=bolt://localhost:7687
-T4DM_NEO4J_USER=neo4j
-T4DM_NEO4J_PASSWORD=<secure-password>
-T4DM_NEO4J_DATABASE=neo4j
-T4DM_NEO4J_MAX_CONNECTION_LIFETIME=3600  # seconds
-T4DM_NEO4J_MAX_CONNECTION_POOL_SIZE=50
-T4DM_NEO4J_CONNECTION_TIMEOUT=30
-```
+### Configuration File
 
-#### Qdrant Connection
-```bash
-T4DM_QDRANT_URL=http://localhost:6333
-T4DM_QDRANT_API_KEY=                  # Optional, for production
-T4DM_QDRANT_TIMEOUT=60
-T4DM_QDRANT_GRPC_PORT=6334
-```
+Create `/etc/t4dm/config.yaml`:
 
-#### Embedding Configuration
-```bash
-T4DM_EMBEDDING_MODEL=BAAI/bge-m3      # Or other sentence-transformers model
-T4DM_EMBEDDING_DIMENSION=1024         # Must match model output
-T4DM_EMBEDDING_DEVICE=cuda:0          # cpu, cuda:0, cuda:1, etc.
-T4DM_EMBEDDING_USE_FP16=true          # Faster, uses less VRAM
-T4DM_EMBEDDING_BATCH_SIZE=32
-T4DM_EMBEDDING_MAX_LENGTH=512
-T4DM_EMBEDDING_CACHE_DIR=/opt/models
-```
+```yaml
+storage:
+  path: /var/lib/t4dm/data
+  segment_size: 67108864
+  wal_fsync_interval: 1.0
 
-#### Memory Parameters
-```bash
-# FSRS decay
-T4DM_FSRS_DEFAULT_STABILITY=1.0       # Initial stability (days)
-T4DM_FSRS_RETENTION_TARGET=0.9        # Target retrievability
+server:
+  host: 0.0.0.0
+  port: 8765
+  workers: 4
 
-# Hebbian learning
-T4DM_HEBBIAN_LEARNING_RATE=0.1        # η in w' = w + η(1-w)
-T4DM_HEBBIAN_INITIAL_WEIGHT=0.1
-T4DM_HEBBIAN_DECAY_RATE=0.01
-T4DM_HEBBIAN_MIN_WEIGHT=0.01
-T4DM_HEBBIAN_STALE_DAYS=180
+embedding:
+  model: sentence-transformers/all-MiniLM-L6-v2
+  device: cuda:0
+  batch_size: 32
 
-# ACT-R activation
-T4DM_ACTR_DECAY=0.5                   # d in t^(-d)
-T4DM_ACTR_THRESHOLD=0.0
-T4DM_ACTR_NOISE=0.5                   # σ in N(0, σ²)
-T4DM_ACTR_SPREADING_STRENGTH=1.6
-```
+rate_limit:
+  requests_per_minute: 100
+  burst: 20
 
-#### Retrieval Weights
-```bash
-T4DM_RETRIEVAL_SEMANTIC_WEIGHT=0.4
-T4DM_RETRIEVAL_RECENCY_WEIGHT=0.25
-T4DM_RETRIEVAL_OUTCOME_WEIGHT=0.2
-T4DM_RETRIEVAL_IMPORTANCE_WEIGHT=0.15
-```
-
-#### Consolidation
-```bash
-T4DM_CONSOLIDATION_MIN_SIMILARITY=0.75
-T4DM_CONSOLIDATION_MIN_OCCURRENCES=3
-T4DM_CONSOLIDATION_SKILL_SIMILARITY=0.85
-```
-
-#### API Server
-```bash
-T4DM_API_HOST=0.0.0.0
-T4DM_API_PORT=8765
-T4DM_API_WORKERS=4                    # Uvicorn workers
-T4DM_API_CORS_ORIGINS=*               # Restrict in production!
-```
-
-#### Observability
-```bash
-T4DM_OTEL_ENABLED=false
-T4DM_OTEL_ENDPOINT=http://localhost:4317
-T4DM_OTEL_INSECURE=true               # Set false in production
-T4DM_LOG_LEVEL=INFO                   # DEBUG, INFO, WARNING, ERROR
+logging:
+  level: INFO
+  format: json
 ```
 
 ---
 
 ## 4. MCP Server Integration
 
-### Claude Desktop Configuration
+### Claude Desktop
 
 Edit `~/.claude/claude_desktop_config.json`:
 
 ```json
 {
   "mcpServers": {
-    "ww-memory": {
-      "command": "python",
-      "args": ["-m", "t4dm.mcp.server"],
+    "t4dm": {
+      "command": "/opt/t4dm/venv/bin/t4dm",
+      "args": ["mcp", "server"],
       "env": {
-        "NEO4J_URI": "bolt://localhost:7687",
-        "NEO4J_USER": "neo4j",
-        "NEO4J_PASSWORD": "${NEO4J_PASSWORD}",
-        "QDRANT_URL": "http://localhost:6333",
-        "T4DM_SESSION_ID": "claude-desktop-${USER}",
-        "T4DM_EMBEDDING_DEVICE": "cuda:0",
-        "PYTHONPATH": "/opt/t4dm"
+        "T4DM_SESSION_ID": "claude-desktop",
+        "T4DM_STORAGE_PATH": "/var/lib/t4dm/data"
       }
     }
   }
 }
 ```
 
-**Important**: Use absolute path to Python if not in PATH:
+### Claude Code
+
+Edit `~/.claude/mcp_servers.json`:
+
 ```json
-"command": "/opt/t4dm/.venv/bin/python"
-```
-
-### Claude Code CLI Configuration
-
-Install as skill:
-```bash
-# Clone to skills directory
-cd ~/.claude/skills
-ln -s /opt/t4dm ww-memory
-
-# Add to skills manifest
-cat >> ~/.claude/skills/manifest.json << EOF
 {
-  "ww-memory": {
-    "description": "Tripartite neural memory system",
-    "command": "python -m t4dm.mcp.server",
-    "working_directory": "/opt/t4dm"
+  "t4dm": {
+    "command": "t4dm",
+    "args": ["mcp", "server"],
+    "env": {
+      "T4DM_SESSION_ID": "${INSTANCE_ID}"
+    }
   }
 }
-EOF
 ```
 
-### Verify MCP Connection
+### Verify MCP
 
 ```bash
-# Test MCP server standalone
-cd /opt/t4dm
-python -m t4dm.mcp.server
-
-# Should output JSON-RPC initialization
-# Press Ctrl+D to send EOF and trigger response
+# Test MCP server directly
+echo '{"jsonrpc":"2.0","method":"initialize","params":{},"id":1}' | t4dm mcp server
 ```
 
 ---
 
 ## 5. REST API Deployment
 
-### Development Server
+### Systemd Service
 
-```bash
-# Direct invocation
-cd /opt/t4dm
-source .venv/bin/activate
-python -m t4dm.api.server
-
-# Or using script entry point
-ww-api
-```
-
-### Production Server (Systemd)
-
-Create `/etc/systemd/system/ww-api.service`:
+Create `/etc/systemd/system/t4dm.service`:
 
 ```ini
 [Unit]
-Description=T4DM REST API
-After=network.target neo4j.service qdrant.service
+Description=T4DM Memory Service
+After=network.target
 
 [Service]
-Type=notify
-User=ww
-Group=ww
+Type=simple
+User=t4dm
+Group=t4dm
 WorkingDirectory=/opt/t4dm
-Environment="PATH=/opt/t4dm/.venv/bin"
-EnvironmentFile=/opt/t4dm/.env
-ExecStart=/opt/t4dm/.venv/bin/uvicorn t4dm.api.server:app \
-  --host 0.0.0.0 \
-  --port 8765 \
-  --workers 4 \
-  --log-level info \
-  --access-log
-Restart=on-failure
-RestartSec=5s
-
-# Security
-NoNewPrivileges=true
-PrivateTmp=true
-ProtectSystem=strict
-ProtectHome=true
-ReadWritePaths=/opt/t4dm/models
+Environment="T4DM_STORAGE_PATH=/var/lib/t4dm/data"
+Environment="T4DM_SESSION_ID=production"
+Environment="T4DM_LOG_LEVEL=INFO"
+ExecStart=/opt/t4dm/venv/bin/t4dm serve --host 0.0.0.0 --port 8765 --workers 4
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
 
 [Install]
 WantedBy=multi-user.target
 ```
 
-Create dedicated user:
 ```bash
-sudo useradd -r -s /bin/false -d /opt/t4dm ww
-sudo chown -R ww:ww /opt/t4dm
-```
-
-Start service:
-```bash
+# Enable and start
 sudo systemctl daemon-reload
-sudo systemctl enable ww-api
-sudo systemctl start ww-api
-sudo systemctl status ww-api
+sudo systemctl enable t4dm
+sudo systemctl start t4dm
+
+# Check status
+sudo systemctl status t4dm
+sudo journalctl -u t4dm -f
 ```
 
-### NGINX Reverse Proxy
+### Nginx Reverse Proxy
 
 ```nginx
-server {
-    listen 80;
-    server_name memory.example.com;
-
-    # Redirect to HTTPS
-    return 301 https://$server_name$request_uri;
+upstream t4dm {
+    server 127.0.0.1:8765;
 }
 
 server {
@@ -504,540 +299,221 @@ server {
     ssl_certificate /etc/letsencrypt/live/memory.example.com/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/memory.example.com/privkey.pem;
 
-    # Security headers
-    add_header X-Frame-Options "SAMEORIGIN" always;
-    add_header X-Content-Type-Options "nosniff" always;
-    add_header X-XSS-Protection "1; mode=block" always;
-
-    # Proxy to WW API
     location / {
-        proxy_pass http://127.0.0.1:8765;
+        proxy_pass http://t4dm;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
-
-        # WebSocket support (if needed)
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection "upgrade";
-
-        # Timeouts for long-running requests
-        proxy_connect_timeout 60s;
-        proxy_send_timeout 60s;
-        proxy_read_timeout 60s;
-    }
-
-    # Rate limiting
-    limit_req_zone $binary_remote_addr zone=api_limit:10m rate=10r/s;
-    location /api/ {
-        limit_req zone=api_limit burst=20 nodelay;
-        proxy_pass http://127.0.0.1:8765;
     }
 }
-```
-
-Install and start:
-```bash
-sudo ln -s /etc/nginx/sites-available/ww-api /etc/nginx/sites-enabled/
-sudo nginx -t
-sudo systemctl reload nginx
 ```
 
 ---
 
 ## 6. Monitoring & Observability
 
-### Prometheus Metrics (Available)
+### Prometheus Metrics
 
-T4DM exposes OpenTelemetry metrics convertible to Prometheus format:
+Metrics available at `/metrics`:
 
-```bash
-# Enable in .env
-T4DM_OTEL_ENABLED=true
-T4DM_OTEL_ENDPOINT=http://localhost:4317
-```
-
-**Available Metrics**:
-- `ww_episodic_create_duration_seconds` - Episode creation latency
-- `ww_semantic_recall_duration_seconds` - Semantic retrieval latency
-- `ww_embedding_generation_duration_seconds` - BGE-M3 encoding time
-- `ww_neo4j_query_duration_seconds` - Graph query latency
-- `ww_qdrant_search_duration_seconds` - Vector search latency
-- `ww_consolidation_episode_count` - Episodes processed in consolidation
-
-### Prometheus Configuration
-
-`/etc/prometheus/prometheus.yml`:
 ```yaml
+# prometheus.yml
 scrape_configs:
   - job_name: 't4dm'
-    scrape_interval: 15s
     static_configs:
       - targets: ['localhost:8765']
-    metrics_path: '/metrics'
-
-  - job_name: 'neo4j'
-    scrape_interval: 15s
-    static_configs:
-      - targets: ['localhost:7474']
-    metrics_path: '/metrics'
-
-  - job_name: 'qdrant'
-    scrape_interval: 15s
-    static_configs:
-      - targets: ['localhost:6333']
-    metrics_path: '/metrics'
+    metrics_path: /metrics
 ```
 
-### Grafana Dashboard
-
-Import template from `/mnt/projects/t4d/t4dm/monitoring/grafana-dashboard.json` (if exists), or create custom panels:
-
-**Key Panels**:
-1. **API Throughput**: Requests per second by endpoint
-2. **Latency Percentiles**: p50, p95, p99 for all operations
-3. **Memory Usage**: Episode/entity/skill counts over time
-4. **Error Rate**: Failed operations per minute
-5. **Database Health**: Neo4j/Qdrant connection pool stats
+Key metrics:
+- `t4dm_requests_total` - Total API requests
+- `t4dm_request_duration_seconds` - Latency histogram
+- `t4dm_storage_items_total` - Stored items
+- `t4dm_consolidation_runs_total` - Consolidation count
+- `t4dm_kappa_distribution` - κ value distribution
 
 ### Health Checks
 
 ```bash
-# API health
+# Basic health
 curl http://localhost:8765/api/v1/health
 
-# Neo4j
-echo "RETURN 1;" | cypher-shell -u neo4j -p "$NEO4J_PASSWORD"
+# Detailed metrics
+curl http://localhost:8765/api/v1/viz/realtime/metrics
 
-# Qdrant
-curl http://localhost:6333/readyz
+# Storage stats
+curl http://localhost:8765/api/v1/viz/t4dx/storage
 ```
 
 ### Logging
 
-Logs to stdout by default (Docker/systemd friendly):
-
 ```bash
-# View API logs
-sudo journalctl -u ww-api -f
+# View logs
+sudo journalctl -u t4dm -f
 
-# In Docker
-docker logs -f ww-api
-
-# Adjust log level
-T4DM_LOG_LEVEL=DEBUG python -m t4dm.api.server
-```
-
-Log format (JSON structured):
-```json
-{
-  "timestamp": "2025-12-06T10:30:00Z",
-  "level": "INFO",
-  "logger": "t4dm.memory.episodic",
-  "message": "Created episode",
-  "session_id": "default",
-  "episode_id": "550e8400-e29b-41d4-a716-446655440000",
-  "duration_ms": 45.2
-}
+# Debug logging
+T4DM_LOG_LEVEL=DEBUG t4dm serve
 ```
 
 ---
 
 ## 7. Security Hardening
 
-### Network Security
-
-1. **Bind to localhost only** (edit configs):
-   - Neo4j: `server.bolt.listen_address=127.0.0.1:7687`
-   - Qdrant: `service.host=127.0.0.1`
-   - API: `T4DM_API_HOST=127.0.0.1` (use reverse proxy for external access)
-
-2. **Firewall rules**:
-```bash
-sudo ufw default deny incoming
-sudo ufw default allow outgoing
-sudo ufw allow 22/tcp    # SSH
-sudo ufw allow 443/tcp   # HTTPS (NGINX)
-sudo ufw enable
-```
-
-### Authentication
-
-#### API Key Authentication (Production)
-
-Add to `/opt/t4dm/t4dm/api/middleware.py`:
-```python
-from fastapi import Security, HTTPException
-from fastapi.security import APIKeyHeader
-
-api_key_header = APIKeyHeader(name="X-API-Key")
-
-async def verify_api_key(api_key: str = Security(api_key_header)):
-    if api_key != os.getenv("T4DM_API_KEY"):
-        raise HTTPException(status_code=403, detail="Invalid API key")
-    return api_key
-```
-
-Set in `.env`:
-```bash
-T4DM_API_KEY=$(openssl rand -hex 32)
-```
-
-#### Neo4j Encryption
-
-Enable TLS in `/etc/neo4j/neo4j.conf`:
-```conf
-dbms.ssl.policy.bolt.enabled=true
-dbms.ssl.policy.bolt.base_directory=/etc/neo4j/ssl
-dbms.ssl.policy.bolt.private_key=private.key
-dbms.ssl.policy.bolt.public_certificate=public.crt
-```
-
-Update URI:
-```bash
-T4DM_NEO4J_URI=bolt+s://localhost:7687
-```
-
-### Secrets Management
-
-**Never commit `.env` to git!**
-
-Use environment-specific secrets:
+### API Key Authentication
 
 ```bash
-# Production secrets in systemd
-sudo systemctl edit ww-api
+# Set API key
+export T4DM_API_KEY=$(openssl rand -hex 32)
 
-# Add:
-[Service]
-Environment="NEO4J_PASSWORD=<from-vault>"
-Environment="T4DM_API_KEY=<from-vault>"
+# Clients must provide header
+curl -H "X-API-Key: $T4DM_API_KEY" http://localhost:8765/api/v1/health
 ```
 
-Or use external secrets manager:
-- HashiCorp Vault
-- AWS Secrets Manager
-- Azure Key Vault
+### Firewall Rules
+
+```bash
+# UFW (Ubuntu)
+sudo ufw allow from 10.0.0.0/8 to any port 8765
+sudo ufw deny 8765
+
+# iptables
+iptables -A INPUT -p tcp --dport 8765 -s 10.0.0.0/8 -j ACCEPT
+iptables -A INPUT -p tcp --dport 8765 -j DROP
+```
+
+### TLS Configuration
+
+Use nginx or Caddy for TLS termination (see reverse proxy section).
 
 ### File Permissions
 
 ```bash
-cd /opt/t4dm
-sudo chown -R ww:ww .
-sudo chmod 600 .env
-sudo chmod 700 scripts/*.sh
+# Secure storage directory
+sudo chown -R t4dm:t4dm /var/lib/t4dm
+sudo chmod 700 /var/lib/t4dm/data
 ```
 
 ---
 
 ## 8. Backup & Recovery
 
-### Neo4j Backup
+### Backup Procedure
 
 ```bash
-# Online backup (Enterprise only)
-neo4j-admin backup --backup-dir=/backups/neo4j --name=ww-graph
+# Option 1: Live backup (recommended)
+curl -X POST http://localhost:8765/api/v1/control/checkpoint
+tar -czf t4dm-backup-$(date +%Y%m%d).tar.gz /var/lib/t4dm/data
 
-# Community edition: Stop service and copy data
-sudo systemctl stop neo4j
-sudo tar czf /backups/neo4j-$(date +%Y%m%d).tar.gz /var/lib/neo4j/data
-sudo systemctl start neo4j
+# Option 2: Stop and backup
+sudo systemctl stop t4dm
+tar -czf t4dm-backup-$(date +%Y%m%d).tar.gz /var/lib/t4dm/data
+sudo systemctl start t4dm
 ```
 
-### Qdrant Backup
+### Restore Procedure
 
 ```bash
-# Create snapshot
-curl -X POST http://localhost:6333/snapshots/create
+# Stop service
+sudo systemctl stop t4dm
 
-# List snapshots
-curl http://localhost:6333/snapshots
+# Restore backup
+rm -rf /var/lib/t4dm/data
+tar -xzf t4dm-backup-20260205.tar.gz -C /
 
-# Copy snapshot files
-sudo cp -r /var/lib/qdrant/snapshots /backups/qdrant-$(date +%Y%m%d)
+# Start service (WAL replay automatic)
+sudo systemctl start t4dm
+
+# Verify
+curl http://localhost:8765/api/v1/health
 ```
 
-### Automated Backup Script
+### Automated Backups
 
-`/opt/t4dm/scripts/backup.sh`:
 ```bash
+# /etc/cron.daily/t4dm-backup
 #!/bin/bash
-set -euo pipefail
-
-BACKUP_DIR=/backups/t4dm
-DATE=$(date +%Y%m%d-%H%M%S)
-RETENTION_DAYS=30
-
-mkdir -p "$BACKUP_DIR"
-
-# Backup Neo4j
-echo "Backing up Neo4j..."
-sudo systemctl stop neo4j
-sudo tar czf "$BACKUP_DIR/neo4j-$DATE.tar.gz" /var/lib/neo4j/data
-sudo systemctl start neo4j
-
-# Backup Qdrant (snapshot)
-echo "Backing up Qdrant..."
-curl -X POST http://localhost:6333/snapshots/create
-sleep 5
-sudo cp -r /var/lib/qdrant/snapshots "$BACKUP_DIR/qdrant-$DATE"
-
-# Backup config
-echo "Backing up configuration..."
-sudo cp /opt/t4dm/.env "$BACKUP_DIR/env-$DATE"
-
-# Cleanup old backups
-echo "Cleaning up old backups (older than $RETENTION_DAYS days)..."
-find "$BACKUP_DIR" -type f -mtime +$RETENTION_DAYS -delete
-
-echo "Backup completed: $BACKUP_DIR/*-$DATE"
-```
-
-Add to crontab:
-```bash
-sudo crontab -e
-
-# Daily backup at 2 AM
-0 2 * * * /opt/t4dm/scripts/backup.sh >> /var/log/ww-backup.log 2>&1
-```
-
-### Recovery
-
-```bash
-# Stop services
-sudo systemctl stop ww-api neo4j qdrant
-
-# Restore Neo4j
-sudo rm -rf /var/lib/neo4j/data/*
-sudo tar xzf /backups/t4dm/neo4j-20251206-020000.tar.gz -C /
-sudo chown -R neo4j:neo4j /var/lib/neo4j/data
-
-# Restore Qdrant
-sudo rm -rf /var/lib/qdrant/storage/*
-sudo cp -r /backups/t4dm/qdrant-20251206-020000/* /var/lib/qdrant/snapshots/
-curl -X POST http://localhost:6333/snapshots/recover?snapshot_name=<snapshot-name>
-
-# Restore config
-sudo cp /backups/t4dm/env-20251206-020000 /opt/t4dm/.env
-
-# Restart services
-sudo systemctl start neo4j qdrant ww-api
+BACKUP_DIR=/var/backups/t4dm
+mkdir -p $BACKUP_DIR
+curl -X POST http://localhost:8765/api/v1/control/checkpoint
+tar -czf $BACKUP_DIR/t4dm-$(date +%Y%m%d).tar.gz /var/lib/t4dm/data
+find $BACKUP_DIR -name "t4dm-*.tar.gz" -mtime +7 -delete
 ```
 
 ---
 
 ## 9. Troubleshooting
 
-### API Won't Start
+### Common Issues
 
-**Symptom**: `ww-api` service fails to start
+| Issue | Cause | Solution |
+|-------|-------|----------|
+| Slow startup | Large WAL replay | Normal on first start after crash |
+| OOM errors | Insufficient RAM | Increase RAM or reduce batch sizes |
+| 429 errors | Rate limiting | Increase T4DM_RATE_LIMIT |
+| Connection refused | Service not running | `systemctl status t4dm` |
+| Permission denied | Wrong file ownership | `chown -R t4dm:t4dm /var/lib/t4dm` |
+| CUDA not found | Missing drivers | Install NVIDIA drivers + CUDA |
 
-**Diagnosis**:
+### Debug Mode
+
 ```bash
-sudo journalctl -u ww-api -n 50
+# Run with debug logging
+T4DM_LOG_LEVEL=DEBUG t4dm serve
+
+# Check storage integrity
+t4dm storage verify /var/lib/t4dm/data
+
+# Force checkpoint
+curl -X POST http://localhost:8765/api/v1/control/checkpoint
 ```
 
-**Common causes**:
-1. **Neo4j not running**: `sudo systemctl start neo4j`
-2. **Qdrant not running**: `sudo systemctl start qdrant`
-3. **Port already in use**: Check with `sudo lsof -i :8765`
-4. **Missing environment variables**: Verify `.env` file exists and is readable
-5. **Python dependencies**: Re-run `pip install -e ".[api]"`
+### Performance Tuning
+
+```bash
+# Increase file descriptors
+ulimit -n 65535
+
+# Tune kernel parameters
+echo "net.core.somaxconn = 65535" >> /etc/sysctl.conf
+echo "vm.swappiness = 10" >> /etc/sysctl.conf
+sysctl -p
+```
+
+### Getting Help
+
+- GitHub Issues: https://github.com/astoreyai/t4dm/issues
+- Documentation: https://github.com/astoreyai/t4dm/tree/main/docs
 
 ---
 
-### Embedding Generation Slow
-
-**Symptom**: Episode creation takes >10 seconds
-
-**Diagnosis**:
-```bash
-# Check if GPU is being used
-nvidia-smi
-
-# Test embedding speed
-python -c "
-from t4dm.embedding.bge_m3 import get_embedding_provider
-import time
-
-emb = get_embedding_provider()
-start = time.time()
-vec = emb.embed_query('test sentence')
-print(f'Embedding time: {time.time() - start:.2f}s')
-print(f'Device: {emb.device}')
-"
-```
-
-**Solutions**:
-1. **Enable GPU**: Set `T4DM_EMBEDDING_DEVICE=cuda:0` in `.env`
-2. **Enable FP16**: Set `T4DM_EMBEDDING_USE_FP16=true` (2x speedup)
-3. **Reduce max_length**: Set `T4DM_EMBEDDING_MAX_LENGTH=256` if long texts not needed
-4. **Batch requests**: Use SDK batch methods instead of individual calls
-
----
-
-### Neo4j Connection Timeout
-
-**Symptom**: `Neo4jError: Failed to establish connection`
-
-**Diagnosis**:
-```bash
-# Check Neo4j status
-sudo systemctl status neo4j
-
-# Test connection manually
-cypher-shell -u neo4j -p "$NEO4J_PASSWORD" -a bolt://localhost:7687
-```
-
-**Solutions**:
-1. **Increase timeout**: Set `T4DM_NEO4J_CONNECTION_TIMEOUT=60` in `.env`
-2. **Check password**: Verify `NEO4J_PASSWORD` matches database
-3. **Check network**: Ensure `127.0.0.1:7687` is accessible
-4. **Review logs**: `sudo journalctl -u neo4j -f`
-
----
-
-### Qdrant Collection Not Found
-
-**Symptom**: `QdrantException: Collection 'ww-episodes-default' not found`
-
-**Diagnosis**:
-```bash
-# List collections
-curl http://localhost:6333/collections
-
-# Check specific collection
-curl http://localhost:6333/collections/ww-episodes-default
-```
-
-**Solutions**:
-1. **Initialize database**: `python -m t4dm.scripts.init_database`
-2. **Verify session ID**: Ensure `T4DM_SESSION_ID` matches collection name
-3. **Check Qdrant logs**: `sudo journalctl -u qdrant -f`
-
----
-
-### High Memory Usage
-
-**Symptom**: System OOM killer terminates processes
-
-**Diagnosis**:
-```bash
-# Check memory usage
-free -h
-docker stats  # If using Docker
-
-# Check which component is consuming memory
-sudo ps aux --sort=-%mem | head -20
-```
-
-**Solutions**:
-1. **Reduce Neo4j heap**: Set `dbms.memory.heap.max_size=1G` (down from 2G)
-2. **Limit API workers**: Set `T4DM_API_WORKERS=2` (down from 4)
-3. **Use CPU instead of GPU**: Set `T4DM_EMBEDDING_DEVICE=cpu` (frees VRAM)
-4. **Enable consolidation**: Periodically run `curl -X POST http://localhost:8765/api/v1/consolidate`
-
----
-
-### Disk Space Full
-
-**Symptom**: `No space left on device`
-
-**Diagnosis**:
-```bash
-df -h
-du -sh /var/lib/neo4j/data
-du -sh /var/lib/qdrant/storage
-```
-
-**Solutions**:
-1. **Run consolidation**: Merges duplicate episodes
-2. **Delete old snapshots**: `rm -rf /var/lib/qdrant/snapshots/old-*`
-3. **Clean Neo4j logs**: `sudo truncate -s 0 /var/lib/neo4j/logs/*.log`
-4. **Archive old data**: Export and delete old sessions
-
----
-
-### MCP Server Not Responding
-
-**Symptom**: Claude Desktop shows "MCP server disconnected"
-
-**Diagnosis**:
-```bash
-# Test MCP server manually
-cd /opt/t4dm
-python -m t4dm.mcp.server
-# Type: {"method": "initialize", "id": 1}
-# Press Ctrl+D
-```
-
-**Solutions**:
-1. **Check Python path**: Use absolute path in config: `/opt/t4dm/.venv/bin/python`
-2. **Verify environment**: Ensure all env vars are set in config
-3. **Check logs**: Look in Claude Desktop logs (`~/Library/Logs/Claude/` on macOS)
-4. **Test dependencies**: `pip list | grep -E "mcp|fastmcp"`
-
----
-
-## Performance Tuning
-
-### Neo4j Optimization
-
-```conf
-# /etc/neo4j/neo4j.conf
-
-# Increase page cache for large graphs
-dbms.memory.pagecache.size=4G
-
-# Enable query logging for slow queries
-dbms.logs.query.enabled=true
-dbms.logs.query.threshold=1s
-
-# Parallel query execution
-dbms.query.parallel_runtime_support=true
-```
-
-### Qdrant Optimization
+## Appendix: Docker Compose
 
 ```yaml
-# /etc/qdrant/config.yaml
+version: '3.8'
 
-# Use HNSW for faster search
-hnsw:
-  m: 16                # Number of edges per node (higher = slower indexing, faster search)
-  ef_construct: 100    # Construction parameter (higher = better quality, slower indexing)
+services:
+  t4dm:
+    build: .
+    ports:
+      - "8765:8765"
+    volumes:
+      - t4dm_data:/data
+    environment:
+      - T4DM_STORAGE_PATH=/data
+      - T4DM_SESSION_ID=production
+      - T4DM_LOG_LEVEL=INFO
+      - T4DM_WORKERS=4
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8765/api/v1/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
-# Enable payload on disk for lower memory
-storage:
-  on_disk_payload: true
+volumes:
+  t4dm_data:
 ```
-
-### API Optimization
-
-```bash
-# Increase worker count (1 per CPU core)
-T4DM_API_WORKERS=8
-
-# Enable connection pooling
-T4DM_NEO4J_MAX_CONNECTION_POOL_SIZE=100
-
-# Reduce batch size for lower latency
-T4DM_EMBEDDING_BATCH_SIZE=16
-```
-
----
-
-## Support Resources
-
-- **Documentation**: `/mnt/projects/t4d/t4dm/docs/`
-- **GitHub Issues**: https://github.com/astoreyai/t4dm/issues
-- **Neo4j Docs**: https://neo4j.com/docs/
-- **Qdrant Docs**: https://qdrant.tech/documentation/
-- **MCP Spec**: https://spec.modelcontextprotocol.io/
-
----
-
-**Document Status**: Complete ✓
-**Tested On**: Ubuntu 22.04, Debian 12, macOS 14
-**Last Updated**: 2025-12-06

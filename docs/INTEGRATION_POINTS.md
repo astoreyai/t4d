@@ -244,7 +244,7 @@ T4DM_SESSION_ID=automation-bot
 ```
 
 **Error Codes**:
-- `-32000`: Storage error (Neo4j/Qdrant)
+- `-32000`: Storage error (T4DX)
 - `-32001`: Embedding generation failed
 - `-32002`: Invalid parameters
 - `-32003`: Memory not found
@@ -713,7 +713,7 @@ class SpatialMemory(MemorySubsystem):
             embedding=embedding
         )
 
-        # Store in Neo4j + Qdrant
+        # Store in T4DX
         await self.graph_store.create_node("Location", location.dict())
         await self.vector_store.add(
             collection="ww-locations",
@@ -730,7 +730,7 @@ class SpatialMemory(MemorySubsystem):
         radius_km: float = 10
     ) -> list[Location]:
         """Retrieve locations within radius."""
-        # Haversine distance query in Neo4j
+        # Haversine distance query in T4DX
         query = """
         MATCH (l:Location)
         WHERE point.distance(

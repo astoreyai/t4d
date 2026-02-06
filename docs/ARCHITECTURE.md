@@ -1,537 +1,221 @@
-# T4DM (WW) - Personal AI Assistant Framework
+# T4DM - System Architecture
 
-**Version**: 0.1.0-alpha
-**Status**: Architecture Design Phase
-**Codename**: Jarvis Core
+**Version**: 2.0.0
+**Status**: Production Ready
+**Last Updated**: 2026-02-05
 
 ---
 
 ## Vision
 
-A modular, provider-agnostic AI assistant framework that orchestrates specialized agents for knowledge management, semantic processing, algorithm design, and domain-specific assistance. Built on principles from Anthropic's long-running agent research.
+T4DM is a biologically-inspired memory system combining a frozen Qwen2.5-3B language backbone with trainable spiking cortical blocks, backed by T4DX — a custom embedded spatiotemporal storage engine. Time is treated as a first-class dimension.
 
 ---
 
-## Core Architecture Principles
-
-### From Anthropic's Long-Running Agent Research
-
-1. **Two-Agent Pattern**
-   - **Initializer Agent**: Sets up environment, feature lists, progress tracking
-   - **Task Agents**: Make incremental progress, leave clean states
-
-2. **State Artifacts**
-   - `ww-progress.json` - Structured progress log with context
-   - `ww-features.json` - Feature requirements and completion status
-   - Git commits with descriptive messages
-   - `init.sh` - Environment bootstrapping
-
-3. **Incremental Progress**
-   - One task/feature at a time
-   - Clean state between sessions
-   - Self-verification before completion
-
----
-
-## System Layers
+## Core Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                      APPLICATION LAYER                          │
 │  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌───────────┐ │
-│  │ Knowledge   │ │  Semantic   │ │   Graph     │ │  Domain   │ │
-│  │ Base Agent  │ │   Agent     │ │   Agent     │ │  Agents   │ │
+│  │  REST API   │ │  MCP Server │ │ Python SDK  │ │ Adapters  │ │
+│  │  (FastAPI)  │ │  (FastMCP)  │ │ (sync/async)│ │(LC/LI/AG) │ │
 │  └─────────────┘ └─────────────┘ └─────────────┘ └───────────┘ │
 ├─────────────────────────────────────────────────────────────────┤
-│                      ORCHESTRATION LAYER                        │
+│                      QWEN BACKBONE (4-bit)                      │
+│  ┌─────────────────────────────┐ ┌─────────────────────────────┐│
+│  │  Layers 0-17 (frozen)       │ │  Layers 18-35 (frozen)      ││
+│  │  + QLoRA adapters (~8M)     │ │  + QLoRA adapters (~8M)     ││
+│  └─────────────────────────────┘ └─────────────────────────────┘│
+├─────────────────────────────────────────────────────────────────┤
+│                SPIKING CORTICAL STACK (×6 blocks)               │
 │  ┌─────────────────────────────────────────────────────────────┐│
-│  │              Agent Coordinator & Router                     ││
-│  │   • Session Management    • Context Bridging                ││
-│  │   • Progress Tracking     • Feature Verification            ││
+│  │ ① Thalamic Gate → ② LIF Integration → ③ Spike Attention   ││
+│  │ → ④ Apical Modulation → ⑤ RWKV Recurrence → ⑥ Residual    ││
+│  │                                                             ││
+│  │ Neuromodulator Bus: DA | NE | ACh | 5-HT (per-block inject)││
 │  └─────────────────────────────────────────────────────────────┘│
 ├─────────────────────────────────────────────────────────────────┤
 │                       MEMORY LAYER                              │
 │  ┌───────────────────┐  ┌───────────────────────────────────┐  │
-│  │   HOT MEMORY      │  │         WARM MEMORY               │  │
-│  │  (In-Session)     │  │      (Cross-Session)              │  │
-│  │  • Context Window │  │  • Vector Store (embeddings)      │  │
-│  │  • Working Memory │  │  • Progress Files                 │  │
-│  │  • Task State     │  │  • Feature Lists                  │  │
+│  │   EPISODIC        │  │         SEMANTIC                  │  │
+│  │   (κ < 0.3)       │  │         (κ > 0.6)                 │  │
+│  │  • Raw events     │  │  • Consolidated concepts          │  │
+│  │  • FSRS decay     │  │  • Hebbian weights                │  │
 │  └───────────────────┘  └───────────────────────────────────┘  │
 │  ┌─────────────────────────────────────────────────────────────┐│
-│  │                    COLD MEMORY                              ││
-│  │   • SQLite/PostgreSQL (structured data)                     ││
-│  │   • Document Store (knowledge artifacts)                    ││
-│  │   • Graph Database (relationships)                          ││
+│  │                    PROCEDURAL                               ││
+│  │   • Skill patterns • Execution traces • Build-Retrieve-Update│
 │  └─────────────────────────────────────────────────────────────┘│
 ├─────────────────────────────────────────────────────────────────┤
-│                      EMBEDDING LAYER                            │
+│                    LEARNING LAYER                               │
+│  ┌───────────────────────────────────────────────────────────┐  │
+│  │  STDP (Spike-Timing Dependent Plasticity)                 │  │
+│  │  Hebbian Learning (co-activation strengthening)           │  │
+│  │  Three-Factor Rule (pre × post × neuromodulator)          │  │
+│  │  Eligibility Traces (temporal credit assignment)          │  │
+│  └───────────────────────────────────────────────────────────┘  │
+├─────────────────────────────────────────────────────────────────┤
+│                  T4DX STORAGE ENGINE                            │
 │  ┌─────────────────────────────────────────────────────────────┐│
-│  │           Provider-Agnostic Embedding Interface             ││
-│  │  ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐           ││
-│  │  │ Voyage  │ │ OpenAI  │ │ Cohere  │ │ Local   │           ││
-│  │  │  AI     │ │ Ada-003 │ │ Embed   │ │ (SBERT) │           ││
-│  │  └─────────┘ └─────────┘ └─────────┘ └─────────┘           ││
+│  │  ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐        ││
+│  │  │   WAL   │  │MemTable│  │Segments │  │ HNSW    │        ││
+│  │  │(persist)│→ │(memory) │→ │ (LSM)   │→ │(vectors)│        ││
+│  │  └─────────┘  └─────────┘  └─────────┘  └─────────┘        ││
+│  │                                                             ││
+│  │  ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐        ││
+│  │  │CSR Graph│  │κ-Index  │  │Bitemporal│ │Provenance│       ││
+│  │  │ (edges) │  │(consol.)│  │ (audit) │  │ (trace) │        ││
+│  │  └─────────┘  └─────────┘  └─────────┘  └─────────┘        ││
 │  └─────────────────────────────────────────────────────────────┘│
 ├─────────────────────────────────────────────────────────────────┤
-│                      STORAGE LAYER                              │
-│  ┌─────────────────────────────────────────────────────────────┐│
-│  │           Provider-Agnostic Storage Interface               ││
-│  │  ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐           ││
-│  │  │ ChromaDB│ │ Pinecone│ │  FAISS  │ │ Qdrant  │           ││
-│  │  └─────────┘ └─────────┘ └─────────┘ └─────────┘           ││
-│  └─────────────────────────────────────────────────────────────┘│
+│                   OBSERVABILITY LAYER                           │
+│     Prometheus  │  OpenTelemetry  │  22 Visualization Modules  │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## Memory Layer Design
+## Key Concepts
 
-### 1. Hot Memory (In-Session)
+### κ (Kappa) Gradient
 
-**Purpose**: Fast access to current context and task state
+Continuous consolidation level [0,1] replacing discrete memory stores:
 
-```python
-class HotMemory:
-    """In-session working memory"""
+| κ Range | State | Description |
+|---------|-------|-------------|
+| 0.0-0.1 | Raw | Just encoded, volatile |
+| 0.1-0.3 | Replayed | NREM-strengthened |
+| 0.3-0.6 | Transitional | Being abstracted |
+| 0.6-0.9 | Semantic | Consolidated concept |
+| 0.9-1.0 | Stable | Permanent knowledge |
 
-    context_window: list[Message]      # Current conversation
-    task_state: TaskState              # Active task tracking
-    working_set: dict[str, Any]        # Scratch space
-    attention_cache: dict[str, float]  # Relevance scores
+### τ(t) Temporal Gate
+
+Controls memory write operations:
+
+```
+τ(t) = σ(λ_ε·ε + λ_Δ·novelty + λ_r·reward)
 ```
 
-### 2. Warm Memory (Cross-Session)
+- ε: Prediction error (high = surprising, should store)
+- novelty: Semantic distance from existing memories
+- reward: Outcome-based reinforcement
 
-**Purpose**: Bridge context windows, track progress
+### LSM Compaction = Memory Consolidation
 
-**Components**:
-- **Progress Log** (`ww-progress.json`): What agents have done
-- **Feature List** (`ww-features.json`): Requirements tracking
-- **Vector Index**: Fast semantic retrieval
-- **Recent Context**: Last N session summaries
+| Compaction Phase | Biological Analog | κ Effect |
+|------------------|-------------------|----------|
+| FLUSH | Working → Episodic | κ = 0.0 |
+| NREM | Replay + STDP | κ → 0.15-0.4 |
+| REM | Prototype creation | κ → 0.6-0.85 |
+| PRUNE | Forgetting curve | κ < 0.1 deleted |
 
-### 3. Cold Memory (Long-Term)
+### Nine Storage Primitives
 
-**Purpose**: Persistent knowledge, relationships, history
+All memory operations map to these T4DX primitives:
 
-**Components**:
-- **Document Store**: Full knowledge artifacts
-- **Relational Store**: Structured metadata
-- **Graph Store**: Entity relationships
+1. **INSERT** - Store new item
+2. **GET** - Retrieve by ID
+3. **SEARCH** - Vector similarity (HNSW)
+4. **UPDATE_FIELDS** - Modify metadata
+5. **UPDATE_EDGE_WEIGHT** - Hebbian learning
+6. **TRAVERSE** - Graph navigation (CSR)
+7. **SCAN** - Range queries
+8. **DELETE** - Remove item
+9. **BATCH_SCALE_WEIGHTS** - Bulk weight decay
 
 ---
 
-## Provider-Agnostic Interfaces
+## Data Flow
 
-### Embedding Provider Interface
+### Store Memory
 
-```python
-from abc import ABC, abstractmethod
-from typing import Protocol
-
-class EmbeddingProvider(Protocol):
-    """Provider-agnostic embedding interface"""
-
-    @abstractmethod
-    async def embed(self, texts: list[str]) -> list[list[float]]:
-        """Generate embeddings for text inputs"""
-        ...
-
-    @abstractmethod
-    async def embed_query(self, query: str) -> list[float]:
-        """Generate embedding optimized for query"""
-        ...
-
-    @property
-    @abstractmethod
-    def dimension(self) -> int:
-        """Embedding dimension"""
-        ...
-
-    @property
-    @abstractmethod
-    def model_name(self) -> str:
-        """Model identifier"""
-        ...
+```
+Input → τ(t) gate → Encode (Time2Vec + embedding)
+      → T4DX.INSERT → WAL.append → MemTable.insert
+      → [flush] → Segment creation → HNSW index update
 ```
 
-### Vector Store Interface
+### Retrieve Memory
 
-```python
-class VectorStore(Protocol):
-    """Provider-agnostic vector store interface"""
+```
+Query → Embed → T4DX.SEARCH (HNSW k-NN)
+      → T4DX.TRAVERSE (graph enrichment)
+      → Score (ACT-R activation + neuromod state)
+      → Rerank → Return top-k
+```
 
-    @abstractmethod
-    async def add(
-        self,
-        ids: list[str],
-        embeddings: list[list[float]],
-        documents: list[str],
-        metadata: list[dict] | None = None
-    ) -> None:
-        """Add documents with embeddings"""
-        ...
+### Consolidate
 
-    @abstractmethod
-    async def query(
-        self,
-        embedding: list[float],
-        top_k: int = 10,
-        filter: dict | None = None
-    ) -> list[SearchResult]:
-        """Semantic search"""
-        ...
-
-    @abstractmethod
-    async def delete(self, ids: list[str]) -> None:
-        """Remove documents"""
-        ...
+```
+Scheduler → Select candidates (by κ, age, importance)
+          → NREM phase: Replay sequences, STDP weight updates
+          → REM phase: HDBSCAN clustering, prototype creation
+          → Compaction: Merge segments, update κ values
+          → PRUNE: Remove low-κ items
 ```
 
 ---
 
-## Agent Framework
+## Technology Stack
 
-### Base Agent Structure
-
-```python
-class BaseAgent(ABC):
-    """Base class for all WW agents"""
-
-    def __init__(
-        self,
-        memory: MemoryLayer,
-        config: AgentConfig
-    ):
-        self.memory = memory
-        self.config = config
-        self.progress_file = "ww-progress.json"
-        self.features_file = "ww-features.json"
-
-    @abstractmethod
-    async def initialize(self) -> None:
-        """First-run initialization (Initializer pattern)"""
-        ...
-
-    @abstractmethod
-    async def execute(self, task: Task) -> TaskResult:
-        """Execute single task increment"""
-        ...
-
-    async def get_bearings(self) -> SessionContext:
-        """Standard session start sequence"""
-        # 1. Read progress log
-        # 2. Read feature list
-        # 3. Check git status
-        # 4. Run verification tests
-        return SessionContext(...)
-
-    async def checkpoint(self, result: TaskResult) -> None:
-        """Clean state checkpoint"""
-        # 1. Update progress log
-        # 2. Update feature status
-        # 3. Git commit if appropriate
-        ...
-```
-
-### Initializer Agent Pattern
-
-```python
-class InitializerAgent(BaseAgent):
-    """Sets up environment for long-running work"""
-
-    async def initialize(self) -> None:
-        # 1. Create progress tracking file
-        await self._create_progress_file()
-
-        # 2. Generate comprehensive feature list from spec
-        await self._generate_feature_list()
-
-        # 3. Create init.sh for environment setup
-        await self._create_init_script()
-
-        # 4. Initial git commit
-        await self._initial_commit()
-
-        # 5. Create verification tests
-        await self._create_verification_suite()
-```
+| Layer | Technology |
+|-------|------------|
+| LLM Backbone | Qwen2.5-3B (4-bit NF4) |
+| Spiking Blocks | PyTorch + STE surrogate gradient |
+| Storage | T4DX (embedded, Rust-inspired LSM) |
+| API | FastAPI + Pydantic |
+| MCP | FastMCP (stdio JSON-RPC) |
+| Embeddings | Sentence-Transformers |
+| Observability | Prometheus + OpenTelemetry |
 
 ---
 
-## Specialized Agents
+## Resource Requirements
 
-### 1. Knowledge Base Agent
+### Minimum (Development)
+- CPU: 4 cores
+- RAM: 8GB
+- Disk: 20GB
 
-**Purpose**: Manage knowledge capture, retrieval, and organization
+### Recommended (Production)
+- CPU: 8+ cores
+- RAM: 24GB (Qwen + T4DX)
+- GPU: 16GB+ VRAM (training)
+- Disk: 100GB SSD
 
-**Capabilities**:
-- Extract knowledge from conversations
-- Chunk and embed documents
-- Semantic search and retrieval
-- Knowledge graph construction
-- Cross-reference linking
-
-### 2. Semantic Agent
-
-**Purpose**: Encoding/decoding semantic representations
-
-**Capabilities**:
-- Text-to-embedding conversion
-- Semantic similarity computation
-- Concept extraction
-- Relationship detection
-- Dimension reduction for visualization
-
-### 3. Graph Agent
-
-**Purpose**: Design and traverse knowledge graphs
-
-**Capabilities**:
-- Graph schema design
-- Entity extraction and linking
-- Path finding algorithms
-- Community detection
-- Graph neural network integration
-
-### 4. Fine-Tuning Orchestrator
-
-**Purpose**: Manage model fine-tuning workflows
-
-**Capabilities**:
-- Dataset preparation
-- Training configuration
-- Progress monitoring
-- Model evaluation
-- Version management
-
-### 5. Domain Agents
-
-**Neuroscience Agent**:
-- Neural pathway modeling
-- Brain region mapping
-- Cognitive process simulation
-
-**Computational Biology Agent**:
-- Protein structure analysis
-- Gene expression modeling
-- Pathway analysis
+### VRAM Budget (24GB target)
+- Qwen 4-bit: ~4GB
+- Spiking blocks: ~2GB
+- QLoRA gradients: ~4GB
+- Activations: ~6GB
+- Headroom: ~8GB
 
 ---
 
-## Progress Tracking Schema
+## Diagrams
 
-### ww-progress.json
+See [diagrams/DIAGRAM_SUMMARY.md](diagrams/DIAGRAM_SUMMARY.md) for complete inventory:
 
-```json
-{
-  "project": "t4dm",
-  "version": "0.1.0",
-  "last_updated": "2025-11-27T10:00:00Z",
-  "sessions": [
-    {
-      "id": "session-001",
-      "started": "2025-11-27T09:00:00Z",
-      "ended": "2025-11-27T10:00:00Z",
-      "agent": "initializer",
-      "summary": "Set up project structure and memory layer",
-      "tasks_completed": [
-        "Created project directory structure",
-        "Implemented embedding provider interface",
-        "Set up SQLite for cold storage"
-      ],
-      "next_steps": [
-        "Implement vector store abstraction",
-        "Create knowledge base agent"
-      ],
-      "git_commits": ["abc123", "def456"]
-    }
-  ],
-  "current_focus": "memory-layer-implementation",
-  "blockers": []
-}
-```
-
-### ww-features.json
-
-```json
-{
-  "project": "t4dm",
-  "generated": "2025-11-27T09:00:00Z",
-  "features": [
-    {
-      "id": "MEM-001",
-      "category": "memory",
-      "description": "Provider-agnostic embedding interface with support for Voyage, OpenAI, Cohere, and local models",
-      "priority": 1,
-      "passes": false,
-      "verification_steps": [
-        "Import EmbeddingProvider protocol",
-        "Instantiate VoyageEmbedding provider",
-        "Generate embedding for sample text",
-        "Verify dimension matches expected"
-      ]
-    },
-    {
-      "id": "MEM-002",
-      "category": "memory",
-      "description": "Vector store abstraction supporting ChromaDB, FAISS, Pinecone, and Qdrant",
-      "priority": 1,
-      "passes": false,
-      "verification_steps": [
-        "Import VectorStore protocol",
-        "Instantiate ChromaDB store",
-        "Add sample documents",
-        "Query and verify results"
-      ]
-    }
-  ]
-}
-```
-
----
-
-## Directory Structure
-
-```
-t4dm/
-├── ARCHITECTURE.md           # This document
-├── ww-progress.json          # Progress tracking
-├── ww-features.json          # Feature requirements
-├── init.sh                   # Environment setup
-├── pyproject.toml            # Project configuration
-├── src/
-│   └── t4dm/
-│       ├── __init__.py
-│       ├── core/
-│       │   ├── __init__.py
-│       │   ├── config.py         # Configuration management
-│       │   └── types.py          # Core type definitions
-│       ├── memory/
-│       │   ├── __init__.py
-│       │   ├── hot.py            # In-session memory
-│       │   ├── warm.py           # Cross-session memory
-│       │   ├── cold.py           # Long-term storage
-│       │   └── layer.py          # Unified memory layer
-│       ├── embedding/
-│       │   ├── __init__.py
-│       │   ├── protocol.py       # Provider interface
-│       │   ├── voyage.py         # Voyage AI provider
-│       │   ├── openai.py         # OpenAI provider
-│       │   ├── local.py          # Local/SBERT provider
-│       │   └── factory.py        # Provider factory
-│       ├── storage/
-│       │   ├── __init__.py
-│       │   ├── protocol.py       # Store interface
-│       │   ├── chromadb.py       # ChromaDB implementation
-│       │   ├── faiss_store.py    # FAISS implementation
-│       │   └── factory.py        # Store factory
-│       ├── agents/
-│       │   ├── __init__.py
-│       │   ├── base.py           # Base agent class
-│       │   ├── initializer.py    # Initializer agent
-│       │   ├── coordinator.py    # Agent orchestration
-│       │   ├── knowledge/
-│       │   │   ├── __init__.py
-│       │   │   └── agent.py      # Knowledge base agent
-│       │   ├── semantic/
-│       │   │   ├── __init__.py
-│       │   │   └── agent.py      # Semantic processing agent
-│       │   ├── graph/
-│       │   │   ├── __init__.py
-│       │   │   └── agent.py      # Graph traversal agent
-│       │   └── domain/
-│       │       ├── __init__.py
-│       │       ├── neuroscience.py
-│       │       └── compbio.py
-│       └── cli/
-│           ├── __init__.py
-│           └── main.py           # CLI interface
-├── tests/
-│   ├── __init__.py
-│   ├── conftest.py
-│   ├── test_memory/
-│   ├── test_embedding/
-│   ├── test_storage/
-│   └── test_agents/
-└── docs/
-    ├── getting-started.md
-    ├── memory-layer.md
-    ├── agent-development.md
-    └── provider-integration.md
-```
-
----
-
-## Implementation Phases
-
-### Phase 0: Foundation (Current)
-- [x] Architecture design
-- [ ] Project structure
-- [ ] Core type definitions
-- [ ] Configuration management
-
-### Phase 1: Memory Layer
-- [ ] Embedding provider protocol
-- [ ] Voyage AI implementation
-- [ ] Local SBERT implementation
-- [ ] Vector store protocol
-- [ ] ChromaDB implementation
-- [ ] FAISS implementation
-- [ ] Memory layer integration
-
-### Phase 2: Agent Framework
-- [ ] Base agent class
-- [ ] Initializer agent
-- [ ] Progress tracking
-- [ ] Feature verification
-- [ ] Session management
-
-### Phase 3: Specialized Agents
-- [ ] Knowledge base agent
-- [ ] Semantic agent
-- [ ] Graph agent
-
-### Phase 4: Domain Agents
-- [ ] Fine-tuning orchestrator
-- [ ] Neuroscience agent
-- [ ] Computational biology agent
-
-### Phase 5: Integration
-- [ ] Claude Code CLI integration
-- [ ] Skill packaging
-- [ ] Documentation
-
----
-
-## Claude Code Integration
-
-This framework is designed to work directly with Claude Code CLI:
-
-1. **Skills**: Each agent becomes a skill in `~/github/astoreyai/claude-skills/`
-2. **Agents**: Specialized agents register as Claude Code subagents
-3. **Commands**: Slash commands for common operations
-4. **Hooks**: Session start/end for context bridging
-
----
-
-## Next Steps
-
-1. Create project structure and core files
-2. Implement embedding provider protocol
-3. Implement vector store protocol
-4. Build memory layer integration
-5. Create base agent class
-6. Implement initializer agent
+- `t4dm_full_system.d2` - Complete system architecture
+- `t4dx_storage_engine.d2` - Storage internals
+- `t4dm_spiking_block.d2` - 6-stage cortical block
+- `kappa_gradient_consolidation.mermaid` - κ progression
 
 ---
 
 ## References
 
-- [Effective harnesses for long-running agents](https://www.anthropic.com/engineering/effective-agent-harnesses) - Anthropic Engineering
-- [Claude Agent SDK](https://docs.anthropic.com/en/docs/claude-code)
-- [ChromaDB](https://docs.trychroma.com/)
-- [FAISS](https://github.com/facebookresearch/faiss)
-- [Sentence Transformers](https://www.sbert.net/)
+- Tulving, E. (1972). Episodic and semantic memory
+- Anderson, J. R. (1993). ACT-R: A theory of higher level cognition
+- Schultz, W. (1997). Dopamine reward prediction error
+- Hinton, G. (2022). Forward-Forward algorithm
+- Anthropic (2024). Mechanistic interpretability
+
+---
+
+See also:
+- [SYSTEM_ARCHITECTURE_MASTER.md](SYSTEM_ARCHITECTURE_MASTER.md) - Detailed module map
+- [MEMORY_ARCHITECTURE.md](MEMORY_ARCHITECTURE.md) - Tripartite memory design
+- [BRAIN_REGION_MAPPING.md](BRAIN_REGION_MAPPING.md) - Neuroscience foundations

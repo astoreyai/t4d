@@ -421,9 +421,9 @@
 ║  │                         └────────┬───────┘                              │ ║
 ║  │                                  ▼                                      │ ║
 ║  │                    ┌─────────────────────────┐                          │ ║
-║  │                    │         Saga            │                          │ ║
-║  │                    │  (Transaction Coord.)   │                          │ ║
-║  │                    │  (Vector preservation)  │                          │ ║
+║  │                    │        T4DX             │                          │ ║
+║  │                    │  (Embedded Storage)     │                          │ ║
+║  │                    │  (WAL + LSM + HNSW)     │                          │ ║
 ║  │                    └─────────────────────────┘                          │ ║
 ║  └─────────────────────────────────────────────────────────────────────────┘ ║
 ║                                                                               ║
@@ -469,7 +469,7 @@
                                 ▼
                     ┌───────────────────────┐
                     │   PERSISTENCE LAYER   │
-                    │   (Qdrant + Neo4j)    │
+                    │   (T4DX Embedded)     │
                     └───────────────────────┘
                                 │
                     ┌───────────┴───────────┐
@@ -530,42 +530,42 @@ The circuit breaker protects storage operations from cascading failures by monit
 - Enables graceful degradation
 - Allows automatic recovery testing
 
-### Saga Compensation Pattern
+### WAL + MemTable Pattern
 
-The saga pattern ensures transactional consistency across Qdrant and Neo4j with vector preservation.
+T4DX uses write-ahead logging for durability with in-memory buffering for performance.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                        SAGA TRANSACTION FLOW                            │
+│                        T4DX WRITE FLOW                                  │
 ├─────────────────────────────────────────────────────────────────────────┤
 │                                                                         │
-│  FORWARD FLOW (Happy Path):                                            │
+│  FORWARD FLOW (Write Path):                                            │
 │  ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐         │
-│  │  Begin   │───▶│  Qdrant  │───▶│  Neo4j   │───▶│  Commit  │         │
-│  │  Saga    │    │  Write   │    │  Write   │    │  Saga    │         │
+│  │  Write   │───▶│   WAL    │───▶│ MemTable │───▶│  HNSW    │         │
+│  │ Request  │    │  Append  │    │  Insert  │    │  Update  │         │
 │  └──────────┘    └──────────┘    └──────────┘    └──────────┘         │
 │                                                                         │
-│  COMPENSATION FLOW (Rollback):                                         │
+│  FLUSH FLOW (Persistence):                                             │
 │  ┌──────────┐    ┌──────────┐    ┌──────────┐                          │
-│  │  Failure │───▶│  Restore │───▶│  Rollback│                          │
-│  │ Detected │    │  Vectors │    │  Changes │                          │
+│  │ MemTable │───▶│ Segment  │───▶│  Index   │                          │
+│  │   Full   │    │  Write   │    │  Merge   │                          │
 │  └──────────┘    └──────────┘    └──────────┘                          │
 │                       │                                                 │
-│                       │ Vectors preserved from original operation       │
+│                       │ WAL truncated after segment written             │
 │                       ▼                                                 │
 │                  ┌─────────┐                                            │
-│                  │ Vector  │                                            │
-│                  │ Cache   │                                            │
+│                  │Manifest │                                            │
+│                  │ Update  │                                            │
 │                  └─────────┘                                            │
 │                                                                         │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
 
 **Key Features**:
-- Preserves vector embeddings during rollback
-- Ensures both stores remain consistent
-- Handles partial failures gracefully
-- Maintains data integrity across distributed operations
+- WAL ensures durability before acknowledgment
+- MemTable provides fast in-memory access
+- Segment compaction during consolidation phases
+- HNSW index rebuilt incrementally
 
 ### CORS Configuration
 

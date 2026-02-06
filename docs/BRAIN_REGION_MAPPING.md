@@ -54,7 +54,7 @@ EpisodicMemory                   -->  Hippocampus (proper)
   +-- FSRS stability             -->  Synaptic consolidation
   +-- session_id                 -->  Context-dependent retrieval
 
-Neo4j Temporal Graph             -->  Hippocampal-entorhinal circuit
+T4DX Temporal Storage            -->  Hippocampal-entorhinal circuit
   |                                     |
   +-- bi-temporal (T_ref, T_sys) -->  Time cells (CA1/MEC)
   +-- vector embeddings          -->  Pattern separation (DG)
@@ -88,7 +88,7 @@ SemanticMemory                   -->  Temporal/Parietal Neocortex
   +-- Hebbian relationships      -->  Associative cortex
   +-- ACT-R activation           -->  Spreading activation (PFC)
 
-Knowledge Graph (Neo4j)          -->  Cortical semantic network
+Knowledge Graph (T4DX CSR)       -->  Cortical semantic network
   |                                     |
   +-- RELATED_TO edges           -->  White matter tracts
   +-- weight decay               -->  Synaptic weakening
@@ -483,7 +483,7 @@ Prediction          │   Yes    │   No     │    No      │ No  │     Yes
 
 ```
 ENCODING PATHWAY:
-Input → Embedding → EpisodicMemory → NCA (NT modulation) → Storage (Neo4j + Qdrant)
+Input → Embedding → EpisodicMemory → NCA (NT modulation) → Storage (T4DX)
                          │
                          └─► SemanticMemory (entity extraction)
                          └─► Hook Layer (Hebbian learning)

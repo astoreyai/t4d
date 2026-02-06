@@ -109,9 +109,10 @@ graph TB
         SPACE[Place/Grid<br/>Cells]
     end
 
-    subgraph Storage["Storage Layer"]
-        NEO4J[(Neo4j<br/>Graph)]
-        QDRANT[(Qdrant<br/>Vector)]
+    subgraph Storage["T4DX Storage Engine"]
+        T4DX[(T4DX<br/>Embedded LSM)]
+        HNSW[HNSW<br/>Vector Index]
+        CSR[CSR<br/>Graph]
     end
 
     API --> Memory
